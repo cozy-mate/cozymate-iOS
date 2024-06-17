@@ -9,7 +9,7 @@ function AppInner() {
   const stack = createNativeStackNavigator<SignInParamList>();
 
   return (
-    <stack.Navigator>
+    <stack.Navigator screenOptions={{ headerShown: false }}>
       <stack.Screen name="SignInScreen" component={SignInScreen} />
       <stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
     </stack.Navigator>
