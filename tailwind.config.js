@@ -11,6 +11,12 @@ module.exports = {
       colors: {
         DEFAULT: 'black',
         kakaoyellow: '#FEE500',
+        navergreen: '#00C73C',
+        appleblack: '#121212',
+
+        'button-black': {
+          text: '#F3F3F3',
+        },
       },
     },
   },
