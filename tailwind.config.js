@@ -18,6 +18,9 @@ module.exports = {
           text: '#F3F3F3',
         },
       },
+      spacing: {
+        110: '27.5rem',
+      },
     },
   },
   plugins: [],
