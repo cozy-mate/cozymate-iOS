@@ -1,9 +1,9 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
-  plugin: [
-    // native-wind 설정
+  plugins: [
+    // Native Wind 설정
     ['nativewind/babel'],
-    // alias 설정
+    // Alias 설정
     [
       'module-resolver',
       {

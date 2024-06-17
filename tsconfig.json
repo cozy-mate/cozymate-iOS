@@ -1,3 +1,37 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["es6", "es2017"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext",
+    "skipLibCheck": true,
+    // alias 설정
+    "baseUrl": ".",
+    "paths": {
+      "@providers/*": ["src/providers/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@routes/*": ["src/routes/*"],
+      "@type/*": ["src/type/*"], // types는 불가능해서 type으로 대체
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
+      "@server/*": ["src/server/*"],
+      "@recoil/*": ["src/recoil/*"],
+      "@axios/*": ["src/axios/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
 }
