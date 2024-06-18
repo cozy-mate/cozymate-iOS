@@ -10,6 +10,7 @@ module.exports = {
     extend: {
       colors: {
         DEFAULT: 'black',
+        main: '#68A4FF',
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',
         appleblack: '#121212',

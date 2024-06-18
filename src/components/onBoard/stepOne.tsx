@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Pressable } from 'react-native';
-import InputBoxComponent from '@components/inputBox';
-import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
+import { View, Text, Pressable } from 'react-native';
+import TextInputBoxComponent from '@components/textInputBox';
 import RadioBoxComponent from '@components/radioBox';
+import NumberInputBoxComponent from '@components/numberInputBox';
+
+import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
+import AbleNextButtonIcon from '@assets/onBoard/ableNextButton.svg';
+import DisableNextButtonIcon from '@assets/onBoard/disableNextButton.svg';
 
 interface StepComponentProps {
   handleNextStep: () => void;
@@ -14,6 +18,8 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [gender, setGender] = useState<string>('');
   const [age, setAge] = useState<string>('');
 
+  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== '';
+
   const [items, setItems] = useState([
     { index: 1, item: '남자', select: false },
     { index: 2, item: '여자', select: false },
@@ -21,7 +27,7 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
 
   return (
     <View className="flex-1">
-      <View className="mt-[67px] mb-[13px]">
+      <View className="mt-[67px] mb-[7px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
             원활한 서비스 이용을 위해
@@ -32,20 +38,22 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
 
         <View>
-          <InputBoxComponent
+          <TextInputBoxComponent
             title="이름"
             value={name}
             setValue={setName}
             placeholder="이름을 입력해주세요"
+            hasButton={false}
           />
         </View>
 
         <View>
-          <InputBoxComponent
+          <TextInputBoxComponent
             title="닉네임"
             value={nickname}
             setValue={setNickname}
             placeholder="닉네임을 입력해주세요"
+            hasButton={false}
           />
         </View>
 
@@ -60,7 +68,7 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
 
         <View>
-          <InputBoxComponent
+          <NumberInputBoxComponent
             title="나이"
             value={age}
             setValue={setAge}
@@ -69,10 +77,14 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
       </View>
 
-      <Pressable onPress={handleNextStep}>
-        <Text>클릭</Text>
-      </Pressable>
-      <YellowCharacter />
+      <View className="float-right">
+        <Pressable onPress={isComplete ? handleNextStep : null}>
+          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
+        </Pressable>
+      </View>
+      <View className="mt-[-33px]">
+        <YellowCharacter />
+      </View>
     </View>
   );
 };

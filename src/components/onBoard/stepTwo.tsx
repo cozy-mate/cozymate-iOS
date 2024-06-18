@@ -1,26 +1,45 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import InputBoxComponent from '@components/inputBox';
+import CustomRadioBoxComponent from '@components/customRadioBox';
+
 import BlueCharacter from '@assets/onBoard/blueCharacter.svg';
-import RadioBoxComponent from '@components/radioBox';
+import SchoolIcon from '@assets/onBoard/schoolIcon.svg';
+import SelectedSchoolIcon from '@assets/onBoard/selectedSchoolIcon.svg';
+import HomeIcon from '@assets/onBoard/homeIcon.svg';
+import SelectedHomeIcon from '@assets/onBoard/selectedHomeIcon.svg';
+
+import AbleNextButtonIcon from '@assets/onBoard/ableNextButton.svg';
+import DisableNextButtonIcon from '@assets/onBoard/disableNextButton.svg';
 
 interface StepComponentProps {
   handleNextStep: () => void;
 }
 
 const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
-  const [name, setName] = useState<string>('');
-  const [nickname, setNickname] = useState<string>('');
-  const [gender, setGender] = useState<string>('');
+  const [type, setType] = useState<string>('');
+
+  const isComplete = type !== '';
 
   const [items, setItems] = useState([
-    { index: 1, item: '남자', select: false },
-    { index: 2, item: '여자', select: false },
+    {
+      index: 1,
+      item: '기숙사',
+      select: false,
+      selected: SelectedSchoolIcon,
+      notSelected: SchoolIcon,
+    },
+    {
+      index: 2,
+      item: '쉐어하우스',
+      select: false,
+      selected: SelectedHomeIcon,
+      notSelected: HomeIcon,
+    },
   ]);
 
   return (
     <View className="flex-1">
-      <View className="mt-[67px] mb-[311px]">
+      <View className="mt-[67px] mb-[270px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
             어떤 주거 형식을
@@ -30,21 +49,22 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
           </Text>
         </View>
 
-        <View>
-          <RadioBoxComponent
-            title="성별"
-            value={gender}
-            setValue={setGender}
+        <View className="flex-row">
+          <CustomRadioBoxComponent
+            value={type}
+            setValue={setType}
             items={items}
             setItems={setItems}
           />
         </View>
       </View>
 
-      <Pressable onPress={handleNextStep}>
-        <Text>클릭</Text>
+      <Pressable onPress={isComplete ? handleNextStep : null}>
+        {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
       </Pressable>
-      <BlueCharacter />
+      <View className="mt-[-19px]">
+        <BlueCharacter />
+      </View>
     </View>
   );
 };
