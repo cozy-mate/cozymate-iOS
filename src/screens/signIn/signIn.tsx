@@ -11,6 +11,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('OnBoardScreen');
   };
 
+  const toRoomMate = () => {
+    navigation.navigate('RoomMateScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1">
       <View className="mx-6 flex-1">
@@ -32,7 +36,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         </View>
 
         <View className="mx-3 mb-4">
-          <Pressable className="flex-row items-center rounded-[33px] bg-navergreen px-[96px] py-[14px]">
+          <Pressable
+            className="flex-row items-center rounded-[33px] bg-navergreen px-[96px] py-[14px]"
+            onPress={toRoomMate}
+          >
             <Text className="text-center text-black opacity-85 font-semibold">
               네이버로 계속하기
             </Text>

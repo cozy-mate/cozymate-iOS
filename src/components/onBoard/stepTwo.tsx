@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
@@ -20,6 +20,11 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
 
   const isComplete = type !== '';
 
+  useEffect(() => {
+    console.log('Type:', type);
+    console.log('isComplete:', isComplete);
+  }, [type, isComplete]);
+
   const [items, setItems] = useState([
     {
       index: 1,
@@ -38,7 +43,7 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   ]);
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 px-5">
       <View className="mt-[67px] mb-[270px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
@@ -49,7 +54,7 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
           </Text>
         </View>
 
-        <View className="flex-row">
+        <View>
           <CustomRadioBoxComponent
             value={type}
             setValue={setType}
@@ -59,9 +64,12 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
       </View>
 
-      <Pressable onPress={isComplete ? handleNextStep : null}>
-        {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
-      </Pressable>
+      <View className="flex items-end">
+        <Pressable onPress={handleNextStep} disabled={!isComplete}>
+          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
+        </Pressable>
+      </View>
+
       <View className="mt-[-19px]">
         <BlueCharacter />
       </View>

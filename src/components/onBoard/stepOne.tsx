@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import TextInputBoxComponent from '@components/textInputBox';
 import RadioBoxComponent from '@components/radioBox';
@@ -25,8 +25,16 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
     { index: 2, item: '여자', select: false },
   ]);
 
+  useEffect(() => {
+    console.log('Name:', name);
+    console.log('Nickname:', nickname);
+    console.log('Gender:', gender);
+    console.log('Age:', age);
+    console.log('isComplete:', isComplete);
+  }, [name, nickname, gender, age, isComplete]);
+
   return (
-    <View className="flex-1">
+    <View className="flex-1 px-5">
       <View className="mt-[67px] mb-[7px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
@@ -77,11 +85,12 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
       </View>
 
-      <View className="float-right">
-        <Pressable onPress={isComplete ? handleNextStep : null}>
+      <View className="flex items-end">
+        <Pressable onPress={handleNextStep}>
           {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
         </Pressable>
       </View>
+
       <View className="mt-[-33px]">
         <YellowCharacter />
       </View>

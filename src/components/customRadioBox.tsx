@@ -48,18 +48,18 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   };
 
   return (
-    <>
+    <View className="flex flex-row">
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`flex-col justify-center items-center rounded-xl border-2 px-5 py-4 mb-4 ${
+          className={`flex-col w-[146px] justify-center items-center rounded-xl border-2 px-5 py-4 mr-6 mb-4 ${
             focusedIndex === item.index
               ? 'border-main bg-[#F3F6FA]'
               : 'border-[#E6E6E6] bg-transparent'
           }`}
           onPress={() => select(item)}
         >
-          <Text className={` font-semibold ${item.select ? 'text-main' : 'text-[#ACADB4]'}`}>
+          <Text className={`font-semibold ${item.select ? 'text-main' : 'text-[#ACADB4]'}`}>
             {item.item}
           </Text>
           {item.select ? (
@@ -74,7 +74,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
-    </>
+    </View>
   );
 };
 

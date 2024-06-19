@@ -24,7 +24,7 @@ const StepThree: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const isComplete = school !== '' && schoolEmail !== '' && certNumber !== '';
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 px-5">
       <View className={isSended ? 'mt-[67px] mb-[64px]' : 'mt-[67px] mb-[156px]'}>
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">학교 이메일을</Text>
@@ -49,6 +49,7 @@ const StepThree: React.FC<StepComponentProps> = ({ handleNextStep }) => {
             placeholder="학교 이메일을 입력해주세요"
             hasButton={true}
             buttonString={isSended ? '인증번호 재전송' : '인증번호 전송'}
+            pressFunc={handleSended}
           />
         </View>
 
@@ -60,15 +61,18 @@ const StepThree: React.FC<StepComponentProps> = ({ handleNextStep }) => {
               setValue={setCertNumber}
               placeholder="인증번호를 입력해주세요"
               hasButton={true}
-              pressFunc={handleSended}
+              buttonString={'인증번호 확인'}
             />
           </View>
         )}
       </View>
 
-      <Pressable onPress={isComplete ? handleNextStep : null}>
-        {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
-      </Pressable>
+      <View className="flex items-end">
+        <Pressable onPress={handleNextStep} disabled={!isComplete}>
+          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
+        </Pressable>
+      </View>
+
       <View className="mt-[-19px]">
         <PinkCharacter />
       </View>

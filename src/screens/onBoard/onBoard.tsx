@@ -19,7 +19,7 @@ const OnBoardScreen = ({ navigation }: OnBoardScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 items-center bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       {step === 1 && <StepOne handleNextStep={handleNextStep} />}
       {step === 2 && <StepTwo handleNextStep={handleNextStep} />}
       {step === 3 && <StepThree handleNextStep={toSignIn} />}
