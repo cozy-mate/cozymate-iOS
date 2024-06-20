@@ -86,7 +86,7 @@ const BasicInformation: React.FC<InformationProps> = ({ handleNextStep }) => {
           />
         </View>
 
-        <View className="mb-12">
+        <View className="mb-10">
           <CustomRadioBoxComponent
             title="신청실을 선택해주세요"
             value={type}
@@ -96,7 +96,7 @@ const BasicInformation: React.FC<InformationProps> = ({ handleNextStep }) => {
           />
         </View>
 
-        <View className="mb-12">
+        <View className="mb-10">
           <CustomRadioBoxComponent
             title="합격여부를 선택해주세요"
             value={passOrNot}
