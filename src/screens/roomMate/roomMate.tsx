@@ -13,6 +13,7 @@ import Example2 from '@assets/roomMate/example/2.svg';
 import Example3 from '@assets/roomMate/example/3.svg';
 import Example4 from '@assets/roomMate/example/4.svg';
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
+import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [value, setValue] = useState<string[]>([]);
@@ -78,9 +79,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   ]);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F7FAFF]">
+    <View className="flex-1 bg-[#F7FAFF]">
       <ScrollView>
-        <View className="flex-row h-[132px] px-4 justify-between items-center mb-[26px] bg-[#CADFFF] rounded-br-[40px]">
+        <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-[26px] bg-[#CADFFF] rounded-br-[40px]">
           <Pressable>
             <View className="flex-row items-center py-2">
               <SchoolLogo />
@@ -92,7 +93,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           </Pressable>
         </View>
 
-        <View className="mb-6">
+        <View className="mb-6 h-[197px]">
           <CheckBoxContainer
             value={value}
             setValue={setValue}
@@ -102,11 +103,15 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View>
+        <View className="h-[372px]">
           <SameAnswerContainer users={users} setUsers={setUsers} />
         </View>
+
+        <View className="h-[214px]">
+          <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
+        </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
