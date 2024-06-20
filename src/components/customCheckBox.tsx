@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, Pressable, TextInput } from 'react-native';
+import { Text, Pressable, TextInput } from 'react-native';
 
 interface CustomCheckBoxComponentProps {
   value: string[];
@@ -69,7 +69,7 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
         <Pressable
           key={item.index}
           className={`flex-row flex-wrap justify-center items-center rounded-[35px] border-2 px-[14px] py-2 mx-1 my-1 ${
-            item.select ? 'border-main bg-[#CADFFF]' : 'border-[#E6E6E6] bg-transparent'
+            item.select ? 'border-main bg-[#CADFFF]' : 'border-[#E6E6E6] bg-white'
           }`}
           onPress={() => select(item)}
         >

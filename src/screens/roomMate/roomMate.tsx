@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
 import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
+import MagnifierIcon from '@assets/roomMate/magnifier.svg';
 
 import Example1 from '@assets/roomMate/example/1.svg';
 import Example2 from '@assets/roomMate/example/2.svg';
@@ -77,13 +79,16 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F7FAFF]">
-      <ScrollView className="grow">
-        <View className="flex-row h-[132px] px-4 items-end mb-[26px]">
+      <ScrollView>
+        <View className="flex-row h-[132px] px-4 justify-between items-center mb-[26px] bg-[#CADFFF] rounded-br-[40px]">
           <Pressable>
-            <View className="flex-row items-center">
+            <View className="flex-row items-center py-2">
               <SchoolLogo />
               <Text className="text-lg font-semibold text-[#5B9CFF] ml-[6px]">인하대학교</Text>
             </View>
+          </Pressable>
+          <Pressable>
+            <MagnifierIcon />
           </Pressable>
         </View>
 

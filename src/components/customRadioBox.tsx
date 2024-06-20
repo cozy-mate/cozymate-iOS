@@ -48,7 +48,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   };
 
   return (
-    <View className="flex flex-row">
+    <>
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
@@ -74,7 +74,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
-    </View>
+    </>
   );
 };
 

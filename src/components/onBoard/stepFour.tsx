@@ -1,0 +1,88 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import CustomRadioBoxComponent from '@components/customRadioBox';
+
+import Booie from '@assets/onBoard/example/booie.svg';
+import Leo from '@assets/onBoard/example/leo.svg';
+import Lulu from '@assets/onBoard/example/lulu.svg';
+import Roy from '@assets/onBoard/example/roy.svg';
+
+interface StepComponentProps {
+  handleNextStep: () => void;
+}
+
+const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
+  const [character, setCharacter] = useState<string>('');
+
+  const isComplete = character !== '';
+
+  useEffect(() => {
+    console.log('Type:', character);
+    console.log('isComplete:', isComplete);
+  }, [character, isComplete]);
+
+  const [items, setItems] = useState([
+    {
+      index: 1,
+      item: '루루',
+      select: false,
+      selected: Lulu,
+      notSelected: Lulu,
+    },
+    {
+      index: 2,
+      item: '로이',
+      select: false,
+      selected: Roy,
+      notSelected: Roy,
+    },
+    {
+      index: 3,
+      item: '레오',
+      select: false,
+      selected: Leo,
+      notSelected: Leo,
+    },
+    {
+      index: 4,
+      item: '부이',
+      select: false,
+      selected: Booie,
+      notSelected: Booie,
+    },
+  ]);
+
+  return (
+    <View className="flex-1 px-5">
+      <View className="mt-[67px] mb-[270px]">
+        <View className="mb-6 leading-loose">
+          <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
+            어떤 주거 형식을
+          </Text>
+          <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
+            가지고 계신가요?
+          </Text>
+        </View>
+
+        <View className="grid grid-cols-2">
+          <CustomRadioBoxComponent
+            value={character}
+            setValue={setCharacter}
+            items={items}
+            setItems={setItems}
+          />
+        </View>
+      </View>
+
+      <View className="flex items-end">
+        <Pressable onPress={handleNextStep} disabled={!isComplete}>
+          <View>
+            <Text>확인</Text>
+          </View>
+        </Pressable>
+      </View>
+    </View>
+  );
+};
+
+export default StepFour;
