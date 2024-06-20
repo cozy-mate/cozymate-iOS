@@ -1,100 +1,156 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import TextInputBoxComponent from '@components/textInputBox';
 import RadioBoxComponent from '@components/radioBox';
-import NumberInputBoxComponent from '@components/numberInputBox';
-
-import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
-import AbleNextButtonIcon from '@assets/onBoard/ableNextButton.svg';
-import DisableNextButtonIcon from '@assets/onBoard/disableNextButton.svg';
+import CustomRadioBoxComponent from './customRadioBox';
 
 interface InformationProps {
   handleNextStep: () => void;
 }
 
 const EssentialInformation: React.FC<InformationProps> = ({ handleNextStep }) => {
-  const [name, setName] = useState<string>('');
-  const [nickname, setNickname] = useState<string>('');
-  const [gender, setGender] = useState<string>('');
-  const [age, setAge] = useState<string>('');
+  const [wakeUp, setWakeUp] = useState<string>('');
+  const [sleep, setSleep] = useState<string>('');
+  const [lightsOut, setLightsOut] = useState<string>('');
+  const [smoking, setSmoking] = useState<string>('');
+  const [sleepHabit, setSleepHabit] = useState<string>('');
+  const [temperament, setTemperament] = useState<string>('');
+  const [pattern, setPattern] = useState<string>('');
+  const [intimacy, setIntimacy] = useState<string>('');
 
-  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== '';
+  const isComplete =
+    wakeUp !== '' &&
+    sleep !== '' &&
+    lightsOut !== '' &&
+    smoking !== '' &&
+    sleepHabit !== '' &&
+    temperament !== '' &&
+    pattern !== '' &&
+    intimacy !== '';
 
-  const [items, setItems] = useState([
-    { index: 1, item: '남자', select: false },
-    { index: 2, item: '여자', select: false },
+  const [smokingItems, setSmokingItems] = useState([
+    { index: 1, item: 'O', select: false },
+    { index: 2, item: 'X', select: false },
+    { index: 3, item: '끊는 중이에요', select: false },
   ]);
 
-  useEffect(() => {
-    console.log('Name:', name);
-    console.log('Nickname:', nickname);
-    console.log('Gender:', gender);
-    console.log('Age:', age);
-    console.log('isComplete:', isComplete);
-  }, [name, nickname, gender, age, isComplete]);
+  const [sleepHabitItems, setSleepHabitItems] = useState([
+    { index: 1, item: 'X', select: false },
+    { index: 2, item: '코골이', select: false },
+    { index: 3, item: '이갈이', select: false },
+    { index: 4, item: '몽유병', select: false },
+  ]);
+
+  const [temperamentItems, setTemperamentItems] = useState([
+    { index: 1, item: '더위를 많이 타요', select: false },
+    { index: 2, item: '추위를 많이 타요', select: false },
+  ]);
+
+  const [patternItems, setPatternItems] = useState([
+    { index: 1, item: '아침형 인간', select: false },
+    { index: 2, item: '새벽형 인간', select: false },
+  ]);
+
+  const [intimacyItems, setIntimacyItems] = useState([
+    { index: 1, item: '필요한 말만 했으면 좋겠어요', select: false },
+    { index: 2, item: '어느정도 친하게 지내요', select: false },
+    { index: 3, item: '완전 친하게 지내고 싶어요', select: false },
+  ]);
 
   return (
-    <View className="flex-1 px-5">
-      <View className="mt-[67px] mb-[7px]">
-        <View className="mb-6 leading-loose">
-          <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
-            원활한 서비스 이용을 위해
-          </Text>
-          <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
-            개인정보를 입력해주세요!
-          </Text>
-        </View>
+    <ScrollView>
+      <View className="flex-1 pl-5 pr-2 pt-8 rounded-t-[30px] bg-white">
+        {/* <View className="mb-12">
+            <CustomRadioBoxComponent
+              title="기상시간을 선택해주세요"
+              value={wakeUp}
+              setValue={setWakeUp}
+              items={typeItems}
+              setItems={setTypeItems}
+            />
+          </View>
 
-        <View>
-          <TextInputBoxComponent
-            title="이름"
-            value={name}
-            setValue={setName}
-            placeholder="이름을 입력해주세요"
-            hasButton={false}
+          <View className="mb-12">
+            <CustomRadioBoxComponent
+              title="취침시간을 선택해주세요"
+              value={sleep}
+              setValue={setSleep}
+              items={passOrNotItems}
+              setItems={setPassOrNotItems}
+            />
+          </View>
+
+          <View className="mb-12">
+            <CustomRadioBoxComponent
+              title="소등시간을 선택해주세요"
+              value={lightsOut}
+              setValue={setLightsOut}
+              items={passOrNotItems}
+              setItems={setPassOrNotItems}
+            />
+          </View> */}
+
+        <View className="mb-10">
+          <CustomRadioBoxComponent
+            title="흡연여부를 선택해주세요"
+            value={smoking}
+            setValue={setSmoking}
+            items={smokingItems}
+            setItems={setSmokingItems}
           />
         </View>
 
-        <View>
-          <TextInputBoxComponent
-            title="닉네임"
-            value={nickname}
-            setValue={setNickname}
-            placeholder="닉네임을 입력해주세요"
-            hasButton={false}
+        <View className="mb-10">
+          <CustomRadioBoxComponent
+            title="잠버릇을 선택해주세요"
+            value={sleepHabit}
+            setValue={setSleepHabit}
+            items={sleepHabitItems}
+            setItems={setSleepHabitItems}
           />
         </View>
 
-        <View>
-          <RadioBoxComponent
-            title="성별"
-            value={gender}
-            setValue={setGender}
-            items={items}
-            setItems={setItems}
+        <View className="mb-10">
+          <CustomRadioBoxComponent
+            title="체질을 선택해주세요"
+            value={temperament}
+            setValue={setTemperament}
+            items={temperamentItems}
+            setItems={setTemperamentItems}
           />
         </View>
 
-        <View>
-          <NumberInputBoxComponent
-            title="나이"
-            value={age}
-            setValue={setAge}
-            placeholder="태어난 연도를 입력해주세요"
+        <View className="mb-10">
+          <CustomRadioBoxComponent
+            title="생활패턴을 선택해주세요"
+            value={pattern}
+            setValue={setPattern}
+            items={patternItems}
+            setItems={setPatternItems}
           />
+        </View>
+
+        <View className="mb-10">
+          <CustomRadioBoxComponent
+            title="친밀도를 선택해주세요"
+            value={intimacy}
+            setValue={setIntimacy}
+            items={intimacyItems}
+            setItems={setIntimacyItems}
+          />
+        </View>
+
+        <View
+          className={`w-[330px] items-center px-4 py-5  rounded-[39px] ${
+            isComplete ? 'bg-main' : 'bg-[#ACADB4]'
+          }`}
+        >
+          <Pressable onPress={handleNextStep}>
+            <Text className="text-sm font-semibold text-white">다음</Text>
+          </Pressable>
         </View>
       </View>
-
-      <View className="flex items-end">
-        <Pressable onPress={handleNextStep}>
-          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
-        </Pressable>
-      </View>
-
-      <View className="mt-[-33px]">
-        <YellowCharacter />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
