@@ -57,14 +57,14 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
       <View className="mt-[67px] mb-[270px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
-            어떤 주거 형식을
+            cozymate와 함께할
           </Text>
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
-            가지고 계신가요?
+            캐릭터를 선택해주세요!
           </Text>
         </View>
 
-        <View className="grid grid-cols-2">
+        <View className="grid">
           <CustomRadioBoxComponent
             value={character}
             setValue={setCharacter}

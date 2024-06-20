@@ -8,7 +8,7 @@ import StepThree from '@components/onBoard/stepThree';
 import StepFour from '@components/onBoard/stepFour';
 
 const OnBoardScreen = ({ navigation }: OnBoardScreenProps) => {
-  const [step, setStep] = useState<number>(3);
+  const [step, setStep] = useState<number>(1);
 
   const handleNextStep = () => {
     setStep(step + 1);

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -79,8 +78,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   ]);
 
   return (
-    <View className="flex-1 bg-[#F7FAFF]">
-      <ScrollView>
+    <SafeAreaView className="flex-1 bg-[#F7FAFF]">
+      <ScrollView className="flex-1">
         <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-[26px] bg-[#CADFFF] rounded-br-[40px]">
           <Pressable>
             <View className="flex-row items-center py-2">
@@ -93,7 +92,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           </Pressable>
         </View>
 
-        <View className="mb-6 h-[197px]">
+        <View className="mb-6">
           <CheckBoxContainer
             value={value}
             setValue={setValue}
@@ -103,15 +102,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View className="h-[372px]">
+        <View className="flex-1">
           <SameAnswerContainer users={users} setUsers={setUsers} />
-        </View>
-
-        <View className="h-[214px]">
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
