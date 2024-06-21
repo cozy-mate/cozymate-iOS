@@ -35,7 +35,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           >
             <KakaoLogo className="mr-2" />
             <Text className="font-semibold text-center text-black opacity-85">
-              카카오로 계속하기
+              온보딩 페이지 (카카오로 계속하기)
             </Text>
           </Pressable>
         </View>
@@ -46,7 +46,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             onPress={toRoomMate}
           >
             <Text className="font-semibold text-center text-black opacity-85">
-              네이버로 계속하기
+              네이버로 계속하기 (룸메이트 페이지)
             </Text>
           </Pressable>
         </View>
@@ -58,7 +58,19 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           >
             <AppleLogo className="mr-2" />
             <Text className="font-semibold text-center text-button-black-text">
-              Apple로 계속하기
+              Apple로 계속하기 (방 생성하기 페이지)
+            </Text>
+          </Pressable>
+        </View>
+
+        <View className="mx-3 mb-11">
+          <Pressable
+            className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
+            onPress={toCreateRomm}
+          >
+            <AppleLogo className="mr-2" />
+            <Text className="font-semibold text-center text-button-black-text">
+              Apple로 계속하기 (상세 페이지)
             </Text>
           </Pressable>
         </View>
