@@ -54,12 +54,12 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           key={item.index}
           className={`flex-col w-[146px] justify-center items-center rounded-xl border-2 px-5 py-4 mr-6 mb-4 ${
             focusedIndex === item.index
-              ? 'border-main bg-[#F3F6FA]'
-              : 'border-[#E6E6E6] bg-transparent'
+              ? 'border-main bg-colorBox'
+              : 'border-disabled bg-transparent'
           }`}
           onPress={() => select(item)}
         >
-          <Text className={`font-semibold ${item.select ? 'text-main' : 'text-[#ACADB4]'}`}>
+          <Text className={`font-semibold ${item.select ? 'text-main' : 'text-disabledFont'}`}>
             {item.item}
           </Text>
           {item.select ? (

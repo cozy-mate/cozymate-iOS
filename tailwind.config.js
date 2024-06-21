@@ -11,17 +11,24 @@ module.exports = {
       colors: {
         DEFAULT: 'black',
         main: '#68A4FF',
+        sub: '#FFCE3D',
+
+        disabled: '#E6E6E6',
+
+        // 폰트 색깔
+        basicFont: '#5D5D6A',
+        colorFont: '#808997',
+        disabledFont: '#ACADB4',
+        emphasizedFont: '#444955',
+
+        // 박스 색깔
+        box: '#F1F1F1',
+        colorBox: '#F3F6FA',
+
+        // 소셜 로그인용 색깔
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',
         appleblack: '#121212',
-
-        'button-black': {
-          text: '#F3F3F3',
-        },
-      },
-      spacing: {
-        29: '7.25rem',
-        110: '27.5rem',
       },
     },
   },

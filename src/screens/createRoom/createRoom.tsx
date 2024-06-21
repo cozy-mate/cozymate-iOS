@@ -9,7 +9,7 @@ import AdditionalInformation from '@components/createRoom/additionalInfomation';
 import CharacterImage from '@assets/character.svg';
 
 const CreateRoomScreen = ({ navigation }: CreateRommScreenProps) => {
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(1);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -27,7 +27,7 @@ const CreateRoomScreen = ({ navigation }: CreateRommScreenProps) => {
           <CharacterImage />
           <View className="items-center px-9 py-[10px] rounded-[64px] bg-white opacity-50">
             <Pressable>
-              <Text className="text-[#808997] text-[10px] font-semibold">캐릭터 선택하기</Text>
+              <Text className="text-colorFont text-[10px] font-semibold">캐릭터 선택하기</Text>
             </Pressable>
           </View>
         </View>

@@ -42,37 +42,29 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
     setIsFocused(false);
   };
 
-  const isActive = isFocused || !!value;
-
   return (
     <View>
-      <Text className="text-[#5D5D6A] pl-1 font-semibold mb-2">{title}</Text>
+      <Text className="pl-1 mb-2 font-semibold text-basicFont">{title}</Text>
       <Pressable
         onPress={handleFocus}
-        className={
-          isActive
-            ? 'flex-row justify-between rounded-xl bg-[#F6F7F9] px-4 py-[18px]'
-            : 'flex-row justify-between rounded-xl bg-[#F6F7F9] px-4 py-[18px]'
-        }
+        className="flex-row justify-between rounded-xl bg-[#F6F7F9] px-4 py-[18px]"
       >
-        <View>
-          <View className="flex-row">
-            <TextInput
-              ref={inputRef}
-              value={value}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onChangeText={valueHandleChange}
-              placeholder={placeholder}
-              placeholderTextColor="#ACADB4"
-              className="mr-2 font-semibold"
-            />
-          </View>
+        <View className="flex-row">
+          <TextInput
+            ref={inputRef}
+            value={value}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChangeText={valueHandleChange}
+            placeholder={placeholder}
+            placeholderTextColor="#ACADB4"
+            className="text-sm font-medium "
+          />
         </View>
 
         {hasButton && (
           <Pressable className="flex-row items-center" onPress={value ? pressFunc : undefined}>
-            <View className="bg-[#F3F6FA] rounded-xl px-4 py-2">
+            <View className="px-4 py-2 bg-colorBox rounded-xl">
               <Text className="text-xs font-medium text-main">{buttonString}</Text>
             </View>
           </Pressable>

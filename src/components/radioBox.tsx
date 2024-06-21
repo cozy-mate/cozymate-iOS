@@ -55,10 +55,10 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
     <>
       {isActive ? (
         <Pressable
-          className="flex-col justify-center rounded-xl border-2 border-main px-5 py-4 mb-4"
+          className="flex-col justify-center px-5 py-4 mb-4 border-2 rounded-xl border-main"
           onPress={handleFocus}
         >
-          <Text className="text-main font-semibold">{title}</Text>
+          <Text className="font-semibold text-main">{title}</Text>
 
           <View className="mt-2.5 flex-row">
             {items.map((item: Item) => {
@@ -78,7 +78,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
                       onPress={() => select(item)}
                     >
                       <RadioButtonSvg className="mr-1" />
-                      <Text className="text-[#ACADB4]">{item.item}</Text>
+                      <Text className="text-disabledFont">{item.item}</Text>
                     </Pressable>
                   )}
                 </View>
@@ -114,7 +114,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
                       onPress={() => select(item)}
                     >
                       <RadioButtonSvg className="mr-1" />
-                      <Text className="text-[#ACADB4]">{item.item}</Text>
+                      <Text className="text-disabledFont">{item.item}</Text>
                     </Pressable>
                   )}
                 </View>

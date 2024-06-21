@@ -73,8 +73,8 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
 
       {hasButton && (
         <Pressable className="flex-row items-center" onPress={value ? pressFunc : undefined}>
-          <View className="bg-[#F3F6FA] rounded-xl px-4 py-2">
-            <Text className="text-xs text-main font-medium">{buttonString}</Text>
+          <View className="px-4 py-2 bg-colorBox rounded-xl">
+            <Text className="text-xs font-medium text-main">{buttonString}</Text>
           </View>
         </Pressable>
       )}

@@ -45,7 +45,7 @@ const BasicInformation: React.FC<InformationProps> = ({ handleNextStep }) => {
 
   return (
     <ScrollView>
-      <View className="flex-1 pl-5 pr-2 pt-8 rounded-t-[30px] bg-white">
+      <View className="flex-1 px-5 pr-2 pt-8 rounded-t-[30px] bg-white">
         <View className="mb-12">
           <TextInputBoxComponent
             title="이름을 입력해주세요"
@@ -108,7 +108,7 @@ const BasicInformation: React.FC<InformationProps> = ({ handleNextStep }) => {
 
         <View
           className={`w-[330px] items-center px-4 py-5  rounded-[39px] ${
-            isComplete ? 'bg-main' : 'bg-[#ACADB4]'
+            isComplete ? 'bg-main' : 'bg-disabledFont'
           }`}
         >
           <Pressable onPress={handleNextStep}>

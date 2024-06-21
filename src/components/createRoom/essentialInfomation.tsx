@@ -28,6 +28,21 @@ const EssentialInformation: React.FC<InformationProps> = ({ handleNextStep }) =>
     pattern !== '' &&
     intimacy !== '';
 
+  const [timeItems, setTimeItems] = useState([
+    { index: 1, item: '1', select: false },
+    { index: 2, item: '2', select: false },
+    { index: 3, item: '3', select: false },
+    { index: 4, item: '4', select: false },
+    { index: 5, item: '5', select: false },
+    { index: 6, item: '6', select: false },
+    { index: 7, item: '7', select: false },
+    { index: 8, item: '8', select: false },
+    { index: 9, item: '9', select: false },
+    { index: 10, item: '10', select: false },
+    { index: 11, item: '11', select: false },
+    { index: 12, item: '12', select: false },
+  ]);
+
   const [smokingItems, setSmokingItems] = useState([
     { index: 1, item: 'O', select: false },
     { index: 2, item: 'X', select: false },
@@ -60,35 +75,35 @@ const EssentialInformation: React.FC<InformationProps> = ({ handleNextStep }) =>
   return (
     <ScrollView>
       <View className="flex-1 pl-5 pr-2 pt-8 rounded-t-[30px] bg-white">
-        {/* <View className="mb-12">
-            <CustomRadioBoxComponent
-              title="기상시간을 선택해주세요"
-              value={wakeUp}
-              setValue={setWakeUp}
-              items={typeItems}
-              setItems={setTypeItems}
-            />
-          </View>
+        <View className="mb-12">
+          <CustomRadioBoxComponent
+            title="기상시간을 선택해주세요"
+            value={wakeUp}
+            setValue={setWakeUp}
+            items={timeItems}
+            setItems={setTimeItems}
+          />
+        </View>
 
-          <View className="mb-12">
-            <CustomRadioBoxComponent
-              title="취침시간을 선택해주세요"
-              value={sleep}
-              setValue={setSleep}
-              items={passOrNotItems}
-              setItems={setPassOrNotItems}
-            />
-          </View>
+        <View className="mb-12">
+          <CustomRadioBoxComponent
+            title="취침시간을 선택해주세요"
+            value={sleep}
+            setValue={setSleep}
+            items={timeItems}
+            setItems={setTimeItems}
+          />
+        </View>
 
-          <View className="mb-12">
-            <CustomRadioBoxComponent
-              title="소등시간을 선택해주세요"
-              value={lightsOut}
-              setValue={setLightsOut}
-              items={passOrNotItems}
-              setItems={setPassOrNotItems}
-            />
-          </View> */}
+        <View className="mb-12">
+          <CustomRadioBoxComponent
+            title="소등시간을 선택해주세요"
+            value={lightsOut}
+            setValue={setLightsOut}
+            items={timeItems}
+            setItems={setTimeItems}
+          />
+        </View>
 
         <View className="mb-10">
           <CustomRadioBoxComponent
@@ -142,7 +157,7 @@ const EssentialInformation: React.FC<InformationProps> = ({ handleNextStep }) =>
 
         <View
           className={`w-[330px] items-center px-4 py-5  rounded-[39px] ${
-            isComplete ? 'bg-main' : 'bg-[#ACADB4]'
+            isComplete ? 'bg-main' : 'bg-disabledFont'
           }`}
         >
           <Pressable onPress={handleNextStep}>
