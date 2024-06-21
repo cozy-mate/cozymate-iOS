@@ -17,8 +17,12 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('RoomMateScreen');
   };
 
-  const toCreateRomm = () => {
+  const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
+  };
+
+  const toUserDetail = () => {
+    navigation.navigate('UserDetailScreen');
   };
 
   return (
@@ -54,10 +58,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-11">
           <Pressable
             className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
-            onPress={toCreateRomm}
+            onPress={toCreateRoom}
           >
             <AppleLogo className="mr-2" />
-            <Text className="font-semibold text-center text-button-black-text">
+            <Text className="font-semibold text-center text-white">
               Apple로 계속하기 (방 생성하기 페이지)
             </Text>
           </Pressable>
@@ -66,10 +70,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-11">
           <Pressable
             className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
-            onPress={toCreateRomm}
+            onPress={toUserDetail}
           >
             <AppleLogo className="mr-2" />
-            <Text className="font-semibold text-center text-button-black-text">
+            <Text className="font-semibold text-center text-white">
               Apple로 계속하기 (상세 페이지)
             </Text>
           </Pressable>
