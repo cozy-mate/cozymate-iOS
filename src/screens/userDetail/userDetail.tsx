@@ -3,10 +3,16 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { UserDetailScreenProps } from '@type/param/stack';
 
-import CharacterImage from '@assets/character.svg';
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
 
+import Background from '@assets/userDetail/background.svg';
+
+import BackButton from '@assets/backButton.svg';
+import MessageIcon from '@assets/message.svg';
+import HeartIcon from '@assets/heart.svg';
+
+import CharacterImage from '@assets/character.svg';
 import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
 import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
@@ -123,8 +129,26 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
     setType('table');
   };
 
+  const toSignIn = () => {
+    navigation.navigate('SignInScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-[#CADFFF]">
+      <Background style={{ position: 'absolute' }} />
+      <View className="flex-row justify-between flex-1 px-5">
+        <Pressable onPress={toSignIn}>
+          <BackButton />
+        </Pressable>
+        <View className="flex-row">
+          <Pressable>
+            <MessageIcon />
+          </Pressable>
+          <Pressable>
+            <HeartIcon />
+          </Pressable>
+        </View>
+      </View>
       <View className="items-center">
         <View className="mb-[48px]">
           <CharacterImage />
