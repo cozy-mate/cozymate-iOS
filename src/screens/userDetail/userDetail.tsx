@@ -7,6 +7,11 @@ import CharacterImage from '@assets/character.svg';
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
 
+import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
+import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
+import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
+import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
+
 const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   const [type, setType] = useState<string>('list');
   const [userData, setUserData] = useState({
@@ -51,8 +56,22 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   });
 
   const typeItems = [
-    { index: 1, name: '리스트로 보기', value: 'list', select: true },
-    { index: 2, name: '표로 보기', value: 'table', select: false },
+    {
+      index: 1,
+      name: '리스트로 보기',
+      value: 'list',
+      select: true,
+      selected: SelectedListIcon,
+      notSelected: NotSelectedListIcon,
+    },
+    {
+      index: 2,
+      name: '표로 보기',
+      value: 'table',
+      select: false,
+      selected: SelectedTableIcon,
+      notSelected: NotSelectedTableIcon,
+    },
   ];
 
   const handleList = () => {
@@ -80,6 +99,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
         <View>
           {typeItems.map((item) => (
             <Pressable key={item.index} onPress={item.value === 'list' ? handleList : handleTable}>
+              <View>{item.value === type ? <item.selected /> : <item.notSelected />}</View>
               <Text>{item.name}</Text>
             </Pressable>
           ))}
