@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { UserDetailScreenProps } from '@type/param/stack';
 
@@ -95,43 +95,45 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
         </View>
       </View>
 
-      <View className="bg-white pt-5 rounded-t-[20px]">
-        <View className="flex-row justify-between">
-          {typeItems.map((item) => (
-            <View className="items-center flex-1 p-4">
-              <Pressable
-                key={item.index}
-                onPress={item.value === 'list' ? handleList : handleTable}
-              >
-                <View className="mb-[6px]">
-                  {item.value === type ? <item.selected /> : <item.notSelected />}
-                </View>
-                <Text
-                  className={`${
-                    item.value === type
-                      ? 'text-main font-semibold'
-                      : 'text-disabledFont font-medium'
-                  }`}
+      <ScrollView>
+        <View className="bg-white pt-5 rounded-t-[20px]">
+          <View className="flex-row justify-between">
+            {typeItems.map((item) => (
+              <View className="items-center flex-1 p-4">
+                <Pressable
+                  key={item.index}
+                  onPress={item.value === 'list' ? handleList : handleTable}
                 >
-                  {item.name}
-                </Text>
-              </Pressable>
+                  <View className="mb-[6px]">
+                    {item.value === type ? <item.selected /> : <item.notSelected />}
+                  </View>
+                  <Text
+                    className={`${
+                      item.value === type
+                        ? 'text-main font-semibold'
+                        : 'text-disabledFont font-medium'
+                    }`}
+                  >
+                    {item.name}
+                  </Text>
+                </Pressable>
+              </View>
+            ))}
+          </View>
+
+          {type === 'list' && (
+            <View>
+              <ListView userData={userData} />
             </View>
-          ))}
+          )}
+
+          {type === 'table' && (
+            <View>
+              <TableView userData={userData} />
+            </View>
+          )}
         </View>
-
-        {type === 'list' && (
-          <View>
-            <ListView userData={userData} />
-          </View>
-        )}
-
-        {type === 'table' && (
-          <View>
-            <TableView userData={userData} />
-          </View>
-        )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
