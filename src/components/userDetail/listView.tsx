@@ -43,14 +43,44 @@ interface ViewProps {
 
 const ListView: React.FC<ViewProps> = ({ userData }) => {
   const renderInfo = (info: Record<string, string>, title: string) => {
+    const labels: Record<string, string> = {
+      name: '이름',
+      age: '출생년도',
+      school: '학교',
+      studentId: '학번',
+      major: '학과',
+      type: '인실',
+      passOrNot: '합격여부',
+      wakeUp: '기상시간',
+      sleep: '취침시간',
+      lightsOut: '소등시간',
+      smoking: '흡연여부',
+      sleepHabit: '잠버릇',
+      temperament: '더위, 추위',
+      pattern: '생활 패턴',
+      intimacy: '친밀도',
+      sharing: '물건공유',
+      study: '공부여부',
+      game: '게임여부',
+      call: '전화여부',
+      cleanliness: '청결 예민도',
+      noise: '소음 예민도',
+      cleaning: '청소 빈도',
+      personality: '성격',
+      mbti: 'MBTI',
+    };
+
     return (
-      <View className="mb-6 leading-loose">
+      <View className="mb-6 leading-loose ">
         <Text className="text-lg font-semibold text-[#46464B] tracking-tight">{title}</Text>
-        {Object.entries(info).map(([key, value]) => (
-          <View key={key}>
-            <Text>{`${key}: ${value}`}</Text>
-          </View>
-        ))}
+        <View className="p-4 border-2 border-[#F1F2F4] rounded-xl">
+          {Object.entries(info).map(([key, value]) => (
+            <View key={key} className="flex-row items-center my-3">
+              <Text className="mr-3 font-medium text-colorFont">{labels[key] || key}</Text>
+              <Text className="text-[#505059] font-medium">{value}</Text>
+            </View>
+          ))}
+        </View>
       </View>
     );
   };

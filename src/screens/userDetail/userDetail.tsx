@@ -83,25 +83,38 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white ">
-      <View className="items-center bg-[#F1F5FF]">
-        <View>
+    <SafeAreaView className="flex-1 bg-[#CADFFF]">
+      <View className="items-center">
+        <View className="mb-[48px]">
           <CharacterImage />
-          <View className="items-center px-9 py-[10px] rounded-[64px] bg-white opacity-50">
+          <View className="items-center px-6 py-3 rounded-[64px] bg-main">
             <Pressable>
-              <Text className="text-colorFont text-[10px] font-semibold">캐릭터 선택하기</Text>
+              <Text className="text-xs font-semibold text-white">룸메이트 요청하기</Text>
             </Pressable>
           </View>
         </View>
       </View>
 
-      <View>
-        <View>
+      <View className="bg-white pt-5 rounded-t-[20px]">
+        <View className="flex-row justify-between">
           {typeItems.map((item) => (
-            <Pressable key={item.index} onPress={item.value === 'list' ? handleList : handleTable}>
-              <View>{item.value === type ? <item.selected /> : <item.notSelected />}</View>
-              <Text>{item.name}</Text>
-            </Pressable>
+            <View className="items-center flex-1">
+              <Pressable
+                key={item.index}
+                onPress={item.value === 'list' ? handleList : handleTable}
+              >
+                <View>{item.value === type ? <item.selected /> : <item.notSelected />}</View>
+                <Text
+                  className={`${
+                    item.value === type
+                      ? 'text-main font-semibold'
+                      : 'text-disabledFont font-medium'
+                  }`}
+                >
+                  {item.name}
+                </Text>
+              </Pressable>
+            </View>
           ))}
         </View>
 
