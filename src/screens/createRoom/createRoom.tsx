@@ -22,7 +22,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white ">
-      <View className="flex-1 items-center bg-[#F1F5FF]">
+      <View className="items-center bg-[#F1F5FF]">
         <View>
           <CharacterImage />
           <View className="items-center px-9 py-[10px] rounded-[64px] bg-white opacity-50">

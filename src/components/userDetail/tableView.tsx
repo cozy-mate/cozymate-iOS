@@ -58,6 +58,7 @@ const ListView: React.FC<ViewProps> = ({ userData }) => {
   return (
     <ScrollView>
       <View className="flex-1 px-5">
+        <Text>지금 테이블임</Text>
         <View className="mt-[67px] mb-[7px]">
           {renderInfo(userData.basicInfo, '기본정보')}
           {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
