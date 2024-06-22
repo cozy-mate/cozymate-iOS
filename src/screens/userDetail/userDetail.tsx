@@ -98,12 +98,14 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
       <View className="bg-white pt-5 rounded-t-[20px]">
         <View className="flex-row justify-between">
           {typeItems.map((item) => (
-            <View className="items-center flex-1">
+            <View className="items-center flex-1 p-4">
               <Pressable
                 key={item.index}
                 onPress={item.value === 'list' ? handleList : handleTable}
               >
-                <View>{item.value === type ? <item.selected /> : <item.notSelected />}</View>
+                <View className="mb-[6px]">
+                  {item.value === type ? <item.selected /> : <item.notSelected />}
+                </View>
                 <Text
                   className={`${
                     item.value === type
