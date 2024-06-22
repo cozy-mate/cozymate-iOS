@@ -18,7 +18,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
     basicInfo: {
       name: '오정현',
       age: '2002년',
-      school: '인하대학교 (인증완료)',
+      school: '인하대학교',
       studentId: '21학번',
       major: '문화콘텐츠문화경영학과',
     },
@@ -44,6 +44,47 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
       cleaning: '일주일에 3-4번은 하는 거 같아요!',
       personality: '조용한걸 좋아해요!',
       mbti: 'INFP',
+    },
+    additionalInfo: {
+      must: [
+        '각자 할 일만 하고 친목은 안 하고싶어요',
+        '음식물 섭취는 되도록 밖에서 해줬으면 좋겠어요',
+      ],
+      can: ['에어컨, 히터는 마음대로 하셔도 돼요', '흡연여부는 딱히 상관없어요'],
+      never: ['친구 데려오기 절대 금지'],
+    },
+  });
+
+  const [otherUserData, setOtherUserData] = useState({
+    basicInfo: {
+      name: '양유진',
+      age: '2002년',
+      school: '인하대학교',
+      studentId: '21학번',
+      major: '정보통신공학과',
+    },
+    dormitoryInfo: {
+      type: '3인 1실',
+      passOrNot: '합격',
+    },
+    essentialInfo: {
+      wakeUp: '오전 7시',
+      sleep: '오전 3시',
+      lightsOut: '오전 4시',
+      smoking: 'X',
+      sleepHabit: 'X',
+      temperament: '추위를 많이 타요',
+      pattern: '새벽형 인간',
+      intimacy: '어느정도 친하게 지내요',
+      sharing: 'X',
+      game: 'X',
+      call: 'X',
+      study: 'O',
+      cleanliness: '5',
+      noise: '8',
+      cleaning: '매일매일 해요!',
+      personality: '조용한걸 좋아해요!',
+      mbti: 'ISFJ',
     },
     additionalInfo: {
       must: [
@@ -129,7 +170,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
 
           {type === 'table' && (
             <View>
-              <TableView userData={userData} />
+              <TableView userData={userData} otherUserData={otherUserData} />
             </View>
           )}
         </View>
