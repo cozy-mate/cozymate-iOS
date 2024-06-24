@@ -47,14 +47,14 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
   return (
     <Pressable
       onPress={handleFocus}
-      className={
-        isActive
-          ? 'flex-row justify-between rounded-xl border-2 border-main px-[22px] py-4 mb-4'
-          : 'flex-row justify-between rounded-xl border-2 border-[#E2E2E2] px-[22px] py-4 mb-4'
-      }
+      className={`box-border flex flex-col justify-center items-start rounded-xl border-[1px] px-[22px] py-4 mb-4
+        ${isActive ? 'border-main' : 'border-disabled'}`}
     >
       <View>
-        <Text className={isActive ? 'text-main font-semibold' : 'text-[#808197] font-semibold'}>
+        <Text
+          className={`font-semibold text-sm leading-[17px] tracking-[-0.03em]
+            ${isActive ? 'text-main' : 'text-colorFont'}`}
+        >
           {title}
         </Text>
         <View className="mt-1.5 flex-row">
@@ -66,7 +66,7 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
             onChangeText={valueHandleChange}
             placeholder={placeholder}
             placeholderTextColor="#C0C0C0"
-            className="mr-2 font-semibold"
+            className="font-medium text-sm leading-[17px] tracking-[-0.03em] text-basicFont"
           />
         </View>
       </View>

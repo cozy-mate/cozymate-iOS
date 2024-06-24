@@ -4,6 +4,8 @@ import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
 import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
+import Background from '@assets/roomMate/background.svg';
+
 import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
 import MagnifierIcon from '@assets/roomMate/magnifier.svg';
 
@@ -79,8 +81,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F7FAFF]">
+      <Background style={{ position: 'absolute' }} />
       <ScrollView className="flex-1">
-        <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-[26px] bg-[#CADFFF] rounded-br-[40px]">
+        <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
           <Pressable>
             <View className="flex-row items-center py-2">
               <SchoolLogo />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import TextInputBoxComponent from '@components/textInputBox';
-import RadioBoxComponent from '@components/radioBox';
+import RadioBoxComponent from '@components/basicRadioBox';
 import NumberInputBoxComponent from '@components/numberInputBox';
 
 import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
