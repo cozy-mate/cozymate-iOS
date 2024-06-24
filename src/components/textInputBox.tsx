@@ -47,10 +47,10 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
   return (
     <Pressable
       onPress={handleFocus}
-      className={`box-border flex flex-col justify-center items-start rounded-xl border-[1px] px-[22px] py-4 mb-4
+      className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-[22px] py-4 mb-4 
         ${isActive ? 'border-main' : 'border-disabled'}`}
     >
-      <View>
+      <View className="flex flex-col items-start justify-center">
         <Text
           className={`font-semibold text-sm leading-[17px] tracking-[-0.03em]
             ${isActive ? 'text-main' : 'text-colorFont'}`}
@@ -72,7 +72,7 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
       </View>
 
       {hasButton && (
-        <Pressable className="flex-row items-center" onPress={value ? pressFunc : undefined}>
+        <Pressable className="flex items-center" onPress={value ? pressFunc : undefined}>
           <View className="px-4 py-2 bg-colorBox rounded-xl">
             <Text className="text-xs font-medium text-main">{buttonString}</Text>
           </View>

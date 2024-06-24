@@ -54,7 +54,7 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
 
   return (
     <View className="flex-1 px-5">
-      <View className="mt-[67px] mb-[270px]">
+      <View className="mt-[67px] mb-[160px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
             cozymate와 함께할
@@ -64,7 +64,7 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
           </Text>
         </View>
 
-        <View className="grid">
+        <View className="flex-row flex-wrap justify-between">
           <CustomRadioBoxComponent
             value={character}
             setValue={setCharacter}
@@ -74,10 +74,14 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
       </View>
 
-      <View className="flex items-end">
+      <View className="flex">
         <Pressable onPress={handleNextStep} disabled={!isComplete}>
-          <View>
-            <Text>확인</Text>
+          <View
+            className={`px-4 py-5 w-[330px] rounded-[39px]  ${
+              isComplete ? 'bg-main' : 'bg-disabledFont'
+            } `}
+          >
+            <Text className="text-sm font-semibold text-center text-white">확인</Text>
           </View>
         </Pressable>
       </View>

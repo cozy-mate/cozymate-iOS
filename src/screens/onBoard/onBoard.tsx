@@ -8,7 +8,7 @@ import StepThree from '@components/onBoard/stepThree';
 import StepFour from '@components/onBoard/stepFour';
 
 const OnBoardScreen = ({ navigation }: OnBoardScreenProps) => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(4);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -23,8 +23,8 @@ const OnBoardScreen = ({ navigation }: OnBoardScreenProps) => {
     <SafeAreaView className="flex-1 bg-white">
       {step === 1 && <StepOne handleNextStep={handleNextStep} />}
       {step === 2 && <StepTwo handleNextStep={handleNextStep} />}
-      {step === 3 && <StepThree handleNextStep={toSignIn} />}
-      {step === 4 && <StepFour handleNextStep={handleNextStep} />}
+      {step === 3 && <StepThree handleNextStep={handleNextStep} />}
+      {step === 4 && <StepFour handleNextStep={toSignIn} />}
     </SafeAreaView>
   );
 };

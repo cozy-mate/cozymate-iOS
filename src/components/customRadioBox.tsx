@@ -52,7 +52,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`flex-col w-[146px] justify-center items-center rounded-xl border-2 px-5 py-4 mr-6 mb-4 ${
+          className={`flex-col w-[45%] justify-center items-center rounded-xl border-[1px] px-5 py-4 mb-4 ${
             focusedIndex === item.index
               ? 'border-main bg-colorBox'
               : 'border-disabled bg-transparent'

@@ -54,7 +54,7 @@ const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
           </Text>
         </View>
 
-        <View>
+        <View className="flex-row justify-between">
           <CustomRadioBoxComponent
             value={type}
             setValue={setType}

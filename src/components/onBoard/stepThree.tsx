@@ -12,16 +12,19 @@ interface StepComponentProps {
 
 const StepThree: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [isSended, setIsSended] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(false);
 
   const handleSended = () => {
     setIsSended(true);
   };
 
+  const handleVerified = () => {
+    setIsVerified(true);
+  };
+
   const [school, setSchool] = useState<string>('');
   const [schoolEmail, setSchoolEmail] = useState<string>('');
   const [certNumber, setCertNumber] = useState<string>('');
-
-  const isComplete = school !== '' && schoolEmail !== '' && certNumber !== '';
 
   return (
     <View className="flex-1 px-5">
@@ -61,15 +64,16 @@ const StepThree: React.FC<StepComponentProps> = ({ handleNextStep }) => {
               setValue={setCertNumber}
               placeholder="인증번호를 입력해주세요"
               hasButton={true}
-              buttonString={'인증번호 확인'}
+              buttonString={isVerified ? '인증 완료' : '인증번호 확인'}
+              pressFunc={handleVerified}
             />
           </View>
         )}
       </View>
 
       <View className="flex items-end">
-        <Pressable onPress={handleNextStep} disabled={!isComplete}>
-          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
+        <Pressable onPress={handleNextStep} disabled={!isVerified}>
+          {isVerified ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
         </Pressable>
       </View>
 
