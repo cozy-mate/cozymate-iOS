@@ -16,9 +16,9 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [name, setName] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
-  const [age, setAge] = useState<string>('');
+  const [age, setAge] = useState<number | null>(null);
 
-  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== '';
+  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== null;
 
   const [items, setItems] = useState([
     { index: 1, item: '남자', select: false },
