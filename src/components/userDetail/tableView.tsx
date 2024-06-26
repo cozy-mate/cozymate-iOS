@@ -108,28 +108,29 @@ const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
     };
 
     return (
-      <View className="mb-6 leading-loose">
-        <Text className="text-lg font-semibold text-[#46464B] tracking-tight">{title}</Text>
+      <View className="leading-loose">
         {Object.keys(labels).map(
           (key) =>
             key in my &&
             key in other && (
               <View key={key} className="flex-row items-center my-3">
                 <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
-                <Text
-                  className={`font-medium ${
-                    my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                  }`}
-                >
-                  {my[key]}
-                </Text>
-                <Text
-                  className={`font-medium ${
-                    my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                  }`}
-                >
-                  {other[key]}
-                </Text>
+                <View className="flex-row justify-between">
+                  <Text
+                    className={`font-medium ${
+                      my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
+                    }`}
+                  >
+                    {my[key]}
+                  </Text>
+                  <Text
+                    className={`font-medium ${
+                      my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
+                    }`}
+                  >
+                    {other[key]}
+                  </Text>
+                </View>
               </View>
             ),
         )}

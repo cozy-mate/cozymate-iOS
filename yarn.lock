@@ -4575,8 +4575,8 @@ __metadata:
     react: 18.2.0
     react-icons: ^5.2.1
     react-native: 0.74.2
-    react-native-gesture-handler: ^2.17.0
-    react-native-reanimated: ^3.12.0
+    react-native-gesture-handler: ^2.17.1
+    react-native-reanimated: ^3.12.1
     react-native-safe-area-context: ^4.10.5
     react-native-screens: ^3.31.1
     react-native-svg: ^15.3.0
@@ -9157,9 +9157,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:^2.17.0":
-  version: 2.17.0
-  resolution: "react-native-gesture-handler@npm:2.17.0"
+"react-native-gesture-handler@npm:^2.17.1":
+  version: 2.17.1
+  resolution: "react-native-gesture-handler@npm:2.17.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -9168,13 +9168,13 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 21747ef920325dc1d85cce8fe74e5bc1a7f5662fb765f87db06026138bd9bd94e822488b3e6c97032c3ea9b96331e1722e6a3a98af2e3d4e2193b902354b8b88
+  checksum: 70da4fc51d92899591aadf03396a8e0b78223fbe71da5b10e76232058c1ef5943d54c1dd8da815d5b6a8b41f259ea9d50457680e2ef7878c88d7396771170ae3
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "react-native-reanimated@npm:3.12.0"
+"react-native-reanimated@npm:^3.12.1":
+  version: 3.12.1
+  resolution: "react-native-reanimated@npm:3.12.1"
   dependencies:
     "@babel/plugin-transform-arrow-functions": ^7.0.0-0
     "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
@@ -9188,7 +9188,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 14ed9eea5d48b456801847c64a29be5cef2141ac2f5af1f687201083be6dafc925b62235c77bf172b5d9894bc69912677620f96d222341dc451c894211988ab8
+  checksum: 91575b3a20a5878f42d0302cf304ed46ff35c12ce717018c0bfb6af047bf675f224ab95de778daae483b139e66c5290a661635c06304065879b02a5926243e1c
   languageName: node
   linkType: hard
 
