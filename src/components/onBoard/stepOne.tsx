@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import TextInputBoxComponent from '@components/textInputBox';
 import RadioBoxComponent from '@components/basicRadioBox';
-import NumberInputBoxComponent from '@components/numberInputBox';
 
 import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
 import AbleNextButtonIcon from '@assets/onBoard/ableNextButton.svg';
@@ -16,7 +15,7 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [name, setName] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
-  const [age, setAge] = useState<number | null>(null);
+  const [age, setAge] = useState<string>('');
 
   const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== null;
 
@@ -76,11 +75,12 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
 
         <View>
-          <NumberInputBoxComponent
+          <TextInputBoxComponent
             title="나이"
             value={age}
             setValue={setAge}
             placeholder="태어난 연도를 입력해주세요"
+            hasButton={false}
           />
         </View>
       </View>
