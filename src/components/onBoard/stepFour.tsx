@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
-import Booie from '@assets/onBoard/example/booie.svg';
-import Leo from '@assets/onBoard/example/leo.svg';
-import Lulu from '@assets/onBoard/example/lulu.svg';
-import Roy from '@assets/onBoard/example/roy.svg';
+import CharacterBox from '@assets/onBoard/characterBox.svg';
 
 interface StepComponentProps {
   handleNextStep: () => void;
 }
+
+type Character = {
+  index: number;
+  item: string;
+  select: boolean;
+  selected: React.FC;
+  notSelected: React.FC;
+};
+
+type Item = {
+  series: string;
+  characters: Character[];
+};
 
 const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [character, setCharacter] = useState<string>('');
@@ -21,40 +31,156 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
     console.log('isComplete:', isComplete);
   }, [character, isComplete]);
 
-  const [items, setItems] = useState([
+  const [items, setItems] = useState<Item[]>([
     {
-      index: 1,
-      item: '루루',
-      select: false,
-      selected: Lulu,
-      notSelected: Lulu,
+      series: 'Type 1',
+      characters: [
+        {
+          index: 1,
+          item: '루루',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 2,
+          item: '로이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 3,
+          item: '레오',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 4,
+          item: '부이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+      ],
     },
     {
-      index: 2,
-      item: '로이',
-      select: false,
-      selected: Roy,
-      notSelected: Roy,
+      series: 'Type 2',
+      characters: [
+        {
+          index: 5,
+          item: '루루',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 6,
+          item: '로이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 7,
+          item: '레오',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 8,
+          item: '부이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+      ],
     },
     {
-      index: 3,
-      item: '레오',
-      select: false,
-      selected: Leo,
-      notSelected: Leo,
+      series: 'Type 3',
+      characters: [
+        {
+          index: 9,
+          item: '루루',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 10,
+          item: '로이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 11,
+          item: '레오',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 12,
+          item: '부이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+      ],
     },
     {
-      index: 4,
-      item: '부이',
-      select: false,
-      selected: Booie,
-      notSelected: Booie,
+      series: 'Type 4',
+      characters: [
+        {
+          index: 13,
+          item: '루루',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 14,
+          item: '로이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 15,
+          item: '레오',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+        {
+          index: 16,
+          item: '부이',
+          select: false,
+          selected: CharacterBox,
+          notSelected: CharacterBox,
+        },
+      ],
     },
   ]);
 
+  const updateCharacters = (updatedCharacters: Character[]) => {
+    setItems((prevItems) =>
+      prevItems.map((prevItem) => ({
+        ...prevItem,
+        characters: prevItem.characters.map(
+          (char) =>
+            updatedCharacters.find((updatedChar) => updatedChar.index === char.index) || char,
+        ),
+      })),
+    );
+  };
+
   return (
-    <View className="flex-1 px-5">
-      <View className="mt-[67px] mb-[160px]">
+    <ScrollView className="flex-1 px-5">
+      <View className="mt-[56px] mb-[59px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
             cozymate와 함께할
@@ -64,28 +190,35 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
           </Text>
         </View>
 
-        <View className="flex-row flex-wrap justify-between">
-          <CustomRadioBoxComponent
-            value={character}
-            setValue={setCharacter}
-            items={items}
-            setItems={setItems}
-          />
-        </View>
+        {items.map((typeItem) => (
+          <View key={typeItem.series} className="mb-[48px]">
+            <Text className="mb-3 text-base font-semibold tracking-tight text-emphasizedFont">
+              {typeItem.series}
+            </Text>
+            <View className="flex-row flex-wrap justify-between">
+              <CustomRadioBoxComponent
+                value={character}
+                setValue={setCharacter}
+                items={typeItem.characters}
+                updateCharacters={updateCharacters}
+              />
+            </View>
+          </View>
+        ))}
       </View>
 
       <View className="flex">
-        <Pressable onPress={handleNextStep} disabled={!isComplete}>
+        <Pressable onPress={handleNextStep}>
           <View
-            className={`px-4 py-5 w-[330px] rounded-[39px]  ${
-              isComplete ? 'bg-main' : 'bg-disabledFont'
-            } `}
+            className={`text-base font-semibold p-4 rounded-xl ${
+              isComplete ? 'bg-main' : 'bg-[#C4C4C4]'
+            }`}
           >
-            <Text className="text-sm font-semibold text-center text-white">확인</Text>
+            <Text className="text-center text-white">확인</Text>
           </View>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

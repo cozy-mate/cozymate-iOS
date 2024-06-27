@@ -4,11 +4,11 @@ import { Text, View, Pressable, TextInput } from 'react-native';
 interface CustomRadioBoxComponentProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+  items: Character[];
+  updateCharacters: (updatedCharacters: Character[]) => void;
 }
 
-type Item = {
+type Character = {
   index: number;
   item: string;
   select: boolean;
@@ -20,7 +20,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   value,
   setValue,
   items,
-  setItems,
+  updateCharacters,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
@@ -37,40 +37,34 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
     setFocusedIndex(null);
   };
 
-  const select = (selectedItem: Item) => {
+  const select = (selectedItem: Character) => {
     const updatedItems = items.map((item) => ({
       ...item,
       select: item.index === selectedItem.index ? true : false,
     }));
-    setItems(updatedItems);
+    updateCharacters(updatedItems);
     setValue(selectedItem.item);
     handleFocus(selectedItem.index);
   };
 
   return (
     <>
-      {items.map((item: Item) => (
+      {items.map((item: Character) => (
         <Pressable
           key={item.index}
-          className={`flex-col w-[45%] justify-center items-center rounded-xl border-[1px] px-5 py-4 mb-4 ${
-            focusedIndex === item.index
-              ? 'border-main bg-colorBox'
-              : 'border-disabled bg-transparent'
-          }`}
+          className="flex-col items-center justify-center"
           onPress={() => select(item)}
         >
-          <Text className={`font-semibold ${item.select ? 'text-main' : 'text-disabledFont'}`}>
-            {item.item}
-          </Text>
           {item.select ? (
-            <View className="mt-2.5">
+            <View className="mb-2 border-2">
               <item.selected />
             </View>
           ) : (
-            <View className="mt-2.5">
+            <View className="mb-2">
               <item.notSelected />
             </View>
           )}
+          <Text className="text-sm font-semibold text-basicFont">{item.item}</Text>
           <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
