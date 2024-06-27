@@ -14,7 +14,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     <View className="flex-1 bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
       <View className="flex items-center mt-[111px]">
-        <View className="mb-5">
+        <View className="mb-[147px]">
           <Text className="text-base font-semibold text-center text-basicFont">
             아직 홈이 결성되지 않았어요
           </Text>
@@ -22,17 +22,19 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
             방을 생성하거나, 초대코드를 입력해주세요!
           </Text>
         </View>
-        <StarImage />
       </View>
 
-      <View className="flex-1 flex-col bg-white px-[26px] pt-[60px] rounded-t-[40px]">
-        <View className="px-5 py-4 mb-4 border-2 border-disabled rounded-xl">
+      <View className="flex-1 flex-col bg-white px-[26px] pt-[60px] rounded-t-[40px] relative">
+        <View className="absolute top-[-110px] left-[115px]">
+          <StarImage />
+        </View>
+        <View className="px-5 py-4 mb-4 border border-disabled rounded-xl">
           <Pressable className="flex-row">
             <View className="mr-3">
               <HomeIcon />
             </View>
             <View>
-              <Text className="text-base font-semibold text-emphasizedFont">방만들기</Text>
+              <Text className="text-base font-semibold text-emphasizedFont">방 만들기</Text>
               <Text className="text-xs font-medium tracking-tight text-basicFont">
                 룸메이트가 모일 커뮤니티 방을 만들어요!
               </Text>
@@ -40,7 +42,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           </Pressable>
         </View>
 
-        <View className="px-5 py-4 border-2 border-disabled rounded-xl">
+        <View className="px-5 py-4 border border-disabled rounded-xl">
           <Pressable className="flex-row">
             <View className="mr-3">
               <CodeIcon />
