@@ -10,6 +10,10 @@ import CodeIcon from '@assets/home/codeIcon.svg';
 import { HomeScreenProps } from '@type/param/stack';
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const toRoomMain = () => {
+    navigation.navigate('RoomMainScreen');
+  };
+
   return (
     <View className="flex-1 bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
@@ -52,6 +56,18 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
               <Text className="text-xs font-medium tracking-tight text-basicFont">
                 방장에게서 받은 코드로 커뮤니티 방에 입장할래요!
               </Text>
+            </View>
+          </Pressable>
+        </View>
+
+        {/* 네비게이션용 코드 */}
+        <View className="px-5 py-4 border border-disabled rounded-xl">
+          <Pressable className="flex-row" onPress={toRoomMain}>
+            <View className="mr-3">
+              <CodeIcon />
+            </View>
+            <View className="flex flex-col">
+              <Text className="text-base font-semibold text-emphasizedFont">룸 메인으로 이동</Text>
             </View>
           </Pressable>
         </View>
