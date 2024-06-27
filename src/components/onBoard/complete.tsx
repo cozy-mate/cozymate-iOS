@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
-import CharacterImage from '@assets/onBoard/example/lulu.svg';
+import CharacterImage from '@assets/onBoard/lulu.svg';
 
 interface StepComponentProps {
   handleNextStep: () => void;

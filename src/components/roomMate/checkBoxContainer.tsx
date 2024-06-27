@@ -1,6 +1,6 @@
 import CustomCheckBoxComponent from '@components/customCheckBox';
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 
 interface CheckBoxContainerProps {
   value: string[];
