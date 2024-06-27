@@ -3,10 +3,6 @@ import { View, Text, Pressable } from 'react-native';
 import TextInputBoxComponent from '@components/textInputBox';
 import RadioBoxComponent from '@components/basicRadioBox';
 
-import YellowCharacter from '@assets/onBoard/yellowCharacter.svg';
-import AbleNextButtonIcon from '@assets/onBoard/ableNextButton.svg';
-import DisableNextButtonIcon from '@assets/onBoard/disableNextButton.svg';
-
 interface StepComponentProps {
   handleNextStep: () => void;
 }
@@ -17,7 +13,7 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [gender, setGender] = useState<string>('');
   const [age, setAge] = useState<string>('');
 
-  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== null;
+  const isComplete = name !== '' && nickname !== '' && gender !== '' && age !== '';
 
   const [items, setItems] = useState([
     { index: 1, item: '남자', select: false },
@@ -34,7 +30,7 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
 
   return (
     <View className="flex-1 px-5">
-      <View className="mt-[67px] mb-[7px]">
+      <View className="mt-[56px] mb-[185px]">
         <View className="mb-6 leading-loose">
           <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
             원활한 서비스 이용을 위해
@@ -85,14 +81,16 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
         </View>
       </View>
 
-      <View className="flex items-end">
+      <View className="flex">
         <Pressable onPress={handleNextStep}>
-          {isComplete ? <AbleNextButtonIcon /> : <DisableNextButtonIcon />}
+          <View
+            className={`text-base font-semibold p-4 rounded-xl ${
+              isComplete ? 'bg-main' : 'bg-[#C4C4C4]'
+            }`}
+          >
+            <Text className="text-center text-white">다음</Text>
+          </View>
         </Pressable>
-      </View>
-
-      <View className="mt-[-33px]">
-        <YellowCharacter />
       </View>
     </View>
   );
