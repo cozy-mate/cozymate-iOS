@@ -21,7 +21,7 @@ type Item = {
   characters: Character[];
 };
 
-const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
+const StepTwo: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   const [character, setCharacter] = useState<string>('');
 
   const isComplete = character !== '';
@@ -222,4 +222,4 @@ const StepFour: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   );
 };
 
-export default StepFour;
+export default StepTwo;
