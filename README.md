@@ -1,1 +1,1 @@
-# cozy-mate-iOS
+# cozymate-iOS
