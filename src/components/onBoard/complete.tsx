@@ -10,7 +10,7 @@ interface StepComponentProps {
 const Complete: React.FC<StepComponentProps> = ({ handleNextStep }) => {
   return (
     <View className="flex-1 px-5">
-      <View className="mt-[56px] mb-[164px]">
+      <View className="mt-[56px] mb-[156px]">
         <View className="mb-[108px] leading-loose">
           <Text className="text-lg font-semibold tracking-tight text-basicFont">델로님,</Text>
           <Text className="text-lg font-semibold tracking-tight text-basicFont">

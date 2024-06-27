@@ -7,6 +7,7 @@ import { RootStackParamList } from '@type/param/stack';
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
+import HomeScreen from 'src/screens/home/home';
 
 function AppInner() {
   const stack = createNativeStackNavigator<RootStackParamList>();
@@ -15,6 +16,7 @@ function AppInner() {
     <stack.Navigator screenOptions={{ headerShown: false }}>
       <stack.Screen name="SignInScreen" component={SignInScreen} />
       <stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
+      <stack.Screen name="HomeScreen" component={HomeScreen} />
       <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
       <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
       <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />

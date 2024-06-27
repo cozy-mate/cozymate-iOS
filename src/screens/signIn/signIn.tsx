@@ -2,8 +2,6 @@ import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native';
 
-import LogoImage from '@assets/logo.svg';
-
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 import { SignInScreenProps } from '@type/param/stack';
@@ -11,6 +9,10 @@ import { SignInScreenProps } from '@type/param/stack';
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const toOnBoard = () => {
     navigation.navigate('OnBoardScreen');
+  };
+
+  const toHome = () => {
+    navigation.navigate('HomeScreen');
   };
 
   const toRoomMate = () => {
@@ -51,7 +53,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-navergreen px-6 py-4"
-            onPress={toRoomMate}
+            onPress={toHome}
           >
             <Text className="font-semibold text-black opacity-85">홈 스크린</Text>
           </Pressable>
