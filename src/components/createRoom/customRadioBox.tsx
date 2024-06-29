@@ -2,57 +2,68 @@ import React, { useRef, useState } from 'react';
 import { Text, View, Pressable, TextInput } from 'react-native';
 
 interface CustomRadioBoxComponentProps {
-  title: string;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
 type Item = {
   index: number;
-  item: string;
+  value: number;
+  name: string;
   select: boolean;
 };
 
 const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
-  title,
   value,
   setValue,
   items,
   setItems,
 }) => {
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+
+  const inputRef = useRef<TextInput>(null);
+
+  const handleFocus = (index: number) => {
+    setFocusedIndex(index);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const handleBlur = () => {
+    setFocusedIndex(null);
+  };
+
   const select = (selectedItem: Item) => {
     const updatedItems = items.map((item) => ({
       ...item,
-      select: item.index === selectedItem.index ? true : false,
+      select: item.index === selectedItem.index,
     }));
     setItems(updatedItems);
-    setValue(selectedItem.item);
+    setValue(selectedItem.value);
+    handleFocus(selectedItem.index);
   };
 
   return (
-    <View>
-      <Text className="pl-1 mb-2 font-semibold text-basicFont">{title}</Text>
-      <View className="flex flex-row flex-wrap">
-        {items.map((item: Item) => (
-          <Pressable
-            key={item.index}
-            className={`flex-col justify-center items-center rounded-xl px-5 py-[10px] mr-2 mb-2 ${
-              item.select ? 'bg-main' : 'bg-[#F6F7F9]'
-            }`}
-            onPress={() => select(item)}
+    <View className="flex flex-row flex-wrap">
+      {items.map((item: Item) => (
+        <Pressable
+          key={item.index}
+          className={`flex-col justify-center items-center rounded-md px-5 py-[10px] mr-2 ${
+            item.select ? 'bg-main' : 'bg-[#F6F7F9]'
+          }`}
+          onPress={() => select(item)}
+        >
+          <Text
+            className={`text-xs font-medium ${item.select ? 'text-white' : 'text-disabledFont'} `}
           >
-            <Text
-              className={`text-xs font-medium tracking-[−0.02em] ${
-                item.select ? 'text-white' : 'text-disabledFont'
-              }`}
-            >
-              {item.item}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+            {item.name}
+          </Text>
+          <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
+        </Pressable>
+      ))}
     </View>
   );
 };

@@ -8,6 +8,7 @@ export type RootStackParamList = {
   RoomMateScreen: undefined;
   CreateRoomScreen: undefined;
   UserDetailScreen: undefined;
+  UserInfoScreen: undefined;
 };
 
 export type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignInScreen'>;
@@ -17,3 +18,4 @@ export type RoomMainScreenProps = NativeStackScreenProps<RootStackParamList, 'Ro
 export type RoomMateScreenProps = NativeStackScreenProps<RootStackParamList, 'RoomMateScreen'>;
 export type CreateRoomScreenProps = NativeStackScreenProps<RootStackParamList, 'CreateRoomScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'UserDetailScreen'>;
+export type UserInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'UserInfoScreen'>;
