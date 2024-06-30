@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/background.svg';
 
@@ -21,9 +20,17 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   return (
     <View className="flex-1 bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
-      <View className="mt-[76px] mx-6">
+      <View className="mt-[76px] mx-5">
         <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
       </View>
+      <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px]">
+        <Text className="text-base font-semibold text-emphasizedFont">
+          오늘 <Text className="text-main">델로</Text>님이
+        </Text>
+        <Text className="text-base font-semibold text-emphasizedFont">
+          해야할 일들을 알려드릴게요!
+        </Text>
+      </ScrollView>
     </View>
   );
 };
