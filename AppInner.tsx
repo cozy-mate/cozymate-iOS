@@ -6,6 +6,7 @@ import OnBoardScreen from 'src/screens/onBoard/onBoard';
 import { RootStackParamList } from '@type/param/stack';
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
+import UserInfoScreen from 'src/screens/userInfo/userInfo';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import HomeScreen from 'src/screens/home/home';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
@@ -19,8 +20,9 @@ function AppInner() {
       <stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
       <stack.Screen name="HomeScreen" component={HomeScreen} />
       <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
-      <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
       <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+      <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
+      <stack.Screen name="UserInfoScreen" component={UserInfoScreen} />
       <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
     </stack.Navigator>
   );

@@ -57,7 +57,9 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           onPress={() => select(item)}
         >
           <Text
-            className={`text-xs font-medium ${item.select ? 'text-white' : 'text-disabledFont'} `}
+            className={`text-xs ${
+              item.select ? 'text-white font-semibold' : 'text-disabledFont font-medium'
+            } `}
           >
             {item.name}
           </Text>
