@@ -5,6 +5,8 @@ import Background from '@assets/background.svg';
 
 import { TodoListScreenProps } from '@type/param/stack';
 import NavBar from '@components/navBar';
+import TodoList from '@components/todoList/todoList';
+import RoleRule from '@components/todoList/roleRule';
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const [isTodo, setIsTodo] = useState<boolean>(true);
@@ -23,13 +25,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
       <View className="mt-[76px] mx-5">
         <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
       </View>
-      <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px]">
-        <Text className="text-base font-semibold text-emphasizedFont">
-          오늘 <Text className="text-main">델로</Text>님이
-        </Text>
-        <Text className="text-base font-semibold text-emphasizedFont">
-          해야할 일들을 알려드릴게요!
-        </Text>
+      <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
+        {isTodo ? <TodoList /> : <RoleRule />}
       </ScrollView>
     </View>
   );
