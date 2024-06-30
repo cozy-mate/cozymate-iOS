@@ -18,10 +18,7 @@ const TodoBox: React.FC<TodoBoxProps> = ({ todoData }) => {
       {todoData ? (
         <>
           {todoData.map((data) => (
-            <View
-              key={data.index}
-              className="flex flex-row justify-between items-center mb-1 py-[11.5px]"
-            >
+            <View key={data.index} className="flex flex-row items-center justify-between mb-1">
               <Text
                 className={`${data.isDone ? 'text-disabledFont line-through' : 'text-basicFont'}`}
               >
