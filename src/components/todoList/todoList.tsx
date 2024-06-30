@@ -1,7 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
+import TodoBox from './todoBox';
 
-const TodoList: React.FC = () => {
+interface TodoBoxProps {
+  todoData: {
+    index: number;
+    isDone: boolean;
+    name: string;
+  }[];
+}
+
+const TodoList: React.FC<TodoBoxProps> = ({ todoData }) => {
   return (
     <View>
       <Text className="text-base font-semibold text-emphasizedFont">
@@ -10,6 +19,7 @@ const TodoList: React.FC = () => {
       <Text className="text-base font-semibold text-emphasizedFont">
         해야할 일들을 알려드릴게요!
       </Text>
+      <TodoBox todoData={todoData} />
     </View>
   );
 };

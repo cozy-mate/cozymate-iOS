@@ -7,9 +7,22 @@ import { TodoListScreenProps } from '@type/param/stack';
 import NavBar from '@components/navBar';
 import TodoList from '@components/todoList/todoList';
 import RoleRule from '@components/todoList/roleRule';
+import { dummyData } from './dummyData';
+
+interface TodoItem {
+  index: number;
+  isDone: boolean;
+  name: string;
+}
+
+interface TodoBox {
+  todoData: TodoItem[];
+}
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const [isTodo, setIsTodo] = useState<boolean>(true);
+
+  const [myTodoData, setMyTodoData] = useState<TodoItem[]>(dummyData.todoData);
 
   const handleTodo = () => {
     setIsTodo(true);
@@ -26,7 +39,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
         <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
       </View>
       <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
-        {isTodo ? <TodoList /> : <RoleRule />}
+        {isTodo ? <TodoList todoData={myTodoData} /> : <RoleRule />}
       </ScrollView>
     </View>
   );
