@@ -11,7 +11,7 @@ interface TodoBoxProps {
 
 const TodoBox: React.FC<TodoBoxProps> = ({ todoData }) => {
   return (
-    <View className="p-2 pl-4 bg-white">
+    <View className="p-2 pl-4 bg-white shadow-chipback">
       {todoData ? (
         <>
           {todoData.map((data) => (
