@@ -10,6 +10,7 @@ import UserInfoScreen from 'src/screens/userInfo/userInfo';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import HomeScreen from 'src/screens/home/home';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
+import TodoListScreen from 'src/screens/todoList/todoList';
 
 function AppInner() {
   const stack = createNativeStackNavigator<RootStackParamList>();
@@ -21,6 +22,8 @@ function AppInner() {
       <stack.Screen name="HomeScreen" component={HomeScreen} />
       <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
       <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+      <stack.Screen name="TodoListScreen" component={TodoListScreen} />
+
       <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
       <stack.Screen name="UserInfoScreen" component={UserInfoScreen} />
       <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
