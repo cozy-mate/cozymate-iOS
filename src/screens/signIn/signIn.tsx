@@ -26,6 +26,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const toUserDetail = () => {
     navigation.navigate('UserDetailScreen');
   };
+  const toTodoList = () => {
+    navigation.navigate('TodoListScreen');
+  };
 
   return (
     <SafeAreaView className="flex-1">
@@ -75,6 +78,16 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           >
             <AppleLogo className="mr-2" />
             <Text className="font-semibold text-center text-white">방 생성하기 스크린</Text>
+          </Pressable>
+        </View>
+
+        <View className="mx-3 mb-4">
+          <Pressable
+            className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
+            onPress={toTodoList}
+          >
+            <AppleLogo className="mr-2" />
+            <Text className="font-semibold text-center text-white">투두리스트 스크린</Text>
           </Pressable>
         </View>
 
