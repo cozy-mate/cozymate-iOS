@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import SelectedBar from '@assets/todoList/selectedBar.svg';
+
 interface NavBarProps {
   isTodo: boolean;
   handleTodo: () => void;
@@ -10,27 +12,29 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ isTodo, handleTodo, handleRoleRule }) => {
   return (
     <View className="flex flex-row">
-      <View className={`${isTodo && ' border-main border-b-4'} px-[15px] text-center mr-[9px]`}>
+      <View className="mr-6">
         <Pressable onPress={handleTodo}>
           <Text
             className={`${
-              isTodo ? 'text-main border-main border-b-4' : 'text-disabledFont'
-            } p-1 text-base font-semibold`}
+              isTodo ? 'text-main' : 'text-disabledFont'
+            } px-[17.5px] pt-1 pb-3 text-base font-semibold`}
           >
             To - do
           </Text>
+          {isTodo && <SelectedBar />}
         </Pressable>
       </View>
 
-      <View className={`${!isTodo && ' border-main border-b-4'}  px-[15px] text-center`}>
+      <View>
         <Pressable onPress={handleRoleRule}>
           <Text
             className={`${
-              !isTodo ? 'text-main border-main border-b-4' : 'text-disabledFont'
-            } p-1 text-base font-semibold`}
+              !isTodo ? 'text-main' : 'text-disabledFont'
+            } pt-1 pb-3 text-base font-semibold`}
           >
             Role & Rule
           </Text>
+          {!isTodo && <SelectedBar />}
         </Pressable>
       </View>
     </View>
