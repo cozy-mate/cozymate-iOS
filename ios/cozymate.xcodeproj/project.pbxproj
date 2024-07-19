@@ -14,8 +14,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		49BD899D88C5FBBB6AE13363 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 421053EA13806C9EDD3FDF00 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-cozymate-cozymateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-cozymate-cozymateTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		80616AD11B494C338763F80F /* SF_HambakSnow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +47,8 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cozymate/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-cozymate-cozymateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.release.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.release.xcconfig"; sourceTree = "<group>"; };
+		923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = SF_HambakSnow.ttf; path = ../src/assets/fonts/SF_HambakSnow.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */ = {isa = PBXFileReference; name = "SF_HambakSnow.ttf"; path = "../src/assets/fonts/SF_HambakSnow.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +103,15 @@
 			name = cozymate;
 			sourceTree = "<group>";
 		};
+		2266C62D5C3A4EAC977837AC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,15 +164,6 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		2266C62D5C3A4EAC977837AC /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 

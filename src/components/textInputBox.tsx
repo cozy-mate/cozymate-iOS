@@ -42,18 +42,18 @@ const TextInputBoxComponent: React.FC<TextInputBoxComponentProps> = ({
     setIsFocused(false);
   };
 
-  const isActive = isFocused || !!value;
+  const isActive = isFocused || value !== '';
 
   return (
     <Pressable
       onPress={handleFocus}
-      className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-[22px] py-4 mb-4 bg-white
-        ${isActive ? 'border-main' : 'border-disabled'}`}
+      className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-5 py-4 mb-4 bg-white
+        ${isActive ? 'border-sub1' : 'border-disabled'}`}
     >
       <View className="flex flex-col items-start justify-center">
         <Text
           className={`font-semibold text-xs leading-[17px] tracking-[-0.03em]
-            ${isActive ? 'text-main' : 'text-colorFont'}`}
+            ${isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
         </Text>

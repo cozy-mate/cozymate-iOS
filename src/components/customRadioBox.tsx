@@ -1,14 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, Pressable, TextInput } from 'react-native';
+import { View, Pressable, TextInput } from 'react-native';
 
 interface CustomRadioBoxComponentProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
-  items: Character[];
-  updateCharacters: (updatedCharacters: Character[]) => void;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
-type Character = {
+type Item = {
   index: number;
   item: string;
   select: boolean;
@@ -20,7 +20,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   value,
   setValue,
   items,
-  updateCharacters,
+  setItems,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
@@ -37,38 +37,29 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
     setFocusedIndex(null);
   };
 
-  const select = (selectedItem: Character) => {
+  const select = (selectedItem: Item) => {
     const updatedItems = items.map((item) => ({
       ...item,
       select: item.index === selectedItem.index ? true : false,
     }));
-    updateCharacters(updatedItems);
+    setItems(updatedItems);
     setValue(selectedItem.item);
     handleFocus(selectedItem.index);
   };
 
   return (
-    <>
-      {items.map((item: Character) => (
+    <View className="flex flex-row flex-wrap">
+      {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className="flex-col items-center justify-center"
           onPress={() => select(item)}
+          className={`mb-10 mr-4 ${item.index % 4 === 0 && 'mr-0'}`}
         >
-          {item.select ? (
-            <View className="mb-2 border-2">
-              <item.selected />
-            </View>
-          ) : (
-            <View className="mb-2">
-              <item.notSelected />
-            </View>
-          )}
-          <Text className="text-sm font-semibold text-basicFont">{item.item}</Text>
+          {item.select ? <item.selected /> : <item.notSelected />}
           <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
-    </>
+    </View>
   );
 };
 

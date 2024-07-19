@@ -15,10 +15,6 @@ interface TodoItem {
   name: string;
 }
 
-interface TodoBox {
-  todoData: TodoItem[];
-}
-
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const [isTodo, setIsTodo] = useState<boolean>(true);
 

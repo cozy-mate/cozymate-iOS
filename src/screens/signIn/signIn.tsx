@@ -26,20 +26,25 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const toUserDetail = () => {
     navigation.navigate('UserDetailScreen');
   };
+
   const toTodoList = () => {
     navigation.navigate('TodoListScreen');
   };
 
+  const toUserInfoScreen = () => {
+    navigation.navigate('UserInfoScreen');
+  };
+
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
         <View className="items-center justify-center flex-1">
           <View className="flex-row mb-[7px]">
             <Text className="text-[#FFE28B] text-[42px] font-extrabold">cozy</Text>
             <Text className="text-[#BDD8FF] text-[42px] font-extrabold">mate</Text>
           </View>
-          <Text className="text-basicFont text-[13.5px] font-semibold">
-            “룸메이트와 함께 만드는 나만의 편안한 집”
+          <Text className="text-basicFont text-[13.5px] font-semibold font-['SF_HambakSnow']">
+            “룸메이트와 함께 만드는 우리의 편안한 공간”
           </Text>
         </View>
 
@@ -91,10 +96,20 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           </Pressable>
         </View>
 
-        <View className="mx-3 mb-11">
+        <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
             onPress={toUserDetail}
+          >
+            <AppleLogo className="mr-2" />
+            <Text className="font-semibold text-center text-white">상세 스크린</Text>
+          </Pressable>
+        </View>
+
+        <View className="mx-3 mb-11">
+          <Pressable
+            className="flex-row items-center rounded-[33px] bg-appleblack px-[96px] py-[14px]"
+            onPress={toUserInfoScreen}
           >
             <AppleLogo className="mr-2" />
             <Text className="font-semibold text-center text-white">상세 스크린</Text>

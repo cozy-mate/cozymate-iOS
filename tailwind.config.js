@@ -13,10 +13,12 @@ module.exports = {
       },
       colors: {
         DEFAULT: 'black',
-        main: '#68A4FF',
-        sub: '#FFCE3D',
+        main1: '#68A4FF',
+        main2: '#FFCE3D',
 
-        disabled: '#E6E6E6',
+        sub1: '#CADFFF',
+        sub2: '#E5F0FF',
+        sub3: '#B5D3FF',
 
         // 폰트 색깔
         basicFont: '#5D5D6A',
@@ -24,9 +26,13 @@ module.exports = {
         disabledFont: '#ACADB4',
         emphasizedFont: '#444955',
 
+        disabled: '#E6E6E6',
+
         // 박스 색깔
         box: '#F1F1F1',
         colorBox: '#F3F6FA',
+
+        warning: '#FF391E',
 
         // 소셜 로그인용 색깔
         kakaoyellow: '#FEE500',

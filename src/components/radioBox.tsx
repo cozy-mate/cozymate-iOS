@@ -49,20 +49,18 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
     handleFocus();
   };
 
-  const isActive = isFocused || !!value;
-
   return (
     <>
-      {isActive ? (
+      {isFocused ? (
         <Pressable
-          className="flex-col justify-center px-5 py-4 mb-4 border-[1px] rounded-xl border-main"
+          className="flex flex-col justify-center px-5 py-4 mb-4 border-[1px] rounded-xl border-sub1"
           onPress={handleFocus}
         >
-          <Text className="font-semibold text-sm leading-[17px] tracking-[-0.03em] text-main">
+          <Text className="font-semibold text-sm leading-[17px] tracking-[-0.03em] text-main1">
             {title}
           </Text>
 
-          <View className="mt-2.5 flex-row">
+          <View className="mt-1.5 flex-row">
             {items.map((item: Item) => {
               return (
                 <View key={item.index}>
