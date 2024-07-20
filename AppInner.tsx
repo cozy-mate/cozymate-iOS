@@ -8,9 +8,9 @@ import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserInfoScreen from 'src/screens/userInfo/userInfo';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
-import HomeScreen from 'src/screens/home/home';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
+import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 
 function AppInner() {
   const stack = createNativeStackNavigator<RootStackParamList>();
@@ -19,7 +19,7 @@ function AppInner() {
     <stack.Navigator screenOptions={{ headerShown: false }}>
       <stack.Screen name="SignInScreen" component={SignInScreen} />
       <stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
-      <stack.Screen name="HomeScreen" component={HomeScreen} />
+      <stack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
       <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
       <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
       <stack.Screen name="TodoListScreen" component={TodoListScreen} />

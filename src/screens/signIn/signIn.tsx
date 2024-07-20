@@ -11,8 +11,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('OnBoardScreen');
   };
 
-  const toHome = () => {
-    navigation.navigate('HomeScreen');
+  const toCozyHome = () => {
+    navigation.navigate('CozyHomeScreen');
   };
 
   const toRoomMate = () => {
@@ -40,8 +40,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       <View className="flex-1 mx-6">
         <View className="items-center justify-center flex-1">
           <View className="flex-row mb-[7px]">
-            <Text className="text-[#FFE28B] text-[42px] font-extrabold">cozy</Text>
-            <Text className="text-[#BDD8FF] text-[42px] font-extrabold">mate</Text>
+            <Text className="text-[42px] font-extrabold">
+              <Text className="text-[#FFE28B]">cozy</Text>
+              <Text className="text-[#BDD8FF]">mate</Text>
+            </Text>
           </View>
           <Text className="text-basicFont text-[13.5px] font-semibold font-['SF_HambakSnow']">
             “룸메이트와 함께 만드는 우리의 편안한 공간”
@@ -61,7 +63,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-navergreen px-6 py-4"
-            onPress={toHome}
+            onPress={toCozyHome}
           >
             <Text className="font-semibold text-black opacity-85">홈 스크린</Text>
           </Pressable>
