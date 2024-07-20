@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import BackButton from '@assets/backButton.svg';
-import XButton from '@assets/xButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 
 import { CreateRoomScreenProps } from '@type/param/stack';
-import TextInputBoxComponent from '@components/textInputBox';
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
@@ -43,47 +41,52 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="px-4">
-        <View className="flex-row justify-between items-center pl-[1px] mb-[33px]">
-          <Pressable onPress={toSignIn}>
-            <BackButton />
-          </Pressable>
-          <Text className="text-black text-[18px] font-semibold">방 만들기</Text>
-          <Pressable onPress={toSignIn}>
-            <XButton />
-          </Pressable>
-        </View>
-        <View className="relative flex items-center justify-center mb-10">
-          <CharacterBox />
-          <View className="absolute bottom-0 right-1/3">
-            <Pressable>
-              <SelectIcon />
+    <SafeAreaView className="flex flex-col justify-between flex-1 bg-white">
+      <View className="flex flex-col justify-between flex-1 px-5">
+        <View>
+          {/* 상단 이전 버튼 */}
+          <View className="flex flex-row items-center mt-2 mb-[33px]">
+            <Pressable onPress={toSignIn}>
+              <BackButton />
             </Pressable>
           </View>
-        </View>
-        <View className="pl-[6px] mb-[260px]">
-          <View className="mb-[28px]">
-            <Text className="mb-2 text-base font-semibold text-basicFont">
-              방이름을 입력해주세요
-            </Text>
-            <TextInput
-              className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
-              value={roomName}
-              onChangeText={valueHandleChange}
-              placeholder="방이름을 입력해주세요"
-            />
+
+          {/* 캐릭터 선택 */}
+          <View className="relative flex items-center justify-center mb-10">
+            <CharacterBox />
+            <View className="absolute bottom-0 right-1/3">
+              <Pressable>
+                <SelectIcon />
+              </Pressable>
+            </View>
           </View>
-          <View>
-            <Text className="mb-2 text-base font-semibold text-basicFont">
-              인원을 선택해주세요 (본인 포함)
-            </Text>
-            <CustomRadioBoxComponent
-              value={peopleNumber}
-              setValue={setPeopleNumber}
-              items={items}
-              setItems={setItems}
-            />
+
+          <View className="">
+            {/* 방이름 입력 */}
+            <View className="mb-[28px]">
+              <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                방이름을 입력해주세요
+              </Text>
+              <TextInput
+                className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
+                value={roomName}
+                onChangeText={valueHandleChange}
+                placeholder="방이름을 입력해주세요"
+              />
+            </View>
+
+            {/* 방 인원 선택 */}
+            <View>
+              <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                인원을 선택해주세요 (본인 포함)
+              </Text>
+              <CustomRadioBoxComponent
+                value={peopleNumber}
+                setValue={setPeopleNumber}
+                items={items}
+                setItems={setItems}
+              />
+            </View>
           </View>
         </View>
 

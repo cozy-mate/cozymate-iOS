@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import Background from '@assets/home/background.svg';
-import StarImage from '@assets/home/star.svg';
+import Background from '@assets/cozyHome/background.svg';
+import StarImage from '@assets/cozyHome/star.svg';
 
 import Icon from '@assets/roomMain/icon.svg';
 import CopyIcon from '@assets/roomMain/copyIcon.svg';
