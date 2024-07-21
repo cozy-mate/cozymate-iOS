@@ -27,8 +27,8 @@ const StepOne: React.FC<StepComponentProps> = ({ handleNextStep }) => {
       {/* 상단 View */}
       <View className="flex mt-14">
         {/* 설명 Text */}
-        <View className="px-2 mb-6 leading-loose">
-          <Text className="text-lg font-semibold text-emphasizedFont tracking-[-0.02em]">
+        <View className="px-2 mb-6">
+          <Text className="text-lg font-semibold text-emphasizedFont leading-[21px] tracking-[-0.02em]">
             원활한 서비스 이용을 위해{'\n'}개인정보를 입력해주세요!
           </Text>
         </View>

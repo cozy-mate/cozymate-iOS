@@ -20,7 +20,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       <View className="flex-1 mx-6">
         <View className="mx-auto mt-[236px] mb-[224px]">
           <View className="mb-[7px]">
-            <Text className="text-[42px] font-extrabold text-center">
+            <Text className="text-[42px] font-extrabold text-center font-['SF_HambakSnow']">
               <Text className="text-[#FFE28B]">cozy</Text>
               <Text className="text-[#BDD8FF]">mate</Text>
             </Text>

@@ -7,6 +7,7 @@ export type RootStackParamList = {
   RoomMainScreen: undefined;
   CreateRoomScreen: undefined;
   TodoListScreen: undefined;
+  SchoolAuthenticationScreen: undefined;
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
@@ -19,6 +20,12 @@ export type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'Sign
 export type OnBoardScreenProps = NativeStackScreenProps<RootStackParamList, 'OnBoardScreen'>;
 // 홈 스크린 (방 만들기 Or 초대코드 입력하기)
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'CozyHomeScreen'>;
+
+export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'SchoolAuthenticationScreen'
+>;
+
 // 방 메인 스크린 (코지봇 알림)
 export type RoomMainScreenProps = NativeStackScreenProps<RootStackParamList, 'RoomMainScreen'>;
 // 방장 방 만들기 스크린 (방 이름 & 인원 선택)

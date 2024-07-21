@@ -15,6 +15,10 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('CreateRoomScreen');
   };
 
+  const toSchoolAuthentication = () => {
+    navigation.navigate('SchoolAuthenticationScreen');
+  };
+
   const isActive = true;
 
   return (
@@ -41,7 +45,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
               룸메이트와 함께 방을 만들어야{'\n'}롤앤룰, 피드를 이용할 수 있어요!
             </Text>
 
-            <Pressable>
+            <Pressable onPress={toSchoolAuthentication}>
               <View className="rounded-[81px] bg-sub1 px-6 py-3">
                 <Text className="text-xs font-semibold text-main1">룸메이트 구하러 가기</Text>
               </View>
