@@ -12,6 +12,7 @@ import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
+import BottomNavBar from 'src/layout/bottomNavBar';
 
 function AppInner() {
   const stack = createNativeStackNavigator<RootStackParamList>();
@@ -20,6 +21,8 @@ function AppInner() {
     <stack.Navigator screenOptions={{ headerShown: false }}>
       <stack.Screen name="SignInScreen" component={SignInScreen} />
       <stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
+
+      <stack.Screen name="BottomNavBar" component={BottomNavBar} />
       <stack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
       <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
 

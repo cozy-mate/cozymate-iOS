@@ -15,6 +15,14 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('CozyHomeScreen');
   };
 
+  const toTodoList = () => {
+    navigation.navigate('TodoListScreen');
+  };
+
+  const toUserDetail = () => {
+    navigation.navigate('UserDetailScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
@@ -33,7 +41,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={toOnBoard}
+            onPress={toUserDetail}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">
@@ -44,7 +52,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
         <View className="mx-3 mb-4">
           <Pressable
-            className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-4 py-[14px]"
+            className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
             onPress={toCozyHome}
           >
             <AppleLogo className="mr-4" />

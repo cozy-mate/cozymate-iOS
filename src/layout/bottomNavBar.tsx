@@ -1,8 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
+import { HomeScreenProps } from '@type/param/stack';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<HomeScreenProps>();
 
 const CozyHome: React.FC = () => {
   return (
@@ -47,7 +49,7 @@ const MyPage: React.FC = () => {
 const BottomNavBar: React.FC = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="코지홈" component={CozyHome} />
+      <Tab.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
       <Tab.Screen name="롤앤룰" component={RoleNRule} />
       <Tab.Screen name="피드" component={Feed} />
       <Tab.Screen name="룸메" component={RoomMate} />

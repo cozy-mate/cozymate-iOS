@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
+  BottomNavBar: undefined;
   SignInScreen: undefined;
   OnBoardScreen: undefined;
   CozyHomeScreen: undefined;
