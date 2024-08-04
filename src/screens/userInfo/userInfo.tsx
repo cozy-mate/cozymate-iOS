@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import { UserInfoScreenProps } from '@type/param/stack';
-import BasicInformation from '@components/createRoom/basicInformation';
 import EssentialInformation from '@components/createRoom/essentialInfomation';
 import AdditionalInformation from '@components/createRoom/additionalInfomation';
 
@@ -31,7 +30,6 @@ const UserInfo = ({ navigation }: UserInfoScreenProps) => {
             </Pressable>
           </View>
         </View>
-        {step === 1 && <BasicInformation handleNextStep={handleNextStep} />}
         {step === 2 && <EssentialInformation handleNextStep={handleNextStep} />}
         {step === 3 && <AdditionalInformation handleNextStep={toSignIn} />}
       </View>

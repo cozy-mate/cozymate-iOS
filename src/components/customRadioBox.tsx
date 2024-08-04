@@ -1,19 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { View, Pressable, TextInput } from 'react-native';
 
+import Check from '@assets/characterItem/check.svg';
+
 interface CustomRadioBoxComponentProps {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
 type Item = {
   index: number;
-  item: string;
+  item: number;
   select: boolean;
-  selected: React.FC;
-  notSelected: React.FC;
+  icon: React.FC;
 };
 
 const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
@@ -55,7 +56,14 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           onPress={() => select(item)}
           className={`mb-10 mr-4 ${item.index % 4 === 0 && 'mr-0'}`}
         >
-          {item.select ? <item.selected /> : <item.notSelected />}
+          <View className="relative">
+            <item.icon />
+            {item.select && (
+              <View className="absolute">
+                <Check />
+              </View>
+            )}
+          </View>
           <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}

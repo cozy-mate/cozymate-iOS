@@ -8,7 +8,7 @@ import { SignInScreenProps } from '@type/param/stack';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const toOnBoard = () => {
-    navigation.navigate('OnBoardScreen');
+    navigation.navigate('PersonalInfoInputScreen');
   };
 
   const toCozyHome = () => {
@@ -23,12 +23,16 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('UserDetailScreen');
   };
 
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
         <View className="mx-auto mt-[236px] mb-[224px]">
           <View className="mb-[7px]">
-            <Text className="text-[42px] font-extrabold text-center font-['SF_HambakSnow']">
+            <Text className="text-[48px] font-normal text-center font-['Cafe24_Meongi_B']">
               <Text className="text-[#FFE28B]">cozy</Text>
               <Text className="text-[#BDD8FF]">mate</Text>
             </Text>
@@ -41,7 +45,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={toUserDetail}
+            onPress={toOnBoard}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">

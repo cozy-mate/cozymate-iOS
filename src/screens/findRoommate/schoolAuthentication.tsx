@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
-import TextInputBoxComponent from '@components/textInputBox';
+import BorderTextInputBox from '@components/common/borderTextInputBox';
 import SearchModal from '@components/findRoommate/searchModal';
 
 const SchoolAuthentication: React.FC = () => {
@@ -42,7 +42,7 @@ const SchoolAuthentication: React.FC = () => {
           </View>
         </Pressable>
 
-        <TextInputBoxComponent
+        <BorderTextInputBox
           title="학교 이메일"
           value={schoolEmail}
           setValue={setSchoolEmail}
@@ -53,7 +53,7 @@ const SchoolAuthentication: React.FC = () => {
         />
 
         {isSended && (
-          <TextInputBoxComponent
+          <BorderTextInputBox
             title="인증번호 확인"
             value={authenticationCode}
             setValue={setAuthenticationCode}

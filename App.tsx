@@ -5,15 +5,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { RecoilRoot } from 'recoil';
+
 function App(): React.JSX.Element {
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <AppInner />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <RecoilRoot>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <AppInner />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </RecoilRoot>
   );
 }
 
