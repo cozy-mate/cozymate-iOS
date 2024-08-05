@@ -21,7 +21,7 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-lg font-semibold tracking-tight text-emphasizedFont">
-              델로님,{'\n'}cozymate에 오신걸 환영해요!
+              {signUp.nickname}님,{'\n'}cozymate에 오신걸 환영해요!
             </Text>
           </View>
 
