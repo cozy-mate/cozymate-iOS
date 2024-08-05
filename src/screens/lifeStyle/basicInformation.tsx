@@ -116,9 +116,16 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
           value={birthYear}
           setValue={setBirthYear}
           placeholder="2002"
+          isDisable={false}
         />
 
-        <CustomTextInputBox title="이름을" value={name} setValue={setName} placeholder="김코지" />
+        <CustomTextInputBox
+          title="이름을"
+          value={name}
+          setValue={setName}
+          placeholder="김코지"
+          isDisable={false}
+        />
       </ScrollView>
     </SafeAreaView>
   );

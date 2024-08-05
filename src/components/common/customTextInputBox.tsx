@@ -6,6 +6,7 @@ interface CustomTextInputBoxProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
+  isDisable?: boolean;
 }
 
 const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
@@ -13,6 +14,7 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
   value,
   setValue,
   placeholder,
+  isDisable,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -50,6 +52,7 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           placeholder={`ex. ${placeholder}`}
+          editable={isDisable}
           className={`${
             isFocused
               ? 'bg-sub2 border-main1 border-[1px]'

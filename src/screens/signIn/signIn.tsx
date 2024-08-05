@@ -45,7 +45,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={toOnBoard}
+            onPress={toLifeStyleOnboarding}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">
