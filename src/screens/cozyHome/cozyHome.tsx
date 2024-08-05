@@ -47,7 +47,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
 
             <Pressable onPress={toSchoolAuthentication}>
               <View className="rounded-[81px] bg-sub1 px-6 py-3">
-                <Text className="text-xs font-semibold text-main1">룸메이트 구하러 가기</Text>
+                <Text className="text-xs font-semibold text-main1">코지메이트 구하러 가기</Text>
               </View>
             </Pressable>
           </View>
