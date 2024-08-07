@@ -4,27 +4,16 @@ import { Pressable, Text, View, SafeAreaView } from 'react-native';
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 
-import { SignInScreenProps } from '@type/param/stack';
+import { SignInScreenProps } from '@type/param/rootStack';
+import { useRecoilState } from 'recoil';
+import { loggedInState } from '@recoil/recoil';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+
   const toOnBoard = () => {
+    setLoggedIn(true);
     navigation.navigate('PersonalInfoInputScreen');
-  };
-
-  const toCozyHome = () => {
-    navigation.navigate('CozyHomeScreen');
-  };
-
-  const toTodoList = () => {
-    navigation.navigate('TodoListScreen');
-  };
-
-  const toUserDetail = () => {
-    navigation.navigate('UserDetailScreen');
-  };
-
-  const toLifeStyleOnboarding = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   return (
@@ -45,7 +34,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={toLifeStyleOnboarding}
+            onPress={toOnBoard}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">
@@ -57,7 +46,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={toCozyHome}
+            onPress={toOnBoard}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-base font-semibold text-center text-white">Apple로 계속하기</Text>

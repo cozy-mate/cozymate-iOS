@@ -4,13 +4,9 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
-import { HomeScreenProps } from '@type/param/stack';
+import { HomeScreenProps } from '@type/param/loginStack';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
-  const toSignIn = () => {
-    navigation.navigate('SignInScreen');
-  };
-
   const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
   };
@@ -27,7 +23,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
       <SafeAreaView className="flex-col flex-1 bg-white">
         <View className="flex pt-4 bg-[#F5F9FF]">
           <View className="flex flex-row justify-between items-center px-5 mb-[33px]">
-            <Pressable onPress={toSignIn}>
+            <Pressable>
               <Text className="text-2xl font-extrabold">
                 <Text className="text-[#FFE28B]">cozy</Text>
                 <Text className="text-[#BDD8FF]">mate</Text>

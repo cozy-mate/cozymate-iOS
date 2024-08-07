@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
-import { CharacterInputScreenProps } from '@type/param/stack';
+import { CharacterInputScreenProps } from '@type/param/rootStack';
 
 import { useRecoilState } from 'recoil';
 import { SignUp } from '@recoil/type';

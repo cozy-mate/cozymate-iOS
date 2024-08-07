@@ -42,14 +42,17 @@ const SimilarLifeStyleContainer: React.FC<SimilarLifeStyleContainerProps> = ({
         className="flex flex-row space-x-3"
       >
         {users.map((user) => (
-          <View className="flex flex-row border-2 border-disabled rounded-[12px] mb-3 p-4 w-[122px]">
-            <View className="flex-col items-center ">
+          <View
+            className="flex flex-row border-2 border-disabled rounded-[12px] mb-3 p-4 w-[122px]"
+            key={user.index}
+          >
+            <View className="flex-col items-center">
               <Text className="bg-colorBox px-2 py-[2px] mr-1 text-[10px] font-medium text-colorFont">
                 {user.age}살 | {user.type}
               </Text>
               <user.image />
               <Text className="px-1 text-[14px] font-semibold text-[#61666D]">{user.name}</Text>
-              <Text className="text-main">{user.percent}%</Text>
+              <Text className="text-main1">{user.percent}%</Text>
             </View>
           </View>
         ))}

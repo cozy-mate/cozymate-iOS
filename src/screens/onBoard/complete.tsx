@@ -4,14 +4,10 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { signUpState } from '@recoil/recoil';
 
-import { CompleteScreenProps } from '@type/param/stack';
+import { CompleteScreenProps } from '@type/param/rootStack';
 
 const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
   const signUp = useRecoilValue(signUpState);
-
-  const toNext = async (): Promise<void> => {
-    navigation.navigate('CozyHomeScreen');
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -35,7 +31,7 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
 
         {/* 하단 View */}
         <View className="flex">
-          <Pressable onPress={toNext}>
+          <Pressable>
             <View className="p-4 rounded-xl bg-main1">
               <Text className="text-base font-semibold text-center text-white">
                 cozymate 바로가기

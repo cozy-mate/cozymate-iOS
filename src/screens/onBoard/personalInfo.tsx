@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
-import { PersonalInfoInputScreenProps } from '@type/param/stack';
+
+import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
 
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
   const [signUp, setSignUp] = useRecoilState(signUpState);
