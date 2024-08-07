@@ -5,6 +5,7 @@ import { Pressable, Text, View } from 'react-native'
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg'
 import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg'
 import FeedEdit from '@assets/feedMain/feedEdit.svg'
+import PostEdit from '@assets/feedMain/postEdit.svg'
 
 import { FeedMainScreenProps } from '@type/param/stack'
 import FeedList from '@components/feedMain/feedList'
@@ -44,6 +45,13 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             <FeedList/>
           </View>
+
+          <View>
+            <Pressable className="absolute bottom-3 right-3 items-center justify-centerp-4 rounded-xl">
+              <PostEdit className="mr-2"/>
+            </Pressable>
+          </View>
+
       </SafeAreaView>
   )
 }
