@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/loginStack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -81,9 +81,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   return (
     <View className="flex-1 bg-[#F7FAFF]">
-      <Background style={{ position: 'absolute' }} />
       <ScrollView className="flex-1">
         <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
+          <Background style={{ position: 'absolute' }} />
           <Pressable>
             <View className="flex-row items-center py-2">
               <SchoolLogo />
