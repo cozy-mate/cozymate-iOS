@@ -16,7 +16,7 @@ const NavBar: React.FC<NavBarProps> = ({ isTodo, handleTodo, handleRoleRule }) =
         <Pressable onPress={handleTodo}>
           <Text
             className={`${
-              isTodo ? 'text-main' : 'text-disabledFont'
+              isTodo ? 'text-main1' : 'text-disabledFont'
             } px-[17.5px] pt-1 pb-3 text-base font-semibold`}
           >
             To - do
@@ -29,7 +29,7 @@ const NavBar: React.FC<NavBarProps> = ({ isTodo, handleTodo, handleRoleRule }) =
         <Pressable onPress={handleRoleRule}>
           <Text
             className={`${
-              !isTodo ? 'text-main' : 'text-disabledFont'
+              !isTodo ? 'text-main1' : 'text-disabledFont'
             } pt-1 pb-3 text-base font-semibold`}
           >
             Role & Rule

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
 
-import { RoomMateScreenProps } from '@type/param/stack';
+import { RoomMateScreenProps } from '@type/param/loginStack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
 import Background from '@assets/roomMate/background.svg';
@@ -80,7 +80,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   ]);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F7FAFF]">
+    <View className="flex-1 bg-[#F7FAFF]">
       <Background style={{ position: 'absolute' }} />
       <ScrollView className="flex-1">
         <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
@@ -110,7 +110,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

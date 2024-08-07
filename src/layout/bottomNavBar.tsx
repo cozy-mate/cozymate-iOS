@@ -1,60 +1,56 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TabNavigatorParamList } from '@type/param/stack';
 
-const CozyHome: React.FC = () => {
+import SelectedIcon from '@assets/selectBottomTabIcon.svg';
+import NotSelectedIcon from '@assets/bottomTabIcon.svg';
+
+interface TabComponentProps {
+  focused: boolean;
+}
+
+export const CozyHome: React.FC<TabComponentProps> = ({ focused }) => {
+  if (focused) {
+    return (
+      <View className="flex flex-col items-center justify-center">
+        {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+        <Text className="text-[10px] font-medium text-basicFont mt-[6px]">코지홈</Text>
+      </View>
+    );
+  }
+};
+
+export const RoleNRule: React.FC<TabComponentProps> = ({ focused }) => {
   return (
-    <View>
-      <Text>코지홈</Text>
+    <View className="flex flex-col items-center justify-center">
+      {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">롤앤룰</Text>
     </View>
   );
 };
 
-const RoleNRule: React.FC = () => {
+export const Feed: React.FC<TabComponentProps> = ({ focused }) => {
   return (
-    <View>
-      <Text>롤앤룰</Text>
+    <View className="flex flex-col items-center justify-center">
+      {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">피드</Text>
     </View>
   );
 };
 
-const Feed: React.FC = () => {
+export const RoomMate: React.FC<TabComponentProps> = ({ focused }) => {
   return (
-    <View>
-      <Text>피드</Text>
+    <View className="flex flex-col items-center justify-center">
+      {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">룸메</Text>
     </View>
   );
 };
 
-const RoomMate: React.FC = () => {
+export const MyPage: React.FC<TabComponentProps> = ({ focused }) => {
   return (
-    <View>
-      <Text>룸메</Text>
+    <View className="flex flex-col items-center justify-center">
+      {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">마이페이지</Text>
     </View>
   );
 };
-
-const MyPage: React.FC = () => {
-  return (
-    <View>
-      <Text>마이페이지</Text>
-    </View>
-  );
-};
-
-const BottomNavBar: React.FC = () => {
-  const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="CozyHomeScreen" component={CozyHome} />
-      <Tab.Screen name="TodoListScreen" component={RoleNRule} />
-      <Tab.Screen name="FeedMainScreen" component={Feed} />
-      <Tab.Screen name="RoomMateScreen" component={RoomMate} />
-      <Tab.Screen name="MyPageScreen" component={MyPage} />
-    </Tab.Navigator>
-  );
-};
-
-export default BottomNavBar;

@@ -12,6 +12,11 @@ export const signUpState = atom<SignUp>({
   },
 });
 
+export const loggedInState = atom<boolean>({
+  key: 'isLoggedIn',
+  default: false,
+});
+
 export const lifeStyleState = atom<LifeStyle>({
   key: 'lifestyle',
   default: {

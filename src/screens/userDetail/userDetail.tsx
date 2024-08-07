@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
-import { UserDetailScreenProps } from '@type/param/stack';
+import { UserDetailScreenProps } from '@type/param/loginStack';
 
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
@@ -129,15 +129,11 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
     setType('table');
   };
 
-  const toSignIn = () => {
-    navigation.navigate('SignInScreen');
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
       <View className="flex-row justify-between flex-1 px-5">
-        <Pressable onPress={toSignIn}>
+        <Pressable>
           <BackButton />
         </Pressable>
         <View className="flex-row">
