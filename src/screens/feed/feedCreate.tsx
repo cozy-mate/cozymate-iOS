@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pressable, View,Text } from 'react-native'
 import PostImage from '@assets/feedCreate/postImage.svg';
-import { FeedCreateScreenProps } from '@type/param/stack'
+import { FeedCreateScreenProps } from '@type/param/loginStack'
 import { TextInput } from 'react-native-gesture-handler';
 
 

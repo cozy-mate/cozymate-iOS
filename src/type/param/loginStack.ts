@@ -1,4 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Feed } from '../../layout/bottomNavBar';
+import FeedCreateScreen from 'src/screens/feed/feedCreate';
+import FeedViewScreen from 'src/screens/feed/feedView';
 
 export type LoginStackParamList = {
   MainScreen: undefined;
@@ -18,12 +21,17 @@ export type LoginStackParamList = {
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
+
+  FeedMainScreen: undefined;
+  FeedEditScreen: undefined;
+  FeedCreateScreen: undefined;
+  FeedViewScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
   CozyHomeScreen: undefined;
   TodoListScreen: undefined;
-  FeedScreen: undefined;
+  FeedMainScreen: undefined;
   RoomMateScreen: undefined;
   MyPageScreen: undefined;
 };
@@ -65,3 +73,9 @@ export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'T
 
 export type RoomMateScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMateScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'UserDetailScreen'>;
+
+// 피드 스크린
+export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedMainScreen'>;
+export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
+export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
+export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;

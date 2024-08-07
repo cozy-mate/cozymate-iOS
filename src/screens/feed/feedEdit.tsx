@@ -2,9 +2,9 @@ import React, {useState,useEffect} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View,TextInput,Text,Pressable } from 'react-native'
 
-type Props = {}
+import { FeedEditScreenProps } from "@type/param/loginStack"
 
-const FeedEditScreen = (props: Props) => {
+const FeedEditScreen = (props: FeedEditScreenProps) => {
 
   const [feedName, setFeedName] = useState<string>('');
   const [feedDescription, setFeedDescription] = useState<string>('');

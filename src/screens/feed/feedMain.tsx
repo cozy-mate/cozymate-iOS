@@ -7,7 +7,7 @@ import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg'
 import FeedEdit from '@assets/feedMain/feedEdit.svg'
 import PostEdit from '@assets/feedMain/postEdit.svg'
 
-import { FeedMainScreenProps } from '@type/param/stack'
+import { FeedMainScreenProps } from "@type/param/loginStack"
 import FeedList from '@components/feedMain/feedList'
 
 const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
@@ -18,8 +18,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
   // - 게시물 불러오기 줘야 할 정보 - Member의 Room Or University
   // - 게시물 정보(작성자, 내용, 이미지, 좋아요 수, 댓글 수, 작성 시간)
 
-  // TODO : Type 미리 정의하기
-  // 
+  // TODO : 게시물 Type 미리 정의하기
 
   const [isFeedEnabled, setIsFeedEnabled] = React.useState(false);
 
@@ -52,7 +51,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
           <View>
             <Pressable 
-                className="absolute bottom-3 right-3 items-center justify-centerp-4 rounded-xl"
+                className="absolute bottom-20 right-3 items-center justify-centerp-4 rounded-xl"
                 onPress={toFeedCreate}>
               <PostEdit className="mr-2"/>
             </Pressable>
