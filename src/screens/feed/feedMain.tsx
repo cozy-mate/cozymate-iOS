@@ -27,6 +27,10 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
     navigation.navigate('FeedEditScreen')
   }
 
+  const toFeedCreate = () => {
+    navigation.navigate('FeedCreateScreen')
+  }
+
   return (
       <SafeAreaView className="flex-1 flex-col bg-white pl-8 pr-8 pt-8 w-full h-full">
           <View className="flex-col bg-white">
@@ -47,7 +51,9 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
           </View>
 
           <View>
-            <Pressable className="absolute bottom-3 right-3 items-center justify-centerp-4 rounded-xl">
+            <Pressable 
+                className="absolute bottom-3 right-3 items-center justify-centerp-4 rounded-xl"
+                onPress={toFeedCreate}>
               <PostEdit className="mr-2"/>
             </Pressable>
           </View>
