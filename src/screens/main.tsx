@@ -21,10 +21,12 @@ const MainScreen = () => {
           paddingBottom: 32,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          shadowColor: 'rgba(160, 160, 160, 0.25)',
+          shadowColor: 'rgb(160, 160, 160)',
           shadowOffset: { width: 0, height: 8 },
           shadowOpacity: 0.25,
           shadowRadius: 8,
+          borderTopColor: 'white',
+          position: 'absolute',
         },
       }}
     >
