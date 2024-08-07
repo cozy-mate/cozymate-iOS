@@ -21,6 +21,10 @@ import BottomNavBar from 'src/layout/bottomNavBar';
 import OnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+import FeedMainScreen from 'src/screens/feed/feedMain';
+import FeedEditScreen from 'src/screens/feed/feedEdit';
+import FeedViewScreen from 'src/screens/feed/feedView';
+import FeedCreateScreen from 'src/screens/feed/feedCreate';
 
 function AppInner() {
   const stack = createNativeStackNavigator<RootStackParamList>();
@@ -47,6 +51,12 @@ function AppInner() {
       <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
       <stack.Screen name="UserInfoScreen" component={UserInfoScreen} />
       <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+
+      <stack.Screen name="FeedMainScreen" component={FeedMainScreen} />
+      <stack.Screen name="FeedEditScreen" component={FeedEditScreen} />
+      <stack.Screen name="FeedViewScreen" component={FeedViewScreen} />
+      <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
+      
     </stack.Navigator>
   );
 }

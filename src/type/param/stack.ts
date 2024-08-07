@@ -24,12 +24,17 @@ export type RootStackParamList = {
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
   UserInfoScreen: undefined;
+
+  FeedMainScreen: undefined;
+  FeedEditScreen: undefined;
+  FeedViewScreen: undefined;
+  FeedCreateScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
   CozyHomeScreen: undefined;
   TodoListScreen: undefined;
-  FeedScreen: undefined;
+  FeedMainScreen: undefined;
   RoomMateScreen: undefined;
   MyPageScreen: undefined;
 };
@@ -87,3 +92,9 @@ export type TodoListScreenProps = NativeStackScreenProps<RootStackParamList, 'To
 export type RoomMateScreenProps = NativeStackScreenProps<RootStackParamList, 'RoomMateScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'UserDetailScreen'>;
 export type UserInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'UserInfoScreen'>;
+
+export type FeedMainScreenProps = NativeStackScreenProps<RootStackParamList, 'FeedMainScreen'>;
+export type FeedEditScreenProps = NativeStackScreenProps<RootStackParamList, 'FeedEditScreen'>;
+export type FeedViewScreenProps = NativeStackScreenProps<RootStackParamList, 'FeedViewScreen'>;
+export type FeedCreateScreenProps = NativeStackScreenProps<RootStackParamList, 'FeedCreateScreen'>;
+

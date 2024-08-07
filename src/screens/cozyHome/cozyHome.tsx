@@ -19,6 +19,10 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('SchoolAuthenticationScreen');
   };
 
+  const toFeed = () => {
+    navigation.navigate('FeedMainScreen');
+  }
+
   const isActive = true;
 
   return (
@@ -27,7 +31,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
       <SafeAreaView className="flex-col flex-1 bg-white">
         <View className="flex pt-4 bg-[#F5F9FF]">
           <View className="flex flex-row justify-between items-center px-5 mb-[33px]">
-            <Pressable onPress={toSignIn}>
+            <Pressable onPress={toFeed}>
               <Text className="text-2xl font-extrabold">
                 <Text className="text-[#FFE28B]">cozy</Text>
                 <Text className="text-[#BDD8FF]">mate</Text>

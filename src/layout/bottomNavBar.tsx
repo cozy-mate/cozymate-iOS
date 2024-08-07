@@ -50,7 +50,7 @@ const BottomNavBar: React.FC = () => {
     <Tab.Navigator>
       <Tab.Screen name="CozyHomeScreen" component={CozyHome} />
       <Tab.Screen name="TodoListScreen" component={RoleNRule} />
-      <Tab.Screen name="FeedScreen" component={Feed} />
+      <Tab.Screen name="FeedMainScreen" component={Feed} />
       <Tab.Screen name="RoomMateScreen" component={RoomMate} />
       <Tab.Screen name="MyPageScreen" component={MyPage} />
     </Tab.Navigator>
