@@ -68,13 +68,13 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`flex-row flex-wrap justify-center items-center rounded-[35px] border-2 px-[14px] py-2 mx-1 my-1 ${
-            item.select ? 'border-main bg-[#CADFFF]' : 'border-disabled bg-white'
+          className={`flex-row flex-wrap justify-center items-center rounded-[35px] border-[1px] px-[14px] py-2 mx-1 my-1 ${
+            item.select ? 'border-main1 bg-[#CADFFF]' : 'border-disabled bg-white'
           }`}
           onPress={() => select(item)}
         >
           <Text
-            className={`text-xs font-medium ${item.select ? 'text-main' : 'text-disabledFont'}`}
+            className={`text-xs font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
           >
             {item.name}
           </Text>
