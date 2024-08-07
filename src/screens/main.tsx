@@ -1,9 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabNavigatorParamList } from '@type/param/loginStack';
-import CozyHomeScreen from './cozyHome/cozyHome';
 
 import { CozyHome, RoleNRule, Feed, RoomMate, MyPage } from 'src/layout/bottomNavBar';
+
+import CozyHomeScreen from './cozyHome/cozyHome';
 import RoomMateScreen from './roomMate/roomMate';
 import TodoListScreen from './todoList/todoList';
 
