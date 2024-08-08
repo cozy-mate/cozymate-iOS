@@ -15,10 +15,6 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('SchoolAuthenticationScreen');
   };
 
-  const toFeed = () => {
-    navigation.navigate('FeedMainScreen');
-  }
-
   const isActive = true;
 
   return (
