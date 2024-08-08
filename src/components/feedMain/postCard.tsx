@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { View, Text, Image, ScrollView, Dimensions} from 'react-native'
 import PersonaExample from '@assets/feedMain/personaExample.svg';
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
@@ -9,8 +9,11 @@ type PostCardProps = {
   post: PostCardType;
   postIndex: number;
   loadingStates: boolean[][];
-  handleImageLoadStart: (postIndex: number, imageIndex: number) => void;
-  handleImageLoadEnd: (postIndex: number, imageIndex: number) => void;
+  profileLoadingStates: boolean[];
+  handleProfileImageLoadStart: (postIndex: number) => void;
+  handleProfileImageLoadEnd: (postIndex: number) => void;
+  handlePostImageLoadStart: (postIndex: number, imageIndex: number) => void;
+  handlePostImageLoadEnd: (postIndex: number, imageIndex: number) => void;
 };
 
 const timeUtil = (time: string) => {
@@ -36,7 +39,14 @@ const timeUtil = (time: string) => {
 
 const PostCard = (props: PostCardProps) => {
 
-  const { post, postIndex,loadingStates,handleImageLoadStart,handleImageLoadEnd } = props;
+  const { post, 
+          postIndex,
+          loadingStates,
+          profileLoadingStates,
+          handleProfileImageLoadStart,
+          handleProfileImageLoadEnd,
+          handlePostImageLoadStart,
+          handlePostImageLoadEnd } = props;
 
   const [itemWidth, setItemWidth] = React.useState(0);
   const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -52,12 +62,23 @@ const PostCard = (props: PostCardProps) => {
     <View key={post.id} className="flex flex-col w-full bg-white mb-4 p-4 rounded-xl z-10 shadow-sm">
     <View className="flex flex-row items-center justify-between">
       <View className="flex flex-row items-center justify-start space-x-2">
-        <PersonaExample />
-        <Text className="text-emphasizedFont font-medium text-sm">{post.writer.nickname}</Text>
+        {profileLoadingStates[postIndex] && (
+        <SkeletonPlaceholder>
+          <View style={{ width: 32, height: 32, borderRadius: 16 }} />
+        </SkeletonPlaceholder> )}
+        <Image
+          className='w-8 h-8 rounded-full'
+          onLoadStart={() => handleProfileImageLoadStart(postIndex)}
+          onLoadEnd={() => handleProfileImageLoadEnd(postIndex)}
+          onError={(e) => console.log('Image loading error:', e.nativeEvent.error)}
+          source={{ uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${post.writer.persona}.png` }}
+          />
+        
+        <Text className="text-emphasizedFont font-semibold text-sm">{post.writer.nickname}</Text>
       </View>
       <Text className="text-disabledFont font-normal text-sm">{timeUtil(post.createdAt)}</Text>
     </View>
-    <Text className="text-emphasizedFont font-medium text-xs mt-2 mb-2">{post.content}</Text>
+    <Text className="text-basicFont font-medium text-sm mt-2 mb-2">{post.content}</Text>
     {post.imageList.length > 0 ? (
       <View>
         <ScrollView
@@ -96,8 +117,8 @@ const PostCard = (props: PostCardProps) => {
                 }}
                 source={{ uri: image }}
                 resizeMode="cover"
-                onLoadStart={() => handleImageLoadStart(postIndex, imageIndex)}
-                onLoadEnd={() => handleImageLoadEnd(postIndex, imageIndex)}
+                onLoadStart={() => handlePostImageLoadStart(postIndex, imageIndex)}
+                onLoadEnd={() => handlePostImageLoadEnd(postIndex, imageIndex)}
                 onError={(e) => console.log('Image loading error:', e.nativeEvent.error)}
               />
             </View>
@@ -121,7 +142,7 @@ const PostCard = (props: PostCardProps) => {
         ):null}
       </View>
     ) : null}
-    <View className="flex flex-row items-center justify-start space-x-2">
+    <View className={`flex flex-row items-center justify-start space-x-2 mt-${post.imageList.length > 0 ? 4 : 0}`}>
       <ChatIcon />
       <Text className="text-disabledFont font-normal text-sm">{post.commentCount}</Text>
     </View>

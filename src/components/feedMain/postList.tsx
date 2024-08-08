@@ -14,14 +14,29 @@ const PostList = (props: PostListProps) => {
   const [loadingStates, setLoadingStates] = useState(
     postCards.map(post => post.imageList.map(() => false))
   );
+  const [profileLoadingStates, setProfileLoadingStates] = useState(
+    postCards.map(() => false)
+  );
 
-  const handleImageLoadStart = (postIndex: number, imageIndex: number) => {
+  const handleProfileImageLoadStart = (postIndex: number) => {
+    const updatedLoadingStates = [...profileLoadingStates];
+    updatedLoadingStates[postIndex] = true;
+    setProfileLoadingStates(updatedLoadingStates);
+  }
+
+  const handleProfileImageLoadEnd = (postIndex: number) => {
+    const updatedLoadingStates = [...profileLoadingStates];
+    updatedLoadingStates[postIndex] = false;
+    setProfileLoadingStates(updatedLoadingStates);
+  }
+
+  const handlePostImageLoadStart = (postIndex: number, imageIndex: number) => {
     const updatedLoadingStates = [...loadingStates];
     updatedLoadingStates[postIndex][imageIndex] = true;
     setLoadingStates(updatedLoadingStates);
   };
 
-  const handleImageLoadEnd = (postIndex: number, imageIndex: number) => {
+  const handlePostImageLoadEnd = (postIndex: number, imageIndex: number) => {
     const updatedLoadingStates = [...loadingStates];
     updatedLoadingStates[postIndex][imageIndex] = false;
     setLoadingStates(updatedLoadingStates);
@@ -36,8 +51,11 @@ const PostList = (props: PostListProps) => {
           post={post}
           postIndex={postIndex}
           loadingStates={loadingStates}
-          handleImageLoadStart={handleImageLoadStart}
-          handleImageLoadEnd={handleImageLoadEnd}/>
+          profileLoadingStates={profileLoadingStates}
+          handleProfileImageLoadStart={handleProfileImageLoadStart}
+          handleProfileImageLoadEnd={handleProfileImageLoadEnd}
+          handlePostImageLoadStart={handlePostImageLoadStart}
+          handlePostImageLoadEnd={handlePostImageLoadEnd}/>
       ))}
     </View>
   );

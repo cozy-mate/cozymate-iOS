@@ -4,7 +4,7 @@ export interface PostCardType {
     writer : {
         id: number;
         nickname: string;
-        persona: string;
+        persona: number;
     }
     imageList : string[];
     commentCount: number;
@@ -18,7 +18,7 @@ export interface CommentType {
     writer : {
         id: number;
         nickname: string;
-        persona: string;
+        persona: number;
     }
     createdAt: string;
     updatedAt: string;

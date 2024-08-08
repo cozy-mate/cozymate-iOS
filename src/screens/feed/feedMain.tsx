@@ -36,7 +36,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
       writer : {
           id: 3,
           nickname: '테스터3',
-          persona: '테스터3'
+          persona: 3
       },
       imageList : [],
       commentCount: 4,
@@ -49,7 +49,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
       writer : {
           id: 1,
           nickname: '테스터',
-          persona: '테스터'
+          persona: 1,
       },
       imageList : ['https://picsum.photos/200/300','https://picsum.photos/200/300','https://picsum.photos/200/300'],
       commentCount: 0,
@@ -62,7 +62,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
       writer : {
           id: 2,
           nickname: '테스터2',
-          persona: '테스터2'
+          persona: 2,
       },
       imageList : ['https://picsum.photos/200/300'],
       commentCount: 0,
