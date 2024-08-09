@@ -5,6 +5,8 @@ import { useRecoilState } from 'recoil';
 import { createRoomState } from '@recoil/recoil';
 import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
 
+import CopyIcon from '@assets/createRoom/copyIcon.svg';
+
 const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
   const [createroomState, setCreateRoomState] = useRecoilState(createRoomState);
 
@@ -26,8 +28,9 @@ const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps)
           </View>
 
           <Pressable className="flex mb-16">
-            <View className="px-6 py-3 rounded-xl bg-colorBox">
-              <Text className="text-base font-semibold text-main1">QUIIRK</Text>
+            <View className="flex flex-row items-center px-6 py-3 rounded-xl bg-colorBox">
+              <Text className="mr-1 text-base font-semibold text-main1">QUIIRK</Text>
+              <CopyIcon />
             </View>
           </Pressable>
 
