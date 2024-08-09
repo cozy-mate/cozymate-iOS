@@ -9,14 +9,12 @@ interface TabComponentProps {
 }
 
 export const CozyHome: React.FC<TabComponentProps> = ({ focused }) => {
-  if (focused) {
-    return (
-      <View className="flex flex-col items-center justify-center">
-        {focused ? <SelectedIcon /> : <NotSelectedIcon />}
-        <Text className="text-[10px] font-medium text-basicFont mt-[6px]">코지홈</Text>
-      </View>
-    );
-  }
+  return (
+    <View className="flex flex-col items-center justify-center">
+      {focused ? <SelectedIcon /> : <NotSelectedIcon />}
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">코지홈</Text>
+    </View>
+  );
 };
 
 export const RoleNRule: React.FC<TabComponentProps> = ({ focused }) => {

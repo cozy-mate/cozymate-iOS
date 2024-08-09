@@ -7,6 +7,7 @@ import { CozyHome, RoleNRule, Feed, RoomMate, MyPage } from 'src/layout/bottomNa
 import CozyHomeScreen from './cozyHome/cozyHome';
 import RoomMateScreen from './roomMate/roomMate';
 import TodoListScreen from './todoList/todoList';
+import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -56,19 +57,19 @@ const MainScreen = () => {
           },
         })}
       />
-      {/* <Tab.Screen
-        name="CozyHomeScreen"
-        component={CozyHomeScreen}
+      <Tab.Screen
+        name="LifeStyleOnboardingScreen"
+        component={LifeStyleOnboardingScreen}
         options={({ route }) => ({
           // title 없애고 custom 하기 위한 옵션
           tabBarLabel: () => {
             return null;
           },
           tabBarIcon: ({ focused }) => {
-            return <Feed />;
+            return <Feed focused={focused} />;
           },
         })}
-      /> */}
+      />
       <Tab.Screen
         name="RoomMateScreen"
         component={RoomMateScreen}
