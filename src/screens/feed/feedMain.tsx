@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState,useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View,RefreshControl } from 'react-native'
 import PostList from '@components/feedMain/postList'
 
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg'
@@ -11,6 +11,10 @@ import PostEdit from '@assets/feedMain/postEdit.svg'
 import { FeedMainScreenProps } from "@type/param/loginStack"
 import { FeedType, PostCardType } from '@type/feed';
 import { ScrollView } from 'react-native-gesture-handler'
+
+const FeedInfo = () => {
+  return
+}
 
 const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
@@ -28,6 +32,8 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
     name: '',
     description: '',
   });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const examplePostList : PostCardType[] = [
     {
@@ -51,7 +57,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
           nickname: '테스터',
           persona: 1,
       },
-      imageList : ['https://picsum.photos/200/300','https://picsum.photos/200/300','https://picsum.photos/200/300'],
+      imageList : ['https://picsum.photos/300/300','https://picsum.photos/400/300','https://picsum.photos/100/300'],
       commentCount: 0,
       createdAt: '2024-08-07T10:00:00',
       updatedAt: '2021-09-09T00:00:00',
@@ -91,6 +97,15 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
   const toFeedCreate = () => {
     navigation.navigate('FeedCreateScreen')
   }
+  
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setPostList([]);
+    setTimeout(() => {
+      setRefreshing(false);
+      setPostList(examplePostList);
+    }, 2000);
+  }, []);
 
   return (
       <SafeAreaView className="flex-1 flex-col bg-main3 pl-8 pr-8 pt-8 w-full h-full">
@@ -99,7 +114,11 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
               alignItems: 'center',
               justifyContent: 'center',
           }}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          >
           <View className="flex-col w-full justify-start">
             {
               isFeedEnabled ? <FeedLampEnabled className="mb-2"/> : <FeedLampDisabled className="mb-2"/>
