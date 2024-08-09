@@ -1,8 +1,8 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 
-export const onCopyAddress = async (text: string) => {
+export const onCopyAddress = (text: string) => {
   try {
-    await Clipboard.setString(text);
+    Clipboard.setString(text);
   } catch (error) {
     console.log(error);
   }
