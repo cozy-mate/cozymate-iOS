@@ -103,6 +103,8 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             {postList.length > 0 ?
               <PostList postCards={postList} toFeedView={toFeedView}/> 
               : 
+              refreshing ?
+              <Text className="flex-1 text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text> :
               <Text className="flex-1 text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             }
         </ScrollView>
