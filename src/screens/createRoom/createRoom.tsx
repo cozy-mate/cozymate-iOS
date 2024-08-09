@@ -84,8 +84,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
                   source={{
                     uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${createroomState.profileImage}.png`,
                   }}
-                  style={{ width: 130, height: 130 }} // 이미지 크기를 원하는 대로 설정
-                  resizeMode="cover" // 필요한 경우 resizeMode 설정
+                  style={{ width: 130, height: 130 }}
+                  resizeMode="cover"
                 />
               ) : (
                 <CharacterBox />
