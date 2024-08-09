@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View, Image } from 'react-native';
 import { useRecoilState } from 'recoil';
 
 import { createRoomState } from '@recoil/recoil';
 import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
 
+import { onCopyAddress } from '@utils/clipboard';
+
 import CopyIcon from '@assets/createRoom/copyIcon.svg';
 
 const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
   const [createroomState, setCreateRoomState] = useRecoilState(createRoomState);
+
+  const [inviteCode, setInviteCode] = useState<string>('QUIIRK');
 
   const toCozyHome = () => {
     navigation.navigate('CozyHomeScreen');
@@ -27,9 +31,9 @@ const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps)
             </Text>
           </View>
 
-          <Pressable className="flex mb-16">
+          <Pressable onPress={() => onCopyAddress(inviteCode)} className="flex mb-16">
             <View className="flex flex-row items-center px-6 py-3 rounded-xl bg-colorBox">
-              <Text className="mr-1 text-base font-semibold text-main1">QUIIRK</Text>
+              <Text className="mr-1 text-base font-semibold text-main1">{inviteCode}</Text>
               <CopyIcon />
             </View>
           </Pressable>
