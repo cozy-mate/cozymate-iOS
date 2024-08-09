@@ -1,16 +1,17 @@
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
-import CustomTextInputBox from '@components/common/customTextInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
 import { EssentialLifeStyleScreenProps } from '@type/param/loginStack';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { Animated, SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import BackHeader from 'src/layout/backHeader';
 
+import { useInputAnimation } from '@hooks/inputAnimation';
+
 type Item = {
   index: number;
-  value: string;
+  value: string | boolean;
   name: string;
   select: boolean;
 };
@@ -18,8 +19,11 @@ type Item = {
 const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenProps) => {
   const [lifeStyle, setLifeStyle] = useRecoilState(lifeStyleState);
 
+  const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
   const [wakeUpTime, setWakeUpTime] = useState<number>(0);
+  const [sleepingMeridian, setSleepingMeridian] = useState<string>('');
   const [sleepingTime, setSleepingTime] = useState<number>(0);
+  const [turnOffMeridian, setTurnOffMeridian] = useState<string>('');
   const [turnOffTime, setTurnOffTime] = useState<number>(0);
   const [smokingState, setSmokingState] = useState<string>('');
   const [sleepingHabit, setSleepingHabit] = useState<string>('');
@@ -38,11 +42,42 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   const [personality, setPersonality] = useState<string>('');
   const [mbti, setMbti] = useState<string>('');
 
+  const canNext =
+    wakeUpMeridian !== '' &&
+    wakeUpTime !== 0 &&
+    sleepingMeridian !== '' &&
+    sleepingTime !== 0 &&
+    turnOffMeridian !== '' &&
+    turnOffTime !== 0 &&
+    smokingState !== '' &&
+    sleepingHabit !== '' &&
+    airConditioningIntensity !== 0 &&
+    heatingIntensity !== 0 &&
+    lifePattern !== '' &&
+    intimacy !== '' &&
+    canShare !== null &&
+    isPlayGame !== null &&
+    isPhoneCall !== null &&
+    studying !== '' &&
+    intake !== '' &&
+    cleanSensitivity !== 0 &&
+    noiseSensitivity !== 0 &&
+    cleaningFrequency !== '' &&
+    personality !== '' &&
+    mbti !== '';
+
+  const toPrev = () => {
+    navigation.navigate('BasicLifeStyleScreen');
+  };
+
   const toNext = async (): Promise<void> => {
     setLifeStyle((prevState: LifeStyle) => ({
       ...prevState,
+      wakeUpMeridian: wakeUpMeridian,
       wakeUpTime: wakeUpTime,
+      sleepingMeridian: sleepingMeridian,
       sleepingTime: sleepingTime,
+      turnOffMeridian: turnOffMeridian,
       turnOffTime: turnOffTime,
       smokingState: smokingState,
       sleepingHabit: sleepingHabit,
@@ -62,12 +97,46 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
       mbti: mbti,
     }));
 
-    navigation.navigate('CozyHomeScreen');
+    navigation.navigate('MainScreen');
   };
 
-  useEffect(() => {
-    console.log(lifeStyle);
-  }, [lifeStyle]);
+  const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);
+  const [showTurnOffTime, setShowTurnOffTime] = useState<boolean>(false);
+  const [showSmokingState, setShowSmokingState] = useState<boolean>(false);
+  const [showSleepingHabit, setShowSleepingHabit] = useState<boolean>(false);
+  const [showAirConditioningIntensity, setShowAirConditioningIntensity] = useState<boolean>(false);
+  const [showHeatingIntensity, setShowHeatingIntensity] = useState<boolean>(false);
+  const [showLifePattern, setShowLifePattern] = useState<boolean>(false);
+  const [showIntimacy, setShowIntimacy] = useState<boolean>(false);
+  const [showCanShare, setShowCanShare] = useState<boolean>(false);
+  const [showIsPlayGame, setShowIsPlayGame] = useState<boolean>(false);
+  const [showIsPhoneCall, setShowIsPhoneCall] = useState<boolean>(false);
+  const [showStudying, setShowStudying] = useState<boolean>(false);
+  const [showIntake, setShowIntake] = useState<boolean>(false);
+  const [showCleanSensitivity, setShowCleanSensitivity] = useState<boolean>(false);
+  const [showNoiseSensitivity, setShowNoiseSensitivity] = useState<boolean>(false);
+  const [showCleaningFrequency, setShowCleaningFrequency] = useState<boolean>(false);
+  const [showPersonality, setShowPersonality] = useState<boolean>(false);
+  const [showMbti, setShowMbti] = useState<boolean>(false);
+
+  const sleepingTimeAnimation = useInputAnimation(showSleepingTime, 400);
+  const turnOffTimeAnimation = useInputAnimation(showTurnOffTime, 400);
+  const smokingStateAnimation = useInputAnimation(showSmokingState, 400);
+  const sleepingHabitAnimation = useInputAnimation(showSleepingHabit, 400);
+  const airConditioningIntensityAnimation = useInputAnimation(showAirConditioningIntensity, 400);
+  const heatingIntensityAnimation = useInputAnimation(showHeatingIntensity, 400);
+  const lifePatternAnimation = useInputAnimation(showLifePattern, 400);
+  const intimacyAnimation = useInputAnimation(showIntimacy, 400);
+  const canShareAnimation = useInputAnimation(showCanShare, 400);
+  const isPlayGameAnimation = useInputAnimation(showIsPlayGame, 400);
+  const isPhoneCallAnimation = useInputAnimation(showIsPhoneCall, 400);
+  const studyingAnimation = useInputAnimation(showStudying, 400);
+  const intakeAnimation = useInputAnimation(showIntake, 400);
+  const cleanSensitivityAnimation = useInputAnimation(showCleanSensitivity, 400);
+  const noiseSensitivityAnimation = useInputAnimation(showNoiseSensitivity, 400);
+  const cleaningFrequencyAnimation = useInputAnimation(showCleaningFrequency, 400);
+  const personalityAnimation = useInputAnimation(showPersonality, 400);
+  const mbtiAnimation = useInputAnimation(showMbti, 400);
 
   const [wakeUpTimeItems, setWakeUpTimeItems] = useState<Item[]>([
     { index: 1, value: '1', name: '1', select: false },
@@ -136,14 +205,14 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   const [heatingIntensityItems, setHeatingIntensityItems] = useState<Item[]>([
-    { index: 1, value: '아침형 인간', name: '아침형 인간', select: false },
-    { index: 2, value: '새벽형 인간', name: '새벽형 인간', select: false },
-  ]);
-
-  const [lifePatternItems, setLifePatternItems] = useState<Item[]>([
     { index: 1, value: '세게 틀어요', name: '세게 틀어요', select: false },
     { index: 2, value: '적당하게 틀어요', name: '적당하게 틀어요', select: false },
     { index: 3, value: '약하게 틀어요', name: '약하게 틀어요', select: false },
+  ]);
+
+  const [lifePatternItems, setLifePatternItems] = useState<Item[]>([
+    { index: 1, value: '아침형 인간', name: '아침형 인간', select: false },
+    { index: 2, value: '새벽형 인간', name: '새벽형 인간', select: false },
   ]);
 
   const [intimacyItems, setIntimacyItems] = useState<Item[]>([
@@ -158,8 +227,8 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   const [canShareItems, setCanShareItems] = useState<Item[]>([
-    { index: 1, value: 'O', name: 'O', select: false },
-    { index: 2, value: 'X', name: 'X', select: false },
+    { index: 1, value: true, name: 'O', select: false },
+    { index: 2, value: false, name: 'X', select: false },
   ]);
 
   const [isPlayGameItems, setIsPlayGameItems] = useState<Item[]>([
@@ -299,179 +368,423 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 16, value: 'ENTJ', name: 'ENTJ', select: false },
   ]);
 
+  useEffect(() => {
+    console.log(lifeStyle);
+  }, [lifeStyle]);
+
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
-      <BackHeader title="필수정보" buttonString="다음" pressFunc={toNext} width={210} />
+      <BackHeader
+        title="필수정보"
+        buttonString="다음"
+        leftPressFunc={toPrev}
+        rightPressFunc={toNext}
+        canNext={canNext}
+        width={210}
+      />
       <ScrollView className="px-5">
-        <CustomRadioInputBox
-          title="MBTI를 알려주세요!"
-          value={mbti}
-          setValue={setMbti}
-          items={mbtiItems}
-          setItems={setMbtiItems}
-          isTime={false}
-        />
+        {showMbti && (
+          <Animated.View
+            style={{
+              opacity: mbtiAnimation.opacity,
+              transform: [{ translateY: mbtiAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="MBTI를 알려주세요!"
+              value={mbti}
+              setValue={setMbti}
+              items={mbtiItems}
+              setItems={setMbtiItems}
+              isTime={false}
+              isWide={true}
+              width={70}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="당신의 성격을 알려주세요!"
-          value={personality}
-          setValue={setPersonality}
-          items={personalityItems}
-          setItems={setPersonalityItems}
-          isTime={false}
-        />
+        {showPersonality && (
+          <Animated.View
+            style={{
+              opacity: personalityAnimation.opacity,
+              transform: [{ translateY: personalityAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="당신의 성격을 알려주세요!"
+              value={personality}
+              setValue={(text) => {
+                setPersonality(text);
+                setShowMbti(!!text);
+              }}
+              items={personalityItems}
+              setItems={setPersonalityItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="평소에 청소를 얼만큼 하시나요?"
-          value={cleaningFrequency}
-          setValue={setCleaningFrequency}
-          items={cleaningFrequencyItems}
-          setItems={setCleaningFrequencyItems}
-          isTime={false}
-        />
+        {showCleaningFrequency && (
+          <Animated.View
+            style={{
+              opacity: cleaningFrequencyAnimation.opacity,
+              transform: [{ translateY: cleaningFrequencyAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="평소에 청소를 얼만큼 하시나요?"
+              value={cleaningFrequency}
+              setValue={(text) => {
+                setCleaningFrequency(text);
+                setShowPersonality(!!text);
+              }}
+              items={cleaningFrequencyItems}
+              setItems={setCleaningFrequencyItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="소음 예민도를 선택해주세요"
-          value={noiseSensitivity}
-          setValue={setNoiseSensitivity}
-          items={noiseSensitivityItems}
-          setItems={setNoiseSensitivityItems}
-          isTime={false}
-        />
+        {showNoiseSensitivity && (
+          <Animated.View
+            style={{
+              opacity: noiseSensitivityAnimation.opacity,
+              transform: [{ translateY: noiseSensitivityAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="소음 예민도를 선택해주세요"
+              value={noiseSensitivity}
+              setValue={(text) => {
+                setNoiseSensitivity(text);
+                setShowCleaningFrequency(!!text);
+              }}
+              items={noiseSensitivityItems}
+              setItems={setNoiseSensitivityItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="청결 예민도를 선택해주세요"
-          value={cleanSensitivity}
-          setValue={setCleanSensitivity}
-          items={cleanSensitivityItems}
-          setItems={setCleanSensitivityItems}
-          isTime={false}
-        />
+        {showCleanSensitivity && (
+          <Animated.View
+            style={{
+              opacity: cleanSensitivityAnimation.opacity,
+              transform: [{ translateY: cleanSensitivityAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="청결 예민도를 선택해주세요"
+              value={cleanSensitivity}
+              setValue={(text) => {
+                setCleanSensitivity(text);
+                setShowNoiseSensitivity(!!text);
+              }}
+              items={cleanSensitivityItems}
+              setItems={setCleanSensitivityItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="섭취여부를 선택해주세요"
-          value={intake}
-          setValue={setIntake}
-          items={intakeItems}
-          setItems={setIntakeItems}
-          isTime={false}
-        />
+        {showIntake && (
+          <Animated.View
+            style={{
+              opacity: intakeAnimation.opacity,
+              transform: [{ translateY: intakeAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="섭취여부를 선택해주세요"
+              value={intake}
+              setValue={(text) => {
+                setIntake(text);
+                setShowCleanSensitivity(!!text);
+              }}
+              items={intakeItems}
+              setItems={setIntakeItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="방 안에서 공부 여부를 선택해주세요"
-          value={studying}
-          setValue={setStudying}
-          items={studyingItems}
-          setItems={setStudyingItems}
-          isTime={false}
-        />
+        {showStudying && (
+          <Animated.View
+            style={{
+              opacity: studyingAnimation.opacity,
+              transform: [{ translateY: studyingAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="방 안에서 공부 여부를 선택해주세요"
+              value={studying}
+              setValue={(text) => {
+                setStudying(text);
+                setShowIntake(!!text);
+              }}
+              items={studyingItems}
+              setItems={setStudyingItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="방 안에서 전화 여부를 선택해주세요"
-          value={isPhoneCall}
-          setValue={setIsPhoneCall}
-          items={isPhoneCallItems}
-          setItems={setIsPhoneCallItems}
-          isTime={false}
-        />
+        {showIsPhoneCall && (
+          <Animated.View
+            style={{
+              opacity: isPhoneCallAnimation.opacity,
+              transform: [{ translateY: isPhoneCallAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="방 안에서 전화 여부를 선택해주세요"
+              value={isPhoneCall}
+              setValue={(text) => {
+                setIsPhoneCall(text);
+                setShowStudying(!!text);
+              }}
+              items={isPhoneCallItems}
+              setItems={setIsPhoneCallItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="방 안에서 게임 여부를 선택해주세요"
-          value={isPlayGame}
-          setValue={setIsPlayGame}
-          items={isPlayGameItems}
-          setItems={setIsPlayGameItems}
-          isTime={false}
-        />
+        {showIsPlayGame && (
+          <Animated.View
+            style={{
+              opacity: isPlayGameAnimation.opacity,
+              transform: [{ translateY: isPlayGameAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="방 안에서 게임 여부를 선택해주세요"
+              value={isPlayGame}
+              setValue={(text) => {
+                setIsPlayGame(text);
+                setShowIsPhoneCall(!!text);
+              }}
+              items={isPlayGameItems}
+              setItems={setIsPlayGameItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
-          value={canShare}
-          setValue={setCanShare}
-          items={canShareItems}
-          setItems={setCanShareItems}
-          isTime={false}
-        />
+        {showCanShare && (
+          <Animated.View
+            style={{
+              opacity: canShareAnimation.opacity,
+              transform: [{ translateY: canShareAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
+              value={canShare}
+              setValue={(text) => {
+                setCanShare(text);
+                setShowIsPlayGame(!!text);
+              }}
+              items={canShareItems}
+              setItems={setCanShareItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="친밀도를 선택해주세요"
-          value={intimacy}
-          setValue={setIntimacy}
-          items={intimacyItems}
-          setItems={setIntimacyItems}
-          isTime={false}
-        />
+        {showIntimacy && (
+          <Animated.View
+            style={{
+              opacity: intimacyAnimation.opacity,
+              transform: [{ translateY: intimacyAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="친밀도를 선택해주세요"
+              value={intimacy}
+              setValue={(text) => {
+                setIntimacy(text);
+                setShowCanShare(!!text);
+              }}
+              items={intimacyItems}
+              setItems={setIntimacyItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="생활 패턴을 입력해주세요"
-          value={lifePattern}
-          setValue={setLifePattern}
-          items={lifePatternItems}
-          setItems={setLifePatternItems}
-          isTime={false}
-        />
+        {showLifePattern && (
+          <Animated.View
+            style={{
+              opacity: lifePatternAnimation.opacity,
+              transform: [{ translateY: lifePatternAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="생활 패턴을 입력해주세요"
+              value={lifePattern}
+              setValue={(text) => {
+                setLifePattern(text);
+                setShowIntimacy(!!text);
+              }}
+              items={lifePatternItems}
+              setItems={setLifePatternItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="히터 강도를 선택해주세요"
-          value={heatingIntensity}
-          setValue={setHeatingIntensity}
-          items={heatingIntensityItems}
-          setItems={setHeatingIntensityItems}
-          isTime={false}
-        />
+        {showHeatingIntensity && (
+          <Animated.View
+            style={{
+              opacity: heatingIntensityAnimation.opacity,
+              transform: [{ translateY: heatingIntensityAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="히터 강도를 선택해주세요"
+              value={heatingIntensity}
+              setValue={(text) => {
+                setHeatingIntensity(text);
+                setShowLifePattern(!!text);
+              }}
+              items={heatingIntensityItems}
+              setItems={setHeatingIntensityItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="에어컨 강도를 선택해주세요"
-          value={airConditioningIntensity}
-          setValue={setAirConditioningIntensity}
-          items={airConditioningIntensityItems}
-          setItems={setAirConditioningIntensityItems}
-          isTime={false}
-        />
+        {showAirConditioningIntensity && (
+          <Animated.View
+            style={{
+              opacity: airConditioningIntensityAnimation.opacity,
+              transform: [{ translateY: airConditioningIntensityAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="에어컨 강도를 선택해주세요"
+              value={airConditioningIntensity}
+              setValue={(text) => {
+                setAirConditioningIntensity(text);
+                setShowHeatingIntensity(!!text);
+              }}
+              items={airConditioningIntensityItems}
+              setItems={setAirConditioningIntensityItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="잠버릇을 선택해주세요"
-          value={sleepingHabit}
-          setValue={setSleepingHabit}
-          items={sleepingHabitItems}
-          setItems={setSleepingHabitItems}
-          isTime={false}
-        />
+        {showSleepingHabit && (
+          <Animated.View
+            style={{
+              opacity: sleepingHabitAnimation.opacity,
+              transform: [{ translateY: sleepingHabitAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="잠버릇을 선택해주세요"
+              value={sleepingHabit}
+              setValue={(text) => {
+                setSleepingHabit(text);
+                setShowAirConditioningIntensity(!!text);
+              }}
+              items={sleepingHabitItems}
+              setItems={setSleepingHabitItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="흡연여부를 선택해주세요"
-          value={smokingState}
-          setValue={setSmokingState}
-          items={smokingStateItems}
-          setItems={setSmokingStateItems}
-          isTime={false}
-        />
+        {showSmokingState && (
+          <Animated.View
+            style={{
+              opacity: smokingStateAnimation.opacity,
+              transform: [{ translateY: smokingStateAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="흡연여부를 선택해주세요"
+              value={smokingState}
+              setValue={(text) => {
+                setSmokingState(text);
+                setShowSleepingHabit(!!text);
+              }}
+              items={smokingStateItems}
+              setItems={setSmokingStateItems}
+              isTime={false}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="소등시간을 선택해주세요"
-          value={turnOffTime}
-          setValue={setTurnOffTime}
-          items={turnOffTimeItems}
-          setItems={setTurnOffTimeItems}
-          isTime={true}
-        />
+        {showTurnOffTime && (
+          <Animated.View
+            style={{
+              opacity: turnOffTimeAnimation.opacity,
+              transform: [{ translateY: turnOffTimeAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="소등시간을 선택해주세요"
+              value={turnOffTime}
+              setValue={(text) => {
+                setTurnOffTime(text);
+                setShowSmokingState(!!text);
+              }}
+              meridian={turnOffMeridian}
+              setMeridian={setTurnOffMeridian}
+              items={turnOffTimeItems}
+              setItems={setTurnOffTimeItems}
+              isTime={true}
+              isWide={true}
+              width={48}
+              count={6}
+            />
+          </Animated.View>
+        )}
 
-        <CustomRadioInputBox
-          title="취침시간을 선택해주세요"
-          value={sleepingTime}
-          setValue={setSleepingTime}
-          items={sleepingTimeItems}
-          setItems={setSleepingTimeItems}
-          isTime={true}
-        />
+        {showSleepingTime && (
+          <Animated.View
+            style={{
+              opacity: sleepingTimeAnimation.opacity,
+              transform: [{ translateY: sleepingTimeAnimation.translateY }],
+            }}
+          >
+            <CustomRadioInputBox
+              title="취침시간을 선택해주세요"
+              value={sleepingTime}
+              setValue={(text) => {
+                setSleepingTime(text);
+                setShowTurnOffTime(!!text);
+              }}
+              meridian={sleepingMeridian}
+              setMeridian={setSleepingMeridian}
+              items={sleepingTimeItems}
+              setItems={setSleepingTimeItems}
+              isTime={true}
+              isWide={true}
+              width={48}
+              count={6}
+            />
+          </Animated.View>
+        )}
 
         <CustomRadioInputBox
           title="기상시간을 선택해주세요"
           value={wakeUpTime}
-          setValue={setWakeUpTime}
+          setValue={(text) => {
+            setWakeUpTime(text);
+            setShowSleepingTime(!!text);
+          }}
+          meridian={wakeUpMeridian}
+          setMeridian={setWakeUpMeridian}
           items={wakeUpTimeItems}
           setItems={setWakeUpTimeItems}
           isTime={true}
+          isWide={true}
+          width={48}
+          count={6}
         />
       </ScrollView>
     </SafeAreaView>

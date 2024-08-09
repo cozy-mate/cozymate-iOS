@@ -29,6 +29,7 @@ export type LoginStackParamList = {
 };
 
 export type TabNavigatorParamList = {
+  LifeStyleOnboardingScreen: undefined;
   CozyHomeScreen: undefined;
   TodoListScreen: undefined;
   FeedMainScreen: undefined;

@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import ExampleImage from '@assets/lifeStyle/exampleImage.svg';
-import { LifeStyleOnboardingScreenProps } from '@type/param/stack';
+import { LifeStyleOnboardingScreenProps } from '@type/param/loginStack';
+import { useRecoilValue } from 'recoil';
+import { lifeStyleState } from '@recoil/recoil';
 
-const OnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
+const LifeStyleOnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
   navigation,
 }: LifeStyleOnboardingScreenProps) => {
+  const lifeStyle = useRecoilValue(lifeStyleState);
+
   const [username, setUsername] = useState<string>('눈꽃');
+
+  useEffect(() => {
+    console.log(lifeStyle);
+  }, [lifeStyle]);
 
   const toInput = () => {
     navigation.navigate('BasicLifeStyleScreen');
@@ -45,4 +53,4 @@ const OnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
   );
 };
 
-export default OnboardingScreen;
+export default LifeStyleOnboardingScreen;

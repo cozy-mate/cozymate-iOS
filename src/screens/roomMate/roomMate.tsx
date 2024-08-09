@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/loginStack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -20,27 +20,27 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [value, setValue] = useState<string[]>([]);
 
   const [items, setItems] = useState([
-    { index: 1, id: 'pattern', name: '생활패턴', select: false },
-    { index: 2, id: 'age', name: '나이', select: false },
-    { index: 3, id: 'id', name: '학번', select: false },
-    { index: 4, id: 'major', name: '학과', select: false },
-    { index: 5, id: 'type', name: '신청실', select: false },
-    { index: 6, id: 'pattern', name: '합격여부', select: false },
-    { index: 7, id: 'pattern', name: '기상시간', select: false },
-    { index: 8, id: 'pattern', name: '취침시간', select: false },
-    { index: 9, id: 'pattern', name: '소등시간', select: false },
-    { index: 10, id: 'pattern', name: '흡연여부', select: false },
-    { index: 11, id: 'pattern', name: '잠버릇', select: false },
-    { index: 12, id: 'pattern', name: '냉난방', select: false },
-    { index: 13, id: 'pattern', name: '물건공유', select: false },
-    { index: 14, id: 'pattern', name: '공부여부', select: false },
-    { index: 15, id: 'pattern', name: '게임여부', select: false },
-    { index: 16, id: 'pattern', name: '전화여부', select: false },
-    { index: 17, id: 'pattern', name: '청결예민도', select: false },
-    { index: 18, id: 'pattern', name: '소음예민도', select: false },
-    { index: 19, id: 'pattern', name: '청소빈도', select: false },
-    { index: 20, id: 'pattern', name: '성격', select: false },
-    { index: 21, id: 'pattern', name: 'MBTI', select: false },
+    { index: 1, id: '출생년도', name: '출생년도', select: false },
+    { index: 2, id: '학번', name: '학번', select: false },
+    { index: 3, id: '학과', name: '학과', select: false },
+    { index: 4, id: '신청실', name: '신청실', select: false },
+    { index: 5, id: '합격여부', name: '합격여부', select: false },
+    { index: 6, id: '기상시간', name: '기상시간', select: false },
+    { index: 7, id: '취침시간', name: '취침시간', select: false },
+    { index: 8, id: '소등시간', name: '소등시간', select: false },
+    { index: 9, id: '흡연여부', name: '흡연여부', select: false },
+    { index: 10, id: '잠버릇', name: '잠버릇', select: false },
+    { index: 11, id: '체질', name: '체질', select: false },
+    { index: 12, id: '생활패턴', name: '생활패턴', select: false },
+    { index: 13, id: '물건공유', name: '물건공유', select: false },
+    { index: 14, id: '공부여부', name: '공부여부', select: false },
+    { index: 15, id: '게임여부', name: '게임여부', select: false },
+    { index: 16, id: '전화여부', name: '전화여부', select: false },
+    { index: 17, id: '청결예민도', name: '청결예민도', select: false },
+    { index: 18, id: '소음예민도', name: '소음예민도', select: false },
+    { index: 19, id: '청소빈도', name: '청소빈도', select: false },
+    { index: 20, id: '성격', name: '성격', select: false },
+    { index: 21, id: 'MBTI', name: 'MBTI', select: false },
   ]);
   const [originalItems, setOriginalItems] = useState([...items]);
 
@@ -81,9 +81,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   return (
     <View className="flex-1 bg-[#F7FAFF]">
-      <Background style={{ position: 'absolute' }} />
       <ScrollView className="flex-1">
         <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
+          <Background style={{ position: 'absolute' }} />
           <Pressable>
             <View className="flex-row items-center py-2">
               <SchoolLogo />
@@ -105,7 +105,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View className="flex-1">
+        <View className="flex pb-10">
           <SameAnswerContainer users={users} setUsers={setUsers} />
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>

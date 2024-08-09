@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, ScrollView, TouchableWithoutFeedback } from 'react-native';
 
-import NavigateIcon from '@assets/roomMate/navigateNext.svg';
+import ToggleIcon from '@assets/roomMate/toggle.svg';
 
 interface SimilarLifeStyleContainerProps {
   users: User[];
@@ -22,16 +22,16 @@ const SimilarLifeStyleContainer: React.FC<SimilarLifeStyleContainerProps> = ({
   setUsers,
 }) => {
   return (
-    <View className="flex px-4 bg-white rounded-tl-[30px] pt-6">
-      <View className="flex flex-row justify-between mb-3 leading-loose">
+    <View className="flex px-5 bg-white rounded-tl-[30px] pt-6">
+      <View className="flex flex-row items-center justify-between mb-3 leading-loose">
         <View className="flex-col">
           <Text className="text-base font-semibold text-[#46464B] px-1 tracking-tight">
-            나와 비슷한 라이프스타일을 갖고 있어요!
+            나와 비슷한{'\n'}라이프스타일을 갖고 있어요!
           </Text>
         </View>
         <Pressable>
           <View className="pl-1 pr-2 py-[6px]">
-            <NavigateIcon />
+            <ToggleIcon />
           </View>
         </Pressable>
       </View>

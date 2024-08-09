@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
-import NavigateIcon from '@assets/roomMate/navigateNext.svg';
+import ToggleIcon from '@assets/roomMate/toggle.svg';
 
 interface SameAnswerContainerProps {
   users: User[];
@@ -19,19 +19,16 @@ type User = {
 
 const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ users, setUsers }) => {
   return (
-    <View className="flex px-4 bg-white rounded-tl-[30px] pt-6">
-      <View className="flex flex-row justify-between mb-3 leading-loose">
+    <View className="flex px-5 bg-white rounded-tl-[30px] pt-6">
+      <View className="flex flex-row items-center justify-between mb-3 leading-loose">
         <View className="flex-col">
-          <Text className="text-base font-semibold text-[#46464B] px-1 tracking-tight">
-            원하는 칩을 선택하면
-          </Text>
-          <Text className="text-base font-semibold text-[#46464B] px-1 tracking-tight">
-            나와 똑같은 답변을 한 사용자만 떠요!
+          <Text className="px-1 text-base font-semibold tracking-tight text-emphasizedFont">
+            원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
           </Text>
         </View>
         <Pressable>
           <View className="pl-1 pr-2 py-[6px]">
-            <NavigateIcon />
+            <ToggleIcon />
           </View>
         </Pressable>
       </View>

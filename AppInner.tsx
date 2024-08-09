@@ -20,7 +20,7 @@ import TodoListScreen from 'src/screens/todoList/todoList';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
 
-import OnboardingScreen from 'src/screens/lifeStyle/onBoarding';
+import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
 import FeedMainScreen from 'src/screens/feed/feedMain';
@@ -45,7 +45,10 @@ function AppInner() {
           <loginStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
           <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
 
-          <loginStack.Screen name="LifeStyleOnboardingScreen" component={OnboardingScreen} />
+          <loginStack.Screen
+            name="LifeStyleOnboardingScreen"
+            component={LifeStyleOnboardingScreen}
+          />
           <loginStack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
           <loginStack.Screen name="EssentialLifeStyleScreen" component={EssentialLifeStyleScreen} />
 
