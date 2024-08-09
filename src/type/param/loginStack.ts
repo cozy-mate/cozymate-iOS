@@ -25,7 +25,7 @@ export type LoginStackParamList = {
   FeedMainScreen: undefined;
   FeedEditScreen: undefined;
   FeedCreateScreen: undefined;
-  FeedViewScreen: undefined;
+  FeedViewScreen: {postId : number};
 };
 
 export type TabNavigatorParamList = {

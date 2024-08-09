@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { PostCardType } from '../../type/feed/postType';
 import PostCard from './postCard';
 
 type PostListProps = {
   postCards: PostCardType[];
+  toFeedView: (postId: number) => void;
 };
 
 
 const PostList = (props: PostListProps) => {
-  const { postCards } = props;
+  const { postCards, toFeedView } = props;
 
   return (
     <View className="flex-1 flex-col w-full items-start mt-5 mb-10">
@@ -17,6 +18,7 @@ const PostList = (props: PostListProps) => {
         <PostCard 
           key={post.id} 
           post={post}
+          toFeedView={toFeedView}
           />
       ))}
     </View>

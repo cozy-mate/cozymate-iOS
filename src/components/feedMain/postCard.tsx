@@ -2,84 +2,41 @@ import React, { Fragment, useEffect, useState,useRef } from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { PostCardType } from '../../type/feed/postType';
+import { PostCardType } from '@type/feed/postType';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { postTimeUtil } from '@utils/time/timeUtil';
+import { useImageCarousel } from '@hooks/useImageCarousel';
+import { usePersonaImage } from '@hooks/usePersonaImage';
 
 type PostCardProps = {
   post: PostCardType;
+  toFeedView : (postId : number) => void;
 }
 
-const timeUtil = (time: string) => {
-  const postedDate = new Date(time);
-  const postedTime = postedDate.getTime();
-  const now = new Date();
-  const nowTime = now.getTime();
-  const diff = nowTime - postedTime;
-  const diffMin = diff / 60000;
-  const diffHour = diffMin / 60;
-  const diffDay = diffHour / 24;
-  
-  if (diffMin < 60) {
-    return `${Math.floor(diffMin)}분 전`;
-  } else if (diffHour < 24) {
-    return `${Math.floor(diffHour)}시간 전`;
-  } else if (diffDay < 4) {
-    return `${Math.floor(diffDay)}일 전`;
-  }
-  return `${postedDate.getFullYear()}년 ${postedDate.getMonth() + 1}월 ${postedDate.getDate()}일`;
-};
-
 const PostCard = (props: PostCardProps) => {
-  const { post } = props;
-  const PERSONA_IMAGE_URL = `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${post.writer.persona}.png`;
+  const { post, toFeedView } = props;
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [loadingImages, setLoadingImages] = useState<boolean[]>(Array(post.imageList.length).fill(false));
-  const [loadingProfile, setLoadingProfile] = useState(true);
+  const {
+    currentSlide,
+    viewWidthRef,
+    loadingImages,
+    handleScroll,
+    handlePostImageLoadStart,
+    handlePostImageLoadEnd,
+    onLayout,
+  } = useImageCarousel(post.imageList);
 
-  const viewWidthRef = useRef(0);
-  const [layoutMeasured, setLayoutMeasured] = useState(false);
-
+  const {
+    PERSONA_IMAGE_URL,
+    loadingProfile,
+    handleProfileImageLoadStart,
+    handleProfileImageLoadEnd,
+  } = usePersonaImage(post.writer.persona);
   
-
-  useEffect(() => {
-    console.log('loadingImages', loadingImages);
-  }, [loadingImages]);
-
-  const handleProfileImageLoadStart = () => {
-    setLoadingProfile(true);
-  };
-
-  const handleProfileImageLoadEnd = () => {
-    setLoadingProfile(false);
-  };
-
-  const handlePostImageLoadStart = (index: number) => {
-    setLoadingImages((prev) => {
-      let updated = [...prev];
-      updated[index] = true;
-      return updated;
-    });
-  };
-
-  const handlePostImageLoadEnd = (index: number) => {
-    setLoadingImages((prev) => {
-      let updated = [...prev];
-      updated[index] = false;
-      return updated;
-    });
-  };
-  const onLayout = (event: any) => {
-    if (!layoutMeasured) {
-      const { width } = event.nativeEvent.layout;
-      viewWidthRef.current = width;
-      setLayoutMeasured(true);
-    }
-  };
 
   return (
     <Fragment>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>toFeedView(post.id)}>
         <View key={post.id} className="flex flex-col w-full bg-white mb-4 p-4 rounded-xl z-10 shadow-sm">
           <View className="flex flex-row w-full items-center justify-between">
             <View className="flex flex-row items-center justify-start space-x-2">
@@ -96,7 +53,7 @@ const PostCard = (props: PostCardProps) => {
               />
               <Text className="text-emphasizedFont font-semibold text-sm">{post.writer.nickname}</Text>
             </View>
-            <Text className="text-disabledFont font-normal text-sm">{timeUtil(post.createdAt)}</Text>
+            <Text className="text-disabledFont font-normal text-sm">{postTimeUtil(post.createdAt)}</Text>
           </View>
           <Text className="text-basicFont font-medium text-sm mt-2 mb-2">{post.content}</Text>
           
@@ -105,13 +62,13 @@ const PostCard = (props: PostCardProps) => {
               onLayout={onLayout}
               className='w-full'>
               <FlatList
-
                 data={post.imageList}
                 horizontal
                 pagingEnabled
                 snapToInterval={viewWidthRef.current}
                 keyExtractor={(item, index) => index.toString()}
                 showsHorizontalScrollIndicator={false}
+                onScroll={handleScroll}
                 scrollEventThrottle={200}
                 decelerationRate="fast"
                 renderItem={({ item, index }) => (
@@ -142,7 +99,7 @@ const PostCard = (props: PostCardProps) => {
               />
 
               {post.imageList.length > 1 && (
-                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 16 }}>
                   {post.imageList.map((_, index) => (
                     <View
                       key={index}
@@ -151,7 +108,7 @@ const PostCard = (props: PostCardProps) => {
                         height: 8,
                         borderRadius: 4,
                         marginHorizontal: 4,
-                        backgroundColor: currentSlide === index ? '#6C6C6C' : '#C9C9C9',
+                        backgroundColor: currentSlide === index ? '#6C6C77' : '#D9D9D9',
                       }}
                     />
                   ))}

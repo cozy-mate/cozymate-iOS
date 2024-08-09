@@ -2,6 +2,7 @@ import React, { useEffect, useState,useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pressable, Text, View,RefreshControl } from 'react-native'
 import PostList from '@components/feedMain/postList'
+import {examplePostList} from './exampleList';
 
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg'
 import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg'
@@ -35,48 +36,6 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const examplePostList : PostCardType[] = [
-    {
-      id: 1,
-      content: '이것은 테스트 게시물입니다.',
-      writer : {
-          id: 3,
-          nickname: '테스터3',
-          persona: 3
-      },
-      imageList : [],
-      commentCount: 4,
-      createdAt: '2024-08-08T10:00:00',
-      updatedAt: '2021-09-09T00:00:00',
-    },
-    {
-      id: 2,
-      content: '이것은 테스트 게시물입니다.',
-      writer : {
-          id: 1,
-          nickname: '테스터',
-          persona: 1,
-      },
-      imageList : ['https://picsum.photos/300/300','https://picsum.photos/400/300','https://picsum.photos/100/300'],
-      commentCount: 0,
-      createdAt: '2024-08-07T10:00:00',
-      updatedAt: '2021-09-09T00:00:00',
-    },
-    {
-      id: 3,
-      content: '이것은 두번째 테스트 게시물입니다.',
-      writer : {
-          id: 2,
-          nickname: '테스터2',
-          persona: 2,
-      },
-      imageList : ['https://picsum.photos/200/300'],
-      commentCount: 0,
-      createdAt: '2024-08-06T10:00:00',
-      updatedAt: '2021-09-09T00:00:00',
-    }
-  ]
-
   const [postList, setPostList] = React.useState<PostCardType[]>(examplePostList);
 
   // Feed 초기화
@@ -96,6 +55,10 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
   const toFeedCreate = () => {
     navigation.navigate('FeedCreateScreen')
+  }
+
+  const toFeedView = (postId: number) => {
+    navigation.navigate('FeedViewScreen',{postId: postId})
   }
   
   const onRefresh = useCallback(() => {
@@ -139,13 +102,11 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
               : <Text className="text-sm font-semibold text-disabledFont">피드 설명을 입력해주세요</Text>
             }
           </View>
-          
             {postList.length > 0 ?
-              <PostList postCards={postList}/> 
+              <PostList postCards={postList} toFeedView={toFeedView}/> 
               : 
               <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             }
-          
         </ScrollView>
           <View>
             <Pressable 

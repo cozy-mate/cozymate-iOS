@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   SignInScreen: undefined;
-
   PersonalInfoInputScreen: undefined;
   CharacterInputScreen: undefined;
   CompleteScreen: undefined;
