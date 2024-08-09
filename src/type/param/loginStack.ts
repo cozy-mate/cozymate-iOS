@@ -4,6 +4,7 @@ export type LoginStackParamList = {
   MainScreen: undefined;
   CozyHomeScreen: undefined;
   SelectCharacterScreen: undefined;
+  CompleteCreateRoomScreen: undefined;
 
   RoomMainScreen: undefined;
   CreateRoomScreen: undefined;
@@ -41,6 +42,12 @@ export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 
 export type SelectCharacterScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'SelectCharacterScreen'
+>;
+
+// 방 만들기 스크린 - 방 생성 완료
+export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'CompleteCreateRoomScreen'
 >;
 
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
