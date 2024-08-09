@@ -6,6 +6,13 @@ export type SignUp = {
   character: number;
 };
 
+export type RoomInfo = {
+  name: string;
+  profileImage: number;
+  maxMateNum: number;
+  creatorId: number;
+};
+
 export type LifeStyle = {
   universityId: number;
   admissionYear: string;
