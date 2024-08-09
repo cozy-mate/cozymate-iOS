@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/background.svg';
 
-import { TodoListScreenProps } from '@type/param/stack';
+import { TodoListScreenProps } from '@type/param/loginStack';
 import NavBar from '@components/navBar';
 import TodoList from '@components/todoList/todoList';
 import RoleRule from '@components/todoList/roleRule';

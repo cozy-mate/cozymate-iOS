@@ -8,7 +8,7 @@ import Icon from '@assets/roomMain/icon.svg';
 import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 
-import { RoomMainScreenProps } from '@type/param/stack';
+import { RoomMainScreenProps } from '@type/param/loginStack';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [roomName, setRoomName] = useState<string>('피그말리온');

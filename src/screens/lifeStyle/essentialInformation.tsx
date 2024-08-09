@@ -2,7 +2,7 @@ import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
-import { EssentialLifeStyleScreenProps } from '@type/param/stack';
+import { EssentialLifeStyleScreenProps } from '@type/param/loginStack';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -301,7 +301,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
 
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
-      <BackHeader title="필수정보" buttonString="다음" pressFunc={toNext} />
+      <BackHeader title="필수정보" buttonString="다음" pressFunc={toNext} width={210} />
       <ScrollView className="px-5">
         <CustomRadioInputBox
           title="MBTI를 알려주세요!"

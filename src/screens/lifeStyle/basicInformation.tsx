@@ -2,7 +2,7 @@ import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
-import { BasicLifeStyleScreenProps } from '@type/param/stack';
+import { BasicLifeStyleScreenProps } from '@type/param/loginStack';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
@@ -62,7 +62,7 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
 
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
-      <BackHeader title="기본정보" buttonString="다음" pressFunc={toNext} />
+      <BackHeader title="기본정보" buttonString="다음" pressFunc={toNext} width={108} />
       <ScrollView className="px-5">
         {showAcceptance && (
           <CustomRadioInputBox
@@ -116,9 +116,16 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
           value={birthYear}
           setValue={setBirthYear}
           placeholder="2002"
+          isDisable={false}
         />
 
-        <CustomTextInputBox title="이름을" value={name} setValue={setName} placeholder="김코지" />
+        <CustomTextInputBox
+          title="이름을"
+          value={name}
+          setValue={setName}
+          placeholder="김코지"
+          isDisable={false}
+        />
       </ScrollView>
     </SafeAreaView>
   );

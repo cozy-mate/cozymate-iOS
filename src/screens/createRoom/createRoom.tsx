@@ -4,7 +4,7 @@ import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 
-import { CreateRoomScreenProps } from '@type/param/stack';
+import { CreateRoomScreenProps } from '@type/param/loginStack';
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
@@ -32,12 +32,12 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     console.log(peopleNumber);
   }, [roomName, peopleNumber]);
 
-  const toSignIn = () => {
-    navigation.navigate('SignInScreen');
-  };
-
   const valueHandleChange = (text: string) => {
     setRoomName(text);
+  };
+
+  const toCozyHome = () => {
+    navigation.navigate('CozyHomeScreen');
   };
 
   return (
@@ -46,7 +46,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         <View>
           {/* 상단 이전 버튼 */}
           <View className="flex flex-row items-center mt-2 mb-[33px]">
-            <Pressable onPress={toSignIn}>
+            <Pressable onPress={toCozyHome}>
               <BackButton />
             </Pressable>
           </View>
