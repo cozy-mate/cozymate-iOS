@@ -4,8 +4,8 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { SelectCharacterScreenProps } from '@type/param/loginStack';
 
 import { useRecoilState } from 'recoil';
-import { SignUp } from '@recoil/type';
-import { signUpState } from '@recoil/recoil';
+import { RoomInfo, SignUp } from '@recoil/type';
+import { createRoomState, signUpState } from '@recoil/recoil';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
@@ -34,11 +34,11 @@ interface Character {
 }
 
 const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
-  const [signUp, setSignUp] = useRecoilState(signUpState);
+  const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
 
-  const [character, setCharacter] = useState<number>(0);
+  const [profileImage, setProfileImage] = useState<number>(0);
 
-  const isComplete = character !== 0;
+  const isComplete = profileImage !== 0;
 
   const [items, setItems] = useState<Character[]>([
     {
@@ -143,9 +143,9 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
   ]);
 
   const toNext = async (): Promise<void> => {
-    setSignUp((prevState: SignUp) => ({
+    setCreateroomState((prevState: RoomInfo) => ({
       ...prevState,
-      character: character,
+      profileImage: profileImage,
     }));
 
     navigation.goBack();
@@ -165,8 +165,8 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
 
           {/* 캐릭터 선택 Input */}
           <CustomRadioBoxComponent
-            value={character}
-            setValue={setCharacter}
+            value={profileImage}
+            setValue={setProfileImage}
             items={items}
             setItems={setItems}
           />

@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+
+import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
+
+import { CreateRoomScreenProps } from '@type/param/loginStack';
+
+import { useRecoilState } from 'recoil';
+import { RoomInfo } from '@recoil/type';
+import { createRoomState } from '@recoil/recoil';
+
 import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 
-import { CreateRoomScreenProps } from '@type/param/loginStack';
-import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
-
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
-  const [roomName, setRoomName] = useState<string>('');
-  const [peopleNumber, setPeopleNumber] = useState<number>(0);
+  const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
+
+  const [name, setName] = useState<string>('');
+  const [maxMateNum, setMaxMateNum] = useState<number>(0);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   useEffect(() => {
-    if (roomName !== '' && peopleNumber !== 0) {
+    if (name !== '' && maxMateNum !== 0) {
       setIsComplete(true);
     }
-  }, [roomName, peopleNumber]);
+  }, [name, maxMateNum]);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -27,21 +35,26 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     { index: 5, value: 6, name: '6명', select: false },
   ]);
 
-  useEffect(() => {
-    console.log(roomName);
-    console.log(peopleNumber);
-  }, [roomName, peopleNumber]);
-
   const valueHandleChange = (text: string) => {
-    setRoomName(text);
+    setName(text);
+  };
+
+  const toCozyHome = () => {
+    navigation.navigate('CozyHomeScreen');
   };
 
   const toSelectCharacter = () => {
     navigation.navigate('SelectCharacterScreen');
   };
 
-  const toCozyHome = () => {
-    navigation.navigate('CozyHomeScreen');
+  const toNext = async (): Promise<void> => {
+    setCreateroomState((prevState: RoomInfo) => ({
+      ...prevState,
+      name: name,
+      maxMateNum: maxMateNum,
+    }));
+
+    navigation.goBack();
   };
 
   return (
@@ -58,7 +71,17 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
           {/* 캐릭터 선택 */}
           <View className="relative flex items-center justify-center mb-10">
             <View className="relative">
-              <CharacterBox />
+              {createroomState.profileImage ? (
+                <Image
+                  source={{
+                    uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${createroomState.profileImage}.png`,
+                  }}
+                  style={{ width: 130, height: 130 }} // 이미지 크기를 원하는 대로 설정
+                  resizeMode="cover" // 필요한 경우 resizeMode 설정
+                />
+              ) : (
+                <CharacterBox />
+              )}
               <View className="absolute bottom-0 right-0">
                 <Pressable onPress={toSelectCharacter}>
                   <SelectIcon />
@@ -75,7 +98,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               </Text>
               <TextInput
                 className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
-                value={roomName}
+                value={name}
                 onChangeText={valueHandleChange}
                 placeholder="방이름을 입력해주세요"
               />
@@ -87,8 +110,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
                 인원을 선택해주세요 (본인 포함)
               </Text>
               <CustomRadioBoxComponent
-                value={peopleNumber}
-                setValue={setPeopleNumber}
+                value={maxMateNum}
+                setValue={setMaxMateNum}
                 items={items}
                 setItems={setItems}
               />
@@ -97,7 +120,10 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         </View>
 
         <View className="flex">
-          <Pressable className={`${isComplete ? 'bg-main' : 'bg-[#C4C4C4]'}  p-4 rounded-xl`}>
+          <Pressable
+            onPress={toNext}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}  p-4 rounded-xl`}
+          >
             <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
           </Pressable>
         </View>
