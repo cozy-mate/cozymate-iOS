@@ -1,10 +1,7 @@
 import React, { Fragment } from 'react'
 import { View } from 'react-native';
 import { CommentType } from '@type/feed';
-import CommentCard from './commentCard';
-import ControlModal from './controlModal';
-import { useFeedModal } from '@hooks/useFeedModal';
-
+import CommentCard from '@components/feedView/commentCard';
 type CommentListProps = {
     commentCards : CommentType[];
   }

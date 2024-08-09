@@ -1,4 +1,4 @@
-import { CommentType, PostCardType } from '../../type/feed/postType';
+import { CommentType, PostCardType } from '@type/feed/postType';
 export const examplePostList : PostCardType[] = [
     {
       id: 1,

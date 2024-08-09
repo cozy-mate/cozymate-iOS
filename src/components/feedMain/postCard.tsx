@@ -1,10 +1,12 @@
 import React, { Fragment} from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
-import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { PostCardType } from '@type/feed/postType';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { PostCardType } from '@type/feed/postType';
 import { postTimeUtil } from '@utils/time/timeUtil';
+import ChatIcon from '@assets/feedMain/chatIcon.svg';
+
 import { useImageCarousel } from '@hooks/useImageCarousel';
 import { usePersonaImage } from '@hooks/usePersonaImage';
 

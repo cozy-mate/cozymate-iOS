@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { PostCardType } from '../../type/feed/postType';
-import PostCard from './postCard';
+
+import { PostCardType } from '@type/feed/postType';
+import PostCard from '@components/feedMain/postCard';
 
 type PostListProps = {
   postCards: PostCardType[];

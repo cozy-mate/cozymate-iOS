@@ -1,23 +1,26 @@
 import React,{ useCallback, useRef} from 'react'
-import { View, Text, Image, FlatList,TextInput, Pressable,RefreshControl,Animated,Modal } from 'react-native';
+import { View, Text, Image, FlatList,TextInput, Pressable,RefreshControl,Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
 import DotIcon from '@assets/feedView/dotIcon.svg';
 
 import { FeedViewScreenProps } from '@type/param/loginStack'
-import { exampleCommentList, examplePostList } from './exampleList';
 import { CommentType, PostCardType } from '@type/feed';
 
+import { exampleCommentList, examplePostList } from '@utils/mockData/exampleList';
 import { postTimeUtil } from '@utils/time/timeUtil';
+
+import CommentList from '@components/feedView/commentList';
+import ControlModal from '@components/feedView/controlModal';
+
 import { useImageCarousel } from '@hooks/useImageCarousel';
 import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useFeedModal } from '@hooks/useFeedModal';
-import CommentList from '@components/feedView/commentList';
-import { ScrollView } from 'react-native-gesture-handler';
-import ControlModal from '@components/feedView/controlModal';
 
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {

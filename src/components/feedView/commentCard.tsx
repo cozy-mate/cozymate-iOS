@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { View , Image, Text,Pressable} from 'react-native';
-import { CommentType } from '@type/feed';
+import { View , Image, Text} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { usePersonaImage } from '@hooks/usePersonaImage';
+
+import { CommentType } from '@type/feed';
 import DotIcon from '@assets/feedView/dotIcon.svg';
 import { postTimeUtil } from '@utils/time/timeUtil';
-import ControlModal from './controlModal';
+
+import ControlModal from '@components/feedView/controlModal';
+
 import { useFeedModal } from '@hooks/useFeedModal';
+import { usePersonaImage } from '@hooks/usePersonaImage';
 type CommentCardProps = {
     comment: CommentType;
 }
@@ -14,7 +17,7 @@ type CommentCardProps = {
 const CommentCard = (props: CommentCardProps) => {
 
     const {
-      comment,
+      comment
     } = props;
 
     const [isMyComment, setIsMyComment] = useState<boolean>(true);

@@ -1,8 +1,10 @@
 import React, { useEffect, useState,useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pressable, Text, View,RefreshControl } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+
 import PostList from '@components/feedMain/postList'
-import {examplePostList} from './exampleList';
+import {examplePostList} from '@utils/mockData/exampleList';
 
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg'
 import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg'
@@ -11,11 +13,7 @@ import PostEdit from '@assets/feedMain/postEdit.svg'
 
 import { FeedMainScreenProps } from "@type/param/loginStack"
 import { FeedType, PostCardType } from '@type/feed';
-import { ScrollView } from 'react-native-gesture-handler'
 
-const FeedInfo = () => {
-  return
-}
 
 const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
@@ -36,7 +34,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const [postList, setPostList] = React.useState<PostCardType[]>(examplePostList);
+  const [postList, setPostList] = React.useState<PostCardType[]>([]);
 
   // Feed 초기화
   // TODO : hook으로 만들기 (재사용 높음)
@@ -82,7 +80,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           >
-          <View className="flex-col w-full justify-start">
+          <View className="flex-1 flex-col w-full justify-start">
             {
               isFeedEnabled ? <FeedLampEnabled className="mb-2"/> : <FeedLampDisabled className="mb-2"/>
             }
@@ -105,7 +103,7 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             {postList.length > 0 ?
               <PostList postCards={postList} toFeedView={toFeedView}/> 
               : 
-              <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
+              <Text className="flex-1 text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             }
         </ScrollView>
           <View>

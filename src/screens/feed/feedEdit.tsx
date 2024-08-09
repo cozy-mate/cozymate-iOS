@@ -10,11 +10,7 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
   const [feedDescription, setFeedDescription] = useState<string>('');
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
-  //TODO: useEffect를 사용하여 불러올 정보
-  // - 피드 이름, 설명 가져오기
-
-  //TODO: useCheckValidation이라는 custom hook을 만들어서 사용해도 좋을 것 같습니다.
-
+  
   useEffect(() => {
     if (feedName !== '' && feedDescription !== '') {
       setIsComplete(true);

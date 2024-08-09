@@ -1,4 +1,3 @@
-import { useFeedModal } from '@hooks/useFeedModal'
 import React from 'react'
 import { Modal, View, Text } from 'react-native'
 
