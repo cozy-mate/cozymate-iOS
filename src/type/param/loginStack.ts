@@ -3,6 +3,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type LoginStackParamList = {
   MainScreen: undefined;
   CozyHomeScreen: undefined;
+  SelectCharacterScreen: undefined;
+
   RoomMainScreen: undefined;
   CreateRoomScreen: undefined;
   TodoListScreen: undefined;
@@ -29,8 +31,17 @@ export type TabNavigatorParamList = {
   MyPageScreen: undefined;
 };
 
-// 홈 스크린 (방 만들기 Or 초대코드 입력하기)
+// 코지홈 스크린
 export type HomeScreenProps = NativeStackScreenProps<LoginStackParamList, 'CozyHomeScreen'>;
+
+// 방 만들기 스크린 - 방 이름 & 인원 선택
+export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
+
+// 방 만들기 스크린 - 캐릭터 선택
+export type SelectCharacterScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'SelectCharacterScreen'
+>;
 
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
@@ -59,8 +70,7 @@ export type EssentialLifeStyleScreenProps = NativeStackScreenProps<
 
 // 방 메인 스크린 (코지봇 알림)
 export type RoomMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMainScreen'>;
-// 방장 방 만들기 스크린 (방 이름 & 인원 선택)
-export type CreateRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateRoomScreen'>;
+
 // 투두리스트 스크린
 export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'TodoListScreen'>;
 
