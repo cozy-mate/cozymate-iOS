@@ -14,6 +14,7 @@ import MainScreen from 'src/screens/main';
 
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
+import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
 
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
@@ -42,6 +43,8 @@ function AppInner() {
           <loginStack.Screen name="MainScreen" component={MainScreen} />
           <loginStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
           <loginStack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
+          <loginStack.Screen name="CompleteCreateRoomScreen" component={CompleteCreateRoomScreen} />
+
           <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
 
           <loginStack.Screen
