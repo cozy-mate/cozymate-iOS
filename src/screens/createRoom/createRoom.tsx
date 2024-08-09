@@ -18,14 +18,17 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
   const [name, setName] = useState<string>('');
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
+  const [isLongName, setIsLongName] = useState<boolean>(false);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   useEffect(() => {
-    if (name !== '' && maxMateNum !== 0) {
+    if (name !== '' && maxMateNum !== 0 && !isLongName) {
       setIsComplete(true);
+    } else {
+      setIsComplete(false);
     }
-  }, [name, maxMateNum]);
+  }, [name, maxMateNum, isLongName]);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -37,6 +40,11 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
   const valueHandleChange = (text: string) => {
     setName(text);
+    if (text.length > 12) {
+      setIsLongName(true);
+    } else {
+      setIsLongName(false);
+    }
   };
 
   const toCozyHome = () => {
@@ -102,6 +110,11 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
                 onChangeText={valueHandleChange}
                 placeholder="방이름을 입력해주세요"
               />
+              {isLongName && (
+                <Text className="pl-2 mt-2 text-xs font-medium text-warning">
+                  방이름은 최대 12글자만 가능해요!
+                </Text>
+              )}
             </View>
 
             {/* 방 인원 선택 */}
