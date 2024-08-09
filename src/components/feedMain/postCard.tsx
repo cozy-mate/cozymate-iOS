@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState,useRef } from 'react';
+import React, { Fragment} from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';

@@ -30,8 +30,8 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
   const [isFeedEnabled, setIsFeedEnabled] = React.useState(false);
 
   const [feedInfo, setFeedInfo] = React.useState<FeedType>({
-    name: '',
-    description: '',
+    name: '피그말리온',
+    description: '집에 안 들어오면 죽는다...',
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -89,8 +89,8 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             <View className='flex-row items-center'>
               {
                 isFeedEnabled ? 
-                <Text className="text-2xl font-extrabold text-black">{feedInfo.name}</Text> 
-                : <Text className="text-2xl font-extrabold text-disabledFont">피드의 이름을 설정해주세요.</Text>
+                <Text className="text-lg font-semibold text-basicFont">{feedInfo.name}</Text> 
+                : <Text className="text-lg font-semibold text-disabledFont">피드의 이름을 설정해주세요.</Text>
               }
               <Pressable onPress={toFeedEdit}>
                 <FeedEdit/>
@@ -98,8 +98,8 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
             </View>
             {
               isFeedEnabled ? 
-              <Text className="text-sm font-semibold text-black">{feedInfo.description}</Text> 
-              : <Text className="text-sm font-semibold text-disabledFont">피드 설명을 입력해주세요</Text>
+              <Text className="text-xs font-normal text-basicFont">{feedInfo.description}</Text> 
+              : <Text className="text-xs font-normal text-disabledFont">피드 설명을 입력해주세요</Text>
             }
           </View>
             {postList.length > 0 ?

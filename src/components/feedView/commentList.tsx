@@ -2,13 +2,17 @@ import React, { Fragment } from 'react'
 import { View } from 'react-native';
 import { CommentType } from '@type/feed';
 import CommentCard from './commentCard';
+import ControlModal from './controlModal';
+import { useFeedModal } from '@hooks/useFeedModal';
 
 type CommentListProps = {
     commentCards : CommentType[];
-}
+  }
 
 const CommentList = (props: CommentListProps) => {
-    const {commentCards} = props;
+    const {
+      commentCards,
+    } = props;
 
     return (
         <View className="flex-1 flex-col w-full px-5 items-start mb-10">
@@ -22,7 +26,7 @@ const CommentList = (props: CommentListProps) => {
                   <View className='w-full border-t-[1px] border-[#F4F4F4]'></View>
                 }
             </Fragment>
-      ))}
+        ))}
     </View>
     )
 }

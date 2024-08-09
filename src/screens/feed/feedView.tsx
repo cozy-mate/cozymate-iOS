@@ -1,10 +1,11 @@
-import React,{Fragment, useCallback, useRef} from 'react'
-import { View, Text, Image, FlatList,TextInput, Pressable,RefreshControl,Animated } from 'react-native';
+import React,{ useCallback, useRef} from 'react'
+import { View, Text, Image, FlatList,TextInput, Pressable,RefreshControl,Animated,Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
+import DotIcon from '@assets/feedView/dotIcon.svg';
 
 import { FeedViewScreenProps } from '@type/param/loginStack'
 import { exampleCommentList, examplePostList } from './exampleList';
@@ -13,8 +14,10 @@ import { CommentType, PostCardType } from '@type/feed';
 import { postTimeUtil } from '@utils/time/timeUtil';
 import { useImageCarousel } from '@hooks/useImageCarousel';
 import { usePersonaImage } from '@hooks/usePersonaImage';
-import CommentList from '@components/feedView/commendList';
+import { useFeedModal } from '@hooks/useFeedModal';
+import CommentList from '@components/feedView/commentList';
 import { ScrollView } from 'react-native-gesture-handler';
+import ControlModal from '@components/feedView/controlModal';
 
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
@@ -24,8 +27,9 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const [commentList, setCommentList] = React.useState<CommentType[]>(exampleCommentList);
   const [refreshing, setRefreshing] = React.useState(false);
   const [comment,setComment] = React.useState<string>('');
+  const [isMyPost, setIsMyPost] = React.useState<boolean>(true);
   const opacity = useRef(new Animated.Value(1)).current; 
-
+  
   const {
     currentSlide,
     viewWidthRef,
@@ -42,6 +46,14 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     handleProfileImageLoadStart,
     handleProfileImageLoadEnd,
   } = usePersonaImage(post.writer.persona);
+
+  const {
+    isModalVisible,
+    modalPosition,
+    dotIconRef,
+    onPressModalOpen,
+    onPressModalClose
+  } = useFeedModal();
 
   const handleCommentChange = (comment: string) => {
     setComment(comment);
@@ -79,9 +91,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     }, 2000);
   }, []);
 
-  
-
-  
   return (
     <View className='bg-white w-full h-full'>
     <SafeAreaView className='bg-white w-full'/>
@@ -118,9 +127,14 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                   <Text className="text-emphasizedFont font-semibold text-sm">{post.writer.nickname}</Text>
                 )}
               </View>
-               
             </View>
-            
+            {
+              isMyPost && !refreshing && (
+                <View className='flex items-center justify-center' ref={dotIconRef} onTouchEnd={onPressModalOpen}>
+                  <DotIcon/>
+                </View>
+              )
+            }
           </View>
           {
             refreshing && (
@@ -195,13 +209,21 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               <Text className="text-disabledFont font-normal text-xs">{post.commentCount}</Text>
             </View>
             <View>
-            <Text className="text-disabledFont font-normal text-xs">{postTimeUtil(post.createdAt)}</Text>
+              {
+                refreshing ? 
+                  <SkeletonPlaceholder>
+                    <View style={{ width: 100, height: 20, borderRadius: 10 }} />
+                  </SkeletonPlaceholder>
+                  : <Text className="text-disabledFont font-normal text-xs">{postTimeUtil(post.createdAt)}</Text>
+              }
+              
             </View>
           </View>
         </View>
         <View className='mt-2 w-full border-t-2 border-[#F4F4F4]'>
         </View>
-        <CommentList commentCards={commentList}/>
+        <CommentList 
+            commentCards={commentList}/>
         </ScrollView>
         <View className='absolute w-full bottom-0'>
           <LinearGradient
@@ -226,6 +248,12 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             </Pressable>
           </LinearGradient>
         </View>
+        <SafeAreaView className='w-full'/>
+        <ControlModal 
+          isModalVisible={isModalVisible} 
+          modalPosition={modalPosition} 
+          onPressModalClose={onPressModalClose}
+        />
     </View>
   )
 }
