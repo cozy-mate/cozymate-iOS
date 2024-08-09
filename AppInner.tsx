@@ -12,12 +12,14 @@ import CompleteScreen from 'src/screens/onBoard/complete';
 
 import MainScreen from 'src/screens/main';
 
+import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
+import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
+
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
-import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
 
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
@@ -39,6 +41,7 @@ function AppInner() {
         <loginStack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false }}>
           <loginStack.Screen name="MainScreen" component={MainScreen} />
           <loginStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
+          <loginStack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
           <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
 
           <loginStack.Screen

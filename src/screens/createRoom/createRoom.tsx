@@ -36,6 +36,10 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     setRoomName(text);
   };
 
+  const toSelectCharacter = () => {
+    navigation.navigate('SelectCharacterScreen');
+  };
+
   const toCozyHome = () => {
     navigation.navigate('CozyHomeScreen');
   };
@@ -56,7 +60,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
             <View className="relative">
               <CharacterBox />
               <View className="absolute bottom-0 right-0">
-                <Pressable>
+                <Pressable onPress={toSelectCharacter}>
                   <SelectIcon />
                 </Pressable>
               </View>
