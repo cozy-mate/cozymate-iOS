@@ -62,7 +62,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       maxMateNum: maxMateNum,
     }));
 
-    navigation.goBack();
+    navigation.navigate('CompleteCreateRoomScreen');
   };
 
   return (

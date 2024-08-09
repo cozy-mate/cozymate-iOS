@@ -1,11 +1,11 @@
 import React from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, Text, View, Image } from 'react-native';
 import { useRecoilState } from 'recoil';
 
 import { createRoomState } from '@recoil/recoil';
-import { Image } from 'react-native';
+import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
 
-const CompleteCreateRoomScreen = () => {
+const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
   const [createroomState, setCreateRoomState] = useRecoilState(createRoomState);
 
   const toCozyHome = () => {
