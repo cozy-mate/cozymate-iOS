@@ -53,11 +53,13 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
 
           {/* 캐릭터 선택 */}
           <View className="relative flex items-center justify-center mb-10">
-            <CharacterBox />
-            <View className="absolute bottom-0 right-1/3">
-              <Pressable>
-                <SelectIcon />
-              </Pressable>
+            <View className="relative">
+              <CharacterBox />
+              <View className="absolute bottom-0 right-0">
+                <Pressable>
+                  <SelectIcon />
+                </Pressable>
+              </View>
             </View>
           </View>
 
