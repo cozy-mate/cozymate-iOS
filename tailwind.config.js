@@ -15,6 +15,8 @@ module.exports = {
         DEFAULT: 'black',
         main1: '#68A4FF',
         main2: '#FFCE3D',
+        // 피드 배경색
+        main3: '#F7F8FA',
 
         sub1: '#CADFFF',
         sub2: '#E5F0FF',
@@ -38,6 +40,8 @@ module.exports = {
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',
         appleblack: '#121212',
+
+
       },
     },
   },
