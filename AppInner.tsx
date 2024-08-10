@@ -23,6 +23,10 @@ import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication'
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+import FeedMainScreen from 'src/screens/feed/feedMain';
+import FeedEditScreen from 'src/screens/feed/feedEdit';
+import FeedViewScreen from 'src/screens/feed/feedView';
+import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -54,6 +58,11 @@ function AppInner() {
 
           <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
           <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+
+          <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
+          <loginStack.Screen name="FeedEditScreen" component={FeedEditScreen} />
+          <loginStack.Screen name="FeedViewScreen" component={FeedViewScreen} />
+          <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
         </loginStack.Navigator>
       ) : (
         <rootStack.Navigator screenOptions={{ headerShown: false }}>
