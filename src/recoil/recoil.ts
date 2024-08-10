@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { SignUp, LifeStyle } from './type';
+import { SignUp, LifeStyle, RoomInfo } from './type';
 
 export const signUpState = atom<SignUp>({
   key: 'signup',
@@ -15,6 +15,16 @@ export const signUpState = atom<SignUp>({
 export const loggedInState = atom<boolean>({
   key: 'isLoggedIn',
   default: false,
+});
+
+export const createRoomState = atom<RoomInfo>({
+  key: 'roomInfo',
+  default: {
+    name: '',
+    profileImage: 0,
+    maxMateNum: 0,
+    creatorId: 0,
+  },
 });
 
 export const lifeStyleState = atom<LifeStyle>({
