@@ -36,6 +36,7 @@ import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
+import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const loginStack = createNativeStackNavigator<LoginStackParamList>();
@@ -69,6 +70,7 @@ function AppInner() {
           <loginStack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <loginStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
           <loginStack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
+          <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
 
           <loginStack.Screen name="TodoListScreen" component={TodoListScreen} />
 
