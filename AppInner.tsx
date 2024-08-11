@@ -21,7 +21,7 @@ import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
-import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
+import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
 
 import MyPageScreen from 'src/screens/myPage/myPage';
 
@@ -51,7 +51,10 @@ function AppInner() {
           <loginStack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
           <loginStack.Screen name="CompleteCreateRoomScreen" component={CompleteCreateRoomScreen} />
 
-          <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
+          <loginStack.Screen
+            name="SchoolAuthenticationScreen"
+            component={SchoolAuthenticationScreen}
+          />
 
           <loginStack.Screen name="MyPageScreen" component={MyPageScreen} />
 

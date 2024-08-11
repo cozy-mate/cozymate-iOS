@@ -59,6 +59,7 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
   'CompleteCreateRoomScreen'
 >;
 
+// 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'SchoolAuthenticationScreen'

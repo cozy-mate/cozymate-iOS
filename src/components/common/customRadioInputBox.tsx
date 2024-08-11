@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Text, View, Pressable, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Pressable } from 'react-native';
 
 interface CustomRadioInputBoxProps {
   title: string;
@@ -37,13 +37,8 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-  const inputRef = useRef<TextInput>(null);
-
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   };
 
   const handleBlur = () => {
@@ -114,7 +109,6 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
             >
               {item.name}
             </Text>
-            <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
           </Pressable>
         ))}
       </View>
