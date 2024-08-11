@@ -6,6 +6,7 @@ import XButton from '@assets/xButton.svg';
 import HomeIcon from '@assets/waitingRoom/homeIcon.svg';
 import PersonIcon from '@assets/waitingRoom/personIcon.svg';
 import ResetIcon from '@assets/waitingRoom/resetIcon.svg';
+import RoomMateBox from '@components/waitingRoom/RoomMateBox';
 
 const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
   const [roomInfo, setRoomInfo] = useState({
@@ -13,6 +14,15 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
     profileImage: 5,
     numOfMate: 6,
   });
+
+  const [memberList, setMemberList] = useState([
+    {
+      name: '델로',
+      profileImage: 1,
+      state: '도착완료',
+      isAdmin: true,
+    },
+  ]);
 
   const toMain = () => {
     navigation.navigate('MainScreen');
@@ -62,7 +72,16 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
 
           <View className="flex flex-col items-end">
             <ResetIcon />
-            <View className="mt-3"></View>
+            <View className="mt-3">
+              {memberList.map((member) => (
+                <RoomMateBox
+                  name={member.name}
+                  profileImage={member.profileImage}
+                  state={member.state}
+                  isAdmin={member.isAdmin}
+                />
+              ))}
+            </View>
           </View>
         </View>
       </View>
