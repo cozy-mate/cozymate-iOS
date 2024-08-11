@@ -105,7 +105,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View className="flex pb-10">
+        <View className="flex pb-20 drop-shadow-topShadow">
           <SameAnswerContainer users={users} setUsers={setUsers} />
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>

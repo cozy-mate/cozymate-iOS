@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Text, Pressable, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { Text, Pressable } from 'react-native';
 
 interface CustomCheckBoxComponentProps {
   value: string[];
@@ -25,18 +25,10 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-  const inputRef = useRef<TextInput>(null);
-
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   };
 
-  const handleBlur = () => {
-    setFocusedIndex(null);
-  };
   const select = (selectedItem: Item) => {
     const updatedItems = items.map((item) =>
       item.index === selectedItem.index ? { ...item, select: !item.select } : item,
@@ -78,7 +70,6 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
           >
             {item.name}
           </Text>
-          <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
     </>

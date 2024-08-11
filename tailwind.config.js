@@ -11,6 +11,9 @@ module.exports = {
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',
       },
+      dropShadow: {
+        topShadow: '0px 0px 8px 0px rgba(218, 218, 218, 0.25)',
+      },
       colors: {
         DEFAULT: 'black',
         main1: '#68A4FF',
@@ -40,8 +43,6 @@ module.exports = {
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',
         appleblack: '#121212',
-
-
       },
     },
   },

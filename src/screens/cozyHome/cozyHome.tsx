@@ -3,6 +3,7 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
+import Character from '@assets/cozyHome/character.svg';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
@@ -49,8 +50,8 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-row justify-between px-5 pt-[26px]">
-          {/* 룸메이트 초대하기 버튼 */}
+        <View className="flex flex-row justify-between px-5 pt-[26px] ">
+          {/* 코지메이트 초대하기 버튼 */}
           <View
             className={`${!isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl w-[162px]`}
           >
