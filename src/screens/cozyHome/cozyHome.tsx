@@ -5,8 +5,12 @@ import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 import { HomeScreenProps } from '@type/param/loginStack';
+import { useRecoilState } from 'recoil';
+import { hasRoomState } from '@recoil/recoil';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
+  const [, setHasRoom] = useRecoilState(hasRoomState);
+
   const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
   };
@@ -20,6 +24,11 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const isActive = true;
+
+  const handleHasRoom = () => {
+    setHasRoom(true);
+    navigation.navigate('RoomMainScreen');
+  };
 
   return (
     <Fragment>
@@ -35,8 +44,12 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
             </Pressable>
 
             <View className="flex flex-row">
-              <ChatIcon />
-              <NotificationIcon />
+              <Pressable>
+                <ChatIcon />
+              </Pressable>
+              <Pressable onPress={handleHasRoom}>
+                <NotificationIcon />
+              </Pressable>
             </View>
           </View>
 
