@@ -6,6 +6,7 @@ import ToggleIcon from '@assets/roomMate/toggle.svg';
 interface SameAnswerContainerProps {
   users: User[];
   setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  toUserDetail: () => void;
 }
 
 type User = {
@@ -17,7 +18,11 @@ type User = {
   percent: number;
 };
 
-const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ users, setUsers }) => {
+const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({
+  users,
+  setUsers,
+  toUserDetail,
+}) => {
   return (
     <View className="flex px-5 bg-white rounded-tl-[30px] pt-6">
       <View className="flex flex-row items-center justify-between mb-3 leading-loose">
@@ -34,28 +39,27 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ users, setUse
       </View>
 
       {users.map((user) => (
-        <View
-          className="flex flex-row border-2 border-disabled rounded-[12px] mb-3 p-4"
-          key={user.index}
-        >
-          <View className="flex flex-row items-center justify-between w-full">
-            <View className="flex flex-row items-center">
-              <user.image />
-              <View className="flex-col ml-2">
-                <View className="flex-row mb-1">
-                  <Text className="bg-colorBox px-2 py-[2px] mr-1 text-[10px] font-medium text-colorFont">
-                    {user.age}살
-                  </Text>
-                  <Text className="bg-colorBox px-2 py-[2px] text-[10px] font-medium text-colorFont">
-                    {user.type}
-                  </Text>
+        <Pressable key={user.index} onPress={toUserDetail}>
+          <View className="flex flex-row border-2 border-disabled rounded-[12px] mb-3 p-4">
+            <View className="flex flex-row items-center justify-between w-full">
+              <View className="flex flex-row items-center">
+                <user.image />
+                <View className="flex-col ml-2">
+                  <View className="flex-row mb-1">
+                    <Text className="bg-colorBox px-2 py-[2px] mr-1 text-[10px] font-medium text-colorFont">
+                      {user.age}살
+                    </Text>
+                    <Text className="bg-colorBox px-2 py-[2px] text-[10px] font-medium text-colorFont">
+                      {user.type}
+                    </Text>
+                  </View>
+                  <Text className="px-1 text-[14px] font-semibold text-[#61666D]">{user.name}</Text>
                 </View>
-                <Text className="px-1 text-[14px] font-semibold text-[#61666D]">{user.name}</Text>
               </View>
+              <Text className="text-colorFont">{user.percent}%</Text>
             </View>
-            <Text className="text-colorFont">{user.percent}%</Text>
           </View>
-        </View>
+        </Pressable>
       ))}
     </View>
   );

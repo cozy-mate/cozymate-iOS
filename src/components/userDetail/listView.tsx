@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 interface ViewProps {
   userData: {
@@ -70,12 +70,23 @@ const ListView: React.FC<ViewProps> = ({ userData }) => {
       mbti: 'MBTI',
     };
 
+    const entries = Object.entries(info);
+
     return (
-      <View className="mb-6 leading-loose ">
-        <Text className="text-lg font-semibold text-[#46464B] tracking-tight">{title}</Text>
-        <View className="p-4 border-2 border-[#F1F2F4] rounded-xl">
-          {Object.entries(info).map(([key, value]) => (
-            <View key={key} className="flex-row items-center my-3">
+      <View className="mb-6 leading-loose">
+        <Text className="text-lg font-semibold text-[#444955] tracking-tight px-1 mb-3">
+          {title}
+        </Text>
+        <View className="p-4 border-[1px] border-[#F1F2F4] rounded-xl">
+          {entries.map(([key, value], index) => (
+            <View
+              key={key}
+              className={`flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
+                index === entries.length - 1
+                  ? 'border-b-0 pb-0'
+                  : 'border-b-[1px] border-b-[#f1f2f4]'
+              }`}
+            >
               <Text className="mr-3 font-medium text-colorFont">{labels[key] || key}</Text>
               <Text className="text-[#505059] font-medium">{value}</Text>
             </View>
@@ -86,13 +97,11 @@ const ListView: React.FC<ViewProps> = ({ userData }) => {
   };
 
   return (
-    <View className="flex-1 px-5">
-      <View className="mt-[67px] mb-[7px]">
-        {renderInfo(userData.basicInfo, '기본정보')}
-        {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
-        {renderInfo(userData.essentialInfo, '필수 정보')}
-      </View>
-    </View>
+    <ScrollView className="px-5 mt-4">
+      {renderInfo(userData.basicInfo, '기본정보')}
+      {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
+      {renderInfo(userData.essentialInfo, '필수 정보')}
+    </ScrollView>
   );
 };
 

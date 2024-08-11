@@ -79,6 +79,10 @@ interface ViewProps {
 }
 
 const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
+  const truncateString = (str: string) => {
+    return str.length > 7 ? `${str.slice(0, 7)}...` : str;
+  };
+
   const renderInfo = (my: Record<string, string>, other: Record<string, string>, title: string) => {
     const labels: Record<string, string> = {
       name: '이름',
@@ -107,32 +111,41 @@ const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
       mbti: 'MBTI',
     };
 
+    const keys = Object.keys(labels);
+
     return (
-      <View className="leading-loose">
-        {Object.keys(labels).map(
-          (key) =>
-            key in my &&
-            key in other && (
-              <View key={key} className="flex-row items-center my-3">
-                <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
-                <View className="flex-row justify-between">
-                  <Text
-                    className={`font-medium ${
-                      my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                    }`}
-                  >
-                    {my[key]}
-                  </Text>
-                  <Text
-                    className={`font-medium ${
-                      my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                    }`}
-                  >
-                    {other[key]}
-                  </Text>
-                </View>
+      <View className="w-full leading-loose">
+        {keys.map((key, index) =>
+          key in my && key in other ? (
+            <View
+              key={key}
+              className={`flex flex-row items-center justify-between w-full py-3 ${
+                index === 0 ? 'pt-0' : ''
+              } ${
+                index === keys.length - 1 ? 'pb-0 border-b-0' : 'border-b-[1px] border-b-[#f1f2f4]'
+              }`}
+            >
+              <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
+              <View className="flex flex-row w-[70%] justify-around items-center">
+                <Text
+                  className={`font-medium tracking-tight ${
+                    key !== 'name' && my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
+                  }`}
+                  style={{ maxWidth: '46%', textAlign: 'center' }}
+                >
+                  {truncateString(my[key])}
+                </Text>
+                <Text
+                  className={`font-medium tracking-tight ${
+                    key !== 'name' && my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
+                  }`}
+                  style={{ maxWidth: '46%', textAlign: 'center' }}
+                >
+                  {truncateString(other[key])}
+                </Text>
               </View>
-            ),
+            </View>
+          ) : null,
         )}
       </View>
     );
@@ -141,7 +154,7 @@ const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
   return (
     <ScrollView>
       <View className="flex-1 px-5">
-        <View className="mt-[67px] mb-[7px]">
+        <View className="flex mt-4 mb-[7px] border-[1px] p-4 rounded-xl border-[#f1f2f4]">
           {renderInfo(userData.basicInfo, otherUserData.basicInfo, '기본정보')}
           {renderInfo(userData.dormitoryInfo, otherUserData.dormitoryInfo, '기숙사 정보')}
           {renderInfo(userData.essentialInfo, otherUserData.essentialInfo, '필수 정보')}

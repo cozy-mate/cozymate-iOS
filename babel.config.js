@@ -3,6 +3,7 @@ module.exports = {
   plugins: [
     // Native Wind 설정
     ['nativewind/babel'],
+    ['react-native-reanimated/plugin'],
     // Alias 설정
     [
       'module-resolver',
