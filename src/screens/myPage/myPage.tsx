@@ -1,17 +1,10 @@
 import { MyPageScreenProps } from '@type/param/loginStack';
 import React from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
-  const toMain = () => {
-    navigation.navigate('MainScreen');
-  };
-
   return (
-    <SafeAreaView>
-      <Pressable onPress={toMain}>
-        <Text>돌아가기</Text>
-      </Pressable>
+    <SafeAreaView className="flex-1 bg-white">
       <Text>마이페이지입니다.</Text>
     </SafeAreaView>
   );
