@@ -17,6 +17,11 @@ export const loggedInState = atom<boolean>({
   default: false,
 });
 
+export const hasRoomState = atom<boolean>({
+  key: 'hasRoom',
+  default: false,
+});
+
 export const createRoomState = atom<RoomInfo>({
   key: 'roomInfo',
   default: {
