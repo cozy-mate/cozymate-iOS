@@ -1,7 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Feed } from '../../layout/bottomNavBar';
-import FeedCreateScreen from 'src/screens/feed/feedCreate';
-import FeedViewScreen from 'src/screens/feed/feedView';
 
 export type LoginStackParamList = {
   MainScreen: undefined;
@@ -15,12 +12,12 @@ export type LoginStackParamList = {
   SchoolAuthenticationScreen: undefined;
   LifeStyleOnboardingScreen: undefined;
 
+  JoinRoomScreen: undefined;
+
   BasicLifeStyleScreen: undefined;
   EssentialLifeStyleScreen: undefined;
 
   LifeStyleInputScreen: undefined;
-
-  BottomNavBar: undefined;
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
@@ -58,6 +55,9 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'CompleteCreateRoomScreen'
 >;
+
+// 방 참여하기 스크린
+export type JoinRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'JoinRoomScreen'>;
 
 // 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
