@@ -3,13 +3,16 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
-import Character from '@assets/cozyHome/character.svg';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
+  };
+
+  const toJoinRoom = () => {
+    navigation.navigate('JoinRoomScreen');
   };
 
   const toSchoolAuthentication = () => {
@@ -80,7 +83,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
                 isActive ? 'bg-colorBox' : 'bg-box'
               } px-4 py-4 rounded-xl w-[162px] mb-2 min-h-[138px]`}
             >
-              <Pressable className="flex-row" onPress={toCreateRoom}>
+              <Pressable onPress={toCreateRoom} className="flex-row">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'
@@ -97,7 +100,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
                 isActive ? 'bg-colorBox' : 'bg-box'
               } px-4 py-4 rounded-xl w-[162px] min-h-[138px]`}
             >
-              <Pressable className="flex-row">
+              <Pressable onPress={toJoinRoom} className="flex-row">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'
