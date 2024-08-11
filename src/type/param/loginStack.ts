@@ -28,7 +28,9 @@ export type LoginStackParamList = {
   FeedMainScreen: undefined;
   FeedEditScreen: undefined;
   FeedCreateScreen: undefined;
-  FeedViewScreen: {postId : number};
+  FeedViewScreen: { postId: number };
+
+  MyPageScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
@@ -97,3 +99,6 @@ export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'F
 export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
 export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
 export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;
+
+// 마이페이지 스크린
+export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
