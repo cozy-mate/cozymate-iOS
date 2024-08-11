@@ -14,6 +14,8 @@ export type LoginStackParamList = {
 
   JoinRoomScreen: undefined;
 
+  WaitingRoomScreen: undefined;
+
   BasicLifeStyleScreen: undefined;
   EssentialLifeStyleScreen: undefined;
 
@@ -58,6 +60,12 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
 
 // 방 참여하기 스크린
 export type JoinRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'JoinRoomScreen'>;
+
+// 룸메이트 대기 스크린
+export type WaitingRoomScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WaitingRoomScreen'
+>;
 
 // 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
