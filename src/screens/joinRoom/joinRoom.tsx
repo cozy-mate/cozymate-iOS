@@ -11,6 +11,10 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
     navigation.navigate('MainScreen');
   };
 
+  const toWaitingRoom = () => {
+    navigation.navigate('WaitingRoomScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex flex-col justify-between flex-1 px-5">
@@ -30,7 +34,7 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         </View>
 
         <View className={`${inviteCode ? 'bg-main1' : 'bg-[#C4c4c4]'} flex p-4 rounded-xl`}>
-          <Pressable onPress={toMain}>
+          <Pressable onPress={toWaitingRoom}>
             <Text className="text-base font-semibold text-center text-white">확인</Text>
           </Pressable>
         </View>
