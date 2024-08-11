@@ -23,6 +23,8 @@ import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
 import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
 
+import MyPageScreen from 'src/screens/myPage/myPage';
+
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
@@ -50,6 +52,8 @@ function AppInner() {
           <loginStack.Screen name="CompleteCreateRoomScreen" component={CompleteCreateRoomScreen} />
 
           <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
+
+          <loginStack.Screen name="MyPageScreen" component={MyPageScreen} />
 
           <loginStack.Screen
             name="LifeStyleOnboardingScreen"
