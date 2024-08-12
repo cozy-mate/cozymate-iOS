@@ -1,47 +1,9 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-interface ViewProps {
-  userData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
-    };
-  };
-}
+import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ViewProps> = ({ userData }) => {
+const ListView: React.FC<ListViewProps> = ({ userData }) => {
   const renderInfo = (info: Record<string, string>, title: string) => {
     const labels: Record<string, string> = {
       name: '이름',
@@ -97,10 +59,12 @@ const ListView: React.FC<ViewProps> = ({ userData }) => {
   };
 
   return (
-    <ScrollView className="px-5 mt-4">
-      {renderInfo(userData.basicInfo, '기본정보')}
-      {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
-      {renderInfo(userData.essentialInfo, '필수 정보')}
+    <ScrollView className="h-2/3">
+      <View className="px-5 mt-4 pb-[34px]">
+        {renderInfo(userData.basicInfo, '기본정보')}
+        {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
+        {renderInfo(userData.essentialInfo, '필수 정보')}
+      </View>
     </ScrollView>
   );
 };

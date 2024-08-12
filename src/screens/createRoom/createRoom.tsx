@@ -47,8 +47,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     }
   };
 
-  const toCozyHome = () => {
-    navigation.navigate('CozyHomeScreen');
+  const toMain = () => {
+    navigation.navigate('MainScreen');
   };
 
   const toSelectCharacter = () => {
@@ -71,7 +71,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         <View>
           {/* 상단 이전 버튼 */}
           <View className="flex flex-row items-center mt-2 mb-[33px]">
-            <Pressable onPress={toCozyHome}>
+            <Pressable onPress={toMain}>
               <BackButton />
             </Pressable>
           </View>
@@ -135,7 +135,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         <View className="flex">
           <Pressable
             onPress={toNext}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}  p-4 rounded-xl`}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
           >
             <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
           </Pressable>

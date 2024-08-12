@@ -1,84 +1,9 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-interface ViewProps {
-  userData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
-    };
-  };
-  otherUserData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
-    };
-  };
-}
+import { TableViewProps } from '@type/userDetail/userDetail';
 
-const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
+const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
   const truncateString = (str: string) => {
     return str.length > 7 ? `${str.slice(0, 7)}...` : str;
   };
@@ -152,8 +77,8 @@ const TableView: React.FC<ViewProps> = ({ userData, otherUserData }) => {
   };
 
   return (
-    <ScrollView>
-      <View className="flex-1 px-5">
+    <ScrollView className="h-2/3">
+      <View className="flex-1 px-5 pb-[34px]">
         <View className="flex mt-4 mb-[7px] border-[1px] p-4 rounded-xl border-[#f1f2f4]">
           {renderInfo(userData.basicInfo, otherUserData.basicInfo, '기본정보')}
           {renderInfo(userData.dormitoryInfo, otherUserData.dormitoryInfo, '기숙사 정보')}

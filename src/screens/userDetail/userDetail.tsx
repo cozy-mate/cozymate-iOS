@@ -186,9 +186,9 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
           {type === 'list' && <ListView userData={userData} />}
           {type === 'table' && <TableView userData={userData} otherUserData={otherUserData} />}
 
-          <Pressable>
-            <View className="bg-main1">
-              <Text className="p-4 text-white">코지메이트 요청</Text>
+          <Pressable className="fixed z-10 w-full px-5 py-2 pb-4 bg-white bottom-8">
+            <View className="items-center py-4 rounded-xl bg-main1">
+              <Text className="text-white">코지메이트 요청</Text>
             </View>
           </Pressable>
         </View>
