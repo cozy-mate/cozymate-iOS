@@ -28,6 +28,8 @@ import MyPageScreen from 'src/screens/myPage/myPage';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
+
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -66,6 +68,10 @@ function AppInner() {
           />
           <loginStack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
           <loginStack.Screen name="EssentialLifeStyleScreen" component={EssentialLifeStyleScreen} />
+          <loginStack.Screen
+            name="AdditionalLifeStyleScreen"
+            component={AdditionalLifeStyleScreen}
+          />
 
           <loginStack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <loginStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />

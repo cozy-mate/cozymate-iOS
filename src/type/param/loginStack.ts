@@ -18,6 +18,7 @@ export type LoginStackParamList = {
 
   BasicLifeStyleScreen: undefined;
   EssentialLifeStyleScreen: undefined;
+  AdditionalLifeStyleScreen: undefined;
 
   LifeStyleInputScreen: undefined;
 
@@ -73,24 +74,28 @@ export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   'SchoolAuthenticationScreen'
 >;
 
+// 라이프 스타일 입력 스크린 - 온보딩
 export type LifeStyleOnboardingScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'LifeStyleOnboardingScreen'
 >;
 
-export type LifeStyleInputScreenProps = NativeStackScreenProps<
-  LoginStackParamList,
-  'LifeStyleInputScreen'
->;
-
+// 라이프 스타일 입력 스크린 - 기본정보
 export type BasicLifeStyleScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'BasicLifeStyleScreen'
 >;
 
+// 라이프 스타일 입력 스크린 - 필수정보
 export type EssentialLifeStyleScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'EssentialLifeStyleScreen'
+>;
+
+// 라이프 스타일 입력 스크린 - 선택정보
+export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'AdditionalLifeStyleScreen'
 >;
 
 // 방 메인 스크린 (코지봇 알림)

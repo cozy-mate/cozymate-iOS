@@ -97,7 +97,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
       mbti: mbti,
     }));
 
-    navigation.navigate('MainScreen');
+    navigation.navigate('AdditionalLifeStyleScreen');
   };
 
   const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);
