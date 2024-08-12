@@ -1,5 +1,5 @@
-import { deleteToken, getAccessToken } from '@utils/token';
 import axios, { AxiosInstance } from 'axios';
+import { deleteToken, getAccessToken } from '@utils/token';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: 'https://cozymate.store',
