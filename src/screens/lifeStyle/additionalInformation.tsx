@@ -22,9 +22,9 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
       ...lifeStyle,
       options: {
         ...lifeStyle.options,
-        additionalProp1: unconditionalInputs,
-        additionalProp2: canMatchInputs,
-        additionalProp3: neverInputs,
+        '무조건 지켜줘야 해요!': unconditionalInputs,
+        '이정도는 맞춰줄 수 있어요!': canMatchInputs,
+        '이건 절대 절대 안 돼요!': neverInputs,
       },
     });
     navigation.navigate('RoomMateScreen');
