@@ -36,3 +36,12 @@ export const GuestDeleteAxiosInstance = async <T>(
   const response = await guestAxiosInstance.delete(url, config);
   return response;
 };
+
+export const GuestPutAxiosInstance = async <T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig,
+): Promise<AxiosResponse> => {
+  const response = await guestAxiosInstance.put(url, data, config);
+  return response;
+};

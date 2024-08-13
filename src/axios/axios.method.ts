@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
 import axiosInstance from '@axios/axios.Instance';
 
@@ -34,5 +34,14 @@ export const DeleteAxiosInstance = async <T>(
   config?: AxiosRequestConfig,
 ): Promise<AxiosResponse> => {
   const response = await axiosInstance.delete(url, config);
+  return response;
+};
+
+export const PutAxiosInstance = async <T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig,
+): Promise<AxiosResponse> => {
+  const response = await axiosInstance.put(url, data, config);
   return response;
 };
