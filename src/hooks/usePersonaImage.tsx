@@ -1,6 +1,5 @@
 import { useState } from 'react';
-export const usePersonaImage = (personaId:number) => {
-
+export const usePersonaImage = (personaId: number) => {
   const PERSONA_IMAGE_URL = `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${personaId}.png`;
 
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -17,7 +16,6 @@ export const usePersonaImage = (personaId:number) => {
     PERSONA_IMAGE_URL,
     loadingProfile,
     handleProfileImageLoadStart,
-    handleProfileImageLoadEnd
-  }
-
+    handleProfileImageLoadEnd,
+  };
 };

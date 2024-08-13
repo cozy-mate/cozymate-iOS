@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useRef } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Pressable, View, Text, Image, TouchableOpacity, Animated } from 'react-native'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
-import { Asset, launchImageLibrary } from 'react-native-image-picker'
-import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist'
+import React, { useCallback, useEffect, useRef } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Pressable, View, Text, Image, TouchableOpacity, Animated } from 'react-native';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 
-import PostImage from '@assets/feedCreate/postImage.svg'
-import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg'
+import PostImage from '@assets/feedCreate/postImage.svg';
+import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
 
-import { FeedCreateScreenProps } from '@type/param/loginStack'
+import { FeedCreateScreenProps } from '@type/param/loginStack';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const MAX_IMAGE_COUNT = 10;
@@ -27,7 +27,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const pickImages = async () => {
     launchImageLibrary(
       { mediaType: 'photo', selectionLimit: 0 }, // selectionLimit: 0 -> unlimited selection
-      response => {
+      (response) => {
         if (response.didCancel) {
           return;
         }
@@ -35,14 +35,14 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
           return;
         }
         if (response.assets && response.assets.length > 0) {
-          setImages(prevImages => [...prevImages, ...response.assets!]);
+          setImages((prevImages) => [...prevImages, ...response.assets!]);
         }
-      }
+      },
     );
   };
 
   const deleteImage = (index: any) => {
-    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const renderItem = useCallback(({ item, getIndex, drag }: RenderItemParams<Asset>) => {
@@ -63,61 +63,57 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     };
 
     return (
-      <View className='relative mr-2'>
-        <TouchableOpacity
-          onLongPress={drag}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-        >
+      <View className="relative mr-2">
+        <TouchableOpacity onLongPress={drag} onPressIn={handlePressIn} onPressOut={handlePressOut}>
           <Animated.Image
             source={{ uri: item.uri }}
-            className='w-20 h-20 rounded-xl'
+            className="w-20 h-20 rounded-xl"
             style={{ transform: [{ scale }] }}
           />
         </TouchableOpacity>
-        <TouchableOpacity className='absolute -top-1 right-0' onPress={() => deleteImage(getIndex())}>
+        <TouchableOpacity
+          className="absolute -top-1 right-0"
+          onPress={() => deleteImage(getIndex())}
+        >
           <ImageDeleteIcon />
         </TouchableOpacity>
       </View>
-    )
+    );
   }, []);
 
   return (
     <SafeAreaView className="flex-1 flex-col bg-white pl-8 pr-8 pt-8 w-full h-full">
-      <View className='flex flex-row w-full h-24 mb-4 items-center justify-center'>
-        <TouchableOpacity 
+      <View className="flex flex-row w-full h-24 mb-4 items-center justify-center">
+        <TouchableOpacity
           className="flex items-center justify-center h-20 w-20 rounded-xl bg-colorBox mr-2 mt-2"
-          onPress={pickImages}>
-            <PostImage className="mb-2" />
-            <Text className='text-sm text-disabledFont'>
-              {`${images.length}/${MAX_IMAGE_COUNT}`}
-            </Text>
+          onPress={pickImages}
+        >
+          <PostImage className="mb-2" />
+          <Text className="text-sm text-disabledFont">{`${images.length}/${MAX_IMAGE_COUNT}`}</Text>
         </TouchableOpacity>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          >
-        <DraggableFlatList
-          data={images}
-          renderItem={renderItem}
-          keyExtractor={(item) => `draggable-${item.uri}`}
-          horizontal={true}
-          onDragEnd={({ data }) => setImages(data)}
-          className='flex h-full'
-          contentContainerStyle={{
-            alignItems: 'center',
-            marginTop:8
-          }}
-        />
+        <ScrollView showsHorizontalScrollIndicator={false}>
+          <DraggableFlatList
+            data={images}
+            renderItem={renderItem}
+            keyExtractor={(item) => `draggable-${item.uri}`}
+            horizontal={true}
+            onDragEnd={({ data }) => setImages(data)}
+            className="flex h-full"
+            contentContainerStyle={{
+              alignItems: 'center',
+              marginTop: 8,
+            }}
+          />
         </ScrollView>
       </View>
-      <View className='flex-1 flex-col items-center justify-start mb-4'>
+      <View className="flex-1 flex-col items-center justify-start mb-4">
         <TextInput
           placeholder="내용를 입력해주세요"
           value={postDescription}
           onChangeText={valueHandleDescriptionChange}
           multiline={true}
           className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
-          textAlignVertical='top'
+          textAlignVertical="top"
           numberOfLines={20}
         />
       </View>
@@ -127,7 +123,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         </Pressable>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default FeedCreateScreen
+export default FeedCreateScreen;
