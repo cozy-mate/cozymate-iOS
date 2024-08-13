@@ -8,11 +8,29 @@ import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 
+import { KakaoOAuthToken, login, getProfile } from '@react-native-seoul/kakao-login';
+
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
   const toOnBoard = () => {
     setLoggedIn(true);
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
+  const signInWithKakao = async (): Promise<void> => {
+    const result: KakaoOAuthToken = await login();
+    console.log(result);
+
+    const response = await getProfile()
+      .then((result) => {
+        return result;
+      })
+      .catch((error) => {
+        throw error;
+      });
+    console.log(response);
+
     navigation.navigate('PersonalInfoInputScreen');
   };
 
@@ -34,7 +52,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={toOnBoard}
+            onPress={signInWithKakao}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">

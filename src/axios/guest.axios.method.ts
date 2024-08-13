@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
 
-import guestAxiosInstance from './guest.axios.instance';
+import guestAxiosInstance from './guest.axios.Instance';
 
 export const GuestPostAxiosInstance = async <T>(
   url: string,
