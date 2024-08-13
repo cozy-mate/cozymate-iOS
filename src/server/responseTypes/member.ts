@@ -45,3 +45,20 @@ export interface SignUpResponse {
     };
   };
 }
+
+export interface SignInResponse {
+  result: {
+    tokenResponseDTO: {
+      message: string;
+      accessToken: string;
+      refreshToken: string;
+    };
+    memberInfoDTO: {
+      name: string;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      persona: number;
+    };
+  };
+}

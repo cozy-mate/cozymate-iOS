@@ -1,11 +1,12 @@
 import { GuestGetAxiosInstance, GuestPostAxiosInstance } from '@axios/guest.axios.method';
 import { GetAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
-import { SignUpRequest } from '@server/requestTypes/member';
+import { SignInRequest, SignUpRequest } from '@server/requestTypes/member';
 import {
   DeleteMemberResponse,
   GetProfileResponse,
   ReissueTokenResponse,
+  SignInResponse,
   SignUpResponse,
 } from '@server/responseTypes/member';
 
@@ -60,6 +61,13 @@ export const signUp = async (
       Authorization: `Bearer ${temporaryToken}`,
     },
   });
+
+  return response.data;
+};
+
+// 로그인
+export const signIn = async (data: SignInRequest): Promise<SignInResponse> => {
+  const response = await GuestPostAxiosInstance<SignInResponse>(`/members/sign-in`, data);
 
   return response.data;
 };

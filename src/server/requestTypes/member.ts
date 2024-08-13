@@ -5,3 +5,8 @@ export interface SignUpRequest {
   birthday: string;
   persona: number;
 }
+
+export interface SignInRequest {
+  clientId: string;
+  socialType: string;
+}
