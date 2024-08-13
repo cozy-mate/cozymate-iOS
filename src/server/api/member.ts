@@ -1,11 +1,10 @@
-import { GuestGetAxiosInstance, GuestPostAxiosInstance } from '@axios/guest.axios.method';
+import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 import { GetAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import { SignInRequest, SignUpRequest } from '@server/requestTypes/member';
 import {
   DeleteMemberResponse,
   GetProfileResponse,
-  ReissueTokenResponse,
   SignInResponse,
   SignUpResponse,
 } from '@server/responseTypes/member';
@@ -20,17 +19,6 @@ export const deleteMember = async (): Promise<DeleteMemberResponse> => {
 // 로그아웃
 export const logout = async () => {
   const response = await GetAxiosInstance(`/member/sign-out`);
-
-  return response.data;
-};
-
-// 토큰 재발행
-export const reissueToken = async (refreshToken: string): Promise<ReissueTokenResponse> => {
-  const response = await GetAxiosInstance<ReissueTokenResponse>(`/member/reissue`, {
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  });
 
   return response.data;
 };
