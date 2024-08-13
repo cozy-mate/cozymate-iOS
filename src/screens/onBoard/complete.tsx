@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
 import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import Config from 'react-native-config';
-
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { loggedInState, signUpState } from '@recoil/recoil';
-
-import { CompleteScreenProps } from '@type/param/rootStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { signUp } from '@server/api/member';
 
-const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { loggedInState, signUpState } from '@recoil/recoil';
+
+const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
@@ -8,7 +8,6 @@ import { HomeScreenProps } from '@type/param/loginStack';
 import { useRecoilState } from 'recoil';
 import { hasRoomState } from '@recoil/recoil';
 import { getProfile } from '@server/api/member';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   useEffect(() => {
