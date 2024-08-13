@@ -10,7 +10,6 @@ export const useFeedModal = () => {
   const dotIconRef = useRef<View>(null);
 
   const onPressModalOpen = () => {
-    console.log('open');
     if (dotIconRef.current) {
       const windowWidth = Dimensions.get('window').width;
       dotIconRef.current.measure((x, y, width, height, pageX, pageY) => {
