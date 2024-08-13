@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 import SearchModal from '@components/findRoommate/searchModal';
+import { SchoolAuthenticationScreenProps } from '@type/param/loginStack';
 
-const SchoolAuthentication: React.FC = () => {
+const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenProps) => {
   const [school, setSchool] = useState<string>('');
   const [schoolEmail, setSchoolEmail] = useState<string>('');
   const [authenticationCode, setAuthenticationCode] = useState<string>('');
@@ -17,6 +18,10 @@ const SchoolAuthentication: React.FC = () => {
 
   const handleSend = () => {
     setIsSended(true);
+  };
+
+  const toNext = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   return (
@@ -60,6 +65,7 @@ const SchoolAuthentication: React.FC = () => {
             placeholder="인증번호 확인"
             hasButton={true}
             buttonString="인증번호 확인"
+            pressFunc={toNext}
           />
         )}
       </View>
@@ -71,4 +77,4 @@ const SchoolAuthentication: React.FC = () => {
   );
 };
 
-export default SchoolAuthentication;
+export default SchoolAuthenticationScreen;

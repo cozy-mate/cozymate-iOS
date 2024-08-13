@@ -21,11 +21,15 @@ import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import TodoListScreen from 'src/screens/todoList/todoList';
-import SchoolAuthentication from 'src/screens/findRoommate/schoolAuthentication';
+import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
+
+import MyPageScreen from 'src/screens/myPage/myPage';
 
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
+
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -33,6 +37,8 @@ import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
+import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const loginStack = createNativeStackNavigator<LoginStackParamList>();
@@ -49,7 +55,12 @@ function AppInner() {
           <loginStack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
           <loginStack.Screen name="CompleteCreateRoomScreen" component={CompleteCreateRoomScreen} />
 
-          <loginStack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthentication} />
+          <loginStack.Screen
+            name="SchoolAuthenticationScreen"
+            component={SchoolAuthenticationScreen}
+          />
+
+          <loginStack.Screen name="MyPageScreen" component={MyPageScreen} />
 
           <loginStack.Screen
             name="LifeStyleOnboardingScreen"
@@ -57,9 +68,16 @@ function AppInner() {
           />
           <loginStack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
           <loginStack.Screen name="EssentialLifeStyleScreen" component={EssentialLifeStyleScreen} />
+          <loginStack.Screen
+            name="AdditionalLifeStyleScreen"
+            component={AdditionalLifeStyleScreen}
+          />
 
           <loginStack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <loginStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
+          <loginStack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
+          <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
+
           <loginStack.Screen name="TodoListScreen" component={TodoListScreen} />
 
           <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />

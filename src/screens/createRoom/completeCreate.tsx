@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View, Image } from 'react-native';
+import Config from 'react-native-config';
+
 import { useRecoilState } from 'recoil';
 
 import { createRoomState } from '@recoil/recoil';
@@ -41,7 +43,7 @@ const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps)
           <View className="flex">
             <Image
               source={{
-                uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${createroomState.profileImage}.png`,
+                uri: `${Config.S3_IMAGE_URL}/persona/png/${createroomState.profileImage}.png`,
               }}
               style={{ width: 300, height: 300 }}
               resizeMode="cover"

@@ -17,6 +17,11 @@ export const loggedInState = atom<boolean>({
   default: false,
 });
 
+export const hasRoomState = atom<boolean>({
+  key: 'hasRoom',
+  default: false,
+});
+
 export const createRoomState = atom<RoomInfo>({
   key: 'roomInfo',
   default: {
@@ -58,9 +63,9 @@ export const lifeStyleState = atom<LifeStyle>({
     personality: '',
     mbti: '',
     options: {
-      additionalProp1: [],
-      additionalProp2: [],
-      additionalProp3: [],
+      '무조건 지켜줘야 해요!': [],
+      '이정도는 맞춰줄 수 있어요!': [],
+      '이건 절대 절대 안 돼요!': [],
     },
   },
 });

@@ -22,7 +22,7 @@ const SimilarLifeStyleContainer: React.FC<SimilarLifeStyleContainerProps> = ({
   setUsers,
 }) => {
   return (
-    <View className="flex px-5 bg-white rounded-tl-[30px] pt-6">
+    <View className="flex px-5 bg-white rounded-tl-[30px] pt-6 pb-2">
       <View className="flex flex-row items-center justify-between mb-3 leading-loose">
         <View className="flex-col">
           <Text className="text-base font-semibold text-[#46464B] px-1 tracking-tight">

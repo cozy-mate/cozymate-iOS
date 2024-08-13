@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
+import Config from 'react-native-config';
 
 import { useRecoilValue } from 'recoil';
 import { signUpState } from '@recoil/recoil';
@@ -24,7 +25,13 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
           {/* 선택된 캐릭터 이미지 */}
           <View className="flex items-center">
             <View>
-              <Text>{signUp.character}</Text>
+              <Image
+                source={{
+                  uri: `${Config.S3_IMAGE_URL}/persona/png/${signUp.character}.png`,
+                }}
+                style={{ width: 300, height: 300 }}
+                resizeMode="cover"
+              />
             </View>
           </View>
         </View>

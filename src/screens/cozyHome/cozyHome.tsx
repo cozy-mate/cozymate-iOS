@@ -5,10 +5,18 @@ import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 import { HomeScreenProps } from '@type/param/loginStack';
+import { useRecoilState } from 'recoil';
+import { hasRoomState } from '@recoil/recoil';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
+  const [, setHasRoom] = useRecoilState(hasRoomState);
+
   const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
+  };
+
+  const toJoinRoom = () => {
+    navigation.navigate('JoinRoomScreen');
   };
 
   const toSchoolAuthentication = () => {
@@ -16,6 +24,11 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const isActive = true;
+
+  const handleHasRoom = () => {
+    setHasRoom(true);
+    navigation.navigate('RoomMainScreen');
+  };
 
   return (
     <Fragment>
@@ -31,8 +44,12 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
             </Pressable>
 
             <View className="flex flex-row">
-              <ChatIcon />
-              <NotificationIcon />
+              <Pressable>
+                <ChatIcon />
+              </Pressable>
+              <Pressable onPress={handleHasRoom}>
+                <NotificationIcon />
+              </Pressable>
             </View>
           </View>
 
@@ -49,8 +66,8 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-row justify-between px-5 pt-[26px]">
-          {/* 룸메이트 초대하기 버튼 */}
+        <View className="flex flex-row justify-between px-5 pt-[26px] ">
+          {/* 코지메이트 초대하기 버튼 */}
           <View
             className={`${!isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl w-[162px]`}
           >
@@ -79,7 +96,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
                 isActive ? 'bg-colorBox' : 'bg-box'
               } px-4 py-4 rounded-xl w-[162px] mb-2 min-h-[138px]`}
             >
-              <Pressable className="flex-row" onPress={toCreateRoom}>
+              <Pressable onPress={toCreateRoom} className="flex-row">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'
@@ -96,7 +113,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
                 isActive ? 'bg-colorBox' : 'bg-box'
               } px-4 py-4 rounded-xl w-[162px] min-h-[138px]`}
             >
-              <Pressable className="flex-row">
+              <Pressable onPress={toJoinRoom} className="flex-row">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'

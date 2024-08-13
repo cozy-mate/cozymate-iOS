@@ -4,15 +4,24 @@ import { Pressable, Text, View } from 'react-native';
 import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
 import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
 
-interface TodoBoxProps {
-  todoData: {
-    index: number;
-    isDone: boolean;
-    name: string;
-  }[];
+interface TodoItem {
+  index: number;
+  isDone: boolean;
+  name: string;
 }
 
-const TodoBox: React.FC<TodoBoxProps> = ({ todoData }) => {
+interface TodoBoxProps {
+  todoData: TodoItem[];
+  setMyTodoData: React.Dispatch<React.SetStateAction<TodoItem[]>>;
+}
+
+const TodoBox: React.FC<TodoBoxProps> = ({ todoData, setMyTodoData }) => {
+  const toggleTodo = (index: number) => {
+    setMyTodoData((prevData) =>
+      prevData.map((item) => (item.index === index ? { ...item, isDone: !item.isDone } : item)),
+    );
+  };
+
   return (
     <View className="p-2 pl-4 bg-white shadow-chipback rounded-xl">
       {todoData ? (
@@ -24,7 +33,7 @@ const TodoBox: React.FC<TodoBoxProps> = ({ todoData }) => {
               >
                 {data.name}
               </Text>
-              <Pressable className="p-[6px]">
+              <Pressable onPress={() => toggleTodo(data.index)} className="p-1.5">
                 {data.isDone ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
               </Pressable>
             </View>

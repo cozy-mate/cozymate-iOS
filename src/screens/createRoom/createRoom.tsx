@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import Config from 'react-native-config';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
@@ -47,8 +48,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     }
   };
 
-  const toCozyHome = () => {
-    navigation.navigate('CozyHomeScreen');
+  const toMain = () => {
+    navigation.navigate('MainScreen');
   };
 
   const toSelectCharacter = () => {
@@ -71,7 +72,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         <View>
           {/* 상단 이전 버튼 */}
           <View className="flex flex-row items-center mt-2 mb-[33px]">
-            <Pressable onPress={toCozyHome}>
+            <Pressable onPress={toMain}>
               <BackButton />
             </Pressable>
           </View>
@@ -82,7 +83,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               {createroomState.profileImage ? (
                 <Image
                   source={{
-                    uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${createroomState.profileImage}.png`,
+                    uri: `${Config.S3_IMAGE_URL}/persona/png/${createroomState.profileImage}.png`,
                   }}
                   style={{ width: 130, height: 130 }}
                   resizeMode="cover"
@@ -135,7 +136,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
         <View className="flex">
           <Pressable
             onPress={toNext}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}  p-4 rounded-xl`}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
           >
             <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
           </Pressable>

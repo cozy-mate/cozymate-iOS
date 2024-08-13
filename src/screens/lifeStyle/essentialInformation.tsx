@@ -11,7 +11,7 @@ import { useInputAnimation } from '@hooks/inputAnimation';
 
 type Item = {
   index: number;
-  value: string | boolean;
+  value: string | boolean | number;
   name: string;
   select: boolean;
 };
@@ -97,7 +97,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
       mbti: mbti,
     }));
 
-    navigation.navigate('MainScreen');
+    navigation.navigate('AdditionalLifeStyleScreen');
   };
 
   const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);
@@ -270,24 +270,19 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   const [cleanSensitivityItems, setCleanSensitivityItems] = useState<Item[]>([
-    { index: 1, value: '매우 예민해요', name: '매우 예민해요', select: false },
-    { index: 2, value: '예민해요', name: '예민해요', select: false },
-    { index: 3, value: '보통이에요', name: '보통이에요', select: false },
-    { index: 4, value: '예민하지 않아요', name: '예민하지 않아요', select: false },
-    { index: 5, value: '매우 예민하지 않아요', name: '매우 예민하지 않아요', select: false },
+    { index: 1, value: 5, name: '매우 예민해요', select: false },
+    { index: 2, value: 4, name: '예민해요', select: false },
+    { index: 3, value: 3, name: '보통이에요', select: false },
+    { index: 4, value: 2, name: '예민하지 않아요', select: false },
+    { index: 5, value: 1, name: '매우 예민하지 않아요', select: false },
   ]);
 
   const [noiseSensitivityItems, setNoiseSensitivityItems] = useState<Item[]>([
-    { index: 1, value: '매우 예민해요', name: '매우 예민해요', select: false },
-    { index: 2, value: '예민해요', name: '예민해요', select: false },
-    { index: 3, value: '보통이에요', name: '보통이에요', select: false },
-    { index: 4, value: '예민하지 않아요', name: '예민하지 않아요', select: false },
-    {
-      index: 5,
-      value: '매우 예민하지 않아요',
-      name: '매우 예민하지 않아요',
-      select: false,
-    },
+    { index: 1, value: 5, name: '매우 예민해요', select: false },
+    { index: 2, value: 4, name: '예민해요', select: false },
+    { index: 3, value: 3, name: '보통이에요', select: false },
+    { index: 4, value: 2, name: '예민하지 않아요', select: false },
+    { index: 5, value: 1, name: '매우 예민하지 않아요', select: false },
   ]);
 
   const [cleaningFrequencyItems, setCleaningFrequencyItems] = useState<Item[]>([

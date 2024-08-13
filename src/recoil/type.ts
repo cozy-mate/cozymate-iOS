@@ -42,8 +42,8 @@ export type LifeStyle = {
   personality: string;
   mbti: string;
   options: {
-    additionalProp1: string[];
-    additionalProp2: string[];
-    additionalProp3: string[];
+    '무조건 지켜줘야 해요!': string[];
+    '이정도는 맞춰줄 수 있어요!': string[];
+    '이건 절대 절대 안 돼요!': string[];
   };
 };
