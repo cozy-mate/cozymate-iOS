@@ -44,6 +44,10 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   ]);
   const [originalItems, setOriginalItems] = useState([...items]);
 
+  const toUserDetail = () => {
+    navigation.navigate('UserDetailScreen');
+  };
+
   const [users, setUsers] = useState([
     {
       image: Example1,
@@ -105,8 +109,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View className="flex pb-10">
-          <SameAnswerContainer users={users} setUsers={setUsers} />
+        <View className="flex pb-20 drop-shadow-topShadow">
+          <SameAnswerContainer users={users} setUsers={setUsers} toUserDetail={toUserDetail} />
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>
       </ScrollView>

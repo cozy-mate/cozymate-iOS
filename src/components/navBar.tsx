@@ -12,7 +12,7 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ isTodo, handleTodo, handleRoleRule }) => {
   return (
     <View className="flex flex-row">
-      <View className="mr-6">
+      <View className="flex flex-col items-center mr-6">
         <Pressable onPress={handleTodo}>
           <Text
             className={`${
@@ -25,12 +25,12 @@ const NavBar: React.FC<NavBarProps> = ({ isTodo, handleTodo, handleRoleRule }) =
         </Pressable>
       </View>
 
-      <View>
+      <View className="flex flex-col items-center">
         <Pressable onPress={handleRoleRule}>
           <Text
             className={`${
               !isTodo ? 'text-main1' : 'text-disabledFont'
-            } pt-1 pb-3 text-base font-semibold`}
+            } pt-1 pb-3 text-base font-semibold tracking-[-0.02em]`}
           >
             Role & Rule
           </Text>

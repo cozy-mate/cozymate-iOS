@@ -1,7 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Feed } from '../../layout/bottomNavBar';
-import FeedCreateScreen from 'src/screens/feed/feedCreate';
-import FeedViewScreen from 'src/screens/feed/feedView';
 
 export type LoginStackParamList = {
   MainScreen: undefined;
@@ -15,12 +12,15 @@ export type LoginStackParamList = {
   SchoolAuthenticationScreen: undefined;
   LifeStyleOnboardingScreen: undefined;
 
+  JoinRoomScreen: undefined;
+
+  WaitingRoomScreen: undefined;
+
   BasicLifeStyleScreen: undefined;
   EssentialLifeStyleScreen: undefined;
+  AdditionalLifeStyleScreen: undefined;
 
   LifeStyleInputScreen: undefined;
-
-  BottomNavBar: undefined;
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
@@ -28,11 +28,12 @@ export type LoginStackParamList = {
   FeedMainScreen: undefined;
   FeedEditScreen: undefined;
   FeedCreateScreen: undefined;
-  FeedViewScreen: {postId : number};
+  FeedViewScreen: { postId: number };
+
+  MyPageScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
-  LifeStyleOnboardingScreen: undefined;
   CozyHomeScreen: undefined;
   TodoListScreen: undefined;
   FeedMainScreen: undefined;
@@ -58,29 +59,43 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
   'CompleteCreateRoomScreen'
 >;
 
+// 방 참여하기 스크린
+export type JoinRoomScreenProps = NativeStackScreenProps<LoginStackParamList, 'JoinRoomScreen'>;
+
+// 룸메이트 대기 스크린
+export type WaitingRoomScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'WaitingRoomScreen'
+>;
+
+// 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'SchoolAuthenticationScreen'
 >;
 
+// 라이프 스타일 입력 스크린 - 온보딩
 export type LifeStyleOnboardingScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'LifeStyleOnboardingScreen'
 >;
 
-export type LifeStyleInputScreenProps = NativeStackScreenProps<
-  LoginStackParamList,
-  'LifeStyleInputScreen'
->;
-
+// 라이프 스타일 입력 스크린 - 기본정보
 export type BasicLifeStyleScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'BasicLifeStyleScreen'
 >;
 
+// 라이프 스타일 입력 스크린 - 필수정보
 export type EssentialLifeStyleScreenProps = NativeStackScreenProps<
   LoginStackParamList,
   'EssentialLifeStyleScreen'
+>;
+
+// 라이프 스타일 입력 스크린 - 선택정보
+export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'AdditionalLifeStyleScreen'
 >;
 
 // 방 메인 스크린 (코지봇 알림)
@@ -97,3 +112,6 @@ export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'F
 export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
 export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
 export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;
+
+// 마이페이지 스크린
+export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;

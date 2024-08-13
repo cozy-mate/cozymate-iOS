@@ -35,7 +35,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
         <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
       </View>
       <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
-        {isTodo ? <TodoList todoData={myTodoData} /> : <RoleRule />}
+        {isTodo ? <TodoList todoData={myTodoData} setMyTodoData={setMyTodoData} /> : <RoleRule />}
       </ScrollView>
     </View>
   );

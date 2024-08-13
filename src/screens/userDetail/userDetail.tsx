@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import { UserDetailScreenProps } from '@type/param/loginStack';
 
@@ -12,7 +12,8 @@ import BackButton from '@assets/backButton.svg';
 import MessageIcon from '@assets/message.svg';
 import HeartIcon from '@assets/heart.svg';
 
-import CharacterImage from '@assets/character.svg';
+import CharacterImage from '@assets/userDetail/character.svg';
+
 import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
 import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
@@ -102,99 +103,96 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
     },
   });
 
-  const typeItems = [
-    {
-      index: 1,
-      name: '리스트로 보기',
-      value: 'list',
-      select: true,
-      selected: SelectedListIcon,
-      notSelected: NotSelectedListIcon,
-    },
-    {
-      index: 2,
-      name: '표로 보기',
-      value: 'table',
-      select: false,
-      selected: SelectedTableIcon,
-      notSelected: NotSelectedTableIcon,
-    },
-  ];
+  const toBack = () => {
+    navigation.goBack();
+  };
 
-  const handleList = () => {
+  const handleList = useCallback(() => {
     setType('list');
-  };
+  }, []);
 
-  const handleTable = () => {
+  const handleTable = useCallback(() => {
     setType('table');
-  };
+  }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#CADFFF]">
+    <SafeAreaView className="flex-1 flex bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
-      <View className="flex-row justify-between flex-1 px-5">
-        <Pressable>
-          <BackButton />
-        </Pressable>
-        <View className="flex-row">
-          <Pressable>
-            <MessageIcon />
+      <View className="flex flex-col">
+        {/* 상단 헤더 */}
+        <View className="flex flex-row justify-between px-5 mt-2 mb-[15px]">
+          <Pressable onPress={toBack}>
+            <BackButton />
           </Pressable>
-          <Pressable>
-            <HeartIcon />
-          </Pressable>
-        </View>
-      </View>
-      <View className="items-center">
-        <View className="mb-[48px]">
-          <CharacterImage />
-          <View className="items-center px-6 py-3 rounded-[64px] bg-main">
+          <View className="flex flex-row">
             <Pressable>
-              <Text className="text-xs font-semibold text-white">룸메이트 요청하기</Text>
+              <MessageIcon />
+            </Pressable>
+            <Pressable>
+              <HeartIcon />
             </Pressable>
           </View>
         </View>
-      </View>
 
-      <ScrollView>
-        <View className="bg-white pt-5 rounded-t-[20px]">
-          <View className="flex-row justify-between">
-            {typeItems.map((item) => (
-              <View className="items-center flex-1 p-4">
-                <Pressable
-                  key={item.index}
-                  onPress={item.value === 'list' ? handleList : handleTable}
-                >
-                  <View className="mb-[6px]">
-                    {item.value === type ? <item.selected /> : <item.notSelected />}
-                  </View>
-                  <Text
-                    className={`${
-                      item.value === type
-                        ? 'text-main font-semibold'
-                        : 'text-disabledFont font-medium'
-                    }`}
-                  >
-                    {item.name}
-                  </Text>
-                </Pressable>
+        <View className="flex flex-row items-center mb-[22px] px-[25px]">
+          <CharacterImage />
+          <View className="flex flex-col ml-2">
+            <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
+              {otherUserData.basicInfo.name}
+            </Text>
+            <Text className="text-sm font-medium text-basicFont">나와의 일치율 99%</Text>
+          </View>
+        </View>
+
+        <View className="flex flex-col bg-white pt-5 rounded-t-[20px]">
+          <View className="flex flex-row items-center justify-center">
+            {/* 리스트로 보기 */}
+            <Pressable
+              onPress={handleList}
+              className="flex flex-row items-center justify-center p-4"
+            >
+              <View className="flex">
+                {type === 'list' ? <SelectedListIcon /> : <NotSelectedListIcon />}
               </View>
-            ))}
+              <Text
+                className={`text-sm ml-1.5 ${
+                  type === 'list' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                }`}
+              >
+                리스트로 보기
+              </Text>
+            </Pressable>
+
+            <View className="bg-disabled w-[1px] h-6 mx-[18px]" />
+
+            {/* 표로 보기 */}
+            <Pressable
+              onPress={handleTable}
+              className="flex flex-row items-center justify-center p-4"
+            >
+              <View className="flex">
+                {type === 'table' ? <SelectedTableIcon /> : <NotSelectedTableIcon />}
+              </View>
+              <Text
+                className={`text-sm ml-1.5 ${
+                  type === 'table' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                }`}
+              >
+                표로 보기
+              </Text>
+            </Pressable>
           </View>
 
-          {type === 'list' && (
-            <View>
-              <ListView userData={userData} />
-            </View>
-          )}
+          {type === 'list' && <ListView userData={userData} />}
+          {type === 'table' && <TableView userData={userData} otherUserData={otherUserData} />}
 
-          {type === 'table' && (
-            <View>
-              <TableView userData={userData} otherUserData={otherUserData} />
+          <Pressable className="fixed z-10 w-full px-5 py-2 pb-4 bg-white bottom-8">
+            <View className="items-center py-4 rounded-xl bg-main1">
+              <Text className="text-white">코지메이트 요청</Text>
             </View>
-          )}
+          </Pressable>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

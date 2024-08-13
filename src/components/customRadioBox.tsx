@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { View, Pressable, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, Pressable } from 'react-native';
 
 import Check from '@assets/characterItem/check.svg';
 
@@ -25,17 +25,8 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-  const inputRef = useRef<TextInput>(null);
-
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  const handleBlur = () => {
-    setFocusedIndex(null);
   };
 
   const select = (selectedItem: Item) => {
@@ -58,13 +49,12 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
         >
           <View className="relative">
             <item.icon />
-            {item.select && (
+            {focusedIndex === item.index && (
               <View className="absolute">
                 <Check />
               </View>
             )}
           </View>
-          <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
     </View>

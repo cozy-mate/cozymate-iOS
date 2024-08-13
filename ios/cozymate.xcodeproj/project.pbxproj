@@ -47,6 +47,7 @@
 		5B7EB9410499542E8C5724F5 /* Pods-cozymate-cozymateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.debug.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B3FF982C5FEB94002CA369 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
+		76DA746A2C6B919800F34533 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cozymate/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-cozymate-cozymateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.release.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.release.xcconfig"; sourceTree = "<group>"; };
 		923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SF_HambakSnow.ttf; path = ../src/assets/fonts/SF_HambakSnow.ttf; sourceTree = "<group>"; };
@@ -133,6 +134,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				76DA746A2C6B919800F34533 /* Config.xcconfig */,
 				76B3FF982C5FEB94002CA369 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* cozymate */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -488,6 +490,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7W85YZ42XT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = cozymate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -515,6 +518,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7W85YZ42XT;
 				INFOPLIST_FILE = cozymate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -535,6 +539,7 @@
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76DA746A2C6B919800F34533 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CC = "";
@@ -618,6 +623,7 @@
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76DA746A2C6B919800F34533 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CC = "";

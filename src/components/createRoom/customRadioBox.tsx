@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Text, View, Pressable, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Pressable } from 'react-native';
 
 interface CustomRadioBoxComponentProps {
   value: number;
@@ -23,17 +23,8 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-  const inputRef = useRef<TextInput>(null);
-
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  const handleBlur = () => {
-    setFocusedIndex(null);
   };
 
   const select = (selectedItem: Item) => {
@@ -52,18 +43,19 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
         <Pressable
           key={item.index}
           className={`flex-col justify-center items-center rounded-md px-5 py-[10px] mr-2 ${
-            item.select ? 'bg-sub1' : 'bg-colorBox'
+            focusedIndex === item.index ? 'bg-sub1' : 'bg-colorBox'
           }`}
           onPress={() => select(item)}
         >
           <Text
             className={`text-xs ${
-              item.select ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+              focusedIndex === item.index
+                ? 'text-main1 font-semibold'
+                : 'text-disabledFont font-medium'
             } `}
           >
             {item.name}
           </Text>
-          <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
         </Pressable>
       ))}
     </View>
