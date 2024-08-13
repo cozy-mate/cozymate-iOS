@@ -12,21 +12,21 @@ import {
 
 // 회원 탈퇴
 export const deleteMember = async (): Promise<DeleteMemberResponse> => {
-  const response = await DeleteAxiosInstance<DeleteMemberResponse>(`/api/v3/member/withdraw`);
+  const response = await DeleteAxiosInstance<DeleteMemberResponse>(`/member/withdraw`);
 
   return response.data;
 };
 
 // 로그아웃
 export const logout = async () => {
-  const response = await GetAxiosInstance(`/api/v3/member/sign-out`);
+  const response = await GetAxiosInstance(`/member/sign-out`);
 
   return response.data;
 };
 
 // 토큰 재발행
 export const reissueToken = async (refreshToken: string): Promise<ReissueTokenResponse> => {
-  const response = await GetAxiosInstance<ReissueTokenResponse>(`/api/v3/member/reissue`, {
+  const response = await GetAxiosInstance<ReissueTokenResponse>(`/member/reissue`, {
     headers: {
       Authorization: `Bearer ${refreshToken}`,
     },
@@ -37,14 +37,14 @@ export const reissueToken = async (refreshToken: string): Promise<ReissueTokenRe
 
 // 사용자 정보 조회
 export const getProfile = async (): Promise<GetProfileResponse> => {
-  const response = await GetAxiosInstance<GetProfileResponse>(`/api/v3/member/member-info`);
+  const response = await GetAxiosInstance<GetProfileResponse>(`/member/member-info`);
 
   return response.data;
 };
 
 // 닉네임 유효성 검증
 export const checkNickname = async (nickname: string) => {
-  const response = await GetAxiosInstance(`/api/v3/member/check-nickname`, {
+  const response = await GetAxiosInstance(`/member/check-nickname`, {
     params: { nickname: nickname },
   });
 
@@ -56,7 +56,7 @@ export const signUp = async (
   data: SignUpRequest,
   temporaryToken: string,
 ): Promise<SignUpResponse> => {
-  const response = await GuestPostAxiosInstance<SignUpResponse>(`/api/v3/member/sign-up`, data, {
+  const response = await GuestPostAxiosInstance<SignUpResponse>(`/member/sign-up`, data, {
     headers: {
       Authorization: `Bearer ${temporaryToken}`,
     },
