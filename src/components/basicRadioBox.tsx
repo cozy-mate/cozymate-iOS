@@ -12,7 +12,7 @@ interface RadioBoxComponentProps {
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
-type Item = { index: number; item: string; select: boolean };
+type Item = { index: number; value: string; item: string; select: boolean };
 
 const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
   title,
@@ -45,7 +45,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
       select: item.index === selectedItem.index ? true : false,
     }));
     setItems(updatedItems);
-    setValue(selectedItem.item);
+    setValue(selectedItem.value);
     handleFocus();
   };
 

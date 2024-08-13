@@ -9,6 +9,7 @@ interface BorderTextInputBoxProps {
   hasButton: boolean;
   buttonString?: string;
   pressFunc?: () => void;
+  canUse?: boolean;
 }
 
 const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
@@ -19,6 +20,7 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
   hasButton,
   buttonString,
   pressFunc,
+  canUse,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -48,12 +50,12 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
     <Pressable
       onPress={handleFocus}
       className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-5 py-4 mb-4 bg-white
-        ${isActive ? 'border-sub1' : 'border-disabled'}`}
+        ${isActive ? 'border-sub1' : 'border-disabled'} ${!canUse ?? 'border - warning'}`}
     >
       <View className="flex flex-col items-start justify-center">
         <Text
           className={`font-semibold text-xs leading-[17px] tracking-[-0.03em]
-            ${isFocused ? 'text-main1' : 'text-colorFont'}`}
+            ${isFocused ? 'text-main1' : 'text-colorFont'} ${!canUse ?? 'border-warning'}`}
         >
           {title}
         </Text>

@@ -1,9 +1,9 @@
 export type SignUp = {
   name: string;
-  nickname: string;
+  nickName: string;
   gender: string;
-  birth: string;
-  character: number;
+  birthday: string;
+  persona: number;
 };
 
 export type RoomInfo = {

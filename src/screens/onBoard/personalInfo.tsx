@@ -3,12 +3,13 @@ import RadioBoxComponent from '@components/basicRadioBox';
 
 import { signUpState } from '@recoil/recoil';
 import { SignUp } from '@recoil/type';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilState } from 'recoil';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 
 import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
+import { checkNickname } from '@server/api/member';
 
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
   const [signUp, setSignUp] = useRecoilState(signUpState);
@@ -21,17 +22,35 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   const isComplete = name !== '' && nickname !== '' && gender !== '' && birthday !== '';
 
   const [items, setItems] = useState([
-    { index: 1, item: '남자', select: false },
-    { index: 2, item: '여자', select: false },
+    { index: 1, value: 'MALE', item: '남자', select: false },
+    { index: 2, value: 'FEMALE', item: '여자', select: false },
   ]);
 
+  const [canUse, setCanUse] = useState<boolean>(true);
+
+  const checkUserNickname = async (nickname: string) => {
+    if (nickname.trim() === '') {
+      setCanUse(true);
+      return;
+    }
+
+    const response = await checkNickname(nickname);
+    setCanUse(response.result);
+  };
+
+  useEffect(() => {
+    checkUserNickname(nickname);
+  }, [nickname]);
+
   const toNext = async (): Promise<void> => {
+    if (!isComplete || !canUse) return;
+
     setSignUp((prevState: SignUp) => ({
       ...prevState,
       name: name,
-      nickname: nickname,
+      nickName: nickname,
       gender: gender,
-      birth: birthday,
+      birthday: birthday,
     }));
 
     navigation.navigate('CharacterInputScreen');
@@ -65,7 +84,13 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             setValue={setNickname}
             placeholder="닉네임을 입력해주세요"
             hasButton={false}
+            canUse={canUse}
           />
+          {!canUse ? (
+            <Text className="text-warning text-[10px] font-medium">
+              다른 사람이 사용중인 닉네임이에요!
+            </Text>
+          ) : null}
 
           {/* 성별 입력 Input */}
           <RadioBoxComponent

@@ -145,7 +145,7 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
   const toNext = async (): Promise<void> => {
     setSignUp((prevState: SignUp) => ({
       ...prevState,
-      character: character,
+      persona: character,
     }));
 
     navigation.navigate('CompleteScreen');

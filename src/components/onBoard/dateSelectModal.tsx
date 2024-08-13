@@ -41,9 +41,21 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
     setDatePickerVisibility(false);
   };
 
+  const [displayDate, setDisplayDate] = useState<string>(selectedDate ? selectedDate : '');
+
   const handleConfirm = (date: Date) => {
-    const dateString = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
-    setSelectedDate(dateString);
+    // Store the date in "YYYY-MM-DD" format
+    const formattedDateForStorage = `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+    // Display the date in "YYYY년 M월 D일" format
+    const formattedDateForDisplay = `${date.getFullYear()}년 ${
+      date.getMonth() + 1
+    }월 ${date.getDate()}일`;
+
+    setSelectedDate(formattedDateForStorage); // Store the "YYYY-MM-DD" format
+    setDisplayDate(formattedDateForDisplay); // Update the displayed date
     hideDatePicker();
   };
 
@@ -63,7 +75,7 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
           {title}
         </Text>
         <View className="mt-1.5 flex flex-row items-center justify-between w-full pb-[3px]">
-          <Text className="text-xs font-medium text-basicFont">{selectedDate}</Text>
+          <Text className="text-xs font-medium text-basicFont">{displayDate}</Text>
           <DownArrow />
         </View>
       </View>
