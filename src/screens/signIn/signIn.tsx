@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, Text, View, SafeAreaView } from 'react-native';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
@@ -8,9 +8,8 @@ import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 
-import { KakaoOAuthToken, login, getProfile } from '@react-native-seoul/kakao-login';
+import { login, getProfile } from '@react-native-seoul/kakao-login';
 import { signIn } from '@server/api/member';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setAccessToken } from '@utils/token';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
@@ -31,7 +30,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       const response = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
       const accessToken = response.result.tokenResponseDTO.accessToken;
 
-      await AsyncStorage.setItem('accessToken', accessToken);
+      await setAccessToken(accessToken);
 
       if (response.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');
