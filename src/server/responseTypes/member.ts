@@ -18,9 +18,11 @@ export interface CheckNicknameResponse {
 
 export interface SignUpResponse {
   result: {
-    message: string;
-    accessToken: string;
-    refreshToken: string;
+    tokenResponseDTO: {
+      message: string;
+      accessToken: string;
+      refreshToken: string;
+    };
     memberInfoDTO: {
       name: string;
       nickname: string;

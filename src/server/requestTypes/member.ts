@@ -1,6 +1,6 @@
 export interface SignUpRequest {
   name: string;
-  nickName: string;
+  nickname: string;
   gender: string;
   birthday: string;
   persona: number;
