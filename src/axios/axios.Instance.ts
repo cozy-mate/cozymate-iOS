@@ -1,8 +1,9 @@
+import Config from 'react-native-config';
 import axios, { AxiosInstance } from 'axios';
 import { deleteToken, getAccessToken } from '@utils/token';
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://cozymate.store',
+  baseURL: Config.SERVER_URL,
   withCredentials: true,
 });
 

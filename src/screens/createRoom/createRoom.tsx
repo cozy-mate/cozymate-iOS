@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import Config from 'react-native-config';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
@@ -82,7 +83,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               {createroomState.profileImage ? (
                 <Image
                   source={{
-                    uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${createroomState.profileImage}.png`,
+                    uri: `${Config.S3_IMAGE_URL}/persona/png/${createroomState.profileImage}.png`,
                   }}
                   style={{ width: 130, height: 130 }}
                   resizeMode="cover"

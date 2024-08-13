@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
+import Config from 'react-native-config';
 
 import { useRecoilValue } from 'recoil';
 import { signUpState } from '@recoil/recoil';
@@ -26,7 +27,7 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
             <View>
               <Image
                 source={{
-                  uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${signUp.character}.png`,
+                  uri: `${Config.S3_IMAGE_URL}/persona/png/${signUp.character}.png`,
                 }}
                 style={{ width: 300, height: 300 }}
                 resizeMode="cover"

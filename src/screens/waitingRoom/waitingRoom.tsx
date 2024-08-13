@@ -1,6 +1,8 @@
-import { WaitingRoomScreenProps } from '@type/param/loginStack';
 import React, { useState } from 'react';
 import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import Config from 'react-native-config';
+
+import { WaitingRoomScreenProps } from '@type/param/loginStack';
 
 import XButton from '@assets/xButton.svg';
 import HomeIcon from '@assets/waitingRoom/homeIcon.svg';
@@ -75,7 +77,7 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
             <View className="flex flex-col items-center mb-8">
               <Image
                 source={{
-                  uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${roomInfo.profileImage}.png`,
+                  uri: `${Config.S3_IMAGE_URL}/persona/png/${roomInfo.profileImage}.png`,
                 }}
                 style={{ width: 120, height: 120 }}
                 resizeMode="cover"

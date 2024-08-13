@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
+import Config from 'react-native-config';
 
 import EmptyCharacter from '@assets/waitingRoom/emptyCharacter.svg';
 
@@ -22,7 +23,7 @@ const RoomMateBox: React.FC<RoomMateBoxProps> = ({ name, profileImage, state, is
       ) : (
         <Image
           source={{
-            uri: `https://staging-cozymate-s3.s3.ap-northeast-2.amazonaws.com/persona/png/${profileImage}.png`,
+            uri: `${Config.S3_IMAGE_URL}/persona/png/${profileImage}.png`,
           }}
           style={{ width: 100, height: 100 }}
           resizeMode="cover"

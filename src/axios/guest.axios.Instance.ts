@@ -1,8 +1,9 @@
+import Config from 'react-native-config';
 import axios, { AxiosInstance } from 'axios';
 
 // 로그인 하지 않은 유저가 사용하는 axios
 const guestAxiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://cozymate.store',
+  baseURL: Config.SERVER_URL,
   withCredentials: true,
 });
 
