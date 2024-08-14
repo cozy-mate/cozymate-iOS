@@ -13,7 +13,7 @@ const CommentList = (props: CommentListProps) => {
     <View className="flex-1 flex-col w-full px-5 items-start mb-10">
       {commentCards.map((comment, commentIndex) => (
         <Fragment>
-          <CommentCard key={comment.id} comment={comment} />
+          <CommentCard key={commentIndex} comment={comment} />
           {commentIndex !== commentCards.length - 1 && (
             <View className="w-full border-t-[1px] border-[#F4F4F4]"></View>
           )}

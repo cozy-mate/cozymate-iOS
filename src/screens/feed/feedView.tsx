@@ -30,8 +30,8 @@ import ControlModal from '@components/feedView/controlModal';
 import { useImageCarousel } from '@hooks/useImageCarousel';
 import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useFeedModal } from '@hooks/useFeedModal';
-import TwoButtonModal from '@components/common/twoButtonModal';
-import { useTwoButtonModal } from '@hooks/useTwoButtonModal';
+import { useButtonModal } from '@hooks/useButtonModal';
+import ButtonModal from '@components/common/buttonModal';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
   const { postId } = props.route.params;
@@ -42,8 +42,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const [isMyPost, setIsMyPost] = React.useState<boolean>(true);
   const opacity = useRef(new Animated.Value(1)).current;
 
-  const { isTwoButtonModalVisible, handleTwoButtonModalClose, handleTwoButtonModalOpen } =
-    useTwoButtonModal();
+  const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
   const {
     currentSlide,
@@ -273,17 +272,18 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       <ControlModal
         isModalVisible={isModalVisible}
         modalPosition={modalPosition}
-        onSubmit={handleTwoButtonModalOpen}
+        onSubmit={handleButtonModalOpen}
         onPressModalClose={onPressModalClose}
       />
-      <TwoButtonModal
+      <ButtonModal
         title="게시물 삭제하시나요?"
         message="삭제하면 우리들의 추억을 복구할 수 없어요!"
         cancelText="취소"
         submitText="삭제"
-        isVisible={isTwoButtonModalVisible}
-        closeModal={handleTwoButtonModalClose}
+        isVisible={isButtonModalVisible}
+        closeModal={handleButtonModalClose}
         onSubmit={() => {}}
+        buttonCount={2}
       />
     </View>
   );

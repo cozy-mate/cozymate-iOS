@@ -7,11 +7,11 @@ import DotIcon from '@assets/feedView/dotIcon.svg';
 import { postTimeUtil } from '@utils/time/timeUtil';
 
 import ControlModal from '@components/feedView/controlModal';
-import TwoButtonModal from '@components/common/twoButtonModal';
+import ButtonModal from '@components/common/buttonModal';
 
 import { useFeedModal } from '@hooks/useFeedModal';
 import { usePersonaImage } from '@hooks/usePersonaImage';
-import { useTwoButtonModal } from '@hooks/useTwoButtonModal';
+import { useButtonModal } from '@hooks/useButtonModal';
 type CommentCardProps = {
   comment: CommentType;
 };
@@ -31,8 +31,7 @@ const CommentCard = (props: CommentCardProps) => {
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
 
-  const { isTwoButtonModalVisible, handleTwoButtonModalClose, handleTwoButtonModalOpen } =
-    useTwoButtonModal();
+  const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
   return (
     <View className="w-full my-5">
@@ -69,16 +68,17 @@ const CommentCard = (props: CommentCardProps) => {
         isModalVisible={isModalVisible}
         modalPosition={modalPosition}
         onPressModalClose={onPressModalClose}
-        onSubmit={handleTwoButtonModalOpen}
+        onSubmit={handleButtonModalOpen}
       />
-      <TwoButtonModal
+      <ButtonModal
         title="게시물 삭제하시나요?"
         message="삭제하면 우리들의 추억을 복구할 수 없어요!"
         cancelText="취소"
         submitText="삭제"
-        isVisible={isTwoButtonModalVisible}
-        closeModal={handleTwoButtonModalClose}
+        isVisible={isButtonModalVisible}
+        closeModal={handleButtonModalClose}
         onSubmit={() => {}}
+        buttonCount={2}
       />
     </View>
   );
