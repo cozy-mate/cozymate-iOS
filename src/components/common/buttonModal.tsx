@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Modal, Text, Pressable, TouchableOpacity } from 'react-native';
+import { View, Modal, Text, TouchableOpacity } from 'react-native';
 
 type Props = {
   title: string;
@@ -15,6 +15,7 @@ type Props = {
 const ButtonModal = (props: Props) => {
   const { title, message, cancelText, submitText, onSubmit, isVisible, closeModal, buttonCount } =
     props;
+
   // Propagation 방지용
   const handleTouchEnd = (event: any) => {
     event.stopPropagation();
@@ -23,51 +24,32 @@ const ButtonModal = (props: Props) => {
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View
-        style={{
-          backgroundColor: 'rgba(0, 0, 0,0.5)',
-        }}
-        className="flex w-full h-full justify-center items-center"
+        className="flex items-center justify-center w-full h-full bg-modalBack"
         onTouchEnd={closeModal}
       >
         <View
-          className="flex flex-col w-5/6 justify-center items-center bg-white px-10 py-8 rounded-xl z-10"
+          className="z-10 flex flex-col items-center justify-center w-5/6 px-10 py-8 bg-white rounded-xl"
           onTouchEnd={handleTouchEnd}
         >
-          <Text className="text-emphasizedFont font-semibold text-lg mb-1">{title}</Text>
-          <Text className="text-colorFont font-normal text-sm mb-5">{message}</Text>
+          <Text className="mb-1 text-lg font-semibold text-emphasizedFont">{title}</Text>
+          <Text className="mb-5 text-sm font-normal text-colorFont">{message}</Text>
           <View className="flex flex-row justify-center space-x-2">
             {buttonCount === 2 && (
               <TouchableOpacity
+                className="items-center justify-center flex-1 py-4 rounded-lg bg-disabled px-7"
                 onPress={closeModal}
-                style={{
-                  flex: 1,
-                  borderRadius: 12,
-                  paddingHorizontal: 28,
-                  paddingVertical: 16,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#E6E6E6',
-                }}
               >
-                <Text style={{ color: '#A9A9A9', fontWeight: '600', fontSize: 14 }}>
+                <Text className="text-sm font-semibold leading-4 text-disabledFont">
                   {cancelText}
                 </Text>
               </TouchableOpacity>
             )}
 
             <TouchableOpacity
+              className="items-center justify-center flex-1 py-4 rounded-lg bg-main1 px-7"
               onPress={onSubmit}
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                paddingHorizontal: 28,
-                paddingVertical: 16,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#68A4FF',
-              }}
             >
-              <Text style={{ color: 'white', fontWeight: '600', fontSize: 14 }}>{submitText}</Text>
+              <Text className="text-sm font-semibold leading-4 text-white">{submitText}</Text>
             </TouchableOpacity>
           </View>
         </View>
