@@ -3,7 +3,7 @@ export interface GetFeedResponse {
   description: string;
 }
 
-export interface PostFeedResponse {
+export interface CreateFeedResponse {
   result: number;
 }
 
