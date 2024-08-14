@@ -41,7 +41,7 @@ const ButtonModal = (props: Props) => {
                 onPress={closeModal}
                 style={{
                   flex: 1,
-                  borderRadius: 12,
+                  borderRadius: 8,
                   paddingHorizontal: 28,
                   paddingVertical: 16,
                   alignItems: 'center',
@@ -59,7 +59,7 @@ const ButtonModal = (props: Props) => {
               onPress={onSubmit}
               style={{
                 flex: 1,
-                borderRadius: 12,
+                borderRadius: 8,
                 paddingHorizontal: 28,
                 paddingVertical: 16,
                 alignItems: 'center',
