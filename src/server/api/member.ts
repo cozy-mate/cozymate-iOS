@@ -17,7 +17,7 @@ export const deleteMember = async (): Promise<DeleteMemberResponse> => {
 };
 
 // 로그아웃
-export const logout = async () => {
+export const signOut = async () => {
   const response = await GetAxiosInstance(`/members/sign-out`);
 
   return response.data;

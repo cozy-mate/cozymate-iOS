@@ -42,7 +42,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   }, [nickname]);
 
   const toNext = async (): Promise<void> => {
-    if (!isComplete || canUse) return;
+    if (!isComplete || !canUse) return;
 
     setSignUp((prevState: SignUp) => ({
       ...prevState,
