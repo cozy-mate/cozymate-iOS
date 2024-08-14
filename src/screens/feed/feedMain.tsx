@@ -1,22 +1,20 @@
-import React, { useEffect, useState,useCallback } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Pressable, Text, View,RefreshControl } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import React, { useEffect, useState, useCallback } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Pressable, Text, View, RefreshControl } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-import PostList from '@components/feedMain/postList'
-import {examplePostList} from '@utils/mockData/exampleList';
+import PostList from '@components/feedMain/postList';
+import { examplePostList } from '@utils/mockData/exampleList';
 
-import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg'
-import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg'
-import FeedEdit from '@assets/feedMain/feedEdit.svg'
-import PostEdit from '@assets/feedMain/postEdit.svg'
+import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg';
+import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg';
+import FeedEdit from '@assets/feedMain/feedEdit.svg';
+import PostEdit from '@assets/feedMain/postEdit.svg';
 
-import { FeedMainScreenProps } from "@type/param/loginStack"
+import { FeedMainScreenProps } from '@type/param/loginStack';
 import { FeedType, PostCardType } from '@type/feed';
 
-
-const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
-
+const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   // TODO : useEffect로 미리 불러와야할 정보들
   // - 피드 정보가 들어있는지 여부
   // - 피드 정보(이름, 설명)
@@ -39,26 +37,25 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
   // Feed 초기화
   // TODO : hook으로 만들기 (재사용 높음)
   useEffect(() => {
-    if(feedInfo.name !== '' && feedInfo.description !== ''){
+    if (feedInfo.name !== '' && feedInfo.description !== '') {
       setIsFeedEnabled(true);
-    }else{
+    } else {
       setIsFeedEnabled(false);
     }
-  },[feedInfo]);
-    
+  }, [feedInfo]);
 
   const toFeedEdit = () => {
-    navigation.navigate('FeedEditScreen')
-  }
+    navigation.navigate('FeedEditScreen');
+  };
 
   const toFeedCreate = () => {
-    navigation.navigate('FeedCreateScreen')
-  }
+    navigation.navigate('FeedCreateScreen');
+  };
 
   const toFeedView = (postId: number) => {
-    navigation.navigate('FeedViewScreen',{postId: postId})
-  }
-  
+    navigation.navigate('FeedViewScreen', { postId: postId });
+  };
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setPostList([]);
@@ -69,55 +66,60 @@ const FeedMainScreen = ({navigation}: FeedMainScreenProps) => {
   }, []);
 
   return (
-      <SafeAreaView className="flex-1 flex-col bg-main3 pl-8 pr-8 pt-8 w-full h-full">
-        <ScrollView contentContainerStyle={{
-              flexGrow: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-          }}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          >
-          <View className="flex-1 flex-col w-full justify-start">
-            {
-              isFeedEnabled ? <FeedLampEnabled className="mb-2"/> : <FeedLampDisabled className="mb-2"/>
-            }
-            <View className='flex-row items-center'>
-              {
-                isFeedEnabled ? 
-                <Text className="text-lg font-semibold text-basicFont">{feedInfo.name}</Text> 
-                : <Text className="text-lg font-semibold text-disabledFont">피드의 이름을 설정해주세요.</Text>
-              }
-              <Pressable onPress={toFeedEdit}>
-                <FeedEdit/>
-              </Pressable>
-            </View>
-            {
-              isFeedEnabled ? 
-              <Text className="text-xs font-normal text-basicFont">{feedInfo.description}</Text> 
-              : <Text className="text-xs font-normal text-disabledFont">피드 설명을 입력해주세요</Text>
-            }
-          </View>
-            {postList.length > 0 ?
-              <PostList postCards={postList} toFeedView={toFeedView}/> 
-              : 
-              refreshing ?
-              <Text className="flex-1 text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text> :
-              <Text className="flex-1 text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
-            }
-        </ScrollView>
-          <View>
-            <Pressable 
-                className="absolute bottom-20 right-3 items-center justify-centerp-4 rounded-xl"
-                onPress={toFeedCreate}>
-              <PostEdit className="mr-2"/>
+    <SafeAreaView className="flex-1 flex-col bg-main3 pl-8 pr-8 pt-8 w-full h-full">
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <View className="flex-1 flex-col w-full justify-start">
+          {isFeedEnabled ? (
+            <FeedLampEnabled className="mb-2" />
+          ) : (
+            <FeedLampDisabled className="mb-2" />
+          )}
+          <View className="flex-row items-center">
+            {isFeedEnabled ? (
+              <Text className="text-lg font-semibold text-basicFont">{feedInfo.name}</Text>
+            ) : (
+              <Text className="text-lg font-semibold text-disabledFont">
+                피드의 이름을 설정해주세요.
+              </Text>
+            )}
+            <Pressable onPress={toFeedEdit}>
+              <FeedEdit />
             </Pressable>
           </View>
-        
-      </SafeAreaView>
-  )
-}
+          {isFeedEnabled ? (
+            <Text className="text-xs font-normal text-basicFont">{feedInfo.description}</Text>
+          ) : (
+            <Text className="text-xs font-normal text-disabledFont">피드 설명을 입력해주세요</Text>
+          )}
+        </View>
+        {postList.length > 0 ? (
+          <PostList postCards={postList} toFeedView={toFeedView} />
+        ) : refreshing ? (
+          <Text className="flex-1 text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text>
+        ) : (
+          <Text className="flex-1 text-sm text-disabledFont">
+            아직 시작된 우리의 이야기가 없어요!
+          </Text>
+        )}
+      </ScrollView>
+      <View>
+        <Pressable
+          className="absolute bottom-20 right-3 items-center justify-centerp-4 rounded-xl"
+          onPress={toFeedCreate}
+        >
+          <PostEdit className="mr-2" />
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-export default FeedMainScreen
+export default FeedMainScreen;

@@ -1,4 +1,4 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -12,8 +12,8 @@ import { usePersonaImage } from '@hooks/usePersonaImage';
 
 type PostCardProps = {
   post: PostCardType;
-  toFeedView : (postId : number) => void;
-}
+  toFeedView: (postId: number) => void;
+};
 
 const PostCard = (props: PostCardProps) => {
   const { post, toFeedView } = props;
@@ -34,12 +34,14 @@ const PostCard = (props: PostCardProps) => {
     handleProfileImageLoadStart,
     handleProfileImageLoadEnd,
   } = usePersonaImage(post.writer.persona);
-  
 
   return (
     <Fragment>
-      <TouchableOpacity onPress={()=>toFeedView(post.id)}>
-        <View key={post.id} className="flex flex-col w-full bg-white mb-4 p-4 rounded-xl z-10 shadow-sm">
+      <TouchableOpacity onPress={() => toFeedView(post.id)}>
+        <View
+          key={post.id}
+          className="flex flex-col w-full bg-white mb-4 p-4 rounded-xl z-10 shadow-sm"
+        >
           <View className="flex flex-row w-full items-center justify-between">
             <View className="flex flex-row items-center justify-start space-x-2">
               {loadingProfile && (
@@ -53,16 +55,18 @@ const PostCard = (props: PostCardProps) => {
                 onLoadEnd={handleProfileImageLoadEnd}
                 source={{ uri: PERSONA_IMAGE_URL }}
               />
-              <Text className="text-emphasizedFont font-semibold text-sm">{post.writer.nickname}</Text>
+              <Text className="text-emphasizedFont font-semibold text-sm">
+                {post.writer.nickname}
+              </Text>
             </View>
-            <Text className="text-disabledFont font-normal text-sm">{postTimeUtil(post.createdAt)}</Text>
+            <Text className="text-disabledFont font-normal text-sm">
+              {postTimeUtil(post.createdAt)}
+            </Text>
           </View>
           <Text className="text-basicFont font-medium text-sm mt-2 mb-2">{post.content}</Text>
-          
+
           {post.imageList.length > 0 && (
-            <View 
-              onLayout={onLayout}
-              className='w-full'>
+            <View onLayout={onLayout} className="w-full">
               <FlatList
                 data={post.imageList}
                 horizontal
@@ -82,7 +86,13 @@ const PostCard = (props: PostCardProps) => {
                   >
                     {loadingImages[index] && (
                       <SkeletonPlaceholder>
-                        <View style={{ width: viewWidthRef.current, height: viewWidthRef.current, borderRadius: 12 }} />
+                        <View
+                          style={{
+                            width: viewWidthRef.current,
+                            height: viewWidthRef.current,
+                            borderRadius: 12,
+                          }}
+                        />
                       </SkeletonPlaceholder>
                     )}
                     <Image
@@ -118,7 +128,11 @@ const PostCard = (props: PostCardProps) => {
               )}
             </View>
           )}
-          <View className={`flex flex-row items-center justify-start space-x-2 mt-${post.imageList.length > 0 ? 4 : 0}`}>
+          <View
+            className={`flex flex-row items-center justify-start space-x-2 mt-${
+              post.imageList.length > 0 ? 4 : 0
+            }`}
+          >
             <ChatIcon />
             <Text className="text-disabledFont font-normal text-sm">{post.commentCount}</Text>
           </View>
