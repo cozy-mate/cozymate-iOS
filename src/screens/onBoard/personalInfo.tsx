@@ -86,7 +86,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             canUse={canUse}
           />
           {!canUse && nickname.trim() !== '' && (
-            <Text className="text-warning text-[10px] font-medium">
+            <Text className="text-warning text-[10px] font-medium mt-[-8px] px-2 mb-4">
               다른 사람이 사용중인 닉네임이에요!
             </Text>
           )}
