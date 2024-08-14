@@ -20,10 +20,9 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
   hasButton,
   buttonString,
   pressFunc,
-  canUse,
+  canUse = true,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
-
   const inputRef = React.useRef<TextInput>(null);
 
   // TextInput value change 함수
@@ -50,12 +49,12 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
     <Pressable
       onPress={handleFocus}
       className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-5 py-4 mb-4 bg-white
-        ${isActive ? 'border-sub1' : 'border-disabled'} ${!canUse ?? 'border - warning'}`}
+        ${!canUse ? 'border-warning' : isActive ? 'border-sub1' : 'border-disabled'}`}
     >
       <View className="flex flex-col items-start justify-center">
         <Text
           className={`font-semibold text-xs leading-[17px] tracking-[-0.03em]
-            ${isFocused ? 'text-main1' : 'text-colorFont'} ${!canUse ?? 'border-warning'}`}
+            ${!canUse ? 'text-warning' : isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
         </Text>

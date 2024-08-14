@@ -55,7 +55,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             </Text>
           </View>
           <Text className="text-basicFont text-[13.5px] font-semibold font-['SF_HambakSnow']">
-            “룸메이트와 함께 만드는 우리의 편안한 공간”
+            “나와 꼭 맞는 룸메이트와 함께 만드는 우리만의 편안한 공간”
           </Text>
         </View>
 
