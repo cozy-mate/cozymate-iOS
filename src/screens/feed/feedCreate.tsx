@@ -62,6 +62,18 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       }).start();
     };
 
+    const handleDelete = () => {
+      Animated.parallel([
+        Animated.timing(scale, {
+          toValue: 0,
+          duration: 200,
+
+          useNativeDriver: true,
+        }),
+        //별도 효과 추가 가능
+      ]).start(() => deleteImage(getIndex()));
+    };
+
     return (
       <View className="relative mr-2">
         <TouchableOpacity onLongPress={drag} onPressIn={handlePressIn} onPressOut={handlePressOut}>
@@ -73,7 +85,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           className="absolute -top-1 right-0"
-          onPress={() => deleteImage(getIndex())}
+          onPress={() => {
+            handleDelete();
+          }}
         >
           <ImageDeleteIcon />
         </TouchableOpacity>
@@ -101,7 +115,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             className="flex h-full"
             contentContainerStyle={{
               alignItems: 'center',
-              marginTop: 8,
+              margin: 8,
             }}
           />
         </ScrollView>
