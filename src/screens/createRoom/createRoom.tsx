@@ -7,15 +7,17 @@ import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 import { CreateRoomScreenProps } from '@type/param/loginStack';
 
 import { useRecoilState } from 'recoil';
-import { RoomInfo } from '@recoil/type';
-import { createRoomState } from '@recoil/recoil';
+import { CreateRoomInfo, RoomInfo } from '@recoil/type';
+import { createRoomState, roomInfoState } from '@recoil/recoil';
 
 import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
+import { createRoom } from '@server/api/room';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
+  const [, setRoomInfoState] = useRecoilState(roomInfoState);
 
   const [name, setName] = useState<string>('');
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
@@ -29,6 +31,14 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     } else {
       setIsComplete(false);
     }
+
+    setCreateroomState((prevState: CreateRoomInfo) => ({
+      ...prevState,
+      name: name,
+      maxMateNum: maxMateNum,
+    }));
+
+    console.log(createroomState);
   }, [name, maxMateNum, isLongName]);
 
   const [items, setItems] = useState([
@@ -57,13 +67,28 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   const toNext = async (): Promise<void> => {
-    setCreateroomState((prevState: RoomInfo) => ({
-      ...prevState,
-      name: name,
-      maxMateNum: maxMateNum,
-    }));
+    try {
+      const response = await createRoom({
+        name: createroomState.name,
+        profileImage: createroomState.profileImage,
+        maxMateNum: createroomState.maxMateNum,
+      });
 
-    navigation.navigate('CompleteCreateRoomScreen');
+      setCreateroomState({ name: '', profileImage: 0, maxMateNum: 0 });
+      console.log(response.result);
+
+      setRoomInfoState((prevState: RoomInfo) => ({
+        ...prevState,
+        roomId: response.result.roomId,
+        name: response.result.name,
+        inviteCode: response.result.inviteCode,
+        profileImage: response.result.profileImage,
+      }));
+
+      navigation.navigate('CompleteCreateRoomScreen');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

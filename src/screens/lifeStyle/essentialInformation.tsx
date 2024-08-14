@@ -139,48 +139,48 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   const mbtiAnimation = useInputAnimation(showMbti, 400);
 
   const [wakeUpTimeItems, setWakeUpTimeItems] = useState<Item[]>([
-    { index: 1, value: '1', name: '1', select: false },
-    { index: 2, value: '2', name: '2', select: false },
-    { index: 3, value: '3', name: '3', select: false },
-    { index: 4, value: '4', name: '4', select: false },
-    { index: 5, value: '5', name: '5', select: false },
-    { index: 6, value: '6', name: '6', select: false },
-    { index: 7, value: '7', name: '7', select: false },
-    { index: 8, value: '8', name: '8', select: false },
-    { index: 9, value: '9', name: '9', select: false },
-    { index: 10, value: '10', name: '10', select: false },
-    { index: 11, value: '11', name: '11', select: false },
-    { index: 12, value: '12', name: '12', select: false },
+    { index: 1, value: 1, name: '1', select: false },
+    { index: 2, value: 2, name: '2', select: false },
+    { index: 3, value: 3, name: '3', select: false },
+    { index: 4, value: 4, name: '4', select: false },
+    { index: 5, value: 5, name: '5', select: false },
+    { index: 6, value: 6, name: '6', select: false },
+    { index: 7, value: 7, name: '7', select: false },
+    { index: 8, value: 8, name: '8', select: false },
+    { index: 9, value: 9, name: '9', select: false },
+    { index: 10, value: 10, name: '10', select: false },
+    { index: 11, value: 11, name: '11', select: false },
+    { index: 12, value: 12, name: '12', select: false },
   ]);
 
   const [sleepingTimeItems, setSleepingTimeItems] = useState<Item[]>([
-    { index: 1, value: '1', name: '1', select: false },
-    { index: 2, value: '2', name: '2', select: false },
-    { index: 3, value: '3', name: '3', select: false },
-    { index: 4, value: '4', name: '4', select: false },
-    { index: 5, value: '5', name: '5', select: false },
-    { index: 6, value: '6', name: '6', select: false },
-    { index: 7, value: '7', name: '7', select: false },
-    { index: 8, value: '8', name: '8', select: false },
-    { index: 9, value: '9', name: '9', select: false },
-    { index: 10, value: '10', name: '10', select: false },
-    { index: 11, value: '11', name: '11', select: false },
-    { index: 12, value: '12', name: '12', select: false },
+    { index: 1, value: 1, name: '1', select: false },
+    { index: 2, value: 2, name: '2', select: false },
+    { index: 3, value: 3, name: '3', select: false },
+    { index: 4, value: 4, name: '4', select: false },
+    { index: 5, value: 5, name: '5', select: false },
+    { index: 6, value: 6, name: '6', select: false },
+    { index: 7, value: 7, name: '7', select: false },
+    { index: 8, value: 8, name: '8', select: false },
+    { index: 9, value: 9, name: '9', select: false },
+    { index: 10, value: 10, name: '10', select: false },
+    { index: 11, value: 11, name: '11', select: false },
+    { index: 12, value: 12, name: '12', select: false },
   ]);
 
   const [turnOffTimeItems, setTurnOffTimeItems] = useState<Item[]>([
-    { index: 1, value: '1', name: '1', select: false },
-    { index: 2, value: '2', name: '2', select: false },
-    { index: 3, value: '3', name: '3', select: false },
-    { index: 4, value: '4', name: '4', select: false },
-    { index: 5, value: '5', name: '5', select: false },
-    { index: 6, value: '6', name: '6', select: false },
-    { index: 7, value: '7', name: '7', select: false },
-    { index: 8, value: '8', name: '8', select: false },
-    { index: 9, value: '9', name: '9', select: false },
-    { index: 10, value: '10', name: '10', select: false },
-    { index: 11, value: '11', name: '11', select: false },
-    { index: 12, value: '12', name: '12', select: false },
+    { index: 1, value: 1, name: '1', select: false },
+    { index: 2, value: 2, name: '2', select: false },
+    { index: 3, value: 3, name: '3', select: false },
+    { index: 4, value: 4, name: '4', select: false },
+    { index: 5, value: 5, name: '5', select: false },
+    { index: 6, value: 6, name: '6', select: false },
+    { index: 7, value: 7, name: '7', select: false },
+    { index: 8, value: 8, name: '8', select: false },
+    { index: 9, value: 9, name: '9', select: false },
+    { index: 10, value: 10, name: '10', select: false },
+    { index: 11, value: 11, name: '11', select: false },
+    { index: 12, value: 12, name: '12', select: false },
   ]);
 
   const [smokingStateItems, setSmokingStateItems] = useState<Item[]>([
@@ -199,15 +199,15 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   const [airConditioningIntensityItems, setAirConditioningIntensityItems] = useState<Item[]>([
-    { index: 1, value: '세게 틀어요', name: '세게 틀어요', select: false },
-    { index: 2, value: '적당하게 틀어요', name: '적당하게 틀어요', select: false },
-    { index: 3, value: '약하게 틀어요', name: '약하게 틀어요', select: false },
+    { index: 1, value: 3, name: '세게 틀어요', select: false },
+    { index: 2, value: 2, name: '적당하게 틀어요', select: false },
+    { index: 3, value: 1, name: '약하게 틀어요', select: false },
   ]);
 
   const [heatingIntensityItems, setHeatingIntensityItems] = useState<Item[]>([
-    { index: 1, value: '세게 틀어요', name: '세게 틀어요', select: false },
-    { index: 2, value: '적당하게 틀어요', name: '적당하게 틀어요', select: false },
-    { index: 3, value: '약하게 틀어요', name: '약하게 틀어요', select: false },
+    { index: 1, value: 3, name: '세게 틀어요', select: false },
+    { index: 2, value: 2, name: '적당하게 틀어요', select: false },
+    { index: 3, value: 1, name: '약하게 틀어요', select: false },
   ]);
 
   const [lifePatternItems, setLifePatternItems] = useState<Item[]>([
@@ -232,13 +232,13 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   const [isPlayGameItems, setIsPlayGameItems] = useState<Item[]>([
-    { index: 1, value: 'O', name: 'O', select: false },
-    { index: 2, value: 'X', name: 'X', select: false },
+    { index: 1, value: true, name: 'O', select: false },
+    { index: 2, value: false, name: 'X', select: false },
   ]);
 
   const [isPhoneCallItems, setIsPhoneCallItems] = useState<Item[]>([
-    { index: 1, value: 'O', name: 'O', select: false },
-    { index: 2, value: 'X', name: 'X', select: false },
+    { index: 1, value: true, name: 'O', select: false },
+    { index: 2, value: false, name: 'X', select: false },
   ]);
 
   const [studyingItems, setStudyingItems] = useState<Item[]>([

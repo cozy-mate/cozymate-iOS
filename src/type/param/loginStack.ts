@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type LoginStackParamList = {
-  MainScreen: undefined;
+  MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
   CozyHomeScreen: undefined;
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;

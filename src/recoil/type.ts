@@ -6,11 +6,17 @@ export type SignUp = {
   persona: number;
 };
 
-export type RoomInfo = {
+export type CreateRoomInfo = {
   name: string;
   profileImage: number;
   maxMateNum: number;
-  creatorId: number;
+};
+
+export type RoomInfo = {
+  roomId: number;
+  name: string;
+  inviteCode: string;
+  profileImage: number;
 };
 
 export type LifeStyle = {

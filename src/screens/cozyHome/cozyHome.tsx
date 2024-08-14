@@ -29,7 +29,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   const isActive = true;
