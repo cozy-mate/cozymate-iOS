@@ -9,18 +9,13 @@ type PostListProps = {
   toFeedView: (postId: number) => void;
 };
 
-
 const PostList = (props: PostListProps) => {
   const { postCards, toFeedView } = props;
 
   return (
     <View className="flex-1 flex-col w-full items-start mt-5 mb-10">
       {postCards.map((post, postIndex) => (
-        <PostCard 
-          key={post.id} 
-          post={post}
-          toFeedView={toFeedView}
-          />
+        <PostCard key={post.id} post={post} toFeedView={toFeedView} />
       ))}
     </View>
   );

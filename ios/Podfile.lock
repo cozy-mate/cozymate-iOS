@@ -960,6 +960,27 @@ PODS:
     - React-Core
   - react-native-date-picker (5.0.4):
     - React-Core
+  - react-native-image-picker (7.1.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-safe-area-context (4.10.5):
     - React-Core
   - react-native-webview (13.10.5):
@@ -1241,51 +1262,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.15.0):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.0)
-    - RNReanimated/worklets (= 3.15.0)
-    - Yoga
-  - RNReanimated/reanimated (3.15.0):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - RNReanimated/worklets (3.15.0):
+  - RNReanimated (3.12.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1376,6 +1353,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1491,6 +1469,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -1601,6 +1581,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
   react-native-config: 8f7283449bbb048902f4e764affbbf24504454af
   react-native-date-picker: 6891317e850deae5b53d51355226e07a495aba61
+  react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-webview: 553abd09f58e340fdc7746c9e2ae096839e99911
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
@@ -1631,7 +1612,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
   RNGestureHandler: efed690b8493a00b99654043daeb1335276ac4a2
-  RNReanimated: 45553a3ae29a75a76269595f8554d07d4090e392
+  RNReanimated: f9192536fa8a312c737eaf15c905f78831193ef1
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   RNSentry: 3d2dc9b3d85333ae858c39f9978e01056267ae90
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
