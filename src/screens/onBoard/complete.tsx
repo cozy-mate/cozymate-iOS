@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
 import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import Config from 'react-native-config';
-
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { loggedInState, signUpState } from '@recoil/recoil';
-
-import { CompleteScreenProps } from '@type/param/rootStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { signUp } from '@server/api/member';
 
-const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { loggedInState, signUpState } from '@recoil/recoil';
+
+const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
 
   useEffect(() => {
@@ -21,18 +19,16 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
 
   const doSignUp = async () => {
     try {
-      const response = await signUp(
-        {
-          name: signupstate.name,
-          nickName: signupstate.nickName,
-          gender: signupstate.gender,
-          birthday: signupstate.birthday,
-          persona: signupstate.persona,
-        },
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNjYxOTkzODU0OktBS0FPIiwidG9rZW5UeXBlIjoiVEVNUE9SQVJZIiwiaWF0IjoxNzIzNTYxNjM2LCJleHAiOjE3MjM1NjE5OTZ9.FY9VJOmnfSs9KXG-QETH6JdUsvNM6cDZgm8ok-LAb20',
-      );
+      const response = await signUp({
+        name: signupstate.name,
+        nickname: signupstate.nickname,
+        gender: signupstate.gender,
+        birthday: signupstate.birthday,
+        persona: signupstate.persona,
+      });
 
-      AsyncStorage.setItem('accessToken', response.result.accessToken);
+      await AsyncStorage.setItem('accessToken', response.result.tokenResponseDTO.accessToken);
+
       setLoggedIn(true);
     } catch (error) {
       console.log(error);
@@ -47,7 +43,7 @@ const CompleteScreen = ({ navigation }: CompleteScreenProps) => {
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-lg font-semibold tracking-tight text-emphasizedFont">
-              {signupstate.nickName}님,{'\n'}cozymate에 오신걸 환영해요!
+              {signupstate.nickname}님,{'\n'}cozymate에 오신걸 환영해요!
             </Text>
           </View>
 

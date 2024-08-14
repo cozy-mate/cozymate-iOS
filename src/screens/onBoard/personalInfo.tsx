@@ -1,11 +1,11 @@
-import BorderTextInputBox from '@components/common/borderTextInputBox';
-import RadioBoxComponent from '@components/basicRadioBox';
-
-import { signUpState } from '@recoil/recoil';
-import { SignUp } from '@recoil/type';
 import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilState } from 'recoil';
+import { signUpState } from '@recoil/recoil';
+import { SignUp } from '@recoil/type';
+
+import BorderTextInputBox from '@components/common/borderTextInputBox';
+import RadioBoxComponent from '@components/basicRadioBox';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 
 import { PersonalInfoInputScreenProps } from '@type/param/rootStack';

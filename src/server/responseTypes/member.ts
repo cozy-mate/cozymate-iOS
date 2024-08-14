@@ -2,21 +2,6 @@ export interface DeleteMemberResponse {
   result: string;
 }
 
-export interface ReissueTokenResponse {
-  result: {
-    message: string;
-    accessToken: string;
-    refreshToken: string;
-    memberInfoDTO: {
-      name: string;
-      nickname: string;
-      gender: string;
-      birthday: string;
-      persona: number;
-    };
-  };
-}
-
 export interface GetProfileResponse {
   result: {
     name: string;
@@ -33,9 +18,28 @@ export interface CheckNicknameResponse {
 
 export interface SignUpResponse {
   result: {
-    message: string;
-    accessToken: string;
-    refreshToken: string;
+    tokenResponseDTO: {
+      message: string;
+      accessToken: string;
+      refreshToken: string;
+    };
+    memberInfoDTO: {
+      name: string;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      persona: number;
+    };
+  };
+}
+
+export interface SignInResponse {
+  result: {
+    tokenResponseDTO: {
+      message: string;
+      accessToken: string;
+      refreshToken: string;
+    };
     memberInfoDTO: {
       name: string;
       nickname: string;
