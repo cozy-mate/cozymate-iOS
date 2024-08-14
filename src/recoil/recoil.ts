@@ -5,7 +5,7 @@ export const signUpState = atom<SignUp>({
   key: 'signup',
   default: {
     name: '',
-    nickName: '',
+    nickname: '',
     gender: '',
     birthday: '',
     persona: 0,

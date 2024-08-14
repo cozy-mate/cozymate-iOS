@@ -8,7 +8,9 @@ import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 
-import { KakaoOAuthToken, login, getProfile } from '@react-native-seoul/kakao-login';
+import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
+import { signIn } from '@server/api/member';
+import { getAccessToken, setAccessToken } from '@utils/token';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
@@ -19,19 +21,27 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   };
 
   const signInWithKakao = async (): Promise<void> => {
-    const result: KakaoOAuthToken = await login();
-    console.log(result);
+    await login();
 
-    const response = await getProfile()
-      .then((result) => {
-        return result;
-      })
-      .catch((error) => {
-        throw error;
-      });
-    console.log(response);
+    try {
+      const result: KakaoProfile = await getProfile();
+      const kakaoId = result.id;
 
-    navigation.navigate('PersonalInfoInputScreen');
+      const response = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
+      const accessToken = response.result.tokenResponseDTO.accessToken;
+      console.log(accessToken);
+      await getAccessToken();
+
+      await setAccessToken(accessToken);
+
+      if (response.result.tokenResponseDTO.refreshToken === null) {
+        navigation.navigate('PersonalInfoInputScreen');
+      } else {
+        setLoggedIn(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
