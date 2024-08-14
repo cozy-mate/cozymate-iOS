@@ -37,9 +37,9 @@
 	<string>7feaa7120f9192caa40266c210bae2b9</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>kakao7feaa7120f9192caa40266c210bae2b9</string>
-		<string>kakaolink</string>
 		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

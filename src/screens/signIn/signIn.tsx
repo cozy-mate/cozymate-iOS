@@ -8,9 +8,9 @@ import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
 import { loggedInState } from '@recoil/recoil';
 
-import { login, getProfile } from '@react-native-seoul/kakao-login';
+import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
 import { signIn } from '@server/api/member';
-import { setAccessToken } from '@utils/token';
+import { getAccessToken, setAccessToken } from '@utils/token';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
@@ -24,11 +24,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     await login();
 
     try {
-      const result = await getProfile();
+      const result: KakaoProfile = await getProfile();
       const kakaoId = result.id;
 
       const response = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
       const accessToken = response.result.tokenResponseDTO.accessToken;
+      console.log(accessToken);
+      await getAccessToken();
 
       await setAccessToken(accessToken);
 
