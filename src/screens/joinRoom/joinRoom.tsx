@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { JoinRoomScreenProps } from '@type/param/loginStack';
 
-import BackButton from '@assets/backButton.svg';
-import ButtonModal from '@components/common/buttonModal';
-import { getRoomDataByInviteCode } from '@server/api/room';
 import { useRecoilState } from 'recoil';
 import { inviteCodeRoomState } from '@recoil/recoil';
+
+import { getRoomDataByInviteCode } from '@server/api/room';
+
+import ButtonModal from '@components/common/buttonModal';
+
+import BackButton from '@assets/backButton.svg';
 
 const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
   const [inviteRoomInfo, setInviteRoomInfo] = useRecoilState(inviteCodeRoomState);
