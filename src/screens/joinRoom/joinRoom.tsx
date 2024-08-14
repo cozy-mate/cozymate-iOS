@@ -3,16 +3,63 @@ import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { JoinRoomScreenProps } from '@type/param/loginStack';
 
 import BackButton from '@assets/backButton.svg';
+import ButtonModal from '@components/common/buttonModal';
+import { getRoomDataByInviteCode } from '@server/api/room';
+import { useRecoilState } from 'recoil';
+import { inviteCodeRoomState } from '@recoil/recoil';
 
 const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
-  const [inviteCode, setInviteCode] = useState<string>('');
+  const [inviteRoomInfo, setInviteRoomInfo] = useRecoilState(inviteCodeRoomState);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const toMain = () => {
     navigation.navigate('MainScreen');
   };
 
   const toWaitingRoom = () => {
+    setIsModalOpen(false);
     navigation.navigate('WaitingRoomScreen');
+  };
+
+  const [inviteCode, setInviteCode] = useState<string>('');
+
+  const getRoomInfo = async () => {
+    setIsModalOpen(true);
+    try {
+      const response = await getRoomDataByInviteCode(inviteCode);
+
+      console.log(response.result);
+      setInviteRoomInfo((prevState) => ({
+        ...prevState,
+        roomId: response.result.roomId,
+        name: response.result.name,
+        managerName: response.result.managerName,
+        maxMateNum: response.result.maxMateNum,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setInviteRoomInfo(() => ({
+      roomId: 0,
+      name: '',
+      managerName: '',
+      maxMateNum: 0,
+    }));
+  };
+
+  const prop = {
+    title: `[${inviteRoomInfo.name}] 방이 맞나요?`,
+    message: `방장 [${inviteRoomInfo.managerName}] | ${inviteRoomInfo.maxMateNum}인실`,
+    cancelText: '취소',
+    submitText: '확인',
+    onSubmit: toWaitingRoom,
+    isVisible: isModalOpen,
+    closeModal: closeModal,
+    buttonCount: 2,
   };
 
   return (
@@ -34,11 +81,13 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         </View>
 
         <View className={`${inviteCode ? 'bg-main1' : 'bg-[#C4c4c4]'} flex p-4 rounded-xl`}>
-          <Pressable onPress={toWaitingRoom}>
+          <Pressable onPress={getRoomInfo}>
             <Text className="text-base font-semibold text-center text-white">확인</Text>
           </Pressable>
         </View>
       </View>
+
+      {isModalOpen && <ButtonModal {...prop} />}
     </SafeAreaView>
   );
 };

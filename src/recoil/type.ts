@@ -19,6 +19,13 @@ export type RoomInfo = {
   profileImage: number;
 };
 
+export type InviteCodeRoomInfo = {
+  roomId: number;
+  name: string;
+  managerName: string;
+  maxMateNum: number;
+};
+
 export type LifeStyle = {
   universityId: number;
   admissionYear: string;
