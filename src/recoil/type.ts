@@ -6,6 +6,14 @@ export type SignUp = {
   persona: number;
 };
 
+export type Profile = {
+  name: string;
+  nickname: string;
+  gender: string;
+  birthday: string;
+  persona: number;
+};
+
 export type CreateRoomInfo = {
   name: string;
   profileImage: number;

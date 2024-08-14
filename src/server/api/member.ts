@@ -24,7 +24,7 @@ export const signOut = async () => {
 };
 
 // 사용자 정보 조회
-export const getProfile = async (): Promise<GetProfileResponse> => {
+export const getMyProfile = async (): Promise<GetProfileResponse> => {
   const response = await GetAxiosInstance<GetProfileResponse>(`/members/member-info`);
 
   return response.data;

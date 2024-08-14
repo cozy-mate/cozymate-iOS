@@ -6,14 +6,15 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
-import { loggedInState } from '@recoil/recoil';
+import { loggedInState, profileState } from '@recoil/recoil';
 
 import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
-import { signIn } from '@server/api/member';
-import { getAccessToken, setAccessToken } from '@utils/token';
+import { getMyProfile, signIn } from '@server/api/member';
+import { setAccessToken } from '@utils/token';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setMyProfile] = useRecoilState(profileState);
 
   const toOnBoard = () => {
     setLoggedIn(true);
@@ -27,14 +28,21 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       const result: KakaoProfile = await getProfile();
       const kakaoId = result.id;
 
-      const response = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
-      const accessToken = response.result.tokenResponseDTO.accessToken;
-      console.log(accessToken);
-      await getAccessToken();
-
+      const signInResponse = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
+      const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
       await setAccessToken(accessToken);
 
-      if (response.result.tokenResponseDTO.refreshToken === null) {
+      const getProfileResponse = await getMyProfile();
+
+      setMyProfile({
+        name: getProfileResponse.result.name,
+        nickname: getProfileResponse.result.nickname,
+        gender: getProfileResponse.result.gender,
+        birthday: getProfileResponse.result.birthday,
+        persona: getProfileResponse.result.persona,
+      });
+
+      if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');
       } else {
         setLoggedIn(true);
