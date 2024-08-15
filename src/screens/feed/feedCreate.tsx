@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, View, Text, Image, TouchableOpacity, Animated } from 'react-native';
+import { Pressable, View, Text, TouchableOpacity, Animated, LogBox } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
@@ -15,6 +15,13 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<Asset[]>([]);
+
+  useEffect(() => {
+    // 외부 라이브러리인 DraggleFlatList에서 나오는 경고로,
+    // 위치를 옮길 때 마다 경고가 떠 우선 무시하도록 설정했습니다.
+    // Github에서 해결되지 않은 이슈로, 라이브러리 업데이트가 되면 지우겠습니다.
+    LogBox.ignoreAllLogs();
+  }, []);
 
   useEffect(() => {
     setIsComplete(postDescription !== '');
@@ -50,14 +57,14 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
     const handlePressIn = () => {
       Animated.spring(scale, {
-        toValue: 1.1, // Slightly enlarge
+        toValue: 1.1,
         useNativeDriver: true,
       }).start();
     };
 
     const handlePressOut = () => {
       Animated.spring(scale, {
-        toValue: 1, // Return to original size
+        toValue: 1,
         useNativeDriver: true,
       }).start();
     };
@@ -84,7 +91,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="absolute -top-1 right-0"
+          className="absolute right-0 -top-5"
           onPress={() => {
             handleDelete();
           }}
@@ -96,14 +103,19 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 flex-col bg-white pl-8 pr-8 pt-8 w-full h-full">
-      <View className="flex flex-row w-full h-24 mb-4 items-center justify-center">
+    <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+      <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
         <TouchableOpacity
-          className="flex items-center justify-center h-20 w-20 rounded-xl bg-colorBox mr-2 mt-2"
+          className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
           onPress={pickImages}
         >
           <PostImage className="mb-2" />
-          <Text className="text-sm text-disabledFont">{`${images.length}/${MAX_IMAGE_COUNT}`}</Text>
+          <View className="flex flex-row items-center justify-center w-full">
+            <Text
+              className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
+            >{`${images.length}/`}</Text>
+            <Text className={`text-sm text-disabledFont`}>{`${MAX_IMAGE_COUNT}`}</Text>
+          </View>
         </TouchableOpacity>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <DraggableFlatList
@@ -120,7 +132,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
           />
         </ScrollView>
       </View>
-      <View className="flex-1 flex-col items-center justify-start mb-4">
+      <View className="flex-col items-center justify-start flex-1 mb-4">
         <TextInput
           placeholder="내용를 입력해주세요"
           value={postDescription}
