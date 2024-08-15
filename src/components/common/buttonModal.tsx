@@ -24,7 +24,7 @@ const ButtonModal = (props: Props) => {
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View
         style={{
-          backgroundColor: 'rgba(0, 0, 0,0.5)',
+          backgroundColor: 'rgba(0, 0, 0,0.7)',
         }}
         className="flex items-center justify-center w-full h-full"
         onTouchEnd={closeModal}
