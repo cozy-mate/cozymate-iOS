@@ -40,7 +40,7 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({
 
       {users.map((user) => (
         <Pressable key={user.index} onPress={toUserDetail}>
-          <View className="flex flex-row border-2 border-disabled rounded-[12px] mb-3 p-4">
+          <View className="flex flex-row border-[1px] border-disabled rounded-[12px] mb-3 p-4">
             <View className="flex flex-row items-center justify-between w-full">
               <View className="flex flex-row items-center">
                 <user.image />

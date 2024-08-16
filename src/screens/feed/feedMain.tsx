@@ -66,7 +66,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 flex-col bg-main3 pl-8 pr-8 pt-8 w-full h-full">
+    <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-main3">
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -76,7 +76,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View className="flex-1 flex-col w-full justify-start">
+        <View className="flex-col justify-start flex-1 w-full">
           {isFeedEnabled ? (
             <FeedLampEnabled className="mb-2" />
           ) : (
@@ -112,7 +112,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
       </ScrollView>
       <View>
         <Pressable
-          className="absolute bottom-20 right-3 items-center justify-centerp-4 rounded-xl"
+          className="absolute items-center justify-center p-4 bottom-20 right-3 rounded-xl"
           onPress={toFeedCreate}
         >
           <PostEdit className="mr-2" />
