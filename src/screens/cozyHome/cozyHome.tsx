@@ -7,15 +7,15 @@ import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 import { HomeScreenProps } from '@type/param/loginStack';
 import { useRecoilState } from 'recoil';
 import { hasRoomState } from '@recoil/recoil';
-import { getProfile } from '@server/api/member';
+import { getMyProfile } from '@server/api/member';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   useEffect(() => {
-    const getMyProfile = async () => {
-      const response = await getProfile();
+    const getProfile = async () => {
+      const response = await getMyProfile();
       console.log(response);
     };
-    getMyProfile();
+    getProfile();
   }, []);
 
   const [, setHasRoom] = useRecoilState(hasRoomState);
@@ -29,7 +29,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   const isActive = true;

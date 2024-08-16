@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Modal, Text, Pressable, TouchableOpacity } from 'react-native';
+import { View, Modal, Text, TouchableOpacity } from 'react-native';
 
 type Props = {
   title: string;
@@ -24,24 +24,24 @@ const ButtonModal = (props: Props) => {
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View
         style={{
-          backgroundColor: 'rgba(0, 0, 0,0.5)',
+          backgroundColor: 'rgba(0, 0, 0,0.7)',
         }}
-        className="flex w-full h-full justify-center items-center"
+        className="flex items-center justify-center w-full h-full"
         onTouchEnd={closeModal}
       >
         <View
-          className="flex flex-col w-5/6 justify-center items-center bg-white px-10 py-8 rounded-xl z-10"
+          className="z-10 flex flex-col items-center justify-center w-5/6 px-10 py-8 bg-white rounded-xl"
           onTouchEnd={handleTouchEnd}
         >
-          <Text className="text-emphasizedFont font-semibold text-lg mb-1">{title}</Text>
-          <Text className="text-colorFont font-normal text-sm mb-5">{message}</Text>
+          <Text className="mb-1 text-lg font-semibold text-emphasizedFont">{title}</Text>
+          <Text className="mb-5 text-sm font-normal text-colorFont">{message}</Text>
           <View className="flex flex-row justify-center space-x-2">
             {buttonCount === 2 && (
               <TouchableOpacity
                 onPress={closeModal}
                 style={{
                   flex: 1,
-                  borderRadius: 12,
+                  borderRadius: 8,
                   paddingHorizontal: 28,
                   paddingVertical: 16,
                   alignItems: 'center',
@@ -59,7 +59,7 @@ const ButtonModal = (props: Props) => {
               onPress={onSubmit}
               style={{
                 flex: 1,
-                borderRadius: 12,
+                borderRadius: 8,
                 paddingHorizontal: 28,
                 paddingVertical: 16,
                 alignItems: 'center',

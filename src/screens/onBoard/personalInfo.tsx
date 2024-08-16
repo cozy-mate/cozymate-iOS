@@ -33,7 +33,6 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
       setCanUse(true);
       return;
     }
-
     const response = await checkNickname(nickname);
     setCanUse(response.result);
   };
@@ -48,7 +47,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
     setSignUp((prevState: SignUp) => ({
       ...prevState,
       name: name,
-      nickName: nickname,
+      nickname: nickname,
       gender: gender,
       birthday: birthday,
     }));
@@ -86,11 +85,11 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             hasButton={false}
             canUse={canUse}
           />
-          {!canUse ? (
-            <Text className="text-warning text-[10px] font-medium">
+          {!canUse && nickname.trim() !== '' && (
+            <Text className="text-warning text-[10px] font-medium mt-[-8px] px-2 mb-4">
               다른 사람이 사용중인 닉네임이에요!
             </Text>
-          ) : null}
+          )}
 
           {/* 성별 입력 Input */}
           <RadioBoxComponent

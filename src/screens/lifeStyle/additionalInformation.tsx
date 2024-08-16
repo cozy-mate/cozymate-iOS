@@ -1,5 +1,6 @@
 import AddButton from '@components/lifeStyle/addButton';
 import { lifeStyleState } from '@recoil/recoil';
+import { registerUserData } from '@server/api/member-stat';
 import { AdditionalLifeStyleScreenProps } from '@type/param/loginStack';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
@@ -17,7 +18,7 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
     navigation.navigate('EssentialLifeStyleScreen');
   };
 
-  const toNext = () => {
+  const toNext = async () => {
     setLifeStyle({
       ...lifeStyle,
       options: {
@@ -27,7 +28,48 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
         '이건 절대 절대 안 돼요!': neverInputs,
       },
     });
-    navigation.navigate('RoomMateScreen');
+
+    console.log(lifeStyle);
+
+    try {
+      await registerUserData({
+        universityId: 1,
+        admissionYear: lifeStyle.admissionYear,
+        major: lifeStyle.major,
+        numOfRoommate: lifeStyle.numOfRoommate,
+        acceptance: lifeStyle.acceptance,
+        wakeUpMeridian: lifeStyle.wakeUpMeridian,
+        wakeUpTime: lifeStyle.wakeUpTime,
+        sleepingMeridian: lifeStyle.sleepingMeridian,
+        sleepingTime: lifeStyle.sleepingTime,
+        turnOffMeridian: lifeStyle.turnOffMeridian,
+        turnOffTime: lifeStyle.turnOffTime,
+        smokingState: lifeStyle.smokingState,
+        sleepingHabit: lifeStyle.sleepingHabit,
+        airConditioningIntensity: lifeStyle.airConditioningIntensity,
+        heatingIntensity: lifeStyle.heatingIntensity,
+        lifePattern: lifeStyle.lifePattern,
+        intimacy: lifeStyle.intimacy,
+        canShare: lifeStyle.canShare,
+        isPlayGame: lifeStyle.isPlayGame,
+        isPhoneCall: lifeStyle.isPhoneCall,
+        studying: lifeStyle.studying,
+        intake: lifeStyle.intake,
+        cleanSensitivity: lifeStyle.cleanSensitivity,
+        noiseSensitivity: lifeStyle.noiseSensitivity,
+        cleaningFrequency: lifeStyle.cleaningFrequency,
+        personality: lifeStyle.personality,
+        mbti: lifeStyle.mbti,
+        options: {
+          '무조건 지켜줘야 해요!': lifeStyle.options['무조건 지켜줘야 해요!'],
+          '이정도는 맞춰줄 수 있어요!': lifeStyle.options['이정도는 맞춰줄 수 있어요!'],
+          '이건 절대 절대 안 돼요!': lifeStyle.options['이건 절대 절대 안 돼요!'],
+        },
+      });
+      navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleInputChange = (

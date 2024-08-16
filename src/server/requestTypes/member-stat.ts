@@ -28,8 +28,8 @@ export interface RegisterUserDataRequest {
   mbti: string;
   options: {
     '무조건 지켜줘야 해요!': string[];
-    '이정도는 맞춰줄 수 있어요!': string[];
     '이건 절대 절대 안 돼요!': string[];
+    '이정도는 맞춰줄 수 있어요!': string[];
   };
 }
 
@@ -63,7 +63,7 @@ export interface UpdateUserDataRequest {
   mbti: string;
   options: {
     '무조건 지켜줘야 해요!': string[];
-    '이정도는 맞춰줄 수 있어요!': string[];
     '이건 절대 절대 안 돼요!': string[];
+    '이정도는 맞춰줄 수 있어요!': string[];
   };
 }

@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundColor: {
+        modalBack: 'rgba(0, 0, 0, 0.5)',
+      },
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',
       },

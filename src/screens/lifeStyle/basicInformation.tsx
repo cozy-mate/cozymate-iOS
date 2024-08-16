@@ -12,7 +12,7 @@ import { useInputAnimation } from '@hooks/inputAnimation';
 
 type Item = {
   index: number;
-  value: string;
+  value: string | number;
   name: string;
   select: boolean;
 };
@@ -31,11 +31,11 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
   const canNext = admissionYear !== '' && major !== '' && numOfRoommate !== 0 && acceptance !== '';
 
   const [numOfRoommateItems, setNumOfRoommateItems] = useState<Item[]>([
-    { index: 1, value: '2', name: '2인', select: false },
-    { index: 2, value: '3', name: '3인', select: false },
-    { index: 3, value: '4', name: '4인', select: false },
-    { index: 4, value: '5', name: '5인', select: false },
-    { index: 5, value: '6', name: '6인', select: false },
+    { index: 1, value: 2, name: '2인', select: false },
+    { index: 2, value: 3, name: '3인', select: false },
+    { index: 3, value: 4, name: '4인', select: false },
+    { index: 4, value: 5, name: '5인', select: false },
+    { index: 5, value: 6, name: '6인', select: false },
   ]);
 
   const [acceptanceItems, setAcceptanceItems] = useState<Item[]>([

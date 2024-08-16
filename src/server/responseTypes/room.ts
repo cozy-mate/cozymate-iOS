@@ -24,5 +24,10 @@ export interface JoinRoomResponse {
 }
 
 export interface CreateRoomResponse {
-  result: string;
+  result: {
+    roomId: number;
+    name: string;
+    inviteCode: string;
+    profileImage: number;
+  };
 }

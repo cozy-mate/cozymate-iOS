@@ -66,10 +66,10 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
       <Text className="text-base font-semibold text-emphasizedFont px-[2px] mb-2">{title}</Text>
       {isTime && (
         <View className="flex flex-row items-center mb-2">
-          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('AM')}>
+          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('오전')}>
             <Text
               className={`${
-                meridian === 'AM' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                meridian === '오전' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
               } `}
             >
               AM
@@ -78,10 +78,10 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
 
           <View className="w-[1px] h-4 bg-[#CCCCCC] mr-2" />
 
-          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('PM')}>
+          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('오후')}>
             <Text
               className={`${
-                meridian === 'PM' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                meridian === '오후' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
               } `}
             >
               PM

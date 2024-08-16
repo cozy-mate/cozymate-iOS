@@ -4,7 +4,7 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { SelectCharacterScreenProps } from '@type/param/loginStack';
 
 import { useRecoilState } from 'recoil';
-import { RoomInfo, SignUp } from '@recoil/type';
+import { CreateRoomInfo, RoomInfo, SignUp } from '@recoil/type';
 import { createRoomState, signUpState } from '@recoil/recoil';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
@@ -34,7 +34,7 @@ interface Character {
 }
 
 const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
-  const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
+  const [, setCreateroomState] = useRecoilState(createRoomState);
 
   const [profileImage, setProfileImage] = useState<number>(0);
 
@@ -143,7 +143,7 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
   ]);
 
   const toNext = async (): Promise<void> => {
-    setCreateroomState((prevState: RoomInfo) => ({
+    setCreateroomState((prevState: CreateRoomInfo) => ({
       ...prevState,
       profileImage: profileImage,
     }));
