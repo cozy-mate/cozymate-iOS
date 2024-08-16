@@ -20,7 +20,7 @@ export type LoginStackParamList = {
   EssentialLifeStyleScreen: undefined;
   AdditionalLifeStyleScreen: undefined;
 
-  LifeStyleInputScreen: undefined;
+  CreateTodoScreen: undefined;
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
@@ -103,6 +103,7 @@ export type RoomMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'R
 
 // 투두리스트 스크린
 export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'TodoListScreen'>;
+export type CreateTodoScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateTodoScreen'>;
 
 export type RoomMateScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMateScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'UserDetailScreen'>;

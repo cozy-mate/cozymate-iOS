@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil';
 import BackHeader from 'src/layout/backHeader';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
+import useCompletionPercentage from '@hooks/useCompletionPercentage';
 
 type Item = {
   index: number;
@@ -68,6 +69,17 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
   const roommateInputAnimation = useInputAnimation(showRoommateInput, 400);
   const acceptanceInputAnimation = useInputAnimation(showAcceptance, 400);
 
+  const totalFields = 4;
+  const progressWidth = useCompletionPercentage({
+    fields: {
+      admissionYear,
+      major,
+      numOfRoommate,
+      acceptance,
+    },
+    totalFields,
+  });
+
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
       <BackHeader
@@ -76,7 +88,7 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
         leftPressFunc={toPrev}
         rightPressFunc={toNext}
         canNext={canNext}
-        width={108}
+        width={progressWidth}
       />
       <ScrollView className="px-5">
         {showAcceptance && (
@@ -126,20 +138,20 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
             }}
           >
             <CustomTextInputBox
-              title="학과를"
+              title="학과를 입력해주세요"
               value={major}
               setValue={setMajor}
-              placeholder="경영학과"
+              placeholder="ex. 경영학과"
               onEnterPress={() => setShowRoommateInput(true)}
             />
           </Animated.View>
         )}
 
         <CustomTextInputBox
-          title="학번을"
+          title="학번을 입력해주세요"
           value={admissionYear}
           setValue={setAdmissionYear}
-          placeholder="23"
+          placeholder="ex. 23"
           onEnterPress={() => setShowMajorInput(true)}
         />
 

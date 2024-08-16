@@ -8,22 +8,22 @@ import {
   View,
 } from 'react-native';
 
-interface CustomTextInputBoxProps {
+interface CustomTextareaProps {
   title: string;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder: string;
-  isDisable?: boolean;
   onEnterPress?: () => void;
+  height: number;
 }
 
-const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
+const CustomTextarea: React.FC<CustomTextareaProps> = ({
   title,
   value,
   setValue,
   placeholder,
-  isDisable,
   onEnterPress,
+  height,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -55,15 +55,10 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
 
   return (
     <View className="mb-12">
-      <Text
-        className={`${
-          isFocused ? 'text-main1' : 'text-emphasizedFont'
-        } text-base font-semibold px-1 mb-2`}
-      >
-        {title}
-      </Text>
+      <Text className="px-1 mb-2 text-base font-semibold text-basicFont">{title}</Text>
       <Pressable onPress={handleFocus}>
         <TextInput
+          multiline
           ref={inputRef}
           value={value}
           onChangeText={valueHandleChange}
@@ -71,17 +66,17 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
           onBlur={handleBlur}
           onSubmitEditing={handleSubmitEditing}
           placeholder={placeholder}
-          editable={isDisable}
           blurOnSubmit={false}
           className={`${
             isFocused
               ? 'bg-sub2 border-main1 border-[1px]'
               : 'bg-colorBox border-colorBox border-[1px]'
           } p-4 text-basicFont rounded-xl`}
+          style={{ height: height }}
         />
       </Pressable>
     </View>
   );
 };
 
-export default CustomTextInputBox;
+export default CustomTextarea;

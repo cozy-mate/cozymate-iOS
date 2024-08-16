@@ -1,16 +1,18 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Dimensions, Pressable, Text, View } from 'react-native';
 
 import BackButton from '@assets/backHeader/backButton.svg';
 
 interface BackHeaderProps {
-  title: string;
-  buttonString: string;
+  title?: string;
+  buttonString?: string;
   leftPressFunc: () => void;
-  rightPressFunc: () => void;
-  canNext: boolean;
-  width: number;
+  rightPressFunc?: () => void;
+  canNext?: boolean;
+  width?: number;
 }
+
+const { width: screenWidth } = Dimensions.get('window');
 
 const BackHeader: React.FC<BackHeaderProps> = ({
   title,
@@ -20,6 +22,8 @@ const BackHeader: React.FC<BackHeaderProps> = ({
   canNext,
   width,
 }) => {
+  const progressWidth = width ? screenWidth * (width / 100) : 0;
+
   return (
     <View className="mb-10">
       <View className="flex flex-row items-center justify-between px-5 mt-2 mb-4">
@@ -40,7 +44,10 @@ const BackHeader: React.FC<BackHeaderProps> = ({
         )}
       </View>
       <View className="relative w-full h-2 bg-box">
-        <View className="absolute top-0 z-10 h-2 bg-main1 rounded-r-xl" style={{ width: width }} />
+        <View
+          className="absolute top-0 z-10 h-2 bg-main1 rounded-r-xl"
+          style={{ width: progressWidth }}
+        />
       </View>
     </View>
   );
