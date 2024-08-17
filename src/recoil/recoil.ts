@@ -99,3 +99,13 @@ export const lifeStyleState = atom<LifeStyle>({
     },
   },
 });
+
+export const feedRefreshState = atom<boolean>({
+  key: 'needsRefresh',
+  default: false,
+});
+
+export const postDetailRefreshState = atom<boolean>({
+  key: 'postDetailRefresh',
+  default: false,
+});

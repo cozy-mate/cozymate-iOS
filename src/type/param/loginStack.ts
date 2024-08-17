@@ -26,8 +26,8 @@ export type LoginStackParamList = {
   UserDetailScreen: undefined;
 
   FeedMainScreen: undefined;
-  FeedEditScreen: undefined;
-  FeedCreateScreen: undefined;
+  FeedEditScreen: { mode: 'create' | 'edit' };
+  FeedCreateScreen: { mode: 'create' | 'edit'; postId?: number };
   FeedViewScreen: { postId: number };
 
   MyPageScreen: undefined;

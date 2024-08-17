@@ -5,7 +5,7 @@ export interface CreateFeedRequest {
 }
 
 export interface UpdateFeedRequest {
-  id: number;
+  roomId: number;
   name: string;
   description: string;
 }

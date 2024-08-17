@@ -4,12 +4,17 @@ import { Asset } from 'react-native-image-picker';
 
 // Asset 객체에 대해서만 사용 가능합니다
 export const uploadAssetImageToS3 = async (files: Asset[]) => {
+  console.log(files);
   const formData = new FormData();
   files.forEach((file) => {
+    const uri = file.uri || '';
+    const fileName = file.fileName || uri.split('/').pop() || '';
+    const fileType = uri.includes('https') ? `image/${fileName.split('.').pop()}` : file.type;
+
     formData.append('files', {
-      uri: file.uri,
-      type: file.type,
-      name: file.fileName,
+      uri: uri,
+      type: fileType,
+      name: fileName,
     });
   });
   const response = await PostAxiosInstance<UploadImageToS3Response>(`/api/files`, formData, {

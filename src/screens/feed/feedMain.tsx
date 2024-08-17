@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg';
 import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg';
@@ -11,21 +10,16 @@ import PostEdit from '@assets/feedMain/postEdit.svg';
 import { FeedMainScreenProps } from '@type/param/loginStack';
 import { FeedType, PostCardType } from '@type/feed';
 import { useRecoilState } from 'recoil';
-import { roomInfoState } from '@recoil/recoil';
+import { feedRefreshState, roomInfoState } from '@recoil/recoil';
 import { getFeedData } from '@server/api/feed';
 import PostCard from '@components/feedMain/postCard';
 import { getPostList } from '@server/api/post';
 
-const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
-  // TODO : useEffect로 미리 불러와야할 정보들
-  // - 피드 정보가 들어있는지 여부
-  // - 피드 정보(이름, 설명)
-  // - 게시물 불러오기 줘야 할 정보 - Member의 Room Or University
-  // - 게시물 정보(작성자, 내용, 이미지, 좋아요 수, 댓글 수, 작성 시간)
-
-  // TODO : 게시물 Type 미리 정의하기
-
+const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
+  // TODO : 복잡하게 섞인 코드 정리하기
+  // TODO : RecoilState RoomId 업데이트 되면 적용하기
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [needsRefresh, setNeedsRefresh] = useRecoilState(feedRefreshState);
 
   const [feedInfo, setFeedInfo] = React.useState<FeedType>({
     name: '',
@@ -59,21 +53,33 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
 
   useEffect(() => {
     getFeedInfo();
+    getPosts(0);
   }, []);
 
-  const getPosts = async (page: number) => {
-    //
-    if (postStates.stop || postStates.loading) {
-      return;
+  useEffect(() => {
+    console.log('needsRefresh:', needsRefresh);
+    if (needsRefresh) {
+      setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
+      handleRefresh();
     }
-    console.log('page called');
-    setPostStates((prev) => ({ ...prev, loading: true }));
+  }, [needsRefresh]);
 
+  const handleRefresh = async () => {
+    await getFeedInfo();
+    await getPosts(0);
+    setPostStates((prev) => ({ ...prev, refreshing: false }));
+    setNeedsRefresh(false);
+  };
+
+  const getPosts = async (page: number) => {
     try {
+      if (postStates.stop || postStates.loading) {
+        return;
+      }
+
+      setPostStates((prev) => ({ ...prev, loading: true }));
+
       const response = await getPostList(roomInfo.roomId === 0 ? 17 : roomInfo.roomId, page);
-
-      console.log(response.result.length);
-
       const posts: PostCardType[] = response.result.map((post) => ({
         id: post.id,
         content: post.content,
@@ -87,7 +93,11 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         createdAt: post.createdAt,
       }));
 
-      setPostList((prevPosts) => [...prevPosts, ...posts]);
+      if (page === 0) {
+        setPostList([...posts]);
+      } else {
+        setPostList((prevPosts) => [...prevPosts, ...posts]);
+      }
       if (response.result.length < 10) {
         // 빈 배열, 혹은 10개 미만의 배열이 오면 더 이상 불러올 데이터가 없다고 판단
         setPostStates((prev) => ({ ...prev, stop: true }));
@@ -101,19 +111,19 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   };
 
   const onEndReached = () => {
-    if (!postStates.stop && !postStates.loading) {
+    if (!postStates.stop && !postStates.loading && !postStates.refreshing) {
       setPostStates((prev) => ({ ...prev, page: prev.page + 1 }));
+      getPosts(postStates.page + 1);
     }
-    getPosts(postStates.page);
   };
 
   // navigation들
   const toFeedEdit = () => {
-    navigation.navigate('FeedEditScreen');
+    navigation.navigate('FeedEditScreen', { mode: feedInfo.isEnabled ? 'edit' : 'create' });
   };
 
   const toFeedCreate = () => {
-    navigation.navigate('FeedCreateScreen');
+    navigation.navigate('FeedCreateScreen', { mode: 'create' });
   };
 
   const toFeedView = (postId: number) => {
@@ -122,30 +132,19 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
 
   const onRefresh = () => {
     setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
-    setPostList([]);
     getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
   };
 
-  const isInitialMount = useRef(true);
+  const renderFooter = () => {
+    if (!postStates.loading) return null;
 
-  useFocusEffect(
-    useCallback(() => {
-      if (isInitialMount.current) {
-        isInitialMount.current = false;
-      } else {
-        setPostStates({
-          page: 0,
-          stop: false,
-          loading: true,
-          refreshing: false,
-        });
-        setPostList([]);
-        getFeedInfo();
-        getPosts(0);
-      }
-    }, []),
-  );
+    return (
+      <View className="py-4">
+        <Text className="text-sm text-disabledFont">로딩 중...</Text>
+      </View>
+    );
+  };
 
   const renderHeader = () => (
     <View className="flex-col justify-start w-screen px-5 mb-5">
@@ -182,15 +181,18 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={
           postStates.loading ? (
-            <View className="items-center justify-center flex-1">
+            <View className="items-center justify-center flex-1 mt-10">
               <Text className="text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text>
             </View>
-          ) : (
+          ) : postStates.page === 0 ? (
             <View className="items-center justify-center flex-1">
               <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             </View>
+          ) : (
+            <View></View>
           )
         }
+        ListFooterComponent={renderFooter}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{
           flexGrow: 1,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, View, Text, TouchableOpacity, Animated, LogBox } from 'react-native';
+import { Pressable, View, Text, TouchableOpacity, Animated, LogBox, Alert } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
@@ -9,14 +9,24 @@ import PostImage from '@assets/feedCreate/postImage.svg';
 import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
 
 import { FeedCreateScreenProps } from '@type/param/loginStack';
-import { createPost } from '../../server/api/post';
-import { uploadAssetImageToS3, uploadImageToS3 } from '../../server/api/image';
+import { createPost, getDetailPost, updatePost } from '../../server/api/post';
+import { uploadAssetImageToS3 } from '../../server/api/image';
+import { useRecoilState } from 'recoil';
+import { feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
+  // TODO : Back Nav 넣기
+  // TODO : 복잡하게 섞인 코드 정리하기
+  // TODO : RecoilState RoomId 업데이트 되면 적용하기
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<Asset[]>([]);
+
+  const { mode, postId } = props.route.params;
+
+  const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
+  const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
   const { navigation } = props;
 
@@ -25,11 +35,27 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     // 위치를 옮길 때 마다 경고가 떠 우선 무시하도록 설정했습니다.
     // Github에서 해결되지 않은 이슈로, 라이브러리 업데이트가 되면 지우겠습니다.
     LogBox.ignoreAllLogs();
+    if (mode === 'edit') {
+      getMyPost(postId!);
+    }
   }, []);
 
   useEffect(() => {
     setIsComplete(postDescription !== '');
   }, [postDescription]);
+
+  const getMyPost = async (postId: number) => {
+    try {
+      const response = await getDetailPost(17, postId);
+      const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
+      setImages(imageList);
+      setPostDescription(response.result.content);
+    } catch (e: any) {
+      console.log(e.response.data);
+      Alert.alert('게시글을 불러오는데 실패했습니다.');
+      navigation.goBack();
+    }
+  };
 
   const valueHandleDescriptionChange = (text: string) => {
     setPostDescription(text);
@@ -37,7 +63,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const pickImages = async () => {
     launchImageLibrary(
-      { mediaType: 'photo', selectionLimit: MAX_IMAGE_COUNT - images.length }, // selectionLimit: 0 -> unlimited selection
+      { mediaType: 'photo', selectionLimit: MAX_IMAGE_COUNT - images.length },
       (response) => {
         if (response.didCancel) {
           return;
@@ -57,8 +83,6 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   };
 
   const createMyPost = async () => {
-    console.log('createMyPost');
-
     let imageResponse = { imgUrlList: [] };
 
     if (images.length > 0) {
@@ -66,16 +90,56 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     }
 
     try {
-      const response = await createPost({
+      await createPost({
         roomId: 17,
         title: '6',
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
-      console.log(response);
+      setNeedRefresh(true);
       navigation.goBack();
     } catch (e: any) {
       console.log(e.response.data);
+    }
+  };
+
+  const updateMyPost = async () => {
+    let imageResponse = { imgUrlList: [] };
+
+    if (images.length > 0) {
+      try {
+        imageResponse = await uploadAssetImageToS3(images);
+        console.log(imageResponse);
+      } catch (e) {
+        console.log(e);
+        Alert.alert('이미지 업로드에 실패했습니다.');
+        return;
+      }
+    }
+
+    try {
+      const response = await updatePost({
+        postId: postId!,
+        roomId: 17,
+        title: '6',
+        content: postDescription,
+        imageList: imageResponse.imgUrlList,
+      });
+
+      console.log(response);
+      setNeedRefresh(true);
+      setNeedsPostRefresh(true);
+      navigation.goBack();
+    } catch (e: any) {
+      console.log(e.response.data);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (mode === 'create') {
+      createMyPost();
+    } else {
+      updateMyPost();
     }
   };
 
@@ -172,7 +236,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       </View>
       <View className="flex">
         <Pressable
-          onPress={createMyPost}
+          onPress={handleSubmit}
           className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
         >
           <Text className="text-base font-semibold text-center text-white">확인</Text>
