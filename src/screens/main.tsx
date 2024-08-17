@@ -28,7 +28,6 @@ const MainScreen = () => {
           shadowOpacity: 0.25,
           shadowRadius: 8,
           borderTopColor: 'white',
-          position: 'absolute',
         },
       }}
     >

@@ -21,6 +21,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('PersonalInfoInputScreen');
   };
 
+  const toOnboard = () => {
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
   const signInWithKakao = async (): Promise<void> => {
     await login();
 
@@ -82,7 +86,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={toOnBoard}
+            onPress={toOnboard}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-base font-semibold text-center text-white">Apple로 계속하기</Text>

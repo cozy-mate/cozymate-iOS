@@ -15,6 +15,7 @@ import Example3 from '@assets/roomMate/example/3.svg';
 import Example4 from '@assets/roomMate/example/4.svg';
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [value, setValue] = useState<string[]>([]);
@@ -109,7 +110,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           />
         </View>
 
-        <View className="flex pb-20 drop-shadow-topShadow">
+        <View className="flex drop-shadow-topShadow">
           <SameAnswerContainer users={users} setUsers={setUsers} toUserDetail={toUserDetail} />
           <SimilarLifeStyleContainer users={users} setUsers={setUsers} />
         </View>

@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import BackHeader from 'src/layout/backHeader';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
+import useCompletionPercentage from '@hooks/useCompletionPercentage';
 
 type Item = {
   index: number;
@@ -65,6 +66,35 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     cleaningFrequency !== '' &&
     personality !== '' &&
     mbti !== '';
+
+  const totalFields = 22;
+  const progressWidth = useCompletionPercentage({
+    fields: {
+      wakeUpMeridian,
+      wakeUpTime,
+      sleepingMeridian,
+      sleepingTime,
+      turnOffMeridian,
+      turnOffTime,
+      smokingState,
+      sleepingHabit,
+      airConditioningIntensity,
+      heatingIntensity,
+      lifePattern,
+      intimacy,
+      canShare,
+      isPlayGame,
+      isPhoneCall,
+      studying,
+      intake,
+      cleanSensitivity,
+      noiseSensitivity,
+      cleaningFrequency,
+      personality,
+      mbti,
+    },
+    totalFields,
+  });
 
   const toPrev = () => {
     navigation.navigate('BasicLifeStyleScreen');
@@ -375,7 +405,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
         leftPressFunc={toPrev}
         rightPressFunc={toNext}
         canNext={canNext}
-        width={210}
+        width={progressWidth}
       />
       <ScrollView className="px-5">
         {showMbti && (

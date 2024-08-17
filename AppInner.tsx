@@ -40,6 +40,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
 import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 
+import CreateTodoScreen from 'src/screens/todoList/createTodo';
+
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const loginStack = createNativeStackNavigator<LoginStackParamList>();
 
@@ -79,6 +81,7 @@ function AppInner() {
           <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
 
           <loginStack.Screen name="TodoListScreen" component={TodoListScreen} />
+          <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
 
           <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
           <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
