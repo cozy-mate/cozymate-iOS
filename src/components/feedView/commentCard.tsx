@@ -35,7 +35,7 @@ const CommentCard = (props: CommentCardProps) => {
 
   return (
     <View className="w-full my-5">
-      <View className="flex flex-row w-full items-center justify-between mb-2">
+      <View className="flex flex-row items-center justify-between w-full mb-2">
         <View className="flex flex-row items-center justify-start space-x-2">
           {loadingProfile && (
             <SkeletonPlaceholder>
@@ -48,7 +48,7 @@ const CommentCard = (props: CommentCardProps) => {
             onLoadEnd={handleProfileImageLoadEnd}
             source={{ uri: PERSONA_IMAGE_URL }}
           />
-          <Text className="text-emphasizedFont font-semibold text-sm">
+          <Text className="text-sm font-semibold text-emphasizedFont">
             {comment.writer.nickname}
           </Text>
         </View>
@@ -59,8 +59,8 @@ const CommentCard = (props: CommentCardProps) => {
         )}
       </View>
       <View className="flex flex-col justify-start">
-        <Text className="text-basicFont font-medium text-sm mb-1">{comment.content}</Text>
-        <Text className="text-disabledFont font-medium text-sm">
+        <Text className="mb-1 text-sm font-medium text-basicFont">{comment.content}</Text>
+        <Text className="text-sm font-medium text-disabledFont">
           {postTimeUtil(comment.createdAt)}
         </Text>
       </View>
@@ -69,6 +69,7 @@ const CommentCard = (props: CommentCardProps) => {
         modalPosition={modalPosition}
         onPressModalClose={onPressModalClose}
         onSubmit={handleButtonModalOpen}
+        onEdit={() => {}}
       />
       <ButtonModal
         title="게시물 삭제하시나요?"

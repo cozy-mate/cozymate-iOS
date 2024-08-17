@@ -1,13 +1,14 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   Image,
   FlatList,
   TextInput,
-  Pressable,
+  TouchableOpacity,
   RefreshControl,
   Animated,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -32,15 +33,43 @@ import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useFeedModal } from '@hooks/useFeedModal';
 import { useButtonModal } from '@hooks/useButtonModal';
 import ButtonModal from '@components/common/buttonModal';
+import { deletePost, getDetailPost } from '@server/api/post';
+import { useRecoilState } from 'recoil';
+import { postDetailRefreshState, roomInfoState } from '@recoil/recoil';
+import { useFocusEffect } from '@react-navigation/native';
+import { createComment } from '@server/api/comment';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
+  // TODO : Back Nav 넣기
+  // TODO : 복잡하게 섞인 코드 정리하기
+  // TODO : Comment시 자연스럼게 Refresh되도록 수정
+  // TODO : RecoilState RoomId 업데이트 되면 적용하기
+
   const { postId } = props.route.params;
-  const [post, setPost] = React.useState<PostCardType>(examplePostList[postId - 1]);
-  const [commentList, setCommentList] = React.useState<CommentType[]>(exampleCommentList);
+  const { navigation } = props;
+  const [post, setPost] = React.useState<PostCardType>({
+    id: 0,
+    writer: {
+      id: 0,
+      nickname: '',
+      persona: 0,
+    },
+    content: '',
+    imageList: [],
+    commentCount: 0,
+    createdAt: '',
+  });
+  const [commentList, setCommentList] = React.useState<CommentType[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [comment, setComment] = React.useState<string>('');
   const [isMyPost, setIsMyPost] = React.useState<boolean>(true);
   const opacity = useRef(new Animated.Value(1)).current;
+
+  const [roomState, setRoomState] = useRecoilState(roomInfoState);
+
+  const [needsPostDetailRefresh, setNeedsPostDetailRefresh] =
+    useRecoilState(postDetailRefreshState);
 
   const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
@@ -68,6 +97,56 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     setComment(comment);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      if (needsPostDetailRefresh) {
+        onRefresh();
+        setNeedsPostDetailRefresh(false);
+      }
+    }, [needsPostDetailRefresh]),
+  );
+
+  const getMyPost = async () => {
+    setLoading(true);
+    try {
+      const response = await getDetailPost(17, postId);
+      const post = {
+        id: response.result.id,
+        writer: {
+          id: 0,
+          nickname: response.result.nickname,
+          persona: response.result.persona,
+        },
+        content: response.result.content,
+        imageList: response.result.imageList,
+        commentCount: 0,
+        createdAt: response.result.createdAt,
+      };
+      const commentList = response.result.commentList.map((comment: any) => ({
+        id: comment.id,
+        content: comment.content,
+        writer: {
+          id: 0,
+          nickname: comment.nickname,
+          persona: comment.persona,
+        },
+        createdAt: comment.createdAt,
+      }));
+      setPost(post);
+      setCommentList(commentList);
+    } catch (e: any) {
+      console.log(e.response.data);
+      Alert.alert('게시물을 불러오는데 실패했습니다.');
+      navigation.goBack();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMyPost();
+  }, []);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     opacity.setValue(1);
@@ -82,7 +161,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       imageList: [],
       commentCount: 0,
       createdAt: '',
-      updatedAt: '',
     });
     setCommentList([]);
 
@@ -93,25 +171,68 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         useNativeDriver: true,
       }).start(() => {
         setRefreshing(false);
-        setPost(examplePostList[postId - 1]);
-        setCommentList(exampleCommentList);
+        getMyPost();
       });
-    }, 2000);
+    }, 1000);
   }, []);
 
+  const onDelete = async () => {
+    const response = await deletePost(17, postId);
+    if (response) {
+      navigation.goBack();
+    } else {
+      console.log('delete error');
+    }
+  };
+
+  const onEdit = () => {
+    navigation.navigate('FeedCreateScreen', {
+      mode: 'edit',
+      postId,
+    });
+  };
+
+  const [commentPosting, setCommentPosting] = React.useState<boolean>(false);
+
+  const createMyComment = async () => {
+    if (comment === '') {
+      return;
+    }
+
+    const data = {
+      roomId: 17,
+      postId: postId,
+      content: comment,
+    };
+    setCommentPosting(true);
+    try {
+      const response = await createComment(data);
+      if (response) {
+        onRefresh();
+      }
+      setComment('');
+    } catch (e: any) {
+      console.log(e.response.data);
+      Alert.alert('댓글을 작성하는데 실패했습니다.');
+    } finally {
+      setCommentPosting(false);
+    }
+  };
+
   return (
-    <View className="bg-white w-full h-full">
-      <SafeAreaView className="bg-white w-full" />
+    <View className="w-full h-full bg-white">
+      <SafeAreaView className="w-full bg-white" />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View key={post.id} className="flex flex-col w-full bg-white p-4 px-5">
-          <View className="flex flex-row w-full items-center justify-between">
+        <View key={post.id} className="flex flex-col w-full p-4 px-5 bg-white">
+          <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-row items-center justify-start space-x-2">
               {loadingProfile ||
-                (refreshing && (
+                refreshing ||
+                (loading && (
                   <Animated.View style={{ opacity }}>
                     <SkeletonPlaceholder>
                       <View style={{ width: 32, height: 32, borderRadius: 16 }} />
@@ -125,22 +246,22 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 source={{ uri: PERSONA_IMAGE_URL }}
               />
               <View className="flex flex-row items-start">
-                {refreshing ? (
+                {refreshing || loading ? (
                   <SkeletonPlaceholder>
                     <View style={{ width: 'auto', height: 'auto', borderRadius: 4, padding: 0 }}>
-                      <Text className="text-emphasizedFont font-semibold text-sm">
+                      <Text className="text-sm font-semibold text-emphasizedFont">
                         {post.writer.nickname}
                       </Text>
                     </View>
                   </SkeletonPlaceholder>
                 ) : (
-                  <Text className="text-emphasizedFont font-semibold text-sm">
+                  <Text className="text-sm font-semibold text-emphasizedFont">
                     {post.writer.nickname}
                   </Text>
                 )}
               </View>
             </View>
-            {isMyPost && !refreshing && (
+            {isMyPost && !refreshing && !loading && (
               <View
                 className="flex items-center justify-center"
                 ref={dotIconRef}
@@ -150,12 +271,13 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               </View>
             )}
           </View>
-          {refreshing && (
-            <SkeletonPlaceholder>
-              <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
-            </SkeletonPlaceholder>
-          )}
-          <Text className="text-basicFont font-medium text-sm mt-2 mb-3">{post.content}</Text>
+          {refreshing ||
+            (loading && (
+              <SkeletonPlaceholder>
+                <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
+              </SkeletonPlaceholder>
+            ))}
+          <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
           {post.imageList.length > 0 && (
             <View onLayout={onLayout} className="w-full">
               <FlatList
@@ -226,15 +348,15 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
           >
             <View className="flex flex-row items-center justify-between space-x-2">
               <ChatIcon />
-              <Text className="text-disabledFont font-normal text-xs">{post.commentCount}</Text>
+              <Text className="text-xs font-normal text-disabledFont">{post.commentCount}</Text>
             </View>
             <View>
-              {refreshing ? (
+              {refreshing || loading ? (
                 <SkeletonPlaceholder>
                   <View style={{ width: 100, height: 20, borderRadius: 10 }} />
                 </SkeletonPlaceholder>
               ) : (
-                <Text className="text-disabledFont font-normal text-xs">
+                <Text className="text-xs font-normal text-disabledFont">
                   {postTimeUtil(post.createdAt)}
                 </Text>
               )}
@@ -242,9 +364,9 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
           </View>
         </View>
         <View className="mt-2 w-full border-t-2 border-[#F4F4F4]"></View>
-        <CommentList commentCards={commentList} />
+        <CommentList key={comment} commentCards={commentList} />
       </ScrollView>
-      <View className="absolute w-full bottom-0">
+      <View className="absolute bottom-0 z-10 w-full">
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
@@ -261,11 +383,14 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             placeholder="댓글을 입력해주세요"
             value={comment}
             onChangeText={handleCommentChange}
-            className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1 mb-10 mt-2"
+            className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1 mb-10 mt-2 z-10"
           />
-          <Pressable className="mb-7">
+          <TouchableOpacity
+            className={`z-10 mb-7 ${loading || commentPosting || refreshing ? 'disabled' : ''}`}
+            onPress={createMyComment}
+          >
             <SendCommentIcon />
-          </Pressable>
+          </TouchableOpacity>
         </LinearGradient>
       </View>
       <SafeAreaView className="w-full" />
@@ -273,6 +398,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         isModalVisible={isModalVisible}
         modalPosition={modalPosition}
         onSubmit={handleButtonModalOpen}
+        onEdit={onEdit}
         onPressModalClose={onPressModalClose}
       />
       <ButtonModal
@@ -282,7 +408,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         submitText="삭제"
         isVisible={isButtonModalVisible}
         closeModal={handleButtonModalClose}
-        onSubmit={() => {}}
+        onSubmit={onDelete}
         buttonCount={2}
       />
     </View>
