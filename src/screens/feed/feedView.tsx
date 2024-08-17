@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -32,15 +32,31 @@ import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useFeedModal } from '@hooks/useFeedModal';
 import { useButtonModal } from '@hooks/useButtonModal';
 import ButtonModal from '@components/common/buttonModal';
+import { getDetailPost } from '@server/api/post';
+import { useRecoilState } from 'recoil';
+import { roomInfoState } from '@recoil/recoil';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
   const { postId } = props.route.params;
-  const [post, setPost] = React.useState<PostCardType>(examplePostList[postId - 1]);
-  const [commentList, setCommentList] = React.useState<CommentType[]>(exampleCommentList);
+  const [post, setPost] = React.useState<PostCardType>({
+    id: 0,
+    writer: {
+      id: 0,
+      nickname: '',
+      persona: 0,
+    },
+    content: '',
+    imageList: [],
+    commentCount: 0,
+    createdAt: '',
+  });
+  const [commentList, setCommentList] = React.useState<CommentType[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [comment, setComment] = React.useState<string>('');
   const [isMyPost, setIsMyPost] = React.useState<boolean>(true);
   const opacity = useRef(new Animated.Value(1)).current;
+
+  const [roomState, setRoomState] = useRecoilState(roomInfoState);
 
   const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
@@ -68,6 +84,38 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     setComment(comment);
   };
 
+  const getMyPost = async () => {
+    const response = await getDetailPost(17, postId);
+    const post = {
+      id: response.result.id,
+      writer: {
+        id: 0,
+        nickname: response.result.nickname,
+        persona: response.result.persona,
+      },
+      content: response.result.content,
+      imageList: response.result.imageList,
+      commentCount: 0,
+      createdAt: response.result.createdAt,
+    };
+    const commentList = response.result.commentList.map((comment: any) => ({
+      id: comment.id,
+      content: comment.content,
+      writer: {
+        id: 0,
+        nickname: comment.nickname,
+        persona: comment.persona,
+      },
+      createdAt: comment.createdAt,
+    }));
+    setPost(post);
+    setCommentList(commentList);
+  };
+
+  useEffect(() => {
+    getMyPost();
+  }, []);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     opacity.setValue(1);
@@ -82,7 +130,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       imageList: [],
       commentCount: 0,
       createdAt: '',
-      updatedAt: '',
     });
     setCommentList([]);
 
@@ -100,15 +147,15 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   }, []);
 
   return (
-    <View className="bg-white w-full h-full">
-      <SafeAreaView className="bg-white w-full" />
+    <View className="w-full h-full bg-white">
+      <SafeAreaView className="w-full bg-white" />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View key={post.id} className="flex flex-col w-full bg-white p-4 px-5">
-          <View className="flex flex-row w-full items-center justify-between">
+        <View key={post.id} className="flex flex-col w-full p-4 px-5 bg-white">
+          <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-row items-center justify-start space-x-2">
               {loadingProfile ||
                 (refreshing && (
@@ -128,13 +175,13 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 {refreshing ? (
                   <SkeletonPlaceholder>
                     <View style={{ width: 'auto', height: 'auto', borderRadius: 4, padding: 0 }}>
-                      <Text className="text-emphasizedFont font-semibold text-sm">
+                      <Text className="text-sm font-semibold text-emphasizedFont">
                         {post.writer.nickname}
                       </Text>
                     </View>
                   </SkeletonPlaceholder>
                 ) : (
-                  <Text className="text-emphasizedFont font-semibold text-sm">
+                  <Text className="text-sm font-semibold text-emphasizedFont">
                     {post.writer.nickname}
                   </Text>
                 )}
@@ -155,7 +202,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
             </SkeletonPlaceholder>
           )}
-          <Text className="text-basicFont font-medium text-sm mt-2 mb-3">{post.content}</Text>
+          <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
           {post.imageList.length > 0 && (
             <View onLayout={onLayout} className="w-full">
               <FlatList
@@ -226,7 +273,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
           >
             <View className="flex flex-row items-center justify-between space-x-2">
               <ChatIcon />
-              <Text className="text-disabledFont font-normal text-xs">{post.commentCount}</Text>
+              <Text className="text-xs font-normal text-disabledFont">{post.commentCount}</Text>
             </View>
             <View>
               {refreshing ? (
@@ -234,7 +281,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                   <View style={{ width: 100, height: 20, borderRadius: 10 }} />
                 </SkeletonPlaceholder>
               ) : (
-                <Text className="text-disabledFont font-normal text-xs">
+                <Text className="text-xs font-normal text-disabledFont">
                   {postTimeUtil(post.createdAt)}
                 </Text>
               )}
@@ -244,7 +291,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         <View className="mt-2 w-full border-t-2 border-[#F4F4F4]"></View>
         <CommentList commentCards={commentList} />
       </ScrollView>
-      <View className="absolute w-full bottom-0">
+      <View className="absolute bottom-0 w-full">
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}

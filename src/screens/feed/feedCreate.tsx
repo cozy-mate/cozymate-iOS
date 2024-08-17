@@ -9,12 +9,16 @@ import PostImage from '@assets/feedCreate/postImage.svg';
 import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
 
 import { FeedCreateScreenProps } from '@type/param/loginStack';
+import { createPost } from '../../server/api/post';
+import { uploadAssetImageToS3, uploadImageToS3 } from '../../server/api/image';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
   const [images, setImages] = React.useState<Asset[]>([]);
+
+  const { navigation } = props;
 
   useEffect(() => {
     // 외부 라이브러리인 DraggleFlatList에서 나오는 경고로,
@@ -33,7 +37,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const pickImages = async () => {
     launchImageLibrary(
-      { mediaType: 'photo', selectionLimit: 0 }, // selectionLimit: 0 -> unlimited selection
+      { mediaType: 'photo', selectionLimit: MAX_IMAGE_COUNT - images.length }, // selectionLimit: 0 -> unlimited selection
       (response) => {
         if (response.didCancel) {
           return;
@@ -50,6 +54,29 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const deleteImage = (index: any) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
+  const createMyPost = async () => {
+    console.log('createMyPost');
+
+    let imageResponse = { imgUrlList: [] };
+
+    if (images.length > 0) {
+      imageResponse = await uploadAssetImageToS3(images);
+    }
+
+    try {
+      const response = await createPost({
+        roomId: 17,
+        title: '6',
+        content: postDescription,
+        imageList: imageResponse.imgUrlList,
+      });
+      console.log(response);
+      navigation.goBack();
+    } catch (e: any) {
+      console.log(e.response.data);
+    }
   };
 
   const renderItem = useCallback(({ item, getIndex, drag }: RenderItemParams<Asset>) => {
@@ -144,7 +171,10 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         />
       </View>
       <View className="flex">
-        <Pressable className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}>
+        <Pressable
+          onPress={createMyPost}
+          className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+        >
           <Text className="text-base font-semibold text-center text-white">확인</Text>
         </Pressable>
       </View>

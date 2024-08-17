@@ -1,6 +1,8 @@
 export interface GetFeedResponse {
-  name: string;
-  description: string;
+  result: {
+    name: string;
+    description: string;
+  };
 }
 
 export interface CreateFeedResponse {

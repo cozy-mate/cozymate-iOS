@@ -17,7 +17,7 @@ export interface GetPostListResponse {
       title: string;
       content: string;
       nickname: string;
-      persona: string;
+      persona: number;
       imageList: string[];
       commentCount: number;
       createdAt: string;
@@ -31,14 +31,14 @@ export interface GetPostDetailResponse {
     title: string;
     content: string;
     nickname: string;
-    persona: string;
+    persona: number;
     imageList: string[];
     commentList: [
       {
         id: number;
         content: string;
         nickname: string;
-        persona: string;
+        persona: number;
       },
     ];
     createdAt: string;
