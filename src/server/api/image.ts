@@ -4,7 +4,6 @@ import { Asset } from 'react-native-image-picker';
 
 // Asset 객체에 대해서만 사용 가능합니다
 export const uploadAssetImageToS3 = async (files: Asset[]) => {
-  console.log(files);
   const formData = new FormData();
   files.forEach((file) => {
     const uri = file.uri || '';

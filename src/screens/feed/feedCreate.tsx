@@ -51,7 +51,6 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setImages(imageList);
       setPostDescription(response.result.content);
     } catch (e: any) {
-      console.log(e.response.data);
       Alert.alert('게시글을 불러오는데 실패했습니다.');
       navigation.goBack();
     }
@@ -99,7 +98,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setNeedRefresh(true);
       navigation.goBack();
     } catch (e: any) {
-      console.log(e.response.data);
+      e.response.data;
     }
   };
 
@@ -109,9 +108,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     if (images.length > 0) {
       try {
         imageResponse = await uploadAssetImageToS3(images);
-        console.log(imageResponse);
       } catch (e) {
-        console.log(e);
         Alert.alert('이미지 업로드에 실패했습니다.');
         return;
       }
@@ -125,8 +122,6 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
-
-      console.log(response);
       setNeedRefresh(true);
       setNeedsPostRefresh(true);
       navigation.goBack();
