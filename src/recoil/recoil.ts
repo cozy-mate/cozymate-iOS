@@ -1,5 +1,13 @@
 import { atom } from 'recoil';
-import { SignUp, LifeStyle, RoomInfo, CreateRoomInfo, InviteCodeRoomInfo, Profile } from './type';
+import {
+  SignUp,
+  LifeStyle,
+  RoomInfo,
+  CreateRoomInfo,
+  InviteCodeRoomInfo,
+  Profile,
+  MyRoom,
+} from './type';
 
 export const signUpState = atom<SignUp>({
   key: 'signup',
@@ -28,9 +36,12 @@ export const loggedInState = atom<boolean>({
   default: false,
 });
 
-export const hasRoomState = atom<boolean>({
+export const hasRoomState = atom<MyRoom>({
   key: 'hasRoom',
-  default: false,
+  default: {
+    hasRoom: false,
+    roomId: 0,
+  },
 });
 
 export const createRoomState = atom<CreateRoomInfo>({

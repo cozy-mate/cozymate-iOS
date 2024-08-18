@@ -4,6 +4,7 @@ export interface DeleteRoomResponse {
 
 export interface GetRoomDataResponse {
   result: {
+    roomId: number;
     name: string;
     inviteCode: string;
     profileImage: number;

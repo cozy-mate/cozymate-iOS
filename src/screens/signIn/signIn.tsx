@@ -6,15 +6,17 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
-import { loggedInState, profileState } from '@recoil/recoil';
+import { hasRoomState, loggedInState, profileState } from '@recoil/recoil';
 
 import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
 import { getMyProfile, signIn } from '@server/api/member';
 import { setAccessToken } from '@utils/token';
+import { checkHasRoom } from '@server/api/room';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setMyProfile] = useRecoilState(profileState);
+  const [, setHasRoom] = useRecoilState(hasRoomState);
 
   const toOnBoard = () => {
     setLoggedIn(true);
@@ -34,6 +36,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
       const signInResponse = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
       const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
+
+      console.log(accessToken);
+
       await setAccessToken(accessToken);
 
       const getProfileResponse = await getMyProfile();
@@ -49,6 +54,15 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');
       } else {
+        const roomCheckResponse = await checkHasRoom();
+        const roomId = roomCheckResponse.result.roomId;
+
+        console.log(roomId);
+
+        if (roomId !== 0) {
+          setHasRoom({ hasRoom: true, roomId: roomId });
+        }
+
         setLoggedIn(true);
       }
     } catch (error) {

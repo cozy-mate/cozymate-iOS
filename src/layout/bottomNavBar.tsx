@@ -39,7 +39,7 @@ export const RoomMate: React.FC<TabComponentProps> = ({ focused }) => {
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <SelectedIcon /> : <NotSelectedIcon />}
-      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">룸메</Text>
+      <Text className="text-[10px] font-medium text-basicFont mt-[6px]">룸메이트</Text>
     </View>
   );
 };

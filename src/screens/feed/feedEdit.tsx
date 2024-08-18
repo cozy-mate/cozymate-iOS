@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, TextInput, Text, Pressable, Alert } from 'react-native';
 
-import { FeedEditScreenProps } from '@type/param/loginStack';
+import { FeedEditScreenProps } from '@type/param/roomStack';
 import { createFeed, getFeedData, updateFeed } from '@server/api/feed';
 import { useRecoilState } from 'recoil';
 import { roomInfoState } from '@recoil/recoil';

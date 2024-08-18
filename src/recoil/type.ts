@@ -14,6 +14,11 @@ export type Profile = {
   persona: number;
 };
 
+export type MyRoom = {
+  hasRoom: boolean;
+  roomId: number;
+};
+
 export type CreateRoomInfo = {
   name: string;
   profileImage: number;

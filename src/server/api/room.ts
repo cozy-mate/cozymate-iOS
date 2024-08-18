@@ -25,15 +25,8 @@ export const deleteRoom = async (roomId: number, memberId: number): Promise<Dele
 };
 
 // 방 정보 조회
-export const getRoomData = async (
-  roomId: number,
-  memberId: number,
-): Promise<GetRoomDataResponse> => {
-  const response = await GetAxiosInstance<GetRoomDataResponse>(`/rooms/${roomId}}`, {
-    params: {
-      memberId: memberId,
-    },
-  });
+export const getRoomData = async (roomId: number): Promise<GetRoomDataResponse> => {
+  const response = await GetAxiosInstance<GetRoomDataResponse>(`/rooms/${roomId}`);
 
   return response.data;
 };

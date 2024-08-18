@@ -1,8 +1,9 @@
 import CustomCheckInputBox from '@components/common/customCheckInputBox';
 import CustomTextarea from '@components/common/customTextarea';
 import CustomTextInputBox from '@components/common/customTextInputBox';
+import CustomCalendar from '@components/todoList/customCalendar';
 import DaySelect from '@components/todoList/daySelect';
-import { CreateTodoScreenProps } from '@type/param/loginStack';
+import { CreateTodoScreenProps } from '@type/param/roomStack';
 import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import BackNav from 'src/layout/backNav';
@@ -68,12 +69,15 @@ const CreateTodoScreen = ({ navigation }: CreateTodoScreenProps) => {
         </View>
 
         {type == 'todo' && (
-          <CustomTextInputBox
-            title="할 일을 입력해주세요"
-            value={todoContent}
-            setValue={setTodoContent}
-            placeholder="할 일을 입력해주세요"
-          />
+          <>
+            <CustomTextInputBox
+              title="할 일을 입력해주세요"
+              value={todoContent}
+              setValue={setTodoContent}
+              placeholder="할 일을 입력해주세요"
+            />
+            <CustomCalendar />
+          </>
         )}
 
         {type == 'role' && (

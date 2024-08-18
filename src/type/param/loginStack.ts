@@ -1,12 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type LoginStackParamList = {
-  MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
+  MainScreen: { screen: keyof LoginTabNavigatorParamList } | undefined;
   CozyHomeScreen: undefined;
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;
 
-  RoomMainScreen: undefined;
+  // RoomMainScreen: undefined;
   CreateRoomScreen: undefined;
   TodoListScreen: undefined;
   SchoolAuthenticationScreen: undefined;
@@ -33,7 +33,7 @@ export type LoginStackParamList = {
   MyPageScreen: undefined;
 };
 
-export type TabNavigatorParamList = {
+export type LoginTabNavigatorParamList = {
   CozyHomeScreen: undefined;
   TodoListScreen: undefined;
   FeedMainScreen: undefined;
@@ -98,21 +98,22 @@ export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
   'AdditionalLifeStyleScreen'
 >;
 
-// 방 메인 스크린 (코지봇 알림)
-export type RoomMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMainScreen'>;
+// // 방 메인 스크린 (코지봇 알림)
+// export type RoomMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMainScreen'>;
 
-// 투두리스트 스크린
-export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'TodoListScreen'>;
-export type CreateTodoScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateTodoScreen'>;
+// // 투두리스트 스크린
+// export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'TodoListScreen'>;
+// export type CreateTodoScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateTodoScreen'>;
 
 export type RoomMateScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMateScreen'>;
+
 export type UserDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'UserDetailScreen'>;
 
-// 피드 스크린
-export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedMainScreen'>;
-export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
-export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
-export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;
+// // 피드 스크린
+// export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedMainScreen'>;
+// export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
+// export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
+// export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;
 
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;

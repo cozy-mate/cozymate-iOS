@@ -19,7 +19,7 @@ import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
 import DotIcon from '@assets/feedView/dotIcon.svg';
 
-import { FeedViewScreenProps } from '@type/param/loginStack';
+import { FeedViewScreenProps } from '@type/param/roomStack';
 import { CommentType, PostCardType } from '@type/feed';
 
 import { exampleCommentList, examplePostList } from '@utils/mockData/exampleList';

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/roomMain/background.svg';
 
@@ -7,53 +7,44 @@ import LightIcon from '@assets/roomMain/icon.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
-import StarImage from '@assets/cozyHome/star.svg';
-
 import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 
-import { RoomMainScreenProps } from '@type/param/loginStack';
+import { RoomMainScreenProps } from '@type/param/roomStack';
+import { getRoomLog } from '@server/api/room-log';
+import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
-import { hasRoomState } from '@recoil/recoil';
+import { getRoomData } from '@server/api/room';
+import Config from 'react-native-config';
+import { onCopyAddress } from '@utils/clipboard';
+
+interface LogItem {
+  content: string;
+  createdAt: string;
+}
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
-  const [, setHasRoom] = useRecoilState(hasRoomState);
+  const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
-  const [roomName, setRoomName] = useState<string>('피그말리온');
-  const [roomCode, setRoomCode] = useState<string>('QUIIRKD');
+  const [logData, setLogData] = useState<LogItem[]>([]);
 
-  const [notificationData, setNotificationData] = useState([
-    {
-      who: '피그말리온',
-      message: '의 역사적인 하루가 시작됐어요!',
-      date: '06/05 17:50',
-    },
-    {
-      who: '더기',
-      message: '님이 빨래를 완료했어요! 얼른 칭찬해주세요!',
-      date: '06/05 17:50',
-    },
-    {
-      who: '델로',
-      message: '님이 빨래 및 건조를 완료했어요! 얼른 칭찬해주세요!',
-      date: '06/07 14:31',
-    },
-    {
-      who: '너진',
-      message: '님이 [델로한테 잘하기]를 완료했어요!',
-      date: '06/05 22:50',
-    },
-    {
-      who: '제이',
-      message: '님이 화장실 청소를 까먹은 거 같아요 ㅠㅠ',
-      date: '06/04 09:31',
-    },
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const infoResponse = await getRoomData(myRoom.roomId);
+        console.log(infoResponse);
 
-  const toMain = () => {
-    setHasRoom(false);
-    navigation.navigate('MainScreen');
-  };
+        setRoomInfo(infoResponse.result);
+
+        const logResponse = await getRoomLog(myRoom.roomId);
+        setLogData(logResponse.result.result);
+      } catch (error) {
+        console.error('Error fetching room data:', error);
+      }
+    };
+    fetchData();
+  }, [myRoom.roomId, setRoomInfo, setLogData]);
 
   return (
     <View className="flex-1 bg-[#CADFFF]">
@@ -66,7 +57,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
             <Pressable>
               <ChatIcon />
             </Pressable>
-            <Pressable onPress={toMain}>
+            <Pressable>
               <NotificationIcon />
             </Pressable>
           </View>
@@ -76,14 +67,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
           <View className="flex flex-row">
             <Text className="mb-2 text-lg font-semibold text-main1">
-              {roomName}
+              {roomInfo.name}
               <Text className="text-basicFont">의 방이에요!</Text>
             </Text>
           </View>
 
-          <Pressable className="flex">
+          <Pressable className="flex" onPress={() => onCopyAddress(roomInfo.inviteCode)}>
             <View className="flex flex-row items-center justify-start px-4 py-2 bg-white opacity-60 rounded-xl">
-              <Text className="text-xs font-medium text-colorFont">{roomCode}</Text>
+              <Text className="text-xs font-medium text-colorFont">{roomInfo.inviteCode}</Text>
               <CopyIcon />
             </View>
           </Pressable>
@@ -92,30 +83,41 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="flex-1 flex-col bg-white px-5 pt-[21px] pb-5 rounded-t-[40px] relative">
         <View className="absolute top-[-110px] right-2">
-          <StarImage />
+          <Image
+            source={{
+              uri: `${Config.S3_IMAGE_URL}/persona/png/${roomInfo.profileImage}.png`,
+            }}
+            style={{ width: 140, height: 140 }}
+            resizeMode="cover"
+          />
         </View>
         <ScrollView>
-          {/* 역순 출력 (서버에서 출력 해주는 데이터에 맞게 수정해야됨) */}
-          {notificationData
-            .slice()
-            .reverse()
-            .map((data, index) => (
-              <View
-                key={index}
-                className={`px-1 py-5 border-b-[1px] border-b-[#F2F1FA] ${
-                  index === notificationData.length - 1 && 'border-b-0'
-                }`}
-              >
-                <CozyBotIcon />
-                <View className="mt-2">
-                  <View className="flex flex-row mb-[2px]">
-                    <Text className="text-sm font-semibold text-main1">{data.who}</Text>
-                    <Text className="text-sm font-medium text-basicFont">{data.message}</Text>
-                  </View>
-                  <Text className="text-xs font-normal text-disabledFont">{data.date}</Text>
+          {logData.map((data, index) => (
+            <View
+              key={index}
+              className={`px-1 py-5 border-b-[1px] border-b-[#F2F1FA] ${
+                index === logData.length - 1 && 'border-b-0'
+              }`}
+            >
+              <CozyBotIcon />
+              <View className="mt-2">
+                <View className="flex flex-row mb-[2px]">
+                  {/* 분리된 content를 부분적으로 스타일링하여 출력 */}
+                  {data.content.split(/{(.*?)}/).map((part, i) => (
+                    <Text
+                      key={i}
+                      className={`text-sm font-medium ${
+                        i % 2 === 1 ? 'text-main1 font-semibold' : 'text-basicFont'
+                      }`}
+                    >
+                      {part}
+                    </Text>
+                  ))}
                 </View>
+                <Text className="text-xs font-normal text-disabledFont">{data.createdAt}</Text>
               </View>
-            ))}
+            </View>
+          ))}
         </ScrollView>
       </View>
     </View>

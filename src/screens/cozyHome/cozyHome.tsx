@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
+import HomeBack from '@assets/cozyHome/homeBack.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
@@ -34,21 +35,22 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
 
   const isActive = true;
 
-  const handleHasRoom = () => {
-    setHasRoom(true);
-    navigation.navigate('RoomMainScreen');
-  };
+  // const handleHasRoom = () => {
+  //   setHasRoom(true);
+  //   navigation.navigate('RoomMainScreen');
+  // };
 
   return (
     <Fragment>
-      <SafeAreaView className="bg-[#F5F9FF]" />
+      <SafeAreaView className="bg-[#CADFFF]" />
       <SafeAreaView className="flex-col flex-1 bg-white">
-        <View className="flex pt-4 bg-[#F5F9FF]">
+        <View className="flex pt-4 bg-[#CADFFF]">
+          <HomeBack style={{ position: 'absolute' }} />
           <View className="flex flex-row justify-between items-center px-5 mb-[33px]">
             <Pressable>
-              <Text className="text-2xl font-extrabold">
-                <Text className="text-[#FFE28B]">cozy</Text>
-                <Text className="text-[#BDD8FF]">mate</Text>
+              <Text className="text-2xl font-extrabold font-['Cafe24_Meongi_B']">
+                <Text className="text-main2">cozy</Text>
+                <Text className="text-main1">mate</Text>
               </Text>
             </Pressable>
 
@@ -56,7 +58,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
               <Pressable>
                 <ChatIcon />
               </Pressable>
-              <Pressable onPress={handleHasRoom}>
+              <Pressable>
                 <NotificationIcon />
               </Pressable>
             </View>
@@ -68,7 +70,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
             </Text>
 
             <Pressable onPress={toSchoolAuthentication}>
-              <View className="rounded-[81px] bg-sub1 px-6 py-3">
+              <View className="rounded-[81px] bg-white px-6 py-3">
                 <Text className="text-xs font-semibold text-main1">룸메이트 구하러 가기</Text>
               </View>
             </Pressable>

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import NavBar from '@components/navBar';
 
-import { TodoListScreenProps } from '@type/param/loginStack';
+import { TodoListScreenProps } from '@type/param/roomStack';
 
 import Background from '@assets/background.svg';
 import SettingIcon from '@assets/todoList/settingIcon.svg';
@@ -29,6 +29,7 @@ interface TodoItem {
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const [isTodo, setIsTodo] = useState<boolean>(true);
+
   const [myTodoData, setMyTodoData] = useState<TodoItem[]>(dummyData.myTodoList);
 
   const { bottom } = useSafeAreaInsets();
