@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, Fragment } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
 
@@ -14,6 +14,7 @@ import { feedRefreshState, roomInfoState } from '@recoil/recoil';
 import { getFeedData } from '@server/api/feed';
 import PostCard from '@components/feedMain/postCard';
 import { getPostList } from '@server/api/post';
+import { get } from 'axios';
 
 const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   // TODO : 복잡하게 섞인 코드 정리하기
@@ -57,7 +58,6 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   }, []);
 
   useEffect(() => {
-    console.log('needsRefresh:', needsRefresh);
     if (needsRefresh) {
       setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
       handleRefresh();
@@ -65,8 +65,8 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   }, [needsRefresh]);
 
   const handleRefresh = async () => {
-    await getFeedInfo();
-    await getPosts(0);
+    getFeedInfo();
+    getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
     setNeedsRefresh(false);
   };
@@ -131,6 +131,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   };
 
   const onRefresh = () => {
+    getFeedInfo();
     setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
     getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
@@ -174,7 +175,8 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   );
 
   return (
-    <SafeAreaView className="relative w-full h-full pt-8 bg-main3">
+    <Fragment>
+      <SafeAreaView />
       <FlatList
         data={postList}
         renderItem={({ item }) => <PostCard post={item} toFeedView={toFeedView} />}
@@ -197,7 +199,6 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
-          paddingBottom: 50,
           width: '100%',
           paddingHorizontal: 20,
         }}
@@ -214,7 +215,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
           <PostEdit className="" />
         </Pressable>
       </View>
-    </SafeAreaView>
+    </Fragment>
   );
 };
 

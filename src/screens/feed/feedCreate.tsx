@@ -1,6 +1,17 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, View, Text, TouchableOpacity, Animated, LogBox, Alert } from 'react-native';
+import {
+  Pressable,
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  LogBox,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
@@ -189,55 +200,57 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
-      <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
-        <TouchableOpacity
-          className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
-          onPress={pickImages}
-        >
-          <PostImage className="mb-2" />
-          <View className="flex flex-row items-center justify-center w-full">
-            <Text
-              className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
-            >{`${images.length}/`}</Text>
-            <Text className={`text-sm text-disabledFont`}>{`${MAX_IMAGE_COUNT}`}</Text>
-          </View>
-        </TouchableOpacity>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          <DraggableFlatList
-            data={images}
-            renderItem={renderItem}
-            keyExtractor={(item) => `draggable-${item.uri}`}
-            horizontal={true}
-            onDragEnd={({ data }) => setImages(data)}
-            className="flex h-full"
-            contentContainerStyle={{
-              alignItems: 'center',
-              margin: 8,
-            }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+        <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
+          <TouchableOpacity
+            className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
+            onPress={pickImages}
+          >
+            <PostImage className="mb-2" />
+            <View className="flex flex-row items-center justify-center w-full">
+              <Text
+                className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
+              >{`${images.length}/`}</Text>
+              <Text className={`text-sm text-disabledFont`}>{`${MAX_IMAGE_COUNT}`}</Text>
+            </View>
+          </TouchableOpacity>
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <DraggableFlatList
+              data={images}
+              renderItem={renderItem}
+              keyExtractor={(item) => `draggable-${item.uri}`}
+              horizontal={true}
+              onDragEnd={({ data }) => setImages(data)}
+              className="flex h-full"
+              contentContainerStyle={{
+                alignItems: 'center',
+                margin: 8,
+              }}
+            />
+          </ScrollView>
+        </View>
+        <View className="flex-col items-center justify-start flex-1 mb-4">
+          <TextInput
+            placeholder="내용를 입력해주세요"
+            value={postDescription}
+            onChangeText={valueHandleDescriptionChange}
+            multiline={true}
+            className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
+            textAlignVertical="top"
+            numberOfLines={20}
           />
-        </ScrollView>
-      </View>
-      <View className="flex-col items-center justify-start flex-1 mb-4">
-        <TextInput
-          placeholder="내용를 입력해주세요"
-          value={postDescription}
-          onChangeText={valueHandleDescriptionChange}
-          multiline={true}
-          className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
-          textAlignVertical="top"
-          numberOfLines={20}
-        />
-      </View>
-      <View className="flex">
-        <Pressable
-          onPress={handleSubmit}
-          className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
-        >
-          <Text className="text-base font-semibold text-center text-white">확인</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+        </View>
+        <View className="flex">
+          <Pressable
+            onPress={handleSubmit}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+          >
+            <Text className="text-base font-semibold text-center text-white">작성</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
