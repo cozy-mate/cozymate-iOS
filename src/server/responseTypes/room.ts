@@ -10,6 +10,21 @@ export interface GetRoomDataResponse {
   };
 }
 
+export interface GetMateListsResponse {
+  result: {
+    memberId: number;
+    nickname: string;
+  }[];
+}
+
+export interface GetInviteRequestResponse {
+  result: {
+    roomId: number;
+    managerNickname: string;
+    roomName: string;
+  };
+}
+
 export interface GetRoomDataByInviteCodeResponse {
   result: {
     roomId: number;
@@ -19,7 +34,21 @@ export interface GetRoomDataByInviteCodeResponse {
   };
 }
 
+export interface CheckHasRoomResponse {
+  result: {
+    roomId: number;
+  };
+}
+
 export interface JoinRoomResponse {
+  result: string;
+}
+
+export interface RequestInviteResponse {
+  result: string;
+}
+
+export interface AcceptInviteResponse {
   result: string;
 }
 
