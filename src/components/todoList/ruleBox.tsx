@@ -20,7 +20,7 @@ const RuleBox: React.FC<RuleBoxProps> = ({ ruleData }) => {
           <View>
             <Text className="text-sm font-medium text-basicFont">{rule.content}</Text>
             {rule.memo.trim() !== '' ? (
-              <Text className="text-[10px] font-medium text-disabledFont mt-0.5">{rule.memo}</Text>
+              <Text className="text-xs font-medium text-disabledFont mt-0.5">{rule.memo}</Text>
             ) : null}
           </View>
         </View>

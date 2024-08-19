@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TextInput,
-  TextInputSubmitEditingEventData,
-  View,
-} from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 
 interface CustomTextInputBoxProps {
   title: string;
@@ -47,18 +40,18 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
     }
   };
 
-  const handleSubmitEditing = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-    if (onEnterPress && value) {
-      onEnterPress();
-    }
-  };
+  // const handleSubmitEditing = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+  //   if (onEnterPress && value) {
+  //     onEnterPress();
+  //   }
+  // };
 
   return (
     <View className="mb-12">
       <Text
         className={`${
           isFocused ? 'text-main1' : 'text-emphasizedFont'
-        } text-base font-semibold px-1 mb-2`}
+        } text-lg font-semibold px-1 mb-2`}
       >
         {title}
       </Text>
@@ -66,10 +59,10 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
         <TextInput
           ref={inputRef}
           value={value}
-          onChangeText={valueHandleChange}
-          onFocus={() => setIsFocused(true)}
+          onFocus={handleFocus}
           onBlur={handleBlur}
-          onSubmitEditing={handleSubmitEditing}
+          onChangeText={valueHandleChange}
+          // onSubmitEditing={handleSubmitEditing}
           placeholder={placeholder}
           editable={isDisable}
           blurOnSubmit={false}

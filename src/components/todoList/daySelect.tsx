@@ -51,19 +51,21 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
 
   return (
     <View className="flex flex-col">
-      <Text className="mb-3 text-base font-semibold text-basicFont">
-        정해진 요일을 선택해주세요
-      </Text>
-      <View className="flex flex-row gap-2 mb-2">
+      <Text className="mb-3 text-lg font-semibold text-basicFont">정해진 요일을 선택해주세요</Text>
+      <View className="flex flex-row justify-between mb-2">
         {items.map((day) => (
           <View
             key={day.id}
             className={`${
               day.selected ? 'bg-sub1' : 'bg-colorBox'
-            } w-8 h-8 flex justify-center items-center rounded-full`}
+            } w-10 h-10 flex justify-center items-center rounded-full`}
           >
             <Pressable onPress={() => selectDay(day.value)}>
-              <Text className={`${day.selected ? 'text-main1' : 'text-disabledFont'}`}>
+              <Text
+                className={`${
+                  day.selected ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                }`}
+              >
                 {day.value}
               </Text>
             </Pressable>
@@ -73,7 +75,7 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
       <View className="flex flex-row items-center">
         <Pressable onPress={toggleAllDays}>{isEveryDay ? <Selected /> : <NotSelected />}</Pressable>
         <Text
-          className={`${isEveryDay ? 'text-basicFont' : 'text-disabledFont'} text-xs font-medium`}
+          className={`${isEveryDay ? 'text-basicFont' : 'text-disabledFont'} text-sm font-medium`}
         >
           매일
         </Text>
