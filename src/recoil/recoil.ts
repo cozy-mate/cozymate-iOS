@@ -60,6 +60,12 @@ export const roomInfoState = atom<RoomInfo>({
     name: '',
     inviteCode: '',
     profileImage: 0,
+    mateList: [
+      {
+        memberId: 0,
+        nickname: '',
+      },
+    ],
   },
 });
 

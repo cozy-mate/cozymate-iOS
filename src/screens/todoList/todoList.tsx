@@ -20,6 +20,8 @@ import { getDayOfWeek } from '@utils/getDay';
 
 import { dummyData, roleDummyData, ruleDummyData } from './dummyData';
 import MyRoleBox from '@components/todoList/myRoleBox';
+import ControlModal from '@components/feedView/controlModal';
+import { useFeedModal } from '@hooks/useFeedModal';
 
 interface TodoItem {
   id: number;
@@ -56,8 +58,11 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     navigation.navigate('CreateTodoScreen');
   };
 
+  const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
+    useFeedModal();
+
   return (
-    <View className="flex-1 bg-[#CADFFF]">
+    <View className="flex-1 bg-[#CADFFF]" onTouchEnd={onPressModalClose}>
       <Background style={{ position: 'absolute' }} />
       <View className="mt-[76px] mx-5">
         <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
@@ -72,7 +77,17 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                   <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                     <Text className="text-main1">델로</Text>님이{'\n'}해야할 일들을 알려드릴게요!
                   </Text>
-                  <SettingIcon />
+                  <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
+                    <SettingIcon />
+                  </Pressable>
+
+                  <ControlModal
+                    isModalVisible={isModalVisible}
+                    modalPosition={modalPosition}
+                    onSubmit={onPressModalClose}
+                    onEdit={toCreate}
+                    onPressModalClose={onPressModalClose}
+                  />
                 </View>
                 <TodoBox todoData={myTodoData} setMyTodoData={setMyTodoData} />
               </View>

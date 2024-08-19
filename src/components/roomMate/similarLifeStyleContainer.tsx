@@ -43,7 +43,7 @@ const SimilarLifeStyleContainer: React.FC<SimilarLifeStyleContainerProps> = ({
       >
         {users.map((user) => (
           <View
-            className="flex flex-row border-[1px] border-disabled rounded-[12px] mb-3 p-4 w-[122px]"
+            className="flex flex-row border-[1px] border-disabled rounded-[12px] mb-3 p-4 w-[122px] items-center"
             key={user.index}
           >
             <View className="flex-col items-center">

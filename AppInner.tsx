@@ -55,7 +55,7 @@ function AppInner() {
   return (
     <GestureHandlerRootView>
       {loggedIn ? (
-        hasRoom ? (
+        hasRoom.hasRoom ? (
           <roomStack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false }}>
             <roomStack.Screen name="MainScreen" component={HasRoomMainScreen} />
             {/* <roomStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} /> */}

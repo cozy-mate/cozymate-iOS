@@ -144,7 +144,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-col bg-white pt-5 rounded-t-[20px]">
+        <View className="flex flex-col bg-white pt-3 rounded-t-[20px]">
           <View className="flex flex-row items-center justify-center">
             {/* 리스트로 보기 */}
             <Pressable

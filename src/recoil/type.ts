@@ -30,6 +30,10 @@ export type RoomInfo = {
   name: string;
   inviteCode: string;
   profileImage: number;
+  mateList: {
+    memberId: number;
+    nickname: string;
+  }[];
 };
 
 export type InviteCodeRoomInfo = {
