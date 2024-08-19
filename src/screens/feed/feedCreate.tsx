@@ -29,6 +29,7 @@ import {
   postDetailRefreshState,
   roomInfoState,
 } from '@recoil/recoil';
+import BackCleanHeader from 'src/layout/backCleanHeader';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   // TODO : Back Nav 넣기
@@ -206,6 +207,11 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+        <BackCleanHeader
+          onPressBack={() => {
+            navigation.goBack();
+          }}
+        />
         <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
           <TouchableOpacity
             className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"

@@ -12,6 +12,8 @@ import ButtonModal from '@components/common/buttonModal';
 import { useFeedModal } from '@hooks/useFeedModal';
 import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useButtonModal } from '@hooks/useButtonModal';
+import { useRecoilState } from 'recoil';
+import { profileState } from '@recoil/recoil';
 type CommentCardProps = {
   comment: CommentType;
 };
@@ -33,6 +35,8 @@ const CommentCard = (props: CommentCardProps) => {
 
   const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
+  const [profile, setProfile] = useRecoilState(profileState);
+
   return (
     <View className="w-full my-5">
       <View className="flex flex-row items-center justify-between w-full mb-2">
@@ -48,9 +52,14 @@ const CommentCard = (props: CommentCardProps) => {
             onLoadEnd={handleProfileImageLoadEnd}
             source={{ uri: PERSONA_IMAGE_URL }}
           />
-          <Text className="text-sm font-semibold text-emphasizedFont">
-            {comment.writer.nickname}
-          </Text>
+          <View className="flex flex-row items-center justify-start">
+            <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+              {`${comment.writer.nickname}`}
+            </Text>
+            <Text className="text-sm font-semibold text-disabledFont">
+              {comment.writer.nickname === profile.nickname ? '(나)' : ''}
+            </Text>
+          </View>
         </View>
         {isMyComment && (
           <View ref={dotIconRef} onTouchEnd={onPressModalOpen}>

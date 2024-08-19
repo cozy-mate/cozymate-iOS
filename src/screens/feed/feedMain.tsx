@@ -83,7 +83,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
         id: post.id,
         content: post.content,
         writer: {
-          id: 0,
+          id: post.writerId,
           nickname: post.nickname,
           persona: post.persona,
         },

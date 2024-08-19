@@ -9,6 +9,8 @@ import ChatIcon from '@assets/feedMain/chatIcon.svg';
 
 import { useImageCarousel } from '@hooks/useImageCarousel';
 import { usePersonaImage } from '@hooks/usePersonaImage';
+import { useRecoilState } from 'recoil';
+import { profileState } from '@recoil/recoil';
 
 type PostCardProps = {
   post: PostCardType;
@@ -35,14 +37,15 @@ const PostCard = (props: PostCardProps) => {
     handleProfileImageLoadEnd,
   } = usePersonaImage(post.writer.persona);
 
+  const [profile, setProfile] = useRecoilState(profileState);
   return (
     <Fragment>
       <TouchableOpacity onPress={() => toFeedView(post.id)}>
         <View
           key={post.id}
-          className="flex flex-col w-full bg-white mb-4 p-4 rounded-xl z-10 shadow-sm"
+          className="z-10 flex flex-col w-full p-4 mb-4 bg-white shadow-sm rounded-xl"
         >
-          <View className="flex flex-row w-full items-center justify-between">
+          <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-row items-center justify-start space-x-2">
               {loadingProfile && (
                 <SkeletonPlaceholder>
@@ -55,15 +58,20 @@ const PostCard = (props: PostCardProps) => {
                 onLoadEnd={handleProfileImageLoadEnd}
                 source={{ uri: PERSONA_IMAGE_URL }}
               />
-              <Text className="text-emphasizedFont font-semibold text-sm">
-                {post.writer.nickname}
-              </Text>
+              <View className="flex flex-row items-center justify-start">
+                <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+                  {`${post.writer.nickname}`}
+                </Text>
+                <Text className="text-sm font-semibold text-disabledFont">
+                  {post.writer.nickname === profile.nickname ? '(나)' : ''}
+                </Text>
+              </View>
             </View>
-            <Text className="text-disabledFont font-normal text-sm">
+            <Text className="text-sm font-normal text-disabledFont">
               {postTimeUtil(post.createdAt)}
             </Text>
           </View>
-          <Text className="text-basicFont font-medium text-sm mt-2 mb-2">{post.content}</Text>
+          <Text className="mt-2 mb-2 text-sm font-medium text-basicFont">{post.content}</Text>
 
           {post.imageList.length > 0 && (
             <View onLayout={onLayout} className="w-full">
@@ -134,7 +142,7 @@ const PostCard = (props: PostCardProps) => {
             }`}
           >
             <ChatIcon />
-            <Text className="text-disabledFont font-normal text-sm">{post.commentCount}</Text>
+            <Text className="text-sm font-normal text-disabledFont">{post.commentCount}</Text>
           </View>
         </View>
       </TouchableOpacity>

@@ -37,7 +37,7 @@ import { useButtonModal } from '@hooks/useButtonModal';
 import ButtonModal from '@components/common/buttonModal';
 import { deletePost, getDetailPost } from '@server/api/post';
 import { useRecoilState } from 'recoil';
-import { hasRoomState, postDetailRefreshState, roomInfoState } from '@recoil/recoil';
+import { hasRoomState, postDetailRefreshState, profileState, roomInfoState } from '@recoil/recoil';
 import { useFocusEffect } from '@react-navigation/native';
 import { createComment, getCommentList } from '@server/api/comment';
 import BackCleanHeader from 'src/layout/backCleanHeader';
@@ -96,6 +96,8 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
 
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
+
+  const [profile, setProfile] = useRecoilState(profileState);
 
   const handleCommentChange = (comment: string) => {
     setComment(comment);
@@ -275,9 +277,14 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                         </View>
                       </SkeletonPlaceholder>
                     ) : (
-                      <Text className="text-sm font-semibold text-emphasizedFont">
-                        {post.writer.nickname}
-                      </Text>
+                      <View className="flex flex-row items-center justify-start">
+                        <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+                          {`${post.writer.nickname}`}
+                        </Text>
+                        <Text className="text-sm font-semibold text-disabledFont">
+                          {post.writer.nickname === profile.nickname ? '(나)' : ''}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 </View>
