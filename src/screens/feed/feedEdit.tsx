@@ -13,7 +13,7 @@ import {
 import { FeedEditScreenProps } from '@type/param/roomStack';
 import { createFeed, getFeedData, updateFeed } from '@server/api/feed';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, roomInfoState } from '@recoil/recoil';
+import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
 import BackCleanHeader from 'src/layout/backCleanHeader';
 
 const FeedEditScreen = (props: FeedEditScreenProps) => {
@@ -26,15 +26,16 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
 
+  // 메인 화면으로 돌아갈 때 refresh를 여부 결정 state
   const [needsRefresh, setNeedsRefresh] = useRecoilState(feedRefreshState);
 
   // FeedInfo 불러오기
   const getFeedInfo = async () => {
     try {
       setIsLoading(true);
-      const response = await getFeedData(roomInfo.roomId === 0 ? 17 : roomInfo.roomId);
+      const response = await getFeedData(roomInfo.roomId);
       setFeedDescription(response.result.description);
       setFeedName(response.result.name);
       setIsComplete(response.result.name !== '' && response.result.description !== '');
@@ -70,7 +71,7 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
           name: feedName,
           description: feedDescription,
         });
-
+        setNeedsRefresh(true);
         Alert.alert('피드가 수정되었습니다.');
         navigation.goBack();
       } catch (e: any) {

@@ -1,8 +1,9 @@
-import { PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
 import { CreateCommentRequest, UpdateCommentRequest } from '@server/requestTypes/comment';
 import {
   CreateCommentResponse,
   DeleteCommentResponse,
+  GetCommentListReponse,
   UpdateCommentResponse,
 } from '@server/responseTypes/comment';
 
@@ -27,5 +28,14 @@ export const deleteComment = async (
   const response = await PostAxiosInstance<DeleteCommentResponse>(
     `/comment/${roomId}/${postId}/${commentId}`,
   );
+  return response.data;
+};
+
+// 댓글 조회
+export const getCommentList = async (
+  roomId: number,
+  postId: number,
+): Promise<GetCommentListReponse> => {
+  const response = await GetAxiosInstance<GetCommentListReponse>(`/comment/${roomId}/${postId}`);
   return response.data;
 };

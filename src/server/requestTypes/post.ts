@@ -1,6 +1,5 @@
 export interface CreatePostRequest {
   roomId: number;
-  title: string;
   content: string;
   imageList: string[];
 }
@@ -8,7 +7,6 @@ export interface CreatePostRequest {
 export interface UpdatePostRequest {
   roomId: number;
   postId: number;
-  title: string;
   content: string;
   imageList: string[];
 }

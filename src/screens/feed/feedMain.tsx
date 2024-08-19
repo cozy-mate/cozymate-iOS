@@ -10,16 +10,15 @@ import PostEdit from '@assets/feedMain/postEdit.svg';
 import { FeedMainScreenProps } from '@type/param/roomStack';
 import { FeedType, PostCardType } from '@type/feed';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, roomInfoState } from '@recoil/recoil';
+import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
 import { getFeedData } from '@server/api/feed';
 import PostCard from '@components/feedMain/postCard';
 import { getPostList } from '@server/api/post';
-import { get } from 'axios';
 
 const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : RecoilState RoomId 업데이트 되면 적용하기
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
   const [needsRefresh, setNeedsRefresh] = useRecoilState(feedRefreshState);
 
   const [feedInfo, setFeedInfo] = React.useState<FeedType>({
@@ -39,7 +38,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   // FeedInfo 불러오기
   const getFeedInfo = async () => {
     try {
-      const response = await getFeedData(roomInfo.roomId === 0 ? 17 : roomInfo.roomId);
+      const response = await getFeedData(roomInfo.roomId);
       setFeedInfo({
         name: response.result.name,
         description: response.result.description,
@@ -79,7 +78,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
 
       setPostStates((prev) => ({ ...prev, loading: true }));
 
-      const response = await getPostList(roomInfo.roomId === 0 ? 17 : roomInfo.roomId, page);
+      const response = await getPostList(roomInfo.roomId, page);
       const posts: PostCardType[] = response.result.map((post) => ({
         id: post.id,
         content: post.content,

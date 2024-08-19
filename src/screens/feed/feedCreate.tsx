@@ -23,7 +23,12 @@ import { FeedCreateScreenProps } from '@type/param/roomStack';
 import { createPost, getDetailPost, updatePost } from '../../server/api/post';
 import { uploadAssetImageToS3 } from '../../server/api/image';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
+import {
+  feedRefreshState,
+  hasRoomState,
+  postDetailRefreshState,
+  roomInfoState,
+} from '@recoil/recoil';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   // TODO : Back Nav 넣기
@@ -36,6 +41,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const { mode, postId } = props.route.params;
 
+  const [roomState, setRoomState] = useRecoilState(hasRoomState);
   const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
   const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
@@ -57,7 +63,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const getMyPost = async (postId: number) => {
     try {
-      const response = await getDetailPost(17, postId);
+      const response = await getDetailPost(roomState.roomId, postId);
       const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
       setImages(imageList);
       setPostDescription(response.result.content);
@@ -101,8 +107,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
     try {
       await createPost({
-        roomId: 17,
-        title: '6',
+        roomId: roomState.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
@@ -126,10 +131,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     }
 
     try {
-      const response = await updatePost({
+      await updatePost({
         postId: postId!,
-        roomId: 17,
-        title: '6',
+        roomId: roomState.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });

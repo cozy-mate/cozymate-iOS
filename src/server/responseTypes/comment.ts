@@ -9,3 +9,14 @@ export interface UpdateCommentResponse {
 export interface DeleteCommentResponse {
   result: boolean;
 }
+
+export interface GetCommentListReponse {
+  result: {
+    id: number;
+    writerId: number;
+    nickname: string;
+    persona: number;
+    content: string;
+    createdAt: string;
+  }[];
+}
