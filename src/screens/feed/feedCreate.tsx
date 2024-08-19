@@ -1,6 +1,17 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pressable, View, Text, TouchableOpacity, Animated, LogBox, Alert } from 'react-native';
+import {
+  Pressable,
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  LogBox,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
 import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
@@ -12,7 +23,13 @@ import { FeedCreateScreenProps } from '@type/param/roomStack';
 import { createPost, getDetailPost, updatePost } from '../../server/api/post';
 import { uploadAssetImageToS3 } from '../../server/api/image';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
+import {
+  feedRefreshState,
+  hasRoomState,
+  postDetailRefreshState,
+  roomInfoState,
+} from '@recoil/recoil';
+import BackCleanHeader from 'src/layout/backCleanHeader';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   // TODO : Back Nav 넣기
@@ -25,6 +42,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const { mode, postId } = props.route.params;
 
+  const [roomState, setRoomState] = useRecoilState(hasRoomState);
   const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
   const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
@@ -46,7 +64,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const getMyPost = async (postId: number) => {
     try {
-      const response = await getDetailPost(17, postId);
+      const response = await getDetailPost(roomState.roomId, postId);
       const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
       setImages(imageList);
       setPostDescription(response.result.content);
@@ -90,8 +108,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
     try {
       await createPost({
-        roomId: 17,
-        title: '6',
+        roomId: roomState.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
@@ -115,10 +132,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     }
 
     try {
-      const response = await updatePost({
+      await updatePost({
         postId: postId!,
-        roomId: 17,
-        title: '6',
+        roomId: roomState.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
@@ -189,55 +205,62 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
-      <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
-        <TouchableOpacity
-          className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
-          onPress={pickImages}
-        >
-          <PostImage className="mb-2" />
-          <View className="flex flex-row items-center justify-center w-full">
-            <Text
-              className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
-            >{`${images.length}/`}</Text>
-            <Text className={`text-sm text-disabledFont`}>{`${MAX_IMAGE_COUNT}`}</Text>
-          </View>
-        </TouchableOpacity>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          <DraggableFlatList
-            data={images}
-            renderItem={renderItem}
-            keyExtractor={(item) => `draggable-${item.uri}`}
-            horizontal={true}
-            onDragEnd={({ data }) => setImages(data)}
-            className="flex h-full"
-            contentContainerStyle={{
-              alignItems: 'center',
-              margin: 8,
-            }}
-          />
-        </ScrollView>
-      </View>
-      <View className="flex-col items-center justify-start flex-1 mb-4">
-        <TextInput
-          placeholder="내용를 입력해주세요"
-          value={postDescription}
-          onChangeText={valueHandleDescriptionChange}
-          multiline={true}
-          className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
-          textAlignVertical="top"
-          numberOfLines={20}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+        <BackCleanHeader
+          onPressBack={() => {
+            navigation.goBack();
+          }}
         />
-      </View>
-      <View className="flex">
-        <Pressable
-          onPress={handleSubmit}
-          className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
-        >
-          <Text className="text-base font-semibold text-center text-white">확인</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+        <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
+          <TouchableOpacity
+            className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
+            onPress={pickImages}
+          >
+            <PostImage className="mb-2" />
+            <View className="flex flex-row items-center justify-center w-full">
+              <Text
+                className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
+              >{`${images.length}/`}</Text>
+              <Text className={`text-sm text-disabledFont`}>{`${MAX_IMAGE_COUNT}`}</Text>
+            </View>
+          </TouchableOpacity>
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <DraggableFlatList
+              data={images}
+              renderItem={renderItem}
+              keyExtractor={(item) => `draggable-${item.uri}`}
+              horizontal={true}
+              onDragEnd={({ data }) => setImages(data)}
+              className="flex h-full"
+              contentContainerStyle={{
+                alignItems: 'center',
+                margin: 8,
+              }}
+            />
+          </ScrollView>
+        </View>
+        <View className="flex-col items-center justify-start flex-1 mb-4">
+          <TextInput
+            placeholder="내용를 입력해주세요"
+            value={postDescription}
+            onChangeText={valueHandleDescriptionChange}
+            multiline={true}
+            className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
+            textAlignVertical="top"
+            numberOfLines={20}
+          />
+        </View>
+        <View className="flex">
+          <Pressable
+            onPress={handleSubmit}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+          >
+            <Text className="text-base font-semibold text-center text-white">작성</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

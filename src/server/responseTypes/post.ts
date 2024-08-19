@@ -14,6 +14,7 @@ export interface GetPostListResponse {
   result: [
     {
       id: number;
+      writerId: number;
       title: string;
       content: string;
       nickname: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, Fragment } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
 
@@ -10,7 +10,7 @@ import PostEdit from '@assets/feedMain/postEdit.svg';
 import { FeedMainScreenProps } from '@type/param/roomStack';
 import { FeedType, PostCardType } from '@type/feed';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, roomInfoState } from '@recoil/recoil';
+import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
 import { getFeedData } from '@server/api/feed';
 import PostCard from '@components/feedMain/postCard';
 import { getPostList } from '@server/api/post';
@@ -18,7 +18,7 @@ import { getPostList } from '@server/api/post';
 const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : RecoilState RoomId 업데이트 되면 적용하기
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
   const [needsRefresh, setNeedsRefresh] = useRecoilState(feedRefreshState);
 
   const [feedInfo, setFeedInfo] = React.useState<FeedType>({
@@ -38,7 +38,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   // FeedInfo 불러오기
   const getFeedInfo = async () => {
     try {
-      const response = await getFeedData(roomInfo.roomId === 0 ? 17 : roomInfo.roomId);
+      const response = await getFeedData(roomInfo.roomId);
       setFeedInfo({
         name: response.result.name,
         description: response.result.description,
@@ -57,7 +57,6 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   }, []);
 
   useEffect(() => {
-    console.log('needsRefresh:', needsRefresh);
     if (needsRefresh) {
       setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
       handleRefresh();
@@ -65,8 +64,8 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   }, [needsRefresh]);
 
   const handleRefresh = async () => {
-    await getFeedInfo();
-    await getPosts(0);
+    getFeedInfo();
+    getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
     setNeedsRefresh(false);
   };
@@ -79,12 +78,12 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
 
       setPostStates((prev) => ({ ...prev, loading: true }));
 
-      const response = await getPostList(roomInfo.roomId === 0 ? 17 : roomInfo.roomId, page);
+      const response = await getPostList(roomInfo.roomId, page);
       const posts: PostCardType[] = response.result.map((post) => ({
         id: post.id,
         content: post.content,
         writer: {
-          id: 0,
+          id: post.writerId,
           nickname: post.nickname,
           persona: post.persona,
         },
@@ -131,6 +130,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   };
 
   const onRefresh = () => {
+    getFeedInfo();
     setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
     getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
@@ -174,7 +174,8 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
   );
 
   return (
-    <SafeAreaView className="relative w-full h-full pt-8 bg-main3">
+    <Fragment>
+      <SafeAreaView />
       <FlatList
         data={postList}
         renderItem={({ item }) => <PostCard post={item} toFeedView={toFeedView} />}
@@ -197,7 +198,6 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
-          paddingBottom: 50,
           width: '100%',
           paddingHorizontal: 20,
         }}
@@ -211,7 +211,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
           <PostEdit />
         </Pressable>
       </View>
-    </SafeAreaView>
+    </Fragment>
   );
 };
 
