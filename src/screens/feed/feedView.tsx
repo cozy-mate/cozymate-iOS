@@ -247,7 +247,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
-            <View key={post.id} className="flex flex-col w-full px-5 pt-4 bg-white">
+            <View key={post.id} className="flex flex-col w-full px-5 pt-4 mb-6 bg-white">
               <View className="flex flex-row items-center justify-between w-full">
                 <View className="flex flex-row items-center justify-start space-x-2">
                   {loadingProfile ||
