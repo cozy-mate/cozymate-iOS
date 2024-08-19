@@ -2,58 +2,23 @@ export interface DeleteTodoResponse {
   result: string;
 }
 
+export interface TodoItem {
+  id: number;
+  content: string;
+  completed: boolean;
+}
+
+export interface MateTodoItem {
+  persona: number;
+  mateTodoList: TodoItem[];
+}
+
 export interface GetTodoDataResponse {
   result: {
     timePoint: string;
-    myTodoList: {
-      persona: number;
-      mateTodoList: {
-        id: number;
-        content: string;
-        completed: boolean;
-      }[];
-    };
+    myTodoList: MateTodoItem;
     mateTodoList: {
-      additionalProp1: {
-        persona: number;
-        mateTodoList: {
-          id: number;
-          content: string;
-          completed: boolean;
-        }[];
-      };
-      additionalProp2: {
-        persona: number;
-        mateTodoList: {
-          id: number;
-          content: string;
-          completed: boolean;
-        }[];
-      };
-      additionalProp3: {
-        persona: number;
-        mateTodoList: {
-          id: number;
-          content: string;
-          completed: boolean;
-        }[];
-      };
-      additionalProp4: {
-        persona: number;
-        mateTodoList: {
-          id: number;
-          content: string;
-          completed: boolean;
-        }[];
-      };
-      additionalProp5: {
-        persona: number;
-        mateTodoList: {
-          id: number;
-          content: string;
-          completed: boolean;
-        }[];
-      };
+      [key: string]: MateTodoItem;
     };
   };
 }

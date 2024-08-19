@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 LocaleConfig.locales.fr = {
@@ -37,13 +37,20 @@ LocaleConfig.locales.fr = {
 
 LocaleConfig.defaultLocale = 'fr';
 
-const CustomCalendar = () => {
+interface CustomCalendarProps {
+  onDateTimeSelect: (dateTime: string) => void;
+}
+
+const CustomCalendar: React.FC<CustomCalendarProps> = ({ onDateTimeSelect }) => {
   const [selected, setSelected] = useState('');
 
   return (
     <Calendar
       enableSwipeMonths={true}
-      onDayPress={(day: any) => setSelected(day.dateString)}
+      onDayPress={(day: any) => {
+        onDateTimeSelect(day.dateString);
+        setSelected(day.dateString);
+      }}
       markedDates={{
         [selected]: { selected: true, disableTouchEvent: true },
       }}
