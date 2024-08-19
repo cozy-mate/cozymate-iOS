@@ -16,3 +16,8 @@ export interface DeleteCommentRequest {
   postId: number;
   commentId: number;
 }
+
+export interface GetCommentRequest {
+  roomId: number;
+  postId: number;
+}
