@@ -75,6 +75,7 @@ const PostCard = (props: PostCardProps) => {
                 onScroll={handleScroll}
                 scrollEventThrottle={200}
                 decelerationRate="fast"
+                scrollEnabled={post.imageList.length >1}
                 renderItem={({ item, index }) => (
                   <View
                     style={{

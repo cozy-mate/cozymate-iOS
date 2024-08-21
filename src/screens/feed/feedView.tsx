@@ -376,7 +376,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     keyExtractor={(item, index) => index.toString()}
                     showsHorizontalScrollIndicator={false}
                     scrollEventThrottle={200}
-                    scrollEnabled={post.imageList.length > 1}
+                    scrollEnabled={post.imageList.length >1}
                     onScroll={handleScroll}
                     decelerationRate="fast"
                     renderItem={({ item, index }) => (
