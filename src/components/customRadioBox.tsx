@@ -40,13 +40,9 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   };
 
   return (
-    <View className="flex flex-row flex-wrap">
+    <View className="flex flex-row flex-wrap gap-x-4 gap-y-8">
       {items.map((item: Item) => (
-        <Pressable
-          key={item.index}
-          onPress={() => select(item)}
-          className={`mb-10 mr-4 ${item.index % 4 === 0 && 'mr-0'}`}
-        >
+        <Pressable key={item.index} onPress={() => select(item)}>
           <View className="relative">
             <item.icon />
             {focusedIndex === item.index && (

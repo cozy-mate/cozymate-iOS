@@ -23,6 +23,7 @@ module.exports = {
           '@providers': './src/providers',
           '@components': './src/components',
           '@hooks': './src/hooks',
+          '@layout': './src/layout',
           '@pages': './src/pages',
           '@routes': './src/routes',
           '@type': './src/type',

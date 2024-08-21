@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signUp } from '@server/api/member';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { loggedInState, signUpState } from '@recoil/recoil';
+import { hasRoomState, loggedInState, signUpState } from '@recoil/recoil';
 
 const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
@@ -16,6 +16,7 @@ const CompleteScreen = () => {
   }, [signupstate]);
 
   const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setHasRoom] = useRecoilState(hasRoomState);
 
   const doSignUp = async () => {
     try {
@@ -29,6 +30,7 @@ const CompleteScreen = () => {
 
       await AsyncStorage.setItem('accessToken', response.result.tokenResponseDTO.accessToken);
 
+      setHasRoom({ roomId: 0, hasRoom: false });
       setLoggedIn(true);
     } catch (error) {
       console.log(error);
@@ -42,7 +44,7 @@ const CompleteScreen = () => {
         <View className="flex mt-[56px]">
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
-            <Text className="text-lg font-semibold tracking-tight text-emphasizedFont">
+            <Text className="text-xl font-semibold leading-5 tracking-tight text-emphasizedFont">
               {signupstate.nickname}님,{'\n'}cozymate에 오신걸 환영해요!
             </Text>
           </View>

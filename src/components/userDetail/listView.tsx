@@ -1,71 +1,123 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ListViewProps> = ({ userData }) => {
-  const renderInfo = (info: Record<string, string>, title: string) => {
+const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
+  const formatValue = (key: string, value: any) => {
+    if (key === 'birthYear') {
+      return `${value}년`;
+    } else if (key === 'isPlayGame' || key === 'isPhoneCall' || key === 'canShare') {
+      return value ? 'O' : 'X';
+    } else if (key === 'numOfRoommate') {
+      return `${value}인 1실`;
+    } else if (key === 'wakeUpTime') {
+      return `${userData.wakeUpMeridian} ${value}시`;
+    } else if (key === 'sleepingTime') {
+      return `${userData.sleepingMeridian} ${value}시`;
+    } else if (key === 'turnOffTime') {
+      return `${userData.turnOffMeridian} ${value}시`;
+    }
+    return value;
+  };
+
+  const renderInfo = (info: Record<string, any>, title: string) => {
     const labels: Record<string, string> = {
-      name: '이름',
-      age: '출생년도',
-      school: '학교',
-      studentId: '학번',
+      memberName: '이름',
+      birthYear: '출생년도',
+      universityId: '학교',
+      admissionYear: '학번',
       major: '학과',
-      type: '인실',
-      passOrNot: '합격여부',
-      wakeUp: '기상시간',
-      sleep: '취침시간',
-      lightsOut: '소등시간',
-      smoking: '흡연여부',
-      sleepHabit: '잠버릇',
-      temperament: '더위, 추위',
-      pattern: '생활 패턴',
+      numOfRoommate: '인실',
+      acceptance: '합격여부',
+      wakeUpTime: '기상시간',
+      sleepingTime: '취침시간',
+      turnOffTime: '소등시간',
+      smokingState: '흡연여부',
+      sleepingHabit: '잠버릇',
+      airConditioningIntensity: '에어컨 강도',
+      heatingIntensity: '히터 강도',
+      lifePattern: '생활 패턴',
       intimacy: '친밀도',
-      sharing: '물건공유',
-      study: '공부여부',
-      game: '게임여부',
-      call: '전화여부',
-      cleanliness: '청결 예민도',
-      noise: '소음 예민도',
-      cleaning: '청소 빈도',
+      canShare: '물건공유',
+      studying: '공부여부',
+      isPlayGame: '게임여부',
+      isPhoneCall: '전화여부',
+      intake: '섭취여부',
+      cleanSensitivity: '청결 예민도',
+      noiseSensitivity: '소음 예민도',
+      cleaningFrequency: '청소 빈도',
       personality: '성격',
       mbti: 'MBTI',
     };
 
-    const entries = Object.entries(info);
+    const infoEntries = Object.entries(info);
 
     return (
-      <View className="mb-6 leading-loose">
-        <Text className="text-lg font-semibold text-[#444955] tracking-tight px-1 mb-3">
-          {title}
-        </Text>
+      <View className={`mb-14 ${info == essentialInfo && 'mb-0'}`}>
+        <Text className="mb-2 text-base font-semibold text-[#444955] px-1">{title}</Text>
         <View className="p-4 border-[1px] border-[#F1F2F4] rounded-xl">
-          {entries.map(([key, value], index) => (
-            <View
-              key={key}
-              className={`flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
-                index === entries.length - 1
-                  ? 'border-b-0 pb-0'
-                  : 'border-b-[1px] border-b-[#f1f2f4]'
-              }`}
-            >
-              <Text className="mr-3 font-medium text-colorFont">{labels[key] || key}</Text>
-              <Text className="text-[#505059] font-medium">{value}</Text>
-            </View>
-          ))}
+          {infoEntries.map(([key, value], index) =>
+            value ? (
+              <View
+                key={key}
+                className={`flex flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
+                  index === infoEntries.length - 1
+                    ? 'border-b-0 pb-0'
+                    : 'border-b-[1px] border-b-[#f1f2f4]'
+                }`}
+              >
+                <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
+                <Text className="text-[#505059] font-medium">{formatValue(key, value)}</Text>
+              </View>
+            ) : null,
+          )}
         </View>
       </View>
     );
   };
 
+  const basicInfo = {
+    memberName: userBasicData.memberName,
+    birthYear: userData.birthYear,
+    universityId: userData.universityId,
+    admissionYear: userData.admissionYear,
+    major: userData.major,
+  };
+
+  const dormInfo = {
+    numOfRoommate: userData.numOfRoommate,
+    acceptance: userData.acceptance,
+  };
+
+  const essentialInfo = {
+    wakeUpTime: userData.wakeUpTime,
+    sleepingTime: userData.sleepingTime,
+    turnOffTime: userData.turnOffTime,
+    smokingState: userData.smokingState,
+    sleepingHabit: userData.sleepingHabit,
+    airConditioningIntensity: userData.airConditioningIntensity,
+    heatingIntensity: userData.heatingIntensity,
+    lifePattern: userData.lifePattern,
+    intimacy: userData.intimacy,
+    canShare: userData.canShare,
+    studying: userData.studying,
+    isPlayGame: userData.isPlayGame,
+    isPhoneCall: userData.isPhoneCall,
+    intake: userData.intake,
+    cleanSensitivity: userData.cleanSensitivity,
+    noiseSensitivity: userData.noiseSensitivity,
+    cleaningFrequency: userData.cleaningFrequency,
+    personality: userData.personality,
+    mbti: userData.mbti,
+  };
+
   return (
-    <ScrollView className="h-2/3">
-      <View className="px-5 mt-4 pb-[34px]">
-        {renderInfo(userData.basicInfo, '기본정보')}
-        {renderInfo(userData.dormitoryInfo, '기숙사 정보')}
-        {renderInfo(userData.essentialInfo, '필수 정보')}
-      </View>
-    </ScrollView>
+    <View className="px-5 mt-4 pb-[60px]">
+      {renderInfo(basicInfo, '기본정보')}
+      {renderInfo(dormInfo, '기숙사 정보')}
+      {renderInfo(essentialInfo, '필수정보')}
+    </View>
   );
 };
 

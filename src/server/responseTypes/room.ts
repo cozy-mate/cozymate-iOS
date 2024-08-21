@@ -8,6 +8,11 @@ export interface GetRoomDataResponse {
     name: string;
     inviteCode: string;
     profileImage: number;
+    mateList: {
+      memberId: number;
+      mateId: number;
+      nickname: string;
+    }[];
   };
 }
 

@@ -12,45 +12,34 @@ interface TodoItem {
 
 interface TodoBoxProps {
   todoData: TodoItem[];
-  setMyTodoData: React.Dispatch<React.SetStateAction<TodoItem[]>>;
+  changeTodo: (todo: TodoItem) => void;
 }
 
-const TodoBox: React.FC<TodoBoxProps> = ({ todoData, setMyTodoData }) => {
-  const toggleTodo = (id: number) => {
-    setMyTodoData((prevData) =>
-      prevData.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)),
-    );
-  };
-
+const TodoBox: React.FC<TodoBoxProps> = ({ todoData, changeTodo }) => {
   return (
     <View className="flex flex-col">
-      <View className="p-2 pl-4 bg-white shadow-chipback rounded-xl">
-        {todoData ? (
-          <>
-            {todoData.map((data) => (
-              <View
-                key={data.id}
-                className={`flex flex-row items-center justify-between mb-1 ${
-                  data.id === todoData.length && 'mb-0'
+      {todoData.length !== 0 ? (
+        <View className="p-2 pl-4 bg-white shadow-chipback rounded-xl">
+          {todoData.map((data) => (
+            <View key={data.id} className="flex flex-row items-center justify-between gap-y-1">
+              <Text
+                className={`${
+                  data.completed ? 'text-disabledFont line-through' : 'text-basicFont'
                 }`}
               >
-                <Text
-                  className={`${
-                    data.completed ? 'text-disabledFont line-through' : 'text-basicFont'
-                  }`}
-                >
-                  {data.content}
-                </Text>
-                <Pressable onPress={() => toggleTodo(data.id)} className="p-1.5">
-                  {data.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
-                </Pressable>
-              </View>
-            ))}
-          </>
-        ) : (
+                {data.content}
+              </Text>
+              <Pressable onPress={() => changeTodo(data)} className="p-1.5">
+                {data.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
+              </Pressable>
+            </View>
+          ))}
+        </View>
+      ) : (
+        <View className="flex items-center justify-center p-2 pl-4 bg-white shadow-chipback rounded-xl h-36">
           <Text className="text-sm font-medium text-disabledFont">오늘 등록된 할 일이 없어요!</Text>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   );
 };

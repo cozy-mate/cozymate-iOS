@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RoomStackParamList = {
   MainScreen: { screen: keyof HasRoomTabNavigatorParamList } | undefined;
-  //   CozyHomeScreen: undefined;
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;
 
@@ -20,7 +19,7 @@ export type RoomStackParamList = {
   EssentialLifeStyleScreen: undefined;
   AdditionalLifeStyleScreen: undefined;
 
-  CreateTodoScreen: undefined;
+  CreateTodoScreen: { type: 'todo' | 'role' | 'rule' };
 
   RoomMateScreen: undefined;
   UserDetailScreen: undefined;
@@ -40,33 +39,6 @@ export type HasRoomTabNavigatorParamList = {
   RoomMateScreen: undefined;
   MyPageScreen: undefined;
 };
-
-// // 코지홈 스크린
-// export type HomeScreenProps = NativeStackScreenProps<RoomStackParamList, 'CozyHomeScreen'>;
-
-// // 방 만들기 스크린 - 방 이름 & 인원 선택
-// export type CreateRoomScreenProps = NativeStackScreenProps<RoomStackParamList, 'CreateRoomScreen'>;
-
-// // 방 만들기 스크린 - 캐릭터 선택
-// export type SelectCharacterScreenProps = NativeStackScreenProps<
-//   RoomStackParamList,
-//   'SelectCharacterScreen'
-// >;
-
-// // 방 만들기 스크린 - 방 생성 완료
-// export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
-//   RoomStackParamList,
-//   'CompleteCreateRoomScreen'
-// >;
-
-// // 방 참여하기 스크린
-// export type JoinRoomScreenProps = NativeStackScreenProps<RoomStackParamList, 'JoinRoomScreen'>;
-
-// // 룸메이트 대기 스크린
-// export type WaitingRoomScreenProps = NativeStackScreenProps<
-//   RoomStackParamList,
-//   'WaitingRoomScreen'
-// >;
 
 // 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
@@ -104,7 +76,6 @@ export type RoomMainScreenProps = NativeStackScreenProps<RoomStackParamList, 'Ro
 // 투두리스트 스크린
 export type TodoListScreenProps = NativeStackScreenProps<RoomStackParamList, 'TodoListScreen'>;
 export type CreateTodoScreenProps = NativeStackScreenProps<RoomStackParamList, 'CreateTodoScreen'>;
-
 export type RoomMateScreenProps = NativeStackScreenProps<RoomStackParamList, 'RoomMateScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<RoomStackParamList, 'UserDetailScreen'>;
 

@@ -55,7 +55,7 @@ function AppInner() {
   return (
     <GestureHandlerRootView>
       {loggedIn ? (
-        hasRoom ? (
+        hasRoom.hasRoom ? (
           <roomStack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false }}>
             <roomStack.Screen name="MainScreen" component={HasRoomMainScreen} />
             {/* <roomStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} /> */}
@@ -141,16 +141,16 @@ function AppInner() {
             <loginStack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
             <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
 
-            <loginStack.Screen name="TodoListScreen" component={TodoListScreen} />
-            <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
+            {/* <loginStack.Screen name="TodoListScreen" component={TodoListScreen} /> */}
+            {/* <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} /> */}
 
             <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
             <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
 
-            <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
+            {/* <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
             <loginStack.Screen name="FeedEditScreen" component={FeedEditScreen} />
             <loginStack.Screen name="FeedViewScreen" component={FeedViewScreen} />
-            <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
+            <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} /> */}
           </loginStack.Navigator>
         )
       ) : (
