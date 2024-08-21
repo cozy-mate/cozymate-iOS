@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, Fragment } from 'react';
+import React, { useEffect, useState, useRef, Fragment } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
 
@@ -10,12 +10,13 @@ import PostEdit from '@assets/feedMain/postEdit.svg';
 import { FeedMainScreenProps } from '@type/param/roomStack';
 import { FeedType, PostCardType } from '@type/feed';
 import { useRecoilState } from 'recoil';
-import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
+import { feedRefreshState, hasRoomState } from '@recoil/recoil';
 import { getFeedData } from '@server/api/feed';
 import PostCard from '@components/feedMain/postCard';
 import { getPostList } from '@server/api/post';
+import { useFocusEffect } from '@react-navigation/native';
 
-const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
+const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : RecoilState RoomId 업데이트 되면 적용하기
   const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
@@ -35,6 +36,31 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
     refreshing: false,
   });
 
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    getFeedInfo();
+    getPosts(0);
+  }, []);
+
+  useEffect(() => {
+    if (needsRefresh) {
+      setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
+      handleRefresh();
+      flatListRef.current?.scrollToOffset({ animated: false, offset: 0 });
+    }
+  }, [needsRefresh]);
+
+  useFocusEffect(
+    // goBack() 호출시에는 리렌더링이 발생하지 않음.
+    // 화면이 보일 때를 기준으로, 조건부로 FlatList를 새로 고침함
+    React.useCallback(() => {
+      if (needsRefresh) {
+        handleRefresh();
+      }
+    }, []),
+  );
+
   // FeedInfo 불러오기
   const getFeedInfo = async () => {
     try {
@@ -51,23 +77,12 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
     }
   };
 
-  useEffect(() => {
-    getFeedInfo();
-    getPosts(0);
-  }, []);
-
-  useEffect(() => {
-    if (needsRefresh) {
-      setPostStates((prev) => ({ ...prev, page: 0, stop: false, refreshing: true }));
-      handleRefresh();
-    }
-  }, [needsRefresh]);
-
   const handleRefresh = async () => {
     getFeedInfo();
     getPosts(0);
     setPostStates((prev) => ({ ...prev, refreshing: false }));
     setNeedsRefresh(false);
+    flatListRef.current?.scrollToOffset({ animated: false, offset: 0 });
   };
 
   const getPosts = async (page: number) => {
@@ -75,7 +90,6 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
       if (postStates.stop || postStates.loading) {
         return;
       }
-
       setPostStates((prev) => ({ ...prev, loading: true }));
 
       const response = await getPostList(roomInfo.roomId, page);
@@ -177,6 +191,7 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
     <Fragment>
       <SafeAreaView />
       <FlatList
+        ref={flatListRef}
         data={postList}
         renderItem={({ item }) => <PostCard post={item} toFeedView={toFeedView} />}
         ListHeaderComponent={renderHeader}
@@ -208,10 +223,11 @@ const FeedMainScreen = ({ navigation, route }: FeedMainScreenProps) => {
       />
       <View>
         <Pressable
-          className="absolute items-center justify-center p-4 bottom-14 right-3 rounded-xl"
+          className={`absolute items-center justify-center p-4 bottom-14 right-3 rounded-xl
+            {}`}
           onPress={toFeedCreate}
         >
-          <PostEdit className="" />
+          <PostEdit />
         </Pressable>
       </View>
     </Fragment>
