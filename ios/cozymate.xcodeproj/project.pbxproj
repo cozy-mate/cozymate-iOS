@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* cozymateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* cozymateTests.m */; };
+		092FCB01E0B344FA36CF90CA /* libPods-cozymate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF91308D56AD4DC2E39C63BB /* libPods-cozymate.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		49BD899D88C5FBBB6AE13363 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 421053EA13806C9EDD3FDF00 /* PrivacyInfo.xcprivacy */; };
-		5DFF49F9FE2FDE45A353F0AC /* libPods-cozymate-cozymateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 548914337F3029A48DC73146 /* libPods-cozymate-cozymateTests.a */; };
+		5FF043F49BCD38AACAF5D68E /* libPods-cozymate-cozymateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E227810C8BAF6AD11E4E73F3 /* libPods-cozymate-cozymateTests.a */; };
 		76B3FF992C5FEB94002CA369 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 76B3FF982C5FEB94002CA369 /* Fonts */; };
 		80616AD11B494C338763F80F /* SF_HambakSnow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		867F721FCE951610EA18412E /* libPods-cozymate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B087F5DDD24F3582CB86CBD /* libPods-cozymate.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,17 +40,17 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = cozymate/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = cozymate/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = cozymate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		1B087F5DDD24F3582CB86CBD /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		20ACD56CE14FB19CB2FF6E21 /* Pods-cozymate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate.release.xcconfig"; path = "Target Support Files/Pods-cozymate/Pods-cozymate.release.xcconfig"; sourceTree = "<group>"; };
 		421053EA13806C9EDD3FDF00 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = cozymate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		548914337F3029A48DC73146 /* libPods-cozymate-cozymateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate-cozymateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		58C62269D41295D2F83ECFC3 /* Pods-cozymate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate.release.xcconfig"; path = "Target Support Files/Pods-cozymate/Pods-cozymate.release.xcconfig"; sourceTree = "<group>"; };
-		6C439652C63DAC5E123BCA16 /* Pods-cozymate-cozymateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.debug.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		76B3FF982C5FEB94002CA369 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		76DA746A2C6B919800F34533 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = cozymate/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8B0D5D7BEFA8C32D344BD37C /* Pods-cozymate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate.debug.xcconfig"; path = "Target Support Files/Pods-cozymate/Pods-cozymate.debug.xcconfig"; sourceTree = "<group>"; };
+		83A300A2D3D092ACC1755FEC /* Pods-cozymate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate.debug.xcconfig"; path = "Target Support Files/Pods-cozymate/Pods-cozymate.debug.xcconfig"; sourceTree = "<group>"; };
 		923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SF_HambakSnow.ttf; path = ../src/assets/fonts/SF_HambakSnow.ttf; sourceTree = "<group>"; };
-		A7B0D42FCD1651E12085EE41 /* Pods-cozymate-cozymateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.release.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.release.xcconfig"; sourceTree = "<group>"; };
+		BF91308D56AD4DC2E39C63BB /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0120DB4CEFC9A5B5E0F537C /* Pods-cozymate-cozymateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.debug.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E227810C8BAF6AD11E4E73F3 /* libPods-cozymate-cozymateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate-cozymateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECB7C97B213D8525095D0381 /* Pods-cozymate-cozymateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cozymate-cozymateTests.release.xcconfig"; path = "Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5DFF49F9FE2FDE45A353F0AC /* libPods-cozymate-cozymateTests.a in Frameworks */,
+				5FF043F49BCD38AACAF5D68E /* libPods-cozymate-cozymateTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				867F721FCE951610EA18412E /* libPods-cozymate.a in Frameworks */,
+				092FCB01E0B344FA36CF90CA /* libPods-cozymate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,8 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				1B087F5DDD24F3582CB86CBD /* libPods-cozymate.a */,
-				548914337F3029A48DC73146 /* libPods-cozymate-cozymateTests.a */,
+				BF91308D56AD4DC2E39C63BB /* libPods-cozymate.a */,
+				E227810C8BAF6AD11E4E73F3 /* libPods-cozymate-cozymateTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -161,10 +161,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8B0D5D7BEFA8C32D344BD37C /* Pods-cozymate.debug.xcconfig */,
-				58C62269D41295D2F83ECFC3 /* Pods-cozymate.release.xcconfig */,
-				6C439652C63DAC5E123BCA16 /* Pods-cozymate-cozymateTests.debug.xcconfig */,
-				A7B0D42FCD1651E12085EE41 /* Pods-cozymate-cozymateTests.release.xcconfig */,
+				83A300A2D3D092ACC1755FEC /* Pods-cozymate.debug.xcconfig */,
+				20ACD56CE14FB19CB2FF6E21 /* Pods-cozymate.release.xcconfig */,
+				D0120DB4CEFC9A5B5E0F537C /* Pods-cozymate-cozymateTests.debug.xcconfig */,
+				ECB7C97B213D8525095D0381 /* Pods-cozymate-cozymateTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -176,12 +176,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "cozymateTests" */;
 			buildPhases = (
-				4AF03CC94032EBFF4EA4DABD /* [CP] Check Pods Manifest.lock */,
+				BA8436925B9A1C023960F591 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				764CDE63460211AFC93BE43A /* [CP] Embed Pods Frameworks */,
-				B427CDEE699A630A5F7F418B /* [CP] Copy Pods Resources */,
+				458947A5DB5DAB711C4A4B4A /* [CP] Embed Pods Frameworks */,
+				22AC2EE0F407846C82E0DB43 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -197,13 +197,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "cozymate" */;
 			buildPhases = (
-				46153F0C8D44D60F39F7E883 /* [CP] Check Pods Manifest.lock */,
+				0AD5F8F5F1426BECABBB2ABA /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				74DD84B9E63982D27E66EE27 /* [CP] Embed Pods Frameworks */,
-				168D2DB4F0F4F782066E0450 /* [CP] Copy Pods Resources */,
+				493C8BF6C6FCA97298E84D4F /* [CP] Embed Pods Frameworks */,
+				0B41B88DEAA92BF014AD90ED /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -289,24 +289,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		168D2DB4F0F4F782066E0450 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		46153F0C8D44D60F39F7E883 /* [CP] Check Pods Manifest.lock */ = {
+		0AD5F8F5F1426BECABBB2ABA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -328,7 +311,75 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4AF03CC94032EBFF4EA4DABD /* [CP] Check Pods Manifest.lock */ = {
+		0B41B88DEAA92BF014AD90ED /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		22AC2EE0F407846C82E0DB43 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		458947A5DB5DAB711C4A4B4A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		493C8BF6C6FCA97298E84D4F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA8436925B9A1C023960F591 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -348,57 +399,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		74DD84B9E63982D27E66EE27 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate/Pods-cozymate-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		764CDE63460211AFC93BE43A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B427CDEE699A630A5F7F418B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-cozymate-cozymateTests/Pods-cozymate-cozymateTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -434,7 +434,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C439652C63DAC5E123BCA16 /* Pods-cozymate-cozymateTests.debug.xcconfig */;
+			baseConfigurationReference = D0120DB4CEFC9A5B5E0F537C /* Pods-cozymate-cozymateTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -461,7 +461,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7B0D42FCD1651E12085EE41 /* Pods-cozymate-cozymateTests.release.xcconfig */;
+			baseConfigurationReference = ECB7C97B213D8525095D0381 /* Pods-cozymate-cozymateTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -485,7 +485,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B0D5D7BEFA8C32D344BD37C /* Pods-cozymate.debug.xcconfig */;
+			baseConfigurationReference = 83A300A2D3D092ACC1755FEC /* Pods-cozymate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -513,7 +513,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58C62269D41295D2F83ECFC3 /* Pods-cozymate.release.xcconfig */;
+			baseConfigurationReference = 20ACD56CE14FB19CB2FF6E21 /* Pods-cozymate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

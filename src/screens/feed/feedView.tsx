@@ -275,6 +275,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         setCommentList(commentList);
       }
       setComment('');
+      Keyboard.dismiss();
     } catch (e: any) {
       setOneButtonModalInfo(COMMENT_CREATE_ERROR);
       handleOneButtonModalOpen();
