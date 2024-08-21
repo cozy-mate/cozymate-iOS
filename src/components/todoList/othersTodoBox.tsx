@@ -17,10 +17,12 @@ interface MateTodo {
 }
 
 interface OthersTodoBoxProps {
+  persona: number;
+
   mateTodoData: MateTodo[];
 }
 
-const OthersTodoBox: React.FC<OthersTodoBoxProps> = ({ mateTodoData }) => {
+const OthersTodoBox: React.FC<OthersTodoBoxProps> = ({ persona, mateTodoData }) => {
   return (
     <View className="p-4 pb-2 pr-2 mb-4 bg-white shadow-chipback rounded-xl">
       {mateTodoData.map((mate) => (
@@ -28,7 +30,7 @@ const OthersTodoBox: React.FC<OthersTodoBoxProps> = ({ mateTodoData }) => {
           <View className="flex flex-row items-center mb-1">
             <Image
               source={{
-                uri: `${Config.S3_IMAGE_URL}/persona/png/1.png`,
+                uri: `${Config.S3_IMAGE_URL}/persona/png/${persona}.png`,
               }}
               style={{ width: 24, height: 24 }}
               resizeMode="cover"

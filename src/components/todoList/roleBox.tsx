@@ -15,10 +15,11 @@ interface RoleData {
 }
 
 interface RoleBoxProps {
+  persona: number;
   roleData: RoleData[];
 }
 
-const RoleBox: React.FC<RoleBoxProps> = ({ roleData }) => {
+const RoleBox: React.FC<RoleBoxProps> = ({ persona, roleData }) => {
   return (
     <View className="p-4 pr-2 mb-4 bg-white shadow-chipback rounded-xl">
       {roleData.map((role) => (
@@ -26,7 +27,7 @@ const RoleBox: React.FC<RoleBoxProps> = ({ roleData }) => {
           <View className="flex flex-row items-center mb-2">
             <Image
               source={{
-                uri: `${Config.S3_IMAGE_URL}/persona/png/1.png`,
+                uri: `${Config.S3_IMAGE_URL}/persona/png/${persona}.png`,
               }}
               style={{ width: 24, height: 24 }}
               resizeMode="cover"

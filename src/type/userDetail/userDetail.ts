@@ -1,116 +1,119 @@
 export interface ListViewProps {
+  userBasicData: {
+    memberId: number;
+    memberName: string;
+    memberNickName: string;
+    memberAge: number;
+    memberPersona: number;
+    numOfRoommate: number;
+    equality: number;
+  };
   userData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
+    universityId: number;
+    admissionYear: string;
+    birthYear?: number;
+    major: string;
+    numOfRoommate: number;
+    acceptance: string;
+    wakeUpMeridian: string;
+    wakeUpTime: number;
+    sleepingMeridian: string;
+    sleepingTime: number;
+    turnOffMeridian: string;
+    turnOffTime: number;
+    smokingState: string;
+    sleepingHabit: string;
+    airConditioningIntensity: number;
+    heatingIntensity: number;
+    lifePattern: string;
+    intimacy: string;
+    canShare: boolean;
+    isPlayGame: boolean;
+    isPhoneCall: boolean;
+    studying: string;
+    intake: string;
+    cleanSensitivity: number;
+    noiseSensitivity: number;
+    cleaningFrequency: string;
+    personality: string;
+    mbti: string;
+    options: {
+      '무조건 지켜줘야 해요!': string[];
+      '이정도는 맞춰줄 수 있어요!': string[];
+      '이건 절대 절대 안 돼요!': string[];
     };
   };
 }
 
 export interface TableViewProps {
   userData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
+    universityId: number;
+    admissionYear: string;
+    birthYear?: number;
+    major: string;
+    numOfRoommate: number;
+    acceptance: string;
+    wakeUpMeridian: string;
+    wakeUpTime: number;
+    sleepingMeridian: string;
+    sleepingTime: number;
+    turnOffMeridian: string;
+    turnOffTime: number;
+    smokingState: string;
+    sleepingHabit: string;
+    airConditioningIntensity: number;
+    heatingIntensity: number;
+    lifePattern: string;
+    intimacy: string;
+    canShare: boolean;
+    isPlayGame: boolean;
+    isPhoneCall: boolean;
+    studying: string;
+    intake: string;
+    cleanSensitivity: number;
+    noiseSensitivity: number;
+    cleaningFrequency: string;
+    personality: string;
+    mbti: string;
+    options: {
+      '무조건 지켜줘야 해요!': string[];
+      '이정도는 맞춰줄 수 있어요!': string[];
+      '이건 절대 절대 안 돼요!': string[];
     };
   };
   otherUserData: {
-    basicInfo: {
-      name: string;
-      age: string;
-      school: string;
-      studentId: string;
-      major: string;
-    };
-    dormitoryInfo: {
-      type: string;
-      passOrNot: string;
-    };
-    essentialInfo: {
-      wakeUp: string;
-      sleep: string;
-      lightsOut: string;
-      smoking: string;
-      sleepHabit: string;
-      temperament: string;
-      pattern: string;
-      intimacy: string;
-      sharing: string;
-      game: string;
-      call: string;
-      study: string;
-      cleanliness: string;
-      noise: string;
-      cleaning: string;
-      personality: string;
-      mbti: string;
-    };
-    additionalInfo: {
-      must: string[];
-      can: string[];
-      never: string[];
+    universityId: number;
+    admissionYear: string;
+    birthYear?: number;
+    major: string;
+    numOfRoommate: number;
+    acceptance: string;
+    wakeUpMeridian: string;
+    wakeUpTime: number;
+    sleepingMeridian: string;
+    sleepingTime: number;
+    turnOffMeridian: string;
+    turnOffTime: number;
+    smokingState: string;
+    sleepingHabit: string;
+    airConditioningIntensity: number;
+    heatingIntensity: number;
+    lifePattern: string;
+    intimacy: string;
+    canShare: boolean;
+    isPlayGame: boolean;
+    isPhoneCall: boolean;
+    studying: string;
+    intake: string;
+    cleanSensitivity: number;
+    noiseSensitivity: number;
+    cleaningFrequency: string;
+    personality: string;
+    mbti: string;
+    options: {
+      '무조건 지켜줘야 해요!': string[];
+      '이정도는 맞춰줄 수 있어요!': string[];
+      '이건 절대 절대 안 돼요!': string[];
     };
   };
 }

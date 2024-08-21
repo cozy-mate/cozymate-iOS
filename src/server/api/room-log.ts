@@ -1,6 +1,7 @@
 import { GetAxiosInstance } from '@axios/axios.method';
 import { GetRoomLogResponse } from '@server/responseTypes/room-log';
 
+// 특정 방에 roomlog 목록 조회
 export const getRoomLog = async (
   roomId: number,
   page?: number,

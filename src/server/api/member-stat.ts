@@ -1,6 +1,7 @@
 import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
 import { RegisterUserDataRequest, UpdateUserDataRequest } from '@server/requestTypes/member-stat';
 import {
+  GetOtherUserDetailDataResponse,
   GetUserDetailDataResponse,
   RegisterUserDataResponse,
   SearchUsersResponse,
@@ -9,16 +10,31 @@ import {
 
 // 사용자 상세정보 조회
 export const getUserDetailData = async (): Promise<GetUserDetailDataResponse> => {
-  const response = await GetAxiosInstance<GetUserDetailDataResponse>(`/members/stat/`);
+  const response = await GetAxiosInstance<GetUserDetailDataResponse>(`/members/stat`);
+
+  return response.data;
+};
+
+// 사용자 상세정보 조회 (타인용)
+export const getOtherUserDetailData = async (
+  memberId: number,
+): Promise<GetOtherUserDetailDataResponse> => {
+  const response = await GetAxiosInstance<GetOtherUserDetailDataResponse>(
+    `/members/stat/${memberId}`,
+  );
 
   return response.data;
 };
 
 // 사용자 상세정보 필터링, 일치율 조회
-export const searchUsers = async (page?: number): Promise<SearchUsersResponse> => {
+export const searchUsers = async (
+  filterList?: string[],
+  page?: number,
+): Promise<SearchUsersResponse> => {
   const response = await GetAxiosInstance<SearchUsersResponse>(`/members/stat/search`, {
     params: {
       page: page,
+      filterList: filterList,
     },
   });
 
@@ -29,7 +45,7 @@ export const searchUsers = async (page?: number): Promise<SearchUsersResponse> =
 export const registerUserData = async (
   data: RegisterUserDataRequest,
 ): Promise<RegisterUserDataResponse> => {
-  const response = await PostAxiosInstance<RegisterUserDataResponse>(`/members/stat/`, data);
+  const response = await PostAxiosInstance<RegisterUserDataResponse>(`/members/stat`, data);
 
   return response.data;
 };
@@ -38,7 +54,7 @@ export const registerUserData = async (
 export const updateUserData = async (
   data: UpdateUserDataRequest,
 ): Promise<UpdateUserDataResponse> => {
-  const response = await PostAxiosInstance<UpdateUserDataResponse>(`/members/stat/`, data);
+  const response = await PostAxiosInstance<UpdateUserDataResponse>(`/members/stat`, data);
 
   return response.data;
 };

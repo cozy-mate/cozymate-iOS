@@ -141,16 +141,16 @@ function AppInner() {
             <loginStack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
             <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
 
-            <loginStack.Screen name="TodoListScreen" component={TodoListScreen} />
-            <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
+            {/* <loginStack.Screen name="TodoListScreen" component={TodoListScreen} /> */}
+            {/* <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} /> */}
 
             <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
             <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
 
-            <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
+            {/* <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
             <loginStack.Screen name="FeedEditScreen" component={FeedEditScreen} />
             <loginStack.Screen name="FeedViewScreen" component={FeedViewScreen} />
-            <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
+            <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} /> */}
           </loginStack.Navigator>
         )
       ) : (

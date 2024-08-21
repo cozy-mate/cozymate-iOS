@@ -10,6 +10,7 @@ export interface GetRoomDataResponse {
     profileImage: number;
     mateList: {
       memberId: number;
+      mateId: number;
       nickname: string;
     }[];
   };

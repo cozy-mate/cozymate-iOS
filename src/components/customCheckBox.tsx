@@ -40,14 +40,14 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
           updatedItems.find((item) => item.index === originalItem.index) || originalItem,
       );
       setItems(newOrder);
-      setValue(value.filter((name) => name !== selectedItem.name));
+      setValue(value.filter((id) => id !== selectedItem.id));
     } else {
       const newOrder = [
         selectedItem,
         ...updatedItems.filter((item) => item.index !== selectedItem.index),
       ];
       setItems(newOrder);
-      setValue([...value, selectedItem.name]);
+      setValue([...value, selectedItem.id]);
     }
 
     setItems(updatedItems);
