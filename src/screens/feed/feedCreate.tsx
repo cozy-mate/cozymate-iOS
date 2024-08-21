@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Pressable,
@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Animated,
   LogBox,
-  Alert,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -23,18 +22,19 @@ import { FeedCreateScreenProps } from '@type/param/roomStack';
 import { createPost, getDetailPost, updatePost } from '../../server/api/post';
 import { uploadAssetImageToS3 } from '../../server/api/image';
 import { useRecoilState } from 'recoil';
-import {
-  feedRefreshState,
-  hasRoomState,
-  postDetailRefreshState,
-  roomInfoState,
-} from '@recoil/recoil';
+import { feedRefreshState, hasRoomState, postDetailRefreshState } from '@recoil/recoil';
 import BackCleanHeader from 'src/layout/backCleanHeader';
+import ButtonModal from '@components/common/buttonModal';
+import { useButtonModal } from '@hooks/useButtonModal';
+
+const IMAGE_UPLOAD_ERROR = '이미지 업로드에 실패했습니다.';
+const POST_CREATE_ERROR = '게시글 생성에 실패했습니다.';
+const POST_SUCCESS = '게시글이 작성되었습니다.';
+const POST_UPDATE_SUCCESS = '게시글이 수정되었습니다.';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
-  // TODO : Back Nav 넣기
   // TODO : 복잡하게 섞인 코드 정리하기
-  // TODO : RecoilState RoomId 업데이트 되면 적용하기
+
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
@@ -46,6 +46,8 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
   const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
+  const [modalTitle, setModalTitle] = useState<string>('작성 완료');
+  const [isGoingBack, setIsGoingBack] = useState<boolean>(false);
   const { navigation } = props;
 
   useEffect(() => {
@@ -69,10 +71,12 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setImages(imageList);
       setPostDescription(response.result.content);
     } catch (e: any) {
-      Alert.alert('게시글을 불러오는데 실패했습니다.');
-      navigation.goBack();
+      setModalTitle(POST_CREATE_ERROR);
+      handleButtonModalOpen();
     }
   };
+
+  const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
 
   const valueHandleDescriptionChange = (text: string) => {
     setPostDescription(text);
@@ -101,9 +105,15 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const createMyPost = async () => {
     let imageResponse = { imgUrlList: [] };
-
-    if (images.length > 0) {
-      imageResponse = await uploadAssetImageToS3(images);
+    try {
+      if (images.length > 0) {
+        imageResponse = await uploadAssetImageToS3(images);
+      }
+    } catch (e) {
+      setModalTitle(IMAGE_UPLOAD_ERROR);
+      setIsGoingBack(false);
+      handleButtonModalOpen();
+      return;
     }
 
     try {
@@ -112,23 +122,29 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
+
       setNeedRefresh(true);
-      navigation.goBack();
+      setIsGoingBack(true);
+      setModalTitle(POST_SUCCESS);
+      handleButtonModalOpen();
     } catch (e: any) {
-      e.response.data;
+      console.log(e.response.data);
+      setIsGoingBack(false);
+      setModalTitle(POST_CREATE_ERROR);
+      handleButtonModalOpen();
     }
   };
 
   const updateMyPost = async () => {
     let imageResponse = { imgUrlList: [] };
-
-    if (images.length > 0) {
-      try {
+    try {
+      if (images.length > 0) {
         imageResponse = await uploadAssetImageToS3(images);
-      } catch (e) {
-        Alert.alert('이미지 업로드에 실패했습니다.');
-        return;
       }
+    } catch (e) {
+      setModalTitle(IMAGE_UPLOAD_ERROR);
+      setIsGoingBack(false);
+      handleButtonModalOpen();
     }
 
     try {
@@ -140,9 +156,13 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       });
       setNeedRefresh(true);
       setNeedsPostRefresh(true);
-      navigation.goBack();
+      setIsGoingBack(true);
+      setModalTitle(POST_UPDATE_SUCCESS);
+      handleButtonModalOpen();
     } catch (e: any) {
-      console.log(e.response.data);
+      setModalTitle(IMAGE_UPLOAD_ERROR);
+      setIsGoingBack(false);
+      handleButtonModalOpen();
     }
   };
 
@@ -151,6 +171,12 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       createMyPost();
     } else {
       updateMyPost();
+    }
+  };
+  const closeModal = () => {
+    handleButtonModalClose();
+    if (isGoingBack) {
+      navigation.goBack();
     }
   };
 
@@ -259,6 +285,14 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             <Text className="text-base font-semibold text-center text-white">작성</Text>
           </Pressable>
         </View>
+        <ButtonModal
+          isVisible={isButtonModalVisible}
+          title={modalTitle}
+          buttonCount={1}
+          submitText="확인"
+          closeModal={() => closeModal()}
+          onSubmit={() => closeModal()}
+        />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

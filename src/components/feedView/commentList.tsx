@@ -4,16 +4,18 @@ import { CommentType } from '@type/feed';
 import CommentCard from '@components/feedView/commentCard';
 type CommentListProps = {
   commentCards: CommentType[];
+  postId: number;
+  updateComment : () => void;
 };
 
 const CommentList = (props: CommentListProps) => {
-  const { commentCards } = props;
+  const { commentCards,postId,updateComment } = props;
 
   return (
-    <View className="flex-1 flex-col w-full px-5 items-start mb-10">
+    <View className="flex-col items-start flex-1 w-full px-5 mb-10">
       {commentCards.map((comment, commentIndex) => (
         <Fragment>
-          <CommentCard key={commentIndex} comment={comment} />
+          <CommentCard key={commentIndex} comment={comment} postId={postId} updateComment={updateComment}/>
           {commentIndex !== commentCards.length - 1 && (
             <View className="w-full border-t-[1px] border-[#F4F4F4]"></View>
           )}

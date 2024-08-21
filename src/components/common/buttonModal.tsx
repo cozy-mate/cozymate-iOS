@@ -3,8 +3,8 @@ import { View, Modal, Text, TouchableOpacity } from 'react-native';
 
 type Props = {
   title: string;
-  message: string;
-  cancelText: string;
+  message?: string;
+  cancelText?: string;
   submitText: string;
   isVisible: boolean;
   closeModal: any;
@@ -34,7 +34,9 @@ const ButtonModal = (props: Props) => {
           onTouchEnd={handleTouchEnd}
         >
           <Text className="mb-1 text-lg font-semibold text-emphasizedFont">{title}</Text>
-          <Text className="mb-5 text-sm font-normal text-colorFont">{message}</Text>
+          {message === '' ? null : (
+            <Text className="mb-5 text-sm font-normal text-colorFont">{message}</Text>
+          )}
           <View className="flex flex-row justify-center space-x-2">
             {buttonCount === 2 && (
               <TouchableOpacity

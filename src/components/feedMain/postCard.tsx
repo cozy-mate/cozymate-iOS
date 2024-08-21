@@ -32,9 +32,6 @@ const PostCard = (props: PostCardProps) => {
 
   const {
     PERSONA_IMAGE_URL,
-    loadingProfile,
-    handleProfileImageLoadStart,
-    handleProfileImageLoadEnd,
   } = usePersonaImage(post.writer.persona);
 
   const [profile, setProfile] = useRecoilState(profileState);
@@ -47,15 +44,8 @@ const PostCard = (props: PostCardProps) => {
         >
           <View className="flex flex-row items-center justify-between w-full">
             <View className="flex flex-row items-center justify-start space-x-2">
-              {loadingProfile && (
-                <SkeletonPlaceholder>
-                  <View style={{ width: 32, height: 32, borderRadius: 16 }} />
-                </SkeletonPlaceholder>
-              )}
               <Image
                 className="w-8 h-8 rounded-full"
-                onLoadStart={handleProfileImageLoadStart}
-                onLoadEnd={handleProfileImageLoadEnd}
                 source={{ uri: PERSONA_IMAGE_URL }}
               />
               <View className="flex flex-row items-center justify-start">
