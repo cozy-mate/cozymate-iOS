@@ -3262,6 +3262,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.51.24":
+  version: 5.51.24
+  resolution: "@tanstack/query-core@npm:5.51.24"
+  checksum: 5404604bf60a7d9880d33296da5316cd4087ff64f0d4afcd77facdbe1d5ca7a3770a1309a1f2202d3896ad6b0b807b4e0d17411d678bc4febe0577038102d40d
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.51.24":
+  version: 5.51.24
+  resolution: "@tanstack/react-query@npm:5.51.24"
+  dependencies:
+    "@tanstack/query-core": 5.51.24
+  peerDependencies:
+    react: ^18.0.0
+  checksum: 2aeb27d7f4965ca62baa30237948728bfc34689a78df912c367f322457715d2feca6e634b0b9b63851f96df8c0abce97b93803bcee67d6fdf56744d7292bd2f2
+  languageName: node
+  linkType: hard
+
 "@trysound/sax@npm:0.2.0":
   version: 0.2.0
   resolution: "@trysound/sax@npm:0.2.0"
@@ -4765,6 +4783,7 @@ __metadata:
     "@react-navigation/native": ^6.1.17
     "@react-navigation/native-stack": ^6.9.26
     "@sentry/react-native": ^5.23.1
+    "@tanstack/react-query": ^5.51.24
     "@types/react": ^18.2.6
     "@types/react-test-renderer": ^18.0.0
     axios: ^1.7.3

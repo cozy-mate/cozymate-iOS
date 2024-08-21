@@ -81,6 +81,7 @@
             "custom-routes": "@routes/**",
             "custom-recoil": "@recoil/**",
             "custom-axios": "@axios/**",
+            "custom-layout": "@layout/**",
             "custom-server": "@server/**",
             "custom-hooks": "@hooks/**",
             "custom-utils": "@utils/**",

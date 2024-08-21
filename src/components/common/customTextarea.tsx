@@ -55,7 +55,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
 
   return (
     <View className="mb-12">
-      <Text className="px-1 mb-2 text-base font-semibold text-basicFont">{title}</Text>
+      <Text className="px-1 mb-2 text-lg font-semibold text-basicFont">{title}</Text>
       <Pressable onPress={handleFocus}>
         <TextInput
           multiline

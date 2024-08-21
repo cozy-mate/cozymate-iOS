@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -18,8 +18,14 @@ import RoleBox from '@components/todoList/roleBox';
 
 import { getDayOfWeek } from '@utils/getDay';
 
-import { dummyData, roleDummyData, ruleDummyData } from './dummyData';
 import MyRoleBox from '@components/todoList/myRoleBox';
+import ControlModal from '@components/feedView/controlModal';
+import { useFeedModal } from '@hooks/useFeedModal';
+import { changeTodoState, getTodoData } from '@server/api/todo';
+import { useRecoilState } from 'recoil';
+import { profileState, roomInfoState } from '@recoil/recoil';
+import { getRuleData } from '@server/api/rule';
+import { getRoleData } from '@server/api/role';
 
 interface TodoItem {
   id: number;
@@ -27,40 +33,112 @@ interface TodoItem {
   content: string;
 }
 
+interface MateTodoItem {
+  persona: number;
+  mateTodoList: TodoItem[];
+}
+
+interface MateTodo {
+  [key: string]: MateTodoItem;
+}
+
+interface RuleItem {
+  id: number;
+  content: string;
+  memo: string;
+}
+
+interface RoleItem {
+  id: number;
+  content: string;
+  repeatDayList: string[];
+  allDays: boolean;
+}
+
+interface MateRoleItem {
+  persona: number;
+  mateRoleList: RoleItem[];
+}
+
+interface MateRole {
+  [key: string]: MateRoleItem;
+}
+
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
-  const [isTodo, setIsTodo] = useState<boolean>(true);
-
-  const [myTodoData, setMyTodoData] = useState<TodoItem[]>(dummyData.myTodoList);
-
   const { bottom } = useSafeAreaInsets();
 
-  const mateTodoData = Object.entries(dummyData.mateTodoList).map(([name, todos]) => ({
-    name,
-    todos,
-  }));
+  const [myProfile, setMyProfile] = useRecoilState(profileState);
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
-  const mateRoleData = Object.entries(roleDummyData.otherRoleList).map(([name, roles]) => ({
-    name,
-    roles,
-  }));
+  const [isTodo, setIsTodo] = useState<boolean>(true);
 
-  const handleTodo = () => {
-    setIsTodo(true);
-  };
+  // Todo용 데이터
+  const [today, setToday] = useState<string>('');
+  const [myTodoData, setMyTodoData] = useState<TodoItem[]>([]);
+  const [mateTodoData, setMateTodoData] = useState<MateTodo>({});
 
-  const handleRoleRule = () => {
-    setIsTodo(false);
+  // Role용 데이터
+  const [ruleData, setRuleData] = useState<RuleItem[]>([]);
+
+  // Rule용 데이터
+  const [myRoleData, setMyRoleData] = useState<MateRoleItem>({
+    persona: 0,
+    mateRoleList: [],
+  });
+  const [mateRoleData, setMateRoleData] = useState<MateRole>({});
+
+  const handleNav = () => {
+    setIsTodo(!isTodo);
   };
 
   const toCreate = () => {
-    navigation.navigate('CreateTodoScreen');
+    navigation.navigate('CreateTodoScreen', { type: isTodo ? 'todo' : 'role' });
   };
 
+  const getRoomTodoList = async () => {
+    const response = await getTodoData(roomInfo.roomId);
+    console.log(response);
+    console.log(response.result.mateTodoList);
+
+    setToday(getDayOfWeek(response.result.timePoint));
+    setMyTodoData(response.result.myTodoList.mateTodoList);
+    setMateTodoData(response.result.mateTodoList);
+  };
+
+  const getRoomRuleData = async () => {
+    const response = await getRuleData(roomInfo.roomId);
+    console.log(response);
+
+    setRuleData(response.result);
+  };
+
+  const getRoomRoleData = async () => {
+    const response = await getRoleData(roomInfo.roomId);
+    console.log(response);
+
+    setMyRoleData(response.result.myRoleList);
+    setMateRoleData(response.result.otherRoleList);
+  };
+
+  useEffect(() => {
+    getRoomTodoList();
+    getRoomRuleData();
+    getRoomRoleData();
+  }, []);
+
+  const changeTodo = async (todo: TodoItem) => {
+    const response = await changeTodoState({ todoId: todo.id, completed: !todo.completed });
+    console.log(response);
+  };
+
+  const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
+    useFeedModal();
+
   return (
-    <View className="flex-1 bg-[#CADFFF]">
+    <View className="flex-1 bg-[#CADFFF]" onTouchEnd={onPressModalClose}>
       <Background style={{ position: 'absolute' }} />
       <View className="mt-[76px] mx-5">
-        <NavBar isTodo={isTodo} handleTodo={handleTodo} handleRoleRule={handleRoleRule} />
+        <NavBar isTodo={isTodo} handleNav={handleNav} />
       </View>
       <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
         <View>
@@ -70,11 +148,22 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
               <View className="mb-14">
                 <View className="flex flex-row justify-between px-1 mb-4">
                   <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-                    <Text className="text-main1">델로</Text>님이{'\n'}해야할 일들을 알려드릴게요!
+                    {today}, <Text className="text-main1">{myProfile.nickname}</Text>
+                    님이{'\n'}해야할 일들을 알려드릴게요!
                   </Text>
-                  <SettingIcon />
+                  <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
+                    <SettingIcon />
+                  </Pressable>
+
+                  <ControlModal
+                    isModalVisible={isModalVisible}
+                    modalPosition={modalPosition}
+                    onSubmit={onPressModalClose}
+                    onEdit={toCreate}
+                    onPressModalClose={onPressModalClose}
+                  />
                 </View>
-                <TodoBox todoData={myTodoData} setMyTodoData={setMyTodoData} />
+                <TodoBox todoData={myTodoData} changeTodo={changeTodo} />
               </View>
 
               {/* 다른 메이트들의 투두리스트 목록 */}
@@ -84,8 +173,12 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                     다른 메이트들은{'\n'}오늘 어떤 일들을 할까요?
                   </Text>
                 </View>
-                {mateTodoData.map((mate, index) => (
-                  <OthersTodoBox key={index} mateTodoData={[mate]} />
+                {Object.entries(mateTodoData).map(([name, mate]) => (
+                  <OthersTodoBox
+                    key={name}
+                    persona={mate.persona}
+                    mateTodoData={[{ name, todos: mate.mateTodoList }]}
+                  />
                 ))}
               </View>
             </>
@@ -95,26 +188,41 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
               <View className="mb-14">
                 <View className="flex flex-row justify-between px-1 mb-4">
                   <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-                    <Text className="text-main1">피그말리온</Text>의{'\n'}규칙에 대해 알려드릴게요!
+                    <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해
+                    알려드릴게요!
                   </Text>
                   <SettingIcon />
                 </View>
-                <RuleBox ruleData={ruleDummyData} />
+                <RuleBox ruleData={ruleData} />
               </View>
 
               {/* 코지홈의 Role */}
               <View style={{ paddingBottom: bottom }}>
                 <View className="flex flex-row justify-between px-1 mb-4">
                   <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-                    <Text className="text-main1">피그말리온</Text>의{'\n'}역할에 대해 알려드릴게요!
+                    <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해
+                    알려드릴게요!
                   </Text>
                   <SettingIcon />
                 </View>
 
-                <MyRoleBox roleData={roleDummyData.myRoleList} nickname="델로" />
+                <MyRoleBox
+                  persona={myRoleData.persona}
+                  roleData={myRoleData.mateRoleList}
+                  nickname={myProfile.nickname}
+                />
 
-                {mateRoleData.map((mate, index) => (
-                  <RoleBox key={index} roleData={[mate]} />
+                {Object.entries(mateRoleData).map(([name, mate], index) => (
+                  <RoleBox
+                    key={index}
+                    persona={mate.persona}
+                    roleData={[
+                      {
+                        name: name,
+                        roles: mate.mateRoleList,
+                      },
+                    ]}
+                  />
                 ))}
               </View>
             </>

@@ -8,85 +8,103 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
     return str.length > 7 ? `${str.slice(0, 7)}...` : str;
   };
 
-  const renderInfo = (my: Record<string, string>, other: Record<string, string>, title: string) => {
+  const formatValue = (key: string, value: any) => {
+    if (key === 'birthYear') {
+      return `${value}년`;
+    } else if (key === 'isPlayGame' || key === 'isPhoneCall' || key === 'canShare') {
+      return value ? 'O' : 'X';
+    } else if (key === 'numOfRoommate') {
+      return `${value}인 1실`;
+    } else if (key === 'wakeUpTime') {
+      return `${userData.wakeUpMeridian} ${value}시`;
+    } else if (key === 'sleepingTime') {
+      return `${userData.sleepingMeridian} ${value}시`;
+    } else if (key === 'turnOffTime') {
+      return `${userData.turnOffMeridian} ${value}시`;
+    }
+    return value;
+  };
+
+  const renderInfo = (my: Record<string, any>, other: Record<string, any>) => {
     const labels: Record<string, string> = {
-      name: '이름',
-      age: '출생년도',
-      school: '학교',
-      studentId: '학번',
+      name: '이름', // From userBasicData
+      memberName: '이름', // From otherUserBasicData
+      birthYear: '출생년도',
+      universityId: '학교',
+      admissionYear: '학번',
       major: '학과',
-      type: '인실',
-      passOrNot: '합격여부',
-      wakeUp: '기상시간',
-      sleep: '취침시간',
-      lightsOut: '소등시간',
-      smoking: '흡연여부',
-      sleepHabit: '잠버릇',
-      temperament: '더위, 추위',
-      pattern: '생활 패턴',
+      numOfRoommate: '인실',
+      acceptance: '합격여부',
+      wakeUpTime: '기상시간',
+      sleepingTime: '취침시간',
+      turnOffTime: '소등시간',
+      smokingState: '흡연여부',
+      sleepingHabit: '잠버릇',
+      airConditioningIntensity: '에어컨 강도',
+      heatingIntensity: '히터 강도',
+      lifePattern: '생활 패턴',
       intimacy: '친밀도',
-      sharing: '물건공유',
-      study: '공부여부',
-      game: '게임여부',
-      call: '전화여부',
-      cleanliness: '청결 예민도',
-      noise: '소음 예민도',
-      cleaning: '청소 빈도',
+      canShare: '물건공유',
+      studying: '공부여부',
+      isPlayGame: '게임여부',
+      isPhoneCall: '전화여부',
+      intake: '섭취여부',
+      cleanSensitivity: '청결 예민도',
+      noiseSensitivity: '소음 예민도',
+      cleaningFrequency: '청소 빈도',
       personality: '성격',
       mbti: 'MBTI',
     };
 
-    const keys = Object.keys(labels);
+    const keys = Object.keys(labels).filter((key) => key in my || key in other);
 
     return (
-      <View className="w-full leading-loose">
-        {keys.map((key, index) =>
-          key in my && key in other ? (
-            <View
-              key={key}
-              className={`flex flex-row items-center justify-between w-full py-3 ${
-                index === 0 ? 'pt-0' : ''
-              } ${
-                index === keys.length - 1 ? 'pb-0 border-b-0' : 'border-b-[1px] border-b-[#f1f2f4]'
-              }`}
-            >
-              <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
-              <View className="flex flex-row w-[70%] justify-around items-center">
-                <Text
-                  className={`font-medium tracking-tight ${
-                    key !== 'name' && my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                  }`}
-                  style={{ maxWidth: '46%', textAlign: 'center' }}
-                >
-                  {truncateString(my[key])}
-                </Text>
-                <Text
-                  className={`font-medium tracking-tight ${
-                    key !== 'name' && my[key] !== other[key] ? 'text-[#F7473B]' : 'text-[#505059]'
-                  }`}
-                  style={{ maxWidth: '46%', textAlign: 'center' }}
-                >
-                  {truncateString(other[key])}
-                </Text>
+      <View className="flex mt-4 mb-[7px] border-[1px] p-4 rounded-xl border-[#f1f2f4]">
+        <View className="w-full leading-loose">
+          {keys.map((key, index) =>
+            key in my && key in other ? (
+              <View
+                key={key}
+                className={`flex flex-row items-center justify-between w-full py-3 ${
+                  index === 0 ? 'pt-0' : ''
+                } ${
+                  index === keys.length - 1
+                    ? 'pb-0 border-b-0'
+                    : 'border-b-[1px] border-b-[#f1f2f4]'
+                }`}
+              >
+                <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
+                <View className="flex flex-row w-[75%] justify-center items-center">
+                  <Text
+                    className={`font-medium tracking-tight ${
+                      key !== 'name' && key !== 'memberName' && my[key] !== other[key]
+                        ? 'text-[#F7473B]'
+                        : 'text-[#505059]'
+                    }`}
+                    style={{ width: '50%', textAlign: 'center' }}
+                  >
+                    {truncateString(formatValue(key, my[key]))}
+                  </Text>
+                  <Text
+                    className={`font-medium tracking-tight ${
+                      key !== 'name' && key !== 'memberName' && my[key] !== other[key]
+                        ? 'text-[#F7473B]'
+                        : 'text-[#505059]'
+                    }`}
+                    style={{ width: '50%', textAlign: 'center' }}
+                  >
+                    {truncateString(formatValue(key, other[key]))}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ) : null,
-        )}
+            ) : null,
+          )}
+        </View>
       </View>
     );
   };
 
-  return (
-    <ScrollView className="h-2/3">
-      <View className="flex-1 px-5 pb-[34px]">
-        <View className="flex mt-4 mb-[7px] border-[1px] p-4 rounded-xl border-[#f1f2f4]">
-          {renderInfo(userData.basicInfo, otherUserData.basicInfo, '기본정보')}
-          {renderInfo(userData.dormitoryInfo, otherUserData.dormitoryInfo, '기숙사 정보')}
-          {renderInfo(userData.essentialInfo, otherUserData.essentialInfo, '필수 정보')}
-        </View>
-      </View>
-    </ScrollView>
-  );
+  return <View className="px-5 mt-4 pb-[54px]">{renderInfo(userData, otherUserData)}</View>;
 };
 
 export default TableView;

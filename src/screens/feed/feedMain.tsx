@@ -172,7 +172,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
           <Text className="text-lg font-semibold text-basicFont">{feedInfo.name}</Text>
         ) : (
           <Text className="text-lg font-semibold text-disabledFont">
-            피드의 이름을 설정해주세요.
+            피드의 이름을 설정해주세요
           </Text>
         )}
         <Pressable onPress={toFeedEdit}>
@@ -221,12 +221,8 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         onEndReached={onEndReached}
         onEndReachedThreshold={0}
       />
-      <View>
-        <Pressable
-          className={`absolute items-center justify-center p-4 bottom-14 right-3 rounded-xl
-            {}`}
-          onPress={toFeedCreate}
-        >
+      <View className="absolute z-20 bottom-8 right-5 w-fit">
+        <Pressable onPress={toFeedCreate}>
           <PostEdit />
         </Pressable>
       </View>

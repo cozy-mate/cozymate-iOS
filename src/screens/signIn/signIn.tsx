@@ -6,20 +6,20 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 import { useRecoilState } from 'recoil';
-import { hasRoomState, loggedInState, profileState } from '@recoil/recoil';
+import { hasRoomState, loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 
 import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
 import { getMyProfile, signIn } from '@server/api/member';
 import { setAccessToken } from '@utils/token';
-import { checkHasRoom } from '@server/api/room';
+import { checkHasRoom, getRoomData } from '@server/api/room';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setMyProfile] = useRecoilState(profileState);
   const [, setHasRoom] = useRecoilState(hasRoomState);
+  const [, setRoomInfo] = useRecoilState(roomInfoState);
 
   const toOnBoard = () => {
-    setLoggedIn(true);
     navigation.navigate('PersonalInfoInputScreen');
   };
 
@@ -41,19 +41,19 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
       await setAccessToken(accessToken);
 
-      const getProfileResponse = await getMyProfile();
-
-      setMyProfile({
-        name: getProfileResponse.result.name,
-        nickname: getProfileResponse.result.nickname,
-        gender: getProfileResponse.result.gender,
-        birthday: getProfileResponse.result.birthday,
-        persona: getProfileResponse.result.persona,
-      });
-
       if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');
       } else {
+        const getProfileResponse = await getMyProfile();
+
+        setMyProfile({
+          name: getProfileResponse.result.name,
+          nickname: getProfileResponse.result.nickname,
+          gender: getProfileResponse.result.gender,
+          birthday: getProfileResponse.result.birthday,
+          persona: getProfileResponse.result.persona,
+        });
+
         const roomCheckResponse = await checkHasRoom();
         const roomId = roomCheckResponse.result.roomId;
 
@@ -61,6 +61,18 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
         if (roomId !== 0) {
           setHasRoom({ hasRoom: true, roomId: roomId });
+
+          const roomInfoResponse = await getRoomData(roomId);
+
+          console.log(roomInfoResponse.result.mateList);
+
+          setRoomInfo({
+            roomId: roomInfoResponse.result.roomId,
+            name: roomInfoResponse.result.name,
+            inviteCode: roomInfoResponse.result.inviteCode,
+            profileImage: roomInfoResponse.result.profileImage,
+            mateList: roomInfoResponse.result.mateList,
+          });
         }
 
         setLoggedIn(true);
@@ -100,7 +112,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={toOnboard}
+            onPress={toOnBoard}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-base font-semibold text-center text-white">Apple로 계속하기</Text>

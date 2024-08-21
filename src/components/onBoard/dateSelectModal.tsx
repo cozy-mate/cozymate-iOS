@@ -75,7 +75,7 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
           {title}
         </Text>
         <View className="mt-1.5 flex flex-row items-center justify-between w-full pb-[3px]">
-          <Text className="text-xs font-medium text-basicFont">{displayDate}</Text>
+          <Text className="text-sm font-medium text-basicFont">{displayDate}</Text>
           <DownArrow />
         </View>
       </View>
