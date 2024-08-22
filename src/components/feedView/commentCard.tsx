@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, Text } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -14,42 +14,67 @@ import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useButtonModal } from '@hooks/useButtonModal';
 import { useRecoilState } from 'recoil';
 import { profileState } from '@recoil/recoil';
+import { deleteComment, updateComment } from '../../server/api/comment';
+import { roomInfoState } from '../../recoil/recoil';
 type CommentCardProps = {
   comment: CommentType;
+  postId:number;
+  updateComment : () => void;
 };
 
-const CommentCard = (props: CommentCardProps) => {
-  const { comment } = props;
+const COMMENT_DELETE_SUCCESS = '댓글이 삭제되었습니다.';
+const COMMENT_DELETE_ERROR = '댓글 삭제에 실패했습니다.';
 
-  const [isMyComment, setIsMyComment] = useState<boolean>(true);
+const CommentCard = (props: CommentCardProps) => {
+  const { comment,postId,updateComment } = props;
+
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [oneButtonModalTitle, setOneButtonModalMessage] = useState('');
 
   const {
     PERSONA_IMAGE_URL,
-    loadingProfile,
-    handleProfileImageLoadStart,
-    handleProfileImageLoadEnd,
   } = usePersonaImage(comment.writer.persona);
-
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
+  const {
+    isButtonModalVisible: isTwoButtonModalVisible,
+    handleButtonModalClose: handleTwoButtonModalClose,
+    handleButtonModalOpen: handleTwoButtonModalOpen,
+  } = useButtonModal();
+  
+  const {
+    isButtonModalVisible: isOneButtonModalVisible,
+    handleButtonModalClose: handleOneButtonModalClose,
+    handleButtonModalOpen: handleOneButtonModalOpen,
+  } = useButtonModal();
 
-  const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
+  const deleteCommentHandler = async () => {
+    try {
+      const response = await deleteComment(roomInfo.roomId, postId, comment.id);
+      if(response){
+        handleTwoButtonModalClose();
+        setOneButtonModalMessage(COMMENT_DELETE_SUCCESS);
+        
+        handleOneButtonModalOpen();
+        
+      }
+     
+      
+    } catch (e) {
+      setOneButtonModalMessage(COMMENT_DELETE_ERROR);
+      handleOneButtonModalOpen();
+    }
+  }
 
   const [profile, setProfile] = useRecoilState(profileState);
+
 
   return (
     <View className="w-full my-5">
       <View className="flex flex-row items-center justify-between w-full mb-2">
         <View className="flex flex-row items-center justify-start space-x-2">
-          {loadingProfile && (
-            <SkeletonPlaceholder>
-              <View style={{ width: 32, height: 32, borderRadius: 16 }} />
-            </SkeletonPlaceholder>
-          )}
           <Image
             className="w-8 h-8 rounded-full"
-            onLoadStart={handleProfileImageLoadStart}
-            onLoadEnd={handleProfileImageLoadEnd}
             source={{ uri: PERSONA_IMAGE_URL }}
           />
           <View className="flex flex-row items-center justify-start">
@@ -61,7 +86,7 @@ const CommentCard = (props: CommentCardProps) => {
             </Text>
           </View>
         </View>
-        {isMyComment && (
+        {comment.writer.nickname === profile.nickname && (
           <View ref={dotIconRef} onTouchEnd={onPressModalOpen}>
             <DotIcon />
           </View>
@@ -77,18 +102,29 @@ const CommentCard = (props: CommentCardProps) => {
         isModalVisible={isModalVisible}
         modalPosition={modalPosition}
         onPressModalClose={onPressModalClose}
-        onSubmit={handleButtonModalOpen}
+        onSubmit={handleTwoButtonModalOpen}
         onEdit={() => {}}
       />
       <ButtonModal
-        title="게시물 삭제하시나요?"
+        title="댓글을 삭제하시나요?"
         message="삭제하면 우리들의 추억을 복구할 수 없어요!"
         cancelText="취소"
         submitText="삭제"
-        isVisible={isButtonModalVisible}
-        closeModal={handleButtonModalClose}
-        onSubmit={() => {}}
+        isVisible={isTwoButtonModalVisible}
+        closeModal={handleTwoButtonModalClose}
+        onSubmit={()=>deleteCommentHandler()}
         buttonCount={2}
+      />
+      <ButtonModal
+        title={oneButtonModalTitle}
+        submitText="확인"
+        isVisible={isOneButtonModalVisible}
+        closeModal={handleOneButtonModalClose}
+        onSubmit={()=>{
+          updateComment();
+          handleOneButtonModalClose();
+        }}
+        buttonCount={1}
       />
     </View>
   );

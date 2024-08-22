@@ -1,4 +1,9 @@
-import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
+import {
+  DeleteAxiosInstance,
+  GetAxiosInstance,
+  PostAxiosInstance,
+  PutAxiosInstance,
+} from '@axios/axios.method';
 import { CreateCommentRequest, UpdateCommentRequest } from '@server/requestTypes/comment';
 import {
   CreateCommentResponse,
@@ -25,7 +30,7 @@ export const deleteComment = async (
   postId: number,
   commentId: number,
 ): Promise<DeleteCommentResponse> => {
-  const response = await PostAxiosInstance<DeleteCommentResponse>(
+  const response = await DeleteAxiosInstance<DeleteCommentResponse>(
     `/comment/${roomId}/${postId}/${commentId}`,
   );
   return response.data;

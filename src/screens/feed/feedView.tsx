@@ -7,8 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   RefreshControl,
-  Animated,
-  Alert,
+  Animated as NativeAnimated,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -24,7 +23,6 @@ import DotIcon from '@assets/feedView/dotIcon.svg';
 import { FeedViewScreenProps } from '@type/param/roomStack';
 import { CommentType, PostCardType } from '@type/feed';
 
-import { exampleCommentList, examplePostList } from '@utils/mockData/exampleList';
 import { postTimeUtil } from '@utils/time/timeUtil';
 
 import CommentList from '@components/feedView/commentList';
@@ -37,20 +35,40 @@ import { useButtonModal } from '@hooks/useButtonModal';
 import ButtonModal from '@components/common/buttonModal';
 import { deletePost, getDetailPost } from '@server/api/post';
 import { useRecoilState } from 'recoil';
-import { hasRoomState, postDetailRefreshState, profileState, roomInfoState } from '@recoil/recoil';
-import { useFocusEffect } from '@react-navigation/native';
-import { createComment, getCommentList } from '@server/api/comment';
+import {
+  feedRefreshState,
+  hasRoomState,
+  postDetailRefreshState,
+  profileState,
+  roomInfoState,
+} from '@recoil/recoil';
+import { createComment, deleteComment, getCommentList } from '@server/api/comment';
 import BackCleanHeader from 'src/layout/backCleanHeader';
-import { getFeedData } from '@server/api/feed';
+import { useFocusEffect } from '@react-navigation/native';
+import Animated from 'react-native-reanimated';
+import { useAnimatedKeyboard, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { updateComment } from '../../server/api/comment';
+
+const POST_GET_ERROR = '게시글을 불러오는데 실패했습니다.';
+const POST_DELETE_SUCCESS = '게시글이 삭제되었습니다.';
+const POST_DELETE_ERROR = '게시글 삭제에 실패했습니다.';
+const COMMENT_CREATE_ERROR = '댓글 작성에 실패했습니다.';
+
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
-  // TODO : Back Nav 넣기
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : Comment시 자연스럼게 Refresh되도록 수정
-  // TODO : RecoilState RoomId 업데이트 되면 적용하기
+
+  const keyboard = useAnimatedKeyboard();
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    bottom: withTiming(keyboard.height.value, { duration: 0 }),
+  }));
 
   const { postId } = props.route.params;
+
   const { navigation } = props;
+
   const [post, setPost] = React.useState<PostCardType>({
     id: 0,
     writer: {
@@ -63,19 +81,35 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     commentCount: 0,
     createdAt: '',
   });
+
   const [commentList, setCommentList] = React.useState<CommentType[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [comment, setComment] = React.useState<string>('');
-  const [isMyPost, setIsMyPost] = React.useState<boolean>(true);
-  const opacity = useRef(new Animated.Value(1)).current;
 
+  const [oneButtonModalInfo, setOneButtonModalInfo] = React.useState('');
+  const [needsToGoBack, setNeedsToGoBack] = React.useState(false);
+
+  const opacity = useRef(new NativeAnimated.Value(1)).current;
+
+  const [profile, setProfile] = useRecoilState(profileState);
   const [roomState, setRoomState] = useRecoilState(hasRoomState);
+  const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(feedRefreshState);
 
   const [needsPostDetailRefresh, setNeedsPostDetailRefresh] =
     useRecoilState(postDetailRefreshState);
 
-  const { isButtonModalVisible, handleButtonModalClose, handleButtonModalOpen } = useButtonModal();
+  const {
+    isButtonModalVisible: isTwoButtonModalVisible,
+    handleButtonModalClose: handleTwoButtonModalClose,
+    handleButtonModalOpen: handleTwoButtonModalOpen,
+  } = useButtonModal();
+
+  const {
+    isButtonModalVisible: isOneButtonModalVisible,
+    handleButtonModalClose: handleOneButtonModalClose,
+    handleButtonModalOpen: handleOneButtonModalOpen,
+  } = useButtonModal();
 
   const {
     currentSlide,
@@ -96,8 +130,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
 
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
-
-  const [profile, setProfile] = useRecoilState(profileState);
 
   const handleCommentChange = (comment: string) => {
     setComment(comment);
@@ -141,11 +173,20 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       setPost(post);
       setCommentList(commentList);
     } catch (e: any) {
-      console.log(e.response.data);
-      Alert.alert('게시물을 불러오는데 실패했습니다.');
-      navigation.goBack();
+      setOneButtonModalInfo(POST_GET_ERROR);
+      setNeedsToGoBack(true);
+      setNeedsPostRefresh(true);
+      handleOneButtonModalOpen();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onOneButtonModalClose = () => {
+    handleOneButtonModalClose();
+    if (needsToGoBack) {
+      setNeedsToGoBack(false);
+      navigation.goBack();
     }
   };
 
@@ -171,7 +212,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     setCommentList([]);
 
     setTimeout(() => {
-      Animated.timing(opacity, {
+      NativeAnimated.timing(opacity, {
         toValue: refreshing ? 1 : 0,
         duration: 500,
         useNativeDriver: true,
@@ -185,9 +226,15 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const onDelete = async () => {
     const response = await deletePost(roomState.roomId, postId);
     if (response) {
-      navigation.goBack();
+      handleTwoButtonModalClose();
+      setOneButtonModalInfo(POST_DELETE_SUCCESS);
+      setNeedsPostRefresh(true);
+      setNeedsToGoBack(true);
+      handleOneButtonModalOpen();
     } else {
-      console.log('delete error');
+      handleTwoButtonModalClose();
+      setOneButtonModalInfo(POST_DELETE_ERROR);
+      handleOneButtonModalOpen();
     }
   };
 
@@ -204,13 +251,13 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     if (comment === '') {
       return;
     }
-
+    setCommentPosting(true);
     const data = {
       roomId: roomState.roomId,
       postId: postId,
       content: comment,
     };
-    setCommentPosting(true);
+
     try {
       const response = await createComment(data);
       if (response) {
@@ -228,20 +275,35 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         setCommentList(commentList);
       }
       setComment('');
+      Keyboard.dismiss();
     } catch (e: any) {
-      console.log(e.response.data);
-      Alert.alert('댓글을 작성하는데 실패했습니다.');
+      setOneButtonModalInfo(COMMENT_CREATE_ERROR);
+      handleOneButtonModalOpen();
     } finally {
       setCommentPosting(false);
     }
   };
+
+  const updateCommentList = async ()=>{
+    const response = await getCommentList(roomState.roomId, postId);
+    const commentList = response.result.map((comment: any) => ({
+      id: comment.id,
+      content: comment.content,
+      writer: {
+        id: comment.writerId,
+        nickname: comment.nickname,
+        persona: comment.persona,
+      },
+      createdAt: comment.createdAt,
+    }));
+    setCommentList(commentList);
+  }
 
   return (
     <View className="w-full h-full bg-white">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Fragment>
           <SafeAreaView className="w-full bg-white" />
-
           <BackCleanHeader paddingX={5} onPressBack={() => navigation.goBack()} />
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -253,11 +315,11 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                   {loadingProfile ||
                     refreshing ||
                     (loading && (
-                      <Animated.View style={{ opacity }}>
+                      <NativeAnimated.View style={{ opacity }}>
                         <SkeletonPlaceholder>
                           <View style={{ width: 32, height: 32, borderRadius: 16 }} />
                         </SkeletonPlaceholder>
-                      </Animated.View>
+                      </NativeAnimated.View>
                     ))}
                   <Image
                     className="w-8 h-8 rounded-full"
@@ -288,7 +350,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     )}
                   </View>
                 </View>
-                {isMyPost && !refreshing && !loading && (
+                {profile.nickname === post.writer.nickname && !refreshing && !loading && (
                   <View
                     className="flex items-center justify-center"
                     ref={dotIconRef}
@@ -298,12 +360,11 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                   </View>
                 )}
               </View>
-              {refreshing ||
-                (loading && (
+              {refreshing || loading && (
                   <SkeletonPlaceholder>
                     <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
                   </SkeletonPlaceholder>
-                ))}
+                )}
               <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
               {post.imageList.length > 0 && (
                 <View onLayout={onLayout} className="w-full">
@@ -315,6 +376,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     keyExtractor={(item, index) => index.toString()}
                     showsHorizontalScrollIndicator={false}
                     scrollEventThrottle={200}
+                    scrollEnabled={post.imageList.length >1}
                     onScroll={handleScroll}
                     decelerationRate="fast"
                     renderItem={({ item, index }) => (
@@ -391,9 +453,10 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               </View>
             </View>
             <View className="mt-2 w-full border-t-2 border-[#F4F4F4]"></View>
-            <CommentList key={comment} commentCards={commentList} />
+            <CommentList key={comment} commentCards={commentList} postId={postId}
+            updateComment={updateCommentList}/>
           </ScrollView>
-          <View className="absolute bottom-0 z-10 w-full">
+          <Animated.View className={`absolute w-full z-10`} style={[animatedStyles]}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 1 }}
@@ -404,40 +467,49 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 height: '100%',
                 width: '100%',
                 paddingHorizontal: 20,
+                paddingBottom: 40,
               }}
             >
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}
                 onChangeText={handleCommentChange}
-                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1 mb-10 mt-2 z-10"
+                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1 mt-2"
               />
               <TouchableOpacity
-                className={`z-10 mb-7 ${loading || commentPosting || refreshing ? 'disabled' : ''}`}
+                className={`${loading || commentPosting || refreshing ? 'disabled' : ''}`}
                 onPress={createMyComment}
               >
                 <SendCommentIcon />
               </TouchableOpacity>
             </LinearGradient>
-          </View>
+          </Animated.View>
 
           <SafeAreaView className="w-full" />
           <ControlModal
             isModalVisible={isModalVisible}
             modalPosition={modalPosition}
-            onSubmit={handleButtonModalOpen}
+            onSubmit={handleTwoButtonModalOpen}
             onEdit={onEdit}
             onPressModalClose={onPressModalClose}
           />
           <ButtonModal
-            title="게시물 삭제하시나요?"
+            title='게시물을 삭제하시나요?'
             message="삭제하면 우리들의 추억을 복구할 수 없어요!"
             cancelText="취소"
             submitText="삭제"
-            isVisible={isButtonModalVisible}
-            closeModal={handleButtonModalClose}
+            isVisible={isTwoButtonModalVisible}
+            closeModal={handleTwoButtonModalClose}
             onSubmit={onDelete}
             buttonCount={2}
+          />
+          <ButtonModal
+            title={oneButtonModalInfo}
+            submitText="확인"
+            isVisible={isOneButtonModalVisible}
+            closeModal={onPressModalClose}
+            onSubmit={onOneButtonModalClose}
+            buttonCount={1}
           />
         </Fragment>
       </TouchableWithoutFeedback>
