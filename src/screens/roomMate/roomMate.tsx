@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, Text, View, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/loginStack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -12,9 +12,10 @@ import ToggleIcon from '@assets/roomMate/toggle.svg';
 
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
-import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
+import { getOtherUserDetailData } from '@server/api/member-stat';
 import { useRecoilState } from 'recoil';
 import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
+import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 
 type UserItem = {
   memberId: number;
@@ -30,11 +31,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [filterList, setFilterList] = useState<string[]>([]);
 
   const [page, setPage] = useState<number>(0);
-  const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
-  const [similarAnswerData, setSimilarAnswerData] = useState<UserItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [myLifeStyleData, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
   const [othersBasicData, setOthersBasicData] = useRecoilState(OtherBasicData);
   const [othersLifeStyleData, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState);
 
@@ -63,49 +61,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 22, id: 'personality', name: '성격', select: false },
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
-  const [originalItems, setOriginalItems] = useState([...items]);
 
-  const toUserDetail = () => {
-    navigation.navigate('UserDetailScreen');
-  };
-
-  const getMyLifeStyle = async () => {
-    try {
-      const response = await getUserDetailData();
-
-      setMyLifeStyleData(response.result);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  const getSameAnswerMate = async () => {
-    try {
-      const response = await searchUsers(filterList);
-
-      setSameAnswerData(response.result.result);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  const getSimilarAnswerData = async () => {
-    try {
-      const response = await searchUsers();
-
-      setSimilarAnswerData(response.result.result);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  useEffect(() => {
-    getMyLifeStyle();
-    if (filterList.length > 0) {
-      getSameAnswerMate();
-    }
-    getSimilarAnswerData();
-  }, [filterList, page]);
+  const { data: sameanswerdata, refetch: refechSameAnswer } = useSearchUsersWithFilters(filterList);
+  const { data: similarmatedata, refetch: refetchSimilar } = useSearchUsers();
 
   const getOthersLifeStyle = async (user: UserItem) => {
     try {
@@ -134,16 +92,15 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         </Pressable>
       </View>
 
-      <CheckBoxContainer
-        value={filterList}
-        setValue={setFilterList}
-        items={items}
-        setItems={setItems}
-        originalItems={originalItems}
-      />
+      <ScrollView className="flex-1">
+        <CheckBoxContainer
+          value={filterList}
+          setValue={setFilterList}
+          items={items}
+          setItems={setItems}
+        />
 
-      <View className="flex-1 bg-white drop-shadow-topShadow rounded-tl-[30px]">
-        <ScrollView className="flex-1">
+        <View className="flex-1 bg-white drop-shadow-topShadow rounded-tl-[30px]">
           <View className="flex px-5 pt-6 ">
             <View className="flex flex-col">
               <View className="flex flex-row items-center justify-between mb-3 leading-loose">
@@ -164,8 +121,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                   <View className="h-[108px] flex justify-center items-center">
                     <Text className="text-sm font-medium text-disabledFont">칩을 선택해보세요</Text>
                   </View>
-                ) : sameAnswerData.length > 0 ? (
-                  sameAnswerData.map((user, index) => (
+                ) : sameanswerdata.result.result.length > 0 ? (
+                  sameanswerdata.result.result.map((user, index) => (
                     <SameAnswerContainer
                       key={index}
                       user={user}
@@ -200,7 +157,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                     showsHorizontalScrollIndicator={false}
                     className="flex flex-row "
                   >
-                    {similarAnswerData.map((user, index) => (
+                    {similarmatedata.result.result.map((user, index) => (
                       <SimilarLifeStyleContainer
                         key={index}
                         user={user}
@@ -212,8 +169,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
               </View>
             </View>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };

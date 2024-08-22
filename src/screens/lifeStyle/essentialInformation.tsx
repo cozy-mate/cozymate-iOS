@@ -755,7 +755,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={turnOffTime}
               setValue={(text) => {
                 setTurnOffTime(text);
-                setShowSmokingState(!!text);
+                setShowSmokingState(!!text && turnOffMeridian !== '');
               }}
               meridian={turnOffMeridian}
               setMeridian={setTurnOffMeridian}
@@ -781,7 +781,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={sleepingTime}
               setValue={(text) => {
                 setSleepingTime(text);
-                setShowTurnOffTime(!!text);
+                setShowTurnOffTime(!!text && sleepingMeridian !== '');
               }}
               meridian={sleepingMeridian}
               setMeridian={setSleepingMeridian}
@@ -800,7 +800,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
           value={wakeUpTime}
           setValue={(text) => {
             setWakeUpTime(text);
-            setShowSleepingTime(!!text);
+            setShowSleepingTime(!!text && wakeUpMeridian !== '');
           }}
           meridian={wakeUpMeridian}
           setMeridian={setWakeUpMeridian}

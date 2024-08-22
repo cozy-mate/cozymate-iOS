@@ -7,7 +7,6 @@ interface CheckBoxContainerProps {
   setValue: React.Dispatch<React.SetStateAction<string[]>>;
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-  originalItems: Item[];
 }
 
 type Item = {
@@ -22,7 +21,6 @@ const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
   setValue,
   items,
   setItems,
-  originalItems,
 }) => {
   return (
     <View className="px-3 mb-6">
@@ -32,7 +30,6 @@ const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
           setValue={setValue}
           items={items}
           setItems={setItems}
-          originalItems={originalItems}
         />
       </View>
     </View>

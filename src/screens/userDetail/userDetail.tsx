@@ -25,14 +25,17 @@ import {
 } from '@recoil/recoil';
 import Config from 'react-native-config';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useGetUserDetailData } from '@hooks/api/member-stat';
 
 const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
   const [type, setType] = useState<string>('list');
 
+  const { data: mylifestyledata, refetch: refetchMyLifeStyle } = useGetUserDetailData();
+
   const userBasicData = useRecoilValue(profileState);
-  const userData = useRecoilValue(MyLifeStyleState);
+  // const userData = useRecoilValue(MyLifeStyleState);
   const otherUserBasicData = useRecoilValue(OtherBasicData);
   const otherUserData = useRecoilValue(OtherLifeStyleState);
 
@@ -133,7 +136,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
                   <ListView userBasicData={otherUserBasicData} userData={otherUserData} />
                 )}
                 {type === 'table' && (
-                  <TableView userData={userData} otherUserData={otherUserData} />
+                  <TableView userData={mylifestyledata.result} otherUserData={otherUserData} />
                 )}
               </ScrollView>
             </View>

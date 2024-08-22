@@ -6,7 +6,6 @@ interface CustomCheckBoxComponentProps {
   setValue: React.Dispatch<React.SetStateAction<string[]>>;
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-  originalItems: Item[];
 }
 
 type Item = {
@@ -21,7 +20,6 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
   setValue,
   items,
   setItems,
-  originalItems,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
@@ -35,23 +33,12 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
     );
 
     if (selectedItem.select) {
-      const newOrder = originalItems.map(
-        (originalItem) =>
-          updatedItems.find((item) => item.index === originalItem.index) || originalItem,
-      );
-      setItems(newOrder);
       setValue(value.filter((id) => id !== selectedItem.id));
     } else {
-      const newOrder = [
-        selectedItem,
-        ...updatedItems.filter((item) => item.index !== selectedItem.index),
-      ];
-      setItems(newOrder);
       setValue([...value, selectedItem.id]);
     }
 
     setItems(updatedItems);
-
     handleFocus(selectedItem.index);
   };
 

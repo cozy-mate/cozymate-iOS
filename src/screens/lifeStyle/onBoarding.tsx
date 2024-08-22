@@ -24,7 +24,7 @@ const LifeStyleOnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
       <View className="px-5 mt-12">
-        <View className="mb-11">
+        <View className="mb-[72px]">
           <Text className="text-xl font-semibold text-basicFont">
             <Text className="text-main1">{username}</Text>님과{'\n'}딱 맞는 라이프스타일을 가진
             {'\n'}
@@ -32,7 +32,7 @@ const LifeStyleOnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
           </Text>
         </View>
 
-        <View className="flex items-center justify-center mb-14">
+        <View className="flex items-center justify-center mb-20">
           <ExampleImage />
         </View>
 
