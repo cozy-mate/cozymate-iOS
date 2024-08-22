@@ -3,8 +3,8 @@ import CustomTextInputBox from '@components/common/customTextInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
 import { BasicLifeStyleScreenProps } from '@type/param/loginStack';
-import React, { useEffect, useState } from 'react';
-import { Animated, Easing, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Animated, SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import BackHeader from 'src/layout/backHeader';
 
@@ -19,10 +19,7 @@ type Item = {
 };
 
 const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) => {
-  const [lifeStyle, setLifeStyle] = useRecoilState(lifeStyleState);
-
-  const [name, setName] = useState<string>('정진혁');
-  const [birthYear, setBirthYear] = useState<string>('1999');
+  const [, setLifeStyle] = useRecoilState(lifeStyleState);
 
   const [admissionYear, setAdmissionYear] = useState<string>('');
   const [major, setMajor] = useState<string>('');
@@ -153,22 +150,6 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
           setValue={setAdmissionYear}
           placeholder="ex. 23"
           onEnterPress={() => setShowMajorInput(true)}
-        />
-
-        <CustomTextInputBox
-          title="출생년도를"
-          value={birthYear}
-          setValue={setBirthYear}
-          placeholder="2002"
-          isDisable={false}
-        />
-
-        <CustomTextInputBox
-          title="이름을"
-          value={name}
-          setValue={setName}
-          placeholder="김코지"
-          isDisable={false}
         />
       </ScrollView>
     </SafeAreaView>

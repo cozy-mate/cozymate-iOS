@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/roomMain/background.svg';
@@ -11,23 +11,20 @@ import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 
 import { RoomMainScreenProps } from '@type/param/roomStack';
-import { getRoomLog } from '@server/api/room-log';
 import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
 import { getRoomData } from '@server/api/room';
 import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
-
-interface LogItem {
-  content: string;
-  createdAt: string;
-}
+import { useGetRoomLog } from '@hooks/api/room-log';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
-  const [logData, setLogData] = useState<LogItem[]>([]);
+  // const [logData, setLogData] = useState<LogItem[]>([]);
+
+  const { data: roomlogdata, refetch: refetchRoomLog } = useGetRoomLog(roomInfo.roomId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,14 +34,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
         setRoomInfo(infoResponse.result);
 
-        const logResponse = await getRoomLog(myRoom.roomId);
-        setLogData(logResponse.result.result);
+        // const logResponse = await getRoomLog(myRoom.roomId);
+        // setLogData(logResponse.result.result);
       } catch (error) {
         console.error('Error fetching room data:', error);
       }
     };
     fetchData();
-  }, [myRoom.roomId, setRoomInfo, setLogData]);
+  }, [myRoom.roomId, setRoomInfo]);
 
   return (
     <View className="flex-1 bg-[#CADFFF]">
@@ -92,11 +89,11 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           />
         </View>
         <ScrollView>
-          {logData.map((data, index) => (
+          {roomlogdata.result.result.map((data, index) => (
             <View
               key={index}
               className={`px-1 py-5 border-b-[1px] border-b-[#F2F1FA] ${
-                index === logData.length - 1 && 'border-b-0'
+                index === roomlogdata.result.result.length - 1 && 'border-b-0'
               }`}
             >
               <CozyBotIcon />

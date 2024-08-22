@@ -58,7 +58,6 @@ function AppInner() {
         hasRoom.hasRoom ? (
           <roomStack.Navigator initialRouteName="MainScreen" screenOptions={{ headerShown: false }}>
             <roomStack.Screen name="MainScreen" component={HasRoomMainScreen} />
-            {/* <roomStack.Screen name="CozyHomeScreen" component={CozyHomeScreen} /> */}
             <roomStack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
             <roomStack.Screen
               name="CompleteCreateRoomScreen"
@@ -136,21 +135,12 @@ function AppInner() {
               component={AdditionalLifeStyleScreen}
             />
 
-            {/* <loginStack.Screen name="RoomMainScreen" component={RoomMainScreen} /> */}
             <loginStack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
             <loginStack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
             <loginStack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
 
-            {/* <loginStack.Screen name="TodoListScreen" component={TodoListScreen} /> */}
-            {/* <loginStack.Screen name="CreateTodoScreen" component={CreateTodoScreen} /> */}
-
             <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
             <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
-
-            {/* <loginStack.Screen name="FeedMainScreen" component={FeedMainScreen} />
-            <loginStack.Screen name="FeedEditScreen" component={FeedEditScreen} />
-            <loginStack.Screen name="FeedViewScreen" component={FeedViewScreen} />
-            <loginStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} /> */}
           </loginStack.Navigator>
         )
       ) : (

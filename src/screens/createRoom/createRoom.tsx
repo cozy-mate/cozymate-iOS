@@ -86,8 +86,8 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
       }));
 
       navigation.navigate('CompleteCreateRoomScreen');
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   };
 
