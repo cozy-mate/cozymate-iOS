@@ -1,9 +1,24 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { TableViewProps } from '@type/userDetail/userDetail';
 
 const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
+  const intensityMapping = [
+    { index: 0, name: '아예 틀지 않아요' },
+    { index: 1, name: '약하게 틀어요' },
+    { index: 2, name: '적당하게 틀어요' },
+    { index: 3, name: '세게 틀어요' },
+  ];
+
+  const sensitivityMapping = [
+    { index: 1, name: '매우 예민하지 않아요' },
+    { index: 2, name: '예민하지 않아요' },
+    { index: 3, name: '보통이에요' },
+    { index: 4, name: '예민해요' },
+    { index: 5, name: '매우 예민해요' },
+  ];
+
   const truncateString = (str: string) => {
     return str.length > 7 ? `${str.slice(0, 7)}...` : str;
   };
@@ -21,6 +36,12 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
       return `${userData.sleepingMeridian} ${value}시`;
     } else if (key === 'turnOffTime') {
       return `${userData.turnOffMeridian} ${value}시`;
+    } else if (key === 'airConditioningIntensity' || key === 'heatingIntensity') {
+      const intensity = intensityMapping.find((item) => item.index === value);
+      return intensity ? intensity.name : value;
+    } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
+      const sensitivity = sensitivityMapping.find((item) => item.index === value);
+      return sensitivity ? sensitivity.name : value;
     }
     return value;
   };

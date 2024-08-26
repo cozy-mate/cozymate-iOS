@@ -5,81 +5,14 @@ import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
-import { useRecoilState } from 'recoil';
-import { hasRoomState, loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 
-import { login, getProfile, KakaoProfile } from '@react-native-seoul/kakao-login';
-import { getMyProfile, signIn } from '@server/api/member';
-import { setAccessToken } from '@utils/token';
-import { checkHasRoom, getRoomData } from '@server/api/room';
+import { useKakaoLogin } from '@hooks/api/member';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const [, setLoggedIn] = useRecoilState(loggedInState);
-  const [, setMyProfile] = useRecoilState(profileState);
-  const [, setHasRoom] = useRecoilState(hasRoomState);
-  const [, setRoomInfo] = useRecoilState(roomInfoState);
+  const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const toOnBoard = () => {
     navigation.navigate('PersonalInfoInputScreen');
-  };
-
-  const toOnboard = () => {
-    navigation.navigate('PersonalInfoInputScreen');
-  };
-
-  const signInWithKakao = async (): Promise<void> => {
-    await login();
-
-    try {
-      const result: KakaoProfile = await getProfile();
-      const kakaoId = result.id;
-
-      const signInResponse = await signIn({ clientId: kakaoId.toString(), socialType: 'KAKAO' });
-      const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
-
-      console.log(accessToken);
-
-      await setAccessToken(accessToken);
-
-      if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
-        navigation.navigate('PersonalInfoInputScreen');
-      } else {
-        const getProfileResponse = await getMyProfile();
-
-        setMyProfile({
-          name: getProfileResponse.result.name,
-          nickname: getProfileResponse.result.nickname,
-          gender: getProfileResponse.result.gender,
-          birthday: getProfileResponse.result.birthday,
-          persona: getProfileResponse.result.persona,
-        });
-
-        const roomCheckResponse = await checkHasRoom();
-        const roomId = roomCheckResponse.result.roomId;
-
-        console.log(roomId);
-
-        if (roomId !== 0) {
-          setHasRoom({ hasRoom: true, roomId: roomId });
-
-          const roomInfoResponse = await getRoomData(roomId);
-
-          console.log(roomInfoResponse.result.mateList);
-
-          setRoomInfo({
-            roomId: roomInfoResponse.result.roomId,
-            name: roomInfoResponse.result.name,
-            inviteCode: roomInfoResponse.result.inviteCode,
-            profileImage: roomInfoResponse.result.profileImage,
-            mateList: roomInfoResponse.result.mateList,
-          });
-        }
-
-        setLoggedIn(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
@@ -92,7 +25,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
               <Text className="text-[#BDD8FF]">mate</Text>
             </Text>
           </View>
-          <Text className="text-basicFont text-[13.5px] font-semibold font-['SF_HambakSnow']">
+          <Text className="text-basicFont text-[13.5px] font-semibold">
             “나와 꼭 맞는 룸메이트와 함께 만드는 우리만의 편안한 공간”
           </Text>
         </View>
@@ -100,7 +33,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
-            onPress={signInWithKakao}
+            onPress={() => kakaoLogin()}
           >
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black opacity-85">

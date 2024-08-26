@@ -4,14 +4,15 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import ExampleImage from '@assets/lifeStyle/exampleImage.svg';
 import { LifeStyleOnboardingScreenProps } from '@type/param/loginStack';
 import { useRecoilValue } from 'recoil';
-import { lifeStyleState } from '@recoil/recoil';
+import { lifeStyleState, profileState } from '@recoil/recoil';
 
 const LifeStyleOnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
   navigation,
 }: LifeStyleOnboardingScreenProps) => {
   const lifeStyle = useRecoilValue(lifeStyleState);
+  const memberInfo = useRecoilValue(profileState);
 
-  const [username, setUsername] = useState<string>('눈꽃');
+  const [username, setUsername] = useState<string>(memberInfo.nickname);
 
   useEffect(() => {
     console.log(lifeStyle);

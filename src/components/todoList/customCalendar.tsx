@@ -83,11 +83,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ onDateTimeSelect }) => 
         textMonthFontSize: 18,
         textMonthFontWeight: 'bold',
 
-        textDayFontFamily: 'Poppins',
-        textMonthFontFamily: 'Poppins',
-        textDayHeaderFontFamily: 'Poppins',
-
-        textDayFontWeight: 'regular',
+        textDayFontWeight: '400',
       }}
     />
   );

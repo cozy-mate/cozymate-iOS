@@ -72,7 +72,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
 
   return (
     <>
-      {changeTodoPending && <LoadingComponent visible={changeTodoPending} />}
+      {changeTodoPending && <LoadingComponent />}
       <View className="flex-1 bg-[#CADFFF]" onTouchEnd={onPressModalClose}>
         <Background style={{ position: 'absolute' }} />
         <View className="mt-[76px] mx-5">
@@ -86,9 +86,11 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 <View className="mb-14">
                   <View className="flex flex-row justify-between px-1 mb-4">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-                      {getDayOfWeek(tododata.result.timePoint)},{' '}
-                      <Text className="text-main1">{myProfile.nickname}</Text>
-                      님이{'\n'}해야할 일들을 알려드릴게요!
+                      <Text className="text-main1">
+                        {getDayOfWeek(tododata.result.timePoint)},{' '}
+                      </Text>
+                      {myProfile.nickname}님이
+                      {'\n'}해야할 일들을 알려드릴게요!
                     </Text>
                     <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
                       <SettingIcon />

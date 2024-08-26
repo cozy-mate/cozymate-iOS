@@ -69,7 +69,7 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
     >
       <View className="flex flex-col items-start justify-center">
         <Text
-          className={`font-semibold text-xs leading-[17px] tracking-[-0.03em]
+          className={`font-semibold text-xs leading-[17px] tracking-tight
             ${isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}

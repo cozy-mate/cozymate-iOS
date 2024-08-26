@@ -2,7 +2,7 @@ import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
 import { EssentialLifeStyleScreenProps } from '@type/param/loginStack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Animated, SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
 import BackHeader from 'src/layout/backHeader';
@@ -18,51 +18,53 @@ type Item = {
 };
 
 const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenProps) => {
-  const [lifeStyle, setLifeStyle] = useRecoilState(lifeStyleState);
+  const [, setLifeStyle] = useRecoilState(lifeStyleState);
 
   const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
-  const [wakeUpTime, setWakeUpTime] = useState<number>(0);
+  const [wakeUpTime, setWakeUpTime] = useState<number | undefined>(undefined);
   const [sleepingMeridian, setSleepingMeridian] = useState<string>('');
-  const [sleepingTime, setSleepingTime] = useState<number>(0);
+  const [sleepingTime, setSleepingTime] = useState<number | undefined>(undefined);
   const [turnOffMeridian, setTurnOffMeridian] = useState<string>('');
-  const [turnOffTime, setTurnOffTime] = useState<number>(0);
+  const [turnOffTime, setTurnOffTime] = useState<number | undefined>(undefined);
   const [smokingState, setSmokingState] = useState<string>('');
   const [sleepingHabit, setSleepingHabit] = useState<string>('');
-  const [airConditioningIntensity, setAirConditioningIntensity] = useState<number>(0);
-  const [heatingIntensity, setHeatingIntensity] = useState<number>(0);
+  const [airConditioningIntensity, setAirConditioningIntensity] = useState<number | undefined>(
+    undefined,
+  );
+  const [heatingIntensity, setHeatingIntensity] = useState<number | undefined>(undefined);
   const [lifePattern, setLifePattern] = useState<string>('');
   const [intimacy, setIntimacy] = useState<string>('');
-  const [canShare, setCanShare] = useState<boolean>(false);
-  const [isPlayGame, setIsPlayGame] = useState<boolean>(false);
-  const [isPhoneCall, setIsPhoneCall] = useState<boolean>(false);
+  const [canShare, setCanShare] = useState<boolean | undefined>(undefined);
+  const [isPlayGame, setIsPlayGame] = useState<boolean | undefined>(undefined);
+  const [isPhoneCall, setIsPhoneCall] = useState<boolean | undefined>(undefined);
   const [studying, setStudying] = useState<string>('');
   const [intake, setIntake] = useState<string>('');
-  const [cleanSensitivity, setCleanSensitivity] = useState<number>(0);
-  const [noiseSensitivity, setNoiseSensitivity] = useState<number>(0);
+  const [cleanSensitivity, setCleanSensitivity] = useState<number | undefined>(undefined);
+  const [noiseSensitivity, setNoiseSensitivity] = useState<number | undefined>(undefined);
   const [cleaningFrequency, setCleaningFrequency] = useState<string>('');
   const [personality, setPersonality] = useState<string>('');
   const [mbti, setMbti] = useState<string>('');
 
   const canNext =
     wakeUpMeridian !== '' &&
-    wakeUpTime !== 0 &&
+    wakeUpTime !== undefined &&
     sleepingMeridian !== '' &&
-    sleepingTime !== 0 &&
+    sleepingTime !== undefined &&
     turnOffMeridian !== '' &&
-    turnOffTime !== 0 &&
+    turnOffTime !== undefined &&
     smokingState !== '' &&
     sleepingHabit !== '' &&
-    airConditioningIntensity !== 0 &&
-    heatingIntensity !== 0 &&
-    lifePattern !== '' &&
+    airConditioningIntensity !== undefined &&
+    heatingIntensity !== undefined &&
     intimacy !== '' &&
-    canShare !== null &&
-    isPlayGame !== null &&
-    isPhoneCall !== null &&
+    lifePattern !== '' &&
+    canShare !== undefined &&
+    isPlayGame !== undefined &&
+    isPhoneCall !== undefined &&
     studying !== '' &&
     intake !== '' &&
-    cleanSensitivity !== 0 &&
-    noiseSensitivity !== 0 &&
+    cleanSensitivity !== undefined &&
+    noiseSensitivity !== undefined &&
     cleaningFrequency !== '' &&
     personality !== '' &&
     mbti !== '';
@@ -232,12 +234,14 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 1, value: 3, name: '세게 틀어요', select: false },
     { index: 2, value: 2, name: '적당하게 틀어요', select: false },
     { index: 3, value: 1, name: '약하게 틀어요', select: false },
+    { index: 4, value: 0, name: '아예 틀지 않아요', select: false },
   ]);
 
   const [heatingIntensityItems, setHeatingIntensityItems] = useState<Item[]>([
     { index: 1, value: 3, name: '세게 틀어요', select: false },
     { index: 2, value: 2, name: '적당하게 틀어요', select: false },
     { index: 3, value: 1, name: '약하게 틀어요', select: false },
+    { index: 4, value: 0, name: '아예 틀지 않아요', select: false },
   ]);
 
   const [lifePatternItems, setLifePatternItems] = useState<Item[]>([
@@ -319,29 +323,35 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 1, value: '매일매일 해요', name: '매일매일 해요', select: false },
     {
       index: 2,
+      value: '일주일에 한 번 정도 해요',
+      name: '일주일에 한 번 정도 해요',
+      select: false,
+    },
+    {
+      index: 3,
       value: '이틀에 한 번 정도 해요',
       name: '이틀에 한 번 정도 해요',
       select: false,
     },
     {
-      index: 3,
+      index: 4,
       value: '일주일에 3-4번 하는 거 같아요',
       name: '일주일에 3-4번 하는 거 같아요',
       select: false,
     },
     {
-      index: 4,
+      index: 5,
       value: '2주에 한 번씩 해요',
       name: '2주에 한 번씩 해요',
       select: false,
     },
     {
-      index: 5,
+      index: 6,
       value: '한 달에 한 번씩 해요',
       name: '한 달에 한 번씩 해요',
       select: false,
     },
-    { index: 6, value: '거의 안 해요', name: '거의 안 해요', select: false },
+    { index: 7, value: '거의 안 해요', name: '거의 안 해요', select: false },
   ]);
 
   const [personalityItems, setPersonalityItems] = useState<Item[]>([
@@ -392,10 +402,6 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 15, value: 'ENFJ', name: 'ENFJ', select: false },
     { index: 16, value: 'ENTJ', name: 'ENTJ', select: false },
   ]);
-
-  useEffect(() => {
-    console.log(lifeStyle);
-  }, [lifeStyle]);
 
   return (
     <SafeAreaView className="flex flex-col flex-1 bg-white">
@@ -566,7 +572,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={isPhoneCall}
               setValue={(text) => {
                 setIsPhoneCall(text);
-                setShowStudying(!!text);
+                setShowStudying(true);
               }}
               items={isPhoneCallItems}
               setItems={setIsPhoneCallItems}
@@ -587,7 +593,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={isPlayGame}
               setValue={(text) => {
                 setIsPlayGame(text);
-                setShowIsPhoneCall(!!text);
+                setShowIsPhoneCall(true);
               }}
               items={isPlayGameItems}
               setItems={setIsPlayGameItems}
@@ -608,7 +614,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={canShare}
               setValue={(text) => {
                 setCanShare(text);
-                setShowIsPlayGame(!!text);
+                setShowIsPlayGame(true);
               }}
               items={canShareItems}
               setItems={setCanShareItems}
@@ -629,7 +635,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={intimacy}
               setValue={(text) => {
                 setIntimacy(text);
-                setShowCanShare(!!text);
+                setShowCanShare(true);
               }}
               items={intimacyItems}
               setItems={setIntimacyItems}
@@ -650,7 +656,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={lifePattern}
               setValue={(text) => {
                 setLifePattern(text);
-                setShowIntimacy(!!text);
+                setShowIntimacy(text !== null && text !== undefined);
               }}
               items={lifePatternItems}
               setItems={setLifePatternItems}
@@ -671,7 +677,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={heatingIntensity}
               setValue={(text) => {
                 setHeatingIntensity(text);
-                setShowLifePattern(!!text);
+                setShowLifePattern(text !== null && text !== undefined);
               }}
               items={heatingIntensityItems}
               setItems={setHeatingIntensityItems}
@@ -692,7 +698,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={airConditioningIntensity}
               setValue={(text) => {
                 setAirConditioningIntensity(text);
-                setShowHeatingIntensity(!!text);
+                setShowHeatingIntensity(text !== null && text !== undefined);
               }}
               items={airConditioningIntensityItems}
               setItems={setAirConditioningIntensityItems}
@@ -755,10 +761,17 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={turnOffTime}
               setValue={(text) => {
                 setTurnOffTime(text);
-                setShowSmokingState(!!text && turnOffMeridian !== '');
+                if (text && turnOffMeridian) {
+                  setShowSmokingState(true);
+                }
               }}
               meridian={turnOffMeridian}
-              setMeridian={setTurnOffMeridian}
+              setMeridian={(meridian) => {
+                setTurnOffMeridian(meridian);
+                if (turnOffTime) {
+                  setShowSmokingState(true);
+                }
+              }}
               items={turnOffTimeItems}
               setItems={setTurnOffTimeItems}
               isTime={true}
@@ -781,10 +794,17 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               value={sleepingTime}
               setValue={(text) => {
                 setSleepingTime(text);
-                setShowTurnOffTime(!!text && sleepingMeridian !== '');
+                if (text && sleepingMeridian) {
+                  setShowTurnOffTime(true);
+                }
               }}
               meridian={sleepingMeridian}
-              setMeridian={setSleepingMeridian}
+              setMeridian={(meridian) => {
+                setSleepingMeridian(meridian);
+                if (sleepingTime) {
+                  setShowTurnOffTime(true);
+                }
+              }}
               items={sleepingTimeItems}
               setItems={setSleepingTimeItems}
               isTime={true}
@@ -800,10 +820,17 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
           value={wakeUpTime}
           setValue={(text) => {
             setWakeUpTime(text);
-            setShowSleepingTime(!!text && wakeUpMeridian !== '');
+            if (text && wakeUpMeridian) {
+              setShowSleepingTime(true);
+            }
           }}
           meridian={wakeUpMeridian}
-          setMeridian={setWakeUpMeridian}
+          setMeridian={(meridian) => {
+            setWakeUpMeridian(meridian);
+            if (wakeUpTime) {
+              setShowSleepingTime(true);
+            }
+          }}
           items={wakeUpTimeItems}
           setItems={setWakeUpTimeItems}
           isTime={true}

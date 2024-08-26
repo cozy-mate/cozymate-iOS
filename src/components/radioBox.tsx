@@ -56,7 +56,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
           className="flex flex-col justify-center px-5 py-4 mb-4 border-[1px] rounded-xl border-sub1"
           onPress={handleFocus}
         >
-          <Text className="font-semibold text-sm leading-[17px] tracking-[-0.03em] text-main1">
+          <Text className="font-semibold text-sm leading-[17px] tracking-tight text-main1">
             {title}
           </Text>
 
@@ -94,7 +94,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
           className="flex-col justify-center rounded-xl border-[1px] border-[#E2E2E2] px-5 py-4 mb-4"
           onPress={handleFocus}
         >
-          <Text className="text-[#808197] font-semibold text-sm leading-[17px] tracking-[-0.03em]">
+          <Text className="text-[#808197] font-semibold text-sm leading-[17px] tracking-tight">
             {title}
           </Text>
 

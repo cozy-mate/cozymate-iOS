@@ -65,7 +65,7 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
           </View>
 
           <View className="flex flex-col items-start mb-[147px] px-5">
-            <Text className="mb-4 text-xl font-semibold tracking-[-0.02em] text-emphasizedFont">
+            <Text className="mb-4 text-xl font-semibold tracking-tight text-emphasizedFont">
               룸메이트와 함께 방을 만들어야{'\n'}롤앤룰, 피드를 이용할 수 있어요!
             </Text>
 

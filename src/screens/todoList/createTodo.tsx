@@ -65,6 +65,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const { mutateAsync: addRoleMutate, isPending: addRolePending } = useAddRole(
     roomInfo.roomId,
     refetchRole,
+    refetchTodo,
   );
 
   const navBarItems = [
@@ -150,9 +151,9 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
 
   return (
     <>
-      {addTodoPending && <LoadingComponent visible={addTodoPending} />}
-      {addRulePending && <LoadingComponent visible={addRulePending} />}
-      {addRolePending && <LoadingComponent visible={addRolePending} />}
+      {addTodoPending && <LoadingComponent />}
+      {addRulePending && <LoadingComponent />}
+      {addRolePending && <LoadingComponent />}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView className="flex flex-col justify-between flex-1 px-5 bg-white">
           <View className="flex">

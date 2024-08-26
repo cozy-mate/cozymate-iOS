@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View, ScrollView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/loginStack';
@@ -13,7 +13,7 @@ import ToggleIcon from '@assets/roomMate/toggle.svg';
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
 import { getOtherUserDetailData } from '@server/api/member-stat';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 
@@ -28,11 +28,16 @@ type UserItem = {
 };
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
+  const myLifeStyleState = useRecoilValue(MyLifeStyleState);
+
   const [filterList, setFilterList] = useState<string[]>([]);
 
   const [page, setPage] = useState<number>(0);
+  const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
+  const [similarAnswerData, setSimilarAnswerData] = useState<UserItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [myLifeStyleData, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
   const [othersBasicData, setOthersBasicData] = useRecoilState(OtherBasicData);
   const [othersLifeStyleData, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState);
 

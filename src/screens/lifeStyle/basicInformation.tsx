@@ -1,12 +1,23 @@
-import CustomRadioInputBox from '@components/common/customRadioInputBox';
-import CustomTextInputBox from '@components/common/customTextInputBox';
+import React, { useState } from 'react';
+import {
+  Animated,
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
+
+import { BasicLifeStyleScreenProps } from '@type/param/loginStack';
+
+import { useRecoilState } from 'recoil';
+
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
-import { BasicLifeStyleScreenProps } from '@type/param/loginStack';
-import React, { useState } from 'react';
-import { Animated, SafeAreaView, ScrollView } from 'react-native';
-import { useRecoilState } from 'recoil';
+
 import BackHeader from 'src/layout/backHeader';
+
+import CustomRadioInputBox from '@components/common/customRadioInputBox';
+import CustomTextInputBox from '@components/common/customTextInputBox';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
@@ -78,81 +89,83 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
   });
 
   return (
-    <SafeAreaView className="flex flex-col flex-1 bg-white">
-      <BackHeader
-        title="기본정보"
-        buttonString="다음"
-        leftPressFunc={toPrev}
-        rightPressFunc={toNext}
-        canNext={canNext}
-        width={progressWidth}
-      />
-      <ScrollView className="px-5">
-        {showAcceptance && (
-          <Animated.View
-            style={{
-              opacity: acceptanceInputAnimation.opacity,
-              transform: [{ translateY: acceptanceInputAnimation.translateY }],
-            }}
-          >
-            <CustomRadioInputBox
-              title="기숙사 합격여부를 선택해주세요"
-              value={acceptance}
-              setValue={setAcceptance}
-              items={acceptanceItems}
-              setItems={setAcceptanceItems}
-              isTime={false}
-            />
-          </Animated.View>
-        )}
-
-        {showRoommateInput && (
-          <Animated.View
-            style={{
-              opacity: roommateInputAnimation.opacity,
-              transform: [{ translateY: roommateInputAnimation.translateY }],
-            }}
-          >
-            <CustomRadioInputBox
-              title="신청실의 인원을 선택해주세요"
-              value={numOfRoommate}
-              setValue={(text) => {
-                setNumOfRoommate(text);
-                setShowAcceptance(!!text);
-              }}
-              items={numOfRoommateItems}
-              setItems={setNumOfRoommateItems}
-              isTime={false}
-            />
-          </Animated.View>
-        )}
-
-        {showMajorInput && (
-          <Animated.View
-            style={{
-              opacity: majorInputAnimation.opacity,
-              transform: [{ translateY: majorInputAnimation.translateY }],
-            }}
-          >
-            <CustomTextInputBox
-              title="학과를 입력해주세요"
-              value={major}
-              setValue={setMajor}
-              placeholder="ex. 경영학과"
-              onEnterPress={() => setShowRoommateInput(true)}
-            />
-          </Animated.View>
-        )}
-
-        <CustomTextInputBox
-          title="학번을 입력해주세요"
-          value={admissionYear}
-          setValue={setAdmissionYear}
-          placeholder="ex. 23"
-          onEnterPress={() => setShowMajorInput(true)}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex flex-col flex-1 bg-white">
+        <BackHeader
+          title="기본정보"
+          buttonString="다음"
+          leftPressFunc={toPrev}
+          rightPressFunc={toNext}
+          canNext={canNext}
+          width={progressWidth}
         />
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView className="px-5">
+          {showAcceptance && (
+            <Animated.View
+              style={{
+                opacity: acceptanceInputAnimation.opacity,
+                transform: [{ translateY: acceptanceInputAnimation.translateY }],
+              }}
+            >
+              <CustomRadioInputBox
+                title="기숙사 합격여부를 선택해주세요"
+                value={acceptance}
+                setValue={setAcceptance}
+                items={acceptanceItems}
+                setItems={setAcceptanceItems}
+                isTime={false}
+              />
+            </Animated.View>
+          )}
+
+          {showRoommateInput && (
+            <Animated.View
+              style={{
+                opacity: roommateInputAnimation.opacity,
+                transform: [{ translateY: roommateInputAnimation.translateY }],
+              }}
+            >
+              <CustomRadioInputBox
+                title="신청실의 인원을 선택해주세요"
+                value={numOfRoommate}
+                setValue={(text) => {
+                  setNumOfRoommate(text);
+                  setShowAcceptance(!!text);
+                }}
+                items={numOfRoommateItems}
+                setItems={setNumOfRoommateItems}
+                isTime={false}
+              />
+            </Animated.View>
+          )}
+
+          {showMajorInput && (
+            <Animated.View
+              style={{
+                opacity: majorInputAnimation.opacity,
+                transform: [{ translateY: majorInputAnimation.translateY }],
+              }}
+            >
+              <CustomTextInputBox
+                title="학과를 입력해주세요"
+                value={major}
+                setValue={setMajor}
+                placeholder="ex. 경영학과"
+                enterFunc={() => setShowRoommateInput(true)}
+              />
+            </Animated.View>
+          )}
+
+          <CustomTextInputBox
+            title="학번을 입력해주세요"
+            value={admissionYear}
+            setValue={setAdmissionYear}
+            placeholder="ex. 23"
+            enterFunc={() => setShowMajorInput(true)}
+          />
+        </ScrollView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

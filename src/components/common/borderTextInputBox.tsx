@@ -53,7 +53,7 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
     >
       <View className="flex flex-col items-start justify-center">
         <Text
-          className={`font-semibold text-xs leading-[17px] tracking-[-0.03em]
+          className={`font-semibold text-xs leading-[17px] tracking-tight
             ${!canUse ? 'text-warning' : isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
@@ -67,7 +67,7 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
             onChangeText={valueHandleChange}
             placeholder={placeholder}
             placeholderTextColor="#ACADB4"
-            className="font-medium text-sm leading-[17px] tracking-[-0.03em] text-basicFont"
+            className="font-medium text-sm leading-[17px] tracking-tight text-basicFont"
           />
         </View>
       </View>
