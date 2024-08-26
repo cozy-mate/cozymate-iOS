@@ -18,16 +18,25 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
-        <View className="mx-auto mt-[236px] mb-[224px]">
+        <View className="mx-auto mt-[236px] mb-[144px]">
           <View className="mb-[7px]">
             <Text className="text-[48px] font-normal text-center font-['Cafe24_Meongi_B']">
               <Text className="text-[#FFE28B]">cozy</Text>
               <Text className="text-[#BDD8FF]">mate</Text>
             </Text>
           </View>
-          <Text className="text-basicFont text-[13.5px] font-semibold">
-            “나와 꼭 맞는 룸메이트와 함께 만드는 우리만의 편안한 공간”
+          <Text className="text-sm font-semibold text-center text-basicFont">
+            “나와 꼭 맞는 룸메이트와 함께 만드는{'\n'}우리만의 편안한 공간”
           </Text>
+        </View>
+
+        <View className="mx-3 mb-4">
+          <Pressable
+            className="flex-row justify-center items-center rounded-[33px] bg-main1 px-6 py-4"
+            onPress={toOnBoard}
+          >
+            <Text className="text-base font-semibold text-white">회원가입</Text>
+          </Pressable>
         </View>
 
         <View className="mx-3 mb-4">

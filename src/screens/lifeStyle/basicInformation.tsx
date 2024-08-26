@@ -34,7 +34,7 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
 
   const [admissionYear, setAdmissionYear] = useState<string>('');
   const [major, setMajor] = useState<string>('');
-  const [numOfRoommate, setNumOfRoommate] = useState<number>(0);
+  const [numOfRoommate, setNumOfRoommate] = useState<number | undefined>(undefined);
   const [acceptance, setAcceptance] = useState<string>('');
 
   const canNext = admissionYear !== '' && major !== '' && numOfRoommate !== 0 && acceptance !== '';

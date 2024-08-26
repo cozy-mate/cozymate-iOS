@@ -13,7 +13,7 @@ export interface ListViewProps {
     admissionYear: string;
     birthYear?: number;
     major: string;
-    numOfRoommate: number;
+    numOfRoommate: number | undefined;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number | undefined;
@@ -86,7 +86,7 @@ export interface TableViewProps {
     admissionYear: string;
     birthYear?: number;
     major: string;
-    numOfRoommate: number;
+    numOfRoommate: number | undefined;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number | undefined;

@@ -22,9 +22,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
-  // const [logData, setLogData] = useState<LogItem[]>([]);
-
-  const { data: roomlogdata, refetch: refetchRoomLog } = useGetRoomLog(roomInfo.roomId);
+  const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,9 +31,6 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         console.log(infoResponse);
 
         setRoomInfo(infoResponse.result);
-
-        // const logResponse = await getRoomLog(myRoom.roomId);
-        // setLogData(logResponse.result.result);
       } catch (error) {
         console.error('Error fetching room data:', error);
       }
@@ -60,7 +55,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-col items-start mb-28">
+        <View className="flex flex-col items-start mb-24">
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
           <View className="flex flex-row">
             <Text className="mb-2 text-lg font-semibold text-main1">
@@ -78,8 +73,8 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         </View>
       </View>
 
-      <View className="flex-1 flex-col bg-white px-5 pt-[21px] pb-5 rounded-t-[40px] relative">
-        <View className="absolute top-[-110px] right-2">
+      <View className="flex-1 flex-col bg-white px-5 pt-8 pb-5 rounded-t-[40px] relative">
+        <View className="absolute top-[-120px] right-2">
           <Image
             source={{
               uri: `${Config.S3_IMAGE_URL}/persona/png/${roomInfo.profileImage}.png`,

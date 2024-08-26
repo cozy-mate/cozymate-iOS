@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Image, Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import Config from 'react-native-config';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { UserDetailScreenProps } from '@type/param/loginStack';
 
@@ -17,14 +19,7 @@ import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
 import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
 import { useRecoilValue } from 'recoil';
-import {
-  MyLifeStyleState,
-  OtherBasicData,
-  OtherLifeStyleState,
-  profileState,
-} from '@recoil/recoil';
-import Config from 'react-native-config';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 import { useGetUserDetailData } from '@hooks/api/member-stat';
 
 const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
@@ -34,8 +29,6 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
 
   const { data: mylifestyledata, refetch: refetchMyLifeStyle } = useGetUserDetailData();
 
-  const userBasicData = useRecoilValue(profileState);
-  // const userData = useRecoilValue(MyLifeStyleState);
   const otherUserBasicData = useRecoilValue(OtherBasicData);
   const otherUserData = useRecoilValue(OtherLifeStyleState);
 
