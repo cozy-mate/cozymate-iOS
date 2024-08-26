@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, View, Image } from 'react-native';
 import Config from 'react-native-config';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { roomInfoState } from '@recoil/recoil';
+import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
 
 import { onCopyAddress } from '@utils/clipboard';
@@ -12,9 +12,12 @@ import { onCopyAddress } from '@utils/clipboard';
 import CopyIcon from '@assets/createRoom/copyIcon.svg';
 
 const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
+  const [, setHasRoom] = useRecoilState(hasRoomState);
+
   const roominfoState = useRecoilValue(roomInfoState);
 
   const toCozyHome = () => {
+    setHasRoom({ hasRoom: true, roomId: roominfoState.roomId });
     navigation.navigate('MainScreen');
   };
 

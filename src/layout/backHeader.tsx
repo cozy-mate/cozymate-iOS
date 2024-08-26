@@ -12,8 +12,6 @@ interface BackHeaderProps {
   width?: number;
 }
 
-const { width: screenWidth } = Dimensions.get('window');
-
 const BackHeader: React.FC<BackHeaderProps> = ({
   title,
   buttonString,
@@ -22,6 +20,8 @@ const BackHeader: React.FC<BackHeaderProps> = ({
   canNext,
   width,
 }) => {
+  const { width: screenWidth } = Dimensions.get('window');
+
   const progressWidth = width ? screenWidth * (width / 100) : 0;
 
   return (
@@ -45,8 +45,10 @@ const BackHeader: React.FC<BackHeaderProps> = ({
       </View>
       <View className="relative w-full h-2 bg-box">
         <View
-          className="absolute top-0 z-10 h-2 bg-main1 rounded-r-xl"
           style={{ width: progressWidth }}
+          className={`absolute top-0 z-10 h-2 bg-main1 rounded-r-xl ${
+            progressWidth === screenWidth && 'rounded-none'
+          }`}
         />
       </View>
     </View>

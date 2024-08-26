@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 interface FieldValues {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | undefined;
 }
 
 interface UseCompletionPercentageParams {
@@ -12,10 +12,9 @@ interface UseCompletionPercentageParams {
 const useCompletionPercentage = ({ fields, totalFields }: UseCompletionPercentageParams) => {
   return useMemo(() => {
     const filledFields = Object.values(fields).filter(
-      (value) => value !== undefined && value !== '' && value !== 0 && value !== false,
+      (value) => value !== undefined && value !== null && value !== '',
     ).length;
 
-    // Calculate width percentage
     return (filledFields / totalFields) * 100;
   }, [fields, totalFields]);
 };

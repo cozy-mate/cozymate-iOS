@@ -38,6 +38,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('MainScreen');
   };
 
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
+  };
+
   const [upItems, setUpItems] = useState([
     {
       id: 1,
@@ -55,7 +59,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
       id: 3,
       title: '나의 라이프스타일 편집',
       value: '',
-      pressFunc: toMain,
+      pressFunc: toLifeStyleOnboarding,
     },
     {
       id: 4,

@@ -7,11 +7,13 @@ import { useMutation, UseMutationResult, useSuspenseQuery } from '@tanstack/reac
 export const useAddRole = (
   roomId: number,
   refetchRuleData: () => void,
+  refetchTodoData: () => void,
 ): UseMutationResult<AddRoleResponse, void, AddRoleRequest, unknown> => {
   return useMutation({
     mutationFn: (addRoleRequest: AddRoleRequest) => addRole(roomId, addRoleRequest),
     onSuccess: () => {
       refetchRuleData();
+      refetchTodoData();
     },
   });
 };

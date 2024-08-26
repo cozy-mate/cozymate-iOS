@@ -38,7 +38,7 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
               school ? 'border-sub1' : 'border-disabled'
             }`}
           >
-            <Text className="font-semibold text-xs leading-[17px] tracking-[-0.03em] text-colorFont">
+            <Text className="font-semibold text-xs leading-[17px] tracking-tight text-colorFont">
               학교
             </Text>
             <Text className={`${school ? 'text-basicFont' : 'text-disabledFont'} mt-1.5`}>

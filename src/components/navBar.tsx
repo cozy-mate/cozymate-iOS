@@ -27,7 +27,7 @@ const NavBar: React.FC<NavBarProps> = ({ isTodo, handleNav }) => {
           <Text
             className={`${
               !isTodo ? 'text-main1' : 'text-disabledFont'
-            } pt-1 text-base font-semibold tracking-[-0.02em] text-center`}
+            } pt-1 text-base font-semibold tracking-tight text-center`}
           >
             Role & Rule
           </Text>

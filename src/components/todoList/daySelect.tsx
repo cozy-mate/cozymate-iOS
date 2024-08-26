@@ -54,13 +54,12 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
       <Text className="mb-3 text-lg font-semibold text-basicFont">정해진 요일을 선택해주세요</Text>
       <View className="flex flex-row justify-between mb-2">
         {items.map((day) => (
-          <View
-            key={day.id}
-            className={`${
-              day.selected ? 'bg-sub1' : 'bg-colorBox'
-            } w-10 h-10 flex justify-center items-center rounded-full`}
-          >
-            <Pressable onPress={() => selectDay(day.value)}>
+          <Pressable key={day.id} onPress={() => selectDay(day.value)}>
+            <View
+              className={`${
+                day.selected ? 'bg-sub1' : 'bg-colorBox'
+              } w-10 h-10 flex justify-center items-center rounded-full`}
+            >
               <Text
                 className={`${
                   day.selected ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
@@ -68,8 +67,8 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
               >
                 {day.value}
               </Text>
-            </Pressable>
-          </View>
+            </View>
+          </Pressable>
         ))}
       </View>
       <View className="flex flex-row items-center">
