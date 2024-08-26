@@ -12,8 +12,8 @@ import ToggleIcon from '@assets/roomMate/toggle.svg';
 
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
-import { getOtherUserDetailData } from '@server/api/member-stat';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
+import { useRecoilState } from 'recoil';
 import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 
@@ -28,18 +28,17 @@ type UserItem = {
 };
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
-  const myLifeStyleState = useRecoilValue(MyLifeStyleState);
-
   const [filterList, setFilterList] = useState<string[]>([]);
-
   const [page, setPage] = useState<number>(0);
-  const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
-  const [similarAnswerData, setSimilarAnswerData] = useState<UserItem[]>([]);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [myLifeStyleData, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
-  const [othersBasicData, setOthersBasicData] = useRecoilState(OtherBasicData);
-  const [othersLifeStyleData, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState);
+  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
+  const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
+  const [similarAnswerData, setSimilarAnswerData] = useState<UserItem[]>([]);
+
+  const [, setOthersBasicData] = useRecoilState(OtherBasicData);
+  const [, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState);
 
   const [items, setItems] = useState([
     { index: 1, id: 'admissionYear', name: '학번', select: false },
@@ -67,8 +66,41 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const { data: sameanswerdata, refetch: refechSameAnswer } = useSearchUsersWithFilters(filterList);
-  const { data: similarmatedata, refetch: refetchSimilar } = useSearchUsers();
+  // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
+  // const { data: similarmatedata } = useSearchUsers();
+
+  const getMyLifeStyle = async () => {
+    try {
+      const response = await getUserDetailData();
+      setMyLifeStyleData(response.result);
+    } catch (error: any) {
+      console.log(error.response.data);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'LifeStyleOnboardingScreen' }],
+      });
+    }
+  };
+
+  const getSameAnswerMate = async () => {
+    try {
+      const response = await searchUsers(filterList);
+
+      setSameAnswerData(response.result.result);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
+
+  const getSimilarAnswerData = async () => {
+    try {
+      const response = await searchUsers();
+
+      setSimilarAnswerData(response.result.result);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
 
   const getOthersLifeStyle = async (user: UserItem) => {
     try {
@@ -81,6 +113,14 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
       console.log(error.response.data);
     }
   };
+
+  useEffect(() => {
+    getMyLifeStyle();
+    if (filterList.length > 0) {
+      getSameAnswerMate();
+    }
+    getSimilarAnswerData();
+  }, [filterList, page]);
 
   return (
     <View className="flex-1 bg-[#F7FAFF]">
@@ -126,8 +166,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                   <View className="h-[108px] flex justify-center items-center">
                     <Text className="text-sm font-medium text-disabledFont">칩을 선택해보세요</Text>
                   </View>
-                ) : sameanswerdata.result.result.length > 0 ? (
-                  sameanswerdata.result.result.map((user, index) => (
+                ) : sameAnswerData.length > 0 ? (
+                  sameAnswerData.map((user, index) => (
                     <SameAnswerContainer
                       key={index}
                       user={user}
@@ -162,7 +202,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                     showsHorizontalScrollIndicator={false}
                     className="flex flex-row "
                   >
-                    {similarmatedata.result.result.map((user, index) => (
+                    {similarAnswerData.map((user, index) => (
                       <SimilarLifeStyleContainer
                         key={index}
                         user={user}

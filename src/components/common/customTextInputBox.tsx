@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Keyboard,
   NativeSyntheticEvent,
   Pressable,
   Text,
@@ -42,12 +43,17 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
 
   const handleBlur = () => {
     setIsFocused(false);
+    Keyboard.dismiss();
+    if (enterFunc && value) {
+      enterFunc();
+    }
   };
 
   const handleSubmitEditing = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     if (enterFunc && value) {
       enterFunc();
     }
+    Keyboard.dismiss();
     inputRef.current?.blur();
   };
 

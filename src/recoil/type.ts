@@ -49,7 +49,7 @@ export type LifeStyle = {
   admissionYear: string;
   birthYear?: number;
   major: string;
-  numOfRoommate: number;
+  numOfRoommate: number | undefined;
   acceptance: string;
   wakeUpMeridian: string;
   wakeUpTime: number | undefined;

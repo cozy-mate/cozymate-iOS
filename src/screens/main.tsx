@@ -1,4 +1,6 @@
 import React from 'react';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LoginTabNavigatorParamList } from '@type/param/loginStack';
 
@@ -9,7 +11,6 @@ import TodoListScreen from './todoList/todoList';
 import FeedMainScreen from './feed/feedMain';
 import RoomMateScreen from './roomMate/roomMate';
 import MyPageScreen from './myPage/myPage';
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 const Tab = createBottomTabNavigator<LoginTabNavigatorParamList>();
 
@@ -23,16 +24,13 @@ const MainScreen = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'white',
-          paddingTop: 16,
+          backgroundColor: '#FFFFFF',
+          paddingTop: 12,
           paddingBottom: 32,
-          // borderTopLeftRadius: 20,
-          // borderTopRightRadius: 20,
-          // shadowColor: 'rgb(160, 160, 160)',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.25,
-          shadowRadius: 8,
-          borderTopColor: 'white',
+          borderTopWidth: 1,
+          borderTopColor: '#F1F1F1',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
         },
       }}
     >
@@ -56,16 +54,6 @@ const MainScreen = () => {
         })}
       />
       <Tab.Screen
-        name="FeedMainScreen"
-        component={FeedMainScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => null,
-          tabBarIcon: ({ focused }) => <Feed focused={focused} />,
-          tabBarButton: (props) => <DisabledTabButton {...props} />,
-        })}
-      />
-      <Tab.Screen
         name="RoomMateScreen"
         component={RoomMateScreen}
         options={({ route }) => ({
@@ -76,6 +64,16 @@ const MainScreen = () => {
           tabBarIcon: ({ focused }) => {
             return <RoomMate focused={focused} />;
           },
+        })}
+      />
+      <Tab.Screen
+        name="FeedMainScreen"
+        component={FeedMainScreen}
+        options={({ route }) => ({
+          // title 없애고 custom 하기 위한 옵션
+          tabBarLabel: () => null,
+          tabBarIcon: ({ focused }) => <Feed focused={focused} />,
+          tabBarButton: (props) => <DisabledTabButton {...props} />,
         })}
       />
       <Tab.Screen
