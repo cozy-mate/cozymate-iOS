@@ -7,8 +7,19 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 import { SignInScreenProps } from '@type/param/rootStack';
 
 import { useKakaoLogin } from '@hooks/api/member';
+import { signIn } from '@server/api/member';
+import { setAccessToken } from '@utils/token';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const testSignUp = async () => {
+    const response = await signIn({ clientId: 'TEST', socialType: 'KAKAO' });
+
+    const accessToken = response.result.tokenResponseDTO.accessToken;
+    await setAccessToken(accessToken);
+
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const toOnBoard = () => {
@@ -33,7 +44,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-main1 px-6 py-4"
-            onPress={toOnBoard}
+            onPress={testSignUp}
           >
             <Text className="text-base font-semibold text-white">회원가입</Text>
           </Pressable>

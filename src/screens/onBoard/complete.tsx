@@ -3,13 +3,14 @@ import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { signUp } from '@server/api/member';
+import { getMyProfile, signUp } from '@server/api/member';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { hasRoomState, loggedInState, signUpState } from '@recoil/recoil';
+import { hasRoomState, loggedInState, profileState, signUpState } from '@recoil/recoil';
 
 const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
+  const [, setMyProfile] = useRecoilState(profileState);
 
   useEffect(() => {
     console.log(signupstate);
@@ -30,10 +31,13 @@ const CompleteScreen = () => {
 
       await AsyncStorage.setItem('accessToken', response.result.tokenResponseDTO.accessToken);
 
+      const getProfileResponse = await getMyProfile();
+      setMyProfile(getProfileResponse.result);
+
       setHasRoom({ roomId: 0, hasRoom: false });
       setLoggedIn(true);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   };
 

@@ -7,10 +7,13 @@ import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 import { HomeScreenProps } from '@type/param/loginStack';
 import { useRecoilState } from 'recoil';
-import { hasRoomState } from '@recoil/recoil';
+import { MyLifeStyleState } from '@recoil/recoil';
 import { getMyProfile } from '@server/api/member';
+import { getUserDetailData } from '@server/api/member-stat';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
+  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
+
   useEffect(() => {
     const getProfile = async () => {
       const response = await getMyProfile();
@@ -18,8 +21,6 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     };
     getProfile();
   }, []);
-
-  const [, setHasRoom] = useRecoilState(hasRoomState);
 
   const toCreateRoom = () => {
     navigation.navigate('CreateRoomScreen');
@@ -29,16 +30,22 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('JoinRoomScreen');
   };
 
-  const toSchoolAuthentication = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
+  const toSchoolAuthentication = async () => {
+    try {
+      const response = await getUserDetailData();
+      setMyLifeStyleData(response.result);
+
+      navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
+    } catch (error: any) {
+      console.log(error.response.data);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'LifeStyleOnboardingScreen' }],
+      });
+    }
   };
 
   const isActive = true;
-
-  // const handleHasRoom = () => {
-  //   setHasRoom(true);
-  //   navigation.navigate('RoomMainScreen');
-  // };
 
   return (
     <Fragment>
