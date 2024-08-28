@@ -12,7 +12,7 @@ import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const testSignUp = async () => {
-    const response = await signIn({ clientId: 'TEST', socialType: 'KAKAO' });
+    const response = await signIn({ clientId: 'TEST', socialType: 'TEST' });
 
     const accessToken = response.result.tokenResponseDTO.accessToken;
     await setAccessToken(accessToken);
@@ -21,6 +21,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   };
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
+
   const loginWithId = useLoginWithId(navigation);
 
   return (
