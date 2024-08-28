@@ -6,9 +6,9 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
-import { useKakaoLogin } from '@hooks/api/member';
 import { signIn } from '@server/api/member';
 import { setAccessToken } from '@utils/token';
+import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const testSignUp = async () => {
@@ -21,10 +21,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   };
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
-
-  const toOnBoard = () => {
-    navigation.navigate('PersonalInfoInputScreen');
-  };
+  const loginWithId = useLoginWithId(navigation);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -65,7 +62,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={toOnBoard}
+            onPress={() => loginWithId()}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-base font-semibold text-center text-white">Apple로 계속하기</Text>

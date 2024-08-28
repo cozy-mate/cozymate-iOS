@@ -12,7 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		49BD899D88C5FBBB6AE13363 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 421053EA13806C9EDD3FDF00 /* PrivacyInfo.xcprivacy */; };
-		5B8C65144F007187A1F64B45 /* libPods-cozymate-cozymateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3A0D76E6DD55CF28A40E4A3 /* libPods-cozymate-cozymateTests.a */; };
+		5961AD07B0A039A586D6150E /* libPods-cozymate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 528A682EAB54A3D8075385DD /* libPods-cozymate.a */; };
 		7658EFEB2C7911790090CE8C /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 7658EFEA2C7911790090CE8C /* main.jsbundle */; };
 		76B3FF992C5FEB94002CA369 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 76B3FF982C5FEB94002CA369 /* Fonts */; };
 		80616AD11B494C338763F80F /* SF_HambakSnow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 923CF305EC5244DB974B22DA /* SF_HambakSnow.ttf */; };
@@ -43,6 +43,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = cozymate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		216728EB80D413FFEFEB016D /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		421053EA13806C9EDD3FDF00 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = cozymate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		528A682EAB54A3D8075385DD /* libPods-cozymate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cozymate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7658EFEA2C7911790090CE8C /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		76B3FF982C5FEB94002CA369 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		76DA746A2C6B919800F34533 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				28C945C92C7C84340020824D /* main.jsbundle */,
 				76DA746A2C6B919800F34533 /* Config.xcconfig */,
 				76B3FF982C5FEB94002CA369 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* cozymate */,
@@ -265,10 +267,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7658EFEB2C7911790090CE8C /* main.jsbundle in Resources */,
 				76B3FF992C5FEB94002CA369 /* Fonts in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				7658EFEB2C7911790090CE8C /* main.jsbundle in Resources */,
 				49BD899D88C5FBBB6AE13363 /* PrivacyInfo.xcprivacy in Resources */,
 				80616AD11B494C338763F80F /* SF_HambakSnow.ttf in Resources */,
 			);
@@ -495,8 +497,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7W85YZ42XT;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7W85YZ42XT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = cozymate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -511,6 +515,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cozymate;
 				PRODUCT_NAME = cozymate;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "cozymate Debug";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -523,8 +529,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7W85YZ42XT;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7W85YZ42XT;
 				INFOPLIST_FILE = cozymate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,6 +546,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cozymate;
 				PRODUCT_NAME = cozymate;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "cozymate Release";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -617,10 +627,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -693,10 +700,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

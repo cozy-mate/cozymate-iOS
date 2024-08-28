@@ -6,6 +6,7 @@ import { checkHasRoom, getRoomData } from '@server/api/room';
 import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { setAccessToken } from '@utils/token';
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 
 // 카카오 로그인
@@ -94,4 +95,71 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
   } else {
     throw new Error('Apple 인증에 실패하였습니다');
   }
+};
+
+export const useLoginWithId = (navigation: any) => {
+  const [, setLoggedIn] = useRecoilState(loggedInState);
+  const [, setMyProfile] = useRecoilState(profileState);
+  const [, setHasRoom] = useRecoilState(hasRoomState);
+  const [, setRoomInfo] = useRecoilState(roomInfoState);
+
+  const handlePrompt = () => {
+    Alert.prompt(
+      '수동 로그인',
+      '수동 아이디를 입력해주세요',
+      [
+        {
+          text: '취소',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: '확인',
+          onPress: async (id: any) => {
+            if (id === undefined) {
+              return;
+            }
+            if (id === '0') {
+              navigation.navigate('PersonalInfoInputScreen');
+              return;
+            }
+            try {
+              const signInResponse = await signIn({ clientId: id, socialType: 'KAKAO' });
+
+              //임시 토큰
+              const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
+
+              await setAccessToken(accessToken);
+
+              if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
+                //navigation.navigate('PersonalInfoInputScreen');
+                Alert.alert('회원가입이 필요합니다');
+              } else {
+                // 프로필 정보 저장
+                const getProfileResponse = await getMyProfile();
+                setMyProfile(getProfileResponse.result);
+
+                // 방 존재 여부 저장
+                const roomCheckResponse = await checkHasRoom();
+                const roomId = roomCheckResponse.result.roomId;
+
+                // 방이 존재하는 경우 방 정보 저장
+                if (roomId !== 0) {
+                  setHasRoom({ hasRoom: true, roomId: roomId });
+
+                  const roomInfoResponse = await getRoomData(roomId);
+                  setRoomInfo(roomInfoResponse.result);
+                }
+                setLoggedIn(true);
+              }
+            } catch (error) {
+              Alert.alert('로그인 오류');
+            }
+          },
+        },
+      ],
+      'plain-text',
+    );
+  };
+  return handlePrompt;
 };
