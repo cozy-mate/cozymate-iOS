@@ -26,12 +26,17 @@ import fourteenth from '@assets/characterItem/14.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
 
-interface Character {
+type IconProps = {
+  width: number;
+  height: number;
+};
+
+type Item = {
   index: number;
   item: number;
   select: boolean;
-  icon: React.FC;
-}
+  icon: React.FC<IconProps>;
+};
 
 const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
   const [signUp, setSignUp] = useRecoilState(signUpState);
@@ -40,7 +45,7 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
 
   const isComplete = character !== 0;
 
-  const [items, setItems] = useState<Character[]>([
+  const [items, setItems] = useState<Item[]>([
     {
       index: 1,
       item: 1,

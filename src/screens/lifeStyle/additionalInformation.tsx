@@ -67,8 +67,8 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
         },
       });
       navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   };
 

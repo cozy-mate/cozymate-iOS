@@ -43,9 +43,5 @@ export const getProfileImage = (persona: number, width: number, height: number) 
 
   const IconComponent = selectedItem.icon;
 
-  return (
-    <View style={{ width, height }}>
-      <IconComponent width={width} height={height} />
-    </View>
-  );
+  return <IconComponent width={width} height={height} />;
 };

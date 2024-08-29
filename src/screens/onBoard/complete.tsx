@@ -50,13 +50,14 @@ const CompleteScreen = () => {
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-xl font-semibold leading-5 tracking-tight text-emphasizedFont">
-              {signupstate.nickname}님,{'\n'}cozymate에 오신걸 환영해요!
+              <Text className="text-main1">{signupstate.nickname}</Text>님,{'\n'}cozymate에 오신걸
+              환영해요!
             </Text>
           </View>
 
           {/* 선택된 캐릭터 이미지 */}
           <View className="flex items-center">
-            <View>{getProfileImage(signupstate.persona, 300, 300)}</View>
+            {getProfileImage(signupstate.persona, 300, 300)}
           </View>
         </View>
 

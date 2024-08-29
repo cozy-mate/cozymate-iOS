@@ -323,14 +323,14 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 1, value: '매일매일 해요', name: '매일매일 해요', select: false },
     {
       index: 2,
-      value: '일주일에 한 번 정도 해요',
-      name: '일주일에 한 번 정도 해요',
+      value: '이틀에 한 번 정도 해요',
+      name: '이틀에 한 번 정도 해요',
       select: false,
     },
     {
       index: 3,
-      value: '이틀에 한 번 정도 해요',
-      name: '이틀에 한 번 정도 해요',
+      value: '일주일에 한 번 정도 해요',
+      name: '일주일에 한 번 정도 해요',
       select: false,
     },
     {

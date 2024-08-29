@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import moment from 'moment';
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -42,11 +43,14 @@ interface CustomCalendarProps {
 }
 
 const CustomCalendar: React.FC<CustomCalendarProps> = ({ onDateTimeSelect }) => {
-  const [selected, setSelected] = useState('');
+  const today = moment().format('YYYY-MM-DD');
+  const [selected, setSelected] = useState(today);
 
   return (
     <Calendar
       enableSwipeMonths={true}
+      minDate={moment().format('YYYY-MM-DD')}
+      disableAllTouchEventsForDisabledDays={true}
       onDayPress={(day: any) => {
         onDateTimeSelect(day.dateString);
         setSelected(day.dateString);

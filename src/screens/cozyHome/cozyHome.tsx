@@ -16,11 +16,9 @@ import useInitFcm from '@hooks/useInitFcm';
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
 
-  const {initFcm} = useInitFcm();
-
+  const { initFcm } = useInitFcm();
 
   useEffect(() => {
-    
     const getProfile = async () => {
       const response = await getMyProfile();
       console.log(response);
@@ -91,12 +89,10 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-row justify-between px-5 pt-[26px] ">
+        <View className="flex flex-row justify-between px-5 pt-[26px] h-[284px] space-x-3">
           {/* 코지메이트 초대하기 버튼 */}
-          <View
-            className={`${!isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl w-[162px]`}
-          >
-            <Pressable className="flex flex-col">
+          <View className={`${!isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
+            <Pressable className="flex flex-col items-start h-full">
               <Text
                 className={`${
                   !isActive ? 'text-main1' : 'text-disabledFont'
@@ -114,14 +110,10 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
             </Pressable>
           </View>
 
-          <View className="flex flex-col">
-            {/* 초대코드로 방 만들기 버튼 */}
-            <View
-              className={`${
-                isActive ? 'bg-colorBox' : 'bg-box'
-              } px-4 py-4 rounded-xl w-[162px] mb-2 min-h-[138px]`}
-            >
-              <Pressable onPress={toCreateRoom} className="flex-row">
+          {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+          <View className="flex flex-col flex-1 space-y-2">
+            <View className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
+              <Pressable onPress={toCreateRoom} className="items-start flex-1">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'
@@ -132,13 +124,8 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
               </Pressable>
             </View>
 
-            {/* 초대코드로 방 참여하기 버튼 */}
-            <View
-              className={`${
-                isActive ? 'bg-colorBox' : 'bg-box'
-              } px-4 py-4 rounded-xl w-[162px] min-h-[138px]`}
-            >
-              <Pressable onPress={toJoinRoom} className="flex-row">
+            <View className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
+              <Pressable onPress={toJoinRoom} className="items-start flex-1">
                 <Text
                   className={`${
                     isActive ? 'text-main1' : 'text-disabledFont'

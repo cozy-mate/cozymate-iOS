@@ -4,8 +4,8 @@ import { Pressable, SafeAreaView, Text, View } from 'react-native';
 import { SelectCharacterScreenProps } from '@type/param/loginStack';
 
 import { useRecoilState } from 'recoil';
-import { CreateRoomInfo, RoomInfo, SignUp } from '@recoil/type';
-import { createRoomState, signUpState } from '@recoil/recoil';
+import { CreateRoomInfo } from '@recoil/type';
+import { createRoomState } from '@recoil/recoil';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
@@ -26,12 +26,17 @@ import fourteenth from '@assets/characterItem/14.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
 
-interface Character {
+type IconProps = {
+  width: number;
+  height: number;
+};
+
+type Item = {
   index: number;
   item: number;
   select: boolean;
-  icon: React.FC;
-}
+  icon: React.FC<IconProps>;
+};
 
 const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
   const [, setCreateroomState] = useRecoilState(createRoomState);
@@ -40,7 +45,7 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
 
   const isComplete = profileImage !== 0;
 
-  const [items, setItems] = useState<Character[]>([
+  const [items, setItems] = useState<Item[]>([
     {
       index: 1,
       item: 1,

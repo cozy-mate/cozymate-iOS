@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import moment from 'moment';
 
 import { useRecoilValue } from 'recoil';
 import { roomInfoState } from '@recoil/recoil';
@@ -38,7 +39,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
 
   // Todo
   const [todoContent, setTodoContent] = useState<string>('');
-  const [timePoint, setTimePoint] = useState<string>('');
+  const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
 
   const { refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
   const { mutateAsync: addTodoMutate, isPending: addTodoPending } = useAddMyTodo(
@@ -82,7 +83,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const resetState = () => {
     if (type === 'todo') {
       setTodoContent('');
-      setTimePoint('');
+      setTimePoint(moment().format('YYYY-MM-DD'));
     } else if (type === 'role') {
       setMateIdList([]);
       setTitle('');

@@ -10,11 +10,16 @@ interface CustomRadioBoxComponentProps {
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
+type IconProps = {
+  width: number;
+  height: number;
+};
+
 type Item = {
   index: number;
   item: number;
   select: boolean;
-  icon: React.FC;
+  icon: React.FC<IconProps>;
 };
 
 const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
@@ -43,8 +48,8 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
     <View className="flex flex-row flex-wrap gap-x-4 gap-y-8">
       {items.map((item: Item) => (
         <Pressable key={item.index} onPress={() => select(item)}>
-          <View className="relative">
-            <item.icon />
+          <View className="relative w-[70px] h-[70px]">
+            <item.icon width={70} height={70} />
             {focusedIndex === item.index && (
               <View className="absolute">
                 <Check />
