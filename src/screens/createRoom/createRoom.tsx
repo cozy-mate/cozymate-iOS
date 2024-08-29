@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  Pressable,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Config from 'react-native-config';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
@@ -93,76 +102,78 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex flex-col justify-between flex-1 bg-white">
-      <View className="flex flex-col justify-between flex-1 px-5">
-        <View>
-          {/* 상단 이전 버튼 */}
-          <View className="flex flex-row items-center mt-2 mb-[33px]">
-            <Pressable onPress={toMain}>
-              <BackButton />
-            </Pressable>
-          </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex flex-col justify-between flex-1 bg-white">
+        <View className="flex flex-col justify-between flex-1 px-5">
+          <View>
+            {/* 상단 이전 버튼 */}
+            <View className="flex flex-row items-center mt-2 mb-[33px]">
+              <Pressable onPress={toMain}>
+                <BackButton />
+              </Pressable>
+            </View>
 
-          {/* 캐릭터 선택 */}
-          <View className="relative flex items-center justify-center mb-10">
-            <View className="relative">
-              {createroomState.profileImage ? (
-                <>{getProfileImage(createroomState.profileImage, 130, 130)}</>
-              ) : (
-                <CharacterBox />
-              )}
-              <View className="absolute bottom-0 right-0">
-                <Pressable onPress={toSelectCharacter}>
-                  <SelectIcon />
-                </Pressable>
+            {/* 캐릭터 선택 */}
+            <View className="relative flex items-center justify-center mb-10">
+              <View className="relative">
+                {createroomState.profileImage ? (
+                  <>{getProfileImage(createroomState.profileImage, 130, 130)}</>
+                ) : (
+                  <CharacterBox />
+                )}
+                <View className="absolute bottom-0 right-0">
+                  <Pressable onPress={toSelectCharacter}>
+                    <SelectIcon />
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+
+            <View className="">
+              {/* 방이름 입력 */}
+              <View className="mb-[28px]">
+                <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                  방이름을 입력해주세요
+                </Text>
+                <TextInput
+                  className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
+                  value={name}
+                  onChangeText={valueHandleChange}
+                  placeholder="방이름을 입력해주세요"
+                />
+                {isLongName && (
+                  <Text className="pl-2 mt-2 text-xs font-medium text-warning">
+                    방이름은 최대 12글자만 가능해요!
+                  </Text>
+                )}
+              </View>
+
+              {/* 방 인원 선택 */}
+              <View>
+                <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                  인원을 선택해주세요 (본인 포함)
+                </Text>
+                <CustomRadioBoxComponent
+                  value={maxMateNum}
+                  setValue={setMaxMateNum}
+                  items={items}
+                  setItems={setItems}
+                />
               </View>
             </View>
           </View>
 
-          <View className="">
-            {/* 방이름 입력 */}
-            <View className="mb-[28px]">
-              <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
-                방이름을 입력해주세요
-              </Text>
-              <TextInput
-                className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
-                value={name}
-                onChangeText={valueHandleChange}
-                placeholder="방이름을 입력해주세요"
-              />
-              {isLongName && (
-                <Text className="pl-2 mt-2 text-xs font-medium text-warning">
-                  방이름은 최대 12글자만 가능해요!
-                </Text>
-              )}
-            </View>
-
-            {/* 방 인원 선택 */}
-            <View>
-              <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
-                인원을 선택해주세요 (본인 포함)
-              </Text>
-              <CustomRadioBoxComponent
-                value={maxMateNum}
-                setValue={setMaxMateNum}
-                items={items}
-                setItems={setItems}
-              />
-            </View>
+          <View className="flex">
+            <Pressable
+              onPress={toNext}
+              className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+            >
+              <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
+            </Pressable>
           </View>
         </View>
-
-        <View className="flex">
-          <Pressable
-            onPress={toNext}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
-          >
-            <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
-          </Pressable>
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

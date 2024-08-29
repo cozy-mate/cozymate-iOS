@@ -43,6 +43,8 @@ import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
 import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 
 import CreateTodoScreen from 'src/screens/todoList/createTodo';
+import ChatScreen from 'src/screens/chatting/chat';
+import NotificationScreen from 'src/screens/notification/notification';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const loginStack = createNativeStackNavigator<LoginStackParamList>();
@@ -100,6 +102,10 @@ function AppInner() {
             <roomStack.Screen name="FeedEditScreen" component={FeedEditScreen} />
             <roomStack.Screen name="FeedViewScreen" component={FeedViewScreen} />
             <roomStack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
+
+            <roomStack.Screen name="ChatScreen" component={ChatScreen} />
+
+            <roomStack.Screen name="NotificationScreen" component={NotificationScreen} />
           </roomStack.Navigator>
         ) : (
           <loginStack.Navigator
@@ -141,6 +147,10 @@ function AppInner() {
 
             <loginStack.Screen name="RoomMateScreen" component={RoomMateScreen} />
             <loginStack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+
+            <loginStack.Screen name="ChatScreen" component={ChatScreen} />
+
+            <loginStack.Screen name="NotificationScreen" component={NotificationScreen} />
           </loginStack.Navigator>
         )
       ) : (

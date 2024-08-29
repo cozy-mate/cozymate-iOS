@@ -12,7 +12,7 @@ export const useGetRoomLog = (
     select: (response: GetRoomLogResponse) => {
       return response;
     },
-    refetchInterval: 5000,
+    refetchInterval: 3000,
   });
 
   return { data, refetch };

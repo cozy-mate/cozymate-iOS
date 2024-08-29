@@ -6,7 +6,6 @@ export type LoginStackParamList = {
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;
 
-  // RoomMainScreen: undefined;
   CreateRoomScreen: undefined;
   TodoListScreen: undefined;
   SchoolAuthenticationScreen: undefined;
@@ -31,6 +30,10 @@ export type LoginStackParamList = {
   FeedViewScreen: { postId: number };
 
   MyPageScreen: undefined;
+
+  ChatScreen: undefined;
+
+  NotificationScreen: undefined;
 };
 
 export type LoginTabNavigatorParamList = {
@@ -98,22 +101,18 @@ export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
   'AdditionalLifeStyleScreen'
 >;
 
-// // 방 메인 스크린 (코지봇 알림)
-// export type RoomMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMainScreen'>;
-
-// // 투두리스트 스크린
-// export type TodoListScreenProps = NativeStackScreenProps<LoginStackParamList, 'TodoListScreen'>;
-// export type CreateTodoScreenProps = NativeStackScreenProps<LoginStackParamList, 'CreateTodoScreen'>;
-
 export type RoomMateScreenProps = NativeStackScreenProps<LoginStackParamList, 'RoomMateScreen'>;
 
 export type UserDetailScreenProps = NativeStackScreenProps<LoginStackParamList, 'UserDetailScreen'>;
 
-// // 피드 스크린
-// export type FeedMainScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedMainScreen'>;
-// export type FeedEditScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedEditScreen'>;
-// export type FeedCreateScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedCreateScreen'>;
-// export type FeedViewScreenProps = NativeStackScreenProps<LoginStackParamList, 'FeedViewScreen'>;
-
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<LoginStackParamList, 'MyPageScreen'>;
+
+// 쪽지 스크린
+export type ChatScreenProps = NativeStackScreenProps<LoginStackParamList, 'ChatScreen'>;
+
+// 알림 스크린
+export type NotificationScreenProps = NativeStackScreenProps<
+  LoginStackParamList,
+  'NotificationScreen'
+>;

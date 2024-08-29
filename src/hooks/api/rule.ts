@@ -26,6 +26,7 @@ export const useGetRuleData = (
     select: (response: GetRuleDataResponse) => {
       return response;
     },
+    refetchInterval: 3000,
   });
 
   return { data, refetch };
