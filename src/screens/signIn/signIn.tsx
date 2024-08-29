@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Pressable, Text, View, SafeAreaView } from 'react-native';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
@@ -6,26 +6,23 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
+import { signIn } from '@server/api/member';
+import { setAccessToken } from '@utils/token';
 import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
-import useInitFcm from '@hooks/useInitFcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const testSignUp = async () => {
+    const response = await signIn({ clientId: 'TEST', socialType: 'TEST' });
 
-  const {initDeviceId, refreshFcmToken} = useInitFcm();
+    const accessToken = response.result.tokenResponseDTO.accessToken;
+    await setAccessToken(accessToken);
 
-  useEffect(() => {
-    initDeviceId();
-    refreshFcmToken();
-  }, []);
-  
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
 
   const loginWithId = useLoginWithId(navigation);
-
-
-  const toOnBoard = () => {
-    navigation.navigate('PersonalInfoInputScreen');
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -45,7 +42,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-main1 px-6 py-4"
-            onPress={toOnBoard}
+            onPress={testSignUp}
           >
             <Text className="text-base font-semibold text-white">회원가입</Text>
           </Pressable>
