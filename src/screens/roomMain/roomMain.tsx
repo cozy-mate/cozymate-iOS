@@ -13,7 +13,6 @@ import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 import { RoomMainScreenProps } from '@type/param/roomStack';
 import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
-import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
 import useInitFcm from '@hooks/useInitFcm';
