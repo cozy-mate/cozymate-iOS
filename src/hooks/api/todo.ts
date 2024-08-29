@@ -44,6 +44,7 @@ export const useGetTodoData = (
     select: (response: GetTodoDataResponse) => {
       return response;
     },
+    refetchInterval: 3000,
   });
 
   return { data, refetch };

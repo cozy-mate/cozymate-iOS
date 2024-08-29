@@ -30,6 +30,10 @@ export type RoomStackParamList = {
   FeedViewScreen: { postId: number };
 
   MyPageScreen: undefined;
+
+  ChatScreen: undefined;
+
+  NotificationScreen: undefined;
 };
 
 export type HasRoomTabNavigatorParamList = {
@@ -87,3 +91,12 @@ export type FeedViewScreenProps = NativeStackScreenProps<RoomStackParamList, 'Fe
 
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<RoomStackParamList, 'MyPageScreen'>;
+
+// 쪽지 스크린
+export type ChatScreenProps = NativeStackScreenProps<RoomStackParamList, 'ChatScreen'>;
+
+// 알림 스크린
+export type NotificationScreenProps = NativeStackScreenProps<
+  RoomStackParamList,
+  'NotificationScreen'
+>;

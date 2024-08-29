@@ -32,6 +32,8 @@ export const useKakaoLogin = (
       const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
       await setAccessToken(accessToken);
 
+      console.log(accessToken);
+
       if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');
       } else {
