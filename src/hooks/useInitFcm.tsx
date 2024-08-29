@@ -4,8 +4,6 @@ import { useRecoilState } from 'recoil';
 import { deleteFcmToken, getFcmToken, hasFcmToken, setFcmToken } from '@utils/fcm';
 import { postFcmToken } from '@server/api/fcm';
 import { getDeviceId } from '../utils/fcm';
-
-import { useEffect } from 'react';
 import notifee from '@notifee/react-native';
 
 const useInitFcm = () => {
@@ -21,40 +19,43 @@ const useInitFcm = () => {
     // -> FCM 토큰 삭제
 
     const initDeviceId = async () => {
+        console.log('Device ID initialized');
         await getDeviceId();
-    }
 
+    }
     // 새로운 토큰 발급
     const refreshFcmToken = async () => {
-        try {
-            // 기존 FCM 토큰 삭제
-            await messaging().deleteToken();
-        
-            // 새로운 FCM 토큰 요청
-            const newToken = await messaging().getToken();
-            console.log('새로 발급된 FCM 토큰:', newToken);
-            await setFcmToken(newToken);
-        
-            // 새로운 토큰을 서버로 전송하거나 로컬 저장소에 저장
-          } catch (error) {
-            console.error('FCM 토큰 재발급 중 오류 발생:', error);
-          }
+        const authorizationStatus = await messaging().requestPermission();
+        if(authorizationStatus){
+            await messaging().deleteToken().then(async (res)=> {
+                    const newToken = await messaging().getToken();
+                    console.log('새로 발급된 FCM 토큰:', newToken);
+                    await setFcmToken(newToken);
+            }
+            ).catch(async (e)=>{
+                console.log('FCM 토큰 재발급 중 오류 발생:', e);
+                // 새로운 FCM 토큰 요청
+                const newToken = await messaging().getToken();
+                console.log('새로 발급된 FCM 토큰:', newToken);
+                await setFcmToken(newToken);
+            })
+        }
     }
 
     const requestUserPermission = async () => {
-        const authorizationStatus = await messaging().requestPermission();
-        if (authorizationStatus) {
+        
+      
             try {
                 // 같은 기기면 매번 같은 토큰 줌
                 const token = await messaging().getToken();
+                console.log(token)
                 const deviceId = await getDeviceId();
                 await setFcmToken(token);
                 const response = await postFcmToken({ deviceId: deviceId!, token });
                 console.log('FCM Token registered successfully:', response);
             } catch (error:any) {
-                console.error('Failed to register FCM token:',error.response.data);
+                console.error('Failed to register FCM token:',error.response);
             }
-    }
     };
 
     const foregroundNotificationListener = () => {

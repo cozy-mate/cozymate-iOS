@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, Text, View, SafeAreaView } from 'react-native';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
@@ -9,8 +9,18 @@ import { SignInScreenProps } from '@type/param/rootStack';
 import { signIn } from '@server/api/member';
 import { setAccessToken } from '@utils/token';
 import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
+import useInitFcm from '@hooks/useInitFcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+
+
+  const {initDeviceId,refreshFcmToken} = useInitFcm();
+
+  useEffect(()=>{
+    initDeviceId();
+    refreshFcmToken();
+  },[])
+
   const testSignUp = async () => {
     const response = await signIn({ clientId: 'TEST', socialType: 'TEST' });
 
