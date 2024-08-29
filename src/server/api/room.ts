@@ -68,12 +68,8 @@ export const checkHasRoom = async (): Promise<CheckHasRoomResponse> => {
 };
 
 // 방 참여 확인
-export const joinRoom = async (roomId: number, memberId: number): Promise<JoinRoomResponse> => {
-  const response = await PostAxiosInstance<JoinRoomResponse>(`/rooms/${roomId}/join`, {
-    params: {
-      memberId: memberId,
-    },
-  });
+export const joinRoom = async (roomId: number): Promise<JoinRoomResponse> => {
+  const response = await PostAxiosInstance<JoinRoomResponse>(`/rooms/${roomId}/join`);
 
   return response.data;
 };

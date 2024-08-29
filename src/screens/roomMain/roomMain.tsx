@@ -13,7 +13,6 @@ import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 import { RoomMainScreenProps } from '@type/param/roomStack';
 import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
-import { getRoomData } from '@server/api/room';
 import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
@@ -31,14 +30,17 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       try {
         const infoResponse = await getRoomData(myRoom.roomId);
         console.log(infoResponse);
+        
+                setRoomInfo(infoResponse.result);
+       } catch (error) {
+         console.error('Error fetching room data:', error);
+       }
+     };
+     fetchData();
+   }, [myRoom.roomId, setRoomInfo]);
 
-        setRoomInfo(infoResponse.result);
-      } catch (error) {
-        console.error('Error fetching room data:', error);
-      }
-    };
-    fetchData();
-  }, [myRoom.roomId, setRoomInfo]);
+
+
 
   return (
     <View className="flex-1 bg-[#CADFFF]">
