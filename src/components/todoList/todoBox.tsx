@@ -19,7 +19,7 @@ const TodoBox: React.FC<TodoBoxProps> = ({ todoData, changeTodo }) => {
   return (
     <View className="flex flex-col">
       {todoData.length !== 0 ? (
-        <View className="p-2 pl-4 bg-white shadow-chipback rounded-xl">
+        <View className="p-2 pl-4 bg-white shadow-custom rounded-xl">
           {todoData.map((data) => (
             <View key={data.id} className="flex flex-row items-center justify-between gap-y-1">
               <Text

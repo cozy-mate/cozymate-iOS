@@ -97,8 +97,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
             >
               <CozyBotIcon />
               <View className="mt-2">
-                <View className="flex flex-row mb-[2px]">
-                  {/* 분리된 content를 부분적으로 스타일링하여 출력 */}
+                <Text className="flex flex-row flex-nowrap mb-[2px]">
                   {data.content.split(/{(.*?)}/).map((part, i) => (
                     <Text
                       key={i}
@@ -109,8 +108,10 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
                       {part}
                     </Text>
                   ))}
-                </View>
-                <Text className="text-xs font-normal text-disabledFont">{data.createdAt}</Text>
+                </Text>
+                <Text className="text-xs font-medium text-disabledFont mt-[2px]">
+                  {data.createdAt}
+                </Text>
               </View>
             </View>
           ))}

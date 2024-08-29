@@ -18,7 +18,7 @@ interface RoleBoxProps {
 
 const MyRoleBox: React.FC<RoleBoxProps> = ({ persona, roleData, nickname }) => {
   return (
-    <View className="p-4 pr-2 mb-4 bg-white shadow-chipback rounded-xl">
+    <View className="p-4 pr-2 mb-4 bg-white shadow-custom rounded-xl">
       <View>
         <View className="flex flex-row items-center mb-2">
           {getProfileImage(persona, 24, 24)}

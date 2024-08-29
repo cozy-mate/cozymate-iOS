@@ -13,7 +13,7 @@ const RuleBox: React.FC<RuleBoxProps> = ({ ruleData }) => {
   return (
     <View className="flex flex-col">
       {ruleData.length > 0 ? (
-        <View className="p-2 pl-4 bg-white rounded-xl shadow-chipback">
+        <View className="p-2 pl-4 bg-white rounded-xl shadow-custom">
           {ruleData.map((rule, index) => (
             <View key={rule.id} className="flex flex-row items-center py-1.5">
               <View className="flex items-center justify-center w-6 h-6 mr-2 rounded-full bg-colorBox">

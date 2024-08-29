@@ -13,6 +13,7 @@ module.exports = {
       },
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',
+        custom: '0px 0px 1px rgba(107, 107, 107, 0.25)',
       },
       dropShadow: {
         topShadow: '0px 0px 8px 0px rgba(218, 218, 218, 0.25)',
