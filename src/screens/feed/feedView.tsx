@@ -14,7 +14,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { ScrollView } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
 
 import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
@@ -40,9 +39,8 @@ import {
   hasRoomState,
   postDetailRefreshState,
   profileState,
-  roomInfoState,
 } from '@recoil/recoil';
-import { createComment, deleteComment, getCommentList } from '@server/api/comment';
+import { createComment, getCommentList } from '@server/api/comment';
 import BackCleanHeader from 'src/layout/backCleanHeader';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
@@ -62,7 +60,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const keyboard = useAnimatedKeyboard();
 
   const animatedStyles = useAnimatedStyle(() => ({
-    bottom: withTiming(keyboard.height.value, { duration: 0 }),
+    bottom : keyboard.height.value > 20  ? keyboard.height.value : 20
   }));
 
   const { postId } = props.route.params;
@@ -457,34 +455,22 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             updateComment={updateCommentList}/>
           </ScrollView>
           <Animated.View className={`absolute w-full z-10`} style={[animatedStyles]}>
-            <LinearGradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              colors={['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 1)']}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: '100%',
-                width: '100%',
-                paddingHorizontal: 20,
-                paddingBottom: 40,
-              }}
-            >
+            <View className='flex flex-row items-center justify-center w-full pt-2 pb-2 pl-4 pr-2 bg-white'>
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}
                 onChangeText={handleCommentChange}
-                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1 mt-2"
+                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1"
               />
               <TouchableOpacity
                 className={`${loading || commentPosting || refreshing ? 'disabled' : ''}`}
                 onPress={createMyComment}
               >
-                <SendCommentIcon />
+              <SendCommentIcon />
               </TouchableOpacity>
-            </LinearGradient>
+              </View>
           </Animated.View>
-
+          
           <SafeAreaView className="w-full" />
           <ControlModal
             isModalVisible={isModalVisible}

@@ -13,9 +13,10 @@ import notifee from '@notifee/react-native';
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('[Background Message] ', remoteMessage);
+
   await notifee.displayNotification({
-    title: remoteMessage.data.title || '알림',
-    body: remoteMessage.data.body || '새로운 메시지가 도착했습니다.',
+    title: remoteMessage.data.title.replace(/{(.*?)}/g, '$1') || '알림',
+    body: remoteMessage.data.body.replace(/{(.*?)}/g, '$1') || '새로운 메시지가 도착했습니다.',
     ios: {
       sound: 'default',
     },

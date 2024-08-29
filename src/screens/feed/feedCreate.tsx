@@ -110,6 +110,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         imageResponse = await uploadAssetImageToS3(images);
       }
     } catch (e) {
+      console.log(e);
       setModalTitle(IMAGE_UPLOAD_ERROR);
       setIsGoingBack(false);
       handleButtonModalOpen();
@@ -142,6 +143,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         imageResponse = await uploadAssetImageToS3(images);
       }
     } catch (e) {
+      console.log(e);
       setModalTitle(IMAGE_UPLOAD_ERROR);
       setIsGoingBack(false);
       handleButtonModalOpen();

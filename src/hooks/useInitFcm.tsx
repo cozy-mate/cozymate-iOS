@@ -1,10 +1,12 @@
 import messaging from '@react-native-firebase/messaging';
 import { loggedInState } from '../recoil/recoil';
 import { useRecoilState } from 'recoil';
-import { deleteFcmToken, getFcmToken, hasFcmToken, setFcmToken } from '@utils/fcm';
+import { setFcmToken } from '@utils/fcm';
 import { postFcmToken } from '@server/api/fcm';
-import { getDeviceId } from '../utils/fcm';
 import notifee from '@notifee/react-native';
+import {getUniqueId} from 'react-native-device-info';
+import { Alert } from 'react-native';
+
 
 const useInitFcm = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loggedInState);
@@ -18,9 +20,9 @@ const useInitFcm = () => {
   // 3. 로그아웃 시
   // -> FCM 토큰 삭제
 
-  const initDeviceId = async () => {
-    console.log('Device ID initialized');
-    await getDeviceId();
+  const getDeviceId = async () => {
+    const deviceId = await getUniqueId();
+    return 'ios-'+deviceId;
   };
   // 새로운 토큰 발급
   const refreshFcmToken = async () => {
@@ -36,6 +38,7 @@ const useInitFcm = () => {
         .catch(async (e) => {
           console.log('FCM 토큰 재발급 중 오류 발생:', e);
           // 새로운 FCM 토큰 요청
+          console.log('재발급 시도중...');
           const newToken = await messaging().getToken();
           console.log('새로 발급된 FCM 토큰:', newToken);
           await setFcmToken(newToken);
@@ -63,8 +66,8 @@ const useInitFcm = () => {
       console.log('Foreground Notification:', remoteMessage);
 
       await notifee.displayNotification({
-        title: remoteMessage?.data.title || '알림',
-        body: remoteMessage?.data.body || '새로운 메시지가 도착했습니다.',
+        title: remoteMessage?.data.title.replace(/{(.*?)}/g, '$1') || '알림',
+        body: remoteMessage?.data.body.replace(/{(.*?)}/g, '$1') || '새로운 메시지가 도착했습니다.',
         ios: {
           sound: 'default',
         },
@@ -81,7 +84,7 @@ const useInitFcm = () => {
   };
 
   return {
-    initDeviceId,
+    getDeviceId,
     refreshFcmToken,
     initFcm,
   };
