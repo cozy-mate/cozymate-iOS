@@ -3,6 +3,7 @@ import { Image, Text, View } from 'react-native';
 import Config from 'react-native-config';
 
 import EmptyCharacter from '@assets/waitingRoom/emptyCharacter.svg';
+import { getProfileImage } from '@utils/profileImage';
 
 interface RoomMateBoxProps {
   name: string;
@@ -18,17 +19,7 @@ const RoomMateBox: React.FC<RoomMateBoxProps> = ({ name, profileImage, state, is
         state === '도착완료' ? 'bg-[#e4efff]' : 'bg-box'
       } flex flex-col items-center p-5 pt-4 rounded-xl mb-9 min-w-[159px]`}
     >
-      {profileImage == 0 ? (
-        <EmptyCharacter />
-      ) : (
-        <Image
-          source={{
-            uri: `${Config.S3_IMAGE_URL}/persona/png/${profileImage}.png`,
-          }}
-          style={{ width: 100, height: 100 }}
-          resizeMode="cover"
-        />
-      )}
+      {profileImage == 0 ? <EmptyCharacter /> : <>{getProfileImage(profileImage, 100, 100)}</>}
 
       <Text
         className={`${

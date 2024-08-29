@@ -9,6 +9,7 @@ import HomeIcon from '@assets/waitingRoom/homeIcon.svg';
 import PersonIcon from '@assets/waitingRoom/personIcon.svg';
 import ResetIcon from '@assets/waitingRoom/resetIcon.svg';
 import RoomMateBox from '@components/waitingRoom/RoomMateBox';
+import { getProfileImage } from '@utils/profileImage';
 
 const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
   const [roomInfo, setRoomInfo] = useState({
@@ -75,13 +76,7 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
             </View>
 
             <View className="flex flex-col items-center mb-8">
-              <Image
-                source={{
-                  uri: `${Config.S3_IMAGE_URL}/persona/png/${roomInfo.profileImage}.png`,
-                }}
-                style={{ width: 120, height: 120 }}
-                resizeMode="cover"
-              />
+              {getProfileImage(roomInfo.profileImage, 120, 120)}
               <View className="flex flex-row mt-3">
                 <View className="flex flex-row items-center">
                   <HomeIcon />

@@ -10,6 +10,7 @@ import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
 import { onCopyAddress } from '@utils/clipboard';
 
 import CopyIcon from '@assets/createRoom/copyIcon.svg';
+import { getProfileImage } from '@utils/profileImage';
 
 const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
   const [, setHasRoom] = useRecoilState(hasRoomState);
@@ -43,15 +44,7 @@ const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps)
             </View>
           </Pressable>
 
-          <View className="flex">
-            <Image
-              source={{
-                uri: `${Config.S3_IMAGE_URL}/persona/png/${roominfoState.profileImage}.png`,
-              }}
-              style={{ width: 300, height: 300 }}
-              resizeMode="cover"
-            />
-          </View>
+          <View className="flex">{getProfileImage(roominfoState.profileImage, 300, 300)}</View>
         </View>
 
         <View className="flex">

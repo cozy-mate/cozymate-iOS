@@ -17,11 +17,13 @@ import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
 import useInitFcm from '@hooks/useInitFcm';
+import { getRoomData } from '@server/api/room';
+import { getProfileImage } from '@utils/profileImage';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-  const {initFcm} = useInitFcm();
+  const { initFcm } = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
   useEffect(() => {
@@ -30,17 +32,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       try {
         const infoResponse = await getRoomData(myRoom.roomId);
         console.log(infoResponse);
-        
-                setRoomInfo(infoResponse.result);
-       } catch (error) {
-         console.error('Error fetching room data:', error);
-       }
-     };
-     fetchData();
-   }, [myRoom.roomId, setRoomInfo]);
 
-
-
+        setRoomInfo(infoResponse.result);
+      } catch (error) {
+        console.error('Error fetching room data:', error);
+      }
+    };
+    fetchData();
+  }, [myRoom.roomId, setRoomInfo]);
 
   return (
     <View className="flex-1 bg-[#CADFFF]">
@@ -79,13 +78,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="flex-1 flex-col bg-white px-5 pt-8 pb-5 rounded-t-[40px] relative">
         <View className="absolute top-[-120px] right-2">
-          <Image
-            source={{
-              uri: `${Config.S3_IMAGE_URL}/persona/png/${roomInfo.profileImage}.png`,
-            }}
-            style={{ width: 140, height: 140 }}
-            resizeMode="cover"
-          />
+          {getProfileImage(roomInfo.profileImage, 140, 140)}
         </View>
         <ScrollView>
           {roomlogdata.result.result.map((data, index) => (

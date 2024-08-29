@@ -7,6 +7,7 @@ import { getMyProfile, signUp } from '@server/api/member';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { hasRoomState, loggedInState, profileState, signUpState } from '@recoil/recoil';
+import { getProfileImage } from '@utils/profileImage';
 
 const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
@@ -55,15 +56,7 @@ const CompleteScreen = () => {
 
           {/* 선택된 캐릭터 이미지 */}
           <View className="flex items-center">
-            <View>
-              <Image
-                source={{
-                  uri: `${Config.S3_IMAGE_URL}/persona/png/${signupstate.persona}.png`,
-                }}
-                style={{ width: 300, height: 300 }}
-                resizeMode="cover"
-              />
-            </View>
+            <View>{getProfileImage(signupstate.persona, 300, 300)}</View>
           </View>
         </View>
 

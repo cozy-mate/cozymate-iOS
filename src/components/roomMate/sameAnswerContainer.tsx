@@ -1,3 +1,4 @@
+import { getProfileImage } from '@utils/profileImage';
 import React from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import Config from 'react-native-config';
@@ -23,13 +24,7 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ user, toUserD
       <View className="flex flex-row border-[1px] border-disabled rounded-[12px] mb-3 p-4">
         <View className="flex flex-row items-center justify-between w-full">
           <View className="flex flex-row items-center">
-            <Image
-              source={{
-                uri: `${Config.S3_IMAGE_URL}/persona/png/${user.memberPersona}.png`,
-              }}
-              style={{ width: 36, height: 36 }}
-              resizeMode="cover"
-            />
+            {getProfileImage(user.memberPersona, 36, 36)}
             <View className="flex-col ml-2">
               <View className="flex-row mb-1">
                 <Text className="bg-colorBox px-2 py-[2px] mr-1 text-[10px] font-medium text-colorFont">
