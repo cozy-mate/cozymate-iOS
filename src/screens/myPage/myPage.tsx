@@ -12,6 +12,7 @@ import Config from 'react-native-config';
 
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import { deleteFcmToken } from '@utils/fcm';
+import { getProfileImage } from '@utils/profileImage';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const myProfile = useRecoilValue(profileState);
@@ -36,7 +37,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
       const response = await deleteMember();
 
       console.log(response);
-      
+
       await deleteToken();
       await deleteFcmToken();
       setLoggedIn(false);
@@ -104,14 +105,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 flex flex-col items-center mt-[52px] px-5">
-        <Image
-          source={{
-            uri: `${Config.S3_IMAGE_URL}/persona/png/${myProfile.persona}.png`,
-          }}
-          style={{ width: 120, height: 120 }}
-          resizeMode="cover"
-        />
-
+        {getProfileImage(myProfile.persona, 120, 120)}
         <Text className="mt-3 mb-10 text-lg font-semibold text-emphasizedFont">
           {myProfile.nickname}
         </Text>

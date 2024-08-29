@@ -12,14 +12,12 @@ import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 import useInitFcm from '@hooks/useInitFcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const { initDeviceId, refreshFcmToken } = useInitFcm();
 
-
-  const {initDeviceId,refreshFcmToken} = useInitFcm();
-
-  useEffect(()=>{
+  useEffect(() => {
     initDeviceId();
     refreshFcmToken();
-  },[])
+  }, []);
 
   const testSignUp = async () => {
     const response = await signIn({ clientId: 'TEST', socialType: 'TEST' });

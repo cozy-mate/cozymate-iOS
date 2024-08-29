@@ -21,6 +21,7 @@ import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
 import { useRecoilValue } from 'recoil';
 import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 import { useGetUserDetailData } from '@hooks/api/member-stat';
+import { getProfileImage } from '@utils/profileImage';
 
 const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -66,13 +67,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
             </View>
 
             <View className="flex flex-row items-center mb-[22px] px-[25px]">
-              <Image
-                source={{
-                  uri: `${Config.S3_IMAGE_URL}/persona/png/${otherUserBasicData.memberPersona}.png`,
-                }}
-                style={{ width: 40, height: 40 }}
-                resizeMode="cover"
-              />
+              {getProfileImage(otherUserBasicData.memberPersona, 40, 40)}
               <View className="flex flex-col ml-2">
                 <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
                   {otherUserBasicData.memberNickName}

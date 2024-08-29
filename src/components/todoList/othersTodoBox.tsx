@@ -4,6 +4,7 @@ import { Image, Text, View } from 'react-native';
 import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
 import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
 import Config from 'react-native-config';
+import { getProfileImage } from '@utils/profileImage';
 
 interface TodoItem {
   id: number;
@@ -28,13 +29,7 @@ const OthersTodoBox: React.FC<OthersTodoBoxProps> = ({ persona, mateTodoData }) 
       {mateTodoData.map((mate) => (
         <View key={mate.name}>
           <View className="flex flex-row items-center mb-1">
-            <Image
-              source={{
-                uri: `${Config.S3_IMAGE_URL}/persona/png/${persona}.png`,
-              }}
-              style={{ width: 24, height: 24 }}
-              resizeMode="cover"
-            />
+            {getProfileImage(persona, 24, 24)}
             <Text className="ml-1.5 font-medium text-emphasizedFont">{mate.name}</Text>
           </View>
           {mate.todos && mate.todos.length > 0 ? (

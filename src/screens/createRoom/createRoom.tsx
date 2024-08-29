@@ -14,6 +14,7 @@ import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 import { createRoom } from '@server/api/room';
+import { getProfileImage } from '@utils/profileImage';
 
 const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
   const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
@@ -106,13 +107,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
           <View className="relative flex items-center justify-center mb-10">
             <View className="relative">
               {createroomState.profileImage ? (
-                <Image
-                  source={{
-                    uri: `${Config.S3_IMAGE_URL}/persona/png/${createroomState.profileImage}.png`,
-                  }}
-                  style={{ width: 130, height: 130 }}
-                  resizeMode="cover"
-                />
+                <>{getProfileImage(createroomState.profileImage, 130, 130)}</>
               ) : (
                 <CharacterBox />
               )}

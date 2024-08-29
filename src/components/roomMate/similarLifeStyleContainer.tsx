@@ -1,3 +1,4 @@
+import { getProfileImage } from '@utils/profileImage';
 import React from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import Config from 'react-native-config';
@@ -30,15 +31,8 @@ const SimilarLifeStyleContainer: React.FC<SimilarLifeStyleContainerProps> = ({
               {user.memberAge}살 | {user.numOfRoommate}인 1실
             </Text>
           </View>
-          <Image
-            source={{
-              uri: `${Config.S3_IMAGE_URL}/persona/png/${user.memberPersona}.png`,
-            }}
-            style={{ width: 60, height: 60 }}
-            resizeMode="cover"
-            className="mb-2"
-          />
-          <Text className="text-sm font-semibold text-basicFont">{user.memberNickName}</Text>
+          {getProfileImage(user.memberPersona, 60, 60)}
+          <Text className="mt-2 text-sm font-semibold text-basicFont">{user.memberNickName}</Text>
           <Text className="text-xs font-medium text-main1">{user.equality}%</Text>
         </View>
       </View>

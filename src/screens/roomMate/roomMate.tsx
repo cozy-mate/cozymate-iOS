@@ -8,7 +8,8 @@ import Background from '@assets/roomMate/background.svg';
 
 import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
 import MagnifierIcon from '@assets/roomMate/magnifier.svg';
-import ToggleIcon from '@assets/roomMate/toggle.svg';
+import DownToggleIcon from '@assets/roomMate/downToggle.svg';
+import RightToggleIcon from '@assets/roomMate/rightToggle.svg';
 
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
@@ -32,6 +33,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [page, setPage] = useState<number>(0);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isToggleClicked, setIsToggleClicked] = useState<boolean>(false);
 
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
   const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
@@ -152,9 +154,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                 <Text className="px-1 text-base font-semibold leading-5 tracking-tight text-emphasizedFont">
                   원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
                 </Text>
-                <Pressable>
+                <Pressable onPress={() => setIsToggleClicked(!isToggleClicked)}>
                   <View className="pl-1 pr-2 py-[6px]">
-                    <ToggleIcon />
+                    {isToggleClicked ? <DownToggleIcon /> : <RightToggleIcon />}
                   </View>
                 </Pressable>
               </View>
@@ -189,18 +191,13 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                   <Text className="px-1 text-base font-semibold leading-5 tracking-tight text-emphasizedFont">
                     나와 비슷한{'\n'}라이프 스타일을 갖고 있어요!
                   </Text>
-                  <Pressable>
-                    <View className="pl-1 pr-2 py-[6px]">
-                      <ToggleIcon />
-                    </View>
-                  </Pressable>
                 </View>
 
                 <View className="flex bg-white gap-x-3">
                   <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    className="flex flex-row "
+                    className="flex flex-row"
                   >
                     {similarAnswerData.map((user, index) => (
                       <SimilarLifeStyleContainer
