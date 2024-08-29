@@ -25,7 +25,7 @@ interface OthersTodoBoxProps {
 
 const OthersTodoBox: React.FC<OthersTodoBoxProps> = ({ persona, mateTodoData }) => {
   return (
-    <View className="p-4 pb-2 pr-2 mb-4 bg-white shadow-chipback rounded-xl">
+    <View className="p-4 pb-2 pr-2 mb-4 bg-white shadow-custom rounded-xl">
       {mateTodoData.map((mate) => (
         <View key={mate.name}>
           <View className="flex flex-row items-center mb-1">

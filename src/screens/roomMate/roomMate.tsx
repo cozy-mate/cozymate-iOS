@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, Text, View, ScrollView } from 'react-native';
+import {
+  Pressable,
+  Text,
+  View,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/loginStack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -30,7 +37,10 @@ type UserItem = {
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [filterList, setFilterList] = useState<string[]>([]);
+
   const [page, setPage] = useState<number>(0);
+  const [hasMoreData, setHasMoreData] = useState<boolean>(true);
+  const [isSimilarLoading, setIsSimilarLoading] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isToggleClicked, setIsToggleClicked] = useState<boolean>(false);
@@ -94,13 +104,24 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   };
 
-  const getSimilarAnswerData = async () => {
-    try {
-      const response = await searchUsers();
+  const getSimilarAnswerData = async (append = false) => {
+    if (!hasMoreData || isSimilarLoading) return;
 
-      setSimilarAnswerData(response.result.result);
-    } catch (error: any) {
-      console.log(error.response.data);
+    setIsSimilarLoading(true);
+    try {
+      const response = await searchUsers(undefined, page);
+
+      const newResults = response.result.result;
+      if (newResults.length === 0) {
+        setHasMoreData(false);
+      } else {
+        setSimilarAnswerData((prevData) => (append ? [...prevData, ...newResults] : newResults));
+        setPage((prevPage) => prevPage + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSimilarLoading(false);
     }
   };
 
@@ -113,6 +134,15 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
       navigation.navigate('UserDetailScreen');
     } catch (error: any) {
       console.log(error.response.data);
+    }
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+    const isCloseToEnd = contentOffset.x + layoutMeasurement.width >= contentSize.width - 100;
+
+    if (isCloseToEnd && hasMoreData && !isLoading) {
+      getSimilarAnswerData(true);
     }
   };
 
@@ -198,6 +228,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     className="flex flex-row"
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16} // Adjust as necessary
                   >
                     {similarAnswerData.map((user, index) => (
                       <SimilarLifeStyleContainer
