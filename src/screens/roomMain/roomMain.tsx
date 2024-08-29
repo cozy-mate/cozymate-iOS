@@ -16,27 +16,31 @@ import { useRecoilState } from 'recoil';
 import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
+import useInitFcm from '@hooks/useInitFcm';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-
+  const {initFcm} = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
-  // useEffect(() => {
-  //   console.log('데이터 받기 전');
-  //   const fetchData = async () => {
-  //     try {
-  //       const infoResponse = await getRoomData(myRoom.roomId);
-  //       console.log(infoResponse);
+  useEffect(() => {
+    initFcm();
+    const fetchData = async () => {
+      try {
+        const infoResponse = await getRoomData(myRoom.roomId);
+        console.log(infoResponse);
+        
+                setRoomInfo(infoResponse.result);
+       } catch (error) {
+         console.error('Error fetching room data:', error);
+       }
+     };
+     fetchData();
+   }, [myRoom.roomId, setRoomInfo]);
 
-  //       setRoomInfo(infoResponse.result);
-  //     } catch (error) {
-  //       console.error('Error fetching room data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [myRoom.roomId, setRoomInfo]);
+
+
 
   return (
     <View className="flex-1 bg-[#CADFFF]">

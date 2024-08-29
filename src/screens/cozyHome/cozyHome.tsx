@@ -11,15 +11,22 @@ import { MyLifeStyleState } from '@recoil/recoil';
 import { getMyProfile } from '@server/api/member';
 import { getUserDetailData } from '@server/api/member-stat';
 
+import useInitFcm from '@hooks/useInitFcm';
+
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
 
+  const {initFcm} = useInitFcm();
+
+
   useEffect(() => {
+    
     const getProfile = async () => {
       const response = await getMyProfile();
       console.log(response);
     };
     getProfile();
+    initFcm();
   }, []);
 
   const toCreateRoom = () => {
