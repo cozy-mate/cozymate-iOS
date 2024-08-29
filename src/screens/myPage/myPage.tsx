@@ -11,6 +11,7 @@ import { deleteToken } from '@utils/token';
 import Config from 'react-native-config';
 
 import RightArrow from '@assets/myPage/rightArrow.svg';
+import { deleteFcmToken } from '@utils/fcm';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const [myProfile, setMyProfile] = useRecoilState(profileState);
@@ -22,6 +23,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     console.log(response);
 
     await deleteToken();
+    await deleteFcmToken();
     setLoggedIn(false);
   };
 
@@ -31,6 +33,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     console.log(response);
 
     await deleteToken();
+    await deleteFcmToken();
     setLoggedIn(false);
   };
 

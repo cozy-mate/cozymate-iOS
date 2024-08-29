@@ -9,14 +9,20 @@ import { HomeScreenProps } from '@type/param/loginStack';
 import { useRecoilState } from 'recoil';
 import { hasRoomState } from '@recoil/recoil';
 import { getMyProfile } from '@server/api/member';
+import useInitFcm from '@hooks/useInitFcm';
 
 const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
+
+  const {initFcm} = useInitFcm();
+
   useEffect(() => {
+    
     const getProfile = async () => {
       const response = await getMyProfile();
       console.log(response);
     };
     getProfile();
+    initFcm();
   }, []);
 
   const [, setHasRoom] = useRecoilState(hasRoomState);

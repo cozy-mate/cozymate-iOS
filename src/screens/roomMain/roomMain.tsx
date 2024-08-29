@@ -17,14 +17,16 @@ import { getRoomData } from '@server/api/room';
 import Config from 'react-native-config';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
+import useInitFcm from '@hooks/useInitFcm';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-
+  const {initFcm} = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
   useEffect(() => {
+    initFcm();
     const fetchData = async () => {
       try {
         const infoResponse = await getRoomData(myRoom.roomId);
