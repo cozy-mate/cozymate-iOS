@@ -7,7 +7,7 @@ import { TodoListScreenProps } from '@type/param/roomStack';
 import { useRecoilState } from 'recoil';
 import { profileState, roomInfoState } from '@recoil/recoil';
 
-import Background from '@assets/background.svg';
+import Background from '@assets/todoList/background.svg';
 import SettingIcon from '@assets/todoList/settingIcon.svg';
 import PlusButton from '@assets/plusButton.svg';
 
