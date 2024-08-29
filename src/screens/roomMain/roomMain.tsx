@@ -40,6 +40,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
     fetchData();
   }, [myRoom.roomId, setRoomInfo]);
 
+  const toChat = () => {
+    navigation.navigate('ChatScreen');
+  };
+
+  const toNotification = () => {
+    navigation.navigate('NotificationScreen');
+  };
+
   return (
     <View className="flex-1 bg-[#CADFFF]">
       <Background style={{ position: 'absolute' }} />
@@ -48,10 +56,10 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         <View className="flex flex-row justify-between mb-2">
           <LightIcon />
           <View className="flex flex-row">
-            <Pressable>
+            <Pressable onPress={toChat}>
               <ChatIcon />
             </Pressable>
-            <Pressable>
+            <Pressable onPress={toNotification}>
               <NotificationIcon />
             </Pressable>
           </View>

@@ -15,7 +15,6 @@ import thirteenth from '@assets/characterItem/13.svg';
 import fourteenth from '@assets/characterItem/14.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
-import { View } from 'react-native';
 
 export const getProfileImage = (persona: number, width: number, height: number) => {
   const items = [

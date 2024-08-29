@@ -35,6 +35,14 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('JoinRoomScreen');
   };
 
+  const toChat = () => {
+    navigation.navigate('ChatScreen');
+  };
+
+  const toNotification = () => {
+    navigation.navigate('NotificationScreen');
+  };
+
   const toSchoolAuthentication = async () => {
     try {
       const response = await getUserDetailData();
@@ -67,10 +75,10 @@ const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
             </Pressable>
 
             <View className="flex flex-row">
-              <Pressable>
+              <Pressable onPress={toChat}>
                 <ChatIcon />
               </Pressable>
-              <Pressable>
+              <Pressable onPress={toNotification}>
                 <NotificationIcon />
               </Pressable>
             </View>

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { loggedInState, profileState } from '@recoil/recoil';
+import { loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 
 import { deleteMember, signOut } from '@server/api/member';
 
 import { MyPageScreenProps } from '@type/param/loginStack';
 
 import { deleteToken } from '@utils/token';
-import Config from 'react-native-config';
 
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import { deleteFcmToken } from '@utils/fcm';
@@ -16,6 +15,7 @@ import { getProfileImage } from '@utils/profileImage';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const myProfile = useRecoilValue(profileState);
+  const roomInfo = useRecoilValue(roomInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
   const logout = async () => {
@@ -58,7 +58,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     {
       id: 1,
       title: '나의 코지룸',
-      value: '피그말리온',
+      value: roomInfo.name !== '' ? roomInfo.name : '아직 활성화된 방이 없어요',
       pressFunc: toMain,
     },
     {

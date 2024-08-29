@@ -28,6 +28,7 @@ export const useGetRoleData = (
     select: (response: GetRoleDataResponse) => {
       return response;
     },
+    refetchInterval: 3000,
   });
 
   return { data, refetch };
