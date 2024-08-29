@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInState, profileState } from '@recoil/recoil';
 
 import { deleteMember, signOut } from '@server/api/member';
@@ -13,25 +13,33 @@ import Config from 'react-native-config';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
-  const [myProfile, setMyProfile] = useRecoilState(profileState);
+  const myProfile = useRecoilValue(profileState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
 
   const logout = async () => {
-    const response = await signOut();
+    try {
+      const response = await signOut();
 
-    console.log(response);
+      console.log(response);
 
-    await deleteToken();
-    setLoggedIn(false);
+      await deleteToken();
+      setLoggedIn(false);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   const withdraw = async () => {
-    const response = await deleteMember();
+    try {
+      const response = await deleteMember();
 
-    console.log(response);
+      console.log(response);
 
-    await deleteToken();
-    setLoggedIn(false);
+      await deleteToken();
+      setLoggedIn(false);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   const toMain = () => {

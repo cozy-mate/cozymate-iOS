@@ -1,16 +1,29 @@
 import React from 'react';
-import { Pressable, Text, View, SafeAreaView, Alert } from 'react-native';
+import { Pressable, Text, View, SafeAreaView } from 'react-native';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
+import { signIn } from '@server/api/member';
+import { setAccessToken } from '@utils/token';
 import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const testSignUp = async () => {
+    const response = await signIn({ clientId: 'TEST', socialType: 'TEST' });
+
+    const accessToken = response.result.tokenResponseDTO.accessToken;
+    await setAccessToken(accessToken);
+
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
+
   const loginWithId = useLoginWithId(navigation);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
@@ -29,7 +42,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row justify-center items-center rounded-[33px] bg-main1 px-6 py-4"
-            onPress={toOnBoard}
+            onPress={testSignUp}
           >
             <Text className="text-base font-semibold text-white">회원가입</Text>
           </Pressable>

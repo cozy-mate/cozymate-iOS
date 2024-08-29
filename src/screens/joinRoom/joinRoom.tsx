@@ -3,28 +3,22 @@ import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import { JoinRoomScreenProps } from '@type/param/loginStack';
 
 import { useRecoilState } from 'recoil';
-import { inviteCodeRoomState } from '@recoil/recoil';
+import { hasRoomState, inviteCodeRoomState, roomInfoState } from '@recoil/recoil';
 
-import { getRoomDataByInviteCode } from '@server/api/room';
+import { getRoomData, getRoomDataByInviteCode, joinRoom } from '@server/api/room';
 
 import ButtonModal from '@components/common/buttonModal';
 
 import BackButton from '@assets/backButton.svg';
 
 const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
+  const [, setHasRoom] = useRecoilState(hasRoomState);
   const [inviteRoomInfo, setInviteRoomInfo] = useRecoilState(inviteCodeRoomState);
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const toMain = () => {
-    navigation.navigate('MainScreen');
-  };
-
-  const toWaitingRoom = () => {
-    setIsModalOpen(false);
-    navigation.navigate('WaitingRoomScreen');
-  };
-
   const [inviteCode, setInviteCode] = useState<string>('');
+  const [roomId, setRoomId] = useState<number>(0);
 
   const getRoomInfo = async () => {
     setIsModalOpen(true);
@@ -39,8 +33,34 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         managerName: response.result.managerName,
         maxMateNum: response.result.maxMateNum,
       }));
+      setRoomId(response.result.roomId);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const toMain = () => {
+    navigation.navigate('MainScreen');
+  };
+
+  const joinCozyRoom = async () => {
+    try {
+      setIsModalOpen(false);
+      await joinRoom(roomId);
+
+      const response = await getRoomData(roomId);
+      setRoomInfo({
+        roomId: response.result.roomId,
+        name: response.result.name,
+        inviteCode: response.result.inviteCode,
+        profileImage: response.result.profileImage,
+        mateList: response.result.mateList,
+      });
+
+      setHasRoom({ hasRoom: true, roomId: inviteRoomInfo.roomId });
+      navigation.navigate('MainScreen');
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   };
 
@@ -59,7 +79,7 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
     message: `방장 [${inviteRoomInfo.managerName}] | ${inviteRoomInfo.maxMateNum}인실`,
     cancelText: '취소',
     submitText: '확인',
-    onSubmit: toWaitingRoom,
+    onSubmit: joinCozyRoom,
     isVisible: isModalOpen,
     closeModal: closeModal,
     buttonCount: 2,
