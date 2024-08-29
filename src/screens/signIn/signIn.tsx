@@ -12,10 +12,11 @@ import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 import useInitFcm from '@hooks/useInitFcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const { initDeviceId, refreshFcmToken } = useInitFcm();
+  const { getDeviceId, refreshFcmToken } = useInitFcm();
 
   useEffect(() => {
-    initDeviceId();
+    // 같은 디바이스면 같은 값을 내는 순수 함수
+    getDeviceId();
     refreshFcmToken();
   }, []);
 

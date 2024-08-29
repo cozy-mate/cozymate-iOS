@@ -48,23 +48,7 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
   };
 
   const postFeedInfo = async () => {
-    if (mode === 'create') {
-      try {
-        await createFeed({
-          roomId: roomInfo.roomId,
-          name: feedName,
-          description: feedDescription,
-        });
-
-        setModalTitle(FEED_CREATE_SUCCESS);
-        setNeedsRefresh(true);
-        handleButtonModalOpen();
-      } catch (e: any) {
-        console.log(e.response.data);
-        setModalTitle(FEED_CREATE_ERROR);
-        handleButtonModalOpen();
-      }
-    } else {
+    
       try {
         await updateFeed({
           roomId: roomInfo.roomId,
@@ -78,7 +62,7 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
         setModalTitle(FEED_UPDATE_ERROR);
         handleButtonModalOpen();
       }
-    }
+    
   };
 
   const handleModalOK = () => {
