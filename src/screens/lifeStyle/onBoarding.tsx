@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, Text, View } from 'react-native';
 
 import ExampleImage from '@assets/lifeStyle/exampleImage.svg';
-import { LifeStyleOnboardingScreenProps } from '@type/param/loginStack';
+import { LifeStyleOnboardingScreenProps } from '@type/param/stack';
 import { useRecoilValue } from 'recoil';
 import { lifeStyleState, profileState } from '@recoil/recoil';
 
-const LifeStyleOnboardingScreen: React.FC<LifeStyleOnboardingScreenProps> = ({
-  navigation,
-}: LifeStyleOnboardingScreenProps) => {
+const LifeStyleOnboardingScreen = ({ navigation }: LifeStyleOnboardingScreenProps) => {
   const lifeStyle = useRecoilValue(lifeStyleState);
   const memberInfo = useRecoilValue(profileState);
 

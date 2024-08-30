@@ -15,6 +15,7 @@ interface CustomTextareaProps {
   placeholder: string;
   onEnterPress?: () => void;
   height: number;
+  maxLength: number;
 }
 
 const CustomTextarea: React.FC<CustomTextareaProps> = ({
@@ -24,6 +25,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
   placeholder,
   onEnterPress,
   height,
+  maxLength,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -57,23 +59,29 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
     <View className="mb-12">
       <Text className="px-1 mb-2 text-lg font-semibold text-basicFont">{title}</Text>
       <Pressable onPress={handleFocus}>
-        <TextInput
-          multiline
-          ref={inputRef}
-          value={value}
-          onChangeText={valueHandleChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={handleBlur}
-          onSubmitEditing={handleSubmitEditing}
-          placeholder={placeholder}
-          blurOnSubmit={false}
-          className={`${
-            isFocused
-              ? 'bg-sub2 border-main1 border-[1px]'
-              : 'bg-colorBox border-colorBox border-[1px]'
-          } p-4 text-basicFont rounded-xl`}
-          style={{ height: height }}
-        />
+        <View style={{ position: 'relative' }}>
+          <TextInput
+            maxLength={maxLength}
+            multiline
+            ref={inputRef}
+            value={value}
+            onChangeText={valueHandleChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={handleBlur}
+            onSubmitEditing={handleSubmitEditing}
+            placeholder={placeholder}
+            blurOnSubmit={false}
+            className={`${
+              isFocused
+                ? 'bg-sub2 border-main1 border-[1px]'
+                : 'bg-colorBox border-colorBox border-[1px]'
+            } p-4 text-basicFont rounded-xl`}
+            style={{ height: height }}
+          />
+          <Text className="absolute text-sm text-gray-500 bottom-4 right-5">
+            {`${value.length} / 50`}
+          </Text>
+        </View>
       </Pressable>
     </View>
   );

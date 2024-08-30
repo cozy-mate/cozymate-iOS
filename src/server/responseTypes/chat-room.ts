@@ -4,7 +4,8 @@ export interface DeleteChatRoomResponse {
 
 export interface GetChatRoomListResponse {
   result: {
-    nickname: string;
+    persona: number;
+    nickName: string;
     lastContent: string;
     chatRoomId: number;
   }[];

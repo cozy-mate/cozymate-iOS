@@ -10,7 +10,7 @@ import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 
-import { RoomMainScreenProps } from '@type/param/roomStack';
+import { RoomMainScreenProps } from '@type/param/stack';
 import { hasRoomState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
 import { onCopyAddress } from '@utils/clipboard';
@@ -65,7 +65,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-col items-start mb-24">
+        <View className="flex flex-col items-start mb-16">
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
           <View className="flex flex-row">
             <Text className="mb-2 text-lg font-semibold text-main1">
