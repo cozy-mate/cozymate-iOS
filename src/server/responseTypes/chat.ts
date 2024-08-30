@@ -10,5 +10,7 @@ export interface GetChatDetailDataResponse {
 }
 
 export interface SendChatResponse {
-  result: string;
+  result: {
+    chatRoomId: number;
+  };
 }

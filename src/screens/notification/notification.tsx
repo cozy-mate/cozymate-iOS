@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SafeAreaView, Text, Pressable, ScrollView } from 'react-native';
+import { View, SafeAreaView, Text, Pressable, ScrollView, TouchableHighlight } from 'react-native';
 
 import { useGetNotificationList } from '@hooks/api/notification';
 
@@ -35,7 +35,11 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
           <View className="flex-1">
             {notificationlist.result.length > 0 ? (
               notificationlist.result.map((noti, index) => (
-                <Pressable key={index} onPress={() => toScreen(noti.category)}>
+                <TouchableHighlight
+                  key={index}
+                  onPress={() => toScreen(noti.category)}
+                  underlayColor="#E5F0FF"
+                >
                   <View
                     className={`p-5 ${
                       index !== notificationlist.result.length - 1
@@ -61,7 +65,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                       </Text>
                     </View>
                   </View>
-                </Pressable>
+                </TouchableHighlight>
               ))
             ) : (
               <View className="flex flex-col items-center justify-center h-full">

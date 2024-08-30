@@ -8,25 +8,29 @@ import { useGetChatDetailData, useSendChat } from '@hooks/api/chat';
 const SendChatScreen = ({ route, navigation }: SendChatScreenProps) => {
   const [content, setContent] = useState<string>('');
 
-  //   const { refetch: refetchChats } = useGetChatDetailData(route.params.chatRoomId);
+  //   const { refetch: refetchChats } = useGetChatDetailData();
 
   const { mutateAsync: sendChatMutate, isPending: sendChatPending } = useSendChat(
     route.params.recipientId,
     // refetchChats,
   );
 
-  const SendChat = () => {
-    sendChatMutate({ content: content });
-    navigation.goBack();
+  const SendChat = async () => {
+    try {
+      const response = await sendChatMutate({ content: content });
+      //   const chatRoomId = response.result.chatRoomId;
+
+      //   refetchChats(chatRoomId);
+
+      navigation.goBack();
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   const toBack = () => {
     navigation.goBack();
   };
-
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
