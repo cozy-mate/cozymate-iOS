@@ -18,14 +18,15 @@ import MyPageNotSelected from '@assets/main/myPageNotSelected.svg';
 
 interface TabComponentProps {
   focused: boolean;
+  isOldIphone: boolean;
 }
 
-export const CozyHome: React.FC<TabComponentProps> = ({ focused }) => {
+export const CozyHome: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <CozyHomeSelected /> : <CozyHomeNotSelected />}
       <Text
-        className={`text-xs ${
+        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
@@ -35,12 +36,12 @@ export const CozyHome: React.FC<TabComponentProps> = ({ focused }) => {
   );
 };
 
-export const RoleNRule: React.FC<TabComponentProps> = ({ focused }) => {
+export const RoleNRule: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
       <Text
-        className={`text-xs ${
+        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
@@ -50,12 +51,12 @@ export const RoleNRule: React.FC<TabComponentProps> = ({ focused }) => {
   );
 };
 
-export const RoomMate: React.FC<TabComponentProps> = ({ focused }) => {
+export const RoomMate: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="relative flex flex-col items-center justify-center">
       {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
       <Text
-        className={`text-xs ${
+        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
@@ -65,12 +66,12 @@ export const RoomMate: React.FC<TabComponentProps> = ({ focused }) => {
   );
 };
 
-export const Feed: React.FC<TabComponentProps> = ({ focused }) => {
+export const Feed: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <FeedSelected /> : <FeedNotSelected />}
       <Text
-        className={`text-xs ${
+        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
@@ -80,12 +81,12 @@ export const Feed: React.FC<TabComponentProps> = ({ focused }) => {
   );
 };
 
-export const MyPage: React.FC<TabComponentProps> = ({ focused }) => {
+export const MyPage: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <MyPageSelected /> : <MyPageNotSelected />}
       <Text
-        className={`text-xs ${
+        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >

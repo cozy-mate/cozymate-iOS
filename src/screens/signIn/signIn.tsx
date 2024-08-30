@@ -10,8 +10,11 @@ import { signIn } from '@server/api/member';
 import { setAccessToken } from '@utils/token';
 import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 import useInitFcm from '@hooks/useInitFcm';
+import { useIsOldiPhone } from '@hooks/device';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
+  const isOldiPhone = useIsOldiPhone();
+
   const { getDeviceId, refreshFcmToken } = useInitFcm();
 
   useEffect(() => {
@@ -36,7 +39,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 mx-6">
-        <View className="mx-auto mt-[236px] mb-[144px]">
+        <View
+          className={`mx-auto ${isOldiPhone ? 'mb-[100px] mt-[200px]' : 'mt-[236px] mb-[144px]'}`}
+        >
           <View className="mb-[7px]">
             <Text className="text-[48px] font-normal text-center font-['Cafe24_Meongi_B']">
               <Text className="text-[#FFE28B]">cozy</Text>
