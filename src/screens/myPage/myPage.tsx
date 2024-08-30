@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
+import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 
@@ -104,57 +104,59 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 flex flex-col items-center mt-[52px] px-5">
-        {getProfileImage(myProfile.persona, 120, 120)}
-        <Text className="mt-3 mb-10 text-lg font-semibold text-emphasizedFont">
-          {myProfile.nickname}
-        </Text>
+      <ScrollView className="mt-[52px] px-5">
+        <View className="flex flex-col items-center flex-1">
+          {getProfileImage(myProfile.persona, 120, 120)}
+          <Text className="mt-3 mb-10 text-lg font-semibold text-emphasizedFont">
+            {myProfile.nickname}
+          </Text>
 
-        <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
-          {upItems.map((item) => (
-            <Pressable
-              key={item.id}
-              onPress={item.pressFunc}
-              className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
-                item.id == upItems.length && 'border-b-0'
-              }`}
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">{item.title}</Text>
-              <View className="flex flex-row items-center">
-                <Text className="mr-1 text-sm font-medium text-main1">{item.value}</Text>
+          <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
+            {upItems.map((item) => (
+              <Pressable
+                key={item.id}
+                onPress={item.pressFunc}
+                className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
+                  item.id == upItems.length && 'border-b-0'
+                }`}
+              >
+                <Text className="text-sm font-medium text-emphasizedFont">{item.title}</Text>
+                <View className="flex flex-row items-center">
+                  <Text className="mr-1 text-sm font-medium text-main1">{item.value}</Text>
+                  <RightArrow />
+                </View>
+              </Pressable>
+            ))}
+          </View>
+
+          <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
+            {downItems.map((item) => (
+              <Pressable
+                key={item.id}
+                onPress={item.pressFunc}
+                className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
+                  item.id == downItems.length && 'border-b-0'
+                }`}
+              >
+                <Text className="text-sm font-medium text-emphasizedFont">{item.title}</Text>
                 <RightArrow />
-              </View>
+              </Pressable>
+            ))}
+          </View>
+
+          <View className="flex flex-row items-center justify-center">
+            <Pressable onPress={logout}>
+              <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
             </Pressable>
-          ))}
-        </View>
 
-        <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
-          {downItems.map((item) => (
-            <Pressable
-              key={item.id}
-              onPress={item.pressFunc}
-              className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
-                item.id == downItems.length && 'border-b-0'
-              }`}
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">{item.title}</Text>
-              <RightArrow />
+            <View className="w-[1px] h-[18px] bg-[#d9d9d9] mx-4" />
+
+            <Pressable onPress={withdraw}>
+              <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
             </Pressable>
-          ))}
+          </View>
         </View>
-
-        <View className="flex flex-row items-center justify-center">
-          <Pressable onPress={logout}>
-            <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
-          </Pressable>
-
-          <View className="w-[1px] h-[18px] bg-[#d9d9d9] mx-4" />
-
-          <Pressable onPress={withdraw}>
-            <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
-          </Pressable>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

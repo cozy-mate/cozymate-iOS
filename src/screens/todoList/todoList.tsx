@@ -31,6 +31,7 @@ import { useGetRoleData } from '@hooks/api/role';
 import { useGetRuleData } from '@hooks/api/rule';
 
 import { getDayOfWeek } from '@utils/getDay';
+import { useIsOldiPhone } from '@hooks/device';
 
 interface TodoItem {
   id: number;
@@ -40,6 +41,7 @@ interface TodoItem {
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { bottom } = useSafeAreaInsets();
+  const isOleiPhone = useIsOldiPhone();
 
   const [myProfile, setMyProfile] = useRecoilState(profileState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
@@ -79,7 +81,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
           <NavBar isTodo={isTodo} handleNav={handleNav} />
         </View>
         <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
-          <View>
+          <View style={{ paddingBottom: bottom }}>
             {isTodo ? (
               <>
                 {/* 나의 투두리스트 목록 */}
@@ -111,7 +113,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 </View>
 
                 {/* 다른 메이트들의 투두리스트 목록 */}
-                <View style={{ paddingBottom: bottom }}>
+                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
                   <View className="flex flex-row justify-between px-1 mb-4">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       다른 메이트들은{'\n'}오늘 어떤 일들을 할까요?
@@ -141,7 +143,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 </View>
 
                 {/* 코지홈의 Role */}
-                <View style={{ paddingBottom: bottom }}>
+                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
                   <View className="flex flex-row justify-between px-1 mb-4">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해

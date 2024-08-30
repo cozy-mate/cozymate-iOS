@@ -1,9 +1,8 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
 import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
-import Config from 'react-native-config';
 import { getProfileImage } from '@utils/profileImage';
 
 interface TodoItem {
@@ -19,7 +18,6 @@ interface MateTodo {
 
 interface OthersTodoBoxProps {
   persona: number;
-
   mateTodoData: MateTodo[];
 }
 

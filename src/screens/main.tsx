@@ -11,10 +11,11 @@ import RoomMateScreen from './roomMate/roomMate';
 import FeedMainScreen from './feed/feedMain';
 import MyPageScreen from './myPage/myPage';
 import { useRecoilValue } from 'recoil';
-import { hasRoomState, lifeStyleState, MyLifeStyleState } from '@recoil/recoil';
+import { hasRoomState, MyLifeStyleState } from '@recoil/recoil';
 import { TouchableOpacityProps } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
+import { useIsOldiPhone } from '@hooks/device';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -26,24 +27,42 @@ const MainScreen = () => {
   const hasRoom = useRecoilValue(hasRoomState);
   const myLifeStyleData = useRecoilValue(MyLifeStyleState);
 
+  const isOldiPhone = useIsOldiPhone();
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          paddingTop: 12,
-          paddingBottom: 32,
-          borderTopWidth: 0,
-          borderRadius: 20,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          // position: 'absolute',
-          shadowColor: 'rgba(160,160,160, 0.25)',
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 1,
-          shadowRadius: 8,
-        },
+        tabBarStyle: isOldiPhone
+          ? {
+              backgroundColor: '#FFFFFF',
+              height: 60,
+              paddingTop: 8,
+              paddingBottom: 16,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              // position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            }
+          : {
+              backgroundColor: '#FFFFFF',
+              paddingTop: 12,
+              paddingBottom: 32,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              // position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            },
       }}
     >
       {hasRoom.hasRoom ? (
@@ -52,7 +71,7 @@ const MainScreen = () => {
           component={RoomMainScreen}
           options={{
             tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <CozyHome focused={focused} />,
+            tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
           }}
         />
       ) : (
@@ -61,7 +80,7 @@ const MainScreen = () => {
           component={CozyHomeScreen}
           options={{
             tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <CozyHome focused={focused} />,
+            tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
           }}
         />
       )}
@@ -75,7 +94,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoleNRule focused={focused} />;
+              return <RoleNRule focused={focused} isOldIphone={isOldiPhone} />;
             },
           })}
         />
@@ -89,7 +108,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoleNRule focused={focused} />;
+              return <RoleNRule focused={focused} isOldIphone={isOldiPhone} />;
             },
             tabBarButton: (props) => <DisabledTabButton {...props} />,
           })}
@@ -105,7 +124,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoomMate focused={focused} />;
+              return <RoomMate focused={focused} isOldIphone={isOldiPhone} />;
             },
           })}
         />
@@ -119,7 +138,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoomMate focused={focused} />;
+              return <RoomMate focused={focused} isOldIphone={isOldiPhone} />;
             },
           })}
         />
@@ -135,7 +154,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <Feed focused={focused} />;
+              return <Feed focused={focused} isOldIphone={isOldiPhone} />;
             },
           })}
         />
@@ -149,7 +168,7 @@ const MainScreen = () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <Feed focused={focused} />;
+              return <Feed focused={focused} isOldIphone={isOldiPhone} />;
             },
             tabBarButton: (props) => <DisabledTabButton {...props} />,
           })}
@@ -165,7 +184,7 @@ const MainScreen = () => {
             return null;
           },
           tabBarIcon: ({ focused }) => {
-            return <MyPage focused={focused} />;
+            return <MyPage focused={focused} isOldIphone={isOldiPhone} />;
           },
         })}
       />
