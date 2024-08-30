@@ -8,7 +8,7 @@ import {
   NativeScrollEvent,
 } from 'react-native';
 
-import { RoomMateScreenProps } from '@type/param/loginStack';
+import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
 import Background from '@assets/roomMate/background.svg';

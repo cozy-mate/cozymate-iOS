@@ -5,7 +5,7 @@ import { loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 
 import { deleteMember, signOut } from '@server/api/member';
 
-import { MyPageScreenProps } from '@type/param/loginStack';
+import { MyPageScreenProps } from '@type/param/stack';
 
 import { deleteToken } from '@utils/token';
 

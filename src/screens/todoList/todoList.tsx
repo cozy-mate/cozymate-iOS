@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { TodoListScreenProps } from '@type/param/roomStack';
+import { TodoListScreenProps } from '@type/param/stack';
 
 import { useRecoilState } from 'recoil';
 import { profileState, roomInfoState } from '@recoil/recoil';

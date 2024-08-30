@@ -5,7 +5,7 @@ import { useGetNotificationList } from '@hooks/api/notification';
 
 import BackButton from '@assets/backButton.svg';
 
-import { NotificationScreenProps } from '@type/param/roomStack';
+import { NotificationScreenProps } from '@type/param/stack';
 
 const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
   const { data: notificationlist, refetch: refetchNotification } = useGetNotificationList();
@@ -66,7 +66,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
             ) : (
               <View className="flex flex-col items-center justify-center h-full">
                 <Text className="text-sm font-medium text-disabledFont">
-                  아직 주고 받은 쪽지가 없어요!
+                  받은 알림이 존재하지 않아요!
                 </Text>
               </View>
             )}

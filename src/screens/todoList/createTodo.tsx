@@ -23,7 +23,7 @@ import LoadingComponent from '@components/loading/loading';
 
 import BackNav from 'src/layout/backNav';
 
-import { CreateTodoScreenProps } from '@type/param/roomStack';
+import { CreateTodoScreenProps } from '@type/param/stack';
 import { useAddMyTodo, useGetTodoData } from '@hooks/api/todo';
 import { useAddRule, useGetRuleData } from '@hooks/api/rule';
 import { useAddRole, useGetRoleData } from '@hooks/api/role';
@@ -227,7 +227,8 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
                     value={memo}
                     setValue={setMemo}
                     placeholder="내용을 입력해주세요"
-                    height={258}
+                    height={120}
+                    maxLength={50}
                   />
                 </>
               )}

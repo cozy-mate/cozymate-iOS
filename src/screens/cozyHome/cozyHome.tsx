@@ -5,7 +5,7 @@ import HomeBack from '@assets/cozyHome/homeBack.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
-import { HomeScreenProps } from '@type/param/loginStack';
+import { CozyHomeScreenProps } from '@type/param/stack';
 import { useRecoilState } from 'recoil';
 import { MyLifeStyleState } from '@recoil/recoil';
 import { getMyProfile } from '@server/api/member';
@@ -13,7 +13,7 @@ import { getUserDetailData } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 
-const CozyHomeScreen = ({ navigation }: HomeScreenProps) => {
+const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
 
   const { initFcm } = useInitFcm();

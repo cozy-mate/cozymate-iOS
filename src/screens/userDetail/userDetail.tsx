@@ -3,7 +3,7 @@ import { Image, Pressable, SafeAreaView, Text, View, ScrollView } from 'react-na
 import Config from 'react-native-config';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { UserDetailScreenProps } from '@type/param/loginStack';
+import { UserDetailScreenProps } from '@type/param/stack';
 
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
@@ -37,6 +37,10 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
     navigation.goBack();
   };
 
+  const toChatRoom = () => {
+    navigation.navigate('SendChatScreen', { recipientId: otherUserBasicData.memberId });
+  };
+
   const handleList = useCallback(() => {
     setType('list');
   }, []);
@@ -57,7 +61,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
                 <BackButton />
               </Pressable>
               <View className="flex flex-row">
-                <Pressable>
+                <Pressable onPress={toChatRoom}>
                   <MessageIcon />
                 </Pressable>
                 <Pressable>

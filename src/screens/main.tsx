@@ -1,24 +1,29 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { LoginTabNavigatorParamList } from '@type/param/loginStack';
+import { TabNavigatorParamList } from '@type/param/stack';
 
 import { CozyHome, RoleNRule, Feed, RoomMate, MyPage } from 'src/layout/bottomNavBar';
 
+import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
 import TodoListScreen from './todoList/todoList';
-import FeedMainScreen from './feed/feedMain';
 import RoomMateScreen from './roomMate/roomMate';
+import FeedMainScreen from './feed/feedMain';
 import MyPageScreen from './myPage/myPage';
+import { useRecoilValue } from 'recoil';
+import { hasRoomState } from '@recoil/recoil';
+import { TouchableOpacityProps } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
-const Tab = createBottomTabNavigator<LoginTabNavigatorParamList>();
+const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
   return <TouchableOpacity {...props} onPress={() => {}} />;
 };
 
 const MainScreen = () => {
+  const hasRoom = useRecoilValue(hasRoomState);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -34,25 +39,55 @@ const MainScreen = () => {
         },
       }}
     >
-      <Tab.Screen
-        name="CozyHomeScreen"
-        component={CozyHomeScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => null,
-          tabBarIcon: ({ focused }) => <CozyHome focused={focused} />,
-        })}
-      />
-      <Tab.Screen
-        name="TodoListScreen"
-        component={TodoListScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => null,
-          tabBarIcon: ({ focused }) => <RoleNRule focused={focused} />,
-          tabBarButton: (props) => <DisabledTabButton {...props} />,
-        })}
-      />
+      {hasRoom.hasRoom ? (
+        <Tab.Screen
+          name="RoomMainScreen"
+          component={RoomMainScreen}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <CozyHome focused={focused} />,
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="CozyHomeScreen"
+          component={CozyHomeScreen}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <CozyHome focused={focused} />,
+          }}
+        />
+      )}
+      {hasRoom.hasRoom ? (
+        <Tab.Screen
+          name="TodoListScreen"
+          component={TodoListScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <RoleNRule focused={focused} />;
+            },
+          })}
+        />
+      ) : (
+        <Tab.Screen
+          name="TodoListScreen"
+          component={TodoListScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <RoleNRule focused={focused} />;
+            },
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
+          })}
+        />
+      )}
       <Tab.Screen
         name="RoomMateScreen"
         component={RoomMateScreen}
@@ -66,16 +101,37 @@ const MainScreen = () => {
           },
         })}
       />
-      <Tab.Screen
-        name="FeedMainScreen"
-        component={FeedMainScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => null,
-          tabBarIcon: ({ focused }) => <Feed focused={focused} />,
-          tabBarButton: (props) => <DisabledTabButton {...props} />,
-        })}
-      />
+      {hasRoom.hasRoom ? (
+        <Tab.Screen
+          name="FeedMainScreen"
+          component={FeedMainScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <Feed focused={focused} />;
+            },
+          })}
+        />
+      ) : (
+        <Tab.Screen
+          name="FeedMainScreen"
+          component={FeedMainScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <Feed focused={focused} />;
+            },
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
+          })}
+        />
+      )}
+
       <Tab.Screen
         name="MyPageScreen"
         component={MyPageScreen}
