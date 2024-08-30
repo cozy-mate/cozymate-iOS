@@ -15,8 +15,9 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('[Background Message] ', remoteMessage);
 
   await notifee.displayNotification({
-    title: remoteMessage.data.title.replace(/{(.*?)}/g, '$1') || '알림',
-    body: remoteMessage.data.body.replace(/{(.*?)}/g, '$1') || '새로운 메시지가 도착했습니다.',
+    title: remoteMessage?.notification.title.replace(/{(.*?)}/g, '$1') || '알림',
+    body:
+      remoteMessage?.notification.body.replace(/{(.*?)}/g, '$1') || '새로운 메시지가 도착했습니다.',
     ios: {
       sound: 'default',
     },
