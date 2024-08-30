@@ -19,7 +19,7 @@ import ChatIcon from '@assets/feedMain/chatIcon.svg';
 import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
 import DotIcon from '@assets/feedView/dotIcon.svg';
 
-import { FeedViewScreenProps } from '@type/param/roomStack';
+import { FeedViewScreenProps } from '@type/param/stack';
 import { CommentType, PostCardType } from '@type/feed';
 
 import { postTimeUtil } from '@utils/time/timeUtil';
@@ -52,7 +52,6 @@ const POST_DELETE_SUCCESS = '게시글이 삭제되었습니다.';
 const POST_DELETE_ERROR = '게시글 삭제에 실패했습니다.';
 const COMMENT_CREATE_ERROR = '댓글 작성에 실패했습니다.';
 
-
 const FeedViewScreen = (props: FeedViewScreenProps) => {
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : Comment시 자연스럼게 Refresh되도록 수정
@@ -60,7 +59,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const keyboard = useAnimatedKeyboard();
 
   const animatedStyles = useAnimatedStyle(() => ({
-    bottom : keyboard.height.value > 20  ? keyboard.height.value : 20
+    bottom: keyboard.height.value > 20 ? keyboard.height.value : 20,
   }));
 
   const { postId } = props.route.params;
@@ -282,7 +281,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     }
   };
 
-  const updateCommentList = async ()=>{
+  const updateCommentList = async () => {
     const response = await getCommentList(roomState.roomId, postId);
     const commentList = response.result.map((comment: any) => ({
       id: comment.id,
@@ -295,7 +294,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       createdAt: comment.createdAt,
     }));
     setCommentList(commentList);
-  }
+  };
 
   return (
     <View className="w-full h-full bg-white">
@@ -358,11 +357,12 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                   </View>
                 )}
               </View>
-              {refreshing || loading && (
+              {refreshing ||
+                (loading && (
                   <SkeletonPlaceholder>
                     <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
                   </SkeletonPlaceholder>
-                )}
+                ))}
               <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
               {post.imageList.length > 0 && (
                 <View onLayout={onLayout} className="w-full">
@@ -374,7 +374,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     keyExtractor={(item, index) => index.toString()}
                     showsHorizontalScrollIndicator={false}
                     scrollEventThrottle={200}
-                    scrollEnabled={post.imageList.length >1}
+                    scrollEnabled={post.imageList.length > 1}
                     onScroll={handleScroll}
                     decelerationRate="fast"
                     renderItem={({ item, index }) => (
@@ -451,11 +451,15 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               </View>
             </View>
             <View className="mt-2 w-full border-t-2 border-[#F4F4F4]"></View>
-            <CommentList key={comment} commentCards={commentList} postId={postId}
-            updateComment={updateCommentList}/>
+            <CommentList
+              key={comment}
+              commentCards={commentList}
+              postId={postId}
+              updateComment={updateCommentList}
+            />
           </ScrollView>
           <Animated.View className={`absolute w-full z-10`} style={[animatedStyles]}>
-            <View className='flex flex-row items-center justify-center w-full pt-2 pb-2 pl-4 pr-2 bg-white'>
+            <View className="flex flex-row items-center justify-center w-full pt-2 pb-2 pl-4 pr-2 bg-white">
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}
@@ -466,11 +470,11 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 className={`${loading || commentPosting || refreshing ? 'disabled' : ''}`}
                 onPress={createMyComment}
               >
-              <SendCommentIcon />
+                <SendCommentIcon />
               </TouchableOpacity>
-              </View>
+            </View>
           </Animated.View>
-          
+
           <SafeAreaView className="w-full" />
           <ControlModal
             isModalVisible={isModalVisible}
@@ -480,7 +484,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             onPressModalClose={onPressModalClose}
           />
           <ButtonModal
-            title='게시물을 삭제하시나요?'
+            title="게시물을 삭제하시나요?"
             message="삭제하면 우리들의 추억을 복구할 수 없어요!"
             cancelText="취소"
             submitText="삭제"

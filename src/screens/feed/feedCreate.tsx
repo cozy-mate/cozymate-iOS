@@ -18,7 +18,7 @@ import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flat
 import PostImage from '@assets/feedCreate/postImage.svg';
 import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
 
-import { FeedCreateScreenProps } from '@type/param/roomStack';
+import { FeedCreateScreenProps } from '@type/param/stack';
 import { createPost, getDetailPost, updatePost } from '../../server/api/post';
 import { uploadAssetImageToS3 } from '../../server/api/image';
 import { useRecoilState } from 'recoil';

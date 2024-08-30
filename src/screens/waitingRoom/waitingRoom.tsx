@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Config from 'react-native-config';
 
-import { WaitingRoomScreenProps } from '@type/param/loginStack';
+import { WaitingRoomScreenProps } from '@type/param/stack';
 
 import XButton from '@assets/xButton.svg';
 import HomeIcon from '@assets/waitingRoom/homeIcon.svg';

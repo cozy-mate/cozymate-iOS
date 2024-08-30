@@ -1,7 +1,7 @@
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import { lifeStyleState } from '@recoil/recoil';
 import { LifeStyle } from '@recoil/type';
-import { EssentialLifeStyleScreenProps } from '@type/param/loginStack';
+import { EssentialLifeStyleScreenProps } from '@type/param/stack';
 import React, { useState } from 'react';
 import { Animated, SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';

@@ -13,7 +13,7 @@ import Config from 'react-native-config';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
-import { CreateRoomScreenProps } from '@type/param/loginStack';
+import { CreateRoomScreenProps } from '@type/param/stack';
 
 import { useRecoilState } from 'recoil';
 import { CreateRoomInfo, RoomInfo } from '@recoil/type';

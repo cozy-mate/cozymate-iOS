@@ -5,7 +5,7 @@ import Config from 'react-native-config';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { hasRoomState, roomInfoState } from '@recoil/recoil';
-import { CompleteCreateRoomScreenProps } from '@type/param/loginStack';
+import { CompleteCreateRoomScreenProps } from '@type/param/stack';
 
 import { onCopyAddress } from '@utils/clipboard';
 

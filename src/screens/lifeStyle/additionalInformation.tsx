@@ -1,7 +1,7 @@
 import AddButton from '@components/lifeStyle/addButton';
 import { lifeStyleState } from '@recoil/recoil';
 import { registerUserData } from '@server/api/member-stat';
-import { AdditionalLifeStyleScreenProps } from '@type/param/loginStack';
+import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';

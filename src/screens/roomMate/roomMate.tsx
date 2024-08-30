@@ -87,10 +87,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
       setMyLifeStyleData(response.result);
     } catch (error: any) {
       console.log(error.response.data);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'LifeStyleOnboardingScreen' }],
-      });
+      navigation.replace('LifeStyleOnboardingScreen'); // replace 사용하여 화면 대체
     }
   };
 

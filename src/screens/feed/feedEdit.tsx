@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, TextInput, Text, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-import { FeedEditScreenProps } from '@type/param/roomStack';
+import { FeedEditScreenProps } from '@type/param/stack';
 import { createFeed, getFeedData, updateFeed } from '@server/api/feed';
 import { useRecoilState } from 'recoil';
 import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
@@ -48,21 +48,19 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
   };
 
   const postFeedInfo = async () => {
-    
-      try {
-        await updateFeed({
-          roomId: roomInfo.roomId,
-          name: feedName,
-          description: feedDescription,
-        });
-        setNeedsRefresh(true);
-        setModalTitle(FEED_UPDATE_SUCCESS);
-        handleButtonModalOpen();
-      } catch (e: any) {
-        setModalTitle(FEED_UPDATE_ERROR);
-        handleButtonModalOpen();
-      }
-    
+    try {
+      await updateFeed({
+        roomId: roomInfo.roomId,
+        name: feedName,
+        description: feedDescription,
+      });
+      setNeedsRefresh(true);
+      setModalTitle(FEED_UPDATE_SUCCESS);
+      handleButtonModalOpen();
+    } catch (e: any) {
+      setModalTitle(FEED_UPDATE_ERROR);
+      handleButtonModalOpen();
+    }
   };
 
   const handleModalOK = () => {

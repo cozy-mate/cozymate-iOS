@@ -7,7 +7,7 @@ import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg';
 import FeedEdit from '@assets/feedMain/feedEdit.svg';
 import PostEdit from '@assets/feedMain/postEdit.svg';
 
-import { FeedMainScreenProps } from '@type/param/roomStack';
+import { FeedMainScreenProps } from '@type/param/stack';
 import { FeedType, PostCardType } from '@type/feed';
 import { useRecoilState } from 'recoil';
 import { feedRefreshState, hasRoomState } from '@recoil/recoil';

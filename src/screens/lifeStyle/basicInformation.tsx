@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { BasicLifeStyleScreenProps } from '@type/param/loginStack';
+import { BasicLifeStyleScreenProps } from '@type/param/stack';
 
 import { useRecoilState } from 'recoil';
 
@@ -54,7 +54,7 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
   ]);
 
   const toPrev = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
+    navigation.goBack();
   };
 
   const toNext = async (): Promise<void> => {

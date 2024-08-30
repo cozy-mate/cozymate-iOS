@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { JoinRoomScreenProps } from '@type/param/loginStack';
+import { JoinRoomScreenProps } from '@type/param/stack';
 
 import { useRecoilState } from 'recoil';
 import { hasRoomState, inviteCodeRoomState, roomInfoState } from '@recoil/recoil';

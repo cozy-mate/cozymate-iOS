@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 import SearchModal from '@components/findRoommate/searchModal';
-import { SchoolAuthenticationScreenProps } from '@type/param/loginStack';
+import { SchoolAuthenticationScreenProps } from '@type/param/stack';
 
 const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenProps) => {
   const [school, setSchool] = useState<string>('');

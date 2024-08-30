@@ -11,9 +11,10 @@ import RoomMateScreen from './roomMate/roomMate';
 import FeedMainScreen from './feed/feedMain';
 import MyPageScreen from './myPage/myPage';
 import { useRecoilValue } from 'recoil';
-import { hasRoomState } from '@recoil/recoil';
+import { hasRoomState, lifeStyleState } from '@recoil/recoil';
 import { TouchableOpacityProps } from 'react-native';
 import { TouchableOpacity } from 'react-native';
+import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -23,6 +24,7 @@ const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
 
 const MainScreen = () => {
   const hasRoom = useRecoilValue(hasRoomState);
+  const lifeStyle = useRecoilValue(lifeStyleState);
 
   return (
     <Tab.Navigator
@@ -93,19 +95,36 @@ const MainScreen = () => {
           })}
         />
       )}
-      <Tab.Screen
-        name="RoomMateScreen"
-        component={RoomMateScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <RoomMate focused={focused} />;
-          },
-        })}
-      />
+      {lifeStyle.acceptance !== '' ? (
+        <Tab.Screen
+          name="RoomMateScreen"
+          component={RoomMateScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <RoomMate focused={focused} />;
+            },
+          })}
+        />
+      ) : (
+        <Tab.Screen
+          name="LifeStyleOnboardingScreen"
+          component={LifeStyleOnboardingScreen}
+          options={({ route }) => ({
+            // title 없애고 custom 하기 위한 옵션
+            tabBarLabel: () => {
+              return null;
+            },
+            tabBarIcon: ({ focused }) => {
+              return <RoomMate focused={focused} />;
+            },
+          })}
+        />
+      )}
+
       {hasRoom.hasRoom ? (
         <Tab.Screen
           name="FeedMainScreen"

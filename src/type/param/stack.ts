@@ -61,6 +61,7 @@ export type TabNavigatorParamList = {
   TodoListScreen: undefined;
   FeedMainScreen: undefined;
   RoomMateScreen: undefined;
+  LifeStyleOnboardingScreen: undefined;
   MyPageScreen: undefined;
 };
 
