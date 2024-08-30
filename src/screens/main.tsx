@@ -11,7 +11,7 @@ import RoomMateScreen from './roomMate/roomMate';
 import FeedMainScreen from './feed/feedMain';
 import MyPageScreen from './myPage/myPage';
 import { useRecoilValue } from 'recoil';
-import { hasRoomState, lifeStyleState } from '@recoil/recoil';
+import { hasRoomState, lifeStyleState, MyLifeStyleState } from '@recoil/recoil';
 import { TouchableOpacityProps } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
@@ -24,7 +24,7 @@ const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
 
 const MainScreen = () => {
   const hasRoom = useRecoilValue(hasRoomState);
-  const lifeStyle = useRecoilValue(lifeStyleState);
+  const myLifeStyleData = useRecoilValue(MyLifeStyleState);
 
   return (
     <Tab.Navigator
@@ -95,7 +95,7 @@ const MainScreen = () => {
           })}
         />
       )}
-      {lifeStyle.acceptance !== '' ? (
+      {myLifeStyleData.acceptance !== '' ? (
         <Tab.Screen
           name="RoomMateScreen"
           component={RoomMateScreen}
