@@ -4,9 +4,8 @@ import { useRecoilState } from 'recoil';
 import { setFcmToken } from '@utils/fcm';
 import { postFcmToken } from '@server/api/fcm';
 import notifee from '@notifee/react-native';
-import {getUniqueId} from 'react-native-device-info';
+import { getUniqueId } from 'react-native-device-info';
 import { Alert } from 'react-native';
-
 
 const useInitFcm = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loggedInState);
@@ -22,7 +21,7 @@ const useInitFcm = () => {
 
   const getDeviceId = async () => {
     const deviceId = await getUniqueId();
-    return 'ios-'+deviceId;
+    return 'ios-' + deviceId;
   };
   // 새로운 토큰 발급
   const refreshFcmToken = async () => {
@@ -32,15 +31,15 @@ const useInitFcm = () => {
         .deleteToken()
         .then(async (res) => {
           const newToken = await messaging().getToken();
-          console.log('새로 발급된 FCM 토큰:', newToken);
+          // console.log('새로 발급된 FCM 토큰:', newToken);
           await setFcmToken(newToken);
         })
         .catch(async (e) => {
-          console.log('FCM 토큰 재발급 중 오류 발생:', e);
+          // console.log('FCM 토큰 재발급 중 오류 발생:', e);
           // 새로운 FCM 토큰 요청
-          console.log('재발급 시도중...');
+          // console.log('재발급 시도중...');
           const newToken = await messaging().getToken();
-          console.log('새로 발급된 FCM 토큰:', newToken);
+          // console.log('새로 발급된 FCM 토큰:', newToken);
           await setFcmToken(newToken);
         });
     }
@@ -50,11 +49,11 @@ const useInitFcm = () => {
     try {
       // 같은 기기면 매번 같은 토큰 줌
       const token = await messaging().getToken();
-      console.log(token);
+      // console.log(token);
       const deviceId = await getDeviceId();
       await setFcmToken(token);
       const response = await postFcmToken({ deviceId: deviceId!, token });
-      console.log('FCM Token registered successfully:', response);
+      // console.log('FCM Token registered successfully:', response);
     } catch (error: any) {
       console.error('Failed to register FCM token:', error.response);
     }
@@ -63,7 +62,7 @@ const useInitFcm = () => {
   const foregroundNotificationListener = () => {
     messaging().onMessage(async (remoteMessage: any) => {
       // TODO : Replace with foreground toast notification
-      console.log('Foreground Notification:', remoteMessage);
+      // console.log('Foreground Notification:', remoteMessage);
 
       await notifee.displayNotification({
         title: remoteMessage?.data.title.replace(/{(.*?)}/g, '$1') || '알림',
@@ -76,7 +75,7 @@ const useInitFcm = () => {
   };
 
   const initFcm = () => {
-    console.log('FCM initialized');
+    // console.log('FCM initialized');
     if (isLoggedIn) {
       requestUserPermission();
       foregroundNotificationListener();

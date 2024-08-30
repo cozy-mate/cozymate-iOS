@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/roomMain/background.svg';
 
@@ -11,17 +11,20 @@ import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 
 import { RoomMainScreenProps } from '@type/param/stack';
-import { hasRoomState, roomInfoState } from '@recoil/recoil';
+import { hasRoomState, MyLifeStyleState, roomInfoState } from '@recoil/recoil';
 import { useRecoilState } from 'recoil';
 import { onCopyAddress } from '@utils/clipboard';
 import { useGetRoomLog } from '@hooks/api/room-log';
 import useInitFcm from '@hooks/useInitFcm';
 import { getRoomData } from '@server/api/room';
 import { getProfileImage } from '@utils/profileImage';
+import { getUserDetailData } from '@server/api/member-stat';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
+
   const { initFcm } = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
@@ -30,14 +33,25 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
     const fetchData = async () => {
       try {
         const infoResponse = await getRoomData(myRoom.roomId);
-        console.log(infoResponse);
 
         setRoomInfo(infoResponse.result);
       } catch (error) {
         console.error('Error fetching room data:', error);
       }
     };
+    const getLifeStyle = async () => {
+      try {
+        const response = await getUserDetailData();
+
+        setMyLifeStyleData(response.result);
+      } catch (error: any) {
+        if (error.response.data.code === 'MEMBERSTAT402') {
+          console.log('라이프 스타일 없음');
+        }
+      }
+    };
     fetchData();
+    getLifeStyle();
   }, [myRoom.roomId, setRoomInfo]);
 
   const toChat = () => {

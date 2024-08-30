@@ -1,5 +1,5 @@
 import AddButton from '@components/lifeStyle/addButton';
-import { lifeStyleState } from '@recoil/recoil';
+import { lifeStyleState, MyLifeStyleState } from '@recoil/recoil';
 import { registerUserData } from '@server/api/member-stat';
 import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 import React, { useState } from 'react';
@@ -9,6 +9,7 @@ import BackHeader from 'src/layout/backHeader';
 
 const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScreenProps) => {
   const [lifeStyle, setLifeStyle] = useRecoilState(lifeStyleState);
+  const [, setMyLifeStyle] = useRecoilState(MyLifeStyleState);
 
   const [unconditionalInputs, setUnconditionalInputs] = useState<string[]>([]);
   const [canMatchInputs, setCanMatchInputs] = useState<string[]>([]);
@@ -28,8 +29,6 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
         '이건 절대 절대 안 돼요!': neverInputs,
       },
     });
-
-    console.log(lifeStyle);
 
     try {
       await registerUserData({
@@ -66,6 +65,8 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
           '이건 절대 절대 안 돼요!': lifeStyle.options['이건 절대 절대 안 돼요!'],
         },
       });
+
+      setMyLifeStyle(lifeStyle);
       navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
     } catch (error: any) {
       console.log(error.response.data);
