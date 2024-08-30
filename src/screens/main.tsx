@@ -36,7 +36,7 @@ const MainScreen = () => {
           borderRadius: 20,
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
-          position: 'absolute',
+          // position: 'absolute',
           shadowColor: 'rgba(160,160,160, 0.25)',
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 1,
