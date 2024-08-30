@@ -34,6 +34,7 @@ export interface GetPostDetailResponse {
     nickname: string;
     persona: number;
     imageList: string[];
+    commentCount: number;
     commentList: [
       {
         id: number;

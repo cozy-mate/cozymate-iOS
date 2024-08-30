@@ -155,7 +155,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
         },
         content: response.result.content,
         imageList: response.result.imageList,
-        commentCount: 0,
+        commentCount: response.result.commentCount,
         createdAt: response.result.createdAt,
       };
       const commentList = response.result.commentList.map((comment: any) => ({
