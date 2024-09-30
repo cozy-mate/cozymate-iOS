@@ -18,7 +18,6 @@ export const useIsOldiPhone = () => {
         'iPhone 8',
         'iPhone 8 Plus',
         'iPhone SE',
-        'iPad 9',
       ];
       setIsOldiPhone(oldModels.includes(model));
     };

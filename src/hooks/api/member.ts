@@ -1,11 +1,5 @@
 import appleAuth from '@invertase/react-native-apple-authentication';
-import {
-  getProfile,
-  KakaoOAuthToken,
-  KakaoProfile,
-  login,
-  loginWithKakaoAccount,
-} from '@react-native-seoul/kakao-login';
+import { getProfile, KakaoOAuthToken, KakaoProfile, login } from '@react-native-seoul/kakao-login';
 import { hasRoomState, loggedInState, profileState, roomInfoState } from '@recoil/recoil';
 import { getMyProfile, signIn } from '@server/api/member';
 import { checkHasRoom, getRoomData } from '@server/api/room';
@@ -25,7 +19,7 @@ export const useKakaoLogin = (
   const [, setRoomInfo] = useRecoilState(roomInfoState);
 
   return useMutation({
-    mutationFn: () => loginWithKakaoAccount(),
+    mutationFn: () => login(),
     onSuccess: async (response: KakaoOAuthToken) => {
       const profile: KakaoProfile = await getProfile();
 
