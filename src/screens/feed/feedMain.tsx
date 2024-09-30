@@ -221,11 +221,13 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         onEndReached={onEndReached}
         onEndReachedThreshold={0}
       />
-      <View className="absolute z-20 bottom-8 right-5 w-fit">
-        <Pressable onPress={toFeedCreate}>
-          <PostEdit />
-        </Pressable>
-      </View>
+
+      <Pressable
+        onPress={toFeedCreate}
+        className="fixed z-20 flex items-end w-fit bottom-28 right-5"
+      >
+        <PostEdit />
+      </Pressable>
     </Fragment>
   );
 };
