@@ -19,8 +19,11 @@ import useInitFcm from '@hooks/useInitFcm';
 import { getRoomData } from '@server/api/room';
 import { getProfileImage } from '@utils/profileImage';
 import { getUserDetailData } from '@server/api/member-stat';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
+  const { bottom } = useSafeAreaInsets();
+
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
@@ -101,7 +104,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         <View className="absolute top-[-120px] right-2">
           {getProfileImage(roomInfo.profileImage, 140, 140)}
         </View>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: bottom + 20 }}>
           {roomlogdata.result.result.map((data, index) => (
             <View
               key={index}
