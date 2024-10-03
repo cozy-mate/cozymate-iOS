@@ -24,6 +24,7 @@ import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/
 import { useRecoilState } from 'recoil';
 import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type UserItem = {
   memberId: number;
@@ -36,6 +37,8 @@ type UserItem = {
 };
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
+  const { bottom } = useSafeAreaInsets();
+
   const [filterList, setFilterList] = useState<string[]>([]);
 
   const [page, setPage] = useState<number>(0);
@@ -227,6 +230,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                     className="flex flex-row"
                     onScroll={handleScroll}
                     scrollEventThrottle={16} // Adjust as necessary
+                    contentContainerStyle={{ paddingBottom: bottom + 45 }}
                   >
                     {similarAnswerData.map((user, index) => (
                       <SimilarLifeStyleContainer

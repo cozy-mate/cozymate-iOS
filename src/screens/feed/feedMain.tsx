@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, Fragment } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
 
 import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg';
@@ -17,6 +17,8 @@ import { getPostList } from '@server/api/post';
 import { useFocusEffect } from '@react-navigation/native';
 
 const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
+  const { bottom } = useSafeAreaInsets();
+
   // TODO : 복잡하게 섞인 코드 정리하기
   // TODO : RecoilState RoomId 업데이트 되면 적용하기
   const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
@@ -215,17 +217,20 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
           alignItems: 'center',
           width: '100%',
           paddingHorizontal: 20,
+          paddingBottom: bottom,
         }}
         refreshControl={<RefreshControl refreshing={postStates.refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}
         onEndReached={onEndReached}
         onEndReachedThreshold={0}
       />
-      <View className="absolute z-20 bottom-8 right-5 w-fit">
-        <Pressable onPress={toFeedCreate}>
-          <PostEdit />
-        </Pressable>
-      </View>
+
+      <Pressable
+        onPress={toFeedCreate}
+        className="fixed z-20 flex items-end w-fit bottom-28 right-5"
+      >
+        <PostEdit />
+      </Pressable>
     </Fragment>
   );
 };
