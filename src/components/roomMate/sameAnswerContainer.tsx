@@ -1,7 +1,6 @@
 import { getProfileImage } from '@utils/profileImage';
 import React from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
-import Config from 'react-native-config';
 
 interface SameAnswerContainerProps {
   user: UserItem;
