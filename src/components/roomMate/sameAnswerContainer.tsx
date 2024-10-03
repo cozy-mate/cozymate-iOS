@@ -39,7 +39,7 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ user, toUserD
               </Text>
             </View>
           </View>
-          <Text className="text-colorFont">{user.equality}%</Text>
+          <Text className="font-medium text-colorFont">{user.equality}%</Text>
         </View>
       </View>
     </Pressable>
