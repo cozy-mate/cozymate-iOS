@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { MyRoom, Profile, SignUp } from './type';
+import { CreateRoomInfo, MyRoom, Profile, SignUp } from './type';
 
 // 최초 회원가입 시 사용자 정보
 export const useSignUpStore = create<{
@@ -44,4 +44,18 @@ export const useHasRoomStore = create<{
     roomId: 0,
   },
   setMyRoom: (newMyRoom) => set((state) => ({ myRoom: { ...state.myRoom, ...newMyRoom } })),
+}));
+
+// 방 생성
+export const useCreateRoomStore = create<{
+  createRoomInfo: CreateRoomInfo;
+  setCreateRoomInfo: (newCreateRoomInfo: Partial<CreateRoomInfo>) => void;
+}>((set) => ({
+  createRoomInfo: {
+    name: '',
+    profileImage: 0,
+    maxMateNum: 0,
+  },
+  setCreateRoomInfo: (newCreateRoomInfo) =>
+    set((state) => ({ createRoomInfo: { ...state.createRoomInfo, ...newCreateRoomInfo } })),
 }));
