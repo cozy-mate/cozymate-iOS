@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil';
 import { profileState, roomInfoState } from '@recoil/recoil';
 
 import Background from '@assets/todoList/background.svg';
-import SettingIcon from '@assets/todoList/settingIcon.svg';
 import PlusButton from '@assets/plusButton.svg';
 
 import LoadingComponent from '@components/loading/loading';
@@ -22,9 +21,6 @@ import RuleBox from '@components/todoList/ruleBox';
 
 import MyRoleBox from '@components/todoList/myRoleBox';
 import RoleBox from '@components/todoList/roleBox';
-
-import ControlModal from '@components/feedView/controlModal';
-import { useFeedModal } from '@hooks/useFeedModal';
 
 import { useChangeTodo, useGetTodoData } from '@hooks/api/todo';
 import { useGetRoleData } from '@hooks/api/role';
@@ -76,13 +72,10 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
   };
 
-  const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
-    useFeedModal();
-
   return (
     <>
       {changeTodoPending && <LoadingComponent />}
-      <View className="flex-1 bg-[#CADFFF]" onTouchEnd={onPressModalClose}>
+      <View className="flex-1 bg-[#CADFFF]">
         <Background style={{ position: 'absolute' }} />
         <View className="mt-[76px] mx-5">
           <NavBar isTodo={isTodo} handleNav={handleNav} />
@@ -101,17 +94,6 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       {myProfile.nickname}님이
                       {'\n'}해야할 일들을 알려드릴게요!
                     </Text>
-                    <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
-                      <SettingIcon />
-                    </Pressable>
-
-                    <ControlModal
-                      isModalVisible={isModalVisible}
-                      modalPosition={modalPosition}
-                      onSubmit={onPressModalClose}
-                      onEdit={toCreate}
-                      onPressModalClose={onPressModalClose}
-                    />
                   </View>
 
                   <View className="mb-3">
@@ -149,7 +131,6 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해
                       알려드릴게요!
                     </Text>
-                    <SettingIcon />
                   </View>
                   <RuleBox ruleData={ruledata.result} />
                 </View>
@@ -161,7 +142,6 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해
                       알려드릴게요!
                     </Text>
-                    <SettingIcon />
                   </View>
 
                   <MyRoleBox

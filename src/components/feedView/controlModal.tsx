@@ -32,7 +32,7 @@ const ControlModal = (props: ControlModalProps) => {
             right: modalPosition.right,
             backgroundColor: 'white',
             borderColor: '#EBEBEB',
-            borderWidth: 2,
+            borderWidth: 1,
             paddingVertical: 10,
             paddingHorizontal: 15,
             borderRadius: 10,
