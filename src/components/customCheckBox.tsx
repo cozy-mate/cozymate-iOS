@@ -28,18 +28,23 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
   };
 
   const select = (selectedItem: Item) => {
+    // 'select' 상태를 반전시킴
     const updatedItems = items.map((item) =>
       item.index === selectedItem.index ? { ...item, select: !item.select } : item,
     );
 
     if (selectedItem.select) {
+      // 이미 선택된 경우, 리스트에서 제거
       setValue(value.filter((id) => id !== selectedItem.id));
     } else {
+      // 선택되지 않은 경우, 리스트에 추가
       setValue([...value, selectedItem.id]);
     }
 
     setItems(updatedItems);
     handleFocus(selectedItem.index);
+
+    console.log(items);
   };
 
   return (
