@@ -104,7 +104,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="mt-[52px] px-5">
+      <ScrollView className="pt-[52px] px-5">
         <View className="flex flex-col items-center flex-1">
           {getProfileImage(myProfile.persona, 120, 120)}
           <Text className="mt-3 mb-10 text-lg font-semibold text-emphasizedFont">
