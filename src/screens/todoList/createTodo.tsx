@@ -191,7 +191,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
                     setValue={setTodoContent}
                     placeholder="할 일을 입력해주세요"
                   />
-                  <CustomCalendar onDateTimeSelect={handleDateTimeSelect} />
+                  <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
                 </>
               )}
 

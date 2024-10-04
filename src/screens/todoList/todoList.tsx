@@ -32,6 +32,7 @@ import { useGetRuleData } from '@hooks/api/rule';
 
 import { getDayOfWeek } from '@utils/getDay';
 import { useIsOldiPhone } from '@hooks/device';
+import CustomCalendar from '@components/todoList/customCalendar';
 
 interface TodoItem {
   id: number;
@@ -42,6 +43,12 @@ interface TodoItem {
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { bottom } = useSafeAreaInsets();
   const isOleiPhone = useIsOldiPhone();
+
+  const [timePoint, setTimePoint] = useState<string>('');
+
+  const handleDateTimeSelect = (dateTime: string) => {
+    setTimePoint(dateTime);
+  };
 
   const [myProfile, setMyProfile] = useRecoilState(profileState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
@@ -56,7 +63,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     navigation.navigate('CreateTodoScreen', { type: isTodo ? 'todo' : 'role' });
   };
 
-  const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
+  const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
   const { mutateAsync: changeTodoMutate, isPending: changeTodoPending } =
     useChangeTodo(refetchTodo);
@@ -106,6 +113,11 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       onPressModalClose={onPressModalClose}
                     />
                   </View>
+
+                  <View className="mb-3">
+                    <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
+                  </View>
+
                   <TodoBox
                     todoData={tododata.result.myTodoList.mateTodoList}
                     changeTodo={changeTodo}

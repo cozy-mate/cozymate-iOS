@@ -37,10 +37,11 @@ export const useChangeTodo = (
 // Todo 조회
 export const useGetTodoData = (
   roomId: number,
+  timePoint?: string,
 ): { data: GetTodoDataResponse; refetch: () => void } => {
   const { data, refetch } = useSuspenseQuery({
-    queryKey: ['tododata', roomId],
-    queryFn: () => getTodoData(roomId),
+    queryKey: ['tododata', roomId, timePoint],
+    queryFn: () => getTodoData(roomId, timePoint),
     select: (response: GetTodoDataResponse) => {
       return response;
     },

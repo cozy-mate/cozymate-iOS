@@ -70,8 +70,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       <Background style={{ position: 'absolute' }} />
       <View className="flex mt-[70px] px-5">
         {/* 헤더 */}
-        <View className="flex flex-row justify-between mb-2">
-          <LightIcon />
+        <View className="flex flex-row justify-end mb-2">
           <View className="flex flex-row">
             <Pressable onPress={toChat}>
               <ChatIcon />
