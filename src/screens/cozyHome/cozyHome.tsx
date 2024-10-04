@@ -43,20 +43,24 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('NotificationScreen');
   };
 
-  const toSchoolAuthentication = async () => {
-    try {
-      const response = await getUserDetailData();
-      setMyLifeStyleData(response.result);
-
-      navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
-    } catch (error: any) {
-      console.log(error.response.data);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'LifeStyleOnboardingScreen' }],
-      });
-    }
+  const toWaiting = () => {
+    navigation.navigate('WaitingRoomScreen');
   };
+
+  // const toSchoolAuthentication = async () => {
+  //   try {
+  //     const response = await getUserDetailData();
+  //     setMyLifeStyleData(response.result);
+
+  //     navigation.navigate('MainScreen', { screen: 'RoomMateScreen' });
+  //   } catch (error: any) {
+  //     console.log(error.response.data);
+  //     navigation.reset({
+  //       index: 0,
+  //       routes: [{ name: 'LifeStyleOnboardingScreen' }],
+  //     });
+  //   }
+  // };
 
   const isActive = true;
 
@@ -85,22 +89,47 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
           </View>
 
           <View className="flex flex-col items-start mb-[147px] px-5">
-            <Text className="mb-4 text-xl font-semibold tracking-tight text-emphasizedFont">
-              룸메이트와 함께 방을 만들어야{'\n'}롤앤룰, 피드를 이용할 수 있어요!
-            </Text>
+            {/* <View className="w-full rounded-lg bg-colorBox mb-[14.5px]">
+              <Text>[공지] 시험기간으로 인한 기숙사 통금시간 변경</Text>
+            </View> */}
 
-            <Pressable onPress={toSchoolAuthentication}>
-              <View className="rounded-[81px] bg-white px-6 py-3">
-                <Text className="text-sm font-semibold text-main1">룸메이트 구하러 가기</Text>
+            {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+            <View className="flex flex-row justify-between w-full">
+              <View
+                className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl w-[49%]`}
+              >
+                <Pressable onPress={toCreateRoom} className="items-start">
+                  <Text
+                    className={`${
+                      isActive ? 'text-main1' : 'text-disabledFont'
+                    } text-base font-semibold leading-[19px]`}
+                  >
+                    방 만들기
+                  </Text>
+                </Pressable>
               </View>
-            </Pressable>
+
+              <View
+                className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl w-[49%]`}
+              >
+                <Pressable onPress={toJoinRoom} className="items-start">
+                  <Text
+                    className={`${
+                      isActive ? 'text-main1' : 'text-disabledFont'
+                    } text-base font-semibold leading-[19px]`}
+                  >
+                    방 참여하기
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
           </View>
         </View>
 
         <View className="flex flex-row justify-between px-5 pt-[26px] h-[284px] space-x-3">
           {/* 코지메이트 초대하기 버튼 */}
           <View className={`${!isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
-            <Pressable className="flex flex-col items-start h-full">
+            <Pressable className="flex flex-col items-start h-full" onPress={toWaiting}>
               <Text
                 className={`${
                   !isActive ? 'text-main1' : 'text-disabledFont'
@@ -116,33 +145,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                 cozymate로{'\n'}룸메이트를 구한 경우에만{'\n'}이용할 수 있어요!
               </Text>
             </Pressable>
-          </View>
-
-          {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-          <View className="flex flex-col flex-1 space-y-2">
-            <View className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
-              <Pressable onPress={toCreateRoom} className="items-start flex-1">
-                <Text
-                  className={`${
-                    isActive ? 'text-main1' : 'text-disabledFont'
-                  } text-base font-semibold leading-[19px]`}
-                >
-                  초대코드로{'\n'}방 만들기
-                </Text>
-              </Pressable>
-            </View>
-
-            <View className={`${isActive ? 'bg-colorBox' : 'bg-box'} px-4 py-4 rounded-xl flex-1`}>
-              <Pressable onPress={toJoinRoom} className="items-start flex-1">
-                <Text
-                  className={`${
-                    isActive ? 'text-main1' : 'text-disabledFont'
-                  } text-base font-semibold leading-[19px]`}
-                >
-                  초대코드로{'\n'}방 참여하기
-                </Text>
-              </Pressable>
-            </View>
           </View>
         </View>
       </SafeAreaView>

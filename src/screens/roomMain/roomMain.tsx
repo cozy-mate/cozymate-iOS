@@ -3,7 +3,6 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import Background from '@assets/roomMain/background.svg';
 
-import LightIcon from '@assets/roomMain/icon.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
@@ -22,6 +21,10 @@ import { getUserDetailData } from '@server/api/member-stat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
+  const toJoin = () => {
+    navigation.navigate('CozyHomeScreen');
+  };
+
   const { bottom } = useSafeAreaInsets();
 
   const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
@@ -101,7 +104,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="flex-1 flex-col bg-white px-5 pt-8 pb-5 rounded-t-[40px] relative">
         <View className="absolute top-[-120px] right-2">
-          {getProfileImage(roomInfo.profileImage, 140, 140)}
+          <Pressable onPress={toJoin}>{getProfileImage(roomInfo.profileImage, 140, 140)}</Pressable>
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: bottom + 20 }}>
           {roomlogdata.result.result.map((data, index) => (
