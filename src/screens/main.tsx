@@ -65,7 +65,7 @@ const MainScreen = () => {
             },
       }}
     >
-      {hasRoom.hasRoom ? (
+      {!hasRoom.hasRoom ? (
         <Tab.Screen
           name="RoomMainScreen"
           component={RoomMainScreen}
@@ -114,7 +114,7 @@ const MainScreen = () => {
           })}
         />
       )}
-      {myLifeStyleData.acceptance !== '' ? (
+      {myLifeStyleData.acceptance === '' ? (
         <Tab.Screen
           name="RoomMateScreen"
           component={RoomMateScreen}

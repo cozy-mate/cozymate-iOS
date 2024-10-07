@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Image,
   Keyboard,
   Pressable,
   SafeAreaView,
@@ -9,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Config from 'react-native-config';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
@@ -22,15 +20,20 @@ import { createRoomState, roomInfoState } from '@recoil/recoil';
 import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
+import XButton from '@assets/createRoom/smallXButton.svg';
 import { createRoom } from '@server/api/room';
 import { getProfileImage } from '@utils/profileImage';
 
-const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
+const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
+  const { type } = route.params;
+
   const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
   const [, setRoomInfoState] = useRecoilState(roomInfoState);
 
   const [name, setName] = useState<string>('');
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
+  const [hashTag, setHashTag] = useState<string>('');
+  const [hashTagList, setHashTagList] = useState<string[]>([]);
   const [isLongName, setIsLongName] = useState<boolean>(false);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -68,6 +71,17 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     }
   };
 
+  const handleHashTagSubmit = () => {
+    if (hashTag.trim() !== '' && hashTagList.length < 3) {
+      setHashTagList([...hashTagList, hashTag.trim()]);
+      setHashTag(''); // Clear the input after adding
+    }
+  };
+
+  const removeHashTag = (index: number) => {
+    setHashTagList((prevList) => prevList.filter((_, i) => i !== index));
+  };
+
   const toMain = () => {
     navigation.navigate('MainScreen');
   };
@@ -101,6 +115,10 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
     }
   };
 
+  useEffect(() => {
+    console.log(hashTagList);
+  });
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex flex-col justify-between flex-1 bg-white">
@@ -129,9 +147,9 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               </View>
             </View>
 
-            <View className="">
+            <View>
               {/* 방이름 입력 */}
-              <View className="mb-[28px]">
+              <View>
                 <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
                   방이름을 입력해주세요
                 </Text>
@@ -149,7 +167,7 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
               </View>
 
               {/* 방 인원 선택 */}
-              <View>
+              <View className="my-10">
                 <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
                   인원을 선택해주세요 (본인 포함)
                 </Text>
@@ -160,6 +178,36 @@ const CreateRoomScreen = ({ navigation }: CreateRoomScreenProps) => {
                   setItems={setItems}
                 />
               </View>
+
+              {/* 방 해시태그 입력 */}
+              {type === 'public' && (
+                <View>
+                  <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                    방을 나타낼 해시태그를 입력해주세요 (최대 3개)
+                  </Text>
+                  <TextInput
+                    className="p-4 mb-2 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
+                    value={hashTag}
+                    onChangeText={setHashTag}
+                    onSubmitEditing={handleHashTagSubmit}
+                    placeholder="해시태그를 입력해주세요"
+                  />
+                  <View className="flex flex-row">
+                    {hashTagList.length > 0 &&
+                      hashTagList.map((hash, index) => (
+                        <View
+                          key={index}
+                          className="rounded-full border-main1 border-[1px] pl-3.5 pr-1.5 py-1 bg-sub2 flex flex-row items-center mr-2"
+                        >
+                          <Text className="text-xs font-semibold text-main1">#{hash}</Text>
+                          <Pressable onPress={() => removeHashTag(index)}>
+                            <XButton />
+                          </Pressable>
+                        </View>
+                      ))}
+                  </View>
+                </View>
+              )}
             </View>
           </View>
 

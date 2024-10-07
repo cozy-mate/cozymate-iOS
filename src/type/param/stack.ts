@@ -20,7 +20,7 @@ export type StackParamList = {
   AdditionalLifeStyleScreen: undefined;
 
   // 방 생성 스크린
-  CreateRoomScreen: undefined;
+  CreateRoomScreen: { type: 'public' | 'private' };
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;
 
