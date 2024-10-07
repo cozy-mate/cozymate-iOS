@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Pressable, Text, View, ScrollView } from 'react-native';
+
+import Advertisement1 from '@assets/roomMate/ad1.svg';
+import Advertisement2 from '@assets/roomMate/ad2.svg';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -9,16 +12,20 @@ import PlusButton from '@assets/roomMate/plusButton.svg';
 
 import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
 import MagnifierIcon from '@assets/roomMate/magnifier.svg';
-import DownToggleIcon from '@assets/roomMate/downToggle.svg';
-import RightToggleIcon from '@assets/roomMate/rightToggle.svg';
 
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
-import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
 import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
-import { useRecoilState } from 'recoil';
-import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  MyLifeStyleState,
+  OtherBasicData,
+  OtherLifeStyleState,
+  profileState,
+} from '@recoil/recoil';
 import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import RecommendRoomContainer from '@components/roomMate/recommendRoomContainer';
+import { dummyData } from './dummyData';
 
 type UserItem = {
   memberId: number;
@@ -30,14 +37,23 @@ type UserItem = {
   equality: number;
 };
 
+interface ADItem {
+  index: number;
+  element: ReactNode;
+}
+
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
+
+  const profile = useRecoilValue(profileState);
 
   const [filterList, setFilterList] = useState<string[]>([]); // 필터 목록
   const [page, setPage] = useState<number>(0); // 페이지네이션
 
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState); // 내 라이프 스타일 데이터
   const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
+
+  const [roomData, setRoomData] = useState(dummyData);
 
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
@@ -72,6 +88,22 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
   // const { data: similarmatedata } = useSearchUsers();
+
+  const [adArray, setAdArray] = useState<ADItem[]>([
+    { index: 1, element: <Advertisement1 /> },
+    { index: 2, element: <Advertisement2 /> },
+  ]);
+
+  const [currentAdIndex, setCurrentAdIndex] = useState(0); // 현재 광고 인덱스 관리
+  const adDisplayInterval = 5000; // 광고가 변경되는 시간 간격 (밀리초)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAdIndex((prevIndex) => (prevIndex + 1) % adArray.length);
+    }, adDisplayInterval);
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 제거
+  }, [adArray.length]);
 
   const getMyLifeStyle = async () => {
     try {
@@ -125,9 +157,11 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
     if (filterList.length > 0) {
       // 필터가 있을 때: 같은 답변을 한 사용자 목록을 가져옴
+      console.log('같은 대답 호출');
       getSameAnswerMate();
     } else {
       // 필터가 없을 때: 비슷한 답변을 한 사용자 목록을 가져옴
+      console.log('비슷한 대답 호출');
       getSimilarAnswerData();
     }
   }, [filterList]); // 필터 목록 변경 시 실행
@@ -159,10 +193,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         />
 
         {/* 사용자 목록 */}
-        <View
-          className="flex flex-col items-center px-4 mb-9"
-          style={{ paddingBottom: bottom + 40 }}
-        >
+        <View className="flex flex-col items-center px-4 mb-9">
           {displayedUsers.length > 0 &&
             displayedUsers.map((user, index) => (
               <SameAnswerContainer index={index} user={user} toUserDetail={getOthersLifeStyle} />
@@ -173,6 +204,31 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
               <Text className="text-xs font-semibold text-colorFont ml-1.5">더보기</Text>
             </Pressable>
           )}
+        </View>
+
+        <View className="flex flex-col px-4 mb-9">
+          <Text className="text-lg font-semibold text-emphasizedFont">
+            {profile.nickname}님과,{'\n'}꼭 맞는 방을 추천해드릴게요
+          </Text>
+
+          <View className="flex flex-row justify-end h-10 mt-3">
+            <Text className="text-sm font-medium text-basicFont">최신순</Text>
+          </View>
+
+          <View>
+            {dummyData.map((room, index) => (
+              <RecommendRoomContainer index={index} roomItem={room} />
+            ))}
+          </View>
+        </View>
+
+        <View className="relative px-5" style={{ paddingBottom: bottom + 60 }}>
+          <View className="relative">
+            {adArray[currentAdIndex].element}
+            <Text className="absolute text-xs font-medium bottom-2 right-4 text-[#A2A2A2]">
+              <Text className="text-white">{currentAdIndex + 1}</Text> / {adArray.length}
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </View>
