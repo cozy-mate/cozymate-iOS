@@ -36,7 +36,13 @@ const UserComponent: React.FC<UserComponentProps> = ({ index, userData }) => {
       <View className="flex flex-row items-center justify-between">
         <Text className="text-xs font-medium text-disabledFont">내 라이프스타일과 일치율</Text>
 
-        <Text className="text-base font-medium text-main1">{userData.equality}%</Text>
+        <Text
+          className={`text-base font-medium ${
+            userData.equality < 50 ? 'text-colorFont' : 'text-main1'
+          }`}
+        >
+          {userData.equality}%
+        </Text>
       </View>
     </Pressable>
   );

@@ -38,7 +38,7 @@ interface TodoItem {
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { bottom } = useSafeAreaInsets();
-  const isOleiPhone = useIsOldiPhone();
+  const isOldiPhone = useIsOldiPhone();
 
   const [timePoint, setTimePoint] = useState<string>('');
 
@@ -107,7 +107,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 </View>
 
                 {/* 다른 메이트들의 투두리스트 목록 */}
-                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
+                <View style={{ paddingBottom: isOldiPhone ? 60 : bottom + 40 }}>
                   <View className="flex flex-row justify-between px-1 mb-4">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       다른 메이트들은{'\n'}오늘 어떤 일들을 할까요?
@@ -136,7 +136,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 </View>
 
                 {/* 코지홈의 Role */}
-                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
+                <View style={{ paddingBottom: isOldiPhone ? 60 : bottom + 40 }}>
                   <View className="flex flex-row justify-between px-1 mb-4">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해

@@ -217,7 +217,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
           alignItems: 'center',
           width: '100%',
           paddingHorizontal: 20,
-          paddingBottom: bottom,
+          paddingBottom: bottom + 20,
         }}
         refreshControl={<RefreshControl refreshing={postStates.refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}

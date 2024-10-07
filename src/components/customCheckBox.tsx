@@ -58,7 +58,7 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
           onPress={() => select(item)}
         >
           <Text
-            className={`text-xs font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
+            className={`text-sm font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
           >
             {item.name}
           </Text>

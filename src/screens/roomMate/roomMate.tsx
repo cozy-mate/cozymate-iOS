@@ -1,17 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Pressable, Text, View, ScrollView } from 'react-native';
-
-import Advertisement1 from '@assets/roomMate/ad1.svg';
-import Advertisement2 from '@assets/roomMate/ad2.svg';
+import { Pressable, Text, View, ScrollView, SafeAreaView } from 'react-native';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
-import Background from '@assets/roomMate/background.svg';
-import PlusButton from '@assets/roomMate/plusButton.svg';
-
-import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
-import MagnifierIcon from '@assets/roomMate/magnifier.svg';
+import BackButton from '@assets/backButton.svg';
 
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
@@ -24,8 +17,8 @@ import {
 } from '@recoil/recoil';
 import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import RecommendRoomContainer from '@components/roomMate/recommendRoomContainer';
 import { dummyData } from './dummyData';
+import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
 type UserItem = {
   memberId: number;
@@ -36,11 +29,6 @@ type UserItem = {
   numOfRoommate: number;
   equality: number;
 };
-
-interface ADItem {
-  index: number;
-  element: ReactNode;
-}
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -88,22 +76,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
   // const { data: similarmatedata } = useSearchUsers();
-
-  const [adArray, setAdArray] = useState<ADItem[]>([
-    { index: 1, element: <Advertisement1 /> },
-    { index: 2, element: <Advertisement2 /> },
-  ]);
-
-  const [currentAdIndex, setCurrentAdIndex] = useState(0); // 현재 광고 인덱스 관리
-  const adDisplayInterval = 5000; // 광고가 변경되는 시간 간격 (밀리초)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentAdIndex((prevIndex) => (prevIndex + 1) % adArray.length);
-    }, adDisplayInterval);
-
-    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 제거
-  }, [adArray.length]);
 
   const getMyLifeStyle = async () => {
     try {
@@ -166,23 +138,18 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   }, [filterList]); // 필터 목록 변경 시 실행
 
-  return (
-    <View className="flex-1 bg-white">
-      <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
-        <Background style={{ position: 'absolute' }} />
-        <Pressable>
-          <View className="flex-row items-center py-2">
-            <SchoolLogo />
-            <Text className="text-lg font-semibold text-[#5B9CFF] ml-[6px]">인하대학교</Text>
-          </View>
-        </Pressable>
-        <Pressable>
-          <MagnifierIcon />
-        </Pressable>
-      </View>
+  const hasData = false;
 
+  return (
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
-        <Text className="px-[18px] text-lg font-semibold leading-5 tracking-tight text-emphasizedFont mb-4">
+        {/* 상단 이전 버튼 */}
+        <View className="flex flex-row items-center pl-2 mb-6">
+          <Pressable>
+            <BackButton />
+          </Pressable>
+        </View>
+        <Text className="px-5 mb-4 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
           원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
         </Text>
         <CheckBoxContainer
@@ -193,45 +160,31 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         />
 
         {/* 사용자 목록 */}
-        <View className="flex flex-col items-center px-4 mb-9">
-          {displayedUsers.length > 0 &&
-            displayedUsers.map((user, index) => (
-              <SameAnswerContainer index={index} user={user} toUserDetail={getOthersLifeStyle} />
-            ))}
-          {hasNextPage && (
-            <Pressable className="flex flex-row items-center py-2 pl-5 pr-6 bg-colorBox rounded-[35px] mt-6">
-              <PlusButton />
-              <Text className="text-xs font-semibold text-colorFont ml-1.5">더보기</Text>
-            </Pressable>
+        <View
+          className="flex flex-col items-center px-5 mb-9"
+          style={{ paddingBottom: bottom + 20 }}
+        >
+          {hasData ? (
+            displayedUsers.length > 0 ? (
+              displayedUsers.map((user, index) => (
+                <SameAnswerContainer
+                  key={user.memberId}
+                  index={index}
+                  user={user}
+                  toUserDetail={getOthersLifeStyle}
+                />
+              ))
+            ) : (
+              <View>
+                <Text>비어있음</Text>
+              </View>
+            )
+          ) : (
+            <NoLifeStyleComponent />
           )}
         </View>
-
-        <View className="flex flex-col px-4 mb-9">
-          <Text className="text-lg font-semibold text-emphasizedFont">
-            {profile.nickname}님과,{'\n'}꼭 맞는 방을 추천해드릴게요
-          </Text>
-
-          <View className="flex flex-row justify-end h-10 mt-3">
-            <Text className="text-sm font-medium text-basicFont">최신순</Text>
-          </View>
-
-          <View>
-            {dummyData.map((room, index) => (
-              <RecommendRoomContainer index={index} roomItem={room} />
-            ))}
-          </View>
-        </View>
-
-        <View className="relative px-5" style={{ paddingBottom: bottom + 60 }}>
-          <View className="relative">
-            {adArray[currentAdIndex].element}
-            <Text className="absolute text-xs font-medium bottom-2 right-4 text-[#A2A2A2]">
-              <Text className="text-white">{currentAdIndex + 1}</Text> / {adArray.length}
-            </Text>
-          </View>
-        </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

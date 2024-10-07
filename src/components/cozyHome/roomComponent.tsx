@@ -39,7 +39,13 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ index, roomData }) => {
           <Text className="text-main1">{roomData.currentNum}명</Text>의 룸메이트가 있어요
         </Text>
 
-        <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
+        <Text
+          className={`text-base font-medium ${
+            roomData.equality < 50 ? 'text-colorFont' : 'text-main1'
+          }`}
+        >
+          {roomData.equality}%
+        </Text>
       </View>
     </Pressable>
   );

@@ -51,8 +51,9 @@ const MainScreen = () => {
             }
           : {
               backgroundColor: '#FFFFFF',
+              height: 94,
               paddingTop: 12,
-              paddingBottom: 32,
+              paddingBottom: 40,
               borderTopWidth: 0,
               borderRadius: 20,
               borderBottomLeftRadius: 0,
