@@ -8,7 +8,7 @@ import XButton from '@assets/xButton.svg';
 import HomeIcon from '@assets/waitingRoom/homeIcon.svg';
 import PersonIcon from '@assets/waitingRoom/personIcon.svg';
 import ResetIcon from '@assets/waitingRoom/resetIcon.svg';
-import RoomMateBox from '@components/waitingRoom/RoomMateBox';
+import RoomMateBox from '@components/waitingRoom/roomMateBox';
 import { getProfileImage } from '@utils/profileImage';
 
 const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
