@@ -11,8 +11,8 @@ import TableView from '@components/userDetail/tableView';
 import Background from '@assets/userDetail/background.svg';
 
 import BackButton from '@assets/backButton.svg';
-import MessageIcon from '@assets/message.svg';
-import HeartIcon from '@assets/heart.svg';
+import MessageIcon from '@assets/userDetail/message.svg';
+import HeartIcon from '@assets/userDetail/heart.svg';
 
 import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
 import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';

@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { profileState, roomInfoState } from '@recoil/recoil';
 
 import Background from '@assets/todoList/background.svg';
-import PlusButton from '@assets/plusButton.svg';
+import PlusButton from '@assets/todoList/plusButton.svg';
 
 import LoadingComponent from '@components/loading/loading';
 
