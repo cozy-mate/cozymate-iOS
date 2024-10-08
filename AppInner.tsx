@@ -23,6 +23,7 @@ import CreateTodoScreen from 'src/screens/todoList/createTodo';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
+import RoomDetailScreen from 'src/screens/roomDetail/roomDetail';
 import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
@@ -54,6 +55,7 @@ function AppInner() {
           <stack.Screen name="CozyHomeScreen" component={CozyHomeScreen} />
 
           <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
+          <stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
 
           <stack.Screen name="TodoListScreen" component={TodoListScreen} />
           <stack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />

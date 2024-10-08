@@ -114,7 +114,11 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RoomMateScreen');
   };
 
-  const [hasRoom, setHasRoom] = useState<boolean>(false);
+  const [hasRoom, setHasRoom] = useState<boolean>(true);
+
+  const toRoomDetail = () => {
+    navigation.navigate('RoomDetailScreen');
+  };
 
   return (
     <View className="flex-1 bg-sub1">
@@ -196,7 +200,11 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             <Text className="mb-4 text-lg font-semibold leading-6 text-emphasizedFont">
               {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
             </Text>
-            {hasRoom ? <MyRoomComponent roomData={MyRoomData} /> : <NoRoomComponent />}
+            {hasRoom ? (
+              <MyRoomComponent roomData={MyRoomData} toRoom={toRoomDetail} />
+            ) : (
+              <NoRoomComponent />
+            )}
           </View>
 
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />
