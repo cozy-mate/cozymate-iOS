@@ -1,27 +1,28 @@
-import React, { useCallback, useState } from 'react';
-import { Image, Pressable, SafeAreaView, Text, View, ScrollView } from 'react-native';
+import { useRecoilValue } from 'recoil';
 import Config from 'react-native-config';
+import React, { useState, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { UserDetailScreenProps } from '@type/param/stack';
+import { Text, View, Image, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
 
-import Background from '@assets/userDetail/background.svg';
+import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
+
+import { useGetUserDetailData } from '@hooks/api/member-stat';
+
+import { getProfileImage } from '@utils/profileImage';
+
+import { UserDetailScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
-import MessageIcon from '@assets/userDetail/message.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
-
-import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
-import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
+import MessageIcon from '@assets/userDetail/message.svg';
+import Background from '@assets/userDetail/background.svg';
 import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
 import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
-import { useRecoilValue } from 'recoil';
-import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
-import { useGetUserDetailData } from '@hooks/api/member-stat';
-import { getProfileImage } from '@utils/profileImage';
+import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
+import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 
 const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -51,12 +52,12 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-[#CADFFF]">
+      <SafeAreaView className="flex-1 bg-sub1">
         <Background style={{ position: 'absolute' }} />
         <View className="flex-1">
-          <View className="flex flex-col flex-1">
+          <View className="flex flex-1 flex-col">
             {/* 상단 헤더 */}
-            <View className="flex flex-row justify-between px-5 mt-2 mb-[15px]">
+            <View className="mb-[15px] mt-2 flex flex-row justify-between px-5">
               <Pressable onPress={toBack}>
                 <BackButton />
               </Pressable>
@@ -70,9 +71,9 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
               </View>
             </View>
 
-            <View className="flex flex-row items-center mb-[22px] px-[25px]">
+            <View className="mb-[22px] flex flex-row items-center px-[25px]">
               {getProfileImage(otherUserBasicData.memberPersona, 40, 40)}
-              <View className="flex flex-col ml-2">
+              <View className="ml-2 flex flex-col">
                 <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
                   {otherUserBasicData.memberNickName}
                 </Text>
@@ -82,7 +83,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
               </View>
             </View>
 
-            <View className="flex-1 bg-white pt-1 rounded-t-[20px]">
+            <View className="flex-1 rounded-t-[20px] bg-white pt-1">
               <View className="flex flex-row items-center justify-center">
                 {/* 리스트로 보기 */}
                 <Pressable
@@ -93,15 +94,15 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
                     {type === 'list' ? <SelectedListIcon /> : <NotSelectedListIcon />}
                   </View>
                   <Text
-                    className={`text-sm ml-1.5 ${
-                      type === 'list' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                    className={`ml-1.5 text-sm ${
+                      type === 'list' ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
                     }`}
                   >
                     리스트로 보기
                   </Text>
                 </Pressable>
 
-                <View className="bg-disabled w-[1px] h-6 mx-[18px]" />
+                <View className="mx-[18px] h-6 w-px bg-disabled" />
 
                 {/* 표로 보기 */}
                 <Pressable
@@ -112,10 +113,10 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
                     {type === 'table' ? <SelectedTableIcon /> : <NotSelectedTableIcon />}
                   </View>
                   <Text
-                    className={`text-sm ml-1.5 ${
+                    className={`ml-1.5 text-sm ${
                       type === 'table'
-                        ? 'text-main1 font-semibold'
-                        : 'text-disabledFont font-medium'
+                        ? 'font-semibold text-main1'
+                        : 'font-medium text-disabledFont'
                     }`}
                   >
                     표로 보기
@@ -134,8 +135,8 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
             </View>
           </View>
 
-          <Pressable className="absolute bottom-0 w-full px-5 bg-white">
-            <View className="items-center py-4 rounded-xl bg-main1">
+          <Pressable className="absolute bottom-0 w-full bg-white px-5">
+            <View className="items-center rounded-xl bg-main1 py-4">
               <Text className="text-white">코지메이트 요청</Text>
             </View>
           </Pressable>

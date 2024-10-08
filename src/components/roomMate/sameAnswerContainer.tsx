@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+
 import { getProfileImage } from '@utils/profileImage';
 
 interface SameAnswerContainerProps {
@@ -22,16 +23,16 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ index, user, 
   return (
     <Pressable onPress={() => toUserDetail(user)} className="w-full">
       <View
-        className={`flex flex-row px-3 py-[30px] border-b-[1px] border-b-[#F6F6F6] ${
+        className={`flex flex-row border-b border-b-[#F6F6F6] px-3 py-[30px] ${
           index === 0 && 'pt-[18px]'
         }  ${index === 4 && 'border-b-0 pb-[18px]'}`}
       >
-        <View className="flex flex-row items-center justify-between w-full">
+        <View className="flex w-full flex-row items-center justify-between">
           <View className="flex flex-row items-center">
             {getProfileImage(user.memberPersona, 46, 46)}
-            <View className="flex-col ml-2">
-              <View className="flex-row mb-1.5">
-                <View className="rounded-[4px] bg-colorBox mr-1.5">
+            <View className="ml-2 flex-col">
+              <View className="mb-1.5 flex-row">
+                <View className="mr-1.5 rounded-[4px] bg-colorBox">
                   <Text className="px-2 py-[2px] text-xs font-medium text-colorFont">
                     {user.memberAge}살
                   </Text>

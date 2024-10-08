@@ -1,6 +1,7 @@
 import { GetAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+
 import { SendChatRequest } from '@server/requestTypes/chat';
-import { GetChatDetailDataResponse, SendChatResponse } from '@server/responseTypes/chat';
+import { SendChatResponse, GetChatDetailDataResponse } from '@server/responseTypes/chat';
 
 // 쪽지방의 쪽지 상세 내역 조회
 export const getChatDetailData = async (chatRoomId: number): Promise<GetChatDetailDataResponse> => {

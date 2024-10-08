@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import {
   Animated,
   Keyboard,
-  SafeAreaView,
   ScrollView,
+  SafeAreaView,
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { BasicLifeStyleScreenProps } from '@type/param/stack';
-
-import { useRecoilState } from 'recoil';
-
-import { lifeStyleState } from '@recoil/recoil';
-import { LifeStyle } from '@recoil/type';
-
 import BackHeader from 'src/layout/backHeader';
 
-import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomTextInputBox from '@components/common/customTextInputBox';
+import CustomRadioInputBox from '@components/common/customRadioInputBox';
+
+import { LifeStyle } from '@recoil/type';
+import { lifeStyleState } from '@recoil/recoil';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
+
+import { BasicLifeStyleScreenProps } from '@type/param/stack';
 
 type Item = {
   index: number;
@@ -90,7 +89,7 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex flex-col flex-1 bg-white">
+      <SafeAreaView className="flex flex-1 flex-col bg-white">
         <BackHeader
           title="기본정보"
           buttonString="다음"

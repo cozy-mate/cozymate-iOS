@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { Image, Pressable, SafeAreaView, Text, View } from 'react-native';
 import Config from 'react-native-config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { getMyProfile, signUp } from '@server/api/member';
-
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { hasRoomState, loggedInState, profileState, signUpState } from '@recoil/recoil';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Text, View, Image, Pressable, SafeAreaView } from 'react-native';
+
+import { signUpState, hasRoomState, profileState, loggedInState } from '@recoil/recoil';
+
+import { signUp, getMyProfile } from '@server/api/member';
+
 import { getProfileImage } from '@utils/profileImage';
 
 const CompleteScreen = () => {
@@ -44,9 +45,9 @@ const CompleteScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-col justify-between flex-1 px-5">
+      <View className="flex flex-1 flex-col justify-between px-5">
         {/* 상단 View */}
-        <View className="flex mt-[56px]">
+        <View className="mt-[56px] flex">
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-xl font-semibold leading-5 tracking-tight text-emphasizedFont">
@@ -64,8 +65,8 @@ const CompleteScreen = () => {
         {/* 하단 View */}
         <View className="flex">
           <Pressable onPress={doSignUp}>
-            <View className="p-4 rounded-xl bg-main1">
-              <Text className="text-base font-semibold text-center text-white">
+            <View className="rounded-xl bg-main1 p-4">
+              <Text className="text-center text-base font-semibold text-white">
                 cozymate 바로가기
               </Text>
             </View>

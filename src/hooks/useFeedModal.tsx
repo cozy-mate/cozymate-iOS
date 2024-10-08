@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { View, Dimensions } from 'react-native';
 export const useFeedModal = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
 import Config from 'react-native-config';
+import { Text, View, Image } from 'react-native';
+
+import { getProfileImage } from '@utils/profileImage';
 
 import EmptyCharacter from '@assets/waitingRoom/emptyCharacter.svg';
-import { getProfileImage } from '@utils/profileImage';
 
 interface RoomMateBoxProps {
   name: string;
@@ -17,14 +18,14 @@ const RoomMateBox: React.FC<RoomMateBoxProps> = ({ name, profileImage, state, is
     <View
       className={`${
         state === '도착완료' ? 'bg-[#e4efff]' : 'bg-box'
-      } flex flex-col items-center p-5 pt-4 rounded-xl mb-9 min-w-[159px]`}
+      } mb-9 flex min-w-[159px] flex-col items-center rounded-xl p-5 pt-4`}
     >
       {profileImage == 0 ? <EmptyCharacter /> : <>{getProfileImage(profileImage, 100, 100)}</>}
 
       <Text
         className={`${
           name != '???' ? 'text-main1' : 'text-disabledFont'
-        } mt-3 mb-[2px] text-sm font-semibold  `}
+        } mb-[2px] mt-3 text-sm font-semibold  `}
       >
         {name}
         {isAdmin ? '(방장)' : ''}

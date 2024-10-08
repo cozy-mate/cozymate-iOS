@@ -1,5 +1,5 @@
-import Clipboard from '@react-native-clipboard/clipboard';
 import { Alert } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export const onCopyAddress = (text: string) => {
   try {

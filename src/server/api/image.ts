@@ -1,6 +1,8 @@
-import { PostAxiosInstance } from '@axios/axios.method';
-import { UploadImageToS3Response } from '@server/responseTypes/image';
 import { Asset } from 'react-native-image-picker';
+
+import { PostAxiosInstance } from '@axios/axios.method';
+
+import { UploadImageToS3Response } from '@server/responseTypes/image';
 
 // Asset 객체에 대해서만 사용 가능합니다
 export const uploadAssetImageToS3 = async (files: Asset[]) => {

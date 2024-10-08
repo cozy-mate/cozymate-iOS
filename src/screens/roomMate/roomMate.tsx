@@ -1,24 +1,28 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { Pressable, Text, View, ScrollView, SafeAreaView } from 'react-native';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useState, ReactNode, useEffect } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
+
+import { dummyData } from './dummyData';
+
+import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
+import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
+import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
+
+import {
+  profileState,
+  OtherBasicData,
+  MyLifeStyleState,
+  OtherLifeStyleState,
+} from '@recoil/recoil';
+
+import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
+
+import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 
 import { RoomMateScreenProps } from '@type/param/stack';
-import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
 import BackButton from '@assets/backButton.svg';
-
-import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
-import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  MyLifeStyleState,
-  OtherBasicData,
-  OtherLifeStyleState,
-  profileState,
-} from '@recoil/recoil';
-import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { dummyData } from './dummyData';
-import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
 type UserItem = {
   memberId: number;
@@ -144,12 +148,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
         {/* 상단 이전 버튼 */}
-        <View className="flex flex-row items-center pl-2 mb-6">
+        <View className="mb-6 flex flex-row items-center pl-2">
           <Pressable>
             <BackButton />
           </Pressable>
         </View>
-        <Text className="px-5 mb-4 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
+        <Text className="mb-4 px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
           원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
         </Text>
         <CheckBoxContainer
@@ -161,7 +165,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
         {/* 사용자 목록 */}
         <View
-          className="flex flex-col items-center px-5 mb-9"
+          className="mb-9 flex flex-col items-center px-5"
           style={{ paddingBottom: bottom + 20 }}
         >
           {hasData ? (

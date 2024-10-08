@@ -1,7 +1,8 @@
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+
 import { addRole, getRoleData } from '@server/api/role';
 import { AddRoleRequest } from '@server/requestTypes/role';
 import { AddRoleResponse, GetRoleDataResponse } from '@server/responseTypes/role';
-import { useMutation, UseMutationResult, useSuspenseQuery } from '@tanstack/react-query';
 
 // Role 생성
 export const useAddRole = (

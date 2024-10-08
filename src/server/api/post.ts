@@ -1,16 +1,17 @@
+import {
+  PutAxiosInstance,
+  GetAxiosInstance,
+  PostAxiosInstance,
+  DeleteAxiosInstance,
+} from '../../axios/axios.method';
+
 import { CreatePostRequest, UpdatePostRequest } from '@server/requestTypes/post';
 import {
-  PostAxiosInstance,
-  PutAxiosInstance,
-  DeleteAxiosInstance,
-  GetAxiosInstance,
-} from '../../axios/axios.method';
-import {
-  GetPostDetailResponse,
   CreatePostResponse,
   UpdatePostResponse,
-  GetPostListResponse,
   DeletePostResponse,
+  GetPostListResponse,
+  GetPostDetailResponse,
 } from '@server/responseTypes/post';
 
 // 게시글 조회

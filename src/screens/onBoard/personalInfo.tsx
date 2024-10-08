@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Keyboard, Pressable, SafeAreaView, Text, View } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { signUpState } from '@recoil/recoil';
-import { SignUp } from '@recoil/type';
+import React, { useState, useEffect } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, Pressable, SafeAreaView } from 'react-native';
 
-import BorderTextInputBox from '@components/common/borderTextInputBox';
 import RadioBoxComponent from '@components/basicRadioBox';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
+import BorderTextInputBox from '@components/common/borderTextInputBox';
+
+import { SignUp } from '@recoil/type';
+import { signUpState } from '@recoil/recoil';
+
+import { checkNickname } from '@server/api/member';
 
 import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
-import { checkNickname } from '@server/api/member';
-import { TouchableWithoutFeedback } from 'react-native';
 
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
   const [signUp, setSignUp] = useRecoilState(signUpState);
@@ -92,12 +94,12 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex flex-col justify-between flex-1 px-5">
+        <View className="flex flex-1 flex-col justify-between px-5">
           {/* 상단 View */}
-          <View className="flex mt-14">
+          <View className="mt-14 flex">
             {/* 설명 Text */}
-            <View className="px-2 mb-6">
-              <Text className="text-lg font-semibold text-emphasizedFont leading-[21px] tracking-tight">
+            <View className="mb-6 px-2">
+              <Text className="text-lg font-semibold leading-[21px] tracking-tight text-emphasizedFont">
                 원활한 서비스 이용을 위해{'\n'}개인정보를 입력해주세요!
               </Text>
             </View>
@@ -128,7 +130,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             />
 
             {!checkDuplicate && nickname.trim() !== '' && (
-              <Text className="text-warning text-xs font-medium mt-[-8px] px-2 mb-4">
+              <Text className="mb-4 mt-[-8px] px-2 text-xs font-medium text-warning">
                 다른 사람이 사용중인 닉네임이에요!
               </Text>
             )}
@@ -158,8 +160,8 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
           {/* 하단 View */}
           <View className="flex">
             <Pressable onPress={toNext}>
-              <View className={`p-4 rounded-xl ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
-                <Text className="text-base font-semibold text-center text-white">다음</Text>
+              <View className={`rounded-xl p-4 ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
+                <Text className="text-center text-base font-semibold text-white">다음</Text>
               </View>
             </Pressable>
           </View>

@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, SafeAreaView, Text, Pressable, ScrollView, TouchableHighlight } from 'react-native';
+import { View, Text, Pressable, ScrollView, SafeAreaView, TouchableHighlight } from 'react-native';
 
 import { useGetNotificationList } from '@hooks/api/notification';
 
-import BackButton from '@assets/backButton.svg';
-
 import { NotificationScreenProps } from '@type/param/stack';
+
+import BackButton from '@assets/backButton.svg';
 
 const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
   const { data: notificationlist, refetch: refetchNotification } = useGetNotificationList();
@@ -25,7 +25,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1">
-        <View className="flex flex-row justify-start px-2 mt-2 mb-7">
+        <View className="mb-7 mt-2 flex flex-row justify-start px-2">
           <Pressable onPress={toBack}>
             <BackButton />
           </Pressable>
@@ -43,7 +43,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                   <View
                     className={`p-5 ${
                       index !== notificationlist.result.length - 1
-                        ? 'border-b-disabled border-b-[1px]'
+                        ? 'border-b border-b-disabled'
                         : 'border-b-0'
                     } `}
                   >
@@ -53,14 +53,14 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                           <Text
                             key={i}
                             className={`text-sm font-medium ${
-                              i % 2 === 1 ? 'text-main1 font-semibold' : 'text-basicFont'
+                              i % 2 === 1 ? 'font-semibold text-main1' : 'text-basicFont'
                             }`}
                           >
                             {part}
                           </Text>
                         ))}
                       </Text>
-                      <Text className="text-xs font-medium text-disabledFont mt-[2px]">
+                      <Text className="mt-[2px] text-xs font-medium text-disabledFont">
                         {noti.createdAt}
                       </Text>
                     </View>
@@ -68,7 +68,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                 </TouchableHighlight>
               ))
             ) : (
-              <View className="flex flex-col items-center justify-center h-full">
+              <View className="flex h-full flex-col items-center justify-center">
                 <Text className="text-sm font-medium text-disabledFont">
                   받은 알림이 존재하지 않아요!
                 </Text>

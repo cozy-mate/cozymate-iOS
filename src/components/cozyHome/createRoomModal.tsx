@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Pressable, Text, View } from 'react-native';
+import { Text, View, Modal, Pressable } from 'react-native';
 
-import GrayXButton from '@assets/createRoom/grayXButton.svg';
 import PublickRoom from '@assets/createRoom/publicRoom.svg';
+import GrayXButton from '@assets/createRoom/grayXButton.svg';
 import PrivateRoom from '@assets/createRoom/privateRoom.svg';
 
 interface CreateRoomModalProps {
@@ -18,13 +18,13 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
 }) => {
   return (
     <Modal>
-      <View className="absolute top-0 left-0 flex flex-col items-center justify-center w-screen h-screen px-5 space-y-6 bg-blackBack">
-        <Pressable onPress={close} className="absolute top-12 right-5">
+      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-blackBack px-5">
+        <Pressable onPress={close} className="absolute right-5 top-12">
           <GrayXButton />
         </Pressable>
 
         <Pressable
-          className="flex flex-row items-center w-full p-4 space-x-5 bg-white rounded-xl"
+          className="flex w-full flex-row items-center space-x-5 rounded-xl bg-white p-4"
           onPress={createPublic}
         >
           <PublickRoom />
@@ -39,7 +39,7 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
         </Pressable>
 
         <Pressable
-          className="flex flex-row items-center w-full p-4 space-x-5 bg-white rounded-xl"
+          className="flex w-full flex-row items-center space-x-5 rounded-xl bg-white p-4"
           onPress={createPrivate}
         >
           <PrivateRoom />

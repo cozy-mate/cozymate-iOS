@@ -8,7 +8,7 @@ export const useImageCarousel = (data: any) => {
 
   const handlePostImageLoadStart = (index: number) => {
     setLoadingImages((prev) => {
-      let updated = [...prev];
+      const updated = [...prev];
       updated[index] = true;
       return updated;
     });
@@ -16,7 +16,7 @@ export const useImageCarousel = (data: any) => {
 
   const handlePostImageLoadEnd = (index: number) => {
     setLoadingImages((prev) => {
-      let updated = [...prev];
+      const updated = [...prev];
       updated[index] = false;
       return updated;
     });

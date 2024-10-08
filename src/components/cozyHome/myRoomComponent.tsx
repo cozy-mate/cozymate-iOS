@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 interface MyRoomComponentProps {
@@ -15,16 +15,16 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ roomData }) => {
   const [hasTagLen, setHashTagLen] = useState<number>(0);
 
   return (
-    <Pressable className="rounded-xl border-[1px] border-main1">
+    <Pressable className="rounded-xl border border-main1">
       <LinearGradient
         colors={['rgba(249, 251, 255, 0.8)', 'rgba(223, 236, 255, 0.8)']}
         start={{ x: 0.008, y: 0 }}
         end={{ x: 1.044, y: 1 }}
-        className="p-4 rounded-xl"
+        className="rounded-xl p-4"
       >
         <View className="flex flex-row">
           {roomData.hashTag.map((hash, index) => (
-            <View key={index} className="rounded bg-white px-2 py-[2px] mr-1.5">
+            <View key={index} className="mr-1.5 rounded bg-white px-2 py-[2px]">
               <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
             </View>
           ))}

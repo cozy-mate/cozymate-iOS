@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Text, View, Pressable, TextInput } from 'react-native';
 
 import PlusCircle from '@assets/lifeStyle/plus.svg';
 
@@ -17,13 +17,13 @@ const AddButton: React.FC<AddButtonProps> = ({ title, inputs, onInputChange, onA
       {inputs.map((input, index) => (
         <TextInput
           key={index}
-          className="p-4 mb-2 rounded-xl bg-colorBox text-basicFont"
+          className="mb-2 rounded-xl bg-colorBox p-4 text-basicFont"
           value={input}
           onChangeText={(text) => onInputChange(text, index)}
         />
       ))}
       <Pressable onPress={onAddInput}>
-        <View className="flex flex-row items-center p-4 bg-colorBox rounded-xl">
+        <View className="flex flex-row items-center rounded-xl bg-colorBox p-4">
           <PlusCircle />
           <Text className="ml-1.5 text-sm font-medium text-disabledFont">내용 추가하기</Text>
         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable, Dimensions } from 'react-native';
 
 import BackButton from '@assets/backHeader/backButton.svg';
 
@@ -26,27 +26,27 @@ const BackHeader: React.FC<BackHeaderProps> = ({
 
   return (
     <View className="mb-10">
-      <View className="flex flex-row items-center justify-between px-5 mt-2 mb-4">
-        <Pressable onPress={leftPressFunc} className="p-2 mr-8">
+      <View className="mb-4 mt-2 flex flex-row items-center justify-between px-5">
+        <Pressable onPress={leftPressFunc} className="mr-8 p-2">
           <BackButton />
         </Pressable>
         <Text className="text-base font-semibold text-basicFont">{title}</Text>
         {canNext ? (
           <Pressable onPress={rightPressFunc}>
-            <View className="px-5 py-[10px] bg-sub1 rounded-md">
+            <View className="rounded-md bg-sub1 px-5 py-[10px]">
               <Text className="text-xs font-semibold text-main1">{buttonString}</Text>
             </View>
           </Pressable>
         ) : (
-          <View className="px-5 py-[10px] bg-white rounded-md">
+          <View className="rounded-md bg-white px-5 py-[10px]">
             <Text className="text-xs font-semibold text-white">{buttonString}</Text>
           </View>
         )}
       </View>
-      <View className="relative w-full h-2 bg-box">
+      <View className="relative h-2 w-full bg-box">
         <View
           style={{ width: progressWidth }}
-          className={`absolute top-0 z-10 h-2 bg-main1 rounded-r-xl ${
+          className={`absolute top-0 z-10 h-2 rounded-r-xl bg-main1 ${
             progressWidth === screenWidth && 'rounded-none'
           }`}
         />

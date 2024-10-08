@@ -1,32 +1,32 @@
+import moment from 'moment';
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import {
+  Text,
+  View,
   Keyboard,
   Pressable,
   SafeAreaView,
-  Text,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
-import moment from 'moment';
-
-import { useRecoilValue } from 'recoil';
-import { roomInfoState } from '@recoil/recoil';
-
-import CustomCheckInputBox from '@components/common/customCheckInputBox';
-import CustomTextarea from '@components/common/customTextarea';
-import CustomTextInputBox from '@components/common/customTextInputBox';
-import CustomCalendar from '@components/todoList/customCalendar';
-import DaySelect from '@components/todoList/daySelect';
-import SubmitButton from '@components/todoList/submitButton';
-
-import LoadingComponent from '@components/loading/loading';
 
 import BackNav from 'src/layout/backNav';
 
-import { CreateTodoScreenProps } from '@type/param/stack';
-import { useAddMyTodo, useGetTodoData } from '@hooks/api/todo';
+import DaySelect from '@components/todoList/daySelect';
+import LoadingComponent from '@components/loading/loading';
+import SubmitButton from '@components/todoList/submitButton';
+import CustomTextarea from '@components/common/customTextarea';
+import CustomCalendar from '@components/todoList/customCalendar';
+import CustomTextInputBox from '@components/common/customTextInputBox';
+import CustomCheckInputBox from '@components/common/customCheckInputBox';
+
+import { roomInfoState } from '@recoil/recoil';
+
 import { useAddRule, useGetRuleData } from '@hooks/api/rule';
 import { useAddRole, useGetRoleData } from '@hooks/api/role';
+import { useAddMyTodo, useGetTodoData } from '@hooks/api/todo';
+
+import { CreateTodoScreenProps } from '@type/param/stack';
 
 const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const roomInfo = useRecoilValue(roomInfoState);
@@ -156,11 +156,11 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
       {addRulePending && <LoadingComponent />}
       {addRolePending && <LoadingComponent />}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView className="flex flex-col justify-between flex-1 px-5 bg-white">
+        <SafeAreaView className="flex flex-1 flex-col justify-between bg-white px-5">
           <View className="flex">
             <BackNav leftPressFunc={toTodo} />
             <View className="px-5">
-              <View className="flex flex-row mb-6 gap-x-3">
+              <View className="mb-6 flex flex-row gap-x-3">
                 {navBarItems.map((nav) => (
                   <Pressable
                     onPress={() => handleNavBarItemPress(nav.value)}
@@ -177,7 +177,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
                     <View
                       className={`${
                         nav.value == type ? 'bg-main1' : 'bg-white'
-                      } h-1 w-[66px] rounded-full mt-2`}
+                      } mt-2 h-1 w-[66px] rounded-full`}
                     />
                   </Pressable>
                 ))}

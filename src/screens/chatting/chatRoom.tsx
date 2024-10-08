@@ -1,13 +1,13 @@
 import React from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
-
-import { useGetChatDetailData } from '@hooks/api/chat';
-import { ChatRoomScreenProps } from '@type/param/stack';
-
-import SettingIcon from '@assets/todoList/settingIcon.svg';
-import BackButton from '@assets/backButton.svg';
+import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import { useFeedModal } from '@hooks/useFeedModal';
+import { useGetChatDetailData } from '@hooks/api/chat';
+
+import { ChatRoomScreenProps } from '@type/param/stack';
+
+import BackButton from '@assets/backButton.svg';
+import SettingIcon from '@assets/todoList/settingIcon.svg';
 
 const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
   const { data: chatlist, refetch: fetchChat } = useGetChatDetailData(route.params.chatRoomId);
@@ -28,9 +28,9 @@ const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-col flex-1">
+      <View className="flex flex-1 flex-col">
         {/* 상단 헤더 */}
-        <View className="flex flex-row justify-between px-2 mt-2 mb-7">
+        <View className="mb-7 mt-2 flex flex-row justify-between px-2">
           <Pressable onPress={toBack}>
             <BackButton />
           </Pressable>
@@ -44,14 +44,14 @@ const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
           {chatlist.result.chatContents.map((chat, index) => (
             <View
               key={index}
-              className={`py-[18px] border-b-[1px] border-b-[#F1F2F4] ${index === 0 && 'pt-0'} ${
-                index === chatlist.result.chatContents.length - 1 && 'pb-0 border-b-0'
+              className={`border-b border-b-[#F1F2F4] py-[18px] ${index === 0 && 'pt-0'} ${
+                index === chatlist.result.chatContents.length - 1 && 'border-b-0 pb-0'
               }`}
             >
               <Text
                 className={`${
                   chat.nickname.includes('(나)') ? 'text-main1' : 'text-colorFont'
-                } text-base font-semibold mb-1.5`}
+                } mb-1.5 text-base font-semibold`}
               >
                 {chat.nickname}
               </Text>
@@ -65,7 +65,7 @@ const ChatRoomScreen = ({ route, navigation }: ChatRoomScreenProps) => {
           onPress={() => toSend(route.params.chatRoomId)}
           className="flex items-center justify-center"
         >
-          <View className="px-[60px] py-[14px] rounded-[39px] bg-main1">
+          <View className="rounded-[39px] bg-main1 px-[60px] py-[14px]">
             <Text className="text-sm font-semibold text-white">쪽지쓰기</Text>
           </View>
         </Pressable>

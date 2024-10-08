@@ -1,11 +1,16 @@
-import AddButton from '@components/lifeStyle/addButton';
-import { lifeStyleState, MyLifeStyleState } from '@recoil/recoil';
-import { registerUserData } from '@server/api/member-stat';
-import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
+import { ScrollView, SafeAreaView } from 'react-native';
+
 import BackHeader from 'src/layout/backHeader';
+
+import AddButton from '@components/lifeStyle/addButton';
+
+import { lifeStyleState, MyLifeStyleState } from '@recoil/recoil';
+
+import { registerUserData } from '@server/api/member-stat';
+
+import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 
 const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScreenProps) => {
   const [lifeStyle, setLifeStyle] = useRecoilState(lifeStyleState);
@@ -94,7 +99,7 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
   };
 
   return (
-    <SafeAreaView className="flex flex-col flex-1 bg-white">
+    <SafeAreaView className="flex flex-1 flex-col bg-white">
       <BackHeader
         title="선택정보"
         buttonString="완료"

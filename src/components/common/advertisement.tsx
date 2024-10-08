@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
+import React, { useState, ReactNode, useEffect } from 'react';
 
 import Advertisement1 from '@assets/roomMate/ad1.svg';
 import Advertisement2 from '@assets/roomMate/ad2.svg';
@@ -29,7 +29,7 @@ const Advertisement: React.FC = () => {
   return (
     <View className="relative">
       {adArray[currentAdIndex].element}
-      <Text className="absolute text-xs font-medium bottom-2 right-4 text-[#A2A2A2]">
+      <Text className="absolute bottom-2 right-4 text-xs font-medium text-[#A2A2A2]">
         <Text className="text-white">{currentAdIndex + 1}</Text> / {adArray.length}
       </Text>
     </View>
