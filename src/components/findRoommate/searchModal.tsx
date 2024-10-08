@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Text, View, FlatList, Pressable, TextInput, SafeAreaView } from 'react-native';
 
 import XButton from '@assets/findRoommate/XButton.svg';
 
@@ -41,14 +41,14 @@ const SearchModal: React.FC<SearchModalProps> = ({ value, setValue, handleOpen }
   };
 
   return (
-    <SafeAreaView className="absolute w-screen h-screen top-[63px] bg-white">
-      <View className="flex flex-row items-center justify-between w-full px-5">
+    <SafeAreaView className="absolute top-[63px] h-screen w-screen bg-white">
+      <View className="flex w-full flex-row items-center justify-between px-5">
         <View className="relative flex-1">
           <TextInput
             placeholder="학교를 입력해주세요"
             value={keyword}
             onChangeText={setKeyword}
-            className="w-full p-4 pr-8 bg-colorBox text-basicFont rounded-xl"
+            className="w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
           />
           {keyword.length > 0 && (
             <Pressable
@@ -64,7 +64,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ value, setValue, handleOpen }
         </View>
 
         <Pressable onPress={handleOpen}>
-          <Text className="p-2 ml-2 text-emphasizedFont">취소</Text>
+          <Text className="ml-2 p-2 text-emphasizedFont">취소</Text>
         </Pressable>
       </View>
 
@@ -75,13 +75,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ value, setValue, handleOpen }
           <Pressable
             onPress={() => handleSelectSchool(item)}
             className={`p-4 ${
-              index !== filteredSchools.length - 1 ? 'border-b-[1px] border-b-colorBox' : ''
+              index !== filteredSchools.length - 1 ? 'border-b border-b-colorBox' : ''
             }`}
           >
             {highlightMatch(item, keyword)}
           </Pressable>
         )}
-        className="px-4 mt-4"
+        className="mt-4 px-4"
       />
     </SafeAreaView>
   );

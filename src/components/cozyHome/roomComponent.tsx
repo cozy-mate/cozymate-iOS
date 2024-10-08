@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable, Dimensions } from 'react-native';
 
 interface RoomComponentProps {
   index: number;
@@ -20,11 +20,11 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ index, roomData }) => {
   return (
     <Pressable
       style={{ width: containerWidth }}
-      className="p-4 border-[1px] border-disabled rounded-xl mr-5"
+      className="mr-5 rounded-xl border border-disabled p-4"
     >
       <View className="flex flex-row">
         {roomData.hashTag.map((hash, index) => (
-          <View key={index} className="rounded bg-colorBox px-2 py-[2px] mr-1.5">
+          <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
             <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
           </View>
         ))}

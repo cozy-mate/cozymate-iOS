@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import Config from 'react-native-config';
+import { useState, useEffect } from 'react';
 
 export const usePersonaImage = (personaId: number) => {
   const PERSONA_IMAGE_URL = `${Config.S3_IMAGE_URL}/persona/png/${personaId}.png`;

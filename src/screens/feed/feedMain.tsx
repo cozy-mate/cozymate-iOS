@@ -1,20 +1,23 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
+import { useRecoilState } from 'recoil';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useRef, useState, Fragment, useEffect } from 'react';
+import { Text, View, FlatList, Pressable, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pressable, Text, View, RefreshControl, FlatList } from 'react-native';
 
-import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg';
-import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg';
+import PostCard from '@components/feedMain/postCard';
+
+import { hasRoomState, feedRefreshState } from '@recoil/recoil';
+
+import { getFeedData } from '@server/api/feed';
+import { getPostList } from '@server/api/post';
+
+import { FeedType, PostCardType } from '@type/feed';
+import { FeedMainScreenProps } from '@type/param/stack';
+
 import FeedEdit from '@assets/feedMain/feedEdit.svg';
 import PostEdit from '@assets/feedMain/postEdit.svg';
-
-import { FeedMainScreenProps } from '@type/param/stack';
-import { FeedType, PostCardType } from '@type/feed';
-import { useRecoilState } from 'recoil';
-import { feedRefreshState, hasRoomState } from '@recoil/recoil';
-import { getFeedData } from '@server/api/feed';
-import PostCard from '@components/feedMain/postCard';
-import { getPostList } from '@server/api/post';
-import { useFocusEffect } from '@react-navigation/native';
+import FeedLampEnabled from '@assets/feedMain/feedLampEnabled.svg';
+import FeedLampDisabled from '@assets/feedMain/feedLampDisabled.svg';
 
 const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -163,7 +166,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   };
 
   const renderHeader = () => (
-    <View className="flex-col justify-start w-screen px-5 mb-5">
+    <View className="mb-5 w-screen flex-col justify-start px-5">
       {feedInfo.isEnabled ? (
         <FeedLampEnabled className="mb-2" />
       ) : (
@@ -199,11 +202,11 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={
           postStates.loading ? (
-            <View className="items-center justify-center flex-1 mt-10">
+            <View className="mt-10 flex-1 items-center justify-center">
               <Text className="text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text>
             </View>
           ) : postStates.page === 0 ? (
-            <View className="items-center justify-center flex-1">
+            <View className="flex-1 items-center justify-center">
               <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             </View>
           ) : (
@@ -227,7 +230,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
 
       <Pressable
         onPress={toFeedCreate}
-        className="fixed z-20 flex items-end w-fit bottom-28 right-5"
+        className="fixed bottom-28 right-5 z-20 flex w-fit items-end"
       >
         <PostEdit />
       </Pressable>

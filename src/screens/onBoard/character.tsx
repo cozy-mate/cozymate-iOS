@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
-
-import { CharacterInputScreenProps } from '@type/param/rootStack';
-
 import { useRecoilState } from 'recoil';
-import { SignUp } from '@recoil/type';
-import { signUpState } from '@recoil/recoil';
+import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
+import { SignUp } from '@recoil/type';
+import { signUpState } from '@recoil/recoil';
+
+import { CharacterInputScreenProps } from '@type/param/rootStack';
+
 import first from '@assets/characterItem/1.svg';
-import second from '@assets/characterItem/2.svg';
 import third from '@assets/characterItem/3.svg';
-import fourth from '@assets/characterItem/4.svg';
 import fifth from '@assets/characterItem/5.svg';
 import sixth from '@assets/characterItem/6.svg';
-import seventh from '@assets/characterItem/7.svg';
-import eighth from '@assets/characterItem/8.svg';
 import ninth from '@assets/characterItem/9.svg';
+import second from '@assets/characterItem/2.svg';
+import fourth from '@assets/characterItem/4.svg';
+import eighth from '@assets/characterItem/8.svg';
 import tenth from '@assets/characterItem/10.svg';
-import eleventh from '@assets/characterItem/11.svg';
+import seventh from '@assets/characterItem/7.svg';
 import twelfth from '@assets/characterItem/12.svg';
-import thirteenth from '@assets/characterItem/13.svg';
-import fourteenth from '@assets/characterItem/14.svg';
+import eleventh from '@assets/characterItem/11.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
+import thirteenth from '@assets/characterItem/13.svg';
+import fourteenth from '@assets/characterItem/14.svg';
 
 type IconProps = {
   width: number;
@@ -158,12 +158,12 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-col justify-between flex-1 px-5">
+      <View className="flex flex-1 flex-col justify-between px-5">
         {/* 상단 View */}
-        <View className="flex mt-14">
+        <View className="mt-14 flex">
           {/* 설명 Text */}
           <View className="mb-6 leading-loose">
-            <Text className="text-lg font-semibold text-[#46464B] tracking-tight">
+            <Text className="text-lg font-semibold tracking-tight text-[#46464B]">
               cozymate와 함께할{'\n'}캐릭터를 선택해주세요!
             </Text>
           </View>
@@ -180,8 +180,8 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
         {/* 하단 View */}
         <View className="flex">
           <Pressable onPress={toNext}>
-            <View className={`p-4 rounded-xl ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
-              <Text className="text-base font-semibold text-center text-white">다음</Text>
+            <View className={`rounded-xl p-4 ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
+              <Text className="text-center text-base font-semibold text-white">다음</Text>
             </View>
           </Pressable>
         </View>

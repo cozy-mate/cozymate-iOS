@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Keyboard,
-  NativeSyntheticEvent,
-  Pressable,
   Text,
-  TextInput,
-  TextInputSubmitEditingEventData,
   View,
+  Keyboard,
+  Pressable,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
 } from 'react-native';
 
 interface CustomTextInputBoxProps {
@@ -62,7 +62,7 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
       <Text
         className={`${
           isFocused ? 'text-main1' : 'text-emphasizedFont'
-        } text-lg font-semibold px-1 mb-2`}
+        } mb-2 px-1 text-lg font-semibold`}
       >
         {title}
       </Text>
@@ -78,10 +78,8 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
           editable={isDisable}
           blurOnSubmit={false}
           className={`${
-            isFocused
-              ? 'bg-sub2 border-main1 border-[1px]'
-              : 'bg-colorBox border-colorBox border-[1px]'
-          } p-4 text-basicFont rounded-xl`}
+            isFocused ? 'border border-main1 bg-sub2' : 'border border-colorBox bg-colorBox'
+          } rounded-xl p-4 text-basicFont`}
         />
       </Pressable>
     </View>

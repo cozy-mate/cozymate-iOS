@@ -1,16 +1,19 @@
 import React, { Fragment } from 'react';
+import { useRecoilState } from 'recoil';
 import { View, Text, Image, FlatList } from 'react-native';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+
+import { profileState } from '@recoil/recoil';
+
+import { usePersonaImage } from '@hooks/usePersonaImage';
+import { useImageCarousel } from '@hooks/useImageCarousel';
+
+import { postTimeUtil } from '@utils/time/timeUtil';
 
 import { PostCardType } from '@type/feed/postType';
-import { postTimeUtil } from '@utils/time/timeUtil';
-import ChatIcon from '@assets/feedMain/chatIcon.svg';
 
-import { useImageCarousel } from '@hooks/useImageCarousel';
-import { usePersonaImage } from '@hooks/usePersonaImage';
-import { useRecoilState } from 'recoil';
-import { profileState } from '@recoil/recoil';
+import ChatIcon from '@assets/feedMain/chatIcon.svg';
 
 type PostCardProps = {
   post: PostCardType;
@@ -30,9 +33,7 @@ const PostCard = (props: PostCardProps) => {
     onLayout,
   } = useImageCarousel(post.imageList);
 
-  const {
-    PERSONA_IMAGE_URL,
-  } = usePersonaImage(post.writer.persona);
+  const { PERSONA_IMAGE_URL } = usePersonaImage(post.writer.persona);
 
   const [profile, setProfile] = useRecoilState(profileState);
   return (
@@ -40,16 +41,13 @@ const PostCard = (props: PostCardProps) => {
       <TouchableOpacity onPress={() => toFeedView(post.id)}>
         <View
           key={post.id}
-          className="z-10 flex flex-col w-full p-4 mb-4 bg-white shadow-sm rounded-xl"
+          className="z-10 mb-4 flex w-full flex-col rounded-xl bg-white p-4 shadow-sm"
         >
-          <View className="flex flex-row items-center justify-between w-full">
+          <View className="flex w-full flex-row items-center justify-between">
             <View className="flex flex-row items-center justify-start space-x-2">
-              <Image
-                className="w-8 h-8 rounded-full"
-                source={{ uri: PERSONA_IMAGE_URL }}
-              />
+              <Image className="h-8 w-8 rounded-full" source={{ uri: PERSONA_IMAGE_URL }} />
               <View className="flex flex-row items-center justify-start">
-                <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+                <Text className="mr-[2px] text-sm font-semibold text-emphasizedFont">
                   {`${post.writer.nickname}`}
                 </Text>
                 <Text className="text-sm font-semibold text-disabledFont">
@@ -61,7 +59,7 @@ const PostCard = (props: PostCardProps) => {
               {postTimeUtil(post.createdAt)}
             </Text>
           </View>
-          <Text className="mt-2 mb-2 text-sm font-medium text-basicFont">{post.content}</Text>
+          <Text className="my-2 text-sm font-medium text-basicFont">{post.content}</Text>
 
           {post.imageList.length > 0 && (
             <View onLayout={onLayout} className="w-full">
@@ -75,7 +73,7 @@ const PostCard = (props: PostCardProps) => {
                 onScroll={handleScroll}
                 scrollEventThrottle={200}
                 decelerationRate="fast"
-                scrollEnabled={post.imageList.length >1}
+                scrollEnabled={post.imageList.length > 1}
                 renderItem={({ item, index }) => (
                   <View
                     style={{
@@ -128,7 +126,7 @@ const PostCard = (props: PostCardProps) => {
             </View>
           )}
           <View
-            className={`flex flex-row items-center justify-start space-x-2 mt-${
+            className={`mt- flex flex-row items-center justify-start space-x-2${
               post.imageList.length > 0 ? 4 : 0
             }`}
           >

@@ -1,31 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import {
-  Pressable,
   View,
   Text,
-  TouchableOpacity,
-  Animated,
   LogBox,
-  TouchableWithoutFeedback,
+  Animated,
   Keyboard,
+  Pressable,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
+import BackCleanHeader from 'src/layout/backCleanHeader';
+
+import { uploadAssetImageToS3 } from '../../server/api/image';
+import { createPost, updatePost, getDetailPost } from '../../server/api/post';
+
+import ButtonModal from '@components/common/buttonModal';
+
+import { hasRoomState, feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
+
+import { useButtonModal } from '@hooks/useButtonModal';
+
+import { FeedCreateScreenProps } from '@type/param/stack';
 
 import PostImage from '@assets/feedCreate/postImage.svg';
 import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
-
-import { FeedCreateScreenProps } from '@type/param/stack';
-import { createPost, getDetailPost, updatePost } from '../../server/api/post';
-import { uploadAssetImageToS3 } from '../../server/api/image';
-import { useRecoilState } from 'recoil';
-import { feedRefreshState, hasRoomState, postDetailRefreshState } from '@recoil/recoil';
-import BackCleanHeader from 'src/layout/backCleanHeader';
-import ButtonModal from '@components/common/buttonModal';
-import { useButtonModal } from '@hooks/useButtonModal';
 
 const IMAGE_UPLOAD_ERROR = '이미지 업로드에 실패했습니다.';
 const POST_CREATE_ERROR = '게시글 생성에 실패했습니다.';
@@ -67,7 +71,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const getMyPost = async (postId: number) => {
     try {
       const response = await getDetailPost(roomState.roomId, postId);
-      const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
+      const imageList = response.result.imageList.map((url: string) => ({ uri: url }) as Asset);
       setImages(imageList);
       setPostDescription(response.result.content);
     } catch (e: any) {
@@ -216,12 +220,12 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         <TouchableOpacity onLongPress={drag} onPressIn={handlePressIn} onPressOut={handlePressOut}>
           <Animated.Image
             source={{ uri: item.uri }}
-            className="w-20 h-20 rounded-xl"
+            className="h-20 w-20 rounded-xl"
             style={{ transform: [{ scale }] }}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="absolute right-0 -top-5"
+          className="absolute -top-5 right-0"
           onPress={() => {
             handleDelete();
           }}
@@ -234,19 +238,19 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+      <SafeAreaView className="h-full w-full flex-1 flex-col bg-white px-8 pt-8">
         <BackCleanHeader
           onPressBack={() => {
             navigation.goBack();
           }}
         />
-        <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
+        <View className="mb-4 flex h-24 w-full flex-row items-center justify-center">
           <TouchableOpacity
-            className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
+            className="mr-2 flex h-20 w-20 items-center justify-center rounded-xl bg-colorBox"
             onPress={pickImages}
           >
             <PostImage className="mb-2" />
-            <View className="flex flex-row items-center justify-center w-full">
+            <View className="flex w-full flex-row items-center justify-center">
               <Text
                 className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
               >{`${images.length}/`}</Text>
@@ -268,13 +272,13 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             />
           </ScrollView>
         </View>
-        <View className="flex-col items-center justify-start flex-1 mb-4">
+        <View className="mb-4 flex-1 flex-col items-center justify-start">
           <TextInput
             placeholder="내용를 입력해주세요"
             value={postDescription}
             onChangeText={valueHandleDescriptionChange}
             multiline={true}
-            className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
+            className="h-2/3 w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
             textAlignVertical="top"
             numberOfLines={20}
           />
@@ -282,9 +286,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         <View className="flex">
           <Pressable
             onPress={handleSubmit}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
           >
-            <Text className="text-base font-semibold text-center text-white">작성</Text>
+            <Text className="text-center text-base font-semibold text-white">작성</Text>
           </Pressable>
         </View>
         <ButtonModal

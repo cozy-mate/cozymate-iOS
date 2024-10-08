@@ -1,24 +1,26 @@
+import { useRecoilState } from 'recoil';
 import React, { useEffect } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Text, View, Pressable, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import Background from '@assets/roomMain/background.svg';
+import { hasRoomState, roomInfoState, MyLifeStyleState } from '@recoil/recoil';
 
-import ChatIcon from '@assets/cozyHome/chatIcon.svg';
-import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
+import { getRoomData } from '@server/api/room';
+import { getUserDetailData } from '@server/api/member-stat';
 
-import CopyIcon from '@assets/roomMain/copyIcon.svg';
-import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
+import useInitFcm from '@hooks/useInitFcm';
+import { useGetRoomLog } from '@hooks/api/room-log';
+
+import { onCopyAddress } from '@utils/clipboard';
+import { getProfileImage } from '@utils/profileImage';
 
 import { RoomMainScreenProps } from '@type/param/stack';
-import { hasRoomState, MyLifeStyleState, roomInfoState } from '@recoil/recoil';
-import { useRecoilState } from 'recoil';
-import { onCopyAddress } from '@utils/clipboard';
-import { useGetRoomLog } from '@hooks/api/room-log';
-import useInitFcm from '@hooks/useInitFcm';
-import { getRoomData } from '@server/api/room';
-import { getProfileImage } from '@utils/profileImage';
-import { getUserDetailData } from '@server/api/member-stat';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import ChatIcon from '@assets/cozyHome/chatIcon.svg';
+import CopyIcon from '@assets/roomMain/copyIcon.svg';
+import Background from '@assets/roomMain/background.svg';
+import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
+import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const toJoin = () => {
@@ -69,11 +71,11 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   };
 
   return (
-    <View className="flex-1 bg-[#CADFFF]">
+    <View className="flex-1 bg-sub1">
       <Background style={{ position: 'absolute' }} />
-      <View className="flex mt-[70px] px-5">
+      <View className="mt-[70px] flex px-5">
         {/* 헤더 */}
-        <View className="flex flex-row justify-end mb-2">
+        <View className="mb-2 flex flex-row justify-end">
           <View className="flex flex-row">
             <Pressable onPress={toChat}>
               <ChatIcon />
@@ -84,7 +86,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           </View>
         </View>
 
-        <View className="flex flex-col items-start mb-16">
+        <View className="mb-16 flex flex-col items-start">
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
           <View className="flex flex-row">
             <Text className="mb-2 text-lg font-semibold text-main1">
@@ -94,7 +96,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           </View>
 
           <Pressable className="flex" onPress={() => onCopyAddress(roomInfo.inviteCode)}>
-            <View className="flex flex-row items-center justify-start px-4 py-2 bg-white opacity-60 rounded-xl">
+            <View className="flex flex-row items-center justify-start rounded-xl bg-white px-4 py-2 opacity-60">
               <Text className="text-xs font-medium text-colorFont">{roomInfo.inviteCode}</Text>
               <CopyIcon />
             </View>
@@ -102,33 +104,33 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         </View>
       </View>
 
-      <View className="flex-1 flex-col bg-white px-5 pt-8 pb-5 rounded-t-[40px] relative">
-        <View className="absolute top-[-120px] right-2">
+      <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
+        <View className="absolute right-2 top-[-120px]">
           <Pressable onPress={toJoin}>{getProfileImage(roomInfo.profileImage, 140, 140)}</Pressable>
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: bottom + 20 }}>
           {roomlogdata.result.result.map((data, index) => (
             <View
               key={index}
-              className={`px-1 py-5 border-b-[1px] border-b-[#F2F1FA] ${
+              className={`border-b border-b-[#F2F1FA] px-1 py-5 ${
                 index === roomlogdata.result.result.length - 1 && 'border-b-0'
               }`}
             >
               <CozyBotIcon />
               <View className="mt-2">
-                <Text className="flex flex-row flex-nowrap mb-[2px]">
+                <Text className="mb-[2px] flex flex-row flex-nowrap">
                   {data.content.split(/{(.*?)}/).map((part, i) => (
                     <Text
                       key={i}
                       className={`text-sm font-medium ${
-                        i % 2 === 1 ? 'text-main1 font-semibold' : 'text-basicFont'
+                        i % 2 === 1 ? 'font-semibold text-main1' : 'text-basicFont'
                       }`}
                     >
                       {part}
                     </Text>
                   ))}
                 </Text>
-                <Text className="text-xs font-medium text-disabledFont mt-[2px]">
+                <Text className="mt-[2px] text-xs font-medium text-disabledFont">
                   {data.createdAt}
                 </Text>
               </View>

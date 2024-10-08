@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 interface MyRoomComponentProps {
@@ -13,12 +13,12 @@ interface MyRoomComponentProps {
 
 const NoRoomComponent: React.FC = () => {
   return (
-    <View className="rounded-xl border-[1px] border-[#CDCDCD]">
+    <View className="rounded-xl border border-[#CDCDCD]">
       <LinearGradient
         colors={['#F1F1F1', '#FFFFFF']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0.25 }}
-        className="flex flex-col items-center p-4 rounded-xl"
+        className="flex flex-col items-center rounded-xl p-4"
       >
         <Text className="pt-2 text-sm font-medium text-disabledFont">
           아직 참여하고 있는 방이 없어요

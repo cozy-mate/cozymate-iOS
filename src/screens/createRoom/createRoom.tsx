@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import React, { useState, useEffect } from 'react';
 import {
+  Text,
+  View,
   Keyboard,
   Pressable,
-  SafeAreaView,
-  Text,
   TextInput,
+  SafeAreaView,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
-import { CreateRoomScreenProps } from '@type/param/stack';
+import { RoomInfo, CreateRoomInfo } from '@recoil/type';
+import { roomInfoState, createRoomState } from '@recoil/recoil';
 
-import { useRecoilState } from 'recoil';
-import { CreateRoomInfo, RoomInfo } from '@recoil/type';
-import { createRoomState, roomInfoState } from '@recoil/recoil';
+import { createRoom } from '@server/api/room';
+
+import { getProfileImage } from '@utils/profileImage';
+
+import { CreateRoomScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
-import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 import XButton from '@assets/createRoom/smallXButton.svg';
-import { createRoom } from '@server/api/room';
-import { getProfileImage } from '@utils/profileImage';
+import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 
 const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { type } = route.params;
@@ -121,18 +123,18 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex flex-col justify-between flex-1 bg-white">
-        <View className="flex flex-col justify-between flex-1 px-5">
+      <SafeAreaView className="flex flex-1 flex-col justify-between bg-white">
+        <View className="flex flex-1 flex-col justify-between px-5">
           <View>
             {/* 상단 이전 버튼 */}
-            <View className="flex flex-row items-center mt-2 mb-[33px]">
+            <View className="mb-[33px] mt-2 flex flex-row items-center">
               <Pressable onPress={toMain}>
                 <BackButton />
               </Pressable>
             </View>
 
             {/* 캐릭터 선택 */}
-            <View className="relative flex items-center justify-center mb-10">
+            <View className="relative mb-10 flex items-center justify-center">
               <View className="relative">
                 {createroomState.profileImage ? (
                   <>{getProfileImage(createroomState.profileImage, 130, 130)}</>
@@ -150,17 +152,17 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
             <View>
               {/* 방이름 입력 */}
               <View>
-                <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                <Text className="mb-2 px-1 text-base font-semibold text-basicFont">
                   방이름을 입력해주세요
                 </Text>
                 <TextInput
-                  className="p-4 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
+                  className="rounded-xl bg-colorBox p-4 text-sm font-medium leading-4 text-basicFont"
                   value={name}
                   onChangeText={valueHandleChange}
                   placeholder="방이름을 입력해주세요"
                 />
                 {isLongName && (
-                  <Text className="pl-2 mt-2 text-xs font-medium text-warning">
+                  <Text className="mt-2 pl-2 text-xs font-medium text-warning">
                     방이름은 최대 12글자만 가능해요!
                   </Text>
                 )}
@@ -168,7 +170,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
               {/* 방 인원 선택 */}
               <View className="my-10">
-                <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                <Text className="mb-2 px-1 text-base font-semibold text-basicFont">
                   인원을 선택해주세요 (본인 포함)
                 </Text>
                 <CustomRadioBoxComponent
@@ -182,11 +184,11 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
               {/* 방 해시태그 입력 */}
               {type === 'public' && (
                 <View>
-                  <Text className="px-1 mb-2 text-base font-semibold text-basicFont">
+                  <Text className="mb-2 px-1 text-base font-semibold text-basicFont">
                     방을 나타낼 해시태그를 입력해주세요 (최대 3개)
                   </Text>
                   <TextInput
-                    className="p-4 mb-2 text-sm font-medium leading-4 text-basicFont bg-colorBox rounded-xl"
+                    className="mb-2 rounded-xl bg-colorBox p-4 text-sm font-medium leading-4 text-basicFont"
                     value={hashTag}
                     onChangeText={setHashTag}
                     onSubmitEditing={handleHashTagSubmit}
@@ -197,7 +199,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                       hashTagList.map((hash, index) => (
                         <View
                           key={index}
-                          className="rounded-full border-main1 border-[1px] pl-3.5 pr-1.5 py-1 bg-sub2 flex flex-row items-center mr-2"
+                          className="mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
                         >
                           <Text className="text-xs font-semibold text-main1">#{hash}</Text>
                           <Pressable onPress={() => removeHashTag(index)}>
@@ -214,9 +216,9 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
           <View className="flex">
             <Pressable
               onPress={toNext}
-              className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+              className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
             >
-              <Text className="text-base font-semibold text-center text-white">방 생성하기</Text>
+              <Text className="text-center text-base font-semibold text-white">방 생성하기</Text>
             </Pressable>
           </View>
         </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Modal, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TouchableOpacity } from 'react-native';
 
 type Props = {
   title: string;
@@ -26,11 +26,11 @@ const ButtonModal = (props: Props) => {
         style={{
           backgroundColor: 'rgba(0, 0, 0,0.7)',
         }}
-        className="flex items-center justify-center w-full h-full"
+        className="flex h-full w-full items-center justify-center"
         onTouchEnd={closeModal}
       >
         <View
-          className="z-10 flex flex-col items-center justify-center w-5/6 px-10 py-8 bg-white rounded-xl"
+          className="z-10 flex w-5/6 flex-col items-center justify-center rounded-xl bg-white px-10 py-8"
           onTouchEnd={handleTouchEnd}
         >
           <Text className="mb-1 text-lg font-semibold text-emphasizedFont">{title}</Text>

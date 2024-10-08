@@ -63,25 +63,25 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
 
   return (
     <View className="mb-12">
-      <Text className="text-base font-semibold text-emphasizedFont px-[2px] mb-2">{title}</Text>
+      <Text className="mb-2 px-[2px] text-base font-semibold text-emphasizedFont">{title}</Text>
       {isTime && (
-        <View className="flex flex-row items-center mb-2">
-          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('오전')}>
+        <View className="mb-2 flex flex-row items-center">
+          <Pressable className="mr-2 p-2" onPress={() => handleMeridianChange('오전')}>
             <Text
               className={`${
-                meridian === '오전' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                meridian === '오전' ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
               } `}
             >
               AM
             </Text>
           </Pressable>
 
-          <View className="w-[1px] h-4 bg-[#CCCCCC] mr-2" />
+          <View className="mr-2 h-4 w-px bg-[#CCCCCC]" />
 
-          <Pressable className="p-2 mr-2" onPress={() => handleMeridianChange('오후')}>
+          <Pressable className="mr-2 p-2" onPress={() => handleMeridianChange('오후')}>
             <Text
               className={`${
-                meridian === '오후' ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                meridian === '오후' ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
               } `}
             >
               PM
@@ -96,7 +96,7 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
             style={{
               width: isWide ? width : undefined,
             }}
-            className={`flex-col justify-center items-center rounded-md py-[10px] mr-2 mb-2 ${
+            className={`mb-2 mr-2 flex-col items-center justify-center rounded-md py-[10px] ${
               item.select ? 'bg-sub1' : 'bg-colorBox'
             } ${isWide ? '' : 'px-5'} ${count == 6 && item.index % 6 === 0 && 'mr-0'}
             }`}
@@ -104,7 +104,7 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
           >
             <Text
               className={`text-xs tracking-tight ${
-                item.select ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                item.select ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
               } `}
             >
               {item.name}

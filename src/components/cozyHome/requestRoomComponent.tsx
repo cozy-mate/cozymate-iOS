@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable, Dimensions } from 'react-native';
 
 interface RequestRoomComponentProps {
   index: number;
@@ -16,13 +16,13 @@ const RequestRoomComponent: React.FC<RequestRoomComponentProps> = ({ index, room
 
   return (
     <Pressable
-      className={`px-1 py-[18px] border-b-[1px] border-b-[#F6F6F6] ${index === 0 && 'pt-2.5'} ${
+      className={`border-b border-b-[#F6F6F6] px-1 py-[18px] ${index === 0 && 'pt-2.5'} ${
         index === 3 && 'border-b-0 pb-2.5'
       }`}
     >
       <View className="flex flex-row">
         {roomData.hashTag.map((hash, index) => (
-          <View key={index} className="rounded bg-colorBox px-2 py-[2px] mr-1.5">
+          <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
             <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
           </View>
         ))}

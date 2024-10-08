@@ -1,6 +1,6 @@
+import moment from 'moment';
 import React, { useMemo, useState } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
-import moment from 'moment';
 
 LocaleConfig.locales.fr = {
   monthNames: [
