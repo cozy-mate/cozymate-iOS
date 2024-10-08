@@ -142,14 +142,18 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   }, [filterList]); // 필터 목록 변경 시 실행
 
-  const hasData = false;
+  const toHome = () => {
+    navigation.navigate('CozyHomeScreen');
+  };
+
+  const hasData = true;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
         {/* 상단 이전 버튼 */}
         <View className="mb-6 flex flex-row items-center pl-2">
-          <Pressable>
+          <Pressable onPress={toHome}>
             <BackButton />
           </Pressable>
         </View>
