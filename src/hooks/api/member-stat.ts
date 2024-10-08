@@ -1,6 +1,7 @@
-import { getUserDetailData, searchUsers } from '@server/api/member-stat';
-import { GetUserDetailDataResponse, SearchUsersResponse } from '@server/responseTypes/member-stat';
-import { useMutation, UseMutationResult, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+
+import { searchUsers, getUserDetailData } from '@server/api/member-stat';
+import { SearchUsersResponse, GetUserDetailDataResponse } from '@server/responseTypes/member-stat';
 
 // 내 라이프 스타일 조회
 export const useGetUserDetailData = (): {

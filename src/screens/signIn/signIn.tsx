@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
-import { Pressable, Text, View, SafeAreaView } from 'react-native';
+import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
-import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
-import AppleLogo from '@assets/signIn/appleLogo.svg';
+import useInitFcm from '@hooks/useInitFcm';
+import { useIsOldiPhone } from '@hooks/device';
+import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
-import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
-import useInitFcm from '@hooks/useInitFcm';
-import { useIsOldiPhone } from '@hooks/device';
+import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
+import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const isOldiPhone = useIsOldiPhone();
@@ -27,13 +27,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 mx-6">
+      <View className="mx-6 flex-1">
         <View
-          className={`mx-auto ${isOldiPhone ? 'mb-[100px] mt-[200px]' : 'mt-[236px] mb-[200px]'}`}
+          className={`mx-auto ${isOldiPhone ? 'mb-[100px] mt-[200px]' : 'mb-[200px] mt-[236px]'}`}
         >
           <View className="mb-[7px]">
             <Text
-              className="text-[48px] font-normal text-center font-['Cafe24_Meongi_B']"
+              className="text-center font-['Cafe24_Meongi_B'] text-[48px] font-normal"
               allowFontScaling={false}
             >
               <Text className="text-[#FFE28B]">cozy</Text>
@@ -41,7 +41,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             </Text>
           </View>
           <Text
-            className="text-sm font-semibold text-center text-basicFont"
+            className="text-center text-sm font-semibold text-basicFont"
             allowFontScaling={false}
           >
             “나와 꼭 맞는 룸메이트와 함께 만드는{'\n'}우리만의 편안한 공간”
@@ -50,11 +50,11 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
         <View className="mx-3 mb-4">
           <Pressable
-            className="flex-row justify-center items-center rounded-[33px] bg-kakaoyellow px-6 py-4"
+            className="flex-row items-center justify-center rounded-[33px] bg-kakaoyellow px-6 py-4"
             onPress={() => kakaoLogin()}
           >
             <KakaoLogo className="mr-2" />
-            <Text className="text-base font-semibold text-black opacity-85">
+            <Text className="opacity-85 text-base font-semibold text-black">
               카카오톡으로 계속하기
             </Text>
           </Pressable>
@@ -66,7 +66,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             onPress={() => loginWithId()}
           >
             <AppleLogo className="mr-4" />
-            <Text className="text-base font-semibold text-center text-white">Apple로 계속하기</Text>
+            <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
           </Pressable>
         </View>
       </View>

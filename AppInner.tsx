@@ -1,44 +1,43 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { useRecoilState } from 'recoil';
-import { loggedInState } from '@recoil/recoil';
-
 import MainScreen from 'src/screens/main';
-import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
-import RoomMainScreen from 'src/screens/roomMain/roomMain';
-import TodoListScreen from 'src/screens/todoList/todoList';
-import CreateTodoScreen from 'src/screens/todoList/createTodo';
-import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
-import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
-import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
-import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
-import CreateRoomScreen from 'src/screens/createRoom/createRoom';
-import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
-import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
-import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
-import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
-import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
-import RoomMateScreen from 'src/screens/roomMate/roomMate';
-import UserDetailScreen from 'src/screens/userDetail/userDetail';
+import ChatScreen from 'src/screens/chatting/chat';
+import MyPageScreen from 'src/screens/myPage/myPage';
+import SignInScreen from 'src/screens/signIn/signIn';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
+import CompleteScreen from 'src/screens/onBoard/complete';
+import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
+import RoomMainScreen from 'src/screens/roomMain/roomMain';
+import TodoListScreen from 'src/screens/todoList/todoList';
+import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
+import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import FeedCreateScreen from 'src/screens/feed/feedCreate';
-import MyPageScreen from 'src/screens/myPage/myPage';
-import ChatScreen from 'src/screens/chatting/chat';
 import ChatRoomScreen from 'src/screens/chatting/chatRoom';
 import SendChatScreen from 'src/screens/chatting/sendChat';
-import NotificationScreen from 'src/screens/notification/notification';
-
-import SignInScreen from 'src/screens/signIn/signIn';
-import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
+import CreateTodoScreen from 'src/screens/todoList/createTodo';
+import CreateRoomScreen from 'src/screens/createRoom/createRoom';
+import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
-import CompleteScreen from 'src/screens/onBoard/complete';
+import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
+import NotificationScreen from 'src/screens/notification/notification';
+import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
+import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
+import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
+import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
+import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
+import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
+import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
 
-import { RootStackParamList } from '@type/param/rootStack';
+import { loggedInState } from '@recoil/recoil';
+
 import { StackParamList } from '@type/param/stack';
+import { RootStackParamList } from '@type/param/rootStack';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();

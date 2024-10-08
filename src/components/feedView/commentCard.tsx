@@ -1,39 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, Text } from 'react-native';
+import { useRecoilState } from 'recoil';
+import { View, Text, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
-import { CommentType } from '@type/feed';
-import DotIcon from '@assets/feedView/dotIcon.svg';
-import { postTimeUtil } from '@utils/time/timeUtil';
+import { roomInfoState } from '../../recoil/recoil';
+import { deleteComment, updateComment } from '../../server/api/comment';
 
-import ControlModal from '@components/feedView/controlModal';
 import ButtonModal from '@components/common/buttonModal';
+import ControlModal from '@components/feedView/controlModal';
+
+import { profileState } from '@recoil/recoil';
 
 import { useFeedModal } from '@hooks/useFeedModal';
-import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useButtonModal } from '@hooks/useButtonModal';
-import { useRecoilState } from 'recoil';
-import { profileState } from '@recoil/recoil';
-import { deleteComment, updateComment } from '../../server/api/comment';
-import { roomInfoState } from '../../recoil/recoil';
+import { usePersonaImage } from '@hooks/usePersonaImage';
+
+import { postTimeUtil } from '@utils/time/timeUtil';
+
+import { CommentType } from '@type/feed';
+
+import DotIcon from '@assets/feedView/dotIcon.svg';
 type CommentCardProps = {
   comment: CommentType;
-  postId:number;
-  updateComment : () => void;
+  postId: number;
+  updateComment: () => void;
 };
 
 const COMMENT_DELETE_SUCCESS = '댓글이 삭제되었습니다.';
 const COMMENT_DELETE_ERROR = '댓글 삭제에 실패했습니다.';
 
 const CommentCard = (props: CommentCardProps) => {
-  const { comment,postId,updateComment } = props;
+  const { comment, postId, updateComment } = props;
 
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const [oneButtonModalTitle, setOneButtonModalMessage] = useState('');
 
-  const {
-    PERSONA_IMAGE_URL,
-  } = usePersonaImage(comment.writer.persona);
+  const { PERSONA_IMAGE_URL } = usePersonaImage(comment.writer.persona);
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
   const {
@@ -41,7 +43,7 @@ const CommentCard = (props: CommentCardProps) => {
     handleButtonModalClose: handleTwoButtonModalClose,
     handleButtonModalOpen: handleTwoButtonModalOpen,
   } = useButtonModal();
-  
+
   const {
     isButtonModalVisible: isOneButtonModalVisible,
     handleButtonModalClose: handleOneButtonModalClose,
@@ -51,34 +53,27 @@ const CommentCard = (props: CommentCardProps) => {
   const deleteCommentHandler = async () => {
     try {
       const response = await deleteComment(roomInfo.roomId, postId, comment.id);
-      if(response){
+      if (response) {
         handleTwoButtonModalClose();
         setOneButtonModalMessage(COMMENT_DELETE_SUCCESS);
-        
+
         handleOneButtonModalOpen();
-        
       }
-     
-      
     } catch (e) {
       setOneButtonModalMessage(COMMENT_DELETE_ERROR);
       handleOneButtonModalOpen();
     }
-  }
+  };
 
   const [profile, setProfile] = useRecoilState(profileState);
 
-
   return (
-    <View className="w-full my-5">
-      <View className="flex flex-row items-center justify-between w-full mb-2">
+    <View className="my-5 w-full">
+      <View className="mb-2 flex w-full flex-row items-center justify-between">
         <View className="flex flex-row items-center justify-start space-x-2">
-          <Image
-            className="w-8 h-8 rounded-full"
-            source={{ uri: PERSONA_IMAGE_URL }}
-          />
+          <Image className="h-8 w-8 rounded-full" source={{ uri: PERSONA_IMAGE_URL }} />
           <View className="flex flex-row items-center justify-start">
-            <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+            <Text className="mr-[2px] text-sm font-semibold text-emphasizedFont">
               {`${comment.writer.nickname}`}
             </Text>
             <Text className="text-sm font-semibold text-disabledFont">
@@ -112,7 +107,7 @@ const CommentCard = (props: CommentCardProps) => {
         submitText="삭제"
         isVisible={isTwoButtonModalVisible}
         closeModal={handleTwoButtonModalClose}
-        onSubmit={()=>deleteCommentHandler()}
+        onSubmit={() => deleteCommentHandler()}
         buttonCount={2}
       />
       <ButtonModal
@@ -120,7 +115,7 @@ const CommentCard = (props: CommentCardProps) => {
         submitText="확인"
         isVisible={isOneButtonModalVisible}
         closeModal={handleOneButtonModalClose}
-        onSubmit={()=>{
+        onSubmit={() => {
           updateComment();
           handleOneButtonModalClose();
         }}

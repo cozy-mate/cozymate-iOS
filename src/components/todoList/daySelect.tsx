@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
-import NotSelected from '@assets/todoList/notSelectedCheckBox.svg';
 import Selected from '@assets/todoList/selectedCheckBox.svg';
+import NotSelected from '@assets/todoList/notSelectedCheckBox.svg';
 
 interface Items {
   id: number;
@@ -52,17 +52,17 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
   return (
     <View className="flex flex-col">
       <Text className="mb-3 text-lg font-semibold text-basicFont">정해진 요일을 선택해주세요</Text>
-      <View className="flex flex-row justify-between mb-2">
+      <View className="mb-2 flex flex-row justify-between">
         {items.map((day) => (
           <Pressable key={day.id} onPress={() => selectDay(day.value)}>
             <View
               className={`${
                 day.selected ? 'bg-sub1' : 'bg-colorBox'
-              } w-10 h-10 flex justify-center items-center rounded-full`}
+              } flex h-10 w-10 items-center justify-center rounded-full`}
             >
               <Text
                 className={`${
-                  day.selected ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                  day.selected ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
                 }`}
               >
                 {day.value}

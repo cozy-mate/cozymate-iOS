@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
@@ -76,8 +76,8 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
 
     return (
       <View className={`mb-14 ${info == essentialInfo && 'mb-0'}`}>
-        <Text className="mb-2 text-base font-semibold text-[#444955] px-1">{title}</Text>
-        <View className="p-4 border-[1px] border-[#F1F2F4] rounded-xl">
+        <Text className="mb-2 px-1 text-base font-semibold text-emphasizedFont">{title}</Text>
+        <View className="rounded-xl border border-[#F1F2F4] p-4">
           {infoEntries.map(([key, value], index) =>
             value ? (
               <View
@@ -85,11 +85,11 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
                 className={`flex flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
                   index === infoEntries.length - 1
                     ? 'border-b-0 pb-0'
-                    : 'border-b-[1px] border-b-[#f1f2f4]'
+                    : 'border-b border-b-[#f1f2f4]'
                 }`}
               >
                 <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
-                <Text className="text-[#505059] font-medium">{formatValue(key, value)}</Text>
+                <Text className="font-medium text-[#505059]">{formatValue(key, value)}</Text>
               </View>
             ) : null,
           )}
@@ -134,7 +134,7 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
   };
 
   return (
-    <View className="px-5 mt-4 pb-[60px]">
+    <View className="mt-4 px-5 pb-[60px]">
       {renderInfo(basicInfo, '기본정보')}
       {renderInfo(dormInfo, '기숙사 정보')}
       {renderInfo(essentialInfo, '필수정보')}

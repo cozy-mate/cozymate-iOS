@@ -1,21 +1,24 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { TouchableOpacity } from 'react-native';
+import { TouchableOpacityProps } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TabNavigatorParamList } from '@type/param/stack';
 
-import { CozyHome, RoleNRule, Feed, RoomMate, MyPage } from 'src/layout/bottomNavBar';
+import { Feed, MyPage, CozyHome, RoomMate, RoleNRule } from 'src/layout/bottomNavBar';
 
+import MyPageScreen from './myPage/myPage';
+import FeedMainScreen from './feed/feedMain';
 import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
 import TodoListScreen from './todoList/todoList';
 import RoomMateScreen from './roomMate/roomMate';
-import FeedMainScreen from './feed/feedMain';
-import MyPageScreen from './myPage/myPage';
-import { useRecoilValue } from 'recoil';
-import { hasRoomState, MyLifeStyleState } from '@recoil/recoil';
-import { TouchableOpacityProps } from 'react-native';
-import { TouchableOpacity } from 'react-native';
 import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
+
+import { hasRoomState, MyLifeStyleState } from '@recoil/recoil';
+
 import { useIsOldiPhone } from '@hooks/device';
+
+import { TabNavigatorParamList } from '@type/param/stack';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -51,8 +54,9 @@ const MainScreen = () => {
             }
           : {
               backgroundColor: '#FFFFFF',
+              height: 94,
               paddingTop: 12,
-              paddingBottom: 32,
+              paddingBottom: 40,
               borderTopWidth: 0,
               borderRadius: 20,
               borderBottomLeftRadius: 0,
@@ -65,7 +69,7 @@ const MainScreen = () => {
             },
       }}
     >
-      {hasRoom.hasRoom ? (
+      {!hasRoom.hasRoom ? (
         <Tab.Screen
           name="RoomMainScreen"
           component={RoomMainScreen}
@@ -114,7 +118,7 @@ const MainScreen = () => {
           })}
         />
       )}
-      {myLifeStyleData.acceptance !== '' ? (
+      {myLifeStyleData.acceptance === '' ? (
         <Tab.Screen
           name="RoomMateScreen"
           component={RoomMateScreen}

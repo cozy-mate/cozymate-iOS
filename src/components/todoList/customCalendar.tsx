@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
 import moment from 'moment';
+import React, { useMemo, useState } from 'react';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 LocaleConfig.locales.fr = {
   monthNames: [
@@ -38,26 +38,65 @@ LocaleConfig.locales.fr = {
 
 LocaleConfig.defaultLocale = 'fr';
 
-interface CustomCalendarProps {
-  onDateTimeSelect: (dateTime: string) => void;
+interface TodoItem {
+  id: number;
+  completed: boolean;
+  content: string;
+  date: string; // 날짜 정보가 있어야 합니다. 형식은 'YYYY-MM-DD'
 }
 
-const CustomCalendar: React.FC<CustomCalendarProps> = ({ onDateTimeSelect }) => {
+interface CustomCalendarProps {
+  canSelectPrev: boolean;
+  onDateTimeSelect: (dateTime: string) => void;
+  todoData?: TodoItem[]; // 할 일 데이터를 선택적으로 받습니다.
+  useMarkedDates?: boolean; // markedDates를 사용할지 여부를 받습니다.
+}
+
+const CustomCalendar: React.FC<CustomCalendarProps> = ({
+  canSelectPrev,
+  onDateTimeSelect,
+  todoData = [], // 기본값으로 빈 배열 설정
+  useMarkedDates = true, // 기본값으로 markedDates를 사용하도록 설정
+}) => {
   const today = moment().format('YYYY-MM-DD');
   const [selected, setSelected] = useState(today);
+
+  const minDate = canSelectPrev ? undefined : today;
+
+  const markedDates = useMemo(() => {
+    if (!useMarkedDates) return {}; // markedDates 사용하지 않는 경우 빈 객체 반환
+
+    const marks: { [key: string]: any } = {};
+
+    todoData.forEach((todo) => {
+      if (todo.date) {
+        marks[todo.date] = {
+          marked: true,
+          dotColor: 'blue',
+          activeOpacity: 0,
+        };
+      }
+    });
+
+    marks[selected] = {
+      selected: true,
+      disableTouchEvent: true,
+      selectedDayBackgroundColor: '#CADFFF',
+      selectedDayTextColor: '#68A4FF',
+    };
+
+    return marks;
+  }, [selected, todoData, useMarkedDates]);
 
   return (
     <Calendar
       enableSwipeMonths={true}
-      minDate={moment().format('YYYY-MM-DD')}
-      disableAllTouchEventsForDisabledDays={true}
+      minDate={minDate}
       onDayPress={(day: any) => {
         onDateTimeSelect(day.dateString);
         setSelected(day.dateString);
       }}
-      markedDates={{
-        [selected]: { selected: true, disableTouchEvent: true },
-      }}
+      markedDates={useMarkedDates ? markedDates : {}} // useMarkedDates가 true일 때만 markedDates 적용
       theme={{
         backgroundColor: '#ffffff',
         calendarBackground: '#ffffff',

@@ -1,11 +1,11 @@
+import { GetAxiosInstance, PutAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+
+import { CreateFeedRequest, UpdateFeedRequest } from '@server/requestTypes/feed';
 import {
   GetFeedResponse,
   CreateFeedResponse,
   UpdateFeedResponse,
 } from '@server/responseTypes/feed';
-
-import { CreateFeedRequest, UpdateFeedRequest } from '@server/requestTypes/feed';
-import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
 
 // 피드 조회
 export const getFeedData = async (roomId: number): Promise<GetFeedResponse> => {

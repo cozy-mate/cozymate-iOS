@@ -28,18 +28,23 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
   };
 
   const select = (selectedItem: Item) => {
+    // 'select' 상태를 반전시킴
     const updatedItems = items.map((item) =>
       item.index === selectedItem.index ? { ...item, select: !item.select } : item,
     );
 
     if (selectedItem.select) {
+      // 이미 선택된 경우, 리스트에서 제거
       setValue(value.filter((id) => id !== selectedItem.id));
     } else {
+      // 선택되지 않은 경우, 리스트에 추가
       setValue([...value, selectedItem.id]);
     }
 
     setItems(updatedItems);
     handleFocus(selectedItem.index);
+
+    console.log(items);
   };
 
   return (
@@ -47,13 +52,13 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`flex-row flex-wrap justify-center items-center rounded-[35px] border-[1px] px-[14px] py-2 mx-1 my-1 ${
-            item.select ? 'border-main1 bg-[#CADFFF]' : 'border-disabled bg-white'
+          className={`m-1 flex-row flex-wrap items-center justify-center rounded-[35px] border px-[14px] py-2 ${
+            item.select ? 'border-main1 bg-sub1' : 'border-disabled bg-white'
           }`}
           onPress={() => select(item)}
         >
           <Text
-            className={`text-xs font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
+            className={`text-sm font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
           >
             {item.name}
           </Text>

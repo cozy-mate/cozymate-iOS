@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { CreateRoomInfo, MyRoom, Profile, SignUp } from './type';
+
+import { MyRoom, SignUp, Profile, CreateRoomInfo } from './type';
 
 // 최초 회원가입 시 사용자 정보
 export const useSignUpStore = create<{

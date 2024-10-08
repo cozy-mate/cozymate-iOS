@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
-import { Animated, Easing } from 'react-native';
+import { Easing, Animated } from 'react-native';
 
-export const useInputAnimation = (trigger: boolean, delay: number = 0) => {
+export const useInputAnimation = (trigger: boolean, delay = 0) => {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-20)).current;
 

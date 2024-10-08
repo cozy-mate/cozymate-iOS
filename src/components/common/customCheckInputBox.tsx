@@ -27,7 +27,7 @@ const CustomCheckInputBox: React.FC<CustomCheckInputBoxProps> = ({
 
   return (
     <View className="mb-10">
-      <Text className="px-1 mb-3 text-lg font-semibold text-basicFont">{title}</Text>
+      <Text className="mb-3 px-1 text-lg font-semibold text-basicFont">{title}</Text>
       <View className="flex flex-row flex-wrap gap-x-2">
         {items.map((item) => {
           const isItemSelected = selectedValues.includes(item.mateId);
@@ -35,14 +35,14 @@ const CustomCheckInputBox: React.FC<CustomCheckInputBoxProps> = ({
           return (
             <Pressable
               key={item.mateId}
-              className={`flex justify-center items-center rounded-md py-[10px] px-5 mb-2 ${
+              className={`mb-2 flex items-center justify-center rounded-md px-5 py-[10px] ${
                 isItemSelected ? 'bg-sub1' : 'bg-colorBox'
               } `}
               onPress={() => toggleSelection(item)}
             >
               <Text
                 className={`text-sm tracking-tight ${
-                  isItemSelected ? 'text-main1 font-semibold' : 'text-disabledFont font-medium'
+                  isItemSelected ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
                 }`}
               >
                 {item.nickname}

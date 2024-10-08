@@ -1,51 +1,55 @@
-import React, { useCallback, useRef, useEffect, Fragment } from 'react';
+import { useRecoilState } from 'recoil';
+import Animated from 'react-native-reanimated';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import React, { useRef, Fragment, useEffect, useCallback } from 'react';
+import { withTiming, useAnimatedStyle, useAnimatedKeyboard } from 'react-native-reanimated';
 import {
   View,
   Text,
   Image,
   FlatList,
-  TextInput,
-  TouchableOpacity,
-  RefreshControl,
-  Animated as NativeAnimated,
   Keyboard,
+  TextInput,
+  RefreshControl,
+  TouchableOpacity,
   TouchableWithoutFeedback,
+  Animated as NativeAnimated,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { ScrollView } from 'react-native-gesture-handler';
 
-import ChatIcon from '@assets/feedMain/chatIcon.svg';
-import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
-import DotIcon from '@assets/feedView/dotIcon.svg';
+import BackCleanHeader from 'src/layout/backCleanHeader';
 
-import { FeedViewScreenProps } from '@type/param/stack';
-import { CommentType, PostCardType } from '@type/feed';
+import { updateComment } from '../../server/api/comment';
 
-import { postTimeUtil } from '@utils/time/timeUtil';
-
+import ButtonModal from '@components/common/buttonModal';
 import CommentList from '@components/feedView/commentList';
 import ControlModal from '@components/feedView/controlModal';
 
-import { useImageCarousel } from '@hooks/useImageCarousel';
-import { usePersonaImage } from '@hooks/usePersonaImage';
+import {
+  hasRoomState,
+  profileState,
+  feedRefreshState,
+  postDetailRefreshState,
+} from '@recoil/recoil';
+
+import { deletePost, getDetailPost } from '@server/api/post';
+import { createComment, getCommentList } from '@server/api/comment';
+
 import { useFeedModal } from '@hooks/useFeedModal';
 import { useButtonModal } from '@hooks/useButtonModal';
-import ButtonModal from '@components/common/buttonModal';
-import { deletePost, getDetailPost } from '@server/api/post';
-import { useRecoilState } from 'recoil';
-import {
-  feedRefreshState,
-  hasRoomState,
-  postDetailRefreshState,
-  profileState,
-} from '@recoil/recoil';
-import { createComment, getCommentList } from '@server/api/comment';
-import BackCleanHeader from 'src/layout/backCleanHeader';
-import { useFocusEffect } from '@react-navigation/native';
-import Animated from 'react-native-reanimated';
-import { useAnimatedKeyboard, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { updateComment } from '../../server/api/comment';
+import { usePersonaImage } from '@hooks/usePersonaImage';
+import { useImageCarousel } from '@hooks/useImageCarousel';
+
+import { postTimeUtil } from '@utils/time/timeUtil';
+
+import { CommentType, PostCardType } from '@type/feed';
+import { FeedViewScreenProps } from '@type/param/stack';
+
+import DotIcon from '@assets/feedView/dotIcon.svg';
+import ChatIcon from '@assets/feedMain/chatIcon.svg';
+import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
 
 const POST_GET_ERROR = '게시글을 불러오는데 실패했습니다.';
 const POST_DELETE_SUCCESS = '게시글이 삭제되었습니다.';
@@ -297,7 +301,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   };
 
   return (
-    <View className="w-full h-full bg-white">
+    <View className="h-full w-full bg-white">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Fragment>
           <SafeAreaView className="w-full bg-white" />
@@ -306,8 +310,8 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
-            <View key={post.id} className="flex flex-col w-full px-5 pt-4 mb-6 bg-white">
-              <View className="flex flex-row items-center justify-between w-full">
+            <View key={post.id} className="mb-6 flex w-full flex-col bg-white px-5 pt-4">
+              <View className="flex w-full flex-row items-center justify-between">
                 <View className="flex flex-row items-center justify-start space-x-2">
                   {loadingProfile ||
                     refreshing ||
@@ -319,7 +323,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                       </NativeAnimated.View>
                     ))}
                   <Image
-                    className="w-8 h-8 rounded-full"
+                    className="h-8 w-8 rounded-full"
                     onLoadStart={handleProfileImageLoadStart}
                     onLoadEnd={handleProfileImageLoadEnd}
                     source={{ uri: PERSONA_IMAGE_URL }}
@@ -337,7 +341,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                       </SkeletonPlaceholder>
                     ) : (
                       <View className="flex flex-row items-center justify-start">
-                        <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+                        <Text className="mr-[2px] text-sm font-semibold text-emphasizedFont">
                           {`${post.writer.nickname}`}
                         </Text>
                         <Text className="text-sm font-semibold text-disabledFont">
@@ -363,7 +367,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
                   </SkeletonPlaceholder>
                 ))}
-              <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
+              <Text className="mb-3 mt-2 text-sm font-medium text-basicFont">{post.content}</Text>
               {post.imageList.length > 0 && (
                 <View onLayout={onLayout} className="w-full">
                   <FlatList
@@ -429,7 +433,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 </View>
               )}
               <View
-                className={`flex flex-row items-center justify-between space-x-2 mt-${
+                className={`mt- flex flex-row items-center justify-between space-x-2${
                   post.imageList.length > 0 ? 4 : 0
                 }`}
               >
@@ -458,13 +462,13 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               updateComment={updateCommentList}
             />
           </ScrollView>
-          <Animated.View className={`absolute w-full z-10`} style={[animatedStyles]}>
-            <View className="flex flex-row items-center justify-center w-full pt-2 pb-2 pl-4 pr-2 bg-white">
+          <Animated.View className={`absolute z-10 w-full`} style={[animatedStyles]}>
+            <View className="flex w-full flex-row items-center justify-center bg-white py-2 pl-4 pr-2">
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}
                 onChangeText={handleCommentChange}
-                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1"
+                className="mr-1 flex-1 rounded-lg bg-[#F0F0F0] p-3 pr-8"
               />
               <TouchableOpacity
                 className={`${loading || commentPosting || refreshing ? 'disabled' : ''}`}

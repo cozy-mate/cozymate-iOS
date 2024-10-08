@@ -1,6 +1,7 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { getRoomLog } from '@server/api/room-log';
 import { GetRoomLogResponse } from '@server/responseTypes/room-log';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 // Room Log 조회
 export const useGetRoomLog = (

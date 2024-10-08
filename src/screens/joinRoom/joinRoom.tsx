@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import {
+  Text,
+  View,
   Keyboard,
   Pressable,
-  SafeAreaView,
-  Text,
   TextInput,
+  SafeAreaView,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
-import { JoinRoomScreenProps } from '@type/param/stack';
-
-import { useRecoilState } from 'recoil';
-import { hasRoomState, inviteCodeRoomState, roomInfoState } from '@recoil/recoil';
-
-import { getRoomData, getRoomDataByInviteCode, joinRoom } from '@server/api/room';
 
 import ButtonModal from '@components/common/buttonModal';
 import CustomTextInputBox from '@components/common/customTextInputBox';
+
+import { hasRoomState, roomInfoState, inviteCodeRoomState } from '@recoil/recoil';
+
+import { joinRoom, getRoomData, getRoomDataByInviteCode } from '@server/api/room';
+
+import { JoinRoomScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 
@@ -97,9 +98,9 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex flex-col justify-between flex-1 px-5">
+        <View className="flex flex-1 flex-col justify-between px-5">
           <View>
-            <Pressable onPress={toMain} className="mt-2 mb-5">
+            <Pressable onPress={toMain} className="mb-5 mt-2">
               <BackButton />
             </Pressable>
             <CustomTextInputBox
@@ -110,9 +111,9 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
             />
           </View>
 
-          <View className={`${inviteCode ? 'bg-main1' : 'bg-[#C4c4c4]'} flex p-4 rounded-xl`}>
+          <View className={`${inviteCode ? 'bg-main1' : 'bg-[#C4c4c4]'} flex rounded-xl p-4`}>
             <Pressable onPress={getRoomInfo}>
-              <Text className="text-base font-semibold text-center text-white">확인</Text>
+              <Text className="text-center text-base font-semibold text-white">확인</Text>
             </Pressable>
           </View>
         </View>

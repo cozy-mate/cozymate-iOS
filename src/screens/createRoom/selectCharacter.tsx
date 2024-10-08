@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Pressable, SafeAreaView, Text, View } from 'react-native';
-
-import { SelectCharacterScreenProps } from '@type/param/stack';
-
 import { useRecoilState } from 'recoil';
-import { CreateRoomInfo } from '@recoil/type';
-import { createRoomState } from '@recoil/recoil';
+import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
+import { CreateRoomInfo } from '@recoil/type';
+import { createRoomState } from '@recoil/recoil';
+
+import { SelectCharacterScreenProps } from '@type/param/stack';
+
 import first from '@assets/characterItem/1.svg';
-import second from '@assets/characterItem/2.svg';
 import third from '@assets/characterItem/3.svg';
-import fourth from '@assets/characterItem/4.svg';
 import fifth from '@assets/characterItem/5.svg';
 import sixth from '@assets/characterItem/6.svg';
-import seventh from '@assets/characterItem/7.svg';
-import eighth from '@assets/characterItem/8.svg';
 import ninth from '@assets/characterItem/9.svg';
+import second from '@assets/characterItem/2.svg';
+import fourth from '@assets/characterItem/4.svg';
+import eighth from '@assets/characterItem/8.svg';
 import tenth from '@assets/characterItem/10.svg';
-import eleventh from '@assets/characterItem/11.svg';
+import seventh from '@assets/characterItem/7.svg';
 import twelfth from '@assets/characterItem/12.svg';
-import thirteenth from '@assets/characterItem/13.svg';
-import fourteenth from '@assets/characterItem/14.svg';
+import eleventh from '@assets/characterItem/11.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
+import thirteenth from '@assets/characterItem/13.svg';
+import fourteenth from '@assets/characterItem/14.svg';
 
 type IconProps = {
   width: number;
@@ -158,9 +158,9 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-col justify-between flex-1 px-5">
+      <View className="flex flex-1 flex-col justify-between px-5">
         {/* 상단 View */}
-        <View className="flex mt-14">
+        <View className="mt-14 flex">
           {/* 설명 Text */}
           <View className="mb-6 leading-loose">
             <Text className="text-lg font-semibold tracking-tight text-emphasizedFont">
@@ -180,8 +180,8 @@ const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
         {/* 하단 View */}
         <View className="flex">
           <Pressable onPress={toNext}>
-            <View className={`p-4 rounded-xl ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
-              <Text className="text-base font-semibold text-center text-white">완료</Text>
+            <View className={`rounded-xl p-4 ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
+              <Text className="text-center text-base font-semibold text-white">완료</Text>
             </View>
           </Pressable>
         </View>

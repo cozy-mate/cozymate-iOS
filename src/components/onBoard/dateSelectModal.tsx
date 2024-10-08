@@ -64,17 +64,17 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
   return (
     <Pressable
       onPress={handleFocus}
-      className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-5 py-4 mb-4 bg-white
+      className={`mb-4 box-border flex flex-row items-center justify-between rounded-xl border bg-white px-5 py-4
         ${isActive ? 'border-sub1' : 'border-disabled'}`}
     >
       <View className="flex flex-col items-start justify-center">
         <Text
-          className={`font-semibold text-xs leading-[17px] tracking-tight
+          className={`text-xs font-semibold leading-[17px] tracking-tight
             ${isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
         </Text>
-        <View className="mt-1.5 flex flex-row items-center justify-between w-full pb-[3px]">
+        <View className="mt-1.5 flex w-full flex-row items-center justify-between pb-[3px]">
           <Text className="text-sm font-medium text-basicFont">{displayDate}</Text>
           <DownArrow />
         </View>

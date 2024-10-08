@@ -1,12 +1,12 @@
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
-import { GetAxiosInstance, DeleteAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
 import { SignInRequest, SignUpRequest } from '@server/requestTypes/member';
 import {
-  DeleteMemberResponse,
-  GetProfileResponse,
   SignInResponse,
   SignUpResponse,
+  GetProfileResponse,
+  DeleteMemberResponse,
 } from '@server/responseTypes/member';
 
 // 회원 탈퇴

@@ -54,13 +54,13 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
   return (
     <Pressable
       onPress={handleFocus}
-      className={`box-border flex flex-col justify-center items-start rounded-xl border-[1px] px-5 py-4 mb-4 ${
+      className={`mb-4 box-border flex flex-col items-start justify-center rounded-xl border px-5 py-4 ${
         isActive ? 'border-sub1' : 'border-disabled'
       }`}
     >
       <View>
         <Text
-          className={`font-semibold text-xs leading-[17px] tracking-tight text-main ${
+          className={`text-main text-xs font-semibold leading-[17px] tracking-tight ${
             isFocused ? 'text-main1' : 'text-colorFont'
           }`}
         >
@@ -70,16 +70,16 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
           {items.map((item: Item) => (
             <View key={item.index}>
               {item.select ? (
-                <Pressable className="flex-row items-center mr-2" onPress={() => select(item)}>
+                <Pressable className="mr-2 flex-row items-center" onPress={() => select(item)}>
                   <SelectedRadioButtonSvg className="mr-1" />
-                  <Text className="font-medium text-sm leading-[17px] tracking-tight text-basicFont">
+                  <Text className="text-sm font-medium leading-[17px] tracking-tight text-basicFont">
                     {item.item}
                   </Text>
                 </Pressable>
               ) : (
-                <Pressable className="flex-row items-center mr-2" onPress={() => select(item)}>
+                <Pressable className="mr-2 flex-row items-center" onPress={() => select(item)}>
                   <RadioButtonSvg className="mr-1" />
-                  <Text className="font-medium text-sm leading-[17px] tracking-tight text-disabledFont">
+                  <Text className="text-sm font-medium leading-[17px] tracking-tight text-disabledFont">
                     {item.item}
                   </Text>
                 </Pressable>

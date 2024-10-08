@@ -1,37 +1,30 @@
 import React, { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { useRecoilState } from 'recoil';
+import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import NavBar from '@components/navBar';
+import TodoBox from '@components/todoList/todoBox';
+import RuleBox from '@components/todoList/ruleBox';
+import RoleBox from '@components/todoList/roleBox';
+import MyRoleBox from '@components/todoList/myRoleBox';
+import LoadingComponent from '@components/loading/loading';
+import OthersTodoBox from '@components/todoList/othersTodoBox';
+import CustomCalendar from '@components/todoList/customCalendar';
+
+import { profileState, roomInfoState } from '@recoil/recoil';
+
+import { useIsOldiPhone } from '@hooks/device';
+import { useGetRoleData } from '@hooks/api/role';
+import { useGetRuleData } from '@hooks/api/rule';
+import { useChangeTodo, useGetTodoData } from '@hooks/api/todo';
+
+import { getDayOfWeek } from '@utils/getDay';
 
 import { TodoListScreenProps } from '@type/param/stack';
 
-import { useRecoilState } from 'recoil';
-import { profileState, roomInfoState } from '@recoil/recoil';
-
 import Background from '@assets/todoList/background.svg';
-import SettingIcon from '@assets/todoList/settingIcon.svg';
-import PlusButton from '@assets/plusButton.svg';
-
-import LoadingComponent from '@components/loading/loading';
-
-import NavBar from '@components/navBar';
-
-import TodoBox from '@components/todoList/todoBox';
-import OthersTodoBox from '@components/todoList/othersTodoBox';
-
-import RuleBox from '@components/todoList/ruleBox';
-
-import MyRoleBox from '@components/todoList/myRoleBox';
-import RoleBox from '@components/todoList/roleBox';
-
-import ControlModal from '@components/feedView/controlModal';
-import { useFeedModal } from '@hooks/useFeedModal';
-
-import { useChangeTodo, useGetTodoData } from '@hooks/api/todo';
-import { useGetRoleData } from '@hooks/api/role';
-import { useGetRuleData } from '@hooks/api/rule';
-
-import { getDayOfWeek } from '@utils/getDay';
-import { useIsOldiPhone } from '@hooks/device';
+import PlusButton from '@assets/todoList/plusButton.svg';
 
 interface TodoItem {
   id: number;
@@ -41,7 +34,13 @@ interface TodoItem {
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { bottom } = useSafeAreaInsets();
-  const isOleiPhone = useIsOldiPhone();
+  const isOldiPhone = useIsOldiPhone();
+
+  const [timePoint, setTimePoint] = useState<string>('');
+
+  const handleDateTimeSelect = (dateTime: string) => {
+    setTimePoint(dateTime);
+  };
 
   const [myProfile, setMyProfile] = useRecoilState(profileState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
@@ -56,7 +55,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     navigation.navigate('CreateTodoScreen', { type: isTodo ? 'todo' : 'role' });
   };
 
-  const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
+  const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
   const { mutateAsync: changeTodoMutate, isPending: changeTodoPending } =
     useChangeTodo(refetchTodo);
@@ -69,24 +68,21 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
   };
 
-  const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
-    useFeedModal();
-
   return (
     <>
       {changeTodoPending && <LoadingComponent />}
-      <View className="flex-1 bg-[#CADFFF]" onTouchEnd={onPressModalClose}>
+      <View className="flex-1 bg-sub1">
         <Background style={{ position: 'absolute' }} />
-        <View className="mt-[76px] mx-5">
+        <View className="mx-5 mt-[76px]">
           <NavBar isTodo={isTodo} handleNav={handleNav} />
         </View>
-        <ScrollView className="bg-[#F7FAFF] px-5 pt-[34px] rounded-tr-[48px]">
+        <ScrollView className="rounded-tr-[48px] bg-[#F7FAFF] px-5 pt-[34px]">
           <View style={{ paddingBottom: bottom }}>
             {isTodo ? (
               <>
                 {/* 나의 투두리스트 목록 */}
                 <View className="mb-14">
-                  <View className="flex flex-row justify-between px-1 mb-4">
+                  <View className="mb-4 flex flex-row justify-between px-1">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       <Text className="text-main1">
                         {getDayOfWeek(tododata.result.timePoint)},{' '}
@@ -94,18 +90,12 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       {myProfile.nickname}님이
                       {'\n'}해야할 일들을 알려드릴게요!
                     </Text>
-                    <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
-                      <SettingIcon />
-                    </Pressable>
-
-                    <ControlModal
-                      isModalVisible={isModalVisible}
-                      modalPosition={modalPosition}
-                      onSubmit={onPressModalClose}
-                      onEdit={toCreate}
-                      onPressModalClose={onPressModalClose}
-                    />
                   </View>
+
+                  <View className="mb-3">
+                    <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
+                  </View>
+
                   <TodoBox
                     todoData={tododata.result.myTodoList.mateTodoList}
                     changeTodo={changeTodo}
@@ -113,8 +103,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                 </View>
 
                 {/* 다른 메이트들의 투두리스트 목록 */}
-                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
-                  <View className="flex flex-row justify-between px-1 mb-4">
+                <View style={{ paddingBottom: isOldiPhone ? 60 : bottom + 40 }}>
+                  <View className="mb-4 flex flex-row justify-between px-1">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       다른 메이트들은{'\n'}오늘 어떤 일들을 할까요?
                     </Text>
@@ -132,24 +122,22 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
               <>
                 {/* 코지홈의 Rule */}
                 <View className="mb-14">
-                  <View className="flex flex-row justify-between px-1 mb-4">
+                  <View className="mb-4 flex flex-row justify-between px-1">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해
                       알려드릴게요!
                     </Text>
-                    <SettingIcon />
                   </View>
                   <RuleBox ruleData={ruledata.result} />
                 </View>
 
                 {/* 코지홈의 Role */}
-                <View style={{ paddingBottom: isOleiPhone ? 60 : bottom }}>
-                  <View className="flex flex-row justify-between px-1 mb-4">
+                <View style={{ paddingBottom: isOldiPhone ? 60 : bottom + 40 }}>
+                  <View className="mb-4 flex flex-row justify-between px-1">
                     <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                       <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해
                       알려드릴게요!
                     </Text>
-                    <SettingIcon />
                   </View>
 
                   <MyRoleBox
@@ -176,7 +164,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
           </View>
         </ScrollView>
 
-        <Pressable onPress={toCreate} className="fixed z-20 flex items-end w-fit bottom-28 right-5">
+        <Pressable onPress={toCreate} className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
           <PlusButton />
         </Pressable>
       </View>

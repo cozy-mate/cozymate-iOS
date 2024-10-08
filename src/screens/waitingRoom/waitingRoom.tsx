@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Config from 'react-native-config';
+import { Text, View, Image, Pressable, ScrollView, SafeAreaView } from 'react-native';
+
+import RoomMateBox from '@components/waitingRoom/roomMateBox';
+
+import { getProfileImage } from '@utils/profileImage';
 
 import { WaitingRoomScreenProps } from '@type/param/stack';
 
 import XButton from '@assets/xButton.svg';
 import HomeIcon from '@assets/waitingRoom/homeIcon.svg';
-import PersonIcon from '@assets/waitingRoom/personIcon.svg';
 import ResetIcon from '@assets/waitingRoom/resetIcon.svg';
-import RoomMateBox from '@components/waitingRoom/RoomMateBox';
-import { getProfileImage } from '@utils/profileImage';
+import PersonIcon from '@assets/waitingRoom/personIcon.svg';
 
 const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
   const [roomInfo, setRoomInfo] = useState({
@@ -58,15 +60,15 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
-        <View className="flex flex-col flex-1 px-5">
+        <View className="flex flex-1 flex-col px-5">
           <View className="flex">
-            <View className="flex flex-row justify-end mt-2 mb-8">
+            <View className="mb-8 mt-2 flex flex-row justify-end">
               <Pressable onPress={toMain}>
                 <XButton />
               </Pressable>
             </View>
 
-            <View className="flex flex-col items-center mb-10">
+            <View className="mb-10 flex flex-col items-center">
               <Text className="text-xl font-semibold text-emphasizedFont">
                 cozymate가 모이고 있어요!
               </Text>
@@ -75,9 +77,9 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
               </Text>
             </View>
 
-            <View className="flex flex-col items-center mb-8">
+            <View className="mb-8 flex flex-col items-center">
               {getProfileImage(roomInfo.profileImage, 120, 120)}
-              <View className="flex flex-row mt-3">
+              <View className="mt-3 flex flex-row">
                 <View className="flex flex-row items-center">
                   <HomeIcon />
                   <Text className="ml-1 text-xs font-medium text-basicFont">
@@ -85,7 +87,7 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
                   </Text>
                 </View>
 
-                <View className="bg-box h-[14px] w-[1px] rounded-md mx-2" />
+                <View className="mx-2 h-[14px] w-px rounded-md bg-box" />
 
                 <View className="flex flex-row items-center">
                   <PersonIcon />
@@ -96,9 +98,9 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
               </View>
             </View>
 
-            <View className="flex flex-col items-end mb-14">
+            <View className="mb-14 flex flex-col items-end">
               <ResetIcon />
-              <View className="flex-row flex-wrap justify-between mt-8 flxex">
+              <View className="flxex mt-8 flex-row flex-wrap justify-between">
                 {fullMemberList.map((member, index) => (
                   <RoomMateBox
                     key={index}
@@ -111,9 +113,9 @@ const WaitingRoomScreen = ({ navigation }: WaitingRoomScreenProps) => {
               </View>
             </View>
 
-            <View className="flex p-4 bg-main1 rounded-xl">
+            <View className="flex rounded-xl bg-main1 p-4">
               <Pressable>
-                <Text className="text-base font-semibold text-center text-white">방 삭제하기</Text>
+                <Text className="text-center text-base font-semibold text-white">방 삭제하기</Text>
               </Pressable>
             </View>
           </View>

@@ -1,4 +1,5 @@
-import { DeleteAxiosInstance, GetAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+
 import { AddRuleRequest } from '@server/requestTypes/rule';
 import {
   AddRuleResponse,
