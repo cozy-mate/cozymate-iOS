@@ -57,9 +57,6 @@ const POST_DELETE_ERROR = '게시글 삭제에 실패했습니다.';
 const COMMENT_CREATE_ERROR = '댓글 작성에 실패했습니다.';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
-  // TODO : 복잡하게 섞인 코드 정리하기
-  // TODO : Comment시 자연스럼게 Refresh되도록 수정
-
   const keyboard = useAnimatedKeyboard();
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -301,7 +298,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   };
 
   return (
-    <View className="h-full w-full bg-white">
+    <View className="w-full h-full bg-white">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Fragment>
           <SafeAreaView className="w-full bg-white" />
@@ -310,8 +307,8 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
-            <View key={post.id} className="mb-6 flex w-full flex-col bg-white px-5 pt-4">
-              <View className="flex w-full flex-row items-center justify-between">
+            <View key={post.id} className="flex flex-col w-full px-5 pt-4 mb-6 bg-white">
+              <View className="flex flex-row items-center justify-between w-full">
                 <View className="flex flex-row items-center justify-start space-x-2">
                   {loadingProfile ||
                     refreshing ||
@@ -323,7 +320,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                       </NativeAnimated.View>
                     ))}
                   <Image
-                    className="h-8 w-8 rounded-full"
+                    className="w-8 h-8 rounded-full"
                     onLoadStart={handleProfileImageLoadStart}
                     onLoadEnd={handleProfileImageLoadEnd}
                     source={{ uri: PERSONA_IMAGE_URL }}
@@ -367,7 +364,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
                   </SkeletonPlaceholder>
                 ))}
-              <Text className="mb-3 mt-2 text-sm font-medium text-basicFont">{post.content}</Text>
+              <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
               {post.imageList.length > 0 && (
                 <View onLayout={onLayout} className="w-full">
                   <FlatList
@@ -433,7 +430,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 </View>
               )}
               <View
-                className={`mt- flex flex-row items-center justify-between space-x-2${
+                className={`flex flex-row items-center justify-between space-x-2 mt-${
                   post.imageList.length > 0 ? 4 : 0
                 }`}
               >
@@ -463,7 +460,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             />
           </ScrollView>
           <Animated.View className={`absolute z-10 w-full`} style={[animatedStyles]}>
-            <View className="flex w-full flex-row items-center justify-center bg-white py-2 pl-4 pr-2">
+            <View className="flex flex-row items-center justify-center w-full py-2 pl-4 pr-2 bg-white">
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}

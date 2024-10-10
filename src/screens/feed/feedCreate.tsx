@@ -37,8 +37,6 @@ const POST_SUCCESS = '게시글이 작성되었습니다.';
 const POST_UPDATE_SUCCESS = '게시글이 수정되었습니다.';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
-  // TODO : 복잡하게 섞인 코드 정리하기
-
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
@@ -50,14 +48,14 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
   const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const [modalTitle, setModalTitle] = useState<string>('작성 완료');
   const [isGoingBack, setIsGoingBack] = useState<boolean>(false);
   const { navigation } = props;
 
   useEffect(() => {
-    // 외부 라이브러리인 DraggleFlatList에서 나오는 경고로,
-    // 위치를 옮길 때 마다 경고가 떠 우선 무시하도록 설정했습니다.
-    // Github에서 해결되지 않은 이슈로, 라이브러리 업데이트가 되면 지우겠습니다.
     LogBox.ignoreAllLogs();
     if (mode === 'edit') {
       getMyPost(postId!);
@@ -69,14 +67,18 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   }, [postDescription]);
 
   const getMyPost = async (postId: number) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const response = await getDetailPost(roomState.roomId, postId);
-      const imageList = response.result.imageList.map((url: string) => ({ uri: url }) as Asset);
+      const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
       setImages(imageList);
       setPostDescription(response.result.content);
     } catch (e: any) {
       setModalTitle(POST_CREATE_ERROR);
       handleButtonModalOpen();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,7 +109,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
-  const createMyPost = async () => {
+  const createMyPost = useCallback(async () => {
     let imageResponse = { imgUrlList: [] };
     try {
       if (images.length > 0) {
@@ -138,9 +140,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setModalTitle(POST_CREATE_ERROR);
       handleButtonModalOpen();
     }
-  };
+  }, [images, postDescription]);
 
-  const updateMyPost = async () => {
+  const updateMyPost = useCallback(async () => {
     let imageResponse = { imgUrlList: [] };
     try {
       if (images.length > 0) {
@@ -170,15 +172,28 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setIsGoingBack(false);
       handleButtonModalOpen();
     }
-  };
+  }, [images, postDescription]);
+
+  useEffect(() => {
+    if (isSubmitting) {
+      try {
+        if (mode === 'create') {
+          createMyPost();
+        } else {
+          updateMyPost();
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  }, [isSubmitting]);
 
   const handleSubmit = () => {
-    if (mode === 'create') {
-      createMyPost();
-    } else {
-      updateMyPost();
-    }
+    setIsSubmitting(true);
   };
+
   const closeModal = () => {
     handleButtonModalClose();
     if (isGoingBack) {
@@ -211,7 +226,6 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
           useNativeDriver: true,
         }),
-        //별도 효과 추가 가능
       ]).start(() => deleteImage(getIndex()));
     };
 
@@ -220,12 +234,12 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         <TouchableOpacity onLongPress={drag} onPressIn={handlePressIn} onPressOut={handlePressOut}>
           <Animated.Image
             source={{ uri: item.uri }}
-            className="h-20 w-20 rounded-xl"
+            className="w-20 h-20 rounded-xl"
             style={{ transform: [{ scale }] }}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="absolute -top-5 right-0"
+          className="absolute right-0 -top-5"
           onPress={() => {
             handleDelete();
           }}
@@ -238,19 +252,19 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="h-full w-full flex-1 flex-col bg-white px-8 pt-8">
+      <SafeAreaView className="flex-col flex-1 w-full h-full px-8 pt-8 bg-white">
         <BackCleanHeader
           onPressBack={() => {
             navigation.goBack();
           }}
         />
-        <View className="mb-4 flex h-24 w-full flex-row items-center justify-center">
+        <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
           <TouchableOpacity
-            className="mr-2 flex h-20 w-20 items-center justify-center rounded-xl bg-colorBox"
+            className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
             onPress={pickImages}
           >
             <PostImage className="mb-2" />
-            <View className="flex w-full flex-row items-center justify-center">
+            <View className="flex flex-row items-center justify-center w-full">
               <Text
                 className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
               >{`${images.length}/`}</Text>
@@ -272,13 +286,13 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             />
           </ScrollView>
         </View>
-        <View className="mb-4 flex-1 flex-col items-center justify-start">
+        <View className="flex-col items-center justify-start flex-1 mb-4">
           <TextInput
             placeholder="내용를 입력해주세요"
             value={postDescription}
             onChangeText={valueHandleDescriptionChange}
             multiline={true}
-            className="h-2/3 w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
+            className="w-full p-4 pr-8 h-2/3 rounded-xl bg-colorBox text-basicFont"
             textAlignVertical="top"
             numberOfLines={20}
           />
@@ -288,7 +302,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             onPress={handleSubmit}
             className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
           >
-            <Text className="text-center text-base font-semibold text-white">작성</Text>
+            <Text className="text-base font-semibold text-center text-white">
+              {isSubmitting ? '게시글 작성 중...' : '게시글 작성하기'}
+            </Text>
           </Pressable>
         </View>
         <ButtonModal
