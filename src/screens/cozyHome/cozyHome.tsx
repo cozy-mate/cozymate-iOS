@@ -114,6 +114,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RoomMateScreen');
   };
 
+  const toRecommendRoom = () => {
+    navigation.navigate('RecommendRoomScreen');
+  };
+
   const [hasRoom, setHasRoom] = useState<boolean>(true);
 
   const toRoomDetail = () => {
@@ -249,7 +253,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                 {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
               </Text>
-              <Text className="text-xs font-semibold text-disabledFont">더보기</Text>
+              <Pressable onPress={toRecommendRoom}>
+                <Text className="text-xs font-semibold text-disabledFont">더보기</Text>
+              </Pressable>
             </View>
             <ScrollView
               className="flex flex-row"
