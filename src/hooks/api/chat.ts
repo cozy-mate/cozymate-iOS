@@ -1,7 +1,8 @@
-import { getChatDetailData, sendChat } from '@server/api/chat';
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+
 import { SendChatRequest } from '@server/requestTypes/chat';
-import { GetChatDetailDataResponse, SendChatResponse } from '@server/responseTypes/chat';
-import { useMutation, UseMutationResult, useSuspenseQuery } from '@tanstack/react-query';
+import { sendChat, getChatDetailData } from '@server/api/chat';
+import { SendChatResponse, GetChatDetailDataResponse } from '@server/responseTypes/chat';
 
 // 쪽지방 쪽지 상세 내역 조회
 export const useGetChatDetailData = (

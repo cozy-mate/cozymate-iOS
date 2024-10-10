@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
+
+import { dummyData } from './dummyData';
+
+import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
+import DetailSearchModal from '@components/roomMate/detailSearchModal';
+import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
+import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
+
 import {
-  Pressable,
-  Text,
-  View,
-  ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
+  profileState,
+  OtherBasicData,
+  MyLifeStyleState,
+  OtherLifeStyleState,
+} from '@recoil/recoil';
+
+import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
+
+import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
 
 import { RoomMateScreenProps } from '@type/param/stack';
-import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
-import Background from '@assets/roomMate/background.svg';
-
-import SchoolLogo from '@assets/roomMate/schoolLogo.svg';
-import MagnifierIcon from '@assets/roomMate/magnifier.svg';
-import DownToggleIcon from '@assets/roomMate/downToggle.svg';
-import RightToggleIcon from '@assets/roomMate/rightToggle.svg';
-
-import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
-import SimilarLifeStyleContainer from '@components/roomMate/similarLifeStyleContainer';
-import { getOtherUserDetailData, getUserDetailData, searchUsers } from '@server/api/member-stat';
-import { useRecoilState } from 'recoil';
-import { MyLifeStyleState, OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
-import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
+import BackButton from '@assets/backButton.svg';
+import FilterIcon from '@assets/roomMate/filter.svg';
 
 type UserItem = {
   memberId: number;
@@ -36,21 +37,28 @@ type UserItem = {
 };
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
-  const [filterList, setFilterList] = useState<string[]>([]);
+  const { bottom } = useSafeAreaInsets();
 
-  const [page, setPage] = useState<number>(0);
-  const [hasMoreData, setHasMoreData] = useState<boolean>(true);
-  const [isSimilarLoading, setIsSimilarLoading] = useState<boolean>(false);
+  const profile = useRecoilValue(profileState);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isToggleClicked, setIsToggleClicked] = useState<boolean>(false);
+  const [filterList, setFilterList] = useState<string[]>([]); // 필터 목록
+  const [page, setPage] = useState<number>(0); // 페이지네이션
 
-  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
-  const [sameAnswerData, setSameAnswerData] = useState<UserItem[]>([]);
-  const [similarAnswerData, setSimilarAnswerData] = useState<UserItem[]>([]);
+  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState); // 내 라이프 스타일 데이터
+  const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
 
-  const [, setOthersBasicData] = useRecoilState(OtherBasicData);
-  const [, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState);
+  const [roomData, setRoomData] = useState(dummyData);
+
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+
+  const [, setOthersBasicData] = useRecoilState(OtherBasicData); // 다른 사용자의 기본 데이터
+  const [, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState); // 다른 사용자의 라이프스타일 데이터
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleModal = () => {
+    setIsModalOpen(false);
+  };
 
   const [items, setItems] = useState([
     { index: 1, id: 'admissionYear', name: '학번', select: false },
@@ -91,41 +99,32 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   };
 
+  // 같은 답변을 한 사용자 목록을 가져오는 함수
   const getSameAnswerMate = async () => {
     try {
-      const response = await searchUsers(filterList);
-
-      setSameAnswerData(response.result.result);
+      const response = await searchUsers(filterList); // 필터를 적용하여 검색
+      setDisplayedUsers(response.result.result);
+      setHasNextPage(response.result.hasNext);
     } catch (error: any) {
       console.log(error.response.data);
     }
   };
 
-  const getSimilarAnswerData = async (append = false) => {
-    if (!hasMoreData || isSimilarLoading) return;
-
-    setIsSimilarLoading(true);
+  // 비슷한 답변을 한 사용자 목록을 가져오는 함수
+  const getSimilarAnswerData = async () => {
     try {
-      const response = await searchUsers(undefined, page);
-
-      const newResults = response.result.result;
-      if (newResults.length === 0) {
-        setHasMoreData(false);
-      } else {
-        setSimilarAnswerData((prevData) => (append ? [...prevData, ...newResults] : newResults));
-        setPage((prevPage) => prevPage + 1);
-      }
+      const response = await searchUsers(undefined, page); // 페이지네이션 적용하여 검색
+      setDisplayedUsers(response.result.result);
+      setHasNextPage(response.result.hasNext);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsSimilarLoading(false);
     }
   };
 
+  // 다른 사용자의 라이프스타일을 가져오는 함수
   const getOthersLifeStyle = async (user: UserItem) => {
     try {
       const response = await getOtherUserDetailData(user.memberId);
-
       setOthersBasicData(user);
       setOthersLifeStyleData(response.result);
       navigation.navigate('UserDetailScreen');
@@ -134,39 +133,48 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   };
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const isCloseToEnd = contentOffset.x + layoutMeasurement.width >= contentSize.width - 100;
+  // 필터에 따라 사용자 데이터를 가져오는 로직
+  useEffect(() => {
+    // 필터가 변경될 때 페이지와 사용자 목록을 초기화
+    setPage(0);
+    setDisplayedUsers([]);
 
-    if (isCloseToEnd && hasMoreData && !isLoading) {
-      getSimilarAnswerData(true);
+    if (filterList.length > 0) {
+      // 필터가 있을 때: 같은 답변을 한 사용자 목록을 가져옴
+      getSameAnswerMate();
+    } else {
+      // 필터가 없을 때: 비슷한 답변을 한 사용자 목록을 가져옴
+      getSimilarAnswerData();
     }
+  }, [filterList]); // 필터 목록 변경 시 실행
+
+  const toHome = () => {
+    navigation.goBack();
   };
 
-  useEffect(() => {
-    getMyLifeStyle();
-    if (filterList.length > 0) {
-      getSameAnswerMate();
-    }
-    getSimilarAnswerData();
-  }, [filterList, page]);
+  const hasData = true;
 
   return (
-    <View className="flex-1 bg-[#F7FAFF]">
-      <View className="flex-row h-[132px] px-4 justify-between items-center pt-[65px] mb-6 bg-[#CADFFF] rounded-br-[40px]">
-        <Background style={{ position: 'absolute' }} />
-        <Pressable>
-          <View className="flex-row items-center py-2">
-            <SchoolLogo />
-            <Text className="text-lg font-semibold text-[#5B9CFF] ml-[6px]">인하대학교</Text>
-          </View>
-        </Pressable>
-        <Pressable>
-          <MagnifierIcon />
-        </Pressable>
-      </View>
-
+    <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
+        {/* 상단 이전 버튼 */}
+        <View className="mb-6 flex flex-row items-center pl-2">
+          <Pressable onPress={toHome}>
+            <BackButton />
+          </Pressable>
+        </View>
+
+        <View className="mb-4 flex flex-row items-center justify-between pr-5">
+          <Text className="px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
+            원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
+          </Text>
+          <Pressable onPress={() => setIsModalOpen(true)}>
+            <View className="rounded-lg border border-disabled px-3 py-[13px]">
+              <FilterIcon />
+            </View>
+          </Pressable>
+        </View>
+
         <CheckBoxContainer
           value={filterList}
           setValue={setFilterList}
@@ -174,75 +182,34 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           setItems={setItems}
         />
 
-        <View className="flex-1 bg-white drop-shadow-topShadow rounded-tl-[30px]">
-          <View className="flex px-5 pt-6 ">
-            <View className="flex flex-col">
-              <View className="flex flex-row items-center justify-between mb-3 leading-loose">
-                <Text className="px-1 text-base font-semibold leading-5 tracking-tight text-emphasizedFont">
-                  원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
-                </Text>
-                <Pressable onPress={() => setIsToggleClicked(!isToggleClicked)}>
-                  <View className="pl-1 pr-2 py-[6px]">
-                    {isToggleClicked ? <DownToggleIcon /> : <RightToggleIcon />}
-                  </View>
-                </Pressable>
-              </View>
-
-              <View className="flex flex-col mb-9">
-                {isLoading ? (
-                  <Text>Loading...</Text>
-                ) : filterList.length === 0 ? (
-                  <View className="h-[108px] flex justify-center items-center">
-                    <Text className="text-sm font-medium text-disabledFont">칩을 선택해보세요</Text>
-                  </View>
-                ) : sameAnswerData.length > 0 ? (
-                  sameAnswerData.map((user, index) => (
-                    <SameAnswerContainer
-                      key={index}
-                      user={user}
-                      toUserDetail={getOthersLifeStyle}
-                    />
-                  ))
-                ) : (
-                  <View className="h-[108px] flex justify-center items-center">
-                    <Text className="text-sm font-medium text-disabledFont">
-                      해당 칩에 같은 답변을 한 사용자가 없어요
-                    </Text>
-                  </View>
-                )}
-              </View>
-
-              {/* 비슷한 라이프 스타일 */}
+        {/* 사용자 목록 */}
+        <View
+          className="mb-9 flex flex-col items-center px-5"
+          style={{ paddingBottom: bottom + 20 }}
+        >
+          {hasData ? (
+            displayedUsers.length > 0 ? (
+              displayedUsers.map((user, index) => (
+                <SameAnswerContainer
+                  key={user.memberId}
+                  index={index}
+                  user={user}
+                  toUserDetail={getOthersLifeStyle}
+                />
+              ))
+            ) : (
               <View>
-                <View className="flex flex-row items-center justify-between mb-3 leading-loose">
-                  <Text className="px-1 text-base font-semibold leading-5 tracking-tight text-emphasizedFont">
-                    나와 비슷한{'\n'}라이프 스타일을 갖고 있어요!
-                  </Text>
-                </View>
-
-                <View className="flex bg-white gap-x-3">
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    className="flex flex-row"
-                    onScroll={handleScroll}
-                    scrollEventThrottle={16} // Adjust as necessary
-                  >
-                    {similarAnswerData.map((user, index) => (
-                      <SimilarLifeStyleContainer
-                        key={index}
-                        user={user}
-                        toUserDetail={getOthersLifeStyle}
-                      />
-                    ))}
-                  </ScrollView>
-                </View>
+                <Text>비어있음</Text>
               </View>
-            </View>
-          </View>
+            )
+          ) : (
+            <NoLifeStyleComponent />
+          )}
         </View>
       </ScrollView>
-    </View>
+
+      {isModalOpen && <DetailSearchModal onClose={handleModal} />}
+    </SafeAreaView>
   );
 };
 

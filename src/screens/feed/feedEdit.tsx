@@ -1,14 +1,19 @@
+import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, TextInput, Text, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, Keyboard, TextInput, Pressable, TouchableWithoutFeedback } from 'react-native';
+
+import BackCleanHeader from 'src/layout/backCleanHeader';
+
+import ButtonModal from '@components/common/buttonModal';
+
+import { hasRoomState, roomInfoState, feedRefreshState } from '@recoil/recoil';
+
+import { createFeed, updateFeed, getFeedData } from '@server/api/feed';
+
+import { useButtonModal } from '@hooks/useButtonModal';
 
 import { FeedEditScreenProps } from '@type/param/stack';
-import { createFeed, getFeedData, updateFeed } from '@server/api/feed';
-import { useRecoilState } from 'recoil';
-import { feedRefreshState, hasRoomState, roomInfoState } from '@recoil/recoil';
-import BackCleanHeader from 'src/layout/backCleanHeader';
-import { useButtonModal } from '@hooks/useButtonModal';
-import ButtonModal from '@components/common/buttonModal';
 
 const FEED_CREATE_SUCCESS = '피드가 생성되었습니다.';
 const FEED_UPDATE_SUCCESS = '피드가 수정되었습니다.';
@@ -85,10 +90,10 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-col flex-1 w-full h-full pt-1 pl-8 pr-8 bg-white">
+      <SafeAreaView className="h-full w-full flex-1 flex-col bg-white px-8 pt-1">
         <BackCleanHeader onPressBack={() => navigation.goBack()} />
-        <View className="flex-col flex-1">
-          <Text className="mb-2 ml-1 font-semibold text-md text-emphasizedFont">
+        <View className="flex-1 flex-col">
+          <Text className="text-md mb-2 ml-1 font-semibold text-emphasizedFont">
             피드 이름을 입력해주세요.
           </Text>
           <TextInput
@@ -96,9 +101,9 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
             value={feedName}
             onChangeText={valueHandleNameChange}
             aria-disabled={isLoading}
-            className="w-full p-4 pr-8 mb-12 bg-colorBox text-basicFont rounded-xl"
+            className="mb-12 w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
           />
-          <Text className="mb-2 ml-1 font-semibold text-md text-emphasizedFont">
+          <Text className="text-md mb-2 ml-1 font-semibold text-emphasizedFont">
             피드 설명을 입력해주세요.
           </Text>
           <TextInput
@@ -106,15 +111,15 @@ const FeedEditScreen = (props: FeedEditScreenProps) => {
             value={feedDescription}
             aria-disabled={isLoading}
             onChangeText={valueHandleDescriptionChange}
-            className="w-full p-4 pr-8 bg-colorBox text-basicFont rounded-xl"
+            className="w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
           />
         </View>
         <View className="flex">
           <Pressable
             onPress={postFeedInfo}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}  p-4 rounded-xl`}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}  rounded-xl p-4`}
           >
-            <Text className="text-base font-semibold text-center text-white">확인</Text>
+            <Text className="text-center text-base font-semibold text-white">확인</Text>
           </Pressable>
         </View>
         <ButtonModal

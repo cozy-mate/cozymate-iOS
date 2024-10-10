@@ -48,12 +48,12 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
   return (
     <Pressable
       onPress={handleFocus}
-      className={`box-border flex flex-row justify-between items-center rounded-xl border-[1px] px-5 py-4 mb-4 bg-white
+      className={`mb-4 box-border flex flex-row items-center justify-between rounded-xl border bg-white px-5 py-4
         ${!canUse ? 'border-warning' : isActive ? 'border-sub1' : 'border-disabled'}`}
     >
       <View className="flex flex-col items-start justify-center">
         <Text
-          className={`font-semibold text-xs leading-[17px] tracking-tight
+          className={`text-xs font-semibold leading-[17px] tracking-tight
             ${!canUse ? 'text-warning' : isFocused ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
@@ -67,14 +67,14 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
             onChangeText={valueHandleChange}
             placeholder={placeholder}
             placeholderTextColor="#ACADB4"
-            className="font-medium text-sm leading-[17px] tracking-tight text-basicFont"
+            className="text-sm font-medium leading-[17px] tracking-tight text-basicFont"
           />
         </View>
       </View>
 
       {value && hasButton && (
         <Pressable className="flex items-center" onPress={value ? pressFunc : undefined}>
-          <View className="px-4 py-2 bg-colorBox rounded-xl">
+          <View className="rounded-xl bg-colorBox px-4 py-2">
             <Text className="text-xs font-medium text-main1">{buttonString}</Text>
           </View>
         </Pressable>

@@ -1,20 +1,21 @@
 import React from 'react';
+
 import first from '@assets/characterItem/1.svg';
-import second from '@assets/characterItem/2.svg';
 import third from '@assets/characterItem/3.svg';
-import fourth from '@assets/characterItem/4.svg';
 import fifth from '@assets/characterItem/5.svg';
 import sixth from '@assets/characterItem/6.svg';
-import seventh from '@assets/characterItem/7.svg';
-import eighth from '@assets/characterItem/8.svg';
 import ninth from '@assets/characterItem/9.svg';
+import second from '@assets/characterItem/2.svg';
+import fourth from '@assets/characterItem/4.svg';
+import eighth from '@assets/characterItem/8.svg';
 import tenth from '@assets/characterItem/10.svg';
-import eleventh from '@assets/characterItem/11.svg';
+import seventh from '@assets/characterItem/7.svg';
 import twelfth from '@assets/characterItem/12.svg';
-import thirteenth from '@assets/characterItem/13.svg';
-import fourteenth from '@assets/characterItem/14.svg';
+import eleventh from '@assets/characterItem/11.svg';
 import fifteenth from '@assets/characterItem/15.svg';
 import sixteenth from '@assets/characterItem/16.svg';
+import thirteenth from '@assets/characterItem/13.svg';
+import fourteenth from '@assets/characterItem/14.svg';
 
 export const getProfileImage = (persona: number, width: number, height: number) => {
   const items = [

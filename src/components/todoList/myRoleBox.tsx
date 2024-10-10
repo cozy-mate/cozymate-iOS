@@ -1,7 +1,8 @@
-import { getProfileImage } from '@utils/profileImage';
 import React from 'react';
-import { Image, Text, View } from 'react-native';
 import Config from 'react-native-config';
+import { Text, View, Image } from 'react-native';
+
+import { getProfileImage } from '@utils/profileImage';
 
 interface RoleItem {
   id: number;
@@ -18,9 +19,9 @@ interface RoleBoxProps {
 
 const MyRoleBox: React.FC<RoleBoxProps> = ({ persona, roleData, nickname }) => {
   return (
-    <View className="p-4 pr-2 mb-4 bg-white shadow-custom rounded-xl">
+    <View className="mb-4 rounded-xl bg-white p-4 pr-2 shadow-custom">
       <View>
-        <View className="flex flex-row items-center mb-2">
+        <View className="mb-2 flex flex-row items-center">
           {getProfileImage(persona, 24, 24)}
           <Text className="ml-1.5 font-medium text-emphasizedFont">{nickname} (나)</Text>
         </View>
@@ -28,11 +29,11 @@ const MyRoleBox: React.FC<RoleBoxProps> = ({ persona, roleData, nickname }) => {
           roleData.map((role, index) => (
             <View
               key={role.id}
-              className={`flex flex-row items-center mb-1 py-1.5 ${
+              className={`mb-1 flex flex-row items-center py-1.5 ${
                 index === roleData.length - 1 ? 'mb-0' : ''
               }`}
             >
-              <View className="bg-colorBox px-2 py-[2px] rounded-sm mr-1.5">
+              <View className="mr-1.5 rounded-sm bg-colorBox px-2 py-[2px]">
                 <Text className="text-xs font-medium text-colorFont">
                   {role.allDays ? '매일' : role.repeatDayList.join(', ')}
                 </Text>

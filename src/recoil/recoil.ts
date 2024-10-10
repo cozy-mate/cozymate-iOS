@@ -1,13 +1,14 @@
 import { atom } from 'recoil';
+
 import {
   SignUp,
-  LifeStyle,
+  MyRoom,
+  Profile,
   RoomInfo,
+  LifeStyle,
+  BasicData,
   CreateRoomInfo,
   InviteCodeRoomInfo,
-  Profile,
-  MyRoom,
-  BasicData,
 } from './type';
 
 export const signUpState = atom<SignUp>({

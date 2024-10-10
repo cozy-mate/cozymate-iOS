@@ -1,11 +1,14 @@
-import messaging from '@react-native-firebase/messaging';
-import { loggedInState } from '../recoil/recoil';
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
-import { setFcmToken } from '@utils/fcm';
-import { postFcmToken } from '@server/api/fcm';
 import notifee from '@notifee/react-native';
 import { getUniqueId } from 'react-native-device-info';
-import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
+import { loggedInState } from '../recoil/recoil';
+
+import { postFcmToken } from '@server/api/fcm';
+
+import { setFcmToken } from '@utils/fcm';
 
 const useInitFcm = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loggedInState);

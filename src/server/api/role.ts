@@ -1,4 +1,5 @@
-import { DeleteAxiosInstance, GetAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+
 import { AddRoleRequest } from '@server/requestTypes/role';
 import {
   AddRoleResponse,

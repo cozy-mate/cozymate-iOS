@@ -1,7 +1,8 @@
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+
 import { addRule, getRuleData } from '@server/api/rule';
 import { AddRuleRequest } from '@server/requestTypes/rule';
 import { AddRuleResponse, GetRuleDataResponse } from '@server/responseTypes/rule';
-import { useMutation, UseMutationResult, useSuspenseQuery } from '@tanstack/react-query';
 
 // Rule 생성
 export const useAddRule = (

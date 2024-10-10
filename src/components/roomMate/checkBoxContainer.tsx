@@ -1,6 +1,7 @@
-import CustomCheckBoxComponent from '@components/customCheckBox';
 import React from 'react';
 import { View } from 'react-native';
+
+import CustomCheckBoxComponent from '@components/customCheckBox';
 
 interface CheckBoxContainerProps {
   value: string[];
@@ -23,7 +24,7 @@ const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
   setItems,
 }) => {
   return (
-    <View className="px-3 mb-6">
+    <View className="mb-6 px-3">
       <View className="flex-row flex-wrap">
         <CustomCheckBoxComponent
           value={value}

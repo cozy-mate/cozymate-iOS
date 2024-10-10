@@ -1,15 +1,17 @@
 import {
   GetAxiosInstance,
   PostAxiosInstance,
-  DeleteAxiosInstance,
   PatchAxiosInstance,
+  DeleteAxiosInstance,
 } from '@axios/axios.method';
+
 import { AddMyTodoRequest, ChangeTodoStateRequest } from '@server/requestTypes/todo';
 import {
   AddMyTodoResponse,
-  ChangeTodoStateResponse,
   DeleteTodoResponse,
+  ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
+
 import { AdditionalLifeStyleScreenProps } from '@type/param/loginStack';
 
 // 특정 방의 특정 Todo 삭제

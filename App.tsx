@@ -1,12 +1,11 @@
 import React from 'react';
-import AppInner from './AppInner';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import { RecoilRoot } from 'recoil';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import AppInner from './AppInner';
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  NativeSyntheticEvent,
-  Pressable,
   Text,
-  TextInput,
-  TextInputSubmitEditingEventData,
   View,
+  Pressable,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
 } from 'react-native';
 
 interface CustomTextareaProps {
@@ -57,7 +57,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
 
   return (
     <View className="mb-12">
-      <Text className="px-1 mb-2 text-lg font-semibold text-basicFont">{title}</Text>
+      <Text className="mb-2 px-1 text-lg font-semibold text-basicFont">{title}</Text>
       <Pressable onPress={handleFocus}>
         <View style={{ position: 'relative' }}>
           <TextInput
@@ -72,13 +72,11 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
             placeholder={placeholder}
             blurOnSubmit={false}
             className={`${
-              isFocused
-                ? 'bg-sub2 border-main1 border-[1px]'
-                : 'bg-colorBox border-colorBox border-[1px]'
-            } p-4 text-basicFont rounded-xl`}
+              isFocused ? 'border border-main1 bg-sub2' : 'border border-colorBox bg-colorBox'
+            } rounded-xl p-4 text-basicFont`}
             style={{ height: height }}
           />
-          <Text className="absolute text-sm text-gray-500 bottom-4 right-5">
+          <Text className="absolute bottom-4 right-5 text-sm text-gray-500">
             {`${value.length} / 50`}
           </Text>
         </View>

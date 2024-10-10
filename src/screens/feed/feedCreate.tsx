@@ -1,31 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { TextInput, ScrollView } from 'react-native-gesture-handler';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import {
-  Pressable,
   View,
   Text,
-  TouchableOpacity,
-  Animated,
   LogBox,
-  TouchableWithoutFeedback,
+  Animated,
   Keyboard,
+  Pressable,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
+import BackCleanHeader from 'src/layout/backCleanHeader';
+
+import { uploadAssetImageToS3 } from '../../server/api/image';
+import { createPost, updatePost, getDetailPost } from '../../server/api/post';
+
+import ButtonModal from '@components/common/buttonModal';
+
+import { hasRoomState, feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
+
+import { useButtonModal } from '@hooks/useButtonModal';
+
+import { FeedCreateScreenProps } from '@type/param/stack';
 
 import PostImage from '@assets/feedCreate/postImage.svg';
 import ImageDeleteIcon from '@assets/feedCreate/imageDeleteIcon.svg';
-
-import { FeedCreateScreenProps } from '@type/param/stack';
-import { createPost, getDetailPost, updatePost } from '../../server/api/post';
-import { uploadAssetImageToS3 } from '../../server/api/image';
-import { useRecoilState } from 'recoil';
-import { feedRefreshState, hasRoomState, postDetailRefreshState } from '@recoil/recoil';
-import BackCleanHeader from 'src/layout/backCleanHeader';
-import ButtonModal from '@components/common/buttonModal';
-import { useButtonModal } from '@hooks/useButtonModal';
 
 const IMAGE_UPLOAD_ERROR = '이미지 업로드에 실패했습니다.';
 const POST_CREATE_ERROR = '게시글 생성에 실패했습니다.';
@@ -33,8 +37,6 @@ const POST_SUCCESS = '게시글이 작성되었습니다.';
 const POST_UPDATE_SUCCESS = '게시글이 수정되었습니다.';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
-  // TODO : 복잡하게 섞인 코드 정리하기
-
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
@@ -46,14 +48,14 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
   const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const [modalTitle, setModalTitle] = useState<string>('작성 완료');
   const [isGoingBack, setIsGoingBack] = useState<boolean>(false);
   const { navigation } = props;
 
   useEffect(() => {
-    // 외부 라이브러리인 DraggleFlatList에서 나오는 경고로,
-    // 위치를 옮길 때 마다 경고가 떠 우선 무시하도록 설정했습니다.
-    // Github에서 해결되지 않은 이슈로, 라이브러리 업데이트가 되면 지우겠습니다.
     LogBox.ignoreAllLogs();
     if (mode === 'edit') {
       getMyPost(postId!);
@@ -65,6 +67,8 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
   }, [postDescription]);
 
   const getMyPost = async (postId: number) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const response = await getDetailPost(roomState.roomId, postId);
       const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
@@ -73,6 +77,8 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     } catch (e: any) {
       setModalTitle(POST_CREATE_ERROR);
       handleButtonModalOpen();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,7 +109,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
-  const createMyPost = async () => {
+  const createMyPost = useCallback(async () => {
     let imageResponse = { imgUrlList: [] };
     try {
       if (images.length > 0) {
@@ -134,9 +140,9 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setModalTitle(POST_CREATE_ERROR);
       handleButtonModalOpen();
     }
-  };
+  }, [images, postDescription]);
 
-  const updateMyPost = async () => {
+  const updateMyPost = useCallback(async () => {
     let imageResponse = { imgUrlList: [] };
     try {
       if (images.length > 0) {
@@ -166,15 +172,28 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
       setIsGoingBack(false);
       handleButtonModalOpen();
     }
-  };
+  }, [images, postDescription]);
+
+  useEffect(() => {
+    if (isSubmitting) {
+      try {
+        if (mode === 'create') {
+          createMyPost();
+        } else {
+          updateMyPost();
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  }, [isSubmitting]);
 
   const handleSubmit = () => {
-    if (mode === 'create') {
-      createMyPost();
-    } else {
-      updateMyPost();
-    }
+    setIsSubmitting(true);
   };
+
   const closeModal = () => {
     handleButtonModalClose();
     if (isGoingBack) {
@@ -207,7 +226,6 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
           useNativeDriver: true,
         }),
-        //별도 효과 추가 가능
       ]).start(() => deleteImage(getIndex()));
     };
 
@@ -234,7 +252,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-col flex-1 w-full h-full pt-8 pl-8 pr-8 bg-white">
+      <SafeAreaView className="flex-col flex-1 w-full h-full px-8 pt-8 bg-white">
         <BackCleanHeader
           onPressBack={() => {
             navigation.goBack();
@@ -274,7 +292,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             value={postDescription}
             onChangeText={valueHandleDescriptionChange}
             multiline={true}
-            className="w-full p-4 pr-8 h-2/3 bg-colorBox text-basicFont rounded-xl"
+            className="w-full p-4 pr-8 h-2/3 rounded-xl bg-colorBox text-basicFont"
             textAlignVertical="top"
             numberOfLines={20}
           />
@@ -282,9 +300,11 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         <View className="flex">
           <Pressable
             onPress={handleSubmit}
-            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} p-4 rounded-xl`}
+            className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
           >
-            <Text className="text-base font-semibold text-center text-white">작성</Text>
+            <Text className="text-base font-semibold text-center text-white">
+              {isSubmitting ? '게시글 작성 중...' : '게시글 작성하기'}
+            </Text>
           </Pressable>
         </View>
         <ButtonModal

@@ -10,9 +10,10 @@ interface BackHeaderProps {
 
 const BackCleanHeader: React.FC<BackHeaderProps> = (props) => {
   const { onPressBack, paddingX } = props;
+
   return (
     <View className="mb-5">
-      <View className={`flex flex-row items-center justify-start px-${paddingX}`}>
+      <View className={`flex flex-row items-center justify-start mx-${paddingX}`}>
         <TouchableOpacity onPress={onPressBack} className="">
           <BackButton />
         </TouchableOpacity>
