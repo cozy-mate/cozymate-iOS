@@ -80,22 +80,18 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
     const keys = Object.keys(labels).filter((key) => key in my || key in other);
 
     return (
-      <View className="flex mt-4 mb-[7px] border-[1px] p-4 rounded-xl border-[#f1f2f4]">
+      <View className="mb-[7px] mt-4 flex rounded-xl border border-[#f1f2f4] p-4">
         <View className="w-full leading-loose">
           {keys.map((key, index) =>
             key in my && key in other ? (
               <View
                 key={key}
-                className={`flex flex-row items-center justify-between w-full py-3 ${
+                className={`flex w-full flex-row items-center justify-between py-3 ${
                   index === 0 ? 'pt-0' : ''
-                } ${
-                  index === keys.length - 1
-                    ? 'pb-0 border-b-0'
-                    : 'border-b-[1px] border-b-[#f1f2f4]'
-                }`}
+                } ${index === keys.length - 1 ? 'border-b-0 pb-0' : 'border-b border-b-[#f1f2f4]'}`}
               >
                 <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
-                <View className="flex flex-row w-[75%] justify-center items-center">
+                <View className="flex w-[75%] flex-row items-center justify-center">
                   <Text
                     className={`font-medium tracking-tight ${
                       key !== 'name' && key !== 'memberName' && my[key] !== other[key]
@@ -125,7 +121,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
     );
   };
 
-  return <View className="px-5 mt-4 pb-[54px]">{renderInfo(userData, otherUserData)}</View>;
+  return <View className="mt-4 px-5 pb-[54px]">{renderInfo(userData, otherUserData)}</View>;
 };
 
 export default TableView;

@@ -1,9 +1,10 @@
 import {
-  DeleteAxiosInstance,
   GetAxiosInstance,
-  PostAxiosInstance,
   PutAxiosInstance,
+  PostAxiosInstance,
+  DeleteAxiosInstance,
 } from '@axios/axios.method';
+
 import { CreateCommentRequest, UpdateCommentRequest } from '@server/requestTypes/comment';
 import {
   CreateCommentResponse,

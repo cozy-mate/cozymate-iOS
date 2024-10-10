@@ -5,23 +5,23 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:tailwindcss/recommended",
-    "prettier"
+    "prettier",
   ],
   "ignorePatterns": [
     ".eslintrc.js",
     "babel.config.js",
     "jest.config.js",
     "metro.config.js",
-    "tailwind.config.js"
+    "tailwind.config.js",
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["react-refresh", "perfectionist"],
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
-    }
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
   },
 
   "rules": {
@@ -34,22 +34,22 @@
       1,
       {
         "order": "asc",
-        "type": "line-length"
-      }
+        "type": "line-length",
+      },
     ],
     "perfectionist/sort-named-exports": [
       1,
       {
         "order": "asc",
-        "type": "line-length"
-      }
+        "type": "line-length",
+      },
     ],
     "perfectionist/sort-exports": [
       1,
       {
         "order": "asc",
-        "type": "line-length"
-      }
+        "type": "line-length",
+      },
     ],
     "perfectionist/sort-imports": [
       1,
@@ -72,7 +72,7 @@
           "custom-hooks",
           "custom-utils",
           "custom-type",
-          "custom-assets"
+          "custom-assets",
         ],
         "custom-groups": {
           "value": {
@@ -86,11 +86,11 @@
             "custom-hooks": "@hooks/**",
             "custom-utils": "@utils/**",
             "custom-type": "@type/**",
-            "custom-assets": "@assets/**"
-          }
+            "custom-assets": "@assets/**",
+          },
         },
-        "internal-pattern": ["src/**"]
-      }
-    ]
-  }
+        "internal-pattern": ["src/**"],
+      },
+    ],
+  },
 }

@@ -1,4 +1,5 @@
-import { DeleteAxiosInstance, GetAxiosInstance } from '@axios/axios.method';
+import { GetAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+
 import { DeleteChatRoomResponse, GetChatRoomListResponse } from '@server/responseTypes/chat-room';
 
 // 쪽지방 삭제 기능

@@ -1,51 +1,55 @@
-import React, { useCallback, useRef, useEffect, Fragment } from 'react';
+import { useRecoilState } from 'recoil';
+import Animated from 'react-native-reanimated';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import React, { useRef, Fragment, useEffect, useCallback } from 'react';
+import { withTiming, useAnimatedStyle, useAnimatedKeyboard } from 'react-native-reanimated';
 import {
   View,
   Text,
   Image,
   FlatList,
-  TextInput,
-  TouchableOpacity,
-  RefreshControl,
-  Animated as NativeAnimated,
   Keyboard,
+  TextInput,
+  RefreshControl,
+  TouchableOpacity,
   TouchableWithoutFeedback,
+  Animated as NativeAnimated,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { ScrollView } from 'react-native-gesture-handler';
 
-import ChatIcon from '@assets/feedMain/chatIcon.svg';
-import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
-import DotIcon from '@assets/feedView/dotIcon.svg';
+import BackCleanHeader from 'src/layout/backCleanHeader';
 
-import { FeedViewScreenProps } from '@type/param/stack';
-import { CommentType, PostCardType } from '@type/feed';
+import { updateComment } from '../../server/api/comment';
 
-import { postTimeUtil } from '@utils/time/timeUtil';
-
+import ButtonModal from '@components/common/buttonModal';
 import CommentList from '@components/feedView/commentList';
 import ControlModal from '@components/feedView/controlModal';
 
-import { useImageCarousel } from '@hooks/useImageCarousel';
-import { usePersonaImage } from '@hooks/usePersonaImage';
+import {
+  hasRoomState,
+  profileState,
+  feedRefreshState,
+  postDetailRefreshState,
+} from '@recoil/recoil';
+
+import { deletePost, getDetailPost } from '@server/api/post';
+import { createComment, getCommentList } from '@server/api/comment';
+
 import { useFeedModal } from '@hooks/useFeedModal';
 import { useButtonModal } from '@hooks/useButtonModal';
-import ButtonModal from '@components/common/buttonModal';
-import { deletePost, getDetailPost } from '@server/api/post';
-import { useRecoilState } from 'recoil';
-import {
-  feedRefreshState,
-  hasRoomState,
-  postDetailRefreshState,
-  profileState,
-} from '@recoil/recoil';
-import { createComment, getCommentList } from '@server/api/comment';
-import BackCleanHeader from 'src/layout/backCleanHeader';
-import { useFocusEffect } from '@react-navigation/native';
-import Animated from 'react-native-reanimated';
-import { useAnimatedKeyboard, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { updateComment } from '../../server/api/comment';
+import { usePersonaImage } from '@hooks/usePersonaImage';
+import { useImageCarousel } from '@hooks/useImageCarousel';
+
+import { postTimeUtil } from '@utils/time/timeUtil';
+
+import { CommentType, PostCardType } from '@type/feed';
+import { FeedViewScreenProps } from '@type/param/stack';
+
+import DotIcon from '@assets/feedView/dotIcon.svg';
+import ChatIcon from '@assets/feedMain/chatIcon.svg';
+import SendCommentIcon from '@assets/feedView/sendCommentIcon.svg';
 
 const POST_GET_ERROR = '게시글을 불러오는데 실패했습니다.';
 const POST_DELETE_SUCCESS = '게시글이 삭제되었습니다.';
@@ -53,9 +57,6 @@ const POST_DELETE_ERROR = '게시글 삭제에 실패했습니다.';
 const COMMENT_CREATE_ERROR = '댓글 작성에 실패했습니다.';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
-  // TODO : 복잡하게 섞인 코드 정리하기
-  // TODO : Comment시 자연스럼게 Refresh되도록 수정
-
   const keyboard = useAnimatedKeyboard();
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -337,7 +338,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                       </SkeletonPlaceholder>
                     ) : (
                       <View className="flex flex-row items-center justify-start">
-                        <Text className="text-sm font-semibold text-emphasizedFont mr-[2px]">
+                        <Text className="mr-[2px] text-sm font-semibold text-emphasizedFont">
                           {`${post.writer.nickname}`}
                         </Text>
                         <Text className="text-sm font-semibold text-disabledFont">
@@ -458,13 +459,13 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
               updateComment={updateCommentList}
             />
           </ScrollView>
-          <Animated.View className={`absolute w-full z-10`} style={[animatedStyles]}>
-            <View className="flex flex-row items-center justify-center w-full pt-2 pb-2 pl-4 pr-2 bg-white">
+          <Animated.View className={`absolute z-10 w-full`} style={[animatedStyles]}>
+            <View className="flex flex-row items-center justify-center w-full py-2 pl-4 pr-2 bg-white">
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}
                 onChangeText={handleCommentChange}
-                className="flex-1 p-3 pr-8 rounded-lg bg-[#F0F0F0] mr-1"
+                className="mr-1 flex-1 rounded-lg bg-[#F0F0F0] p-3 pr-8"
               />
               <TouchableOpacity
                 className={`${loading || commentPosting || refreshing ? 'disabled' : ''}`}

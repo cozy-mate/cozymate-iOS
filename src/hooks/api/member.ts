@@ -1,13 +1,16 @@
-import appleAuth from '@invertase/react-native-apple-authentication';
-import { getProfile, KakaoOAuthToken, KakaoProfile, login } from '@react-native-seoul/kakao-login';
-import { hasRoomState, loggedInState, profileState, roomInfoState } from '@recoil/recoil';
-import { getMyProfile, signIn } from '@server/api/member';
-import { checkHasRoom, getRoomData } from '@server/api/room';
-import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { setAccessToken } from '@utils/token';
 import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
+import appleAuth from '@invertase/react-native-apple-authentication';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
+
+import { hasRoomState, profileState, loggedInState, roomInfoState } from '@recoil/recoil';
+
+import { signIn, getMyProfile } from '@server/api/member';
+import { getRoomData, checkHasRoom } from '@server/api/room';
+import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
+
+import { setAccessToken } from '@utils/token';
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -32,7 +35,7 @@ export const useKakaoLogin = (
       const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
       await setAccessToken(accessToken);
 
-      // console.log(accessToken);
+      console.log(accessToken);
 
       if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
         navigation.navigate('PersonalInfoInputScreen');

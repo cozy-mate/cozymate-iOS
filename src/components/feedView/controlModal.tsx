@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text } from 'react-native';
+import { View, Text, Modal } from 'react-native';
 
 type ControlModalProps = {
   isModalVisible: boolean;
@@ -24,7 +24,7 @@ const ControlModal = (props: ControlModalProps) => {
 
   return (
     <Modal animationType="fade" transparent={true} visible={isModalVisible}>
-      <View className="z-10 w-full h-full" onTouchEnd={onPressModalClose}>
+      <View className="z-10 h-full w-full" onTouchEnd={onPressModalClose}>
         <View
           style={{
             position: 'absolute',
@@ -32,7 +32,7 @@ const ControlModal = (props: ControlModalProps) => {
             right: modalPosition.right,
             backgroundColor: 'white',
             borderColor: '#EBEBEB',
-            borderWidth: 2,
+            borderWidth: 1,
             paddingVertical: 10,
             paddingHorizontal: 15,
             borderRadius: 10,
@@ -41,7 +41,7 @@ const ControlModal = (props: ControlModalProps) => {
           <View onTouchEnd={handleEdit}>
             <Text className="text-xs text-emphasizedFont">수정하기</Text>
           </View>
-          <View className="w-full border-t-[1px] border-[#EAEAEA] my-2" />
+          <View className="my-2 w-full border-t border-[#EAEAEA]" />
           <View onTouchEnd={handleSubmit}>
             <Text className="text-xs text-emphasizedFont">삭제하기</Text>
           </View>

@@ -1,11 +1,12 @@
-import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@axios/axios.method';
-import { RegisterUserDataRequest, UpdateUserDataRequest } from '@server/requestTypes/member-stat';
+import { GetAxiosInstance, PutAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
+
+import { UpdateUserDataRequest, RegisterUserDataRequest } from '@server/requestTypes/member-stat';
 import {
-  GetOtherUserDetailDataResponse,
-  GetUserDetailDataResponse,
-  RegisterUserDataResponse,
   SearchUsersResponse,
   UpdateUserDataResponse,
+  RegisterUserDataResponse,
+  GetUserDetailDataResponse,
+  GetOtherUserDetailDataResponse,
 } from '@server/responseTypes/member-stat';
 
 // 사용자 상세정보 조회

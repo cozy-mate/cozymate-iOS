@@ -1,14 +1,18 @@
-import CustomRadioInputBox from '@components/common/customRadioInputBox';
-import { lifeStyleState } from '@recoil/recoil';
-import { LifeStyle } from '@recoil/type';
-import { EssentialLifeStyleScreenProps } from '@type/param/stack';
 import React, { useState } from 'react';
-import { Animated, SafeAreaView, ScrollView } from 'react-native';
 import { useRecoilState } from 'recoil';
+import { Animated, ScrollView, SafeAreaView } from 'react-native';
+
 import BackHeader from 'src/layout/backHeader';
+
+import CustomRadioInputBox from '@components/common/customRadioInputBox';
+
+import { LifeStyle } from '@recoil/type';
+import { lifeStyleState } from '@recoil/recoil';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
+
+import { EssentialLifeStyleScreenProps } from '@type/param/stack';
 
 type Item = {
   index: number;
@@ -404,7 +408,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   ]);
 
   return (
-    <SafeAreaView className="flex flex-col flex-1 bg-white">
+    <SafeAreaView className="flex flex-1 flex-col bg-white">
       <BackHeader
         title="필수정보"
         buttonString="다음"

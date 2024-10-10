@@ -3,11 +3,17 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type StackParamList = {
   MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
 
-  // 방이 없는 경우의 코지홈 스크린
+  // 홈(메인) 스크린
   CozyHomeScreen: undefined;
 
   // 방이 있는 경우의 코지홈 스크린
   RoomMainScreen: undefined;
+
+  // 방 상세 정보 스크린
+  RoomDetailScreen: undefined;
+
+  // 방 추천 스크린
+  RecommendRoomScreen: undefined;
 
   // 롤앤룰 스크린
   TodoListScreen: undefined;
@@ -20,7 +26,7 @@ export type StackParamList = {
   AdditionalLifeStyleScreen: undefined;
 
   // 방 생성 스크린
-  CreateRoomScreen: undefined;
+  CreateRoomScreen: { type: 'public' | 'private' };
   SelectCharacterScreen: undefined;
   CompleteCreateRoomScreen: undefined;
 
@@ -70,6 +76,15 @@ export type CozyHomeScreenProps = NativeStackScreenProps<StackParamList, 'CozyHo
 
 // 방이 있는 경우의 코지홈 스크린
 export type RoomMainScreenProps = NativeStackScreenProps<StackParamList, 'RoomMainScreen'>;
+
+// 방 상세 정보 스크린
+export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'RoomDetailScreen'>;
+
+// 방 추천 스크린
+export type RecommendRoomScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'RecommendRoomScreen'
+>;
 
 // 롤앤룰 스크린
 export type TodoListScreenProps = NativeStackScreenProps<StackParamList, 'TodoListScreen'>;

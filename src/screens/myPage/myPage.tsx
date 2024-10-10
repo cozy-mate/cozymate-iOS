@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { loggedInState, profileState, roomInfoState } from '@recoil/recoil';
+import { Text, View, Image, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import { deleteMember, signOut } from '@server/api/member';
+import { profileState, loggedInState, roomInfoState } from '@recoil/recoil';
+
+import { signOut, deleteMember } from '@server/api/member';
+
+import { deleteToken } from '@utils/token';
+import { deleteFcmToken } from '@utils/fcm';
+import { getProfileImage } from '@utils/profileImage';
 
 import { MyPageScreenProps } from '@type/param/stack';
 
-import { deleteToken } from '@utils/token';
-
 import RightArrow from '@assets/myPage/rightArrow.svg';
-import { deleteFcmToken } from '@utils/fcm';
-import { getProfileImage } from '@utils/profileImage';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const myProfile = useRecoilValue(profileState);
@@ -104,19 +105,19 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="mt-[52px] px-5">
-        <View className="flex flex-col items-center flex-1">
+      <ScrollView className="px-5 pt-[52px]">
+        <View className="flex flex-1 flex-col items-center">
           {getProfileImage(myProfile.persona, 120, 120)}
-          <Text className="mt-3 mb-10 text-lg font-semibold text-emphasizedFont">
+          <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
             {myProfile.nickname}
           </Text>
 
-          <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
+          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
             {upItems.map((item) => (
               <Pressable
                 key={item.id}
                 onPress={item.pressFunc}
-                className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
+                className={`flex flex-row justify-between border-b border-b-[#f1f2f4] py-3 ${
                   item.id == upItems.length && 'border-b-0'
                 }`}
               >
@@ -129,12 +130,12 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             ))}
           </View>
 
-          <View className="border-[1px] border-[#f1f2f4] flex flex-col w-full p-4 py-1 rounded-xl mb-4">
+          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
             {downItems.map((item) => (
               <Pressable
                 key={item.id}
                 onPress={item.pressFunc}
-                className={`border-b-[1px] border-b-[#f1f2f4] py-3 flex flex-row justify-between ${
+                className={`flex flex-row justify-between border-b border-b-[#f1f2f4] py-3 ${
                   item.id == downItems.length && 'border-b-0'
                 }`}
               >
@@ -149,7 +150,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
             </Pressable>
 
-            <View className="w-[1px] h-[18px] bg-[#d9d9d9] mx-4" />
+            <View className="mx-4 h-[18px] w-px bg-[#d9d9d9]" />
 
             <Pressable onPress={withdraw}>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>

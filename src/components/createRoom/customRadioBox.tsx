@@ -42,7 +42,7 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`flex-col justify-center items-center rounded-md px-5 py-[10px] mr-2 ${
+          className={`mr-2 flex-col items-center justify-center rounded-md px-5 py-[10px] ${
             focusedIndex === item.index ? 'bg-sub1' : 'bg-colorBox'
           }`}
           onPress={() => select(item)}
@@ -50,8 +50,8 @@ const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
           <Text
             className={`text-xs ${
               focusedIndex === item.index
-                ? 'text-main1 font-semibold'
-                : 'text-disabledFont font-medium'
+                ? 'font-semibold text-main1'
+                : 'font-medium text-disabledFont'
             } `}
           >
             {item.name}

@@ -1,6 +1,7 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { getNotificationList } from '@server/api/notification';
 import { GetNotificationResponse } from '@server/responseTypes/notification';
-import { useSuspenseQuery } from '@tanstack/react-query';
 
 // 알림 목록 조회
 export const useGetNotificationList = (): {

@@ -1,20 +1,16 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import CozyHomeSelected from '@assets/main/cozyHomeSelected.svg';
-import CozyHomeNotSelected from '@assets/main/cozyHomeNotSelected.svg';
-
-import RoleNRuleSelected from '@assets/main/roleNRuleSelected.svg';
-import RoleNRuleNotSelected from '@assets/main/roleNRuleNotSelected.svg';
-
-import RoomMateSelected from '@assets/main/roomMateSelected.svg';
-import RoomMateNotSelected from '@assets/main/roomMateNotSelected.svg';
-
 import FeedSelected from '@assets/main/feedSelected.svg';
-import FeedNotSelected from '@assets/main/feedNotSelected.svg';
-
 import MyPageSelected from '@assets/main/myPageSelected.svg';
+import FeedNotSelected from '@assets/main/feedNotSelected.svg';
+import CozyHomeSelected from '@assets/main/cozyHomeSelected.svg';
+import RoomMateSelected from '@assets/main/roomMateSelected.svg';
+import RoleNRuleSelected from '@assets/main/roleNRuleSelected.svg';
 import MyPageNotSelected from '@assets/main/myPageNotSelected.svg';
+import CozyHomeNotSelected from '@assets/main/cozyHomeNotSelected.svg';
+import RoomMateNotSelected from '@assets/main/roomMateNotSelected.svg';
+import RoleNRuleNotSelected from '@assets/main/roleNRuleNotSelected.svg';
 
 interface TabComponentProps {
   focused: boolean;
@@ -30,7 +26,7 @@ export const CozyHome: React.FC<TabComponentProps> = ({ focused, isOldIphone }) 
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
-        코지홈
+        홈
       </Text>
     </View>
   );
@@ -51,7 +47,7 @@ export const RoleNRule: React.FC<TabComponentProps> = ({ focused, isOldIphone })
   );
 };
 
-export const RoomMate: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
+export const CozyBot: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="relative flex flex-col items-center justify-center">
       {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
@@ -60,7 +56,7 @@ export const RoomMate: React.FC<TabComponentProps> = ({ focused, isOldIphone }) 
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
-        룸메이트
+        코지봇
       </Text>
     </View>
   );
