@@ -4,17 +4,15 @@ import { TouchableOpacity } from 'react-native';
 import { TouchableOpacityProps } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Feed, MyPage, CozyHome, RoomMate, RoleNRule } from 'src/layout/bottomNavBar';
+import { Feed, MyPage, CozyBot, CozyHome, RoleNRule } from 'src/layout/bottomNavBar';
 
 import MyPageScreen from './myPage/myPage';
 import FeedMainScreen from './feed/feedMain';
 import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
 import TodoListScreen from './todoList/todoList';
-import RoomMateScreen from './roomMate/roomMate';
-import LifeStyleOnboardingScreen from './lifeStyle/onBoarding';
 
-import { hasRoomState, MyLifeStyleState } from '@recoil/recoil';
+import { hasRoomState } from '@recoil/recoil';
 
 import { useIsOldiPhone } from '@hooks/device';
 
@@ -23,12 +21,17 @@ import { TabNavigatorParamList } from '@type/param/stack';
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
-  return <TouchableOpacity {...props} onPress={() => {}} />;
+  return (
+    <TouchableOpacity
+      {...props}
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      onPress={() => {}}
+    />
+  );
 };
 
 const MainScreen = () => {
   const hasRoom = useRecoilValue(hasRoomState);
-  const myLifeStyleData = useRecoilValue(MyLifeStyleState);
 
   const isOldiPhone = useIsOldiPhone();
 
@@ -69,25 +72,14 @@ const MainScreen = () => {
             },
       }}
     >
-      {!hasRoom.hasRoom ? (
-        <Tab.Screen
-          name="RoomMainScreen"
-          component={RoomMainScreen}
-          options={{
-            tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
-          }}
-        />
-      ) : (
-        <Tab.Screen
-          name="CozyHomeScreen"
-          component={CozyHomeScreen}
-          options={{
-            tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
-          }}
-        />
-      )}
+      <Tab.Screen
+        name="CozyHomeScreen"
+        component={CozyHomeScreen}
+        options={{
+          tabBarLabel: () => null,
+          tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
+        }}
+      />
       {hasRoom.hasRoom ? (
         <Tab.Screen
           name="TodoListScreen"
@@ -118,32 +110,33 @@ const MainScreen = () => {
           })}
         />
       )}
-      {myLifeStyleData.acceptance === '' ? (
+      {hasRoom.hasRoom ? (
         <Tab.Screen
-          name="RoomMateScreen"
-          component={RoomMateScreen}
+          name="RoomMainScreen"
+          component={RoomMainScreen}
           options={({ route }) => ({
             // title 없애고 custom 하기 위한 옵션
             tabBarLabel: () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoomMate focused={focused} isOldIphone={isOldiPhone} />;
+              return <CozyBot focused={focused} isOldIphone={isOldiPhone} />;
             },
           })}
         />
       ) : (
         <Tab.Screen
-          name="LifeStyleOnboardingScreen"
-          component={LifeStyleOnboardingScreen}
+          name="RoomMainScreen"
+          component={RoomMainScreen}
           options={({ route }) => ({
             // title 없애고 custom 하기 위한 옵션
             tabBarLabel: () => {
               return null;
             },
             tabBarIcon: ({ focused }) => {
-              return <RoomMate focused={focused} isOldIphone={isOldiPhone} />;
+              return <CozyBot focused={focused} isOldIphone={isOldiPhone} />;
             },
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
           })}
         />
       )}

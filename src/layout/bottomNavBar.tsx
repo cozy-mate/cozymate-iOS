@@ -26,7 +26,7 @@ export const CozyHome: React.FC<TabComponentProps> = ({ focused, isOldIphone }) 
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
-        코지홈
+        홈
       </Text>
     </View>
   );
@@ -47,7 +47,7 @@ export const RoleNRule: React.FC<TabComponentProps> = ({ focused, isOldIphone })
   );
 };
 
-export const RoomMate: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
+export const CozyBot: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
   return (
     <View className="relative flex flex-col items-center justify-center">
       {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
@@ -56,7 +56,7 @@ export const RoomMate: React.FC<TabComponentProps> = ({ focused, isOldIphone }) 
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
-        룸메이트
+        코지봇
       </Text>
     </View>
   );
