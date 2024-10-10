@@ -126,7 +126,7 @@ const PostCard = (props: PostCardProps) => {
             </View>
           )}
           <View
-            className={`mt- flex flex-row items-center justify-start space-x-2${
+            className={`flex flex-row items-center justify-start space-x-2 mt-${
               post.imageList.length > 0 ? 4 : 0
             }`}
           >
