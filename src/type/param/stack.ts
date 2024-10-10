@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type StackParamList = {
   MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
 
-  // 방이 없는 경우의 코지홈 스크린
+  // 홈(메인) 스크린
   CozyHomeScreen: undefined;
 
   // 방이 있는 경우의 코지홈 스크린
@@ -11,6 +11,9 @@ export type StackParamList = {
 
   // 방 상세 정보 스크린
   RoomDetailScreen: undefined;
+
+  // 방 추천 스크린
+  RecommentRoomScrenn: undefined;
 
   // 롤앤룰 스크린
   TodoListScreen: undefined;
@@ -76,6 +79,12 @@ export type RoomMainScreenProps = NativeStackScreenProps<StackParamList, 'RoomMa
 
 // 방 상세 정보 스크린
 export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'RoomDetailScreen'>;
+
+// 방 추천 스크린
+export type RecommentRoomScrennProps = NativeStackScreenProps<
+  StackParamList,
+  'RecommentRoomScrenn'
+>;
 
 // 롤앤룰 스크린
 export type TodoListScreenProps = NativeStackScreenProps<StackParamList, 'TodoListScreen'>;
