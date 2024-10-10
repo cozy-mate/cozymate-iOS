@@ -6,6 +6,7 @@ import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 import { dummyData } from './dummyData';
 
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
+import DetailSearchModal from '@components/roomMate/detailSearchModal';
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
@@ -23,6 +24,7 @@ import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-sta
 import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
+import FilterIcon from '@assets/roomMate/filter.svg';
 
 type UserItem = {
   memberId: number;
@@ -51,6 +53,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   const [, setOthersBasicData] = useRecoilState(OtherBasicData); // 다른 사용자의 기본 데이터
   const [, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState); // 다른 사용자의 라이프스타일 데이터
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleModal = () => {
+    setIsModalOpen(false);
+  };
 
   const [items, setItems] = useState([
     { index: 1, id: 'admissionYear', name: '학번', select: false },
@@ -133,29 +141,40 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
     if (filterList.length > 0) {
       // 필터가 있을 때: 같은 답변을 한 사용자 목록을 가져옴
-      console.log('같은 대답 호출');
       getSameAnswerMate();
     } else {
       // 필터가 없을 때: 비슷한 답변을 한 사용자 목록을 가져옴
-      console.log('비슷한 대답 호출');
       getSimilarAnswerData();
     }
   }, [filterList]); // 필터 목록 변경 시 실행
 
-  const hasData = false;
+  const toHome = () => {
+    navigation.navigate('CozyHomeScreen');
+  };
+
+  const hasData = true;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1">
         {/* 상단 이전 버튼 */}
         <View className="mb-6 flex flex-row items-center pl-2">
-          <Pressable>
+          <Pressable onPress={toHome}>
             <BackButton />
           </Pressable>
         </View>
-        <Text className="mb-4 px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
-          원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
-        </Text>
+
+        <View className="mb-4 flex flex-row items-center justify-between pr-5">
+          <Text className="px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
+            원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
+          </Text>
+          <Pressable onPress={() => setIsModalOpen(true)}>
+            <View className="rounded-lg border border-disabled px-3 py-[13px]">
+              <FilterIcon />
+            </View>
+          </Pressable>
+        </View>
+
         <CheckBoxContainer
           value={filterList}
           setValue={setFilterList}
@@ -188,6 +207,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           )}
         </View>
       </ScrollView>
+
+      {isModalOpen && <DetailSearchModal onClose={handleModal} />}
     </SafeAreaView>
   );
 };

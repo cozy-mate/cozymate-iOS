@@ -3,6 +3,7 @@ import { Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 interface MyRoomComponentProps {
+  toRoom: () => void;
   roomData: {
     title: string;
     hashTag: string[];
@@ -11,11 +12,11 @@ interface MyRoomComponentProps {
   };
 }
 
-const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ roomData }) => {
+const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) => {
   const [hasTagLen, setHashTagLen] = useState<number>(0);
 
   return (
-    <Pressable className="rounded-xl border border-main1">
+    <Pressable className="rounded-xl border border-main1" onPress={toRoom}>
       <LinearGradient
         colors={['rgba(249, 251, 255, 0.8)', 'rgba(223, 236, 255, 0.8)']}
         start={{ x: 0.008, y: 0 }}

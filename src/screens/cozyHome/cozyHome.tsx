@@ -1,7 +1,16 @@
 import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, View, Pressable, ScrollView, SafeAreaView, LayoutChangeEvent } from 'react-native';
+import {
+  Text,
+  View,
+  Pressable,
+  ScrollView,
+  SafeAreaView,
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 
 import { MyRoomData, RoomDummyData, UserDummyData } from './dummyData';
 
@@ -54,7 +63,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState(0);
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     setScrollY(event.nativeEvent.contentOffset.y);
   };
 
@@ -105,70 +114,83 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RoomMateScreen');
   };
 
-  const [hasRoom, setHasRoom] = useState<boolean>(false);
+  const [hasRoom, setHasRoom] = useState<boolean>(true);
+
+  const toRoomDetail = () => {
+    navigation.navigate('RoomDetailScreen');
+  };
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-sub1">
       <SafeAreaView
         style={{
           backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
         }}
       />
-      <ScrollView className="flex-1" onScroll={handleScroll} scrollEventThrottle={16}>
-        <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
-          <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
-            <Pressable className="flex flex-row items-center py-2" onPress={handleSchool}>
-              {school ? (
-                <>
-                  <BlueSchool />
-                  <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">인하대학교</Text>
-                </>
-              ) : (
-                <>
-                  <GraySchool />
-                  <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
-                    학교 인증을 해주세요
-                  </Text>
-                  <ArrowIcon />
-                </>
-              )}
-            </Pressable>
-
-            <View className="flex flex-row">
-              <Pressable onPress={toChat}>
-                <ChatIcon />
+      <ScrollView
+        className="flex-1"
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        bounces={false}
+      >
+        <View className="bg-white">
+          <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
+            <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
+              <Pressable className="flex flex-row items-center py-2" onPress={handleSchool}>
+                {school ? (
+                  <>
+                    <BlueSchool />
+                    <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">인하대학교</Text>
+                  </>
+                ) : (
+                  <>
+                    <GraySchool />
+                    <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
+                      학교 인증을 해주세요
+                    </Text>
+                    <ArrowIcon />
+                  </>
+                )}
               </Pressable>
-              <Pressable onPress={toNotification}>
-                <NotificationIcon />
-              </Pressable>
-            </View>
-          </View>
 
-          <View className="flex flex-col items-start px-5">
-            <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
-              <MegaPhoneIcon />
-              <Text className="ml-2 text-xs font-medium text-emphasizedFont">
-                [공지] 시험기간으로 인한 기숙사 통금시간 변경
-              </Text>
+              <View className="flex flex-row">
+                <Pressable onPress={toChat}>
+                  <ChatIcon />
+                </Pressable>
+                <Pressable onPress={toNotification}>
+                  <NotificationIcon />
+                </Pressable>
+              </View>
             </View>
 
-            {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-            <View className="mb-[25px] flex h-[100px] w-full flex-row justify-between">
-              <Pressable
-                onPress={createRoomModalOpen}
-                className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-              >
-                <Text className="text-base font-semibold leading-[19px] text-main1">방 만들기</Text>
-              </Pressable>
-
-              <Pressable
-                onPress={toJoinRoom}
-                className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-              >
-                <Text className="text-base font-semibold leading-[19px] text-main1">
-                  방 참여하기
+            <View className="flex flex-col items-start px-5">
+              <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
+                <MegaPhoneIcon />
+                <Text className="ml-2 text-xs font-medium text-emphasizedFont">
+                  [공지] 시험기간으로 인한 기숙사 통금시간 변경
                 </Text>
-              </Pressable>
+              </View>
+
+              {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+              <View className="mb-[25px] flex h-[100px] w-full flex-row justify-between">
+                <Pressable
+                  onPress={createRoomModalOpen}
+                  className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                >
+                  <Text className="text-base font-semibold leading-[19px] text-main1">
+                    방 만들기
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={toJoinRoom}
+                  className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                >
+                  <Text className="text-base font-semibold leading-[19px] text-main1">
+                    방 참여하기
+                  </Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </View>
@@ -178,7 +200,11 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             <Text className="mb-4 text-lg font-semibold leading-6 text-emphasizedFont">
               {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
             </Text>
-            {hasRoom ? <MyRoomComponent roomData={MyRoomData} /> : <NoRoomComponent />}
+            {hasRoom ? (
+              <MyRoomComponent roomData={MyRoomData} toRoom={toRoomDetail} />
+            ) : (
+              <NoRoomComponent />
+            )}
           </View>
 
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />

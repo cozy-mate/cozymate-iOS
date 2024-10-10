@@ -9,6 +9,9 @@ export type StackParamList = {
   // 방이 있는 경우의 코지홈 스크린
   RoomMainScreen: undefined;
 
+  // 방 상세 정보 스크린
+  RoomDetailScreen: undefined;
+
   // 롤앤룰 스크린
   TodoListScreen: undefined;
   CreateTodoScreen: { type: 'todo' | 'role' | 'rule' };
@@ -70,6 +73,9 @@ export type CozyHomeScreenProps = NativeStackScreenProps<StackParamList, 'CozyHo
 
 // 방이 있는 경우의 코지홈 스크린
 export type RoomMainScreenProps = NativeStackScreenProps<StackParamList, 'RoomMainScreen'>;
+
+// 방 상세 정보 스크린
+export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'RoomDetailScreen'>;
 
 // 롤앤룰 스크린
 export type TodoListScreenProps = NativeStackScreenProps<StackParamList, 'TodoListScreen'>;
