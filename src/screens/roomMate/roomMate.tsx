@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import React, { useState, ReactNode, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
@@ -149,7 +149,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   }, [filterList]); // 필터 목록 변경 시 실행
 
   const toHome = () => {
-    navigation.navigate('CozyHomeScreen');
+    navigation.goBack();
   };
 
   const hasData = true;
