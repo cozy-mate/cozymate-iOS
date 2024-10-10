@@ -13,7 +13,7 @@ export type StackParamList = {
   RoomDetailScreen: undefined;
 
   // 방 추천 스크린
-  RecommentRoomScrenn: undefined;
+  RecommendRoomScreen: undefined;
 
   // 롤앤룰 스크린
   TodoListScreen: undefined;
@@ -81,9 +81,9 @@ export type RoomMainScreenProps = NativeStackScreenProps<StackParamList, 'RoomMa
 export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'RoomDetailScreen'>;
 
 // 방 추천 스크린
-export type RecommentRoomScrennProps = NativeStackScreenProps<
+export type RecommendRoomScreenProps = NativeStackScreenProps<
   StackParamList,
-  'RecommentRoomScrenn'
+  'RecommendRoomScreen'
 >;
 
 // 롤앤룰 스크린

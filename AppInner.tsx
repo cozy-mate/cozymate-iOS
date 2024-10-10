@@ -29,6 +29,7 @@ import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
+import RecommendRoomScreen from 'src/screens/recommendRoom/recommendRoom';
 import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
 import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
@@ -56,6 +57,7 @@ function AppInner() {
 
           <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
+          <stack.Screen name="RecommendRoomScreen" component={RecommendRoomScreen} />
 
           <stack.Screen name="TodoListScreen" component={TodoListScreen} />
           <stack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
