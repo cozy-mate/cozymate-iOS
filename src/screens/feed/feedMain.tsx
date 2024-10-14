@@ -1,16 +1,18 @@
+import { useRecoilState } from 'recoil';
+import { useQueryClient } from '@tanstack/react-query';
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useRef, useState, Fragment, useEffect } from 'react';
 import { Text, View, FlatList, Pressable, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useRecoilState } from 'recoil';
-import PostCard from '@components/feedMain/postCard';
-import { useFocusEffect } from '@react-navigation/native';
-import { useQueryClient } from '@tanstack/react-query';
 import Header from '@components/feedMain/header';
 import Footer from '@components/feedMain/footer';
+import PostCard from '@components/feedMain/postCard';
+
+import { hasRoomState, feedRefreshState } from '@recoil/recoil';
+
 import { useGetFeedInfo } from '@hooks/api/feed';
 import { useGetPostList } from '@hooks/api/post';
-import { hasRoomState, feedRefreshState } from '@recoil/recoil';
 
 import { FeedMainScreenProps } from '@type/param/stack';
 
@@ -88,11 +90,11 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         ListHeaderComponent={<Header feedInfo={feedInfo} navigation={navigation} />}
         ListEmptyComponent={
           isPostsLoading ? (
-            <View className="items-center justify-center flex-1 mt-10">
+            <View className="mt-10 flex-1 items-center justify-center">
               <Text className="text-sm text-disabledFont">이야기를 불러오는 중입니다...</Text>
             </View>
           ) : postList?.pages[0]?.length === 0 ? (
-            <View className="items-center justify-center flex-1">
+            <View className="flex-1 items-center justify-center">
               <Text className="text-sm text-disabledFont">아직 시작된 우리의 이야기가 없어요!</Text>
             </View>
           ) : (
@@ -114,12 +116,11 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
         onEndReachedThreshold={0}
       />
 
-      <Pressable
-        onPress={toFeedCreate}
-        className="fixed z-20 flex items-end bottom-28 right-5 w-fit"
-      >
-        <PostEdit />
-      </Pressable>
+      <View className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
+        <Pressable onPress={toFeedCreate}>
+          <PostEdit />
+        </Pressable>
+      </View>
     </Fragment>
   );
 };

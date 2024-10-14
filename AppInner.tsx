@@ -25,6 +25,7 @@ import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
 import RoomDetailScreen from 'src/screens/roomDetail/roomDetail';
 import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
+import LifeStyleEditScreen from 'src/screens/lifeStyle/lifeStyleEdit';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
@@ -66,6 +67,7 @@ function AppInner() {
           <stack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
           <stack.Screen name="EssentialLifeStyleScreen" component={EssentialLifeStyleScreen} />
           <stack.Screen name="AdditionalLifeStyleScreen" component={AdditionalLifeStyleScreen} />
+          <stack.Screen name="LifeStyleEditScreen" component={LifeStyleEditScreen} />
 
           <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
           <stack.Screen name="SelectCharacterScreen" component={SelectCharacterScreen} />
