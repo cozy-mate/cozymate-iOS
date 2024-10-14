@@ -17,8 +17,8 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   close,
 }) => {
   return (
-    <Modal transparent={true} animationType="slide">
-      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-blackBack px-5">
+    <Modal transparent={true} animationType="fade">
+      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-modalBack2 px-5">
         <Pressable onPress={close} className="absolute right-5 top-12">
           <GrayXButton />
         </Pressable>
