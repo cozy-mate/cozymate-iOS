@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       backgroundColor: {
         modalBack: 'rgba(0, 0, 0, 0.5)',
-        blackBack: 'rgba(0, 0, 0, 0.9)',
+        modalBack2: 'rgba(0, 0, 0, 0.75)',
       },
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',
