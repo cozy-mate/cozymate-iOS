@@ -157,3 +157,151 @@ export const sameAnswerDummyData = [
     ],
   },
 ];
+
+export const recommendRoomDummyData = [
+  {
+    title: '방이름',
+    equality: 75,
+    currentNum: 2,
+    totalNum: 3,
+    hashTags: ['히로아카', '바쿠고'],
+    option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'sleepingTime',
+        color: 'red',
+        answer: '2명 일치',
+      },
+      {
+        title: 'noiseSensitivity',
+        color: 'gray',
+        answer: '1명 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
+    ],
+  },
+  {
+    title: '방이름',
+    equality: 75,
+    currentNum: 2,
+    totalNum: 3,
+    hashTags: ['히로아카', '바쿠고'],
+    option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'sleepingTime',
+        color: 'red',
+        answer: '2명 일치',
+      },
+      {
+        title: 'noiseSensitivity',
+        color: 'gray',
+        answer: '1명 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
+    ],
+  },
+  {
+    title: '방이름',
+    equality: 75,
+    currentNum: 2,
+    totalNum: 3,
+    hashTags: ['히로아카', '바쿠고'],
+    option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'sleepingTime',
+        color: 'red',
+        answer: '2명 일치',
+      },
+      {
+        title: 'noiseSensitivity',
+        color: 'gray',
+        answer: '1명 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
+    ],
+  },
+  {
+    title: '방이름',
+    equality: 75,
+    currentNum: 2,
+    totalNum: 3,
+    hashTags: ['히로아카', '바쿠고'],
+    option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'sleepingTime',
+        color: 'red',
+        answer: '2명 일치',
+      },
+      {
+        title: 'noiseSensitivity',
+        color: 'gray',
+        answer: '1명 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
+    ],
+  },
+  {
+    title: '방이름',
+    equality: 75,
+    currentNum: 2,
+    totalNum: 3,
+    hashTags: ['히로아카', '바쿠고'],
+    option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'sleepingTime',
+        color: 'red',
+        answer: '2명 일치',
+      },
+      {
+        title: 'noiseSensitivity',
+        color: 'gray',
+        answer: '1명 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
+    ],
+  },
+];

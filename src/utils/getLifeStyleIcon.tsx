@@ -272,11 +272,7 @@ export const getRoommateLifeStyleIcon = (option: LifestyleOptionKey, answer: str
 };
 
 // 방 안의 룸메이트들의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoomLifeStyleIcon = (
-  option: LifestyleOptionKey,
-  color: 'blue' | 'gray' | 'red',
-  answer: string,
-) => {
+export const getRoomLifeStyleIcon = (option: LifestyleOptionKey, color: string, answer: string) => {
   const { blueIcon, grayIcon, redIcon, label } =
     lifestyleOptions[option] || lifestyleOptions.sleepingTime;
 
