@@ -261,12 +261,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               scrollEventThrottle={16}
             >
               {sameAnswerDummyData.map((data, index) => (
-                <SameAnswerUserComponent
-                  key={index}
-                  index={index}
-                  userData={data}
-                  onLayout={onLayout}
-                />
+                <SameAnswerUserComponent key={index} userData={data} onLayout={onLayout} />
               ))}
             </ScrollView>
 

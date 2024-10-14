@@ -1,10 +1,13 @@
 import React from 'react';
 import { Text, View, Dimensions, LayoutChangeEvent } from 'react-native';
 
-import { getLifeStyleIcon } from '@utils/getLifeStyleIcon';
+import {
+  lifestyleOptions,
+  LifestyleOptionKey,
+  getRoommateLifeStyleIcon,
+} from '@utils/getLifeStyleIcon';
 
 interface SameAnswerUserComponentProps {
-  index: number;
   userData: {
     nickname: string;
     equality: number;
@@ -17,10 +20,13 @@ interface SameAnswerUserComponentProps {
 }
 
 const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
-  index,
   userData,
   onLayout,
 }) => {
+  const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
+    return key in lifestyleOptions;
+  };
+
   const screenWidth = Dimensions.get('window').width;
   const calculatedWidth = screenWidth - 40;
 
@@ -43,7 +49,9 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
       <View className="flex flex-row items-center justify-between px-2 pt-3">
         {userData.option.map((opt, index) => (
           <View key={index} className="flex flex-col items-center">
-            {getLifeStyleIcon(opt.title, opt.answer)}
+            {isLifestyleOptionKey(opt.title)
+              ? getRoommateLifeStyleIcon(opt.title, opt.answer)
+              : null}
           </View>
         ))}
       </View>

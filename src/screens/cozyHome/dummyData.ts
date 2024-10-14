@@ -51,20 +51,20 @@ export const sameAnswerDummyData = [
     equality: 95,
     option: [
       {
-        title: 'wakeUpTime',
-        answer: 'AM 11:00',
+        title: 'admissionYear',
+        answer: '20',
       },
       {
-        title: 'sleepingTime',
-        answer: 'AM 11:00',
+        title: 'birthYear',
+        answer: '1999',
       },
       {
-        title: 'noiseSensitivity',
-        answer: '매우 예민 X',
+        title: 'major',
+        answer: '컴퓨터공학과',
       },
       {
-        title: 'cleanSensitivity',
-        answer: '매우 예민 O',
+        title: 'acceptance',
+        answer: '합격',
       },
     ],
   },
@@ -78,15 +78,15 @@ export const sameAnswerDummyData = [
       },
       {
         title: 'sleepingTime',
-        answer: 'AM 11:00',
+        answer: 'AM 05:00',
       },
       {
-        title: 'noiseSensitivity',
-        answer: '매우 예민 X',
+        title: 'turnOffTime',
+        answer: 'AM 04:00',
       },
       {
-        title: 'cleanSensitivity',
-        answer: '매우 예민 O',
+        title: 'smokingState',
+        answer: '연초',
       },
     ],
   },
@@ -95,42 +95,20 @@ export const sameAnswerDummyData = [
     equality: 95,
     option: [
       {
-        title: 'wakeUpTime',
-        answer: 'AM 11:00',
+        title: 'sleepingHabit',
+        answer: 'X',
       },
       {
-        title: 'sleepingTime',
-        answer: 'AM 11:00',
+        title: 'airConditioningIntensity',
+        answer: '약하게',
       },
       {
-        title: 'noiseSensitivity',
-        answer: '매우 예민 X',
+        title: 'heatingIntensity',
+        answer: '약하게',
       },
       {
-        title: 'cleanSensitivity',
-        answer: '매우 예민 O',
-      },
-    ],
-  },
-  {
-    nickname: '쇼토',
-    equality: 95,
-    option: [
-      {
-        title: 'wakeUpTime',
-        answer: 'AM 11:00',
-      },
-      {
-        title: 'sleepingTime',
-        answer: 'AM 11:00',
-      },
-      {
-        title: 'noiseSensitivity',
-        answer: '매우 예민 X',
-      },
-      {
-        title: 'cleanSensitivity',
-        answer: '매우 예민 O',
+        title: 'lifePattern',
+        answer: '새벽형 인간',
       },
     ],
   },
@@ -139,20 +117,42 @@ export const sameAnswerDummyData = [
     equality: 95,
     option: [
       {
-        title: 'wakeUpTime',
-        answer: 'AM 11:00',
+        title: 'intimacy',
+        answer: '필요한말만 하면 좋겠어요',
       },
       {
-        title: 'sleepingTime',
-        answer: 'AM 11:00',
+        title: 'canShare',
+        answer: '휴지정도',
       },
       {
-        title: 'noiseSensitivity',
-        answer: '매우 예민 X',
+        title: 'isPlayGame',
+        answer: '보이스채팅정도는 가능해요',
+      },
+      {
+        title: 'isPhoneCall',
+        answer: '급한 전화는 가능해요',
+      },
+    ],
+  },
+  {
+    nickname: '쇼토',
+    equality: 95,
+    option: [
+      {
+        title: 'studying',
+        answer: '시험기간에는 가능해요',
+      },
+      {
+        title: 'intake',
+        answer: '간단한 간식정도는 괜찮아요',
       },
       {
         title: 'cleanSensitivity',
-        answer: '매우 예민 O',
+        answer: '매우 예민해요',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민하지 않아요',
       },
     ],
   },
