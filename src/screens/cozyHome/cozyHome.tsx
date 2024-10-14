@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Text,
@@ -12,15 +12,15 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import { MyRoomData, RoomDummyData, UserDummyData } from './dummyData';
+import { MyRoomData, RoomDummyData, sameAnswerDummyData } from './dummyData';
 
 import Advertisement from '@components/common/advertisement';
 import RoomComponent from '@components/cozyHome/roomComponent';
-import UserComponent from '@components/cozyHome/userComponent';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
 import NoRoomComponent from '@components/cozyHome/noRoomComponent';
 import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
+import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
 import { profileState } from '@recoil/recoil';
 
@@ -39,6 +39,21 @@ import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
+  const [componentWidth, setComponentWidth] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0); // Track the current index
+
+  // 레이아웃이 변경될 때 크기를 계산하는 함수
+  const onLayout = useCallback((event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    setComponentWidth(width);
+  }, []);
+
+  const handleSameAnswerUserScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const index = Math.floor(offsetX / componentWidth);
+    setCurrentIndex(index);
+  };
+
   const profile = useRecoilValue(profileState);
   const { bottom } = useSafeAreaInsets();
 
@@ -226,7 +241,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-          <View className="pl-5">
+          <View className="px-5">
             <View className="mb-4 flex flex-row items-center justify-between pr-5">
               <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                 {profile.nickname}님,{'\n'}이런 룸메이트는 어때요?
@@ -239,11 +254,25 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               className="flex flex-row"
               horizontal={true}
               showsHorizontalScrollIndicator={false}
+              pagingEnabled={true}
+              snapToInterval={componentWidth}
+              onScroll={handleSameAnswerUserScroll}
+              decelerationRate="fast"
+              scrollEventThrottle={16}
             >
-              {UserDummyData.map((data, index) => (
-                <UserComponent key={index} index={index} userData={data} />
+              {sameAnswerDummyData.map((data, index) => (
+                <SameAnswerUserComponent index={index} userData={data} onLayout={onLayout} />
               ))}
             </ScrollView>
+
+            <View className="mt-4 flex flex-row justify-center space-x-2">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <View
+                  key={index}
+                  className={`${index == currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'} h-2 rounded-full`}
+                />
+              ))}
+            </View>
           </View>
 
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />

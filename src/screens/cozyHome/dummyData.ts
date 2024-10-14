@@ -44,3 +44,116 @@ export const MyRoomData = {
   currentNum: 3,
   equality: 32,
 };
+
+export const sameAnswerDummyData = [
+  {
+    nickname: '바쿠고',
+    equality: 95,
+    option: [
+      {
+        title: 'wakeUpTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'sleepingTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민 X',
+      },
+      {
+        title: 'cleanSensitivity',
+        answer: '매우 예민 O',
+      },
+    ],
+  },
+  {
+    nickname: '쇼토',
+    equality: 95,
+    option: [
+      {
+        title: 'wakeUpTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'sleepingTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민 X',
+      },
+      {
+        title: 'cleanSensitivity',
+        answer: '매우 예민 O',
+      },
+    ],
+  },
+  {
+    nickname: '바쿠고',
+    equality: 95,
+    option: [
+      {
+        title: 'wakeUpTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'sleepingTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민 X',
+      },
+      {
+        title: 'cleanSensitivity',
+        answer: '매우 예민 O',
+      },
+    ],
+  },
+  {
+    nickname: '쇼토',
+    equality: 95,
+    option: [
+      {
+        title: 'wakeUpTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'sleepingTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민 X',
+      },
+      {
+        title: 'cleanSensitivity',
+        answer: '매우 예민 O',
+      },
+    ],
+  },
+  {
+    nickname: '쇼토',
+    equality: 95,
+    option: [
+      {
+        title: 'wakeUpTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'sleepingTime',
+        answer: 'AM 11:00',
+      },
+      {
+        title: 'noiseSensitivity',
+        answer: '매우 예민 X',
+      },
+      {
+        title: 'cleanSensitivity',
+        answer: '매우 예민 O',
+      },
+    ],
+  },
+];
