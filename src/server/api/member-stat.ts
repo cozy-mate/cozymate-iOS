@@ -55,7 +55,7 @@ export const registerUserData = async (
 export const updateUserData = async (
   data: UpdateUserDataRequest,
 ): Promise<UpdateUserDataResponse> => {
-  const response = await PostAxiosInstance<UpdateUserDataResponse>(`/members/stat`, data);
+  const response = await PutAxiosInstance<UpdateUserDataResponse>(`/members/stat`, data);
 
   return response.data;
 };

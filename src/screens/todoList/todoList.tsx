@@ -164,9 +164,11 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
           </View>
         </ScrollView>
 
-        <Pressable onPress={toCreate} className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
-          <PlusButton />
-        </Pressable>
+        <View className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
+          <Pressable onPress={toCreate}>
+            <PlusButton />
+          </Pressable>
+        </View>
       </View>
     </>
   );

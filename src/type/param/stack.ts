@@ -25,6 +25,9 @@ export type StackParamList = {
   EssentialLifeStyleScreen: undefined;
   AdditionalLifeStyleScreen: undefined;
 
+  // 라이프 스타일 수정 스크린
+  LifeStyleEditScreen: undefined;
+
   // 방 생성 스크린
   CreateRoomScreen: { type: 'public' | 'private' };
   SelectCharacterScreen: undefined;
@@ -106,6 +109,10 @@ export type EssentialLifeStyleScreenProps = NativeStackScreenProps<
 export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
   StackParamList,
   'AdditionalLifeStyleScreen'
+>;
+export type LifeStyleEditScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'LifeStyleEditScreen'
 >;
 
 // 방 생성 스크린

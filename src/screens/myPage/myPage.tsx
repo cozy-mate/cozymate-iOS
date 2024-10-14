@@ -32,6 +32,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('SchoolAuthenticationScreen');
   };
 
+  const toLifeStyleEdit = () => {
+    navigation.navigate('LifeStyleEditScreen');
+  };
+
   const logout = async () => {
     try {
       const response = await signOut();
@@ -113,7 +117,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               </View>
             </Pressable>
 
-            <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
+            <Pressable
+              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+              onPress={toLifeStyleEdit}
+            >
               <Text className="text-sm font-medium text-emphasizedFont">나의 라이프스타일</Text>
               <View className="flex flex-row items-center">
                 <RightArrow />
