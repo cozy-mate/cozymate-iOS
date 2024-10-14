@@ -84,10 +84,6 @@ export const sameAnswerDummyData = [
         title: 'turnOffTime',
         answer: 'AM 04:00',
       },
-      {
-        title: 'smokingState',
-        answer: '연초',
-      },
     ],
   },
   {
@@ -101,14 +97,6 @@ export const sameAnswerDummyData = [
       {
         title: 'airConditioningIntensity',
         answer: '약하게',
-      },
-      {
-        title: 'heatingIntensity',
-        answer: '약하게',
-      },
-      {
-        title: 'lifePattern',
-        answer: '새벽형 인간',
       },
     ],
   },
@@ -172,16 +160,6 @@ export const recommendRoomDummyData = [
         answer: '모두 일치',
       },
       {
-        title: 'sleepingTime',
-        color: 'red',
-        answer: '2명 일치',
-      },
-      {
-        title: 'noiseSensitivity',
-        color: 'gray',
-        answer: '1명 일치',
-      },
-      {
         title: 'cleanSensitivity',
         color: 'blue',
         answer: '2명 일치',
@@ -209,11 +187,6 @@ export const recommendRoomDummyData = [
         title: 'noiseSensitivity',
         color: 'gray',
         answer: '1명 일치',
-      },
-      {
-        title: 'cleanSensitivity',
-        color: 'blue',
-        answer: '2명 일치',
       },
     ],
   },

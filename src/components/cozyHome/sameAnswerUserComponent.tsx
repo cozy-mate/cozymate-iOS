@@ -46,7 +46,9 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
         </View>
       </View>
 
-      <View className="flex flex-row items-center justify-between px-2 pt-3">
+      <View
+        className={`flex flex-row items-center px-2 pt-3 ${userData.option.length == 2 ? 'justify-around' : 'justify-between'}`}
+      >
         {userData.option.map((opt, index) => (
           <View key={index} className="flex flex-col items-center">
             {isLifestyleOptionKey(opt.title)

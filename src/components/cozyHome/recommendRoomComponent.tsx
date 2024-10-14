@@ -44,7 +44,9 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomDat
         </Text>
       </View>
 
-      <View className="mb-6 flex flex-row items-center justify-between px-2 pt-4">
+      <View
+        className={`mb-6 flex flex-row items-center px-2 pt-4 ${roomData.option.length == 2 ? 'justify-around' : 'justify-between'}`}
+      >
         {roomData.option.map((opt, index) => (
           <View key={index} className="flex flex-col items-center">
             {isLifestyleOptionKey(opt.title)
