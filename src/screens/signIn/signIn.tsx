@@ -25,6 +25,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const loginWithId = useLoginWithId(navigation);
 
+  const toOnboard = () => {
+    navigation.navigate('PersonalInfoInputScreen');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mx-6 flex-1">
@@ -69,6 +73,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
           </Pressable>
         </View>
+
+        <Pressable onPress={toOnboard}>
+          <Text>온보딩</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
