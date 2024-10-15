@@ -307,7 +307,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     if (data && data.result) {
       const result = data.result;
 
-      setAdmissionYear(result.admissionYear);
+      setAdmissionYear(result.admissionYear.toString());
       setMajor(result.major);
       setNumOfRoommate(result.numOfRoommate);
       setAcceptance(result.acceptance);
@@ -532,252 +532,257 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="relative flex-1 bg-white">
-      <ScrollView className="px-5" ref={scrollViewRef}>
-        <View className="mb-10 mt-2 flex flex-row justify-between">
-          <Pressable onPress={toMyPage}>
-            <BackButton />
-          </Pressable>
+    <>
+      <SafeAreaView className="flex-1 bg-white">
+        <ScrollView className="px-5" ref={scrollViewRef}>
+          <View className="mb-10 mt-2 flex flex-row justify-between">
+            <Pressable onPress={toMyPage}>
+              <BackButton />
+            </Pressable>
 
-          <Pressable className="rounded-md bg-sub1 px-5 py-2.5" onPress={updateInfo}>
-            <Text className="text-xs font-semibold text-main1">수정</Text>
-          </Pressable>
-        </View>
+            <Pressable
+              className="flex flex-row items-center rounded-md bg-sub1 px-5 py-2.5"
+              onPress={updateInfo}
+            >
+              <Text className="text-xs font-semibold text-main1">수정</Text>
+            </Pressable>
+          </View>
 
-        <CustomTextInputBox
-          title="닉네임을 입력해주세요"
-          value={nickname}
-          setValue={setNickname}
-          placeholder="ex. 눈꽃"
-        />
+          <CustomTextInputBox
+            title="닉네임을 입력해주세요"
+            value={nickname}
+            setValue={setNickname}
+            placeholder="ex. 눈꽃"
+          />
 
-        <CustomTextInputBox
-          title="학과를 입력해주세요"
-          value={major}
-          setValue={setMajor}
-          placeholder="ex. 컴퓨터공학과"
-        />
+          <CustomTextInputBox
+            title="학과를 입력해주세요"
+            value={major}
+            setValue={setMajor}
+            placeholder="ex. 컴퓨터공학과"
+          />
 
-        <CustomTextInputBox
-          title="학번을 입력해주세요"
-          value={admissionYear}
-          setValue={setAdmissionYear}
-          placeholder="ex. 23"
-        />
+          <CustomTextInputBox
+            title="학번을 입력해주세요"
+            value={admissionYear}
+            setValue={setAdmissionYear}
+            placeholder="ex. 23"
+          />
 
-        <CustomRadioInputBox
-          title="신청실의 인원을 선택해주세요"
-          value={numOfRoommate}
-          setValue={setNumOfRoommate}
-          items={numOfRoommateItems}
-          setItems={setNumOfRoommateItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="신청실의 인원을 선택해주세요"
+            value={numOfRoommate}
+            setValue={setNumOfRoommate}
+            items={numOfRoommateItems}
+            setItems={setNumOfRoommateItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="기숙사 합격여부를 선택해주세요"
-          value={acceptance}
-          setValue={setAcceptance}
-          items={acceptanceItems}
-          setItems={setAcceptanceItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="기숙사 합격여부를 선택해주세요"
+            value={acceptance}
+            setValue={setAcceptance}
+            items={acceptanceItems}
+            setItems={setAcceptanceItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="기상시간을 선택해주세요"
-          value={wakeUpTime}
-          setValue={setWakeUpTime}
-          meridian={wakeUpMeridian}
-          setMeridian={setWakeUpMeridian}
-          items={wakeUpTimeItems}
-          setItems={setWakeUpTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
-        />
+          <CustomRadioInputBox
+            title="기상시간을 선택해주세요"
+            value={wakeUpTime}
+            setValue={setWakeUpTime}
+            meridian={wakeUpMeridian}
+            setMeridian={setWakeUpMeridian}
+            items={wakeUpTimeItems}
+            setItems={setWakeUpTimeItems}
+            isTime={true}
+            isWide={true}
+            width={48}
+            count={6}
+          />
 
-        <CustomRadioInputBox
-          title="취침시간을 선택해주세요"
-          value={sleepingTime}
-          setValue={setSleepingTime}
-          meridian={sleepingMeridian}
-          setMeridian={setSleepingMeridian}
-          items={sleepingTimeItems}
-          setItems={setSleepingTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
-        />
+          <CustomRadioInputBox
+            title="취침시간을 선택해주세요"
+            value={sleepingTime}
+            setValue={setSleepingTime}
+            meridian={sleepingMeridian}
+            setMeridian={setSleepingMeridian}
+            items={sleepingTimeItems}
+            setItems={setSleepingTimeItems}
+            isTime={true}
+            isWide={true}
+            width={48}
+            count={6}
+          />
 
-        <CustomRadioInputBox
-          title="소등시간 선택해주세요"
-          value={turnOffTime}
-          setValue={setTurnOffTime}
-          meridian={turnOffMeridian}
-          setMeridian={setTurnOffMeridian}
-          items={turnOffTimeItems}
-          setItems={setTurnOffTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
-        />
+          <CustomRadioInputBox
+            title="소등시간 선택해주세요"
+            value={turnOffTime}
+            setValue={setTurnOffTime}
+            meridian={turnOffMeridian}
+            setMeridian={setTurnOffMeridian}
+            items={turnOffTimeItems}
+            setItems={setTurnOffTimeItems}
+            isTime={true}
+            isWide={true}
+            width={48}
+            count={6}
+          />
 
-        <CustomRadioInputBox
-          title="흡연여부를 선택해주세요"
-          value={smokingState}
-          setValue={setSmokingState}
-          items={smokingStateItems}
-          setItems={setSmokingStateItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="흡연여부를 선택해주세요"
+            value={smokingState}
+            setValue={setSmokingState}
+            items={smokingStateItems}
+            setItems={setSmokingStateItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="잠버릇을 선택해주세요"
-          value={sleepingHabit}
-          setValue={setSleepingHabit}
-          items={sleepingHabitItems}
-          setItems={setSleepingHabitItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="잠버릇을 선택해주세요"
+            value={sleepingHabit}
+            setValue={setSleepingHabit}
+            items={sleepingHabitItems}
+            setItems={setSleepingHabitItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="에어컨 강도를 선택해주세요"
-          value={airConditioningIntensity}
-          setValue={setAirConditioningIntensity}
-          items={airConditioningIntensityItems}
-          setItems={setAirConditioningIntensityItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="에어컨 강도를 선택해주세요"
+            value={airConditioningIntensity}
+            setValue={setAirConditioningIntensity}
+            items={airConditioningIntensityItems}
+            setItems={setAirConditioningIntensityItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="히터 강도를 선택해주세요"
-          value={heatingIntensity}
-          setValue={setHeatingIntensity}
-          items={heatingIntensityItems}
-          setItems={setHeatingIntensityItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="히터 강도를 선택해주세요"
+            value={heatingIntensity}
+            setValue={setHeatingIntensity}
+            items={heatingIntensityItems}
+            setItems={setHeatingIntensityItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="생활 패턴을 입력해주세요"
-          value={lifePattern}
-          setValue={setLifePattern}
-          items={lifePatternItems}
-          setItems={setLifePatternItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="생활 패턴을 입력해주세요"
+            value={lifePattern}
+            setValue={setLifePattern}
+            items={lifePatternItems}
+            setItems={setLifePatternItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="친밀도를 선택해주세요"
-          value={intimacy}
-          setValue={setIntimacy}
-          items={intimacyItems}
-          setItems={setIntimacyItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="친밀도를 선택해주세요"
+            value={intimacy}
+            setValue={setIntimacy}
+            items={intimacyItems}
+            setItems={setIntimacyItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
-          value={canShare}
-          setValue={setCanShare}
-          items={canShareItems}
-          setItems={setCanShareItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
+            value={canShare}
+            setValue={setCanShare}
+            items={canShareItems}
+            setItems={setCanShareItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="방 안에서 게임 여부를 선택해주세요"
-          value={isPlayGame}
-          setValue={setIsPlayGame}
-          items={isPlayGameItems}
-          setItems={setIsPlayGameItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="방 안에서 게임 여부를 선택해주세요"
+            value={isPlayGame}
+            setValue={setIsPlayGame}
+            items={isPlayGameItems}
+            setItems={setIsPlayGameItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="방 안에서 전화 여부를 선택해주세요"
-          value={isPhoneCall}
-          setValue={setIsPhoneCall}
-          items={isPhoneCallItems}
-          setItems={setIsPhoneCallItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="방 안에서 전화 여부를 선택해주세요"
+            value={isPhoneCall}
+            setValue={setIsPhoneCall}
+            items={isPhoneCallItems}
+            setItems={setIsPhoneCallItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="방 안에서 공부 여부를 선택해주세요"
-          value={studying}
-          setValue={setStudying}
-          items={studyingItems}
-          setItems={setStudyingItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="방 안에서 공부 여부를 선택해주세요"
+            value={studying}
+            setValue={setStudying}
+            items={studyingItems}
+            setItems={setStudyingItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="섭취여부를 선택해주세요"
-          value={intake}
-          setValue={setIntake}
-          items={intakeItems}
-          setItems={setIntakeItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="섭취여부를 선택해주세요"
+            value={intake}
+            setValue={setIntake}
+            items={intakeItems}
+            setItems={setIntakeItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="청결 예민도를 선택해주세요"
-          value={cleanSensitivity}
-          setValue={setCleanSensitivity}
-          items={cleanSensitivityItems}
-          setItems={setCleanSensitivityItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="청결 예민도를 선택해주세요"
+            value={cleanSensitivity}
+            setValue={setCleanSensitivity}
+            items={cleanSensitivityItems}
+            setItems={setCleanSensitivityItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="소음 예민도를 선택해주세요"
-          value={noiseSensitivity}
-          setValue={setNoiseSensitivity}
-          items={noiseSensitivityItems}
-          setItems={setNoiseSensitivityItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="소음 예민도를 선택해주세요"
+            value={noiseSensitivity}
+            setValue={setNoiseSensitivity}
+            items={noiseSensitivityItems}
+            setItems={setNoiseSensitivityItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="평소에 청소를 얼만큼 하시나요?"
-          value={cleaningFrequency}
-          setValue={setCleaningFrequency}
-          items={cleaningFrequencyItems}
-          setItems={setCleaningFrequencyItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="평소에 청소를 얼만큼 하시나요?"
+            value={cleaningFrequency}
+            setValue={setCleaningFrequency}
+            items={cleaningFrequencyItems}
+            setItems={setCleaningFrequencyItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="당신의 성격을 알려주세요!"
-          value={personality}
-          setValue={setPersonality}
-          items={personalityItems}
-          setItems={setPersonalityItems}
-          isTime={false}
-        />
+          <CustomRadioInputBox
+            title="당신의 성격을 알려주세요!"
+            value={personality}
+            setValue={setPersonality}
+            items={personalityItems}
+            setItems={setPersonalityItems}
+            isTime={false}
+          />
 
-        <CustomRadioInputBox
-          title="MBTI를 알려주세요!"
-          value={mbti}
-          setValue={setMbti}
-          items={mbtiItems}
-          setItems={setMbtiItems}
-          isTime={false}
-          isWide={true}
-          width={70}
-        />
-      </ScrollView>
+          <CustomRadioInputBox
+            title="MBTI를 알려주세요!"
+            value={mbti}
+            setValue={setMbti}
+            items={mbtiItems}
+            setItems={setMbtiItems}
+            isTime={false}
+            isWide={true}
+            width={70}
+          />
+        </ScrollView>
+      </SafeAreaView>
 
-      <View className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
+      <View className="fixed bottom-28 right-5 flex w-fit items-end">
         <Pressable onPress={scrollToTop}>
           <TopButton />
         </Pressable>
       </View>
-    </SafeAreaView>
+    </>
   );
 };
 
