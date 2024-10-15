@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Text, Pressable } from 'react-native';
 
-interface CustomCheckBoxComponentProps {
-  value: string[];
-  setValue: React.Dispatch<React.SetStateAction<string[]>>;
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-}
-
 type Item = {
   index: number;
   id: string;
   name: string;
   select: boolean;
 };
+
+interface CustomCheckBoxComponentProps {
+  value: string[];
+  setValue: React.Dispatch<React.SetStateAction<string[]>>;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+}
 
 const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
   value,
