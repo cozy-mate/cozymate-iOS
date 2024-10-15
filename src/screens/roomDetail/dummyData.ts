@@ -1,6 +1,8 @@
 export const dummyData = {
   title: '피그말리온',
   persona: 1,
+  type: '제1생활관',
+  numOfRoommate: 4,
   hashTag: ['UMC', '같이애니보실?', '피그마짱'],
   maxNum: 4,
   currentNum: 2,
@@ -30,8 +32,4 @@ export const dummyData = {
       isChief: false,
     },
   ],
-  type: {
-    type: '제1생활관',
-    count: 4,
-  },
 };

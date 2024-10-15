@@ -41,6 +41,7 @@ import MegaPhoneIcon from '@assets/cozyHome/megaPhone.svg';
 import ArrowIcon from '@assets/cozyHome/rightGrayArrow.svg';
 import GraySchool from '@assets/cozyHome/graySchoolIcon.svg';
 import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
+import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
@@ -238,7 +239,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
         <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
           <View className="px-5">
-            <Text className="mb-4 text-lg font-semibold leading-6 text-emphasizedFont">
+            <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
               {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
             </Text>
             {hasRoom ? (
@@ -251,7 +252,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
           <View className="px-5">
-            <Text className="mb-4 text-lg font-semibold leading-6 text-emphasizedFont">
+            <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
               {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
             </Text>
             <ScrollView className="flex flex-col">
@@ -264,12 +265,13 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
           <View className="px-5">
-            <View className="mb-4 flex flex-row items-center justify-between pr-5">
-              <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
+            <View className="mb-4 flex flex-row items-center justify-between">
+              <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
                 {profile.nickname}님,{'\n'}이런 룸메이트는 어때요?
               </Text>
-              <Pressable onPress={toRoomMate}>
-                <Text className="text-xs font-semibold text-disabledFont">더보기</Text>
+              <Pressable className="flex flex-row items-center" onPress={toRoomMate}>
+                <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
+                <RightArrow />
               </Pressable>
             </View>
             <ScrollView
@@ -301,12 +303,13 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
           <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
           <View className="mb-6 px-5">
-            <View className="mb-4 flex flex-row items-center justify-between pr-5">
-              <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
+            <View className="mb-4 flex flex-row items-center justify-between">
+              <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
                 {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
               </Text>
-              <Pressable onPress={toRecommendRoom}>
-                <Text className="text-xs font-semibold text-disabledFont">더보기</Text>
+              <Pressable className="flex flex-row items-center" onPress={toRecommendRoom}>
+                <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
+                <RightArrow />
               </Pressable>
             </View>
             <ScrollView

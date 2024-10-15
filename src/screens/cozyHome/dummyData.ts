@@ -203,12 +203,12 @@ export const recommendRoomDummyData = [
         answer: '모두 일치',
       },
       {
-        title: 'sleepingTime',
+        title: 'canShare',
         color: 'red',
         answer: '2명 일치',
       },
       {
-        title: 'noiseSensitivity',
+        title: 'canShare',
         color: 'gray',
         answer: '1명 일치',
       },
