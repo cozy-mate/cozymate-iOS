@@ -74,7 +74,7 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
         <View className="flex-1 bg-white px-5 pt-4" style={{ paddingBottom: bottom + 80 }}>
           {RoomDummyData.map((room, index) => (
-            <RoomComponent index={index} roomData={room} toRoomDetail={toRoomDetail} />
+            <RoomComponent key={index} index={index} roomData={room} toRoomDetail={toRoomDetail} />
           ))}
         </View>
       </ScrollView>

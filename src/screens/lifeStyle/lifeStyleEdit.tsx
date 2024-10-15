@@ -307,7 +307,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     if (data && data.result) {
       const result = data.result;
 
-      setAdmissionYear(result.admissionYear);
+      setAdmissionYear(result.admissionYear.toString());
       setMajor(result.major);
       setNumOfRoommate(result.numOfRoommate);
       setAcceptance(result.acceptance);
