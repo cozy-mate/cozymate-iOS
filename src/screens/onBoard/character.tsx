@@ -148,6 +148,8 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
   ]);
 
   const toNext = async (): Promise<void> => {
+    if (!isComplete) return;
+
     setSignUp((prevState: SignUp) => ({
       ...prevState,
       persona: character,

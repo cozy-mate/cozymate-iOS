@@ -35,11 +35,12 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 24, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const toNext = () => {
+  const isComplete = selectedChips.length === 4;
+
+  const toNext = async (): Promise<void> => {
+    if (!isComplete) return;
     navigation.navigate('CompleteScreen');
   };
-
-  const isComplete = selectedChips.length === 4;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
