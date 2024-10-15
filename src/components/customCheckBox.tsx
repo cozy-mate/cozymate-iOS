@@ -43,8 +43,6 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
 
     setItems(updatedItems);
     handleFocus(selectedItem.index);
-
-    console.log(items);
   };
 
   return (
@@ -52,13 +50,13 @@ const CustomCheckBoxComponent: React.FC<CustomCheckBoxComponentProps> = ({
       {items.map((item: Item) => (
         <Pressable
           key={item.index}
-          className={`m-1 flex-row flex-wrap items-center justify-center rounded-[35px] border px-[14px] py-2 ${
+          className={`mb-3 mr-2 flex-row flex-wrap items-center justify-center rounded-full border px-[14px] py-2 ${
             item.select ? 'border-main1 bg-sub1' : 'border-disabled bg-white'
           }`}
           onPress={() => select(item)}
         >
           <Text
-            className={`text-sm font-medium ${item.select ? 'text-main1' : 'text-disabledFont'}`}
+            className={`text-center text-sm font-medium tracking-tighter ${item.select ? 'text-main1' : 'text-disabledFont'}`}
           >
             {item.name}
           </Text>

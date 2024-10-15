@@ -153,7 +153,7 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
       persona: character,
     }));
 
-    navigation.navigate('CompleteScreen');
+    navigation.navigate('ChipSelectScreen');
   };
 
   return (
