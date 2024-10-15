@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -12,7 +12,9 @@ import {
 
 import { dummyData } from './dummyData';
 
-import MemberContainer from '@components/roomDetail/memberContainer';
+import ChipComponent from '@components/roomDetail/chipComponent';
+import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
+import MemberComponent from '@components/roomDetail/memberComponent';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -22,8 +24,18 @@ import BackButton from '@assets/backButton.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 
+type ChipItems = {
+  title: string;
+  color: string;
+};
+
 const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
   const [roomData, setRoomData] = useState(dummyData);
+  const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
+
+  const handleLifeStyleModal = () => {
+    setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
+  };
 
   const toHome = () => {
     navigation.goBack();
@@ -42,6 +54,32 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
     const { height } = event.nativeEvent.layout;
     setHeight(height);
   };
+
+  const [items, setItems] = useState<ChipItems[]>([
+    { title: '학번', color: 'blue' },
+    { title: '학과', color: 'gray' },
+    { title: '신청실', color: 'red' },
+    { title: '합격여부', color: 'gray' },
+    { title: '기상시간', color: 'red' },
+    { title: '취침시간', color: 'blue' },
+    { title: '소등시간', color: 'red' },
+    { title: '흡연여부', color: 'gray' },
+    { title: '잠버릇', color: 'blue' },
+    { title: '에어컨', color: 'red' },
+    { title: '히터', color: 'blue' },
+    { title: '생활패턴', color: 'gray' },
+    { title: '친밀도', color: 'blue' },
+    { title: '물건공유', color: 'blue' },
+    { title: '공부여부', color: 'red' },
+    { title: '게임여부', color: 'blue' },
+    { title: '전화여부', color: 'red' },
+    { title: '섭취여부', color: 'blue' },
+    { title: '청결예민도', color: 'gray' },
+    { title: '소음예민도', color: 'blue' },
+    { title: '청소빈도', color: 'blue' },
+    { title: '성격', color: 'blue' },
+    { title: 'MBTI', color: 'blue' },
+  ]);
 
   return (
     <View className="flex-1 bg-sub1">
@@ -96,36 +134,72 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
         <View className="flex-1 bg-sub1">
           <View className="flex-1 rounded-t-[20px] bg-white px-5 pt-9">
             <View className="mb-16">
-              <Text className="mb-4 text-base font-semibold text-emphasizedFont">
+              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                 <Text className="text-main1">{roomData.requestList.length}</Text>개의
                 {'\n'}룸메이트 요청이 도착했어요
               </Text>
-              <MemberContainer memberData={roomData.requestList} />
+
+              <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                {roomData.requestList.map((request, index) => (
+                  <MemberComponent key={index} index={index} memberData={request} />
+                ))}
+              </View>
             </View>
 
             <View className="mb-16">
-              <View className="flex flex-row items-center justify-between">
-                <Text className="mb-4 text-base font-semibold text-emphasizedFont">방정보</Text>
+              <View className="mb-4 flex flex-row items-center justify-between px-1">
+                <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
                 <Text className="text-xs font-medium text-disabledFont">
                   <Text className="text-main1">{roomData.currentNum}</Text> / {roomData.maxNum}
                 </Text>
               </View>
-              <MemberContainer memberData={roomData.member} />
+
+              <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                {roomData.member.map((mem, index) => (
+                  <MemberComponent key={index} index={index} memberData={mem} />
+                ))}
+              </View>
             </View>
 
             <View className="mb-16">
-              <Text className="mb-4 text-base font-semibold text-emphasizedFont">기숙사 정보</Text>
-              <MemberContainer memberData={roomData.member} />
+              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+                기숙사 정보
+              </Text>
+
+              <View className="rounded-xl border border-[#F1F2F4] p-4">
+                <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
+                  <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
+                  <Text className="text-sm font-medium text-basicFont">{roomData.type}</Text>
+                </View>
+                <View className="flex flex-row pt-3">
+                  <Text className="mr-3 text-sm font-medium text-colorFont">인실</Text>
+                  <Text className="text-sm font-medium text-basicFont">
+                    {roomData.numOfRoommate}인실
+                  </Text>
+                </View>
+              </View>
             </View>
 
             <View className="mb-16">
-              <Text className="mb-4 text-base font-semibold text-emphasizedFont">
+              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                 룸메이트 라이프스타일 한 눈에 보기
               </Text>
-              <MemberContainer memberData={roomData.member} />
+
+              <View className="flex flex-row flex-wrap">
+                {items.map((item, index) => (
+                  <ChipComponent
+                    key={index}
+                    index={index}
+                    chipData={item}
+                    handleModal={handleLifeStyleModal}
+                  />
+                ))}
+              </View>
             </View>
           </View>
         </View>
+
+        {isLifeStyleModalOpen && <LifeStyleModal closeModal={handleLifeStyleModal} />}
       </ScrollView>
     </View>
   );

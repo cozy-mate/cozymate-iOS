@@ -39,9 +39,10 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomDat
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-4">
         <Text className="pl-2 text-base font-semibold text-basicFont">{roomData.title}</Text>
-        <Text className="text-xs font-medium text-disabledFont">
-          {roomData.currentNum} / {roomData.totalNum}명
-        </Text>
+        <View className="flex flex-row items-center">
+          <Text className="mr-1 text-xs font-medium text-disabledFont">방 평균 일치율</Text>
+          <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
+        </View>
       </View>
 
       <View
@@ -66,8 +67,9 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomDat
         </View>
 
         <View className="flex flex-row items-center">
-          <Text className="mr-1 text-xs font-medium text-disabledFont">방 평균 일치율</Text>
-          <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
+          <Text className="text-xs font-medium text-disabledFont">
+            {roomData.currentNum} / {roomData.totalNum}명
+          </Text>
         </View>
       </View>
     </View>
