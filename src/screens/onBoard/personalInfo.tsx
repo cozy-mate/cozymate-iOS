@@ -4,6 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Text, View, Keyboard, Pressable, SafeAreaView } from 'react-native';
 
 import RadioBoxComponent from '@components/basicRadioBox';
+import SchoolSelect from '@components/onBoard/schoolSelect';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 
@@ -15,12 +16,13 @@ import { checkNickname } from '@server/api/member';
 import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
 
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
-  const [signUp, setSignUp] = useRecoilState(signUpState);
+  const [, setSignUp] = useRecoilState(signUpState);
 
   const [name, setName] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
+  const [school, setSchool] = useState<string>('');
 
   const isComplete = name !== '' && nickname !== '' && gender !== '' && birthday !== '';
 
@@ -75,7 +77,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
     if (checkDuplicate) {
       setCanUse(true);
     }
-  }, [nickname]);
+  }, [nickname, checkDuplicate]);
 
   const toNext = async (): Promise<void> => {
     if (!isComplete || !canUse) return;
@@ -155,6 +157,9 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               setSelectedDate={setBirthday}
               title="생년월일"
             />
+
+            {/* 학교 입력 Input */}
+            <SchoolSelect school={school} setSchool={setSchool} title="학교" />
           </View>
 
           {/* 하단 View */}
