@@ -18,6 +18,13 @@ import { useIsOldiPhone } from '@hooks/device';
 
 import { TabNavigatorParamList } from '@type/param/stack';
 
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false,
+};
+
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {

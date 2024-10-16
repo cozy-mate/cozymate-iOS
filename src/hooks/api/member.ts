@@ -157,7 +157,8 @@ export const useLoginWithId = (navigation: any) => {
                 }
                 setLoggedIn(true);
               }
-            } catch (error) {
+            } catch (error: any) {
+              console.log(error.result.data)
               Alert.alert('로그인 오류');
             }
           },
