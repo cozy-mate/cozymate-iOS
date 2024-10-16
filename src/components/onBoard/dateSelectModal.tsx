@@ -17,6 +17,7 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
   title,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const inputRef = React.useRef<TextInput>(null);
 
@@ -34,8 +35,6 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
   const handleBlur = () => {
     setIsFocused(false);
   };
-
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);

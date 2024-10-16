@@ -24,7 +24,7 @@ const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
   setItems,
 }) => {
   return (
-    <View className="mb-6 px-3">
+    <View className="mb-6 pl-5 pr-3">
       <View className="flex-row flex-wrap">
         <CustomCheckBoxComponent
           value={value}

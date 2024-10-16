@@ -4,6 +4,7 @@ export type RootStackParamList = {
   SignInScreen: undefined;
   PersonalInfoInputScreen: undefined;
   CharacterInputScreen: undefined;
+  ChipSelectScreen: undefined;
   CompleteScreen: undefined;
 };
 
@@ -21,6 +22,9 @@ export type CharacterInputScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'CharacterInputScreen'
 >;
+
+// 온보딩 3 스크린
+export type ChipSelectScreenProps = NativeStackScreenProps<RootStackParamList, 'ChipSelectScreen'>;
 
 // 온보딩 완료 스크린
 export type CompleteScreenProps = NativeStackScreenProps<RootStackParamList, 'CompleteScreen'>;

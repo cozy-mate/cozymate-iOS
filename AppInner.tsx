@@ -19,6 +19,7 @@ import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import ChatRoomScreen from 'src/screens/chatting/chatRoom';
 import SendChatScreen from 'src/screens/chatting/sendChat';
+import ChipSelectScreen from 'src/screens/onBoard/chipSelect';
 import CreateTodoScreen from 'src/screens/todoList/createTodo';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
@@ -100,6 +101,7 @@ function AppInner() {
           <rootStack.Screen name="SignInScreen" component={SignInScreen} />
           <rootStack.Screen name="PersonalInfoInputScreen" component={PersonalInfoInputScreen} />
           <rootStack.Screen name="CharacterInputScreen" component={CharacterInputScreen} />
+          <rootStack.Screen name="ChipSelectScreen" component={ChipSelectScreen} />
           <rootStack.Screen name="CompleteScreen" component={CompleteScreen} />
         </rootStack.Navigator>
       )}

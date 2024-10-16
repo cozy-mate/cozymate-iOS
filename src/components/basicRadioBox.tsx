@@ -4,6 +4,8 @@ import { Text, View, Pressable, TextInput } from 'react-native';
 import RadioButtonSvg from '@assets/onBoard/radioBox.svg';
 import SelectedRadioButtonSvg from '@assets/onBoard/selectedRadioBox.svg';
 
+type Item = { index: number; value: string; item: string; select: boolean };
+
 interface RadioBoxComponentProps {
   title: string;
   value: string;
@@ -11,8 +13,6 @@ interface RadioBoxComponentProps {
   items: Item[];
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }
-
-type Item = { index: number; value: string; item: string; select: boolean };
 
 const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
   title,
