@@ -45,6 +45,8 @@ import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
+  const { top, bottom } = useSafeAreaInsets();
+
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
 
@@ -78,7 +80,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   };
 
   const profile = useRecoilValue(profileState);
-  const { bottom } = useSafeAreaInsets();
 
   const { initFcm } = useInitFcm();
 
@@ -177,61 +178,65 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
       >
         <View className="bg-white">
           <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
-            <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
-              <Pressable className="flex flex-row items-center py-2" onPress={handleSchool}>
-                {school ? (
-                  <>
-                    <BlueSchool />
-                    <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">인하대학교</Text>
-                  </>
-                ) : (
-                  <>
-                    <GraySchool />
-                    <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
-                      학교 인증을 해주세요
+            <HomeBack style={{ position: 'absolute' }} />
+            <View style={{ position: 'relative', zIndex: 100 }}>
+              <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
+                <Pressable className="flex flex-row items-center py-2" onPress={handleSchool}>
+                  {school ? (
+                    <View className="flex flex-row items-center">
+                      <BlueSchool />
+                      <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">
+                        인하대학교
+                      </Text>
+                    </View>
+                  ) : (
+                    <View className="flex flex-row items-center">
+                      <GraySchool />
+                      <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
+                        학교 인증을 해주세요
+                      </Text>
+                      <ArrowIcon />
+                    </View>
+                  )}
+                </Pressable>
+
+                <View className="flex flex-row">
+                  <Pressable onPress={toChat}>
+                    <ChatIcon />
+                  </Pressable>
+                  <Pressable onPress={toNotification}>
+                    <NotificationIcon />
+                  </Pressable>
+                </View>
+              </View>
+              <View className="flex flex-col items-start px-5">
+                <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
+                  <MegaPhoneIcon />
+                  <Text className="ml-2 text-xs font-medium text-emphasizedFont">
+                    [공지] 시험기간으로 인한 기숙사 통금시간 변경
+                  </Text>
+                </View>
+
+                {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+                <View className="mb-[25px] flex h-[100px] w-full flex-row justify-between">
+                  <Pressable
+                    onPress={createRoomModalOpen}
+                    className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                  >
+                    <Text className="text-base font-semibold leading-[19px] text-main1">
+                      방 만들기
                     </Text>
-                    <ArrowIcon />
-                  </>
-                )}
-              </Pressable>
+                  </Pressable>
 
-              <View className="flex flex-row">
-                <Pressable onPress={toChat}>
-                  <ChatIcon />
-                </Pressable>
-                <Pressable onPress={toNotification}>
-                  <NotificationIcon />
-                </Pressable>
-              </View>
-            </View>
-
-            <View className="flex flex-col items-start px-5">
-              <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
-                <MegaPhoneIcon />
-                <Text className="ml-2 text-xs font-medium text-emphasizedFont">
-                  [공지] 시험기간으로 인한 기숙사 통금시간 변경
-                </Text>
-              </View>
-
-              {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-              <View className="mb-[25px] flex h-[100px] w-full flex-row justify-between">
-                <Pressable
-                  onPress={createRoomModalOpen}
-                  className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-                >
-                  <Text className="text-base font-semibold leading-[19px] text-main1">
-                    방 만들기
-                  </Text>
-                </Pressable>
-
-                <Pressable
-                  onPress={toJoinRoom}
-                  className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-                >
-                  <Text className="text-base font-semibold leading-[19px] text-main1">
-                    방 참여하기
-                  </Text>
-                </Pressable>
+                  <Pressable
+                    onPress={toJoinRoom}
+                    className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                  >
+                    <Text className="text-base font-semibold leading-[19px] text-main1">
+                      방 참여하기
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>
@@ -294,7 +299,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               {Array.from({ length: 5 }).map((_, index) => (
                 <View
                   key={index}
-                  className={`${index == userCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'} h-2 rounded-full`}
+                  className={`${
+                    index == userCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                  } h-2 rounded-full`}
                 />
               ))}
             </View>
@@ -332,7 +339,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               {Array.from({ length: 5 }).map((_, index) => (
                 <View
                   key={index}
-                  className={`${index == roomCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'} h-2 rounded-full`}
+                  className={`${
+                    index == roomCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                  } h-2 rounded-full`}
                 />
               ))}
             </View>

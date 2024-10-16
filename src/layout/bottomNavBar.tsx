@@ -22,7 +22,7 @@ export const CozyHome: React.FC<TabComponentProps> = ({ focused, isOldIphone }) 
     <View className="flex flex-col items-center justify-center">
       {focused ? <CozyHomeSelected /> : <CozyHomeNotSelected />}
       <Text
-        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
+        className={`text-center ${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >
@@ -37,7 +37,7 @@ export const RoleNRule: React.FC<TabComponentProps> = ({ focused, isOldIphone })
     <View className="flex flex-col items-center justify-center">
       {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
       <Text
-        className={`${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
+        className={`text-center ${isOldIphone ? 'text-[10px]' : 'text-xs'} ${
           focused ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
         }`}
       >

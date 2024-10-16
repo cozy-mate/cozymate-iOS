@@ -1,9 +1,15 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { TouchableOpacityProps } from 'react-native';
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TouchableOpacity, GestureResponderEvent } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Animated, {
+  Easing,
+  withTiming,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 import { Feed, MyPage, CozyBot, CozyHome, RoleNRule } from 'src/layout/bottomNavBar';
 
@@ -32,21 +38,39 @@ const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
       {...props}
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onPress={() => {
-        ReactNativeHapticFeedback.trigger("impactLight", options);
+        ReactNativeHapticFeedback.trigger('impactLight', options);
       }}
     />
   );
 };
 
 const HapticTabButton: React.FC<TouchableOpacityProps> = (props) => {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }));
+
   return (
     <TouchableOpacity
       {...props}
       onPress={(event: GestureResponderEvent) => {
-        ReactNativeHapticFeedback.trigger("impactLight", options);
+        ReactNativeHapticFeedback.trigger('impactLight', options);
+
+        scale.value = withTiming(1.05, { duration: 150, easing: Easing.ease }, () => {
+          scale.value = withTiming(1, { duration: 150 });
+        });
+
         props.onPress?.(event);
       }}
-    />
+    >
+      <Animated.View style={animatedStyle}>{props.children}</Animated.View>
+    </TouchableOpacity>
   );
 };
 
@@ -98,7 +122,7 @@ const MainScreen = () => {
         options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
-          tabBarButton: (props) => <HapticTabButton {...props} />
+          tabBarButton: (props) => <HapticTabButton {...props} />,
         }}
       />
       {hasRoom.hasRoom ? (
@@ -108,7 +132,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <HapticTabButton {...props} />
+            tabBarButton: (props) => <HapticTabButton {...props} />,
           }}
         />
       ) : (
@@ -118,7 +142,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <DisabledTabButton {...props} />
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
           }}
         />
       )}
@@ -129,7 +153,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <CozyBot focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <HapticTabButton {...props} />
+            tabBarButton: (props) => <HapticTabButton {...props} />,
           }}
         />
       ) : (
@@ -139,7 +163,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <CozyBot focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <DisabledTabButton {...props} />
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
           }}
         />
       )}
@@ -151,7 +175,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <Feed focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <HapticTabButton {...props} />
+            tabBarButton: (props) => <HapticTabButton {...props} />,
           }}
         />
       ) : (
@@ -161,7 +185,7 @@ const MainScreen = () => {
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <Feed focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <DisabledTabButton {...props} />
+            tabBarButton: (props) => <DisabledTabButton {...props} />,
           }}
         />
       )}
@@ -169,11 +193,11 @@ const MainScreen = () => {
       <Tab.Screen
         name="MyPageScreen"
         component={MyPageScreen}
-         options={{
-            tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <MyPage focused={focused} isOldIphone={isOldiPhone} />,
-            tabBarButton: (props) => <HapticTabButton {...props} />
-          }}
+        options={{
+          tabBarLabel: () => null,
+          tabBarIcon: ({ focused }) => <MyPage focused={focused} isOldIphone={isOldiPhone} />,
+          tabBarButton: (props) => <HapticTabButton {...props} />,
+        }}
       />
     </Tab.Navigator>
   );
