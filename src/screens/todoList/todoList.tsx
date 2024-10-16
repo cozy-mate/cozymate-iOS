@@ -72,7 +72,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     <>
       {changeTodoPending && <LoadingComponent />}
       <View className="flex-1 bg-sub1">
-        <View className="mx-5 mt-[76px]" style={{ position: 'relative' }}>
+        <View className="px-5 pt-[76px]" style={{ position: 'relative' }}>
           <Background style={{ position: 'absolute', top: 0 }} />
           <NavBar isTodo={isTodo} handleNav={handleNav} />
         </View>
