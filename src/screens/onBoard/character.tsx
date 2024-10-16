@@ -39,7 +39,7 @@ type Item = {
 };
 
 const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
-  const [signUp, setSignUp] = useRecoilState(signUpState);
+  const [, setSignUp] = useRecoilState(signUpState);
 
   const [character, setCharacter] = useState<number>(0);
 
