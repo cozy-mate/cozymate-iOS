@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, View } from 'react-native';
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-
 
 import FeedSelected from '@assets/main/feedSelected.svg';
 import MyPageSelected from '@assets/main/myPageSelected.svg';
@@ -19,20 +17,7 @@ interface TabComponentProps {
   isOldIphone: boolean;
 }
 
-
-const options = {
-  enableVibrateFallback: true,
-  ignoreAndroidSystemSettings: false,
-};
-
 export const CozyHome: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
-useEffect(() => {
-    if (focused) {
-      // 탭이 선택되었을 때 진동 발생
-      ReactNativeHapticFeedback.trigger("impactLight", options);
-    }
-  }, [focused]);
-
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <CozyHomeSelected /> : <CozyHomeNotSelected />}
@@ -48,13 +33,6 @@ useEffect(() => {
 };
 
 export const RoleNRule: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
-useEffect(() => {
-    if (focused) {
-      // 탭이 선택되었을 때 진동 발생
-      ReactNativeHapticFeedback.trigger("impactLight", options);
-    }
-  }, [focused]);
-
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
@@ -70,14 +48,6 @@ useEffect(() => {
 };
 
 export const CozyBot: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
-
-  useEffect(() => {
-    if (focused) {
-      // 탭이 선택되었을 때 진동 발생
-      ReactNativeHapticFeedback.trigger("impactLight", options);
-    }
-  }, [focused]);
-
   return (
     <View className="relative flex flex-col items-center justify-center">
       {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
@@ -93,13 +63,6 @@ export const CozyBot: React.FC<TabComponentProps> = ({ focused, isOldIphone }) =
 };
 
 export const Feed: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
-  useEffect(() => {
-    if (focused) {
-      // 탭이 선택되었을 때 진동 발생
-      ReactNativeHapticFeedback.trigger("impactLight", options);
-    }
-  }, [focused]);
-
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <FeedSelected /> : <FeedNotSelected />}
@@ -115,13 +78,6 @@ export const Feed: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
 };
 
 export const MyPage: React.FC<TabComponentProps> = ({ focused, isOldIphone }) => {
-  useEffect(() => {
-    if (focused) {
-      // 탭이 선택되었을 때 진동 발생
-      ReactNativeHapticFeedback.trigger("impactLight", options);
-    }
-  }, [focused]);
-  
   return (
     <View className="flex flex-col items-center justify-center">
       {focused ? <MyPageSelected /> : <MyPageNotSelected />}
