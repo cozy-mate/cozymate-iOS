@@ -44,17 +44,17 @@ export const useKakaoLogin = (
         const getProfileResponse = await getMyProfile();
         setMyProfile(getProfileResponse.result);
 
-        // 방 존재 여부 저장
-        const roomCheckResponse = await checkHasRoom();
-        const roomId = roomCheckResponse.result.roomId;
+        // // 방 존재 여부 저장
+        // const roomCheckResponse = await checkHasRoom();
+        // const roomId = roomCheckResponse.result.roomId;
 
-        // 방이 존재하는 경우 방 정보 저장
-        if (roomId !== 0) {
-          setHasRoom({ hasRoom: true, roomId: roomId });
+        // // 방이 존재하는 경우 방 정보 저장
+        // if (roomId !== 0) {
+        //   setHasRoom({ hasRoom: true, roomId: roomId });
 
-          const roomInfoResponse = await getRoomData(roomId);
-          setRoomInfo(roomInfoResponse.result);
-        }
+        //   const roomInfoResponse = await getRoomData(roomId);
+        //   setRoomInfo(roomInfoResponse.result);
+        // }
         setLoggedIn(true);
       }
     },
@@ -157,7 +157,8 @@ export const useLoginWithId = (navigation: any) => {
                 }
                 setLoggedIn(true);
               }
-            } catch (error) {
+            } catch (error: any) {
+              console.log(error.result.data)
               Alert.alert('로그인 오류');
             }
           },

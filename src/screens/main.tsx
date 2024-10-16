@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { TouchableOpacity } from 'react-native';
 import { TouchableOpacityProps } from 'react-native';
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import { TouchableOpacity, GestureResponderEvent } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Feed, MyPage, CozyBot, CozyHome, RoleNRule } from 'src/layout/bottomNavBar';
@@ -18,6 +19,11 @@ import { useIsOldiPhone } from '@hooks/device';
 
 import { TabNavigatorParamList } from '@type/param/stack';
 
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false,
+};
+
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
@@ -25,7 +31,21 @@ const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
     <TouchableOpacity
       {...props}
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onPress={() => {}}
+      onPress={() => {
+        ReactNativeHapticFeedback.trigger("impactLight", options);
+      }}
+    />
+  );
+};
+
+const HapticTabButton: React.FC<TouchableOpacityProps> = (props) => {
+  return (
+    <TouchableOpacity
+      {...props}
+      onPress={(event: GestureResponderEvent) => {
+        ReactNativeHapticFeedback.trigger("impactLight", options);
+        props.onPress?.(event);
+      }}
     />
   );
 };
@@ -78,66 +98,49 @@ const MainScreen = () => {
         options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ focused }) => <CozyHome focused={focused} isOldIphone={isOldiPhone} />,
+          tabBarButton: (props) => <HapticTabButton {...props} />
         }}
       />
       {hasRoom.hasRoom ? (
         <Tab.Screen
           name="TodoListScreen"
           component={TodoListScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <RoleNRule focused={focused} isOldIphone={isOldiPhone} />;
-            },
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <HapticTabButton {...props} />
+          }}
         />
       ) : (
         <Tab.Screen
           name="TodoListScreen"
           component={TodoListScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <RoleNRule focused={focused} isOldIphone={isOldiPhone} />;
-            },
-            tabBarButton: (props) => <DisabledTabButton {...props} />,
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <DisabledTabButton {...props} />
+          }}
         />
       )}
       {hasRoom.hasRoom ? (
         <Tab.Screen
           name="RoomMainScreen"
           component={RoomMainScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <CozyBot focused={focused} isOldIphone={isOldiPhone} />;
-            },
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <CozyBot focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <HapticTabButton {...props} />
+          }}
         />
       ) : (
         <Tab.Screen
           name="RoomMainScreen"
           component={RoomMainScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <CozyBot focused={focused} isOldIphone={isOldiPhone} />;
-            },
-            tabBarButton: (props) => <DisabledTabButton {...props} />,
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <CozyBot focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <DisabledTabButton {...props} />
+          }}
         />
       )}
 
@@ -145,45 +148,32 @@ const MainScreen = () => {
         <Tab.Screen
           name="FeedMainScreen"
           component={FeedMainScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <Feed focused={focused} isOldIphone={isOldiPhone} />;
-            },
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <Feed focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <HapticTabButton {...props} />
+          }}
         />
       ) : (
         <Tab.Screen
           name="FeedMainScreen"
           component={FeedMainScreen}
-          options={({ route }) => ({
-            // title 없애고 custom 하기 위한 옵션
-            tabBarLabel: () => {
-              return null;
-            },
-            tabBarIcon: ({ focused }) => {
-              return <Feed focused={focused} isOldIphone={isOldiPhone} />;
-            },
-            tabBarButton: (props) => <DisabledTabButton {...props} />,
-          })}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <Feed focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <DisabledTabButton {...props} />
+          }}
         />
       )}
 
       <Tab.Screen
         name="MyPageScreen"
         component={MyPageScreen}
-        options={({ route }) => ({
-          // title 없애고 custom 하기 위한 옵션
-          tabBarLabel: () => {
-            return null;
-          },
-          tabBarIcon: ({ focused }) => {
-            return <MyPage focused={focused} isOldIphone={isOldiPhone} />;
-          },
-        })}
+         options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ({ focused }) => <MyPage focused={focused} isOldIphone={isOldiPhone} />,
+            tabBarButton: (props) => <HapticTabButton {...props} />
+          }}
       />
     </Tab.Navigator>
   );
