@@ -19,6 +19,7 @@ import {
   recommendRoomDummyData,
 } from './dummyData';
 
+import LoadingComponent from '@components/loading/loading';
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
@@ -162,6 +163,8 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const toRoomDetail = () => {
     navigation.navigate('RoomDetailScreen');
   };
+
+  const isLoading = true;
 
   return (
     <View className="flex-1 bg-sub1">

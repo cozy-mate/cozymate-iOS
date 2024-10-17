@@ -152,7 +152,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     navigation.goBack();
   };
 
-  const hasData = true;
+  const hasData = false;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
