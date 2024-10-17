@@ -84,12 +84,24 @@ export const sameAnswerDummyData = [
         title: 'turnOffTime',
         answer: 'AM 04:00',
       },
+      {
+        title: 'turnOffTime',
+        answer: 'AM 04:00',
+      },
     ],
   },
   {
     nickname: '바쿠고',
     equality: 95,
     option: [
+      {
+        title: 'sleepingHabit',
+        answer: 'X',
+      },
+      {
+        title: 'airConditioningIntensity',
+        answer: '약하게',
+      },
       {
         title: 'sleepingHabit',
         answer: 'X',
@@ -154,6 +166,16 @@ export const recommendRoomDummyData = [
     totalNum: 3,
     hashTags: ['히로아카', '바쿠고'],
     option: [
+      {
+        title: 'wakeUpTime',
+        color: 'blue',
+        answer: '모두 일치',
+      },
+      {
+        title: 'cleanSensitivity',
+        color: 'blue',
+        answer: '2명 일치',
+      },
       {
         title: 'wakeUpTime',
         color: 'blue',

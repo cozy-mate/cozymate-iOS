@@ -73,7 +73,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
             blurOnSubmit={false}
             className={`${
               isFocused ? 'border border-main1 bg-sub2' : 'border border-colorBox bg-colorBox'
-            } rounded-xl p-4 text-basicFont`}
+            } rounded-xl p-4 text-base text-basicFont`}
             style={{ height: height }}
           />
           <Text className="absolute bottom-4 right-5 text-sm text-gray-500">

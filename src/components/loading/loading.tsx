@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View } from 'react-native';
+import { Image, Modal } from 'react-native';
 
 const LoadingComponent: React.FC = () => {
   return (
-    <View
-      className="absolute z-20 flex h-screen w-screen items-center justify-center"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-    >
-      <ActivityIndicator size="large" color="#68A4FF" />
-    </View>
+    <Modal transparent={true}>
+      <View className="flex h-full w-full items-center justify-center bg-modalBack">
+        <Image source={require('../../assets/loading.gif')} className="h-20 w-20" />
+        {/* <ActivityIndicator size="large" color="#68A4FF" /> */}
+      </View>
+    </Modal>
   );
 };
 

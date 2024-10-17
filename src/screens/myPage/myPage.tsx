@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import { profileState, hasRoomState, loggedInState, roomInfoState } from '@recoil/recoil';
@@ -13,11 +14,13 @@ import { getProfileImage } from '@utils/profileImage';
 import { MyPageScreenProps } from '@type/param/stack';
 
 import HomeIcon from '@assets/myPage/home.svg';
+import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
-import RoundBackGround from '@assets/myPage/roundBack.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
+  const { top } = useSafeAreaInsets();
+
   const hasRoom = useRecoilValue(hasRoomState);
   const myProfile = useRecoilValue(profileState);
   const roomInfo = useRecoilValue(roomInfoState);
@@ -65,9 +68,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="bg-white px-5 pt-[52px]">
-        <View className="flex flex-1 flex-col items-center">
+    <View className="flex-1 bg-white">
+      <ScrollView className="bg-white" style={{ position: 'relative' }}>
+        <Background style={{ position: 'absolute' }} />
+        <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
           {getProfileImage(myProfile.persona, 120, 120)}
           <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
             {myProfile.nickname}
@@ -155,7 +159,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

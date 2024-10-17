@@ -1,11 +1,13 @@
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Text,
   View,
   Keyboard,
   Pressable,
+  ScrollView,
   SafeAreaView,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -30,6 +32,7 @@ import { CreateTodoScreenProps } from '@type/param/stack';
 
 const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const roomInfo = useRecoilValue(roomInfoState);
+  const { bottom } = useSafeAreaInsets();
 
   const [type, setType] = useState<string>(route.params.type);
 
@@ -155,87 +158,98 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
       {addTodoPending && <LoadingComponent />}
       {addRulePending && <LoadingComponent />}
       {addRolePending && <LoadingComponent />}
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView className="flex flex-1 flex-col justify-between bg-white px-5">
-          <View className="flex">
-            <BackNav leftPressFunc={toTodo} />
-            <View className="px-5">
-              <View className="mb-6 flex flex-row gap-x-3">
-                {navBarItems.map((nav) => (
-                  <Pressable
-                    onPress={() => handleNavBarItemPress(nav.value)}
-                    key={nav.id}
-                    className="flex flex-col items-center"
-                  >
-                    <Text
-                      className={`${
-                        type === nav.value ? 'text-main1' : 'text-disabledFont'
-                      } text-lg font-semibold`}
+        <SafeAreaView className="flex-1 bg-white">
+          <ScrollView className="flex-1">
+            <View className="flex" style={{ paddingBottom: bottom }}>
+              <BackNav leftPressFunc={toTodo} />
+              <View className="px-5">
+                <View className="mb-6 flex flex-row gap-x-3">
+                  {navBarItems.map((nav) => (
+                    <Pressable
+                      onPress={() => handleNavBarItemPress(nav.value)}
+                      key={nav.id}
+                      className="flex flex-col items-center"
                     >
-                      {nav.name}
-                    </Text>
-                    <View
-                      className={`${
-                        nav.value == type ? 'bg-main1' : 'bg-white'
-                      } mt-2 h-1 w-[66px] rounded-full`}
+                      <Text
+                        className={`${
+                          type === nav.value ? 'text-main1' : 'text-disabledFont'
+                        } text-lg font-semibold`}
+                      >
+                        {nav.name}
+                      </Text>
+                      <View
+                        className={`${
+                          nav.value == type ? 'bg-main1' : 'bg-white'
+                        } mt-2 h-1 w-[66px] rounded-full`}
+                      />
+                    </Pressable>
+                  ))}
+                </View>
+
+                {type == 'todo' && (
+                  <>
+                    <CustomTextInputBox
+                      title="할 일을 입력해주세요"
+                      value={todoContent}
+                      setValue={setTodoContent}
+                      placeholder="할 일을 입력해주세요"
                     />
-                  </Pressable>
-                ))}
+
+                    <CustomCheckInputBox
+                      title="담당자를 선택해주세요"
+                      selectedValues={mateIdList}
+                      setSelectedValues={setMateIdList}
+                      items={roomInfo.mateList}
+                    />
+
+                    <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
+                  </>
+                )}
+
+                {type == 'role' && (
+                  <>
+                    <CustomCheckInputBox
+                      title="담당자를 선택해주세요"
+                      selectedValues={mateIdList}
+                      setSelectedValues={setMateIdList}
+                      items={roomInfo.mateList}
+                    />
+
+                    <CustomTextInputBox
+                      title="역할을 입력해주세요"
+                      value={title}
+                      setValue={setTitle}
+                      placeholder="역할을 입력해주세요"
+                    />
+                    <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />
+                  </>
+                )}
+
+                {type == 'rule' && (
+                  <>
+                    <CustomTextInputBox
+                      title="규칙을 입력해주세요"
+                      value={ruleContent}
+                      setValue={setRuleContent}
+                      placeholder="규칙을 입력해주세요"
+                    />
+                    <CustomTextarea
+                      title="메모를 추가해주세요 (선택)"
+                      value={memo}
+                      setValue={setMemo}
+                      placeholder="내용을 입력해주세요"
+                      height={120}
+                      maxLength={50}
+                    />
+                  </>
+                )}
               </View>
-
-              {type == 'todo' && (
-                <>
-                  <CustomTextInputBox
-                    title="할 일을 입력해주세요"
-                    value={todoContent}
-                    setValue={setTodoContent}
-                    placeholder="할 일을 입력해주세요"
-                  />
-                  <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
-                </>
-              )}
-
-              {type == 'role' && (
-                <>
-                  <CustomCheckInputBox
-                    title="담당자를 선택해주세요"
-                    selectedValues={mateIdList}
-                    setSelectedValues={setMateIdList}
-                    items={roomInfo.mateList}
-                  />
-
-                  <CustomTextInputBox
-                    title="역할을 입력해주세요"
-                    value={title}
-                    setValue={setTitle}
-                    placeholder="역할을 입력해주세요"
-                  />
-                  <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />
-                </>
-              )}
-
-              {type == 'rule' && (
-                <>
-                  <CustomTextInputBox
-                    title="규칙을 입력해주세요"
-                    value={ruleContent}
-                    setValue={setRuleContent}
-                    placeholder="규칙을 입력해주세요"
-                  />
-                  <CustomTextarea
-                    title="메모를 추가해주세요 (선택)"
-                    value={memo}
-                    setValue={setMemo}
-                    placeholder="내용을 입력해주세요"
-                    height={120}
-                    maxLength={50}
-                  />
-                </>
-              )}
             </View>
-          </View>
+          </ScrollView>
 
-          <View className="flex px-5">
+          <View className="fixed bottom-0 w-full bg-transparent px-5">
             <SubmitButton pressFunc={handleSubmit} canSubmit={canSubmit()} />
           </View>
         </SafeAreaView>

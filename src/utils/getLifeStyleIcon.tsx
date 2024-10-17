@@ -260,8 +260,10 @@ const truncateAnswer = (answer: string, maxLength: number) => {
 const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer }) => (
   <View className="flex flex-col items-center">
     {icon}
-    <Text className="mt-1.5 text-xs font-medium text-disabledFont">{label}</Text>
-    <Text className="text-xs font-semibold text-basicFont">{truncateAnswer(answer, 5)}</Text>
+    <Text className="mt-1.5 text-xs font-medium tracking-tighter text-disabledFont">{label}</Text>
+    <Text className="text-xs font-semibold tracking-tighter text-basicFont">
+      {truncateAnswer(answer, 5)}
+    </Text>
   </View>
 );
 
