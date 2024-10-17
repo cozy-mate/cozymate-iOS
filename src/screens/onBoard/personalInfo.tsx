@@ -22,7 +22,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
-  const [school, setSchool] = useState<string>('');
+  const [school, setSchool] = useState<number>(0);
 
   const isComplete = name !== '' && nickname !== '' && gender !== '' && birthday !== '';
 
@@ -106,7 +106,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               </Text>
             </View>
 
-            {/* 이름 입력 Input */}
+            {/* 이름 입력 Input
             <BorderTextInputBox
               title="이름"
               value={name}
@@ -114,7 +114,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               placeholder="이름을 입력해주세요"
               hasButton={false}
               canUse={canUse}
-            />
+            /> */}
             {/* {!checkKor && (
             <Text className="text-warning text-xs font-medium mt-[-8px] px-2 mb-4">
               이름은 한글로만 입력가능해요!
