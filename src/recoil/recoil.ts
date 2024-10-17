@@ -14,10 +14,10 @@ import {
 export const signUpState = atom<SignUp>({
   key: 'signup',
   default: {
-    name: '',
     nickname: '',
     gender: '',
     birthday: '',
+    school: 0,
     persona: 0,
   },
 });

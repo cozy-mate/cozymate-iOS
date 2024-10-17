@@ -18,49 +18,34 @@ import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
   const [, setSignUp] = useRecoilState(signUpState);
 
-  const [name, setName] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
   const [school, setSchool] = useState<number>(0);
 
-  const isComplete = name !== '' && nickname !== '' && gender !== '' && birthday !== '';
+  const isComplete = nickname !== '' && gender !== '' && birthday !== '' && school !== 0;
 
   const [items, setItems] = useState([
     { index: 1, value: 'MALE', item: '남자', select: false },
     { index: 2, value: 'FEMALE', item: '여자', select: false },
   ]);
 
-  // const [checkKor, setCheckKor] = useState<boolean>(true);
-
-  // const checkNameKorean = (name: string) => {
-  //   const korRex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]+$/;
-
-  //   if (name.trim() !== '' && !korRex.test(name)) {
-  //     setCheckKor(false);
-  //   } else {
-  //     setCheckKor(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkNameKorean(name);
-  // }, [name]);
-
   const [checkDuplicate, setCheckDuplicate] = useState<boolean>(true);
-  // const [checkLength, setCheckLength] = useState<boolean>(true);
-
+  const [checkLength, setCheckLength] = useState<boolean>(true);
   const [canUse, setCanUse] = useState<boolean>(true);
 
-  // const checkNicknameLength = async (nickname: string) => {
-  //   const trimmedNickname = nickname.trim();
-  //   if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
-  //     setCheckLength(false);
-  //     setCanUse(false);
-  //     return;
-  //   }
-  //   setCheckLength(true);
-  // };
+  const checkNicknameLength = async (nickname: string) => {
+    const trimmedNickname = nickname.trim();
+
+    if (trimmedNickname.length == 0) {
+      return;
+    } else if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
+      setCheckLength(false);
+      setCanUse(false);
+      return;
+    }
+    setCheckLength(true);
+  };
 
   const checkUserNickname = async (nickname: string) => {
     if (nickname.trim() !== '') {
@@ -71,7 +56,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   };
 
   useEffect(() => {
-    // checkNicknameLength(nickname);
+    checkNicknameLength(nickname);
     checkUserNickname(nickname);
 
     if (checkDuplicate) {
@@ -84,10 +69,10 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
 
     setSignUp((prevState: SignUp) => ({
       ...prevState,
-      name: name,
       nickname: nickname,
       gender: gender,
       birthday: birthday,
+      school: school,
     }));
 
     navigation.navigate('CharacterInputScreen');
@@ -106,21 +91,6 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               </Text>
             </View>
 
-            {/* 이름 입력 Input
-            <BorderTextInputBox
-              title="이름"
-              value={name}
-              setValue={setName}
-              placeholder="이름을 입력해주세요"
-              hasButton={false}
-              canUse={canUse}
-            /> */}
-            {/* {!checkKor && (
-            <Text className="text-warning text-xs font-medium mt-[-8px] px-2 mb-4">
-              이름은 한글로만 입력가능해요!
-            </Text>
-          )} */}
-
             {/* 닉네임 입력 Input */}
             <BorderTextInputBox
               title="닉네임"
@@ -128,7 +98,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               setValue={setNickname}
               placeholder="닉네임을 입력해주세요"
               hasButton={false}
-              canUse={nickname.trim() === '' || (checkDuplicate && canUse)}
+              canUse={checkLength && checkDuplicate && canUse}
             />
 
             {!checkDuplicate && nickname.trim() !== '' && (
@@ -136,11 +106,11 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
                 다른 사람이 사용중인 닉네임이에요!
               </Text>
             )}
-            {/* {!checkLength && nickname.trim() !== '' && (
-            <Text className="text-warning text-xs font-medium mt-[-8px] px-2 mb-4">
-              닉네임은 2~8자인 한글, 영어, 숫자만 가능해요!
-            </Text>
-          )} */}
+            {!checkLength && nickname.trim() !== '' && (
+              <Text className="mb-4 mt-[-8px] px-2 text-xs font-medium text-warning">
+                닉네임은 2~8자인 한글, 영어, 숫자만 가능해요!
+              </Text>
+            )}
 
             {/* 성별 입력 Input */}
             <RadioBoxComponent
