@@ -5,9 +5,10 @@ import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import { dummyData } from './dummyData';
 
+import SearchModal from '@components/roomMate/searchModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
-import DetailSearchModal from '@components/roomMate/detailSearchModal';
 import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
+import DetailSearchModal from '@components/roomMate/trash/detailSearchModal';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
 import {
@@ -208,7 +209,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         </View>
       </ScrollView>
 
-      {isModalOpen && <DetailSearchModal onClose={handleModal} />}
+      {isModalOpen && <SearchModal onClose={handleModal} />}
     </SafeAreaView>
   );
 };

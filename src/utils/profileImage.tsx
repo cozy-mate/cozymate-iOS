@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 
 import first from '@assets/characterItem/1.svg';
 import third from '@assets/characterItem/3.svg';
@@ -43,5 +44,13 @@ export const getProfileImage = (persona: number, width: number, height: number) 
 
   const IconComponent = selectedItem.icon;
 
-  return <IconComponent width={width} height={height} />;
+  return (
+    <View
+      className="flex items-center justify-center rounded-full bg-white opacity-100"
+      // SVG 이미지의 테두리가 밀리는 현상으로 인하여 배경을 SVG 파일의 크기보다 1px 작게 설정
+      style={{ width: width - 1, height: height - 1 }}
+    >
+      <IconComponent width={width} height={height} />
+    </View>
+  );
 };
