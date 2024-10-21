@@ -247,7 +247,8 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
 interface LifeStyleIconProps {
   icon: JSX.Element;
   label: string;
-  answer: string;
+  answer?: string;
+  isMine: boolean;
 }
 
 const truncateAnswer = (answer: string, maxLength: number) => {
@@ -257,20 +258,34 @@ const truncateAnswer = (answer: string, maxLength: number) => {
   return answer;
 };
 
-const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer }) => (
+const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMine }) => (
   <View className="flex flex-col items-center">
     {icon}
-    <Text className="mt-1.5 text-xs font-medium tracking-tighter text-disabledFont">{label}</Text>
-    <Text className="text-xs font-semibold tracking-tighter text-basicFont">
-      {truncateAnswer(answer, 5)}
+    <Text
+      className={`mt-1.5 text-xs tracking-tighter ${
+        isMine ? 'font-semibold text-emphasizedFont' : 'font-medium text-disabledFont'
+      }`}
+    >
+      {label}
     </Text>
+    {answer !== undefined && (
+      <Text className="text-xs font-semibold tracking-tighter text-basicFont">
+        {truncateAnswer(answer, 5)}
+      </Text>
+    )}
   </View>
 );
+
+// 마이페이지의 내 정보에서 선택한 라이프 스타일을 보여주는 컴포넌트를 생성하는 메서드
+export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
+  const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
+  return <LifestyleIcon icon={blueIcon} label={label} isMine={true} />;
+};
 
 // 룸메이트의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
 export const getRoommateLifeStyleIcon = (option: LifestyleOptionKey, answer: string) => {
   const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
-  return <LifestyleIcon icon={blueIcon} label={label} answer={answer} />;
+  return <LifestyleIcon icon={blueIcon} label={label} answer={answer} isMine={false} />;
 };
 
 // 방 안의 룸메이트들의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
@@ -287,5 +302,5 @@ export const getRoomLifeStyleIcon = (option: LifestyleOptionKey, color: string, 
     icon = redIcon;
   }
 
-  return <LifestyleIcon icon={icon} label={label} answer={answer} />;
+  return <LifestyleIcon icon={icon} label={label} answer={answer} isMine={false} />;
 };

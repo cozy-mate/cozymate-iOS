@@ -3,6 +3,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
+import ButtonModal from '@components/common/buttonModal';
+
 import { profileState, hasRoomState, loggedInState, roomInfoState } from '@recoil/recoil';
 
 import { signOut, deleteMember } from '@server/api/member';
@@ -26,6 +28,12 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const roomInfo = useRecoilValue(roomInfoState);
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [school, setSchool] = useState<boolean>(true);
+
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+
+  const toMyInfo = () => {
+    navigation.navigate('MyInfoScreen');
+  };
 
   const toRoomDetail = () => {
     navigation.navigate('RoomDetailScreen');
@@ -69,7 +77,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView className="bg-white" style={{ position: 'relative' }}>
+      <ScrollView className="bg-white" style={{ position: 'relative' }} bounces={false}>
         <Background style={{ position: 'absolute' }} />
         <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
           {getProfileImage(myProfile.persona, 120, 120)}
@@ -78,6 +86,16 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </Text>
 
           <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
+            <Pressable
+              onPress={toMyInfo}
+              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+            >
+              <Text className="text-sm font-medium text-emphasizedFont">내 정보</Text>
+              <View className="flex flex-row items-center">
+                <RightArrow />
+              </View>
+            </Pressable>
+
             <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
               <Text className="text-sm font-medium text-emphasizedFont">나의 코지룸</Text>
               <View className="flex flex-row items-center">
@@ -147,7 +165,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
 
           <View className="flex flex-row items-center justify-center">
-            <Pressable onPress={logout}>
+            <Pressable onPress={() => setIsLogoutModalOpen(true)}>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
             </Pressable>
 
@@ -158,6 +176,16 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             </Pressable>
           </View>
         </View>
+
+        <ButtonModal
+          title="로그아웃 하시겠어요?"
+          cancelText="취소"
+          submitText="확인"
+          isVisible={isLogoutModalOpen}
+          closeModal={() => setIsLogoutModalOpen(false)}
+          onSubmit={logout}
+          buttonCount={2}
+        />
       </ScrollView>
     </View>
   );

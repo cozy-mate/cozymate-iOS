@@ -7,6 +7,7 @@ import MainScreen from 'src/screens/main';
 import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
+import MyInfoScreen from 'src/screens/myPage/myInfo';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -89,6 +90,7 @@ function AppInner() {
           <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
 
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
+          <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
