@@ -10,7 +10,7 @@ const NoLifeStyleComponent: React.FC = () => {
   const profile = useRecoilValue(profileState);
 
   return (
-    <View className="flex w-full flex-col items-center rounded-xl bg-[#F6f6f6] pb-4 pt-8">
+    <View className="flex w-full flex-col items-center pb-4 pt-8">
       <StarIcon />
       <View className="p-4">
         <Text className="text-center text-xs font-medium text-disabledFont">

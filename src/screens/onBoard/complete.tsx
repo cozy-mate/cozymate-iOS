@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import Config from 'react-native-config';
+import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { Text, View, Pressable, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View, Image, Pressable, SafeAreaView } from 'react-native';
 
 import { signUpState, hasRoomState, profileState, loggedInState } from '@recoil/recoil';
 
@@ -13,21 +12,16 @@ import { getProfileImage } from '@utils/profileImage';
 const CompleteScreen = () => {
   const signupstate = useRecoilValue(signUpState);
   const [, setMyProfile] = useRecoilState(profileState);
-
-  useEffect(() => {
-    console.log(signupstate);
-  }, [signupstate]);
-
   const [, setLoggedIn] = useRecoilState(loggedInState);
   const [, setHasRoom] = useRecoilState(hasRoomState);
 
   const doSignUp = async () => {
     try {
       const response = await signUp({
-        name: signupstate.name,
         nickname: signupstate.nickname,
         gender: signupstate.gender,
         birthday: signupstate.birthday,
+        school: signupstate.school,
         persona: signupstate.persona,
       });
 
@@ -47,7 +41,7 @@ const CompleteScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex flex-1 flex-col justify-between px-5">
         {/* 상단 View */}
-        <View className="mt-[56px] flex">
+        <View className="mt-14 flex">
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-xl font-semibold leading-5 tracking-tight text-emphasizedFont">

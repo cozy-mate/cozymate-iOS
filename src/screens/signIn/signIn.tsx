@@ -26,7 +26,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const loginWithId = useLoginWithId(navigation);
 
   const toOnboard = () => {
-    navigation.navigate('ChipSelectScreen');
+    navigation.navigate('PersonalInfoInputScreen');
   };
 
   return (

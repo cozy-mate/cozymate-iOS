@@ -56,8 +56,6 @@ const CommentCard = (props: CommentCardProps) => {
       if (response) {
         handleTwoButtonModalClose();
         setOneButtonModalMessage(COMMENT_DELETE_SUCCESS);
-
-        handleOneButtonModalOpen();
       }
     } catch (e) {
       setOneButtonModalMessage(COMMENT_DELETE_ERROR);

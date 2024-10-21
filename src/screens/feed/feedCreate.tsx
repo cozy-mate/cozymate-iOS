@@ -234,12 +234,12 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
         <TouchableOpacity onLongPress={drag} onPressIn={handlePressIn} onPressOut={handlePressOut}>
           <Animated.Image
             source={{ uri: item.uri }}
-            className="w-20 h-20 rounded-xl"
+            className="h-20 w-20 rounded-xl"
             style={{ transform: [{ scale }] }}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="absolute right-0 -top-5"
+          className="absolute -top-5 right-0"
           onPress={() => {
             handleDelete();
           }}
@@ -252,19 +252,21 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-col flex-1 w-full h-full px-8 pt-8 bg-white">
-        <BackCleanHeader
-          onPressBack={() => {
-            navigation.goBack();
-          }}
-        />
-        <View className="flex flex-row items-center justify-center w-full h-24 mb-4">
+      <SafeAreaView className="mt-2 h-full w-full flex-1 flex-col bg-white">
+        <View className="pl-2">
+          <BackCleanHeader
+            onPressBack={() => {
+              navigation.goBack();
+            }}
+          />
+        </View>
+        <View className="mb-4 flex h-24 w-full flex-row items-center justify-center px-5">
           <TouchableOpacity
-            className="flex items-center justify-center w-20 h-20 mr-2 rounded-xl bg-colorBox"
+            className="mr-2 flex h-20 w-20 items-center justify-center rounded-xl bg-colorBox"
             onPress={pickImages}
           >
             <PostImage className="mb-2" />
-            <View className="flex flex-row items-center justify-center w-full">
+            <View className="flex w-full flex-row items-center justify-center">
               <Text
                 className={`text-sm ${images.length > 0 ? 'text-main1' : 'text-disabledFont'}`}
               >{`${images.length}/`}</Text>
@@ -286,23 +288,23 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
             />
           </ScrollView>
         </View>
-        <View className="flex-col items-center justify-start flex-1 mb-4">
+        <View className="mb-4 flex-1 flex-col items-center justify-start px-5">
           <TextInput
             placeholder="내용를 입력해주세요"
             value={postDescription}
             onChangeText={valueHandleDescriptionChange}
             multiline={true}
-            className="w-full p-4 pr-8 h-2/3 rounded-xl bg-colorBox text-basicFont"
+            className="h-2/3 w-full rounded-xl bg-colorBox p-4 pr-8 text-basicFont"
             textAlignVertical="top"
             numberOfLines={20}
           />
         </View>
-        <View className="flex">
+        <View className="flex px-5">
           <Pressable
             onPress={handleSubmit}
             className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
           >
-            <Text className="text-base font-semibold text-center text-white">
+            <Text className="text-center text-base font-semibold text-white">
               {isSubmitting ? '게시글 작성 중...' : '게시글 작성하기'}
             </Text>
           </Pressable>
