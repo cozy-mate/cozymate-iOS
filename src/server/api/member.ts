@@ -7,6 +7,7 @@ import {
   SignUpResponse,
   GetProfileResponse,
   DeleteMemberResponse,
+  CheckNicknameResponse,
 } from '@server/responseTypes/member';
 
 // 회원 탈퇴
@@ -31,8 +32,8 @@ export const getMyProfile = async (): Promise<GetProfileResponse> => {
 };
 
 // 닉네임 유효성 검증
-export const checkNickname = async (nickname: string) => {
-  const response = await GetAxiosInstance(`/members/check-nickname`, {
+export const checkNickname = async (nickname: string): Promise<CheckNicknameResponse> => {
+  const response = await GetAxiosInstance<CheckNicknameResponse>(`/members/check-nickname`, {
     params: { nickname: nickname },
   });
 

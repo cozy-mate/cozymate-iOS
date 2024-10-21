@@ -23,6 +23,10 @@ export interface GetTodoDataResponse {
   };
 }
 
+export interface UpdateTodoResponse {
+  result: string;
+}
+
 export interface ChangeTodoStateResponse {
   result: string;
 }

@@ -3,3 +3,8 @@ export interface AddRoleRequest {
   title: string;
   repeatDayList: string[];
 }
+
+export interface UpdateRoleRequest {
+  title: string;
+  repeatDayList: string[];
+}

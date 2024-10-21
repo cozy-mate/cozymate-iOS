@@ -23,6 +23,10 @@ export interface GetRoleDataResponse {
   };
 }
 
+export interface UpdateRoleResponse {
+  result: string;
+}
+
 export interface AddRoleResponse {
   result: string;
 }
