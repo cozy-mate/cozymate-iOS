@@ -228,7 +228,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
       setOneButtonModalInfo(POST_DELETE_SUCCESS);
       setNeedsPostRefresh(true);
       setNeedsToGoBack(true);
-      handleOneButtonModalOpen();
     } else {
       handleTwoButtonModalClose();
       setOneButtonModalInfo(POST_DELETE_ERROR);
@@ -298,17 +297,17 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   };
 
   return (
-    <View className="w-full h-full bg-white">
+    <View className="h-full w-full bg-white">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Fragment>
           <SafeAreaView className="w-full bg-white" />
-          <BackCleanHeader paddingX={5} onPressBack={() => navigation.goBack()} />
+          <BackCleanHeader onPressBack={() => navigation.goBack()} />
           <ScrollView
             showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
-            <View key={post.id} className="flex flex-col w-full px-5 pt-4 mb-6 bg-white">
-              <View className="flex flex-row items-center justify-between w-full">
+            <View key={post.id} className="mb-6 flex w-full flex-col bg-white px-5 pt-4">
+              <View className="flex w-full flex-row items-center justify-between">
                 <View className="flex flex-row items-center justify-start space-x-2">
                   {loadingProfile ||
                     refreshing ||
@@ -320,7 +319,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                       </NativeAnimated.View>
                     ))}
                   <Image
-                    className="w-8 h-8 rounded-full"
+                    className="h-8 w-8 rounded-full"
                     onLoadStart={handleProfileImageLoadStart}
                     onLoadEnd={handleProfileImageLoadEnd}
                     source={{ uri: PERSONA_IMAGE_URL }}
@@ -364,7 +363,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                     <View style={{ width: '100%', height: 20, borderRadius: 4, marginTop: 10 }} />
                   </SkeletonPlaceholder>
                 ))}
-              <Text className="mt-2 mb-3 text-sm font-medium text-basicFont">{post.content}</Text>
+              <Text className="mb-3 mt-2 text-sm font-medium text-basicFont">{post.content}</Text>
               {post.imageList.length > 0 && (
                 <View onLayout={onLayout} className="w-full">
                   <FlatList
@@ -430,8 +429,8 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
                 </View>
               )}
               <View
-                className={`flex flex-row items-center justify-between space-x-2 mt-${
-                  post.imageList.length > 0 ? 4 : 0
+                className={`flex flex-row items-center justify-between space-x-2 ${
+                  post.imageList.length > 0 ? 'mt-4' : 'mt-0'
                 }`}
               >
                 <View className="flex flex-row items-center justify-between space-x-2">
@@ -460,7 +459,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
             />
           </ScrollView>
           <Animated.View className={`absolute z-10 w-full`} style={[animatedStyles]}>
-            <View className="flex flex-row items-center justify-center w-full py-2 pl-4 pr-2 bg-white">
+            <View className="flex w-full flex-row items-center justify-center bg-white py-2 pl-4 pr-2">
               <TextInput
                 placeholder="댓글을 입력해주세요"
                 value={comment}

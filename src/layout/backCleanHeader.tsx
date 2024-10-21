@@ -5,15 +5,14 @@ import BackButton from '@assets/backHeader/backButton.svg';
 
 interface BackHeaderProps {
   onPressBack: () => void;
-  paddingX?: number;
 }
 
 const BackCleanHeader: React.FC<BackHeaderProps> = (props) => {
-  const { onPressBack, paddingX } = props;
+  const { onPressBack } = props;
 
   return (
     <View className="mb-5">
-      <View className={`flex flex-row items-center justify-start mx-${paddingX}`}>
+      <View className={`flex flex-row items-center justify-start px-5`}>
         <TouchableOpacity onPress={onPressBack} className="">
           <BackButton />
         </TouchableOpacity>
