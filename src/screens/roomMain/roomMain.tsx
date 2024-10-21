@@ -1,12 +1,11 @@
-import { useRecoilState } from 'recoil';
 import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { hasRoomState, roomInfoState, MyLifeStyleState } from '@recoil/recoil';
+import { hasRoomState, roomInfoState } from '@recoil/recoil';
 
 import { getRoomData } from '@server/api/room';
-import { getUserDetailData } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRoomLog } from '@hooks/api/room-log';
@@ -16,25 +15,23 @@ import { getProfileImage } from '@utils/profileImage';
 
 import { RoomMainScreenProps } from '@type/param/stack';
 
-import ChatIcon from '@assets/cozyHome/chatIcon.svg';
 import CopyIcon from '@assets/roomMain/copyIcon.svg';
 import Background from '@assets/roomMain/background.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
-import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
+import ColorRightArrow from '@assets/roomMain/colorRightArrow.svg';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
-  const toJoin = () => {
-    navigation.navigate('CozyHomeScreen');
-  };
-
   const { bottom } = useSafeAreaInsets();
 
-  const [myRoom, setMyRoom] = useRecoilState(hasRoomState);
+  const myRoom = useRecoilValue(hasRoomState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState);
 
   const { initFcm } = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
+
+  const toRoomDetail = () => {
+    navigation.navigate('RoomDetailScreen');
+  };
 
   useEffect(() => {
     initFcm();
@@ -47,44 +44,36 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         console.error('Error fetching room data:', error);
       }
     };
-    const getLifeStyle = async () => {
-      try {
-        const response = await getUserDetailData();
-
-        setMyLifeStyleData(response.result);
-      } catch (error: any) {
-        if (error.response.data.code === 'MEMBERSTAT402') {
-          console.log('라이프 스타일 없음');
-        }
-      }
-    };
     fetchData();
-    getLifeStyle();
   }, [myRoom.roomId, setRoomInfo]);
 
-  const toChat = () => {
-    navigation.navigate('ChatScreen');
-  };
-
-  const toNotification = () => {
-    navigation.navigate('NotificationScreen');
-  };
+  const iconList = [1, 2, 3, 4];
 
   return (
     <View className="flex-1 bg-sub1">
       <Background style={{ position: 'absolute' }} />
       <View className="mt-[70px] flex px-5">
         {/* 헤더 */}
-        <View className="mb-2 flex flex-row justify-end">
-          <View className="flex flex-row">
-            <Pressable onPress={toChat}>
-              <ChatIcon />
-            </Pressable>
-            <Pressable onPress={toNotification}>
-              <NotificationIcon />
-            </Pressable>
+        <Pressable className="mb-2 flex flex-row items-center" onPress={toRoomDetail}>
+          <View className="mr-2 flex flex-row">
+            {iconList.map((icon, index) => (
+              <View
+                key={index}
+                className="ml-[-4px] rounded-full"
+                style={{
+                  shadowColor: '#606060',
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 2,
+                  backgroundColor: 'white',
+                }}
+              >
+                {getProfileImage(icon, 20, 20)}
+              </View>
+            ))}
           </View>
-        </View>
+          <ColorRightArrow />
+        </Pressable>
 
         <View className="mb-16 flex flex-col items-start">
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
@@ -106,9 +95,9 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
         <View className="absolute right-2 top-[-120px]">
-          <Pressable onPress={toJoin}>{getProfileImage(roomInfo.profileImage, 140, 140)}</Pressable>
+          <Pressable>{getProfileImage(roomInfo.profileImage, 140, 140)}</Pressable>
         </View>
-        <ScrollView contentContainerStyle={{ paddingBottom: bottom + 20 }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: bottom + 40 }}>
           {roomlogdata.result.result.map((data, index) => (
             <View
               key={index}

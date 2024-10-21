@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -47,7 +47,7 @@ const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
 
 function AppInner() {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const loggedIn = useRecoilValue(loggedInState);
 
   return (
     <GestureHandlerRootView>
