@@ -38,6 +38,15 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title })
     { index: 4, value: 4, title: '숭실대학교' },
   ];
 
+  const majorList = [
+    { index: 1, value: 1, title: '경영학과' },
+    { index: 2, value: 2, title: '정보통신공학과' },
+    { index: 3, value: 3, title: '컴퓨터공학과' },
+    { index: 4, value: 4, title: '문화콘텐츠문화경영학과' },
+  ];
+
+  const selectedList = title === '학교' ? schoolList : majorList;
+
   const isActive = isFocused || school !== 0;
 
   return (
@@ -72,8 +81,8 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title })
       </Pressable>
 
       {isSchoolListOpen && (
-        <View className="mt-[-12px] rounded-xl border border-sub1 px-5 py-3">
-          {schoolList.map((school) => (
+        <View className="mb-4 mt-[-12px] rounded-xl border border-sub1 px-5 py-3">
+          {selectedList.map((school) => (
             <Pressable
               key={school.index}
               onPress={() => {

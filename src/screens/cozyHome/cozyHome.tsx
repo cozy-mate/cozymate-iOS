@@ -166,6 +166,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   const isLoading = true;
 
+  const toSchoolAuthentication = () => {
+    navigation.navigate('SchoolAuthenticationScreen');
+  };
+
   return (
     <View className="flex-1 bg-sub1">
       <SafeAreaView
@@ -184,15 +188,23 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             <HomeBack style={{ position: 'absolute' }} />
             <View style={{ position: 'relative', zIndex: 100 }}>
               <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
-                <Pressable className="flex flex-row items-center py-2" onPress={handleSchool}>
-                  {school ? (
+                {school ? (
+                  <Pressable
+                    className="flex flex-row items-center py-2"
+                    onPress={toSchoolAuthentication}
+                  >
                     <View className="flex flex-row items-center">
                       <BlueSchool />
                       <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">
                         인하대학교
                       </Text>
                     </View>
-                  ) : (
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    className="flex flex-row items-center py-2"
+                    onPress={toSchoolAuthentication}
+                  >
                     <View className="flex flex-row items-center">
                       <GraySchool />
                       <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
@@ -200,8 +212,8 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                       </Text>
                       <ArrowIcon />
                     </View>
-                  )}
-                </Pressable>
+                  </Pressable>
+                )}
 
                 <View className="flex flex-row">
                   <Pressable onPress={toChat}>

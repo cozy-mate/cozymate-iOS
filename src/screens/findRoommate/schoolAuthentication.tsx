@@ -1,81 +1,78 @@
 import React, { useState } from 'react';
-import { Text, View, Pressable, TextInput, SafeAreaView } from 'react-native';
+import { Text, View, Keyboard, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 
-import SearchModal from '@components/findRoommate/searchModal';
-import BorderTextInputBox from '@components/common/borderTextInputBox';
+import ButtonModal from '@components/common/buttonModal';
+import SchoolSelect from '@components/onBoard/schoolSelect';
+import ButtonTextInput from '@components/schoolAuthentication/buttonTextInput';
 
 import { SchoolAuthenticationScreenProps } from '@type/param/stack';
 
+import BackButton from '@assets/backButton.svg';
+
 const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenProps) => {
-  const [school, setSchool] = useState<string>('');
+  const [school, setSchool] = useState<number>(0);
+  const [major, setMajor] = useState<number>(0);
   const [schoolEmail, setSchoolEmail] = useState<string>('');
   const [authenticationCode, setAuthenticationCode] = useState<string>('');
 
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isSended, setIsSended] = useState<boolean>(false);
-
-  const handleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleSend = () => {
     setIsSended(true);
   };
 
   const toNext = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
+    navigation.goBack();
   };
 
   return (
-    <SafeAreaView className="flex flex-1 flex-col bg-white">
-      <View className="mt-12 px-5">
-        <Text className="mb-6 px-2 font-['Pretendard'] text-xl font-semibold leading-6 text-emphasizedFont">
-          룸메이트를 구하려면{'\n'}
-          <Text className="text-main1">학교 인증</Text>이 필요해요!
-        </Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex flex-1 flex-col bg-white">
+        <View className="pl-3">
+          <BackButton />
+        </View>
+        <View className="mt-2 px-5">
+          <Text className="mb-6 px-2 font-['Pretendard'] text-xl font-semibold leading-6 text-emphasizedFont">
+            룸메이트를 구하려면{'\n'}
+            <Text className="text-main1">학교 인증</Text>이 필요해요!
+          </Text>
 
-        <Pressable onPress={handleSearch}>
-          <View
-            className={`mb-4 flex flex-col rounded-xl border px-5 py-4 ${
-              school ? 'border-sub1' : 'border-disabled'
-            }`}
-          >
-            <Text className="text-xs font-semibold leading-[17px] tracking-tight text-colorFont">
-              학교
-            </Text>
-            <Text className={`${school ? 'text-basicFont' : 'text-disabledFont'} mt-1.5`}>
-              {school ? school : '이름을 입력해주세요'}
-            </Text>
-          </View>
-        </Pressable>
+          <SchoolSelect school={school} setSchool={setSchool} title="학교" />
 
-        <BorderTextInputBox
-          title="학교 이메일"
-          value={schoolEmail}
-          setValue={setSchoolEmail}
-          placeholder="이메일을 입력해주세요"
-          hasButton={true}
-          buttonString="인증번호 전송"
-          pressFunc={handleSend}
-        />
+          <SchoolSelect school={major} setSchool={setMajor} title="학과" />
 
-        {isSended && (
-          <BorderTextInputBox
-            title="인증번호 확인"
-            value={authenticationCode}
-            setValue={setAuthenticationCode}
-            placeholder="인증번호 확인"
-            hasButton={true}
-            buttonString="인증번호 확인"
-            pressFunc={toNext}
+          <ButtonTextInput
+            title="학교 이메일"
+            value={schoolEmail}
+            setValue={setSchoolEmail}
+            placeholder="이메일을 입력해주세요"
+            buttonString={isSended ? '인증번호 재전송' : '인증번호 전송'}
+            buttonFunc={handleSend}
           />
-        )}
-      </View>
 
-      {isSearchOpen && (
-        <SearchModal value={school} setValue={setSchool} handleOpen={handleSearch} />
-      )}
-    </SafeAreaView>
+          {isSended && (
+            <ButtonTextInput
+              title="인증번호 확인"
+              value={authenticationCode}
+              setValue={setAuthenticationCode}
+              placeholder="인증번호를 입력해주세요"
+              buttonString="인증번호 확인"
+              buttonFunc={() => setIsModalOpen(true)}
+            />
+          )}
+
+          <ButtonModal
+            title="학교인증이 완료됐어요"
+            submitText="확인"
+            isVisible={isModalOpen}
+            buttonCount={1}
+            closeModal={() => setIsModalOpen(false)}
+            onSubmit={toNext}
+          />
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
