@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -7,6 +7,7 @@ import MainScreen from 'src/screens/main';
 import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
+import MyInfoScreen from 'src/screens/myPage/myInfo';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -47,7 +48,7 @@ const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
 
 function AppInner() {
-  const [loggedIn, setLoggedIn] = useRecoilState(loggedInState);
+  const loggedIn = useRecoilValue(loggedInState);
 
   return (
     <GestureHandlerRootView>
@@ -89,6 +90,7 @@ function AppInner() {
           <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
 
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
+          <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />

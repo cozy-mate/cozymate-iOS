@@ -11,6 +11,7 @@ module.exports = {
       backgroundColor: {
         modalBack: 'rgba(0, 0, 0, 0.5)',
         modalBack2: 'rgba(0, 0, 0, 0.75)',
+        updateButtonBack: 'rgba(62, 62, 62, 0.4)',
       },
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',

@@ -26,9 +26,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     navigation.goBack();
   };
 
-  const [nickname, setNickname] = useState<string>('');
   const [admissionYear, setAdmissionYear] = useState<string>('');
-  const [major, setMajor] = useState<string>('');
   const [numOfRoommate, setNumOfRoommate] = useState<number>(0);
   const [acceptance, setAcceptance] = useState<string>('');
   const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
@@ -308,7 +306,6 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
       const result = data.result;
 
       setAdmissionYear(result.admissionYear.toString());
-      setMajor(result.major);
       setNumOfRoommate(result.numOfRoommate);
       setAcceptance(result.acceptance);
       setWakeUpMeridian(result.wakeUpMeridian);
@@ -484,8 +481,8 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     try {
       await updateUserData({
         universityId: 1,
+        major: '',
         admissionYear: admissionYear,
-        major: major,
         numOfRoommate: numOfRoommate,
         acceptance: acceptance,
         wakeUpMeridian: wakeUpMeridian,
@@ -533,8 +530,9 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-white">
-        <ScrollView className="px-5" ref={scrollViewRef}>
+      <View className="flex-1 bg-white">
+        <SafeAreaView className="bg-white" />
+        <ScrollView className="flex-1 bg-white px-5" ref={scrollViewRef}>
           <View className="mb-10 mt-2 flex flex-row justify-between">
             <Pressable onPress={toMyPage}>
               <BackButton />
@@ -547,20 +545,6 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
               <Text className="text-xs font-semibold text-main1">수정</Text>
             </Pressable>
           </View>
-
-          <CustomTextInputBox
-            title="닉네임을 입력해주세요"
-            value={nickname}
-            setValue={setNickname}
-            placeholder="ex. 눈꽃"
-          />
-
-          <CustomTextInputBox
-            title="학과를 입력해주세요"
-            value={major}
-            setValue={setMajor}
-            placeholder="ex. 컴퓨터공학과"
-          />
 
           <CustomTextInputBox
             title="학번을 입력해주세요"
@@ -775,7 +759,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
             width={70}
           />
         </ScrollView>
-      </SafeAreaView>
+      </View>
 
       <View className="fixed bottom-28 right-5 flex w-fit items-end">
         <Pressable onPress={scrollToTop}>

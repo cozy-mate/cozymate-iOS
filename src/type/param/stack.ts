@@ -54,6 +54,7 @@ export type StackParamList = {
 
   // 마이페이지 스크린
   MyPageScreen: undefined;
+  MyInfoScreen: undefined;
 
   // 쪽지 스크린
   ChatScreen: undefined;
@@ -150,6 +151,7 @@ export type FeedViewScreenProps = NativeStackScreenProps<StackParamList, 'FeedVi
 
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<StackParamList, 'MyPageScreen'>;
+export type MyInfoScreenProps = NativeStackScreenProps<StackParamList, 'MyInfoScreen'>;
 
 // 쪽지 스크린
 export type ChatScreenProps = NativeStackScreenProps<StackParamList, 'ChatScreen'>;
