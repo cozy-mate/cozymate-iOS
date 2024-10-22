@@ -1,4 +1,3 @@
-import { useRecoilValue } from 'recoil';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -12,14 +11,8 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import {
-  MyRoomData,
-  RoomDummyData,
-  sameAnswerDummyData,
-  recommendRoomDummyData,
-} from './dummyData';
+import { RoomDummyData, sameAnswerDummyData, recommendRoomDummyData } from './dummyData';
 
-import LoadingComponent from '@components/loading/loading';
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
@@ -28,11 +21,13 @@ import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
 import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
-import { profileState } from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
+import { useProfileStore } from '@zustand/member/member';
 
 import { getMyProfile } from '@server/api/member';
 
 import useInitFcm from '@hooks/useInitFcm';
+import { useGetRoomData } from '@hooks/api/room';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
@@ -46,7 +41,12 @@ import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
-  const { top, bottom } = useSafeAreaInsets();
+  const { profile } = useProfileStore();
+  const { myRoom } = useHasRoomStore();
+
+  const { bottom } = useSafeAreaInsets();
+
+  const { data: roomData } = useGetRoomData(myRoom.roomId);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
@@ -79,8 +79,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     const index = Math.floor(offsetX / roomComponentWidth);
     setRoomCurrentIndex(index);
   };
-
-  const profile = useRecoilValue(profileState);
 
   const { initFcm } = useInitFcm();
 
@@ -126,12 +124,12 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   };
 
   const toCreatePublicRoom = () => {
-    navigation.navigate('CreateRoomScreen', { type: 'public' });
+    navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
     setCreateRoomOpen(false);
   };
 
   const toCreatePrivateRoom = () => {
-    navigation.navigate('CreateRoomScreen', { type: 'private' });
+    navigation.navigate('CreateRoomScreen', { type: 'PRIVATE' });
     setCreateRoomOpen(false);
   };
 
@@ -158,13 +156,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RecommendRoomScreen');
   };
 
-  const [hasRoom, setHasRoom] = useState<boolean>(true);
-
   const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen');
+    navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
   };
-
-  const isLoading = true;
 
   const toSchoolAuthentication = () => {
     navigation.navigate('SchoolAuthenticationScreen');
@@ -262,8 +256,8 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
               {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
             </Text>
-            {hasRoom ? (
-              <MyRoomComponent roomData={MyRoomData} toRoom={toRoomDetail} />
+            {myRoom.hasRoom ? (
+              <MyRoomComponent roomData={roomData.result} toRoom={toRoomDetail} />
             ) : (
               <NoRoomComponent />
             )}

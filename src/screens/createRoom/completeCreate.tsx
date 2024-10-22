@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import Config from 'react-native-config';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { Text, View, Image, Pressable, SafeAreaView } from 'react-native';
+import React from 'react';
+import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
-import { hasRoomState, roomInfoState } from '@recoil/recoil';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
 import { onCopyAddress } from '@utils/clipboard';
 import { getProfileImage } from '@utils/profileImage';
@@ -12,14 +10,21 @@ import { CompleteCreateRoomScreenProps } from '@type/param/stack';
 
 import CopyIcon from '@assets/createRoom/copyIcon.svg';
 
-const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps) => {
-  const [, setHasRoom] = useRecoilState(hasRoomState);
+const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScreenProps) => {
+  const { type } = route.params;
 
-  const roominfoState = useRecoilValue(roomInfoState);
+  const { roomInfo } = useRoomInfoStore();
+  const { setMyRoom } = useHasRoomStore();
 
   const toCozyHome = () => {
-    setHasRoom({ hasRoom: true, roomId: roominfoState.roomId });
+    setMyRoom({ hasRoom: true, roomId: roomInfo.roomId });
     navigation.navigate('MainScreen');
+  };
+
+  const handleCopyInviteCode = () => {
+    if (roomInfo.inviteCode) {
+      onCopyAddress(roomInfo.inviteCode);
+    }
   };
 
   return (
@@ -35,16 +40,18 @@ const CompleteCreateRoomScreen = ({ navigation }: CompleteCreateRoomScreenProps)
             </Text>
           </View>
 
-          <Pressable onPress={() => onCopyAddress(roominfoState.inviteCode)} className="mb-16 flex">
-            <View className="flex flex-row items-center rounded-xl bg-colorBox px-6 py-3">
-              <Text className="mr-1 text-base font-semibold text-main1">
-                {roominfoState.inviteCode}
-              </Text>
-              <CopyIcon />
-            </View>
-          </Pressable>
+          {type === 'PRIVATE' && roomInfo.inviteCode && (
+            <Pressable onPress={handleCopyInviteCode} className="mb-16 flex">
+              <View className="flex flex-row items-center rounded-xl bg-colorBox px-6 py-3">
+                <Text className="mr-1 text-base font-semibold text-main1">
+                  {roomInfo.inviteCode}
+                </Text>
+                <CopyIcon />
+              </View>
+            </Pressable>
+          )}
 
-          <View className="flex">{getProfileImage(roominfoState.profileImage, 300, 300)}</View>
+          <View className="flex">{getProfileImage(roomInfo.profileImage, 300, 300)}</View>
         </View>
 
         <View className="flex">

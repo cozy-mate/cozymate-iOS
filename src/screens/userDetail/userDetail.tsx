@@ -1,8 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import Config from 'react-native-config';
 import React, { useState, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, View, Image, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';

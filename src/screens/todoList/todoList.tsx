@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,7 +11,8 @@ import LoadingComponent from '@components/loading/loading';
 import OthersTodoBox from '@components/todoList/othersTodoBox';
 import CustomCalendar from '@components/todoList/customCalendar';
 
-import { profileState, roomInfoState } from '@recoil/recoil';
+import { useRoomInfoStore } from '@zustand/room/room';
+import { useProfileStore } from '@zustand/member/member';
 
 import { useIsOldiPhone } from '@hooks/device';
 import { useGetRoleData } from '@hooks/api/role';
@@ -42,8 +42,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     setTimePoint(dateTime);
   };
 
-  const [myProfile, setMyProfile] = useRecoilState(profileState);
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const { profile } = useProfileStore();
+  const { roomInfo } = useRoomInfoStore();
 
   const [isTodo, setIsTodo] = useState<boolean>(true);
 
@@ -60,9 +60,9 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { mutateAsync: changeTodoMutate, isPending: changeTodoPending } =
     useChangeTodo(refetchTodo);
 
-  const { data: roledata, refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
+  const { data: roledata } = useGetRoleData(roomInfo.roomId);
 
-  const { data: ruledata, refetch: refetchRule } = useGetRuleData(roomInfo.roomId);
+  const { data: ruledata } = useGetRuleData(roomInfo.roomId);
 
   const changeTodo = async (todo: TodoItem): Promise<void> => {
     changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
@@ -87,7 +87,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       <Text className="text-main1">
                         {getDayOfWeek(tododata.result.timePoint)},{' '}
                       </Text>
-                      {myProfile.nickname}님이
+                      {profile.nickname}님이
                       {'\n'}해야할 일들을 알려드릴게요!
                     </Text>
                   </View>
@@ -143,7 +143,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                   <MyRoleBox
                     persona={roledata.result.myRoleList.persona}
                     roleData={roledata.result.myRoleList.mateRoleList}
-                    nickname={myProfile.nickname}
+                    nickname={profile.nickname}
                   />
 
                   {Object.entries(roledata.result.otherRoleList).map(([name, mate], index) => (

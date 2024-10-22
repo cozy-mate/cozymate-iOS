@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react';
-import { useRecoilState } from 'recoil';
+import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
 
-import { profileState } from '@recoil/recoil';
+import { useProfileStore } from '@zustand/member/member';
 
 import { usePersonaImage } from '@hooks/usePersonaImage';
 import { useImageCarousel } from '@hooks/useImageCarousel';
@@ -21,6 +20,8 @@ type PostCardProps = {
 };
 
 const PostCard = (props: PostCardProps) => {
+  const { profile } = useProfileStore();
+
   const { post, toFeedView } = props;
 
   const {
@@ -35,7 +36,6 @@ const PostCard = (props: PostCardProps) => {
 
   const { PERSONA_IMAGE_URL } = usePersonaImage(post.writer.persona);
 
-  const [profile, setProfile] = useRecoilState(profileState);
   return (
     <TouchableOpacity onPress={() => toFeedView(post.id)}>
       <View

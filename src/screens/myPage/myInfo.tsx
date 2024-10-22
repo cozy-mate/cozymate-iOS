@@ -1,10 +1,9 @@
-import { useRecoilValue } from 'recoil';
 import React, { Fragment, useState } from 'react';
 import { View, Text, Pressable, SafeAreaView } from 'react-native';
 
 import ChipSelectModal from '@components/common/chipSelectModal';
 
-import { profileState } from '@recoil/recoil';
+import { useProfileStore } from '@zustand/member/member';
 
 import { getProfileImage } from '@utils/profileImage';
 import { LifestyleOptionKey, getMyImportantLifeStyle } from '@utils/getLifeStyleIcon';
@@ -15,7 +14,7 @@ import BackButton from '@assets/backButton.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 
 const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
-  const myInfo = useRecoilValue(profileState);
+  const { profile } = useProfileStore();
 
   const [isCharacterSelectOpen, setIsCharacterSelectOpen] = useState<boolean>(false);
   const [isChipModalOpen, setIsChipModalOpen] = useState<boolean>(false);
@@ -56,7 +55,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
 
           <View className="relative flex items-center">
             <View className="relative h-[120px] w-[120px] overflow-hidden rounded-[60px]">
-              <View>{getProfileImage(myInfo.persona, 120, 120)}</View>
+              <View>{getProfileImage(profile.persona, 120, 120)}</View>
               <View className="absolute bottom-0 flex h-[32px] w-[120px] items-center justify-center overflow-hidden rounded-b-[32px] bg-updateButtonBack">
                 <Text className="text-center text-xs font-semibold text-white">수정</Text>
               </View>
@@ -69,7 +68,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
                 <View className="flex flex-row">
                   <Text className="text-sm font-medium text-disabledFont">닉네임</Text>
                   <Text className="ml-2 text-sm font-medium text-emphasizedFont">
-                    {myInfo.nickname}
+                    {profile.nickname}
                   </Text>
                 </View>
                 <View className="flex flex-row items-center">
@@ -91,7 +90,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
                 <View className="flex flex-row">
                   <Text className="text-sm font-medium text-disabledFont">생년월일</Text>
                   <Text className="ml-2 text-sm font-medium text-emphasizedFont">
-                    {translateBirthDay(myInfo.birthday)}
+                    {translateBirthDay(profile.birthday)}
                   </Text>
                 </View>
                 <View className="flex flex-row items-center">

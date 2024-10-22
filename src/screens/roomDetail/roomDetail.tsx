@@ -10,11 +10,11 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import { dummyData } from './dummyData';
-
 import ChipComponent from '@components/roomDetail/chipComponent';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
+
+import { useGetRoomData } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -29,8 +29,21 @@ type ChipItems = {
   color: string;
 };
 
-const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
-  const [roomData, setRoomData] = useState(dummyData);
+const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
+  const { roomId } = route.params;
+
+  const { data: roomData } = useGetRoomData(roomId);
+
+  // const [roomData, setRoomData] = useState({
+  //   roomId: 0,
+  //   name: '',
+  //   inviteCode: '',
+  //   profileImage: 0,
+  //   mateList: [{ memberId: 0, mateId: 0, nickname: '' }],
+  //   roomType: '',
+  //   hashtags: [''],
+  // });
+
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
   const handleLifeStyleModal = () => {
@@ -113,17 +126,18 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
               </View>
 
               <View className="mb-[22px] flex flex-row items-center px-[25px]">
-                {getProfileImage(roomData.persona, 40, 40)}
+                {getProfileImage(roomData.result.profileImage, 40, 40)}
                 <View className="ml-2 flex flex-col">
                   <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
-                    {roomData.title}
+                    {roomData.result.name}
                   </Text>
                   <View className="flex flex-row">
-                    {roomData.hashTag.map((hash, index) => (
-                      <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
-                        #{hash}
-                      </Text>
-                    ))}
+                    {roomData.result.hashtags &&
+                      roomData.result.hashtags.map((hash, index) => (
+                        <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
+                          #{hash}
+                        </Text>
+                      ))}
                   </View>
                 </View>
               </View>
@@ -134,30 +148,39 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
         <View className="flex-1 bg-sub1">
           <View className="flex-1 rounded-t-[20px] bg-white px-5 pt-9">
             <View className="mb-16">
-              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+              {/* <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                 <Text className="text-main1">{roomData.requestList.length}</Text>개의
                 {'\n'}룸메이트 요청이 도착했어요
-              </Text>
+              </Text> */}
 
-              <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+              {/* <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
                 {roomData.requestList.map((request, index) => (
                   <MemberComponent key={index} index={index} memberData={request} />
                 ))}
-              </View>
+              </View> */}
             </View>
 
             <View className="mb-16">
               <View className="mb-4 flex flex-row items-center justify-between px-1">
                 <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
                 <Text className="text-xs font-medium text-disabledFont">
-                  <Text className="text-main1">{roomData.currentNum}</Text> / {roomData.maxNum}
+                  <Text className="text-main1">
+                    {roomData.result.mateList && roomData.result.mateList.length}
+                  </Text>{' '}
+                  / {roomData.result.mateList && roomData.result.mateList.length}
                 </Text>
               </View>
 
               <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
-                {roomData.member.map((mem, index) => (
-                  <MemberComponent key={index} index={index} memberData={mem} />
-                ))}
+                {roomData.result.mateList &&
+                  roomData.result.mateList.map((member, index) => (
+                    <MemberComponent
+                      key={index}
+                      index={index}
+                      memberData={member}
+                      length={roomData.result.mateList.length}
+                    />
+                  ))}
               </View>
             </View>
 
@@ -166,7 +189,7 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
                 기숙사 정보
               </Text>
 
-              <View className="rounded-xl border border-[#F1F2F4] p-4">
+              {/* <View className="rounded-xl border border-[#F1F2F4] p-4">
                 <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
                   <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
                   <Text className="text-sm font-medium text-basicFont">{roomData.type}</Text>
@@ -177,7 +200,7 @@ const RoomDetailScreen = ({ navigation }: RoomDetailScreenProps) => {
                     {roomData.numOfRoommate}인실
                   </Text>
                 </View>
-              </View>
+              </View> */}
             </View>
 
             <View className="mb-16">

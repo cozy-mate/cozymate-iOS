@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -39,7 +38,7 @@ import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation
 import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
 import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
 
-import { loggedInState } from '@recoil/recoil';
+import { useLoggedInStore } from '@zustand/member/member';
 
 import { StackParamList } from '@type/param/stack';
 import { RootStackParamList } from '@type/param/rootStack';
@@ -48,7 +47,7 @@ const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
 
 function AppInner() {
-  const loggedIn = useRecoilValue(loggedInState);
+  const { loggedIn } = useLoggedInStore();
 
   return (
     <GestureHandlerRootView>

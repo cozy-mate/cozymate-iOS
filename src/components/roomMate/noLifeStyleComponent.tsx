@@ -1,13 +1,12 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import { Text, View, Pressable } from 'react-native';
 
-import { profileState } from '@recoil/recoil';
+import { useProfileStore } from '@zustand/member/member';
 
 import StarIcon from '@assets/roomMate/star.svg';
 
 const NoLifeStyleComponent: React.FC = () => {
-  const profile = useRecoilValue(profileState);
+  const { profile } = useProfileStore();
 
   return (
     <View className="flex w-full flex-col items-center pb-4 pt-8">

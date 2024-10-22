@@ -13,21 +13,8 @@ export interface GetRoomDataResponse {
       mateId: number;
       nickname: string;
     }[];
-  };
-}
-
-export interface GetMateListsResponse {
-  result: {
-    memberId: number;
-    nickname: string;
-  }[];
-}
-
-export interface GetInviteRequestResponse {
-  result: {
-    roomId: number;
-    managerNickname: string;
-    roomName: string;
+    roomType: string;
+    hashtags: string[];
   };
 }
 
@@ -46,6 +33,14 @@ export interface CheckHasRoomResponse {
   };
 }
 
+export interface CheckRoomNameResponse {
+  result: boolean;
+}
+
+export interface ExitRoomResponse {
+  result: string;
+}
+
 export interface JoinRoomResponse {
   result: string;
 }
@@ -58,11 +53,34 @@ export interface AcceptInviteResponse {
   result: string;
 }
 
-export interface CreateRoomResponse {
+export interface CreatePublicRoomResponse {
+  result: {
+    roomId: number;
+    name: string;
+    inviteCode?: string;
+    profileImage: number;
+    mateList: {
+      memberId: number;
+      mateId: number;
+      nickname: string;
+    }[];
+    roomType: string;
+    hashtags?: string[];
+  };
+}
+
+export interface CreatePrivateRoomResponse {
   result: {
     roomId: number;
     name: string;
     inviteCode: string;
     profileImage: number;
+    mateList: {
+      memberId: number;
+      mateId: number;
+      nickname: string;
+    }[];
+    roomType: string;
+    hashtags: string[];
   };
 }

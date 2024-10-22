@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useRef, useState, Fragment, useEffect } from 'react';
+import React, { useRef, Fragment, useEffect } from 'react';
 import { Text, View, FlatList, Pressable, RefreshControl } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -9,7 +9,9 @@ import Header from '@components/feedMain/header';
 import Footer from '@components/feedMain/footer';
 import PostCard from '@components/feedMain/postCard';
 
-import { hasRoomState, feedRefreshState } from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
+
+import { feedRefreshState } from '@recoil/recoil';
 
 import { useGetFeedInfo } from '@hooks/api/feed';
 import { useGetPostList } from '@hooks/api/post';
@@ -22,7 +24,8 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   const { bottom } = useSafeAreaInsets();
   const queryClient = useQueryClient();
 
-  const [roomInfo, setRoomInfo] = useRecoilState(hasRoomState);
+  const { myRoom } = useHasRoomStore();
+
   const [needsRefresh, setNeedsRefresh] = useRecoilState(feedRefreshState);
 
   const flatListRef = useRef<FlatList>(null);
@@ -31,7 +34,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
     data: feedInfo,
     isLoading: isFeedLoading,
     refetch: refetchFeed,
-  } = useGetFeedInfo(roomInfo.roomId);
+  } = useGetFeedInfo(myRoom.roomId);
 
   const {
     data: postList,
@@ -39,7 +42,7 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
     fetchNextPage,
     hasNextPage,
     refetch,
-  } = useGetPostList(roomInfo.roomId);
+  } = useGetPostList(myRoom.roomId);
 
   useEffect(() => {
     if (needsRefresh) {
@@ -60,8 +63,8 @@ const FeedMainScreen = ({ navigation }: FeedMainScreenProps) => {
   );
 
   const handleRefresh = async () => {
-    await queryClient.invalidateQueries({ queryKey: ['feedInfo', roomInfo.roomId] });
-    await queryClient.invalidateQueries({ queryKey: ['postList', roomInfo.roomId] });
+    await queryClient.invalidateQueries({ queryKey: ['feedInfo', myRoom.roomId] });
+    await queryClient.invalidateQueries({ queryKey: ['postList', myRoom.roomId] });
     setNeedsRefresh(false);
     flatListRef.current?.scrollToOffset({ animated: false, offset: 0 });
   };

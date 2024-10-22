@@ -1,16 +1,15 @@
 /**
  * @format
  */
-import 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import { Text } from 'react-native';
+import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
+import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 
 import App from './App';
 import { name as appName } from './app.json';
-import { Text } from 'react-native';
-
-import messaging from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;

@@ -11,5 +11,11 @@ export interface GetRuleDataResponse {
 }
 
 export interface AddRuleResponse {
+  result: {
+    id: number;
+  };
+}
+
+export interface UpdateRuleResponse {
   result: string;
 }

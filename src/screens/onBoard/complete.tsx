@@ -1,36 +1,36 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { signUpState, hasRoomState, profileState, loggedInState } from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
+import { useSignUpStore, useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
 import { signUp, getMyProfile } from '@server/api/member';
 
 import { getProfileImage } from '@utils/profileImage';
 
 const CompleteScreen = () => {
-  const signupstate = useRecoilValue(signUpState);
-  const [, setMyProfile] = useRecoilState(profileState);
-  const [, setLoggedIn] = useRecoilState(loggedInState);
-  const [, setHasRoom] = useRecoilState(hasRoomState);
+  const { signUpState } = useSignUpStore();
+  const { setLoggedIn } = useLoggedInStore();
+  const { setProfile } = useProfileStore();
+  const { setMyRoom } = useHasRoomStore();
 
   const doSignUp = async () => {
     try {
       const response = await signUp({
-        nickname: signupstate.nickname,
-        gender: signupstate.gender,
-        birthday: signupstate.birthday,
-        school: signupstate.school,
-        persona: signupstate.persona,
+        nickname: signUpState.nickname,
+        gender: signUpState.gender,
+        birthday: signUpState.birthday,
+        school: signUpState.school,
+        persona: signUpState.persona,
       });
 
       await AsyncStorage.setItem('accessToken', response.result.tokenResponseDTO.accessToken);
 
       const getProfileResponse = await getMyProfile();
-      setMyProfile(getProfileResponse.result);
+      setProfile(getProfileResponse.result);
 
-      setHasRoom({ roomId: 0, hasRoom: false });
+      setMyRoom({ roomId: 0, hasRoom: false });
       setLoggedIn(true);
     } catch (error: any) {
       console.log(error.response.data);
@@ -45,14 +45,14 @@ const CompleteScreen = () => {
           {/* 설명 Text */}
           <View className="mb-[108px] leading-loose">
             <Text className="text-xl font-semibold leading-5 tracking-tight text-emphasizedFont">
-              <Text className="text-main1">{signupstate.nickname}</Text>님,{'\n'}cozymate에 오신걸
+              <Text className="text-main1">{signUpState.nickname}</Text>님,{'\n'}cozymate에 오신걸
               환영해요!
             </Text>
           </View>
 
           {/* 선택된 캐릭터 이미지 */}
           <View className="flex items-center">
-            {getProfileImage(signupstate.persona, 300, 300)}
+            {getProfileImage(signUpState.persona, 300, 300)}
           </View>
         </View>
 

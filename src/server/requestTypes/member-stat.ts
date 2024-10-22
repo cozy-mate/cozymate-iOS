@@ -11,26 +11,23 @@ export interface RegisterUserDataRequest {
   turnOffMeridian: string;
   turnOffTime: number | undefined;
   smokingState: string;
-  sleepingHabit: string;
+  sleepingHabit: string[];
   airConditioningIntensity: number | undefined;
   heatingIntensity: number | undefined;
   lifePattern: string;
   intimacy: string;
-  canShare: boolean | undefined;
-  isPlayGame: boolean | undefined;
-  isPhoneCall: boolean | undefined;
+  canShare: string;
+  isPlayGame: string;
+  isPhoneCall: string;
   studying: string;
   intake: string;
   cleanSensitivity: number | undefined;
   noiseSensitivity: number | undefined;
   cleaningFrequency: string;
-  personality: string;
+  drinkingFrequency: string;
+  personality: string[];
   mbti: string;
-  options: {
-    '무조건 지켜줘야 해요!': string[];
-    '이건 절대 절대 안 돼요!': string[];
-    '이정도는 맞춰줄 수 있어요!': string[];
-  };
+  selfIntroduction: string;
 }
 
 export interface UpdateUserDataRequest {

@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { hasRoomState, roomInfoState } from '@recoil/recoil';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
 import { getRoomData } from '@server/api/room';
 
@@ -21,16 +20,16 @@ import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 import ColorRightArrow from '@assets/roomMain/colorRightArrow.svg';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
-  const { bottom } = useSafeAreaInsets();
+  const { myRoom } = useHasRoomStore();
+  const { roomInfo, setRoomInfo } = useRoomInfoStore();
 
-  const myRoom = useRecoilValue(hasRoomState);
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const { bottom } = useSafeAreaInsets();
 
   const { initFcm } = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
   const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen');
+    navigation.navigate('RoomDetailScreen', { roomId: roomInfo.roomId });
   };
 
   useEffect(() => {
@@ -84,12 +83,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
             </Text>
           </View>
 
-          <Pressable className="flex" onPress={() => onCopyAddress(roomInfo.inviteCode)}>
-            <View className="flex flex-row items-center justify-start rounded-xl bg-white px-4 py-2 opacity-60">
-              <Text className="text-xs font-medium text-colorFont">{roomInfo.inviteCode}</Text>
-              <CopyIcon />
-            </View>
-          </Pressable>
+          {roomInfo.inviteCode && (
+            <Pressable className="flex" onPress={() => onCopyAddress(roomInfo.inviteCode)}>
+              <View className="flex flex-row items-center justify-start rounded-xl bg-white px-4 py-2 opacity-60">
+                <Text className="text-xs font-medium text-colorFont">{roomInfo.inviteCode}</Text>
+                <CopyIcon />
+              </View>
+            </Pressable>
+          )}
         </View>
       </View>
 

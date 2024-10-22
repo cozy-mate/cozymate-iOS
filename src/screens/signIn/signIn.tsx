@@ -3,7 +3,7 @@ import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useIsOldiPhone } from '@hooks/device';
-import { useKakaoLogin, useLoginWithId } from '@hooks/api/member';
+import { useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -22,8 +22,6 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   }, []);
 
   const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
-
-  const loginWithId = useLoginWithId(navigation);
 
   const toOnboard = () => {
     navigation.navigate('PersonalInfoInputScreen');
@@ -58,25 +56,19 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             onPress={() => kakaoLogin()}
           >
             <KakaoLogo className="mr-2" />
-            <Text className="opacity-85 text-base font-semibold text-black">
-              카카오톡으로 계속하기
-            </Text>
+            <Text className="text-base font-semibold text-black">카카오톡으로 계속하기</Text>
           </Pressable>
         </View>
 
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={() => loginWithId()}
+            onPress={() => toOnboard()}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
           </Pressable>
         </View>
-
-        <Pressable onPress={toOnboard}>
-          <Text>온보딩</Text>
-        </Pressable>
       </View>
     </SafeAreaView>
   );

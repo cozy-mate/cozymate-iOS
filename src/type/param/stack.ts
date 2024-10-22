@@ -10,7 +10,7 @@ export type StackParamList = {
   RoomMainScreen: undefined;
 
   // 방 상세 정보 스크린
-  RoomDetailScreen: undefined;
+  RoomDetailScreen: { roomId: number };
 
   // 방 추천 스크린
   RecommendRoomScreen: undefined;
@@ -29,9 +29,9 @@ export type StackParamList = {
   LifeStyleEditScreen: undefined;
 
   // 방 생성 스크린
-  CreateRoomScreen: { type: 'public' | 'private' };
-  SelectCharacterScreen: undefined;
-  CompleteCreateRoomScreen: undefined;
+  CreateRoomScreen: { type: 'PUBLIC' | 'PRIVATE' };
+  SelectCharacterScreen: { type: 'PUBLIC' | 'PRIVATE' };
+  CompleteCreateRoomScreen: { type: 'PUBLIC' | 'PRIVATE' };
 
   // 방 입장 스크린
   JoinRoomScreen: undefined;

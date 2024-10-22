@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 import { TouchableOpacityProps } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TouchableOpacity, GestureResponderEvent } from 'react-native';
@@ -19,7 +18,7 @@ import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
 import TodoListScreen from './todoList/todoList';
 
-import { hasRoomState } from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
 
 import { useIsOldiPhone } from '@hooks/device';
 
@@ -75,7 +74,9 @@ const HapticTabButton: React.FC<TouchableOpacityProps> = (props) => {
 };
 
 const MainScreen = () => {
-  const hasRoom = useRecoilValue(hasRoomState);
+  const { myRoom } = useHasRoomStore();
+
+  // const hasRoom = useRecoilValue(hasRoomState);
 
   const isOldiPhone = useIsOldiPhone();
 
@@ -125,7 +126,7 @@ const MainScreen = () => {
           tabBarButton: (props) => <HapticTabButton {...props} />,
         }}
       />
-      {hasRoom.hasRoom ? (
+      {myRoom.hasRoom ? (
         <Tab.Screen
           name="TodoListScreen"
           component={TodoListScreen}
@@ -146,7 +147,7 @@ const MainScreen = () => {
           }}
         />
       )}
-      {hasRoom.hasRoom ? (
+      {myRoom.hasRoom ? (
         <Tab.Screen
           name="RoomMainScreen"
           component={RoomMainScreen}
@@ -168,7 +169,7 @@ const MainScreen = () => {
         />
       )}
 
-      {hasRoom.hasRoom ? (
+      {myRoom.hasRoom ? (
         <Tab.Screen
           name="FeedMainScreen"
           component={FeedMainScreen}

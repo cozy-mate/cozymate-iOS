@@ -1,20 +1,24 @@
-import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
+import {
+  GetAxiosInstance,
+  PostAxiosInstance,
+  PatchAxiosInstance,
+  DeleteAxiosInstance,
+} from '@axios/axios.method';
 
-import { CreateRoomRequest, RequestInviteRequest } from '@server/requestTypes/room';
+import { CreatePublicRoomRequest, CreatePrivateRoomRequest } from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
-  CreateRoomResponse,
+  ExitRoomResponse,
   DeleteRoomResponse,
   GetRoomDataResponse,
-  AcceptInviteResponse,
   CheckHasRoomResponse,
-  GetMateListsResponse,
-  RequestInviteResponse,
-  GetInviteRequestResponse,
+  CheckRoomNameResponse,
+  CreatePublicRoomResponse,
+  CreatePrivateRoomResponse,
   GetRoomDataByInviteCodeResponse,
 } from '@server/responseTypes/room';
 
-// 방 삭제
+// 방 삭제 기능 (방장 권한)
 export const deleteRoom = async (roomId: number, memberId: number): Promise<DeleteRoomResponse> => {
   const response = await DeleteAxiosInstance<DeleteRoomResponse>(`/rooms/${roomId}`, {
     params: {
@@ -25,30 +29,14 @@ export const deleteRoom = async (roomId: number, memberId: number): Promise<Dele
   return response.data;
 };
 
-// 방 정보 조회
+// 방 정보 조회 기능
 export const getRoomData = async (roomId: number): Promise<GetRoomDataResponse> => {
   const response = await GetAxiosInstance<GetRoomDataResponse>(`/rooms/${roomId}`);
 
   return response.data;
 };
 
-// 방에 초대할 코지메이트 목록 조회
-export const getMateLists = async (roomId: number): Promise<GetMateListsResponse> => {
-  const response = await GetAxiosInstance<GetMateListsResponse>(
-    `/rooms/${roomId}/available-friends`,
-  );
-
-  return response.data;
-};
-
-// 방 초대 요청 조회
-export const getInviteRequest = async (): Promise<GetInviteRequestResponse> => {
-  const response = await GetAxiosInstance<GetInviteRequestResponse>(`/rooms/request-invites`);
-
-  return response.data;
-};
-
-// 초대코드로 방 정보 조회
+// 초대코드로 방 정보 조회 기능
 export const getRoomDataByInviteCode = async (
   inviteCode: string,
 ): Promise<GetRoomDataByInviteCodeResponse> => {
@@ -68,44 +56,48 @@ export const checkHasRoom = async (): Promise<CheckHasRoomResponse> => {
   return response.data;
 };
 
-// 방 참여 확인
+// 방 이름 중복 검증
+export const checkRoomName = async (roomName: string): Promise<CheckRoomNameResponse> => {
+  const response = await GetAxiosInstance<CheckRoomNameResponse>(`/rooms/check-roomname`, {
+    params: {
+      roomName: roomName,
+    },
+  });
+
+  return response.data;
+};
+
+// 방 나가기 기능
+export const exitRoom = async (roomId: number): Promise<ExitRoomResponse> => {
+  const response = await PatchAxiosInstance<ExitRoomResponse>(`/rooms/${roomId}/quit`);
+
+  return response.data;
+};
+
+// 방 입장 기능
 export const joinRoom = async (roomId: number): Promise<JoinRoomResponse> => {
   const response = await PostAxiosInstance<JoinRoomResponse>(`/rooms/${roomId}/join`);
 
   return response.data;
 };
 
-// 선택한 코지메이트 방에 초대요청 보내기
-export const requestInvite = async (
-  roomId: number,
-  data: RequestInviteRequest,
-): Promise<RequestInviteResponse> => {
-  const response = await PostAxiosInstance<RequestInviteResponse>(`/rooms/${roomId}/invite`, data);
+// 공개 방 생성 기능
+export const createPublicRoom = async (
+  data: CreatePublicRoomRequest,
+): Promise<CreatePublicRoomResponse> => {
+  const response = await PostAxiosInstance<CreatePublicRoomResponse>(`/rooms/create-public`, data);
 
   return response.data;
 };
 
-// 방 초대 수락/거절
-export const acceptInvite = async (
-  roomId: number,
-  accept: boolean,
-): Promise<AcceptInviteResponse> => {
-  const response = await PostAxiosInstance<AcceptInviteResponse>(
-    `/rooms/${roomId}/invite-request`,
-    null,
-    {
-      params: {
-        accept: accept,
-      },
-    },
+// 초대코드로 방생성 기능
+export const createPrivateRoom = async (
+  data: CreatePrivateRoomRequest,
+): Promise<CreatePrivateRoomResponse> => {
+  const response = await PostAxiosInstance<CreatePrivateRoomResponse>(
+    `/rooms/create-private`,
+    data,
   );
-
-  return response.data;
-};
-
-// 방 생성
-export const createRoom = async (data: CreateRoomRequest): Promise<CreateRoomResponse> => {
-  const response = await PostAxiosInstance<CreateRoomResponse>(`/rooms/create`, data);
 
   return response.data;
 };
