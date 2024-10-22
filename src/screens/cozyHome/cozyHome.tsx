@@ -24,10 +24,10 @@ import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponen
 import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore } from '@zustand/member/member';
 
-import { getRoomData } from '@server/api/room';
 import { getMyProfile } from '@server/api/member';
 
 import useInitFcm from '@hooks/useInitFcm';
+import { useGetRoomData } from '@hooks/api/room';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
@@ -40,45 +40,13 @@ import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
 import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
-interface MatelistItem {
-  memberId: number;
-  mateId: number;
-  nickname: string;
-}
-
-interface RoomData {
-  roomId: number;
-  name: string;
-  inviteCode: string;
-  profileImage: number;
-  mateList: MatelistItem[];
-  roomType: string;
-  hashtags: string[];
-}
-
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
 
   const { bottom } = useSafeAreaInsets();
 
-  const [roomData, setRoomData] = useState<RoomData>({
-    roomId: 0,
-    name: '',
-    inviteCode: '',
-    profileImage: 0,
-    mateList: [{ memberId: 0, mateId: 0, nickname: '' }],
-    roomType: '',
-    hashtags: [],
-  });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getRoomData(myRoom.roomId);
-      setRoomData(response.result);
-    };
-    fetchData();
-  });
+  const { data: roomData } = useGetRoomData(myRoom.roomId);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
@@ -289,7 +257,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
             </Text>
             {myRoom.hasRoom ? (
-              <MyRoomComponent roomData={roomData} toRoom={toRoomDetail} />
+              <MyRoomComponent roomData={roomData.result} toRoom={toRoomDetail} />
             ) : (
               <NoRoomComponent />
             )}

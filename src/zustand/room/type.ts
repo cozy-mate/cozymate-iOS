@@ -28,11 +28,11 @@ export type MateType = {
 export type RoomInfo = {
   roomId: number;
   name: string;
-  inviteCode?: string;
+  inviteCode: string;
   profileImage: number;
   mateList: MateType[];
   roomType: string;
-  hashtags?: string[];
+  hashtags: string[];
 };
 
 export type InviteCodeRoomInfo = {

@@ -50,7 +50,10 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
 
         <View className="flex flex-row items-center justify-between">
           <Text className="text-xs font-medium text-disabledFont">
-            <Text className="text-main1">{roomData.mateList.length}명</Text>의 룸메이트가 있어요
+            <Text className="text-main1">
+              {roomData.mateList.length !== 0 ? roomData.mateList.length : 0}명
+            </Text>
+            의 룸메이트가 있어요
           </Text>
 
           <Text className="text-base font-medium text-colorFont">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import ChipComponent from '@components/roomDetail/chipComponent';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
-import { getRoomData } from '@server/api/room';
+import { useGetRoomData } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -32,15 +32,18 @@ type ChipItems = {
 const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
-  const [roomData, setRoomData] = useState({
-    roomId: 0,
-    name: '',
-    inviteCode: '',
-    profileImage: 0,
-    mateList: [{ memberId: 0, mateId: 0, nickname: '' }],
-    roomType: '',
-    hashtags: [''],
-  });
+  const { data: roomData } = useGetRoomData(roomId);
+
+  // const [roomData, setRoomData] = useState({
+  //   roomId: 0,
+  //   name: '',
+  //   inviteCode: '',
+  //   profileImage: 0,
+  //   mateList: [{ memberId: 0, mateId: 0, nickname: '' }],
+  //   roomType: '',
+  //   hashtags: [''],
+  // });
+
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
   const handleLifeStyleModal = () => {
@@ -64,17 +67,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     const { height } = event.nativeEvent.layout;
     setHeight(height);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getRoomData(roomId);
-
-      console.log(response);
-
-      setRoomData(response.result);
-    };
-    fetchData();
-  }, [roomId]);
 
   const [items, setItems] = useState<ChipItems[]>([
     { title: '학번', color: 'blue' },
@@ -134,14 +126,14 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
               </View>
 
               <View className="mb-[22px] flex flex-row items-center px-[25px]">
-                {getProfileImage(roomData.profileImage, 40, 40)}
+                {getProfileImage(roomData.result.profileImage, 40, 40)}
                 <View className="ml-2 flex flex-col">
                   <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
-                    {roomData.name}
+                    {roomData.result.name}
                   </Text>
                   <View className="flex flex-row">
-                    {roomData.hashtags &&
-                      roomData.hashtags.map((hash, index) => (
+                    {roomData.result.hashtags &&
+                      roomData.result.hashtags.map((hash, index) => (
                         <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
                           #{hash}
                         </Text>
@@ -173,16 +165,21 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
                 <Text className="text-xs font-medium text-disabledFont">
                   <Text className="text-main1">
-                    {roomData.mateList && roomData.mateList.length}
+                    {roomData.result.mateList && roomData.result.mateList.length}
                   </Text>{' '}
-                  / {roomData.mateList && roomData.mateList.length}
+                  / {roomData.result.mateList && roomData.result.mateList.length}
                 </Text>
               </View>
 
               <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
-                {roomData.mateList &&
-                  roomData.mateList.map((mem, index) => (
-                    <MemberComponent key={index} index={index} memberData={mem} />
+                {roomData.result.mateList &&
+                  roomData.result.mateList.map((member, index) => (
+                    <MemberComponent
+                      key={index}
+                      index={index}
+                      memberData={member}
+                      length={roomData.result.mateList.length}
+                    />
                   ))}
               </View>
             </View>

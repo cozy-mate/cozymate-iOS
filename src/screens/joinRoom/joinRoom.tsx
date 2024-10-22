@@ -64,6 +64,7 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         profileImage: response.result.profileImage,
         mateList: response.result.mateList,
         roomType: response.result.roomType,
+        hashtags: response.result.hashtags || [],
       });
 
       setMyRoom({ hasRoom: true, roomId: inviteCodeRoomInfo.roomId });
