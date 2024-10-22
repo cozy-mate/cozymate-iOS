@@ -57,7 +57,7 @@ export interface CreatePublicRoomResponse {
   result: {
     roomId: number;
     name: string;
-    inviteCode: string;
+    inviteCode?: string;
     profileImage: number;
     mateList: {
       memberId: number;
@@ -65,7 +65,7 @@ export interface CreatePublicRoomResponse {
       nickname: string;
     }[];
     roomType: string;
-    hashtags: string[];
+    hashtags?: string[];
   };
 }
 

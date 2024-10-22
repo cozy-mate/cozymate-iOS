@@ -29,6 +29,7 @@ module.exports = {
           '@type': './src/type',
           '@utils': './src/utils',
           '@assets': './src/assets',
+          '@zustand': './src/zustand',
           '@recoil': './src/recoil',
           '@server': './src/server',
           '@axios': './src/axios',

@@ -1,4 +1,3 @@
-import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import {
   Text,
@@ -12,10 +11,13 @@ import {
 
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
-import { RoomInfo, CreateRoomInfo } from '@recoil/type';
-import { roomInfoState, createRoomState } from '@recoil/recoil';
+import {
+  useRoomInfoStore,
+  useCreatePublicRoomStore,
+  useCreatePrivateRoomStore,
+} from '@zustand/room/room';
 
-import { createRoom } from '@server/api/room';
+import { createPublicRoom, createPrivateRoom } from '@server/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -29,13 +31,14 @@ import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { type } = route.params;
 
-  const [createroomState, setCreateroomState] = useRecoilState(createRoomState);
-  const [, setRoomInfoState] = useRecoilState(roomInfoState);
+  const { createPublicRoomInfo, setCreatePublicRoomInfo } = useCreatePublicRoomStore();
+  const { createPrivateRoomInfo, setCreatePrivateRoomInfo } = useCreatePrivateRoomStore();
+  const { setRoomInfo } = useRoomInfoStore();
 
   const [name, setName] = useState<string>('');
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
   const [hashTag, setHashTag] = useState<string>('');
-  const [hashTagList, setHashTagList] = useState<string[]>([]);
+  const [hashtags, setHashtags] = useState<string[]>([]);
   const [isLongName, setIsLongName] = useState<boolean>(false);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -47,14 +50,37 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       setIsComplete(false);
     }
 
-    setCreateroomState((prevState: CreateRoomInfo) => ({
-      ...prevState,
-      name: name,
-      maxMateNum: maxMateNum,
-    }));
-
-    console.log(createroomState);
-  }, [name, maxMateNum, isLongName]);
+    if (
+      type === 'PUBLIC' &&
+      (name !== createPublicRoomInfo.name ||
+        maxMateNum !== createPublicRoomInfo.maxMateNum ||
+        hashtags !== createPublicRoomInfo.hashtags)
+    ) {
+      setCreatePublicRoomInfo({
+        name: name,
+        maxMateNum: maxMateNum,
+        hashtags: hashtags,
+      });
+    } else if (
+      type === 'PRIVATE' &&
+      (name !== createPrivateRoomInfo.name || maxMateNum !== createPrivateRoomInfo.maxMateNum)
+    ) {
+      setCreatePrivateRoomInfo({
+        name: name,
+        maxMateNum: maxMateNum,
+      });
+    }
+  }, [
+    createPrivateRoomInfo,
+    createPublicRoomInfo,
+    hashtags,
+    isLongName,
+    maxMateNum,
+    name,
+    setCreatePrivateRoomInfo,
+    setCreatePublicRoomInfo,
+    type,
+  ]);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -74,14 +100,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   };
 
   const handleHashTagSubmit = () => {
-    if (hashTag.trim() !== '' && hashTagList.length < 3) {
-      setHashTagList([...hashTagList, hashTag.trim()]);
-      setHashTag(''); // Clear the input after adding
+    if (hashTag.trim() !== '' && hashtags.length < 3) {
+      setHashtags([...hashtags, hashTag.trim()]);
+      setHashTag('');
     }
   };
 
   const removeHashTag = (index: number) => {
-    setHashTagList((prevList) => prevList.filter((_, i) => i !== index));
+    setHashtags((prevList) => prevList.filter((_, i) => i !== index));
   };
 
   const toMain = () => {
@@ -89,37 +115,61 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   };
 
   const toSelectCharacter = () => {
-    navigation.navigate('SelectCharacterScreen');
+    navigation.navigate('SelectCharacterScreen', { type: type });
   };
 
-  const toNext = async (): Promise<void> => {
+  const toNextforPublic = async (): Promise<void> => {
     try {
-      const response = await createRoom({
-        name: createroomState.name,
-        profileImage: createroomState.profileImage,
-        maxMateNum: createroomState.maxMateNum,
+      const response = await createPublicRoom({
+        name: createPublicRoomInfo.name,
+        profileImage: createPublicRoomInfo.profileImage,
+        maxMateNum: createPublicRoomInfo.maxMateNum,
+        hashtags: createPublicRoomInfo.hashtags,
       });
 
-      setCreateroomState({ name: '', profileImage: 0, maxMateNum: 0 });
       console.log(response.result);
 
-      setRoomInfoState((prevState: RoomInfo) => ({
-        ...prevState,
+      setRoomInfo({
         roomId: response.result.roomId,
         name: response.result.name,
-        inviteCode: response.result.inviteCode,
         profileImage: response.result.profileImage,
-      }));
+        mateList: response.result.mateList,
+        roomType: response.result.roomType,
+        inviteCode: response.result.inviteCode || '',
+        hashtags: response.result.hashtags || [],
+      });
 
-      navigation.navigate('CompleteCreateRoomScreen');
+      navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
     } catch (error: any) {
       console.log(error.response.data);
     }
   };
 
-  useEffect(() => {
-    console.log(hashTagList);
-  });
+  const toNextforPrivate = async (): Promise<void> => {
+    try {
+      const response = await createPrivateRoom({
+        name: createPrivateRoomInfo.name,
+        profileImage: createPrivateRoomInfo.profileImage,
+        maxMateNum: createPrivateRoomInfo.maxMateNum,
+      });
+
+      console.log(response.result);
+
+      setRoomInfo({
+        roomId: response.result.roomId,
+        name: response.result.name,
+        profileImage: response.result.profileImage,
+        mateList: response.result.mateList,
+        roomType: response.result.roomType,
+        inviteCode: response.result.inviteCode,
+        hashtags: response.result.hashtags,
+      });
+
+      navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -136,8 +186,10 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
             {/* 캐릭터 선택 */}
             <View className="relative mb-10 flex items-center justify-center">
               <View className="relative">
-                {createroomState.profileImage ? (
-                  <>{getProfileImage(createroomState.profileImage, 130, 130)}</>
+                {type === 'PUBLIC' && createPublicRoomInfo?.profileImage ? (
+                  getProfileImage(createPublicRoomInfo.profileImage, 130, 130)
+                ) : type === 'PRIVATE' && createPrivateRoomInfo?.profileImage ? (
+                  getProfileImage(createPrivateRoomInfo.profileImage, 130, 130)
                 ) : (
                   <CharacterBox />
                 )}
@@ -182,7 +234,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
               </View>
 
               {/* 방 해시태그 입력 */}
-              {type === 'public' && (
+              {type === 'PUBLIC' && (
                 <View>
                   <Text className="mb-2 px-1 text-base font-semibold text-basicFont">
                     방을 나타낼 해시태그를 입력해주세요 (최대 3개)
@@ -195,8 +247,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                     placeholder="해시태그를 입력해주세요"
                   />
                   <View className="flex flex-row">
-                    {hashTagList.length > 0 &&
-                      hashTagList.map((hash, index) => (
+                    {hashtags.length > 0 &&
+                      hashtags.map((hash, index) => (
                         <View
                           key={index}
                           className="mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
@@ -215,7 +267,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
           <View className="flex">
             <Pressable
-              onPress={toNext}
+              onPress={type == 'PUBLIC' ? toNextforPublic : toNextforPrivate}
               className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
             >
               <Text className="text-center text-base font-semibold text-white">방 생성하기</Text>

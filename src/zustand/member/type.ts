@@ -1,8 +1,8 @@
 export interface SignUp {
-  name: string;
   nickname: string;
   gender: string;
   birthday: string;
+  school: number;
   persona: number;
 }
 
@@ -12,15 +12,4 @@ export interface Profile {
   gender: string;
   birthday: string;
   persona: number;
-}
-
-export interface MyRoom {
-  hasRoom: boolean;
-  roomId: number;
-}
-
-export interface CreateRoomInfo {
-  name: string;
-  profileImage: number;
-  maxMateNum: number;
 }

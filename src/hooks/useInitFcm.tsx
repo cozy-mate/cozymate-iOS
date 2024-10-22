@@ -1,17 +1,15 @@
-import { Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
 import notifee from '@notifee/react-native';
 import { getUniqueId } from 'react-native-device-info';
 import messaging from '@react-native-firebase/messaging';
 
-import { loggedInState } from '../recoil/recoil';
+import { useLoggedInStore } from '@zustand/member/member';
 
 import { postFcmToken } from '@server/api/fcm';
 
 import { setFcmToken } from '@utils/fcm';
 
 const useInitFcm = () => {
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loggedInState);
+  const { loggedIn } = useLoggedInStore();
 
   // 로직 정리
   // 1. 가장 처음 앱을 켰을 때
@@ -79,7 +77,7 @@ const useInitFcm = () => {
 
   const initFcm = () => {
     // console.log('FCM initialized');
-    if (isLoggedIn) {
+    if (loggedIn) {
       requestUserPermission();
       foregroundNotificationListener();
     }

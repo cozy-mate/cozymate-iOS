@@ -1,15 +1,13 @@
-import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
-import { roomInfoState } from '../../recoil/recoil';
-import { deleteComment, updateComment } from '../../server/api/comment';
+import { deleteComment } from '../../server/api/comment';
 
 import ButtonModal from '@components/common/buttonModal';
 import ControlModal from '@components/feedView/controlModal';
 
-import { profileState } from '@recoil/recoil';
+import { useRoomInfoStore } from '@zustand/room/room';
+import { useProfileStore } from '@zustand/member/member';
 
 import { useFeedModal } from '@hooks/useFeedModal';
 import { useButtonModal } from '@hooks/useButtonModal';
@@ -20,6 +18,7 @@ import { postTimeUtil } from '@utils/time/timeUtil';
 import { CommentType } from '@type/feed';
 
 import DotIcon from '@assets/feedView/dotIcon.svg';
+
 type CommentCardProps = {
   comment: CommentType;
   postId: number;
@@ -30,14 +29,18 @@ const COMMENT_DELETE_SUCCESS = '댓글이 삭제되었습니다.';
 const COMMENT_DELETE_ERROR = '댓글 삭제에 실패했습니다.';
 
 const CommentCard = (props: CommentCardProps) => {
+  const { profile } = useProfileStore();
+  const { roomInfo } = useRoomInfoStore();
+
   const { comment, postId, updateComment } = props;
 
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const [oneButtonModalTitle, setOneButtonModalMessage] = useState('');
 
   const { PERSONA_IMAGE_URL } = usePersonaImage(comment.writer.persona);
+
   const { isModalVisible, modalPosition, dotIconRef, onPressModalOpen, onPressModalClose } =
     useFeedModal();
+
   const {
     isButtonModalVisible: isTwoButtonModalVisible,
     handleButtonModalClose: handleTwoButtonModalClose,
@@ -62,8 +65,6 @@ const CommentCard = (props: CommentCardProps) => {
       handleOneButtonModalOpen();
     }
   };
-
-  const [profile, setProfile] = useRecoilState(profileState);
 
   return (
     <View className="my-5 w-full">

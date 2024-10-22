@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
-import { SignUp } from '@recoil/type';
-import { signUpState } from '@recoil/recoil';
+import { useSignUpStore } from '@zustand/member/member';
 
 import { CharacterInputScreenProps } from '@type/param/rootStack';
 
@@ -39,7 +37,7 @@ type Item = {
 };
 
 const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
-  const [, setSignUp] = useRecoilState(signUpState);
+  const { setSignUpState } = useSignUpStore();
 
   const [character, setCharacter] = useState<number>(0);
 
@@ -67,10 +65,9 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
 
-    setSignUp((prevState: SignUp) => ({
-      ...prevState,
+    setSignUpState({
       persona: character,
-    }));
+    });
 
     navigation.navigate('ChipSelectScreen');
   };

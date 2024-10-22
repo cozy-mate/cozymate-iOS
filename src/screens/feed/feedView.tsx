@@ -5,7 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import React, { useRef, Fragment, useEffect, useCallback } from 'react';
-import { withTiming, useAnimatedStyle, useAnimatedKeyboard } from 'react-native-reanimated';
+import { useAnimatedStyle, useAnimatedKeyboard } from 'react-native-reanimated';
 import {
   View,
   Text,
@@ -21,18 +21,16 @@ import {
 
 import BackCleanHeader from 'src/layout/backCleanHeader';
 
-import { updateComment } from '../../server/api/comment';
+// import { updateComment } from '../../server/api/comment';
 
 import ButtonModal from '@components/common/buttonModal';
 import CommentList from '@components/feedView/commentList';
 import ControlModal from '@components/feedView/controlModal';
 
-import {
-  hasRoomState,
-  profileState,
-  feedRefreshState,
-  postDetailRefreshState,
-} from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
+import { useProfileStore } from '@zustand/member/member';
+
+import { feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
 
 import { deletePost, getDetailPost } from '@server/api/post';
 import { createComment, getCommentList } from '@server/api/comment';
@@ -57,6 +55,14 @@ const POST_DELETE_ERROR = '게시글 삭제에 실패했습니다.';
 const COMMENT_CREATE_ERROR = '댓글 작성에 실패했습니다.';
 
 const FeedViewScreen = (props: FeedViewScreenProps) => {
+  const { profile } = useProfileStore();
+  const { myRoom } = useHasRoomStore();
+
+  const [, setNeedsPostRefresh] = useRecoilState(feedRefreshState);
+
+  const [needsPostDetailRefresh, setNeedsPostDetailRefresh] =
+    useRecoilState(postDetailRefreshState);
+
   const keyboard = useAnimatedKeyboard();
 
   const animatedStyles = useAnimatedStyle(() => ({
@@ -89,13 +95,6 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const [needsToGoBack, setNeedsToGoBack] = React.useState(false);
 
   const opacity = useRef(new NativeAnimated.Value(1)).current;
-
-  const [profile, setProfile] = useRecoilState(profileState);
-  const [roomState, setRoomState] = useRecoilState(hasRoomState);
-  const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(feedRefreshState);
-
-  const [needsPostDetailRefresh, setNeedsPostDetailRefresh] =
-    useRecoilState(postDetailRefreshState);
 
   const {
     isButtonModalVisible: isTwoButtonModalVisible,
@@ -145,7 +144,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   const getMyPost = async () => {
     setLoading(true);
     try {
-      const response = await getDetailPost(roomState.roomId, postId);
+      const response = await getDetailPost(myRoom.roomId, postId);
       const post = {
         id: response.result.id,
         writer: {
@@ -222,7 +221,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   }, []);
 
   const onDelete = async () => {
-    const response = await deletePost(roomState.roomId, postId);
+    const response = await deletePost(myRoom.roomId, postId);
     if (response) {
       handleTwoButtonModalClose();
       setOneButtonModalInfo(POST_DELETE_SUCCESS);
@@ -250,7 +249,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     }
     setCommentPosting(true);
     const data = {
-      roomId: roomState.roomId,
+      roomId: myRoom.roomId,
       postId: postId,
       content: comment,
     };
@@ -258,7 +257,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
     try {
       const response = await createComment(data);
       if (response) {
-        const responseComment = await getCommentList(roomState.roomId, postId);
+        const responseComment = await getCommentList(myRoom.roomId, postId);
         const commentList = responseComment.result.map((comment: any) => ({
           id: comment.id,
           content: comment.content,
@@ -282,7 +281,7 @@ const FeedViewScreen = (props: FeedViewScreenProps) => {
   };
 
   const updateCommentList = async () => {
-    const response = await getCommentList(roomState.roomId, postId);
+    const response = await getCommentList(myRoom.roomId, postId);
     const commentList = response.result.map((comment: any) => ({
       id: comment.id,
       content: comment.content,

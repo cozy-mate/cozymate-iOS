@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Text,
@@ -22,7 +21,7 @@ import CustomCalendar from '@components/todoList/customCalendar';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import CustomCheckInputBox from '@components/common/customCheckInputBox';
 
-import { roomInfoState } from '@recoil/recoil';
+import { useRoomInfoStore } from '@zustand/room/room';
 
 import { useAddRule, useGetRuleData } from '@hooks/api/rule';
 import { useAddRole, useGetRoleData } from '@hooks/api/role';
@@ -31,7 +30,8 @@ import { useAddMyTodo, useGetTodoData } from '@hooks/api/todo';
 import { CreateTodoScreenProps } from '@type/param/stack';
 
 const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
-  const roomInfo = useRecoilValue(roomInfoState);
+  const { roomInfo } = useRoomInfoStore();
+
   const { bottom } = useSafeAreaInsets();
 
   const [type, setType] = useState<string>(route.params.type);

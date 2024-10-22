@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+
+interface MatelistItem {
+  memberId: number;
+  mateId: number;
+  nickname: string;
+}
 
 interface MyRoomComponentProps {
   toRoom: () => void;
   roomData: {
-    title: string;
-    hashTag: string[];
-    currentNum: number;
-    equality: number;
+    roomId: number;
+    name: string;
+    inviteCode: string;
+    profileImage: number;
+    mateList: MatelistItem[];
+    roomType: string;
+    hashtags: string[];
   };
 }
 
 const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) => {
-  const [hasTagLen, setHashTagLen] = useState<number>(0);
-
   return (
     <Pressable className="rounded-xl border border-main1" onPress={toRoom}>
       <LinearGradient
@@ -24,23 +31,32 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
         className="rounded-xl p-4"
       >
         <View className="flex flex-row">
-          {roomData.hashTag.map((hash, index) => (
-            <View key={index} className="mr-1.5 rounded bg-white px-2 py-[2px]">
-              <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
+          {roomData.hashtags.length !== 0 ? (
+            roomData.hashtags.map((hash, index) => (
+              <View key={index} className="mr-1.5 rounded bg-white px-2 py-[2px]">
+                <Text className="text-xs font-medium text-colorFont">#{hash}</Text>
+              </View>
+            ))
+          ) : (
+            <View className="mr-1.5 rounded bg-white px-2 py-[2px]">
+              <Text className="text-xs font-medium text-colorFont">#해시태그</Text>
             </View>
-          ))}
+          )}
         </View>
 
         <View className="my-2">
-          <Text className="text-base font-semibold text-emphasizedFont">{roomData.title}</Text>
+          <Text className="text-base font-semibold text-emphasizedFont">{roomData.name}</Text>
         </View>
 
         <View className="flex flex-row items-center justify-between">
           <Text className="text-xs font-medium text-disabledFont">
-            <Text className="text-main1">{roomData.currentNum}명</Text>의 룸메이트가 있어요
+            <Text className="text-main1">{roomData.mateList.length}명</Text>의 룸메이트가 있어요
           </Text>
 
-          <Text className="text-base font-medium text-colorFont">{roomData.equality}%</Text>
+          <Text className="text-base font-medium text-colorFont">
+            95
+            {/* {roomData.equality} */}%
+          </Text>
         </View>
       </LinearGradient>
     </Pressable>

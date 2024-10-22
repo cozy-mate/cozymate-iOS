@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   View,
@@ -16,14 +15,14 @@ import { RoomDummyData } from './dummyData';
 
 import RoomComponent from '@components/recommendRoom/RoomComponent';
 
-import { profileState } from '@recoil/recoil';
+import { useProfileStore } from '@zustand/member/member';
 
 import { RecommendRoomScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 
 const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
-  const profile = useRecoilValue(profileState);
+  const { profile } = useProfileStore();
 
   const { bottom } = useSafeAreaInsets();
 
@@ -45,8 +44,8 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
     navigation.goBack();
   };
 
-  const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen');
+  const toRoomDetail = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', { roomId: roomId });
   };
 
   return (
@@ -74,7 +73,12 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
         <View className="flex-1 bg-white px-5 pt-4" style={{ paddingBottom: bottom + 80 }}>
           {RoomDummyData.map((room, index) => (
-            <RoomComponent key={index} index={index} roomData={room} toRoomDetail={toRoomDetail} />
+            <RoomComponent
+              key={index}
+              index={index}
+              roomData={room}
+              toRoomDetail={() => toRoomDetail(room.roomId)}
+            />
           ))}
         </View>
       </ScrollView>

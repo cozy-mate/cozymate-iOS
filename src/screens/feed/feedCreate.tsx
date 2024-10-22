@@ -22,7 +22,9 @@ import { createPost, updatePost, getDetailPost } from '../../server/api/post';
 
 import ButtonModal from '@components/common/buttonModal';
 
-import { hasRoomState, feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
+import { useHasRoomStore } from '@zustand/room/room';
+
+import { feedRefreshState, postDetailRefreshState } from '@recoil/recoil';
 
 import { useButtonModal } from '@hooks/useButtonModal';
 
@@ -37,6 +39,8 @@ const POST_SUCCESS = '게시글이 작성되었습니다.';
 const POST_UPDATE_SUCCESS = '게시글이 수정되었습니다.';
 
 const FeedCreateScreen = (props: FeedCreateScreenProps) => {
+  const { myRoom } = useHasRoomStore();
+
   const MAX_IMAGE_COUNT = 10;
   const [postDescription, setPostDescription] = React.useState<string>('');
   const [isComplete, setIsComplete] = React.useState<boolean>(false);
@@ -44,9 +48,8 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
   const { mode, postId } = props.route.params;
 
-  const [roomState, setRoomState] = useRecoilState(hasRoomState);
-  const [needRefresh, setNeedRefresh] = useRecoilState(feedRefreshState);
-  const [needsPostRefresh, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
+  const [, setNeedRefresh] = useRecoilState(feedRefreshState);
+  const [, setNeedsPostRefresh] = useRecoilState(postDetailRefreshState);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -70,7 +73,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const response = await getDetailPost(roomState.roomId, postId);
+      const response = await getDetailPost(myRoom.roomId, postId);
       const imageList = response.result.imageList.map((url: string) => ({ uri: url } as Asset));
       setImages(imageList);
       setPostDescription(response.result.content);
@@ -125,7 +128,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
 
     try {
       await createPost({
-        roomId: roomState.roomId,
+        roomId: myRoom.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });
@@ -158,7 +161,7 @@ const FeedCreateScreen = (props: FeedCreateScreenProps) => {
     try {
       await updatePost({
         postId: postId!,
-        roomId: roomState.roomId,
+        roomId: myRoom.roomId,
         content: postDescription,
         imageList: imageResponse.imgUrlList,
       });

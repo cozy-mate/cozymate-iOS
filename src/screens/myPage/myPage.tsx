@@ -1,11 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { Text, View, Pressable, ScrollView } from 'react-native';
 
 import ButtonModal from '@components/common/buttonModal';
 
-import { profileState, hasRoomState, loggedInState, roomInfoState } from '@recoil/recoil';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
 import { signOut, deleteMember } from '@server/api/member';
 
@@ -21,12 +20,11 @@ import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
-  const { top } = useSafeAreaInsets();
+  const { setLoggedIn } = useLoggedInStore();
+  const { myRoom } = useHasRoomStore();
+  const { profile } = useProfileStore();
+  const { roomInfo } = useRoomInfoStore();
 
-  const hasRoom = useRecoilValue(hasRoomState);
-  const myProfile = useRecoilValue(profileState);
-  const roomInfo = useRecoilValue(roomInfoState);
-  const [, setLoggedIn] = useRecoilState(loggedInState);
   const [school, setSchool] = useState<boolean>(true);
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
@@ -36,7 +34,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen');
+    navigation.navigate('RoomDetailScreen', { roomId: 1 });
   };
 
   const toSchoolAuthentication = () => {
@@ -80,9 +78,9 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
       <ScrollView className="bg-white" style={{ position: 'relative' }} bounces={false}>
         <Background style={{ position: 'absolute' }} />
         <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
-          {getProfileImage(myProfile.persona, 120, 120)}
+          {getProfileImage(profile.persona, 120, 120)}
           <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
-            {myProfile.nickname}
+            {profile.nickname}
           </Text>
 
           <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
@@ -99,7 +97,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
               <Text className="text-sm font-medium text-emphasizedFont">나의 코지룸</Text>
               <View className="flex flex-row items-center">
-                {hasRoom.hasRoom ? (
+                {myRoom.hasRoom ? (
                   <Pressable onPress={toRoomDetail} className="flex flex-row items-center">
                     <HomeIcon />
                     <Text className="mx-1 text-sm font-medium text-main1">{roomInfo.name}</Text>

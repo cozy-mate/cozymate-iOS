@@ -1,9 +1,7 @@
+import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
-
-import { dummyData } from './dummyData';
 
 import SearchModal from '@components/roomMate/searchModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -11,12 +9,7 @@ import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import DetailSearchModal from '@components/roomMate/trash/detailSearchModal';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
-import {
-  profileState,
-  OtherBasicData,
-  MyLifeStyleState,
-  OtherLifeStyleState,
-} from '@recoil/recoil';
+import { OtherBasicData, MyLifeStyleState, OtherLifeStyleState } from '@recoil/recoil';
 
 import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
 
@@ -40,15 +33,11 @@ type UserItem = {
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
-  const profile = useRecoilValue(profileState);
-
   const [filterList, setFilterList] = useState<string[]>([]); // 필터 목록
   const [page, setPage] = useState<number>(0); // 페이지네이션
 
   const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState); // 내 라이프 스타일 데이터
   const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
-
-  const [roomData, setRoomData] = useState(dummyData);
 
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
@@ -89,16 +78,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
   // const { data: similarmatedata } = useSearchUsers();
-
-  const getMyLifeStyle = async () => {
-    try {
-      const response = await getUserDetailData();
-      setMyLifeStyleData(response.result);
-    } catch (error: any) {
-      console.log(error.response.data);
-      navigation.replace('LifeStyleOnboardingScreen'); // replace 사용하여 화면 대체
-    }
-  };
 
   // 같은 답변을 한 사용자 목록을 가져오는 함수
   const getSameAnswerMate = async () => {

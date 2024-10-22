@@ -1,30 +1,28 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
-import { CreateRoomInfo } from '@recoil/type';
-import { createRoomState } from '@recoil/recoil';
+import { useCreatePublicRoomStore, useCreatePrivateRoomStore } from '@zustand/room/room';
 
 import { SelectCharacterScreenProps } from '@type/param/stack';
 
-import first from '@assets/characterItem/1.svg';
-import third from '@assets/characterItem/3.svg';
-import fifth from '@assets/characterItem/5.svg';
-import sixth from '@assets/characterItem/6.svg';
-import ninth from '@assets/characterItem/9.svg';
-import second from '@assets/characterItem/2.svg';
-import fourth from '@assets/characterItem/4.svg';
-import eighth from '@assets/characterItem/8.svg';
-import tenth from '@assets/characterItem/10.svg';
-import seventh from '@assets/characterItem/7.svg';
-import twelfth from '@assets/characterItem/12.svg';
-import eleventh from '@assets/characterItem/11.svg';
-import fifteenth from '@assets/characterItem/15.svg';
-import sixteenth from '@assets/characterItem/16.svg';
-import thirteenth from '@assets/characterItem/13.svg';
-import fourteenth from '@assets/characterItem/14.svg';
+import First from '@assets/characterItem/1.svg';
+import Third from '@assets/characterItem/3.svg';
+import Fifth from '@assets/characterItem/5.svg';
+import Sixth from '@assets/characterItem/6.svg';
+import Ninth from '@assets/characterItem/9.svg';
+import Second from '@assets/characterItem/2.svg';
+import Fourth from '@assets/characterItem/4.svg';
+import Eighth from '@assets/characterItem/8.svg';
+import Tenth from '@assets/characterItem/10.svg';
+import Seventh from '@assets/characterItem/7.svg';
+import Twelfth from '@assets/characterItem/12.svg';
+import Eleventh from '@assets/characterItem/11.svg';
+import Fifteenth from '@assets/characterItem/15.svg';
+import Sixteenth from '@assets/characterItem/16.svg';
+import Thirteenth from '@assets/characterItem/13.svg';
+import Fourteenth from '@assets/characterItem/14.svg';
 
 type IconProps = {
   width: number;
@@ -38,121 +36,45 @@ type Item = {
   icon: React.FC<IconProps>;
 };
 
-const SelectCharacterScreen = ({ navigation }: SelectCharacterScreenProps) => {
-  const [, setCreateroomState] = useRecoilState(createRoomState);
+const SelectCharacterScreen = ({ navigation, route }: SelectCharacterScreenProps) => {
+  const { type } = route.params;
+
+  const { setCreatePublicRoomInfo } = useCreatePublicRoomStore();
+  const { setCreatePrivateRoomInfo } = useCreatePrivateRoomStore();
 
   const [profileImage, setProfileImage] = useState<number>(0);
 
   const isComplete = profileImage !== 0;
 
   const [items, setItems] = useState<Item[]>([
-    {
-      index: 1,
-      item: 1,
-      select: false,
-      icon: first,
-    },
-    {
-      index: 2,
-      item: 2,
-      select: false,
-      icon: second,
-    },
-    {
-      index: 3,
-      item: 3,
-      select: false,
-      icon: third,
-    },
-    {
-      index: 4,
-      item: 4,
-      select: false,
-      icon: fourth,
-    },
-
-    {
-      index: 5,
-      item: 5,
-      select: false,
-      icon: fifth,
-    },
-    {
-      index: 6,
-      item: 6,
-      select: false,
-      icon: sixth,
-    },
-    {
-      index: 7,
-      item: 7,
-      select: false,
-      icon: seventh,
-    },
-    {
-      index: 8,
-      item: 8,
-      select: false,
-      icon: eighth,
-    },
-
-    {
-      index: 9,
-      item: 9,
-      select: false,
-      icon: ninth,
-    },
-    {
-      index: 10,
-      item: 10,
-      select: false,
-      icon: tenth,
-    },
-    {
-      index: 11,
-      item: 11,
-      select: false,
-      icon: eleventh,
-    },
-    {
-      index: 12,
-      item: 12,
-      select: false,
-      icon: twelfth,
-    },
-
-    {
-      index: 13,
-      item: 13,
-      select: false,
-      icon: thirteenth,
-    },
-    {
-      index: 14,
-      item: 14,
-      select: false,
-      icon: fourteenth,
-    },
-    {
-      index: 15,
-      item: 15,
-      select: false,
-      icon: fifteenth,
-    },
-    {
-      index: 16,
-      item: 16,
-      select: false,
-      icon: sixteenth,
-    },
+    { index: 1, item: 1, select: false, icon: First },
+    { index: 2, item: 2, select: false, icon: Second },
+    { index: 3, item: 3, select: false, icon: Third },
+    { index: 4, item: 4, select: false, icon: Fourth },
+    { index: 5, item: 5, select: false, icon: Fifth },
+    { index: 6, item: 6, select: false, icon: Sixth },
+    { index: 7, item: 7, select: false, icon: Seventh },
+    { index: 8, item: 8, select: false, icon: Eighth },
+    { index: 9, item: 9, select: false, icon: Ninth },
+    { index: 10, item: 10, select: false, icon: Tenth },
+    { index: 11, item: 11, select: false, icon: Eleventh },
+    { index: 12, item: 12, select: false, icon: Twelfth },
+    { index: 13, item: 13, select: false, icon: Thirteenth },
+    { index: 14, item: 14, select: false, icon: Fourteenth },
+    { index: 15, item: 15, select: false, icon: Fifteenth },
+    { index: 16, item: 16, select: false, icon: Sixteenth },
   ]);
 
   const toNext = async (): Promise<void> => {
-    setCreateroomState((prevState: CreateRoomInfo) => ({
-      ...prevState,
-      profileImage: profileImage,
-    }));
-
+    if (type === 'PUBLIC') {
+      setCreatePublicRoomInfo({
+        profileImage: profileImage,
+      });
+    } else if (type === 'PRIVATE') {
+      setCreatePrivateRoomInfo({
+        profileImage: profileImage,
+      });
+    }
     navigation.goBack();
   };
 

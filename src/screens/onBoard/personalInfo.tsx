@@ -1,4 +1,3 @@
-import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { Text, View, Keyboard, Pressable, SafeAreaView } from 'react-native';
@@ -8,15 +7,14 @@ import SchoolSelect from '@components/onBoard/schoolSelect';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 
-import { SignUp } from '@recoil/type';
-import { signUpState } from '@recoil/recoil';
+import { useSignUpStore } from '@zustand/member/member';
 
 import { checkNickname } from '@server/api/member';
 
 import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
 
 const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
-  const [, setSignUp] = useRecoilState(signUpState);
+  const { setSignUpState } = useSignUpStore();
 
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
@@ -67,13 +65,12 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   const toNext = async (): Promise<void> => {
     if (!isComplete || !canUse) return;
 
-    setSignUp((prevState: SignUp) => ({
-      ...prevState,
+    setSignUpState({
       nickname: nickname,
       gender: gender,
       birthday: birthday,
       school: school,
-    }));
+    });
 
     navigation.navigate('CharacterInputScreen');
   };
