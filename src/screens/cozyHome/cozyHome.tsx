@@ -300,6 +300,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               snapToInterval={userComponentWidth}
               onScroll={handleSameAnswerUserScroll}
               decelerationRate="fast"
+              disableIntervalMomentum={true}
               scrollEventThrottle={16}
               bounces={false}
             >

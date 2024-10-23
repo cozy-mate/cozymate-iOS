@@ -169,7 +169,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
             <View className="mx-4 h-[18px] w-px bg-[#d9d9d9]" />
 
-            <Pressable onPress={withdraw}>
+            <Pressable>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
             </Pressable>
           </View>
