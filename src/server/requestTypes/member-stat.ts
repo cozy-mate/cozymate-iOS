@@ -42,7 +42,7 @@ export interface UpdateUserDataRequest {
   turnOffMeridian: string;
   turnOffTime: number;
   smokingState: string;
-  sleepingHabit: string;
+  sleepingHabit: string[];
   airConditioningIntensity: number;
   heatingIntensity: number;
   lifePattern: string;
@@ -56,7 +56,7 @@ export interface UpdateUserDataRequest {
   noiseSensitivity: number;
   cleaningFrequency: string;
   drinkingFrequency: string;
-  personality: string;
+  personality: string[];
   mbti: string;
   selfIntroduction: string;
 }
