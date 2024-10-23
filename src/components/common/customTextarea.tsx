@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  Pressable,
-  TextInput,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-} from 'react-native';
+import { Text, View, Pressable, TextInput } from 'react-native';
 
 interface CustomTextareaProps {
   title: string;
@@ -49,9 +42,10 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
     }
   };
 
-  const handleSubmitEditing = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+  const handleSubmitEditing = () => {
     if (onEnterPress && value) {
       onEnterPress();
+      inputRef.current?.blur();
     }
   };
 
@@ -77,7 +71,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
             style={{ height: height }}
           />
           <Text className="absolute bottom-4 right-5 text-sm text-gray-500">
-            {`${value.length} / 50`}
+            {`${value.length} / ${maxLength}`}
           </Text>
         </View>
       </Pressable>
