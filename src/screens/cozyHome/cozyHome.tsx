@@ -164,6 +164,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('SchoolAuthenticationScreen');
   };
 
+  const toLifeStyle = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
+  };
+
   return (
     <View className="flex-1 bg-sub1">
       <SafeAreaView
@@ -213,7 +217,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   <Pressable onPress={toChat}>
                     <ChatIcon />
                   </Pressable>
-                  <Pressable onPress={toNotification}>
+                  <Pressable onPress={toLifeStyle}>
                     <NotificationIcon />
                   </Pressable>
                 </View>
