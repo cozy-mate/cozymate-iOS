@@ -34,16 +34,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   const { data: roomData } = useGetRoomData(roomId);
 
-  // const [roomData, setRoomData] = useState({
-  //   roomId: 0,
-  //   name: '',
-  //   inviteCode: '',
-  //   profileImage: 0,
-  //   mateList: [{ memberId: 0, mateId: 0, nickname: '' }],
-  //   roomType: '',
-  //   hashtags: [''],
-  // });
-
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
   const handleLifeStyleModal = () => {
@@ -111,7 +101,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           <View className="flex flex-col bg-sub1" onLayout={handleLayout}>
             <View>
               {/* 상단 헤더 */}
-              <View className="mb-[15px] mt-2 flex flex-row justify-between px-5">
+              <View className="mb-5 mt-2 flex flex-row justify-between px-5">
                 <Pressable onPress={toHome}>
                   <BackButton />
                 </Pressable>
@@ -125,19 +115,22 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 </View>
               </View>
 
-              <View className="mb-[22px] flex flex-row items-center px-[25px]">
+              <View className="mb-6 flex flex-row items-center px-5">
                 {getProfileImage(roomData.result.profileImage, 40, 40)}
                 <View className="ml-2 flex flex-col">
                   <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
                     {roomData.result.name}
                   </Text>
                   <View className="flex flex-row">
-                    {roomData.result.hashtags &&
+                    {roomData.result.hashtags.length !== 0 ? (
                       roomData.result.hashtags.map((hash, index) => (
                         <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
                           #{hash}
                         </Text>
-                      ))}
+                      ))
+                    ) : (
+                      <Text className="text-sm font-medium text-basicFont">비공개방이에요</Text>
+                    )}
                   </View>
                 </View>
               </View>
