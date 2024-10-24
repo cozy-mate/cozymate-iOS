@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -36,9 +37,11 @@ import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
 import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
 import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
-import SchoolAuthenticationScreen from 'src/screens/findRoommate/schoolAuthentication';
+import SchoolAuthenticationScreen from 'src/screens/schoolAuthentication/schoolAuthentication';
 
 import { useLoggedInStore } from '@zustand/member/member';
+
+import { useAutoLogin } from '@hooks/autoLogin';
 
 import { StackParamList } from '@type/param/stack';
 import { RootStackParamList } from '@type/param/rootStack';
@@ -47,7 +50,21 @@ const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
 
 function AppInner() {
-  const { loggedIn } = useLoggedInStore();
+  const { loggedIn, setLoggedIn } = useLoggedInStore();
+  const [appLoaded, setAppLoaded] = useState<boolean>(false);
+
+  console.log('AppInner - loggedIn:', loggedIn);
+  console.log('AppInner - appLoaded:', appLoaded);
+
+  useAutoLogin(setLoggedIn, setAppLoaded);
+
+  if (!appLoaded) {
+    return (
+      <View className="flex flex-1 items-center justify-center">
+        <Text>로티 이미지 나올 곳 (앱이 로딩 중입니다)</Text>
+      </View>
+    );
+  }
 
   return (
     <GestureHandlerRootView>

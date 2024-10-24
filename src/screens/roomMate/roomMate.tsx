@@ -9,7 +9,9 @@ import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
 import DetailSearchModal from '@components/roomMate/trash/detailSearchModal';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
-import { OtherBasicData, MyLifeStyleState, OtherLifeStyleState } from '@recoil/recoil';
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
+import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 
 import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
 
@@ -33,16 +35,13 @@ type UserItem = {
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
-  const [filterList, setFilterList] = useState<string[]>([]); // 필터 목록
-  const [page, setPage] = useState<number>(0); // 페이지네이션
+  const { hasLifeStyle } = useHasLifeStyleStore();
 
-  const [, setMyLifeStyleData] = useRecoilState(MyLifeStyleState); // 내 라이프 스타일 데이터
-  const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
-
+  const [filterList, setFilterList] = useState<string[]>([]);
+  const [page, setPage] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
-  const [, setOthersBasicData] = useRecoilState(OtherBasicData); // 다른 사용자의 기본 데이터
-  const [, setOthersLifeStyleData] = useRecoilState(OtherLifeStyleState); // 다른 사용자의 라이프스타일 데이터
+  const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -76,63 +75,16 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
-  // const { data: similarmatedata } = useSearchUsers();
-
-  // 같은 답변을 한 사용자 목록을 가져오는 함수
-  const getSameAnswerMate = async () => {
-    try {
-      const response = await searchUsers(filterList); // 필터를 적용하여 검색
-      setDisplayedUsers(response.result.result);
-      setHasNextPage(response.result.hasNext);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  // 비슷한 답변을 한 사용자 목록을 가져오는 함수
-  const getSimilarAnswerData = async () => {
-    try {
-      const response = await searchUsers(undefined, page); // 페이지네이션 적용하여 검색
-      setDisplayedUsers(response.result.result);
-      setHasNextPage(response.result.hasNext);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // 다른 사용자의 라이프스타일을 가져오는 함수
-  const getOthersLifeStyle = async (user: UserItem) => {
-    try {
-      const response = await getOtherUserDetailData(user.memberId);
-      setOthersBasicData(user);
-      setOthersLifeStyleData(response.result);
-      navigation.navigate('UserDetailScreen');
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
-
-  // 필터에 따라 사용자 데이터를 가져오는 로직
-  useEffect(() => {
-    // 필터가 변경될 때 페이지와 사용자 목록을 초기화
-    setPage(0);
-    setDisplayedUsers([]);
-
-    if (filterList.length > 0) {
-      // 필터가 있을 때: 같은 답변을 한 사용자 목록을 가져옴
-      getSameAnswerMate();
-    } else {
-      // 필터가 없을 때: 비슷한 답변을 한 사용자 목록을 가져옴
-      getSimilarAnswerData();
-    }
-  }, [filterList]); // 필터 목록 변경 시 실행
+  const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
+  const { data: similarmatedata } = useSearchUsers();
 
   const toHome = () => {
     navigation.goBack();
   };
 
-  const hasData = false;
+  const toOtherDetail = (memberId: number) => {
+    navigation.navigate('UserDetailScreen', { memberId: memberId });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -167,14 +119,14 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           className="mb-9 flex flex-col items-center px-5"
           style={{ paddingBottom: bottom + 20 }}
         >
-          {hasData ? (
+          {hasLifeStyle ? (
             displayedUsers.length > 0 ? (
               displayedUsers.map((user, index) => (
                 <SameAnswerContainer
                   key={user.memberId}
                   index={index}
                   user={user}
-                  toUserDetail={getOthersLifeStyle}
+                  toUserDetail={() => toOtherDetail(user.memberId)}
                 />
               ))
             ) : (
@@ -182,8 +134,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                 <Text>비어있음</Text>
               </View>
             )
-          ) : (
+          ) : displayedUsers.length > 0 || filterList.length > 0 ? (
             <NoLifeStyleComponent />
+          ) : (
+            <View>
+              <Text>비어있음</Text>
+            </View>
           )}
         </View>
       </ScrollView>

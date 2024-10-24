@@ -38,8 +38,8 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
               </View>
             ))
           ) : (
-            <View className="mr-1.5 rounded bg-white px-2 py-[2px]">
-              <Text className="text-xs font-medium text-colorFont">#해시태그</Text>
+            <View className="mr-1.5 rounded py-[2px]">
+              <Text className="text-xs font-medium text-colorFont">비공개방이에요</Text>
             </View>
           )}
         </View>

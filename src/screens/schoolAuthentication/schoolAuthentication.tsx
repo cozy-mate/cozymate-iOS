@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View, Keyboard, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
+import {
+  Text,
+  View,
+  Keyboard,
+  Pressable,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import ButtonModal from '@components/common/buttonModal';
 import SchoolSelect from '@components/onBoard/schoolSelect';
@@ -22,16 +29,16 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
     setIsSended(true);
   };
 
-  const toNext = () => {
+  const toBack = () => {
     navigation.goBack();
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex flex-1 flex-col bg-white">
-        <View className="pl-3">
+        <Pressable onPress={toBack} className="pl-3">
           <BackButton />
-        </View>
+        </Pressable>
         <View className="mt-2 px-5">
           <Text className="mb-6 px-2 font-['Pretendard'] text-xl font-semibold leading-6 text-emphasizedFont">
             룸메이트를 구하려면{'\n'}
@@ -68,7 +75,7 @@ const SchoolAuthenticationScreen = ({ navigation }: SchoolAuthenticationScreenPr
             isVisible={isModalOpen}
             buttonCount={1}
             closeModal={() => setIsModalOpen(false)}
-            onSubmit={toNext}
+            onSubmit={toBack}
           />
         </View>
       </SafeAreaView>
