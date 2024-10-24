@@ -10,3 +10,11 @@ export interface SignInRequest {
   clientId: string;
   socialType: string;
 }
+
+export interface TestSignUpRequest {
+  name: string;
+  nickname: string;
+  gender: string;
+  birthday: string;
+  persona: number;
+}

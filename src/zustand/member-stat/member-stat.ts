@@ -2,6 +2,14 @@ import { create } from 'zustand';
 
 import { LifeStyle } from './type';
 
+export const useHasLifeStyleStore = create<{
+  hasLifeStyle: boolean;
+  setHasLifeStyle: (status: boolean) => void;
+}>((set) => ({
+  hasLifeStyle: false,
+  setHasLifeStyle: (status) => set({ hasLifeStyle: status }),
+}));
+
 export const useLifeStyleStore = create<{
   lifeStyle: LifeStyle;
   setLifeStyle: (newLifeStyle: Partial<LifeStyle>) => void;

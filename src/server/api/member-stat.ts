@@ -39,14 +39,14 @@ export const checkDormitoryNum = async (): Promise<CheckDormitoryNumResponse> =>
 
 // 사용자 상세정보 필터링, 일치율 조회
 export const searchUsers = async (
-  page?: number,
   filterList?: string[],
+  page?: number,
   needsDetail?: boolean,
 ): Promise<SearchUsersResponse> => {
   const response = await GetAxiosInstance<SearchUsersResponse>(`/members/stat/filter`, {
     params: {
-      page: page,
       filterList: filterList,
+      page: page,
       needsDetail: needsDetail,
     },
   });

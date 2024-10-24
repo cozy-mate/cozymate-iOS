@@ -1,9 +1,17 @@
 import React, { useEffect } from 'react';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
+import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
+import { signIn, testSignUp } from '@server/api/member';
+import { getUserDetailData } from '@server/api/member-stat';
+
 import useInitFcm from '@hooks/useInitFcm';
 import { useIsOldiPhone } from '@hooks/device';
 import { useKakaoLogin } from '@hooks/api/member';
+
+import { setAccessToken } from '@utils/token';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -12,6 +20,10 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const isOldiPhone = useIsOldiPhone();
+  const { setLoggedIn } = useLoggedInStore();
+  const { setProfile } = useProfileStore();
+  const { setHasLifeStyle } = useHasLifeStyleStore();
+  const { setLifeStyle } = useLifeStyleStore();
 
   const { getDeviceId, refreshFcmToken } = useInitFcm();
 
@@ -25,6 +37,38 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const toOnboard = () => {
     navigation.navigate('PersonalInfoInputScreen');
+  };
+
+  const testLogin = async (): Promise<void> => {
+    try {
+      const signInResponse = await signIn({ clientId: 'test', socialType: 'TEST' });
+      await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
+
+      const signUpResponse = await testSignUp({
+        name: '테스트',
+        nickname: '테스트',
+        gender: 'MALE',
+        birthday: '1999-02-13',
+        persona: 1,
+      });
+
+      await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
+      setProfile(signUpResponse.result.memberInfoDTO);
+
+      const response = await getUserDetailData();
+      setHasLifeStyle(true);
+      setLifeStyle(response.result);
+    } catch (error: any) {
+      const errorCode = error?.response?.data?.code;
+
+      if (errorCode === 'MEMBERSTAT402') {
+        setHasLifeStyle(false);
+      } else {
+        console.error(error);
+      }
+    }
+
+    setLoggedIn(true);
   };
 
   return (
@@ -69,6 +113,10 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
           </Pressable>
         </View>
+
+        <Pressable onPress={testLogin}>
+          <Text>테스트 로그인</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

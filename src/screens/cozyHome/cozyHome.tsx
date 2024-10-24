@@ -16,15 +16,12 @@ import { RoomDummyData, sameAnswerDummyData, recommendRoomDummyData } from './du
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
-import NoRoomComponent from '@components/cozyHome/noRoomComponent';
 import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
 import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore } from '@zustand/member/member';
-
-import { getMyProfile } from '@server/api/member';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRoomData } from '@hooks/api/room';
@@ -83,11 +80,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { initFcm } = useInitFcm();
 
   useEffect(() => {
-    const getProfile = async () => {
-      const response = await getMyProfile();
-      console.log(response);
-    };
-    getProfile();
     initFcm();
   }, []);
 
@@ -231,7 +223,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                 </View>
 
                 {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-                <View className="mb-[25px] flex h-[100px] w-full flex-row justify-between">
+                <View className="mb-6 flex h-[100px] w-full flex-row justify-between">
                   <Pressable
                     onPress={createRoomModalOpen}
                     className="w-[49%] items-start rounded-xl bg-colorBox p-4"
@@ -256,18 +248,19 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
         </View>
 
         <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
-          <View className="px-5">
-            <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-              {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
-            </Text>
-            {myRoom.hasRoom ? (
-              <MyRoomComponent roomData={roomData.result} toRoom={toRoomDetail} />
-            ) : (
-              <NoRoomComponent />
-            )}
-          </View>
+          {myRoom.hasRoom && roomData !== undefined && (
+            <>
+              <View className="px-5">
+                <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                  {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
+                </Text>
 
-          <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+                <MyRoomComponent roomData={roomData.result} toRoom={toRoomDetail} />
+              </View>
+
+              <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+            </>
+          )}
 
           <View className="px-5">
             <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
