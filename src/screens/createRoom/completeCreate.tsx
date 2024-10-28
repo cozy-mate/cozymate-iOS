@@ -35,12 +35,14 @@ const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScree
             <Text className="mb-1 text-center text-xl font-semibold text-emphasizedFont">
               방 생성을 완료했어요!
             </Text>
-            <Text className="text-center text-sm font-medium text-basicFont">
-              초대코드를 공유해 룸메이트를 모아보세요..
-            </Text>
+            {type === 'PUBLIC' && (
+              <Text className="text-center text-sm font-medium text-basicFont">
+                초대코드를 공유해 룸메이트를 모아보세요..
+              </Text>
+            )}
           </View>
 
-          {type === 'PRIVATE' && roomInfo.inviteCode && (
+          {type === 'PUBLIC' && roomInfo.inviteCode && (
             <Pressable onPress={handleCopyInviteCode} className="mb-16 flex">
               <View className="flex flex-row items-center rounded-xl bg-colorBox px-6 py-3">
                 <Text className="mr-1 text-base font-semibold text-main1">

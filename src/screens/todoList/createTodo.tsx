@@ -1,15 +1,7 @@
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  Text,
-  View,
-  Keyboard,
-  Pressable,
-  ScrollView,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import BackNav from 'src/layout/backNav';
 
@@ -18,8 +10,8 @@ import LoadingComponent from '@components/loading/loading';
 import SubmitButton from '@components/todoList/submitButton';
 import CustomTextarea from '@components/common/customTextarea';
 import CustomCalendar from '@components/todoList/customCalendar';
+import SelectMateComponent from '@components/todoList/selectMate';
 import CustomTextInputBox from '@components/common/customTextInputBox';
-import CustomCheckInputBox from '@components/common/customCheckInputBox';
 
 import { useRoomInfoStore } from '@zustand/room/room';
 
@@ -42,6 +34,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
 
   // Todo
   const [todoContent, setTodoContent] = useState<string>('');
+  const [todoMateIdList, setTodoMateIdList] = useState<number[]>([]);
   const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
 
   const { refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
@@ -61,7 +54,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   );
 
   // Role
-  const [mateIdList, setMateIdList] = useState<number[]>([]);
+  const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
   const [title, setTitle] = useState<string>('');
   const [repeatDayList, setRepeatDayList] = useState<string[]>([]);
 
@@ -86,9 +79,10 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const resetState = () => {
     if (type === 'todo') {
       setTodoContent('');
+      setTodoMateIdList([]);
       setTimePoint(moment().format('YYYY-MM-DD'));
     } else if (type === 'role') {
-      setMateIdList([]);
+      setRoleMateIdList([]);
       setTitle('');
       setRepeatDayList([]);
     } else if (type === 'rule') {
@@ -106,9 +100,9 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   // 생성 가능한 지 여부 확인
   const canSubmit = () => {
     if (type === 'todo') {
-      return todoContent.trim() !== '' && !!timePoint;
+      return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return mateIdList.length > 0 && title.trim() !== '' && repeatDayList.length > 0;
+      return roleMateIdList.length > 0 && title.trim() !== '' && repeatDayList.length > 0;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -122,18 +116,26 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
         return;
       }
       try {
-        await addTodoMutate({ content: todoContent, timePoint: timePoint });
+        await addTodoMutate({
+          content: todoContent,
+          // mateIdList: todoMateIdList,
+          timePoint: timePoint,
+        });
         resetState();
         toTodo();
       } catch (error) {
         console.log(error);
       }
     } else if (type === 'role') {
-      if (mateIdList.length === 0 || title.trim() === '' || repeatDayList.length === 0) {
+      if (roleMateIdList.length === 0 || title.trim() === '' || repeatDayList.length === 0) {
         return;
       }
       try {
-        await addRoleMutate({ mateIdList, title, repeatDayList });
+        await addRoleMutate({
+          mateIdList: roleMateIdList,
+          title: title,
+          repeatDayList: repeatDayList,
+        });
         resetState();
         toTodo();
       } catch (error: any) {
@@ -159,101 +161,102 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
       {addRulePending && <LoadingComponent />}
       {addRolePending && <LoadingComponent />}
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView className="flex-1 bg-white">
-          <ScrollView className="flex-1">
-            <View className="flex" style={{ paddingBottom: bottom }}>
-              <BackNav leftPressFunc={toTodo} />
-              <View className="px-5">
-                <View className="mb-6 flex flex-row gap-x-3">
-                  {navBarItems.map((nav) => (
-                    <Pressable
-                      onPress={() => handleNavBarItemPress(nav.value)}
-                      key={nav.id}
-                      className="flex flex-col items-center"
+      <SafeAreaView className="flex-1 bg-white">
+        <ScrollView>
+          <View className="flex" style={{ paddingBottom: bottom }}>
+            <BackNav leftPressFunc={toTodo} />
+            <View className="px-5">
+              <View className="mb-6 flex flex-row gap-x-3">
+                {navBarItems.map((nav) => (
+                  <Pressable
+                    onPress={() => handleNavBarItemPress(nav.value)}
+                    key={nav.id}
+                    className="flex flex-col items-center"
+                  >
+                    <Text
+                      className={`${
+                        type === nav.value ? 'text-main1' : 'text-disabledFont'
+                      } text-lg font-semibold`}
                     >
-                      <Text
-                        className={`${
-                          type === nav.value ? 'text-main1' : 'text-disabledFont'
-                        } text-lg font-semibold`}
-                      >
-                        {nav.name}
-                      </Text>
-                      <View
-                        className={`${
-                          nav.value == type ? 'bg-main1' : 'bg-white'
-                        } mt-2 h-1 w-[66px] rounded-full`}
-                      />
-                    </Pressable>
-                  ))}
-                </View>
-
-                {type == 'todo' && (
-                  <>
-                    <CustomTextInputBox
-                      title="할 일을 입력해주세요"
-                      value={todoContent}
-                      setValue={setTodoContent}
-                      placeholder="할 일을 입력해주세요"
+                      {nav.name}
+                    </Text>
+                    <View
+                      className={`${
+                        nav.value == type ? 'bg-main1' : 'bg-white'
+                      } mt-2 h-1 w-[66px] rounded-full`}
                     />
-
-                    <CustomCheckInputBox
-                      title="담당자를 선택해주세요"
-                      selectedValues={mateIdList}
-                      setSelectedValues={setMateIdList}
-                      items={roomInfo.mateList}
-                    />
-
-                    <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
-                  </>
-                )}
-
-                {type == 'role' && (
-                  <>
-                    <CustomCheckInputBox
-                      title="담당자를 선택해주세요"
-                      selectedValues={mateIdList}
-                      setSelectedValues={setMateIdList}
-                      items={roomInfo.mateList}
-                    />
-
-                    <CustomTextInputBox
-                      title="역할을 입력해주세요"
-                      value={title}
-                      setValue={setTitle}
-                      placeholder="역할을 입력해주세요"
-                    />
-                    <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />
-                  </>
-                )}
-
-                {type == 'rule' && (
-                  <>
-                    <CustomTextInputBox
-                      title="규칙을 입력해주세요"
-                      value={ruleContent}
-                      setValue={setRuleContent}
-                      placeholder="규칙을 입력해주세요"
-                    />
-                    <CustomTextarea
-                      title="메모를 추가해주세요 (선택)"
-                      value={memo}
-                      setValue={setMemo}
-                      placeholder="내용을 입력해주세요"
-                      height={120}
-                      maxLength={50}
-                    />
-                  </>
-                )}
+                  </Pressable>
+                ))}
               </View>
-            </View>
-          </ScrollView>
 
-          <View className="fixed bottom-0 w-full bg-transparent px-5">
-            <SubmitButton pressFunc={handleSubmit} canSubmit={canSubmit()} />
+              {type == 'todo' && (
+                <>
+                  <CustomTextInputBox
+                    title="할 일을 입력해주세요"
+                    value={todoContent}
+                    setValue={setTodoContent}
+                    placeholder="할 일을 입력해주세요"
+                  />
+
+                  <SelectMateComponent
+                    title="담당자를 선택해주세요"
+                    selectedValues={todoMateIdList}
+                    setSelectedValues={setTodoMateIdList}
+                    items={roomInfo.mateList}
+                  />
+
+                  <Text className="mb-2 px-1 text-lg font-semibold text-basicFont">
+                    날짜를 선택해주세요
+                  </Text>
+                  <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
+                </>
+              )}
+
+              {type == 'role' && (
+                <>
+                  <SelectMateComponent
+                    title="담당자를 선택해주세요"
+                    selectedValues={roleMateIdList}
+                    setSelectedValues={setRoleMateIdList}
+                    items={roomInfo.mateList}
+                  />
+
+                  <CustomTextInputBox
+                    title="역할을 입력해주세요"
+                    value={title}
+                    setValue={setTitle}
+                    placeholder="역할을 입력해주세요"
+                  />
+                  <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />
+                </>
+              )}
+
+              {type == 'rule' && (
+                <>
+                  <CustomTextInputBox
+                    title="규칙을 입력해주세요"
+                    value={ruleContent}
+                    setValue={setRuleContent}
+                    placeholder="규칙을 입력해주세요"
+                  />
+                  <CustomTextarea
+                    title="메모를 추가해주세요 (선택)"
+                    value={memo}
+                    setValue={setMemo}
+                    placeholder="내용을 입력해주세요"
+                    height={120}
+                    maxLength={50}
+                  />
+                </>
+              )}
+            </View>
           </View>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
+        </ScrollView>
+
+        <View className="fixed bottom-0 w-full bg-transparent px-5">
+          <SubmitButton pressFunc={handleSubmit} canSubmit={canSubmit()} />
+        </View>
+      </SafeAreaView>
     </>
   );
 };

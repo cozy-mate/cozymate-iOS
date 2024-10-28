@@ -8,10 +8,10 @@ type Item = {
   select: boolean;
 };
 
-interface CustomRadioInputBoxProps {
+interface CustomCheckBoxInputProps {
   title: string;
-  value: any;
-  setValue: React.Dispatch<React.SetStateAction<any>>;
+  value: any[];
+  setValue: React.Dispatch<React.SetStateAction<any[]>>;
   meridian?: string;
   setMeridian?: React.Dispatch<React.SetStateAction<string>>;
   items: Item[];
@@ -22,7 +22,7 @@ interface CustomRadioInputBoxProps {
   count?: number;
 }
 
-const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
+const CustomCheckBoxInput: React.FC<CustomCheckBoxInputProps> = ({
   title,
   value,
   setValue,
@@ -46,12 +46,20 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
   };
 
   const select = (selectedItem: Item) => {
-    const updatedItems = items.map((item) => ({
-      ...item,
-      select: item.index === selectedItem.index,
-    }));
+    const updatedItems = items.map((item) =>
+      item.index === selectedItem.index
+        ? { ...item, select: !item.select } // 선택 토글
+        : item,
+    );
     setItems(updatedItems);
-    setValue(selectedItem.value);
+
+    // 선택된 아이템의 value를 배열에 추가/제거
+    if (selectedItem.select) {
+      setValue((prevValue) => prevValue.filter((val) => val !== selectedItem.value));
+    } else {
+      setValue((prevValue) => [...prevValue, selectedItem.value]);
+    }
+
     handleFocus(selectedItem.index);
   };
 
@@ -116,4 +124,4 @@ const CustomRadioInputBox: React.FC<CustomRadioInputBoxProps> = ({
   );
 };
 
-export default CustomRadioInputBox;
+export default CustomCheckBoxInput;

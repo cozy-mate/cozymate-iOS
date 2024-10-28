@@ -1,6 +1,5 @@
 import React from 'react';
-import Config from 'react-native-config';
-import { Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { getProfileImage } from '@utils/profileImage';
 

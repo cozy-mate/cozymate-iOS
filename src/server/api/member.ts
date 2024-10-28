@@ -1,11 +1,12 @@
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
-import { SignInRequest, SignUpRequest } from '@server/requestTypes/member';
+import { SignInRequest, SignUpRequest, TestSignUpRequest } from '@server/requestTypes/member';
 import {
   SignInResponse,
   SignUpResponse,
   GetProfileResponse,
+  TestSignUpResponse,
   DeleteMemberResponse,
   CheckNicknameResponse,
 } from '@server/responseTypes/member';
@@ -50,6 +51,12 @@ export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
 // 로그인
 export const signIn = async (data: SignInRequest): Promise<SignInResponse> => {
   const response = await GuestPostAxiosInstance<SignInResponse>(`/members/sign-in`, data);
+
+  return response.data;
+};
+
+export const testSignUp = async (data: TestSignUpRequest): Promise<TestSignUpResponse> => {
+  const response = await PostAxiosInstance<TestSignUpResponse>(`/members/sign-up`, data);
 
   return response.data;
 };

@@ -77,3 +77,20 @@ export interface SignInResponse {
     };
   };
 }
+
+export interface TestSignUpResponse {
+  result: {
+    tokenResponseDTO: {
+      message: string;
+      accessToken: string;
+      refreshToken: string;
+    };
+    memberInfoDTO: {
+      name: string;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      persona: number;
+    };
+  };
+}

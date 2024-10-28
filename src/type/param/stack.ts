@@ -44,7 +44,7 @@ export type StackParamList = {
 
   // 룸메이트 스크린
   RoomMateScreen: undefined;
-  UserDetailScreen: undefined;
+  UserDetailScreen: { memberId: number };
 
   // 피드 스크린
   FeedMainScreen: undefined;
