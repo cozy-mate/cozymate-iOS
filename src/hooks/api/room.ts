@@ -1,7 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { getRoomData } from '@server/api/room';
-import { GetRoomDataResponse } from '@server/responseTypes/room';
+import { getRoomData, checkHasRoom } from '@server/api/room';
+import { GetRoomDataResponse, CheckHasRoomResponse } from '@server/responseTypes/room';
+
+export const useCheckHasRoom = (): {
+  data: CheckHasRoomResponse | undefined;
+  refetch: () => void;
+} => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['hasRoom'],
+    queryFn: () => checkHasRoom(),
+    select: (reseponse: CheckHasRoomResponse) => {
+      return reseponse;
+    },
+  });
+
+  return { data, refetch };
+};
 
 export const useGetRoomData = (
   roomId: number,

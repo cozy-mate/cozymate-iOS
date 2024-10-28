@@ -17,13 +17,12 @@ axiosInstance.interceptors.request.use(
   },
 );
 
-// JWT 토큰 기반 API 요청 => 주석 처리
+// JWT 토큰 기반 API 요청
 axiosInstance.interceptors.request.use(
   async (config) => {
     const accessToken = await getAccessToken();
 
     if (!accessToken) {
-      // 토큰이 없을 경우 로그아웃 처리
       throw new Error('토큰 없음');
     }
 

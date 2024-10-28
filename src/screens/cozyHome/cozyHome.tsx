@@ -5,6 +5,7 @@ import {
   View,
   Pressable,
   ScrollView,
+  Dimensions,
   SafeAreaView,
   LayoutChangeEvent,
   NativeScrollEvent,
@@ -38,6 +39,8 @@ import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
+  const width = Dimensions.get('screen').width;
+
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
 
@@ -175,9 +178,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
       >
         <View className="bg-white">
           <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
-            <HomeBack style={{ position: 'absolute' }} />
+            <HomeBack width={width} style={{ position: 'absolute' }} />
             <View style={{ position: 'relative', zIndex: 100 }}>
-              <View className="mb-[8.5px] flex flex-row items-center justify-between px-5">
+              <View className="mb-[8.5px] flex flex-row items-center justify-between pl-5">
                 {school ? (
                   <Pressable
                     className="flex flex-row items-center py-2"
@@ -205,7 +208,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   </Pressable>
                 )}
 
-                <View className="flex flex-row">
+                <View className="flex flex-row pr-5">
                   <Pressable onPress={toChat}>
                     <ChatIcon />
                   </Pressable>

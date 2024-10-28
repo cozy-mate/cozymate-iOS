@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from 'react';
-import { Text, View, Pressable, ScrollView } from 'react-native';
+import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
-import ButtonModal from '@components/common/buttonModal';
+// import ButtonModal from '@components/common/buttonModal';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
-import { signOut, deleteMember } from '@server/api/member';
+import { deleteMember } from '@server/api/member';
 
 import { deleteToken } from '@utils/token';
 import { deleteFcmToken } from '@utils/fcm';
@@ -20,6 +20,8 @@ import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
+  const width = Dimensions.get('screen').width;
+
   const { setLoggedIn } = useLoggedInStore();
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
@@ -27,7 +29,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   const [school, setSchool] = useState<boolean>(true);
 
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+  // const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
 
   const toMyInfo = () => {
     navigation.navigate('MyInfoScreen');
@@ -45,14 +47,9 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('LifeStyleEditScreen');
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
-      const response = await signOut();
-
-      console.log(response);
-
       await deleteToken();
-      await deleteFcmToken();
       setLoggedIn(false);
     } catch (error: any) {
       console.log(error.response.data);
@@ -76,7 +73,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="bg-white" style={{ position: 'relative' }} bounces={false}>
-        <Background style={{ position: 'absolute' }} />
+        <Background width={width} style={{ position: 'absolute' }} />
         <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
           {getProfileImage(profile.persona, 120, 120)}
           <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
@@ -163,7 +160,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
 
           <View className="flex flex-row items-center justify-center">
-            <Pressable onPress={() => setIsLogoutModalOpen(true)}>
+            <Pressable onPress={logout}>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
             </Pressable>
 
@@ -175,15 +172,15 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
         </View>
 
-        <ButtonModal
+        {/* <ButtonModal
           title="로그아웃 하시겠어요?"
           cancelText="취소"
           submitText="확인"
           isVisible={isLogoutModalOpen}
           closeModal={() => setIsLogoutModalOpen(false)}
-          onSubmit={logout}
+          onSubmit={() => logout()}
           buttonCount={2}
-        />
+        /> */}
       </ScrollView>
     </View>
   );
