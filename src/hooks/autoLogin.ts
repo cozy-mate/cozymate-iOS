@@ -26,13 +26,10 @@ export const useAutoLogin = (
 
   useEffect(() => {
     const checkLogin = async (): Promise<void> => {
-      console.log('checkLogin called');
-
       try {
         const oldRefreshToken = await getRefreshToken();
 
         if (!oldRefreshToken) {
-          console.log('No refresh token found, logging out');
           setLoggedIn(false);
           await deleteToken();
           const elapsed = Date.now() - start;
@@ -41,39 +38,40 @@ export const useAutoLogin = (
           return;
         }
 
-        console.log('Reissuing token');
+        await setRefreshToken(oldRefreshToken);
 
-        const response = await reissueToken(oldRefreshToken);
+        try {
+          const response = await reissueToken();
 
-        // const profileResponse = await getMyProfile();
-        // setProfile(profileResponse.result);
+          // 토큰 저장
+          await Promise.all([
+            setAccessToken(response.accessToken),
+            setRefreshToken(response.refreshToken),
+          ]);
+        } catch (error: any) {
+          console.log(error.response.data);
+        }
 
-        // // 방 존재 여부 확인
-        // const roomCheckResponse = await checkHasRoom();
-        // const roomId = roomCheckResponse.result.roomId;
-        // console.log('Room check response:', roomCheckResponse);
+        const profileResponse = await getMyProfile();
+        setProfile(profileResponse.result);
 
-        // // 방이 존재하는 경우 방 정보 저장
-        // if (roomId !== 0) {
-        //   setMyRoom({ hasRoom: true, roomId });
-        //   const roomInfoResponse = await getRoomData(roomId);
-        //   setRoomInfo(roomInfoResponse.result);
-        //   console.log('Room info updated:', roomInfoResponse.result);
-        // }
+        // 방 존재 여부 확인
+        const roomCheckResponse = await checkHasRoom();
+        const roomId = roomCheckResponse.result.roomId;
+        console.log('Room check response:', roomCheckResponse);
 
-        // 토큰 저장
-        await Promise.all([
-          setAccessToken(response.accessToken),
-          setRefreshToken(response.refreshToken),
-        ]);
-        console.log('Tokens saved');
+        // 방이 존재하는 경우 방 정보 저장
+        if (roomId !== 0) {
+          setMyRoom({ hasRoom: true, roomId });
+          const roomInfoResponse = await getRoomData(roomId);
+          setRoomInfo(roomInfoResponse.result);
+        }
 
         // 라이프스타일 정보 처리
         try {
           const userDetailResponse = await getUserDetailData();
           setHasLifeStyle(true);
           setLifeStyle(userDetailResponse.result);
-          console.log('LifeStyle updated:', userDetailResponse.result);
         } catch (error: any) {
           const errorCode = error?.response?.data?.code;
           if (errorCode === 'MEMBERSTAT402') {
@@ -91,7 +89,7 @@ export const useAutoLogin = (
         const remainingTime = 3500 - elapsed;
         setTimeout(() => setAppLoaded(true), remainingTime > 0 ? remainingTime : 0);
       } catch (error: any) {
-        console.error('Error in checkLogin:', error.response.data);
+        console.error('Error in checkLogin:', error.response);
         setLoggedIn(false);
         await deleteToken();
         const elapsed = Date.now() - start;
