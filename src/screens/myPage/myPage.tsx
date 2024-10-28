@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
 // import ButtonModal from '@components/common/buttonModal';
@@ -6,10 +6,10 @@ import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
-import { deleteMember } from '@server/api/member';
+// import { deleteMember } from '@server/api/member';
 
 import { deleteToken } from '@utils/token';
-import { deleteFcmToken } from '@utils/fcm';
+// import { deleteFcmToken } from '@utils/fcm';
 import { getProfileImage } from '@utils/profileImage';
 
 import { MyPageScreenProps } from '@type/param/stack';
@@ -27,7 +27,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
-  const [school, setSchool] = useState<boolean>(true);
+  const school = true;
 
   // const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
 
@@ -56,19 +56,19 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     }
   };
 
-  const withdraw = async () => {
-    try {
-      const response = await deleteMember();
+  // const withdraw = async () => {
+  //   try {
+  //     const response = await deleteMember();
 
-      console.log(response);
+  //     console.log(response);
 
-      await deleteToken();
-      await deleteFcmToken();
-      setLoggedIn(false);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
+  //     await deleteToken();
+  //     await deleteFcmToken();
+  //     setLoggedIn(false);
+  //   } catch (error: any) {
+  //     console.log(error.response.data);
+  //   }
+  // };
 
   return (
     <View className="flex-1 bg-white">

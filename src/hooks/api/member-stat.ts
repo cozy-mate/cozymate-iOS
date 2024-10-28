@@ -2,8 +2,12 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchUsers, getUserDetailData } from '@server/api/member-stat';
-import { SearchUsersResponse, GetUserDetailDataResponse } from '@server/responseTypes/member-stat';
+import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
+import {
+  SearchUsersResponse,
+  GetUserDetailDataResponse,
+  GetOtherUserDetailDataResponse,
+} from '@server/responseTypes/member-stat';
 
 // 내 라이프 스타일 조회
 export const useGetUserDetailData = (): {
@@ -15,6 +19,23 @@ export const useGetUserDetailData = (): {
     queryFn: () => getUserDetailData(),
     select: (reseponse: GetUserDetailDataResponse) => {
       return reseponse;
+    },
+  });
+
+  return { data, refetch };
+};
+
+export const useGetOtherDetailData = (
+  memberId: number,
+): {
+  data: GetOtherUserDetailDataResponse;
+  refetch: () => void;
+} => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['otherlifestyledata', memberId],
+    queryFn: () => getOtherUserDetailData(memberId),
+    select: (response: GetOtherUserDetailDataResponse) => {
+      return response;
     },
   });
 

@@ -27,26 +27,22 @@ export const RoomDummyData = [
 
 export const UserDummyData = [
   {
+    memberId: 1,
     name: '배이',
     hashTag: ['21살', '문화컨텐츠문화경영학과'],
     equality: 75,
   },
   {
+    memberId: 2,
     name: '바쿠고',
     hashTag: ['다이너마이트', '대폭살신'],
     equality: 32,
   },
 ];
 
-export const MyRoomData = {
-  title: '피그말리온',
-  hashTag: ['담배사절', '같이애니보실?'],
-  currentNum: 3,
-  equality: 32,
-};
-
 export const sameAnswerDummyData = [
   {
+    memberId: 1,
     nickname: '바쿠고',
     equality: 95,
     option: [
@@ -69,6 +65,7 @@ export const sameAnswerDummyData = [
     ],
   },
   {
+    memberId: 2,
     nickname: '쇼토',
     equality: 95,
     option: [
@@ -91,6 +88,7 @@ export const sameAnswerDummyData = [
     ],
   },
   {
+    memberId: 3,
     nickname: '바쿠고',
     equality: 95,
     option: [
@@ -113,6 +111,7 @@ export const sameAnswerDummyData = [
     ],
   },
   {
+    memberId: 4,
     nickname: '쇼토',
     equality: 95,
     option: [
@@ -135,6 +134,7 @@ export const sameAnswerDummyData = [
     ],
   },
   {
+    memberId: 5,
     nickname: '쇼토',
     equality: 95,
     option: [
@@ -160,6 +160,7 @@ export const sameAnswerDummyData = [
 
 export const recommendRoomDummyData = [
   {
+    roomId: 11,
     title: '방이름',
     equality: 75,
     currentNum: 2,
@@ -189,6 +190,7 @@ export const recommendRoomDummyData = [
     ],
   },
   {
+    roomId: 12,
     title: '방이름',
     equality: 75,
     currentNum: 2,
@@ -213,6 +215,7 @@ export const recommendRoomDummyData = [
     ],
   },
   {
+    roomId: 13,
     title: '방이름',
     equality: 75,
     currentNum: 2,
@@ -242,6 +245,7 @@ export const recommendRoomDummyData = [
     ],
   },
   {
+    roomId: 14,
     title: '방이름',
     equality: 75,
     currentNum: 2,
@@ -271,6 +275,7 @@ export const recommendRoomDummyData = [
     ],
   },
   {
+    roomId: 15,
     title: '방이름',
     equality: 75,
     currentNum: 2,

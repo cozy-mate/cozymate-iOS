@@ -30,6 +30,5 @@ export const useGetRoomData = (
     enabled: roomId !== 0,
   });
 
-  console.log(data);
   return { data, refetch };
 };

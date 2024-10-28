@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, LayoutChangeEvent } from 'react-native';
+import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
 import {
   lifestyleOptions,
@@ -9,6 +9,7 @@ import {
 
 interface RecommendRoomComponentProps {
   roomData: {
+    roomId: number;
     title: string;
     equality: number;
     currentNum: number;
@@ -21,9 +22,14 @@ interface RecommendRoomComponentProps {
     }[];
   };
   onLayout: (event: LayoutChangeEvent) => void;
+  pressFunc: (roomId: number) => void;
 }
 
-const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomData, onLayout }) => {
+const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
+  roomData,
+  onLayout,
+  pressFunc,
+}) => {
   const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
     return key in lifestyleOptions;
   };
@@ -32,7 +38,8 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomDat
   const calculatedWidth = screenWidth - 40;
 
   return (
-    <View
+    <Pressable
+      onPress={() => pressFunc(roomData.roomId)}
       style={{ width: calculatedWidth }}
       className="flex flex-col rounded-xl border border-disabled px-4 pb-[18px] pt-5"
       onLayout={onLayout}
@@ -70,7 +77,7 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({ roomDat
           </Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

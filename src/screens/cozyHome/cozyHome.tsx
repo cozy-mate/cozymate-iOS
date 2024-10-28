@@ -84,7 +84,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   useEffect(() => {
     initFcm();
-  }, []);
+  }, [initFcm]);
 
   // 학교 인증 관련
   const [school, setSchool] = useState<boolean>(false);
@@ -151,16 +151,16 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RecommendRoomScreen');
   };
 
-  const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
+  const toUserDetail = (memberId: number) => {
+    navigation.navigate('UserDetailScreen', { memberId: memberId });
+  };
+
+  const toRoomDetail = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', { roomId: roomId });
   };
 
   const toSchoolAuthentication = () => {
     navigation.navigate('SchoolAuthenticationScreen');
-  };
-
-  const toLifeStyle = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   return (
@@ -212,7 +212,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   <Pressable onPress={toChat}>
                     <ChatIcon />
                   </Pressable>
-                  <Pressable onPress={toLifeStyle}>
+                  <Pressable onPress={toNotification}>
                     <NotificationIcon />
                   </Pressable>
                 </View>
@@ -258,7 +258,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
                 </Text>
 
-                <MyRoomComponent roomData={roomData.result} toRoom={toRoomDetail} />
+                <MyRoomComponent
+                  roomData={roomData.result}
+                  toRoom={() => toRoomDetail(roomData.result.roomId)}
+                />
               </View>
 
               <View className="my-6 h-2.5 bg-[#F7F9FA]" />
@@ -301,7 +304,12 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               bounces={false}
             >
               {sameAnswerDummyData.map((data, index) => (
-                <SameAnswerUserComponent key={index} userData={data} onLayout={onLayoutUser} />
+                <SameAnswerUserComponent
+                  key={index}
+                  userData={data}
+                  onLayout={onLayoutUser}
+                  pressFunc={() => toUserDetail(data.memberId)}
+                />
               ))}
             </ScrollView>
 
@@ -336,12 +344,18 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               pagingEnabled={true}
               snapToInterval={roomComponentWidth}
               onScroll={handleRecommendRoomScroll}
+              disableIntervalMomentum={true}
               decelerationRate="fast"
               scrollEventThrottle={16}
               bounces={false}
             >
               {recommendRoomDummyData.map((data, index) => (
-                <RecommendRoomComponent key={index} roomData={data} onLayout={onLayoutRoom} />
+                <RecommendRoomComponent
+                  key={index}
+                  roomData={data}
+                  onLayout={onLayoutRoom}
+                  pressFunc={() => toRoomDetail(myRoom.roomId)}
+                />
               ))}
             </ScrollView>
 
@@ -357,9 +371,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             </View>
           </View>
 
-          <View className="relative px-5">
-            <Advertisement />
-          </View>
+          <Advertisement />
         </View>
 
         {createRoomOpen && (

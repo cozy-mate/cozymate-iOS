@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  Pressable,
-  ScrollView,
-  SafeAreaView,
-  NativeScrollEvent,
-  LayoutChangeEvent,
-  NativeSyntheticEvent,
-} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
 import ChipComponent from '@components/roomDetail/chipComponent';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
+
+import { useHasRoomStore } from '@zustand/room/room';
 
 import { useGetRoomData } from '@hooks/api/room';
 
@@ -23,6 +17,7 @@ import { RoomDetailScreenProps } from '@type/param/stack';
 import BackButton from '@assets/backButton.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
+import Background from '@assets/userDetail/background.svg';
 
 type ChipItems = {
   title: string;
@@ -32,7 +27,14 @@ type ChipItems = {
 const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
+  const { myRoom } = useHasRoomStore();
+
+  const { bottom } = useSafeAreaInsets();
+  const width = Dimensions.get('screen').width;
+
   const { data: roomData } = useGetRoomData(roomId);
+
+  console.log(roomData);
 
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
@@ -40,22 +42,12 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
   };
 
-  const toHome = () => {
+  const toBack = () => {
     navigation.goBack();
   };
 
-  // 스크롤 시 SafeAreaView 색상 관련
-  const [scrollY, setScrollY] = useState(0);
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollY(event.nativeEvent.contentOffset.y);
-  };
-
-  const [height, setHeight] = useState<number>(0);
-
-  const handleLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setHeight(height);
+  const toChatRoom = () => {
+    navigation.navigate('SendChatScreen', { recipientId: 1 });
   };
 
   const [items, setItems] = useState<ChipItems[]>([
@@ -84,139 +76,166 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     { title: 'MBTI', color: 'blue' },
   ]);
 
-  return (
-    <View className="flex-1 bg-sub1">
-      <SafeAreaView
-        style={{
-          backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
-        }}
-      />
-      <ScrollView
-        className="flex-1"
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        bounces={false}
-      >
-        <View className="bg-white">
-          <View className="flex flex-col bg-sub1" onLayout={handleLayout}>
-            <View>
-              {/* 상단 헤더 */}
-              <View className="mb-5 mt-2 flex flex-row justify-between px-5">
-                <Pressable onPress={toHome}>
-                  <BackButton />
-                </Pressable>
-                <View className="flex flex-row">
-                  <Pressable>
-                    <MessageIcon />
-                  </Pressable>
-                  <Pressable>
-                    <HeartIcon />
-                  </Pressable>
-                </View>
-              </View>
+  const [isRequested, setIsRequested] = useState<boolean>(false);
 
-              <View className="mb-6 flex flex-row items-center px-5">
-                {getProfileImage(roomData.result.profileImage, 40, 40)}
-                <View className="ml-2 flex flex-col">
-                  <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
-                    {roomData.result.name}
-                  </Text>
-                  <View className="flex flex-row">
-                    {roomData.result.hashtags.length !== 0 ? (
-                      roomData.result.hashtags.map((hash, index) => (
-                        <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
-                          #{hash}
-                        </Text>
-                      ))
-                    ) : (
-                      <Text className="text-sm font-medium text-basicFont">비공개방이에요</Text>
-                    )}
-                  </View>
-                </View>
+  return (
+    <View className="flex-1 bg-white">
+      <SafeAreaView className="bg-sub1" />
+      <View className="flex-1">
+        <View className="flex flex-1 flex-col bg-sub1">
+          {/* 상단 헤더 */}
+          <View className="mb-[15px] mt-2 flex flex-row justify-between pl-3 pr-5">
+            <Background width={width} style={{ position: 'absolute', zIndex: 99 }} />
+            <Pressable onPress={toBack} style={{ zIndex: 100 }}>
+              <BackButton />
+            </Pressable>
+            <View className="flex flex-row">
+              <Pressable onPress={toChatRoom}>
+                <MessageIcon />
+              </Pressable>
+              <Pressable>
+                <HeartIcon />
+              </Pressable>
+            </View>
+          </View>
+
+          <View className="mb-6 flex flex-row items-center px-5">
+            {getProfileImage(roomData.result.profileImage, 40, 40)}
+            <View className="ml-2 flex flex-col">
+              <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
+                {roomData.result.name}
+              </Text>
+              <View className="flex flex-row">
+                {roomData.result.hashtags.length !== 0 ? (
+                  roomData.result.hashtags.map((hash, index) => (
+                    <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
+                      #{hash}
+                    </Text>
+                  ))
+                ) : (
+                  <Text className="text-sm font-medium text-basicFont">비공개방이에요</Text>
+                )}
               </View>
             </View>
           </View>
-        </View>
 
-        <View className="flex-1 bg-sub1">
-          <View className="flex-1 rounded-t-[20px] bg-white px-5 pt-9">
-            <View className="mb-16">
-              {/* <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+          <View className="flex-1 rounded-t-[20px] bg-white pt-[37px]">
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
+              <View className="mb-16 px-5">
+                {/* <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                 <Text className="text-main1">{roomData.requestList.length}</Text>개의
                 {'\n'}룸메이트 요청이 도착했어요
               </Text> */}
 
-              {/* <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                {/* <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
                 {roomData.requestList.map((request, index) => (
                   <MemberComponent key={index} index={index} memberData={request} />
                 ))}
               </View> */}
-            </View>
-
-            <View className="mb-16">
-              <View className="mb-4 flex flex-row items-center justify-between px-1">
-                <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
-                <Text className="text-xs font-medium text-disabledFont">
-                  <Text className="text-main1">
-                    {roomData.result.mateList && roomData.result.mateList.length}
-                  </Text>{' '}
-                  / {roomData.result.mateList && roomData.result.mateList.length}
-                </Text>
               </View>
 
-              <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
-                {roomData.result.mateList &&
-                  roomData.result.mateList.map((member, index) => (
-                    <MemberComponent
-                      key={index}
-                      index={index}
-                      memberData={member}
-                      length={roomData.result.mateList.length}
-                    />
-                  ))}
-              </View>
-            </View>
-
-            <View className="mb-16">
-              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
-                기숙사 정보
-              </Text>
-
-              {/* <View className="rounded-xl border border-[#F1F2F4] p-4">
-                <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
-                  <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
-                  <Text className="text-sm font-medium text-basicFont">{roomData.type}</Text>
-                </View>
-                <View className="flex flex-row pt-3">
-                  <Text className="mr-3 text-sm font-medium text-colorFont">인실</Text>
-                  <Text className="text-sm font-medium text-basicFont">
-                    {roomData.numOfRoommate}인실
+              <View className="mb-16 px-5">
+                <View className="mb-4 flex flex-row items-center justify-between px-1">
+                  <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
+                  <Text className="text-xs font-medium text-disabledFont">
+                    <Text className="text-main1">
+                      {roomData.result.mateList && roomData.result.mateList.length}
+                    </Text>{' '}
+                    / {roomData.result.mateList && roomData.result.mateList.length}
                   </Text>
                 </View>
-              </View> */}
-            </View>
 
-            <View className="mb-16">
-              <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
-                룸메이트 라이프스타일 한 눈에 보기
-              </Text>
-
-              <View className="flex flex-row flex-wrap">
-                {items.map((item, index) => (
-                  <ChipComponent
-                    key={index}
-                    index={index}
-                    chipData={item}
-                    handleModal={handleLifeStyleModal}
-                  />
-                ))}
+                <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                  {roomData.result.mateList &&
+                    roomData.result.mateList.map((member, index) => (
+                      <MemberComponent
+                        key={index}
+                        index={index}
+                        memberData={member}
+                        length={roomData.result.mateList.length}
+                      />
+                    ))}
+                </View>
               </View>
-            </View>
+
+              <View className="mb-16 px-5">
+                <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+                  기숙사 정보
+                </Text>
+
+                <View className="rounded-xl border border-[#F1F2F4] p-4">
+                  <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
+                    <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
+                    <Text className="text-sm font-medium text-basicFont">
+                      {roomData?.result.roomType}
+                    </Text>
+                  </View>
+                  <View className="flex flex-row pt-3">
+                    <Text className="mr-3 text-sm font-medium text-colorFont">인실</Text>
+                    <Text className="text-sm font-medium text-basicFont">
+                      {roomData?.result.mateList.length}인실
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View className="mb-16 pl-5 pr-3">
+                <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+                  룸메이트 라이프스타일 한 눈에 보기
+                </Text>
+
+                <View className="flex flex-row flex-wrap">
+                  {items.map((item, index) => (
+                    <ChipComponent
+                      key={index}
+                      index={index}
+                      chipData={item}
+                      handleModal={handleLifeStyleModal}
+                    />
+                  ))}
+                </View>
+              </View>
+            </ScrollView>
           </View>
         </View>
 
-        {isLifeStyleModalOpen && <LifeStyleModal closeModal={handleLifeStyleModal} />}
-      </ScrollView>
+        <View className="px-5">
+          {/* 순서대로 1. 해당 방에 참가한 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
+          <Pressable
+            onPress={() => setIsRequested(!isRequested)}
+            className={`fixed bottom-[42px] rounded-xl px-5 py-4 ${
+              myRoom.roomId === roomId
+                ? 'bg-warning'
+                : myRoom.roomId !== roomId && myRoom.roomId !== 0
+                ? 'bg-[#c4c4c4]'
+                : myRoom.roomId === 0 && isRequested
+                ? 'border border-main1 bg-colorBox'
+                : 'bg-main1'
+            }`}
+          >
+            <Text
+              className={`text-center text-base font-semibold ${
+                myRoom.roomId === roomId
+                  ? 'text-white'
+                  : myRoom.roomId !== roomId && myRoom.roomId !== 0
+                  ? 'text-white'
+                  : myRoom.roomId === 0 && isRequested
+                  ? 'text-main1'
+                  : 'text-white'
+              }`}
+            >
+              {myRoom.roomId === roomId
+                ? '방 나가기'
+                : myRoom.roomId !== roomId && myRoom.roomId !== 0
+                ? '방 참여 요청'
+                : myRoom.roomId === 0 && isRequested
+                ? '방 참여 요청 취소'
+                : '방 참여 요청'}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+      {isLifeStyleModalOpen && <LifeStyleModal closeModal={handleLifeStyleModal} />}
     </View>
   );
 };

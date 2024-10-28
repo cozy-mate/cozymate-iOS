@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Dimensions, LayoutChangeEvent } from 'react-native';
+import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
 import {
   lifestyleOptions,
@@ -9,6 +9,7 @@ import {
 
 interface SameAnswerUserComponentProps {
   userData: {
+    memberId: number;
     nickname: string;
     equality: number;
     option: {
@@ -17,11 +18,13 @@ interface SameAnswerUserComponentProps {
     }[];
   };
   onLayout: (event: LayoutChangeEvent) => void;
+  pressFunc: () => void;
 }
 
 const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
   userData,
   onLayout,
+  pressFunc,
 }) => {
   const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
     return key in lifestyleOptions;
@@ -31,7 +34,8 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
   const calculatedWidth = screenWidth - 40;
 
   return (
-    <View
+    <Pressable
+      onPress={pressFunc}
       style={{ width: calculatedWidth }}
       className="flex flex-col rounded-xl border border-disabled px-4 py-5"
       onLayout={onLayout}
@@ -55,7 +59,7 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
           </View>
         ))}
       </View>
-    </View>
+    </Pressable>
   );
 };
 
