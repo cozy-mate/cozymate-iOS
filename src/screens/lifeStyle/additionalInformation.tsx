@@ -28,6 +28,7 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
     try {
       await registerUserData({
         universityId: 1,
+        major: '컴공',
         admissionYear: lifeStyle.admissionYear,
         numOfRoommate: lifeStyle.numOfRoommate,
         acceptance: lifeStyle.acceptance,

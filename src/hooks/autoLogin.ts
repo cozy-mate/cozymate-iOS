@@ -5,13 +5,14 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { reissueToken } from '@server/api/auth';
+import { getMyProfile } from '@server/api/member';
 import { getUserDetailData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 
 import { deleteToken, setAccessToken, setRefreshToken, getRefreshToken } from '@utils/token';
 
 export const useAutoLogin = (
-  setLoggedIn: (loggedIn: boolean) => void, // 타입 명시
+  setLoggedIn: any,
   setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   // 프로필 정보
@@ -24,14 +25,13 @@ export const useAutoLogin = (
   const start = Date.now();
 
   useEffect(() => {
-    const checkLogin = async () => {
+    const checkLogin = async (): Promise<void> => {
       console.log('checkLogin called');
 
       try {
-        const refreshToken = await getRefreshToken();
-        console.log('refreshToken:', refreshToken);
+        const oldRefreshToken = await getRefreshToken();
 
-        if (!refreshToken) {
+        if (!oldRefreshToken) {
           console.log('No refresh token found, logging out');
           setLoggedIn(false);
           await deleteToken();
@@ -42,30 +42,29 @@ export const useAutoLogin = (
         }
 
         console.log('Reissuing token');
-        const response = await reissueToken(refreshToken);
-        console.log('Token reissued:', response);
 
-        // 유저 프로필 업데이트
-        setProfile(response.result.memberInfoDTO);
-        console.log('Profile updated:', response.result.memberInfoDTO);
+        const response = await reissueToken(oldRefreshToken);
 
-        // 방 존재 여부 확인
-        const roomCheckResponse = await checkHasRoom();
-        const roomId = roomCheckResponse.result.roomId;
-        console.log('Room check response:', roomCheckResponse);
+        // const profileResponse = await getMyProfile();
+        // setProfile(profileResponse.result);
 
-        // 방이 존재하는 경우 방 정보 저장
-        if (roomId !== 0) {
-          setMyRoom({ hasRoom: true, roomId });
-          const roomInfoResponse = await getRoomData(roomId);
-          setRoomInfo(roomInfoResponse.result);
-          console.log('Room info updated:', roomInfoResponse.result);
-        }
+        // // 방 존재 여부 확인
+        // const roomCheckResponse = await checkHasRoom();
+        // const roomId = roomCheckResponse.result.roomId;
+        // console.log('Room check response:', roomCheckResponse);
+
+        // // 방이 존재하는 경우 방 정보 저장
+        // if (roomId !== 0) {
+        //   setMyRoom({ hasRoom: true, roomId });
+        //   const roomInfoResponse = await getRoomData(roomId);
+        //   setRoomInfo(roomInfoResponse.result);
+        //   console.log('Room info updated:', roomInfoResponse.result);
+        // }
 
         // 토큰 저장
         await Promise.all([
-          setAccessToken(response.result.accessToken),
-          setRefreshToken(response.result.refreshToken),
+          setAccessToken(response.accessToken),
+          setRefreshToken(response.refreshToken),
         ]);
         console.log('Tokens saved');
 
@@ -92,7 +91,7 @@ export const useAutoLogin = (
         const remainingTime = 3500 - elapsed;
         setTimeout(() => setAppLoaded(true), remainingTime > 0 ? remainingTime : 0);
       } catch (error: any) {
-        console.error('Error in checkLogin:', error);
+        console.error('Error in checkLogin:', error.response.data);
         setLoggedIn(false);
         await deleteToken();
         const elapsed = Date.now() - start;

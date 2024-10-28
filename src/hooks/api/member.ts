@@ -14,7 +14,7 @@ import {
   KakaoLoginResponse,
 } from '@server/responseTypes/member';
 
-import { setAccessToken } from '@utils/token';
+import { setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -42,15 +42,16 @@ export const useKakaoLogin = (
           socialType: 'KAKAO',
         });
 
-        // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
-        const accessToken = signInResponse.result.tokenResponseDTO.accessToken;
-        await setAccessToken(accessToken);
+        const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
 
-        console.log(accessToken);
+        // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
+        await setAccessToken(accessToken);
 
         if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
           navigation.navigate('PersonalInfoInputScreen');
         } else {
+          await setRefreshToken(refreshToken);
+
           // 프로필 정보 저장
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);

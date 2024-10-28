@@ -53,9 +53,6 @@ function AppInner() {
   const { loggedIn, setLoggedIn } = useLoggedInStore();
   const [appLoaded, setAppLoaded] = useState<boolean>(false);
 
-  console.log('AppInner - loggedIn:', loggedIn);
-  console.log('AppInner - appLoaded:', appLoaded);
-
   useAutoLogin(setLoggedIn, setAppLoaded);
 
   if (!appLoaded) {
