@@ -1,13 +1,13 @@
 export interface ListViewProps {
-  userBasicData: {
-    memberId: number;
-    memberName: string;
-    memberNickName: string;
-    memberAge: number;
-    memberPersona: number;
-    numOfRoommate: number;
-    equality: number;
-  };
+  // userBasicData: {
+  //   memberId: number;
+  //   memberName: string;
+  //   memberNickName: string;
+  //   memberAge: number;
+  //   memberPersona: number;
+  //   numOfRoommate: number;
+  //   equality: number;
+  // };
   userData: {
     universityId: number;
     admissionYear: string;
@@ -22,26 +22,23 @@ export interface ListViewProps {
     turnOffMeridian: string;
     turnOffTime: number | undefined;
     smokingState: string;
-    sleepingHabit: string;
+    sleepingHabit: string[];
     airConditioningIntensity: number | undefined;
     heatingIntensity: number | undefined;
     lifePattern: string;
     intimacy: string;
-    canShare: boolean | undefined;
-    isPlayGame: boolean | undefined;
-    isPhoneCall: boolean | undefined;
+    canShare: string;
+    isPlayGame: string;
+    isPhoneCall: string;
     studying: string;
     intake: string;
     cleanSensitivity: number | undefined;
     noiseSensitivity: number | undefined;
     cleaningFrequency: string;
-    personality: string;
+    drinkingFrequency: string;
+    personality: string[];
     mbti: string;
-    options: {
-      '무조건 지켜줘야 해요!': string[];
-      '이정도는 맞춰줄 수 있어요!': string[];
-      '이건 절대 절대 안 돼요!': string[];
-    };
+    selfIntroduction: string;
   };
 }
 
@@ -60,26 +57,23 @@ export interface TableViewProps {
     turnOffMeridian: string;
     turnOffTime: number;
     smokingState: string;
-    sleepingHabit: string;
+    sleepingHabit: string[];
     airConditioningIntensity: number;
     heatingIntensity: number;
     lifePattern: string;
     intimacy: string;
-    canShare: boolean;
-    isPlayGame: boolean;
-    isPhoneCall: boolean;
+    canShare: string;
+    isPlayGame: string;
+    isPhoneCall: string;
     studying: string;
     intake: string;
     cleanSensitivity: number;
     noiseSensitivity: number;
     cleaningFrequency: string;
-    personality: string;
+    drinkingFrequency: string;
+    personality: string[];
     mbti: string;
-    options: {
-      '무조건 지켜줘야 해요!': string[];
-      '이정도는 맞춰줄 수 있어요!': string[];
-      '이건 절대 절대 안 돼요!': string[];
-    };
+    selfIntroduction: string;
   };
   otherUserData: {
     universityId: number;
@@ -95,25 +89,22 @@ export interface TableViewProps {
     turnOffMeridian: string;
     turnOffTime: number | undefined;
     smokingState: string;
-    sleepingHabit: string;
-    airConditioningIntensity: number | undefined;
-    heatingIntensity: number | undefined;
+    sleepingHabit: string[];
+    airConditioningIntensity: number;
+    heatingIntensity: number;
     lifePattern: string;
     intimacy: string;
-    canShare: boolean | undefined;
-    isPlayGame: boolean | undefined;
-    isPhoneCall: boolean | undefined;
+    canShare: string;
+    isPlayGame: string;
+    isPhoneCall: string;
     studying: string;
     intake: string;
-    cleanSensitivity: number | undefined;
-    noiseSensitivity: number | undefined;
+    cleanSensitivity: number;
+    noiseSensitivity: number;
     cleaningFrequency: string;
-    personality: string;
+    drinkingFrequency: string;
+    personality: string[];
     mbti: string;
-    options: {
-      '무조건 지켜줘야 해요!': string[];
-      '이정도는 맞춰줄 수 있어요!': string[];
-      '이건 절대 절대 안 돼요!': string[];
-    };
+    selfIntroduction: string;
   };
 }

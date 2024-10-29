@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
 import TodoBox from '@components/todoList/todoBox';
@@ -33,6 +33,8 @@ interface TodoItem {
 }
 
 const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
+  const width = Dimensions.get('screen').width;
+
   const { bottom } = useSafeAreaInsets();
   const isOldiPhone = useIsOldiPhone();
 
@@ -73,7 +75,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
       {changeTodoPending && <LoadingComponent />}
       <View className="flex-1 bg-sub1">
         <View className="px-5 pt-[76px]" style={{ position: 'relative' }}>
-          <Background style={{ position: 'absolute', top: 0 }} />
+          <Background width={width} style={{ position: 'absolute', top: 0 }} />
           <NavBar isTodo={isTodo} handleNav={handleNav} />
         </View>
         <ScrollView className="rounded-tr-[48px] bg-[#F7FAFF] px-5 pt-[34px]">

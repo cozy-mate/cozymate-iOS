@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
-import { SignUp, Profile } from './type';
+import { SignUp, Profile, IsLoggedIn } from './type';
 
 // 로그인 상태
 export const useLoggedInStore = create<{
-  loggedIn: boolean;
+  loggedIn: IsLoggedIn;
   setLoggedIn: (status: boolean) => void;
 }>((set) => ({
   loggedIn: false,

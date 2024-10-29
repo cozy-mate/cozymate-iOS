@@ -50,10 +50,10 @@ const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
 
 function AppInner() {
-  const { loggedIn, setLoggedIn } = useLoggedInStore();
+  const { loggedIn } = useLoggedInStore();
   const [appLoaded, setAppLoaded] = useState<boolean>(false);
 
-  useAutoLogin(setLoggedIn, setAppLoaded);
+  useAutoLogin(setAppLoaded);
 
   if (!appLoaded) {
     return (

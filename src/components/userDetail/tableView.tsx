@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { TableViewProps } from '@type/userDetail/userDetail';
 
@@ -121,7 +121,24 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
     );
   };
 
-  return <View className="mt-4 px-5 pb-[54px]">{renderInfo(userData, otherUserData)}</View>;
+  return (
+    <View className="mt-4 px-5 pb-[54px]">
+      <View className="mb-14">{renderInfo(userData, otherUserData)}</View>
+      <View className="flex flex-col">
+        <View className="flex flex-row items-center justify-between px-1">
+          <Text className="mb-3 text-base font-semibold text-emphasizedFont">하고 싶은 말</Text>
+          <Pressable>
+            <Text className="text-xs font-medium text-disabledFont underline">신고하기</Text>
+          </Pressable>
+        </View>
+        <View className="rounded-xl border border-[#F1F2F4] p-4">
+          <Text className="text-sm font-medium text-basicFont">
+            {otherUserData.selfIntroduction}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
 };
 
 export default TableView;

@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import React, { useState, ReactNode, useEffect } from 'react';
 
 import Advertisement1 from '@assets/roomMate/ad1.svg';
@@ -10,9 +10,11 @@ interface ADItem {
 }
 
 const Advertisement: React.FC = () => {
+  const width = Dimensions.get('screen').width;
+
   const [adArray, setAdArray] = useState<ADItem[]>([
-    { index: 1, element: <Advertisement1 /> },
-    { index: 2, element: <Advertisement2 /> },
+    { index: 1, element: <Advertisement1 width={width} /> },
+    { index: 2, element: <Advertisement2 width={width} /> },
   ]);
 
   const [currentAdIndex, setCurrentAdIndex] = useState(0); // 현재 광고 인덱스 관리
@@ -29,7 +31,7 @@ const Advertisement: React.FC = () => {
   return (
     <View className="relative">
       {adArray[currentAdIndex].element}
-      <Text className="absolute bottom-2 right-4 text-xs font-medium text-[#A2A2A2]">
+      <Text className="absolute bottom-2 right-8 text-xs font-medium text-[#A2A2A2]">
         <Text className="text-white">{currentAdIndex + 1}</Text> / {adArray.length}
       </Text>
     </View>

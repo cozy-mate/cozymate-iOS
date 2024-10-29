@@ -1,9 +1,14 @@
 import React from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
+const ListView: React.FC<ListViewProps> = ({
+  //userBasicData,
+  userData,
+}) => {
+  console.log(userData);
+
   const intensityMapping = [
     { index: 0, name: '아예 틀지 않아요' },
     { index: 1, name: '약하게 틀어요' },
@@ -98,13 +103,13 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
     );
   };
 
-  const basicInfo = {
-    memberName: userBasicData.memberName,
-    birthYear: userData.birthYear,
-    universityId: userData.universityId,
-    admissionYear: userData.admissionYear,
-    major: userData.major,
-  };
+  // const basicInfo = {
+  //   memberName: userBasicData.memberName,
+  //   birthYear: userData.birthYear,
+  //   universityId: userData.universityId,
+  //   admissionYear: userData.admissionYear,
+  //   major: userData.major,
+  // };
 
   const dormInfo = {
     numOfRoommate: userData.numOfRoommate,
@@ -134,10 +139,23 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
   };
 
   return (
-    <View className="mt-4 px-5 pb-[60px]">
-      {renderInfo(basicInfo, '기본정보')}
-      {renderInfo(dormInfo, '기숙사 정보')}
-      {renderInfo(essentialInfo, '필수정보')}
+    <View className="mt-4 px-5 pb-[54px]">
+      <View className="mb-14">
+        {/* {renderInfo(basicInfo, '기본정보')} */}
+        {renderInfo(dormInfo, '기숙사 정보')}
+        {renderInfo(essentialInfo, '필수정보')}
+      </View>
+      <View className="flex flex-col">
+        <View className="flex flex-row items-center justify-between px-1">
+          <Text className="mb-3 text-base font-semibold text-emphasizedFont">하고 싶은 말</Text>
+          <Pressable>
+            <Text className="text-xs font-medium text-disabledFont underline">신고하기</Text>
+          </Pressable>
+        </View>
+        <View className="rounded-xl border border-[#F1F2F4] p-4">
+          <Text className="text-sm font-medium text-basicFont">{userData.selfIntroduction}</Text>
+        </View>
+      </View>
     </View>
   );
 };

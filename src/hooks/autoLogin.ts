@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { reissueToken } from '@server/api/auth';
@@ -11,10 +11,9 @@ import { getRoomData, checkHasRoom } from '@server/api/room';
 
 import { deleteToken, setAccessToken, setRefreshToken, getRefreshToken } from '@utils/token';
 
-export const useAutoLogin = (
-  setLoggedIn: any,
-  setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const { setLoggedIn } = useLoggedInStore();
+
   // 프로필 정보
   const { setProfile } = useProfileStore();
   const { setMyRoom } = useHasRoomStore();
@@ -58,7 +57,6 @@ export const useAutoLogin = (
         // 방 존재 여부 확인
         const roomCheckResponse = await checkHasRoom();
         const roomId = roomCheckResponse.result.roomId;
-        console.log('Room check response:', roomCheckResponse);
 
         // 방이 존재하는 경우 방 정보 저장
         if (roomId !== 0) {
@@ -83,13 +81,11 @@ export const useAutoLogin = (
         }
 
         setLoggedIn(true);
-        console.log('Logged in successfully');
 
         const elapsed = Date.now() - start;
         const remainingTime = 3500 - elapsed;
         setTimeout(() => setAppLoaded(true), remainingTime > 0 ? remainingTime : 0);
       } catch (error: any) {
-        console.error('Error in checkLogin:', error.response);
         setLoggedIn(false);
         await deleteToken();
         const elapsed = Date.now() - start;
