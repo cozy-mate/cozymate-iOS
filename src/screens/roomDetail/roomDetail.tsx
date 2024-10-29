@@ -76,6 +76,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     { title: 'MBTI', color: 'blue' },
   ]);
 
+  console.log(roomData?.result.mateList);
+
   const [isRequested, setIsRequested] = useState<boolean>(false);
 
   return (
@@ -138,10 +140,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 <View className="mb-4 flex flex-row items-center justify-between px-1">
                   <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
                   <Text className="text-xs font-medium text-disabledFont">
-                    <Text className="text-main1">
-                      {roomData.result.mateList && roomData.result.mateList.length}
-                    </Text>{' '}
-                    / {roomData.result.mateList && roomData.result.mateList.length}
+                    <Text className="text-main1">{roomData.result.numOfArrival}</Text> /{' '}
+                    {roomData.result.maxMateNum}
                   </Text>
                 </View>
 

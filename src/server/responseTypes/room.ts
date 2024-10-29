@@ -12,9 +12,15 @@ export interface GetRoomDataResponse {
       memberId: number;
       mateId: number;
       nickname: string;
+      persona: number;
+      mateEquality: number;
     }[];
+    maxMateNum: number;
+    numOfArrival: number;
     roomType: string;
     hashtags: string[];
+    equaility: number;
+    roomManager: boolean;
   };
 }
 

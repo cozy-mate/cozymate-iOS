@@ -8,14 +8,13 @@ interface RuleBoxProps {
     id: number;
     content: string;
     memo: string;
-  }[];
+  };
   toEdit: (type: boolean, mode: 'edit', id: number) => void;
 }
 
 const RuleBox: React.FC<RuleBoxProps> = ({ ruleData, toEdit }) => {
   return (
     <View className="flex flex-col">
-      {ruleData.length > 0 ? (
         <View className="rounded-xl bg-white p-2 pl-4 shadow-custom">
           {ruleData.map((rule, index) => (
             <View key={rule.id} className="flex flex-row items-center justify-between py-1.5">

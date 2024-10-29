@@ -12,6 +12,7 @@ import OthersTodoBox from '@components/todoList/othersTodoBox';
 import CustomCalendar from '@components/todoList/customCalendar';
 
 import { useRoomInfoStore } from '@zustand/room/room';
+import { useTodoItemStore } from '@zustand/todo/todo';
 import { useProfileStore } from '@zustand/member/member';
 
 import { useIsOldiPhone } from '@hooks/device';
@@ -47,6 +48,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
+  const { setTodoItem } = useTodoItemStore();
+
   const [isTodo, setIsTodo] = useState<boolean>(true);
 
   const handleNav = () => {
@@ -69,6 +72,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const changeTodo = async (todo: TodoItem): Promise<void> => {
     changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
   };
+
+  const handleTodoItem = (todo: TodoItem) => {};
 
   return (
     <>
@@ -130,7 +135,12 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       알려드릴게요!
                     </Text>
                   </View>
-                  <RuleBox ruleData={ruledata.result} toEdit={toCreateOrEdit} />
+
+                  <View className="rounded-xl bg-white p-2 pl-4 shadow-custom">
+                    {ruledata.result.map((rule) => (
+                      <RuleBox ruleData={rule} toEdit={toCreateOrEdit} />
+                    ))}
+                  </View>
                 </View>
 
                 {/* 코지홈의 Role */}
