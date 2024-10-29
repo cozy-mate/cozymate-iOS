@@ -27,6 +27,8 @@ import { useProfileStore } from '@zustand/member/member';
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRoomData } from '@hooks/api/room';
 
+import { getAccessToken } from '@utils/token';
+
 import { CozyHomeScreenProps } from '@type/param/stack';
 
 import HomeBack from '@assets/cozyHome/homeBack.svg';

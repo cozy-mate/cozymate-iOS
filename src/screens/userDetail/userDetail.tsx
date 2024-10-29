@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
-// import ListView from '@components/userDetail/listView';
+import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
 
 import { useHasRoomStore } from '@zustand/room/room';
@@ -129,9 +129,12 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
             </View>
 
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
-              {/* {type === 'list' && (
-                  <ListView userBasicData={otherUserBasicData} userData={otherlifestyledata} />
-                )} */}
+              {type === 'list' && (
+                <ListView
+                  //userBasicData={otherUserBasicData}
+                  userData={otherlifestyledata.result}
+                />
+              )}
               {type === 'table' && (
                 <TableView
                   userData={mylifestyledata.result}

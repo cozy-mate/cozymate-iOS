@@ -3,7 +3,12 @@ import { View, Text, Pressable } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
+const ListView: React.FC<ListViewProps> = ({
+  //userBasicData,
+  userData,
+}) => {
+  console.log(userData);
+
   const intensityMapping = [
     { index: 0, name: '아예 틀지 않아요' },
     { index: 1, name: '약하게 틀어요' },
@@ -98,13 +103,13 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
     );
   };
 
-  const basicInfo = {
-    memberName: userBasicData.memberName,
-    birthYear: userData.birthYear,
-    universityId: userData.universityId,
-    admissionYear: userData.admissionYear,
-    major: userData.major,
-  };
+  // const basicInfo = {
+  //   memberName: userBasicData.memberName,
+  //   birthYear: userData.birthYear,
+  //   universityId: userData.universityId,
+  //   admissionYear: userData.admissionYear,
+  //   major: userData.major,
+  // };
 
   const dormInfo = {
     numOfRoommate: userData.numOfRoommate,
@@ -134,9 +139,9 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData }) => {
   };
 
   return (
-    <View>
-      <View className="mt-4 px-5 pb-[60px]">
-        {renderInfo(basicInfo, '기본정보')}
+    <View className="mt-4 px-5 pb-[54px]">
+      <View className="mb-14">
+        {/* {renderInfo(basicInfo, '기본정보')} */}
         {renderInfo(dormInfo, '기숙사 정보')}
         {renderInfo(essentialInfo, '필수정보')}
       </View>
