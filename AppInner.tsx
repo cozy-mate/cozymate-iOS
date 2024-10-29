@@ -21,6 +21,7 @@ import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import ChatRoomScreen from 'src/screens/chatting/chatRoom';
 import SendChatScreen from 'src/screens/chatting/sendChat';
 import ChipSelectScreen from 'src/screens/onBoard/chipSelect';
+import RoleNRuleScreen from 'src/screens/roleNrule/roleNrule';
 import CreateTodoScreen from 'src/screens/todoList/createTodo';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
@@ -30,9 +31,11 @@ import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 import LifeStyleEditScreen from 'src/screens/lifeStyle/lifeStyleEdit';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
+import EditRoleNRuleScreen from 'src/screens/roleNrule/editRoleAndRule';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import RecommendRoomScreen from 'src/screens/recommendRoom/recommendRoom';
+import CreateRoleNRuleScreen from 'src/screens/roleNrule/createRoleNRule';
 import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
 import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
@@ -74,6 +77,10 @@ function AppInner() {
           <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
           <stack.Screen name="RecommendRoomScreen" component={RecommendRoomScreen} />
+
+          <stack.Screen name="RoleNRuleScreen" component={RoleNRuleScreen} />
+          <stack.Screen name="CreateRoleNRuleScreen" component={CreateRoleNRuleScreen} />
+          <stack.Screen name="EditRoleNRuleScreen" component={EditRoleNRuleScreen} />
 
           <stack.Screen name="TodoListScreen" component={TodoListScreen} />
           <stack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />

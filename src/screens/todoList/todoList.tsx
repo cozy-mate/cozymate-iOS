@@ -53,8 +53,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
     setIsTodo(!isTodo);
   };
 
-  const toCreate = () => {
-    navigation.navigate('CreateTodoScreen', { type: isTodo ? 'todo' : 'role' });
+  const toCreateOrEdit = (type: boolean, mode: 'create' | 'edit', id?: number) => {
+    navigation.navigate('CreateTodoScreen', { type: type ? 'todo' : 'role', mode: mode, id: id });
   };
 
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
@@ -130,7 +130,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       알려드릴게요!
                     </Text>
                   </View>
-                  <RuleBox ruleData={ruledata.result} />
+                  <RuleBox ruleData={ruledata.result} toEdit={toCreateOrEdit} />
                 </View>
 
                 {/* 코지홈의 Role */}
@@ -167,7 +167,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
         </ScrollView>
 
         <View className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
-          <Pressable onPress={toCreate}>
+          <Pressable onPress={() => toCreateOrEdit(isTodo, 'create')}>
             <PlusButton />
           </Pressable>
         </View>

@@ -16,7 +16,7 @@ import MyPageScreen from './myPage/myPage';
 import FeedMainScreen from './feed/feedMain';
 import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
-import TodoListScreen from './todoList/todoList';
+import RoleNRuleScreen from './roleNrule/roleNrule';
 
 import { useHasRoomStore } from '@zustand/room/room';
 
@@ -128,8 +128,8 @@ const MainScreen = () => {
       />
       {myRoom.hasRoom ? (
         <Tab.Screen
-          name="TodoListScreen"
-          component={TodoListScreen}
+          name="RoleNRuleScreen"
+          component={RoleNRuleScreen}
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,
@@ -138,8 +138,8 @@ const MainScreen = () => {
         />
       ) : (
         <Tab.Screen
-          name="TodoListScreen"
-          component={TodoListScreen}
+          name="RoleNRuleScreen"
+          component={RoleNRuleScreen}
           options={{
             tabBarLabel: () => null,
             tabBarIcon: ({ focused }) => <RoleNRule focused={focused} isOldIphone={isOldiPhone} />,

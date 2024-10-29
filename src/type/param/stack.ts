@@ -1,5 +1,15 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+export type TabNavigatorParamList = {
+  CozyHomeScreen: undefined;
+  RoomMainScreen: undefined;
+  RoleNRuleScreen: undefined;
+  FeedMainScreen: undefined;
+  RoomMateScreen: undefined;
+  LifeStyleOnboardingScreen: undefined;
+  MyPageScreen: undefined;
+};
+
 export type StackParamList = {
   MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
 
@@ -16,8 +26,20 @@ export type StackParamList = {
   RecommendRoomScreen: undefined;
 
   // 롤앤룰 스크린
+  RoleNRuleScreen: undefined;
+  CreateRoleNRuleScreen: { type: string };
+  EditRoleNRuleScreen: {
+    type: string;
+    id: number;
+  };
+
+  // 롤앤룰 스크린
   TodoListScreen: undefined;
-  CreateTodoScreen: { type: 'todo' | 'role' | 'rule' };
+  CreateTodoScreen: {
+    type: 'todo' | 'role' | 'rule';
+    mode: 'create' | 'edit';
+    id?: number;
+  };
 
   // 라이프 스타일 입력 스크린
   LifeStyleOnboardingScreen: undefined;
@@ -65,16 +87,6 @@ export type StackParamList = {
   NotificationScreen: undefined;
 };
 
-export type TabNavigatorParamList = {
-  CozyHomeScreen: undefined;
-  RoomMainScreen: undefined;
-  TodoListScreen: undefined;
-  FeedMainScreen: undefined;
-  RoomMateScreen: undefined;
-  LifeStyleOnboardingScreen: undefined;
-  MyPageScreen: undefined;
-};
-
 // 방이 없는 경우의 코지홈 스크린
 export type CozyHomeScreenProps = NativeStackScreenProps<StackParamList, 'CozyHomeScreen'>;
 
@@ -88,6 +100,17 @@ export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'Room
 export type RecommendRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'RecommendRoomScreen'
+>;
+
+// 롤앤룰 스크린
+export type RoleNRuleScreenProps = NativeStackScreenProps<StackParamList, 'RoleNRuleScreen'>;
+export type CreateRoleNRuleScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'CreateRoleNRuleScreen'
+>;
+export type EditRoleNRuleScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'EditRoleNRuleScreen'
 >;
 
 // 롤앤룰 스크린
