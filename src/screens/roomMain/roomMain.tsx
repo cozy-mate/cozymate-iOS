@@ -44,9 +44,13 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       }
     };
     fetchData();
-  }, [myRoom.roomId, setRoomInfo]);
+  }, [myRoom.roomId, setRoomInfo, initFcm]);
 
   const iconList = [1, 2, 3, 4];
+
+  const toEdit = () => {
+    navigation.navigate('EditRoomScreen', { id: roomInfo.roomId, type: roomInfo.roomType });
+  };
 
   return (
     <View className="flex-1 bg-sub1">
@@ -96,7 +100,9 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
         <View className="absolute right-2 top-[-120px]">
-          <Pressable>{getProfileImage(roomInfo.profileImage, 140, 140)}</Pressable>
+          <Pressable onPress={toEdit} disabled={!roomInfo.roomManager}>
+            {getProfileImage(roomInfo.profileImage, 140, 140)}
+          </Pressable>
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: bottom + 40 }}>
           {roomlogdata.result.result.map((data, index) => (

@@ -47,6 +47,28 @@ export interface ExitRoomResponse {
   result: string;
 }
 
+export interface UpdateRoomResponse {
+  result: {
+    roomId: number;
+    name: string;
+    inviteCode: string;
+    profileImage: number;
+    mateList: {
+      memberId: number;
+      mateId: number;
+      nickname: string;
+      persona: number;
+      mateEquality: number;
+    }[];
+    maxMateNum: number;
+    numOfArrival: number;
+    roomType: string;
+    hashtags: string[];
+    equaility: number;
+    roomManager: boolean;
+  };
+}
+
 export interface JoinRoomResponse {
   result: string;
 }
@@ -63,15 +85,21 @@ export interface CreatePublicRoomResponse {
   result: {
     roomId: number;
     name: string;
-    inviteCode?: string;
+    inviteCode: string;
     profileImage: number;
     mateList: {
       memberId: number;
       mateId: number;
       nickname: string;
+      persona: number;
+      mateEquality: number;
     }[];
+    maxMateNum: number;
+    numOfArrival: number;
     roomType: string;
-    hashtags?: string[];
+    hashtags: string[];
+    equaility: number;
+    roomManager: boolean;
   };
 }
 
@@ -85,8 +113,14 @@ export interface CreatePrivateRoomResponse {
       memberId: number;
       mateId: number;
       nickname: string;
+      persona: number;
+      mateEquality: number;
     }[];
+    maxMateNum: number;
+    numOfArrival: number;
     roomType: string;
     hashtags: string[];
+    equaility: number;
+    roomManager: boolean;
   };
 }

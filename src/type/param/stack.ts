@@ -55,6 +55,9 @@ export type StackParamList = {
   SelectCharacterScreen: { type: 'PUBLIC' | 'PRIVATE' };
   CompleteCreateRoomScreen: { type: 'PUBLIC' | 'PRIVATE' };
 
+  // 방 수정 스크린
+  EditRoomScreen: { id: number; type: string };
+
   // 방 입장 스크린
   JoinRoomScreen: undefined;
 
@@ -149,6 +152,9 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'CompleteCreateRoomScreen'
 >;
+
+// 방 수정 스크린
+export type EditRoomScreenProps = NativeStackScreenProps<StackParamList, 'EditRoomScreen'>;
 
 // 방 입장 스크린
 export type JoinRoomScreenProps = NativeStackScreenProps<StackParamList, 'JoinRoomScreen'>;
