@@ -86,7 +86,6 @@ export type TabNavigatorParamList = {
   RoleNRuleScreen: undefined;
   FeedMainScreen: undefined;
   RoomMateScreen: undefined;
-  LifeStyleOnboardingScreen: undefined;
   MyPageScreen: undefined;
 };
 

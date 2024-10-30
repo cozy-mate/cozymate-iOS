@@ -21,11 +21,10 @@ import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
 import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
-import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore } from '@zustand/member/member';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
 import useInitFcm from '@hooks/useInitFcm';
-import { useGetRoomData } from '@hooks/api/room';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
@@ -43,10 +42,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
+  const { roomInfo } = useRoomInfoStore();
 
   const { bottom } = useSafeAreaInsets();
-
-  const { data: roomData } = useGetRoomData(myRoom.roomId);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
@@ -252,7 +250,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
           </View>
 
           <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
-            {myRoom.hasRoom && roomData && (
+            {myRoom.hasRoom && roomInfo && (
               <>
                 <View className="px-5">
                   <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
@@ -260,8 +258,8 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   </Text>
 
                   <MyRoomComponent
-                    roomData={roomData.result}
-                    toRoom={() => toRoomDetail(roomData.result.roomId)}
+                    roomData={roomInfo}
+                    toRoom={() => toRoomDetail(roomInfo.roomId)}
                   />
                 </View>
 
