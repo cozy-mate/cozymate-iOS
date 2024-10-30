@@ -27,7 +27,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@sentry/react-native": "^5.31.0",
     "@tanstack/react-query": "^5.51.24",
-    "axios": "^1.7.3",
+    "axios": "1.7.4",
     "moment": "^2.30.1",
     "react": "18.2.0",
     "react-error-boundary": "^4.0.13",
