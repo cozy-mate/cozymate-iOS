@@ -6,6 +6,7 @@ import { ListViewProps } from '@type/userDetail/userDetail';
 const ListView: React.FC<ListViewProps> = ({
   //userBasicData,
   userData,
+  openModal,
 }) => {
   console.log(userData);
 
@@ -148,7 +149,7 @@ const ListView: React.FC<ListViewProps> = ({
       <View className="flex flex-col">
         <View className="flex flex-row items-center justify-between px-1">
           <Text className="mb-3 text-base font-semibold text-emphasizedFont">하고 싶은 말</Text>
-          <Pressable>
+          <Pressable onPress={openModal}>
             <Text className="text-xs font-medium text-disabledFont underline">신고하기</Text>
           </Pressable>
         </View>

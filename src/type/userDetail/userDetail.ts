@@ -40,6 +40,7 @@ export interface ListViewProps {
     mbti: string;
     selfIntroduction: string;
   };
+  openModal: () => void;
 }
 
 export interface TableViewProps {
@@ -107,4 +108,5 @@ export interface TableViewProps {
     mbti: string;
     selfIntroduction: string;
   };
+  openModal: () => void;
 }

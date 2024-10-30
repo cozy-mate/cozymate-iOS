@@ -204,13 +204,13 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
                     <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
                     <Text className="text-sm font-medium text-basicFont">
-                      {roomData?.result.roomType}
+                      {roomData.result.roomType}
                     </Text>
                   </View>
                   <View className="flex flex-row pt-3">
                     <Text className="mr-3 text-sm font-medium text-colorFont">인실</Text>
                     <Text className="text-sm font-medium text-basicFont">
-                      {roomData?.result.mateList.length}인실
+                      {roomData.result.maxMateNum}인실
                     </Text>
                   </View>
                 </View>
