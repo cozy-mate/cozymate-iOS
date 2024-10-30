@@ -167,7 +167,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
 
               {/* 방 해시태그 입력 */}
               {type === 'PUBLIC' && (
-                <View>
+                <View className="mt-10">
                   <Text className="mb-2 px-1 text-base font-semibold text-basicFont">
                     방을 나타낼 해시태그를 입력해주세요 (최대 3개)
                   </Text>
