@@ -6,6 +6,8 @@ interface MatelistItem {
   memberId: number;
   mateId: number;
   nickname: string;
+  persona: number;
+  mateEquality: number;
 }
 
 interface MyRoomComponentProps {
@@ -16,8 +18,12 @@ interface MyRoomComponentProps {
     inviteCode: string;
     profileImage: number;
     mateList: MatelistItem[];
+    maxMateNum: number;
+    numOfArrival: number;
     roomType: string;
     hashtags: string[];
+    equaility: number;
+    roomManager: boolean;
   };
 }
 
@@ -50,16 +56,10 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
 
         <View className="flex flex-row items-center justify-between">
           <Text className="text-xs font-medium text-disabledFont">
-            <Text className="text-main1">
-              {roomData.mateList.length !== 0 ? roomData.mateList.length : 0}명
-            </Text>
-            의 룸메이트가 있어요
+            <Text className="text-main1">{roomData.numOfArrival}명</Text>의 룸메이트가 있어요
           </Text>
 
-          <Text className="text-base font-medium text-colorFont">
-            95
-            {/* {roomData.equality} */}%
-          </Text>
+          <Text className="text-base font-medium text-colorFont">{roomData.equaility}%</Text>
         </View>
       </LinearGradient>
     </Pressable>

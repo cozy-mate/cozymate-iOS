@@ -1,6 +1,5 @@
+import React from 'react';
 import { RecoilRoot } from 'recoil';
-import { Text } from 'react-native';
-import React, { Suspense } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,7 +11,6 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 0,
-      retry: false,
     },
   },
 });
@@ -24,9 +22,7 @@ function App(): React.JSX.Element {
         <SafeAreaProvider>
           <NavigationContainer>
             <QueryClientProvider client={queryClient}>
-              <Suspense fallback={<Text>Loading...</Text>}>
-                <AppInner />
-              </Suspense>
+              <AppInner />
             </QueryClientProvider>
           </NavigationContainer>
         </SafeAreaProvider>

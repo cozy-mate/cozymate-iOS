@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -7,23 +7,32 @@ import { getProfileImage } from '@utils/profileImage';
 
 import RightArrow from '@assets/smallRightArrow.svg';
 
-interface MemberComponentProps {
-  index: number;
-  memberData: {
-    memberId: number;
-    mateId: number;
-    nickname: string;
-    persona: number;
-    mateEquality: number;
-  };
-  length: number;
+interface MemberItem {
+  memberId: number;
+  mateId: number;
+  nickname: string;
+  persona: number;
+  mateEquality: number;
 }
 
-const MemberComponent: React.FC<MemberComponentProps> = ({ index, memberData, length }) => {
+interface MemberComponentProps {
+  index: number;
+  memberData: MemberItem;
+  length: number;
+  pressFunc: (member: MemberItem) => void;
+}
+
+const MemberComponent: React.FC<MemberComponentProps> = ({
+  index,
+  memberData,
+  length,
+  pressFunc,
+}) => {
   const { profile } = useProfileStore();
 
   return (
-    <View
+    <Pressable
+      onPress={() => pressFunc(memberData)}
       className={`flex flex-row justify-between border-b border-b-[#F1F2F4] py-3 ${
         index === 0 && 'pt-2'
       } ${index === length - 1 && 'border-b-0 pb-2'}`}
@@ -47,7 +56,7 @@ const MemberComponent: React.FC<MemberComponentProps> = ({ index, memberData, le
         )}
         <RightArrow />
       </View>
-    </View>
+    </Pressable>
   );
 };
 

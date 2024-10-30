@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -15,22 +15,17 @@ import { SendChatScreenProps } from '@type/param/stack';
 
 import XButton from '@assets/xButton.svg';
 
-const SendChatScreen = ({ route, navigation }: SendChatScreenProps) => {
+const SendChatScreen = ({ navigation, route }: SendChatScreenProps) => {
   const [content, setContent] = useState<string>('');
 
-  //   const { refetch: refetchChats } = useGetChatDetailData();
+  const { refetch: refetchChats } = useGetChatDetailData(route.params.chatRoomId);
 
-  const { mutateAsync: sendChatMutate, isPending: sendChatPending } = useSendChat(
-    route.params.recipientId,
-    // refetchChats,
-  );
+  const { mutateAsync: sendChatMutate } = useSendChat(route.params.recipientId, refetchChats);
 
   const SendChat = async () => {
     try {
-      const response = await sendChatMutate({ content: content });
-      //   const chatRoomId = response.result.chatRoomId;
-
-      //   refetchChats(chatRoomId);
+      await sendChatMutate({ content: content });
+      refetchChats();
 
       navigation.goBack();
     } catch (error: any) {

@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getChatRoomList } from '@server/api/chat-room';
-import { GetChatRoomListResponse } from '@server/responseTypes/chat-room';
+import { getChatRoomId, getChatRoomList } from '@server/api/chat-room';
+import { GetChatRoomIdResponse, GetChatRoomListResponse } from '@server/responseTypes/chat-room';
 
 // 쪽지방 목록 조회
 export const useGetChatRoomList = (): {
@@ -13,6 +13,24 @@ export const useGetChatRoomList = (): {
     queryFn: () => getChatRoomList(),
     select: (reseponse: GetChatRoomListResponse) => {
       return reseponse;
+    },
+  });
+
+  return { data, refetch };
+};
+
+// 쪽지방 아이디 조회
+export const useGetChatRoomId = (
+  recipientId: number,
+): {
+  data: GetChatRoomIdResponse;
+  refetch: () => void;
+} => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['chatroomid', recipientId],
+    queryFn: () => getChatRoomId(recipientId),
+    select: (response: GetChatRoomIdResponse) => {
+      return response;
     },
   });
 

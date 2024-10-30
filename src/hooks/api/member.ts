@@ -124,9 +124,8 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
 };
 
 // 애플 로그인
-export const useAppleLogin = (
-  navigation: any,
-): UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
+export const useAppleLogin = (): //navigation: any,
+UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
   // 로그인 정보
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보

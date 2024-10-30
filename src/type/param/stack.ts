@@ -1,15 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export type TabNavigatorParamList = {
-  CozyHomeScreen: undefined;
-  RoomMainScreen: undefined;
-  RoleNRuleScreen: undefined;
-  FeedMainScreen: undefined;
-  RoomMateScreen: undefined;
-  LifeStyleOnboardingScreen: undefined;
-  MyPageScreen: undefined;
-};
-
 export type StackParamList = {
   MainScreen: { screen: keyof TabNavigatorParamList } | undefined;
 
@@ -84,10 +74,20 @@ export type StackParamList = {
   // 쪽지 스크린
   ChatScreen: undefined;
   ChatRoomScreen: { chatRoomId: number };
-  SendChatScreen: { recipientId: number };
+  SendChatScreen: { recipientId: number; chatRoomId: number };
 
   // 알림 스크린
   NotificationScreen: undefined;
+};
+
+export type TabNavigatorParamList = {
+  CozyHomeScreen: undefined;
+  RoomMainScreen: undefined;
+  RoleNRuleScreen: undefined;
+  FeedMainScreen: undefined;
+  RoomMateScreen: undefined;
+  LifeStyleOnboardingScreen: undefined;
+  MyPageScreen: undefined;
 };
 
 // 방이 없는 경우의 코지홈 스크린

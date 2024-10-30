@@ -6,7 +6,6 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
 import { getRoomData } from '@server/api/room';
 
-import useInitFcm from '@hooks/useInitFcm';
 import { useGetRoomLog } from '@hooks/api/room-log';
 
 import { onCopyAddress } from '@utils/clipboard';
@@ -25,7 +24,6 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
   const { bottom } = useSafeAreaInsets();
 
-  const { initFcm } = useInitFcm();
   const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
 
   const toRoomDetail = () => {
@@ -33,20 +31,17 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   };
 
   useEffect(() => {
-    initFcm();
     const fetchData = async () => {
       try {
         const infoResponse = await getRoomData(myRoom.roomId);
 
         setRoomInfo(infoResponse.result);
-      } catch (error) {
-        console.error('Error fetching room data:', error);
+      } catch (error: any) {
+        console.error('Error fetching room data:', error.reponse);
       }
     };
     fetchData();
-  }, [myRoom.roomId, setRoomInfo, initFcm]);
-
-  const iconList = [1, 2, 3, 4];
+  }, []);
 
   const toEdit = () => {
     navigation.navigate('EditRoomScreen', { id: roomInfo.roomId, type: roomInfo.roomType });
@@ -59,10 +54,10 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         {/* 헤더 */}
         <Pressable className="mb-2 flex flex-row items-center" onPress={toRoomDetail}>
           <View className="mr-2 flex flex-row">
-            {iconList.map((icon, index) => (
+            {roomInfo.mateList.map((icon, index) => (
               <View
                 key={index}
-                className="ml-[-4px] rounded-full"
+                className="-ml-1 rounded-full"
                 style={{
                   shadowColor: '#606060',
                   shadowOffset: { width: 0, height: 0 },
@@ -71,7 +66,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
                   backgroundColor: 'white',
                 }}
               >
-                {getProfileImage(icon, 20, 20)}
+                {getProfileImage(icon.persona, 20, 20)}
               </View>
             ))}
           </View>

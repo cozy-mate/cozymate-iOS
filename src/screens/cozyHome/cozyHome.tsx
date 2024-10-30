@@ -27,8 +27,6 @@ import { useProfileStore } from '@zustand/member/member';
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRoomData } from '@hooks/api/room';
 
-import { getAccessToken } from '@utils/token';
-
 import { CozyHomeScreenProps } from '@type/param/stack';
 
 import HomeBack from '@assets/cozyHome/homeBack.svg';
@@ -86,7 +84,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   useEffect(() => {
     initFcm();
-  }, [initFcm]);
+  }, []);
 
   // 학교 인증 관련
   const [school, setSchool] = useState<boolean>(false);
@@ -166,225 +164,227 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   };
 
   return (
-    <View className="flex-1 bg-sub1">
-      <SafeAreaView
-        style={{
-          backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
-        }}
-      />
-      <ScrollView
-        className="flex-1"
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        bounces={false}
-      >
-        <View className="bg-white">
-          <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
-            <HomeBack width={width} style={{ position: 'absolute' }} />
-            <View style={{ position: 'relative', zIndex: 100 }}>
-              <View className="mb-[8.5px] flex flex-row items-center justify-between pl-5">
-                {school ? (
-                  <Pressable
-                    className="flex flex-row items-center py-2"
-                    onPress={toSchoolAuthentication}
-                  >
-                    <View className="flex flex-row items-center">
-                      <BlueSchool />
-                      <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">
-                        인하대학교
-                      </Text>
-                    </View>
-                  </Pressable>
-                ) : (
-                  <Pressable
-                    className="flex flex-row items-center py-2"
-                    onPress={toSchoolAuthentication}
-                  >
-                    <View className="flex flex-row items-center">
-                      <GraySchool />
-                      <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
-                        학교 인증을 해주세요
-                      </Text>
-                      <ArrowIcon />
-                    </View>
-                  </Pressable>
-                )}
+    <>
+      <View className="flex-1 bg-sub1">
+        <SafeAreaView
+          style={{
+            backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
+          }}
+        />
+        <ScrollView
+          className="flex-1"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          bounces={false}
+        >
+          <View className="bg-white">
+            <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
+              <HomeBack width={width} style={{ position: 'absolute' }} />
+              <View style={{ position: 'relative', zIndex: 100 }}>
+                <View className="mb-[8.5px] flex flex-row items-center justify-between pl-5">
+                  {school ? (
+                    <Pressable
+                      className="flex flex-row items-center py-2"
+                      onPress={toSchoolAuthentication}
+                    >
+                      <View className="flex flex-row items-center">
+                        <BlueSchool />
+                        <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">
+                          인하대학교
+                        </Text>
+                      </View>
+                    </Pressable>
+                  ) : (
+                    <Pressable
+                      className="flex flex-row items-center py-2"
+                      onPress={toSchoolAuthentication}
+                    >
+                      <View className="flex flex-row items-center">
+                        <GraySchool />
+                        <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
+                          학교 인증을 해주세요
+                        </Text>
+                        <ArrowIcon />
+                      </View>
+                    </Pressable>
+                  )}
 
-                <View className="flex flex-row pr-5">
-                  <Pressable onPress={toChat}>
-                    <ChatIcon />
-                  </Pressable>
-                  <Pressable onPress={toNotification}>
-                    <NotificationIcon />
-                  </Pressable>
+                  <View className="flex flex-row pr-5">
+                    <Pressable onPress={toChat}>
+                      <ChatIcon />
+                    </Pressable>
+                    <Pressable onPress={toNotification}>
+                      <NotificationIcon />
+                    </Pressable>
+                  </View>
+                </View>
+                <View className="flex flex-col items-start px-5">
+                  <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
+                    <MegaPhoneIcon />
+                    <Text className="ml-2 text-xs font-medium text-emphasizedFont">
+                      [공지] 시험기간으로 인한 기숙사 통금시간 변경
+                    </Text>
+                  </View>
+
+                  {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+                  <View className="mb-6 flex h-[100px] w-full flex-row justify-between">
+                    <Pressable
+                      onPress={createRoomModalOpen}
+                      className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                    >
+                      <Text className="text-base font-semibold leading-[19px] text-main1">
+                        방 만들기
+                      </Text>
+                    </Pressable>
+
+                    <Pressable
+                      onPress={toJoinRoom}
+                      className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                    >
+                      <Text className="text-base font-semibold leading-[19px] text-main1">
+                        방 참여하기
+                      </Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
-              <View className="flex flex-col items-start px-5">
-                <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
-                  <MegaPhoneIcon />
-                  <Text className="ml-2 text-xs font-medium text-emphasizedFont">
-                    [공지] 시험기간으로 인한 기숙사 통금시간 변경
+            </View>
+          </View>
+
+          <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
+            {myRoom.hasRoom && roomData && (
+              <>
+                <View className="px-5">
+                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                    {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
                   </Text>
+
+                  <MyRoomComponent
+                    roomData={roomData.result}
+                    toRoom={() => toRoomDetail(roomData.result.roomId)}
+                  />
                 </View>
 
-                {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-                <View className="mb-6 flex h-[100px] w-full flex-row justify-between">
-                  <Pressable
-                    onPress={createRoomModalOpen}
-                    className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-                  >
-                    <Text className="text-base font-semibold leading-[19px] text-main1">
-                      방 만들기
-                    </Text>
-                  </Pressable>
+                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+              </>
+            )}
 
-                  <Pressable
-                    onPress={toJoinRoom}
-                    className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-                  >
-                    <Text className="text-base font-semibold leading-[19px] text-main1">
-                      방 참여하기
-                    </Text>
-                  </Pressable>
-                </View>
-              </View>
+            <View className="px-5">
+              <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
+              </Text>
+              <ScrollView className="flex flex-col">
+                {RoomDummyData.map((data, index) => (
+                  <RequestRoomComponent key={index} index={index} roomData={data} />
+                ))}
+              </ScrollView>
             </View>
-          </View>
-        </View>
 
-        <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
-          {myRoom.hasRoom && roomData !== undefined && (
-            <>
-              <View className="px-5">
-                <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                  {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
+            <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+
+            <View className="px-5">
+              <View className="mb-4 flex flex-row items-center justify-between">
+                <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                  {profile.nickname}님,{'\n'}이런 룸메이트는 어때요?
                 </Text>
-
-                <MyRoomComponent
-                  roomData={roomData.result}
-                  toRoom={() => toRoomDetail(roomData.result.roomId)}
-                />
+                <Pressable className="flex flex-row items-center" onPress={toRoomMate}>
+                  <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
+                  <RightArrow />
+                </Pressable>
               </View>
+              <ScrollView
+                className="flex flex-row"
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled={true}
+                snapToInterval={userComponentWidth}
+                onScroll={handleSameAnswerUserScroll}
+                decelerationRate="fast"
+                disableIntervalMomentum={true}
+                scrollEventThrottle={16}
+                bounces={false}
+              >
+                {sameAnswerDummyData.map((data, index) => (
+                  <SameAnswerUserComponent
+                    key={index}
+                    userData={data}
+                    onLayout={onLayoutUser}
+                    pressFunc={() => toUserDetail(data.memberId)}
+                  />
+                ))}
+              </ScrollView>
 
-              <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-            </>
+              <View className="mt-4 flex flex-row justify-center space-x-2">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <View
+                    key={index}
+                    className={`${
+                      index == userCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                    } h-2 rounded-full`}
+                  />
+                ))}
+              </View>
+            </View>
+
+            <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+
+            <View className="mb-6 px-5">
+              <View className="mb-4 flex flex-row items-center justify-between">
+                <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                  {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
+                </Text>
+                <Pressable className="flex flex-row items-center" onPress={toRecommendRoom}>
+                  <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
+                  <RightArrow />
+                </Pressable>
+              </View>
+              <ScrollView
+                className="flex flex-row"
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled={true}
+                snapToInterval={roomComponentWidth}
+                onScroll={handleRecommendRoomScroll}
+                disableIntervalMomentum={true}
+                decelerationRate="fast"
+                scrollEventThrottle={16}
+                bounces={false}
+              >
+                {recommendRoomDummyData.map((data, index) => (
+                  <RecommendRoomComponent
+                    key={index}
+                    roomData={data}
+                    onLayout={onLayoutRoom}
+                    pressFunc={() => toRoomDetail(myRoom.roomId)}
+                  />
+                ))}
+              </ScrollView>
+
+              <View className="mt-4 flex flex-row justify-center space-x-2">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <View
+                    key={index}
+                    className={`${
+                      index == roomCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                    } h-2 rounded-full`}
+                  />
+                ))}
+              </View>
+            </View>
+
+            <Advertisement />
+          </View>
+
+          {createRoomOpen && (
+            <CreateRoomModal
+              createPublic={toCreatePublicRoom}
+              createPrivate={toCreatePrivateRoom}
+              close={createRoomModalClose}
+            />
           )}
-
-          <View className="px-5">
-            <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-              {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
-            </Text>
-            <ScrollView className="flex flex-col">
-              {RoomDummyData.map((data, index) => (
-                <RequestRoomComponent key={index} index={index} roomData={data} />
-              ))}
-            </ScrollView>
-          </View>
-
-          <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-
-          <View className="px-5">
-            <View className="mb-4 flex flex-row items-center justify-between">
-              <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                {profile.nickname}님,{'\n'}이런 룸메이트는 어때요?
-              </Text>
-              <Pressable className="flex flex-row items-center" onPress={toRoomMate}>
-                <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
-                <RightArrow />
-              </Pressable>
-            </View>
-            <ScrollView
-              className="flex flex-row"
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              pagingEnabled={true}
-              snapToInterval={userComponentWidth}
-              onScroll={handleSameAnswerUserScroll}
-              decelerationRate="fast"
-              disableIntervalMomentum={true}
-              scrollEventThrottle={16}
-              bounces={false}
-            >
-              {sameAnswerDummyData.map((data, index) => (
-                <SameAnswerUserComponent
-                  key={index}
-                  userData={data}
-                  onLayout={onLayoutUser}
-                  pressFunc={() => toUserDetail(data.memberId)}
-                />
-              ))}
-            </ScrollView>
-
-            <View className="mt-4 flex flex-row justify-center space-x-2">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <View
-                  key={index}
-                  className={`${
-                    index == userCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-                  } h-2 rounded-full`}
-                />
-              ))}
-            </View>
-          </View>
-
-          <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-
-          <View className="mb-6 px-5">
-            <View className="mb-4 flex flex-row items-center justify-between">
-              <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
-              </Text>
-              <Pressable className="flex flex-row items-center" onPress={toRecommendRoom}>
-                <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
-                <RightArrow />
-              </Pressable>
-            </View>
-            <ScrollView
-              className="flex flex-row"
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              pagingEnabled={true}
-              snapToInterval={roomComponentWidth}
-              onScroll={handleRecommendRoomScroll}
-              disableIntervalMomentum={true}
-              decelerationRate="fast"
-              scrollEventThrottle={16}
-              bounces={false}
-            >
-              {recommendRoomDummyData.map((data, index) => (
-                <RecommendRoomComponent
-                  key={index}
-                  roomData={data}
-                  onLayout={onLayoutRoom}
-                  pressFunc={() => toRoomDetail(myRoom.roomId)}
-                />
-              ))}
-            </ScrollView>
-
-            <View className="mt-4 flex flex-row justify-center space-x-2">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <View
-                  key={index}
-                  className={`${
-                    index == roomCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-                  } h-2 rounded-full`}
-                />
-              ))}
-            </View>
-          </View>
-
-          <Advertisement />
-        </View>
-
-        {createRoomOpen && (
-          <CreateRoomModal
-            createPublic={toCreatePublicRoom}
-            createPrivate={toCreatePrivateRoom}
-            close={createRoomModalClose}
-          />
-        )}
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 

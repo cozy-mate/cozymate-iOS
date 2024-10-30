@@ -7,6 +7,7 @@ import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
+import { useMemberInfoStore } from '@zustand/member/member';
 
 import { useGetRoomData } from '@hooks/api/room';
 
@@ -15,6 +16,7 @@ import { getProfileImage } from '@utils/profileImage';
 import { RoomDetailScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
+import SettingIcon from '@assets/settingIcon.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
@@ -24,8 +26,18 @@ type ChipItems = {
   color: string;
 };
 
+interface MemberItem {
+  memberId: number;
+  mateId: number;
+  nickname: string;
+  persona: number;
+  mateEquality: number;
+}
+
 const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
+
+  const { setMemberInfo } = useMemberInfoStore();
 
   const { myRoom } = useHasRoomStore();
 
@@ -33,8 +45,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   const { data: roomData } = useGetRoomData(roomId);
-
-  console.log(roomData);
 
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
@@ -46,9 +56,9 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     navigation.goBack();
   };
 
-  const toChatRoom = () => {
-    navigation.navigate('SendChatScreen', { recipientId: 1 });
-  };
+  // const toChatRoom = () => {
+  //   navigation.navigate('SendChatScreen', { recipientId: 1 });
+  // };
 
   const [items, setItems] = useState<ChipItems[]>([
     { title: '학번', color: 'blue' },
@@ -76,9 +86,19 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     { title: 'MBTI', color: 'blue' },
   ]);
 
-  console.log(roomData?.result.mateList);
-
   const [isRequested, setIsRequested] = useState<boolean>(false);
+
+  const toUserDetail = (member: MemberItem) => {
+    navigation.navigate('UserDetailScreen', { memberId: member.memberId });
+
+    setMemberInfo({
+      memberId: member.memberId,
+      memberNickName: member.nickname,
+      memberAge: 20,
+      memberPersona: member.persona,
+      equality: member.mateEquality,
+    });
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -91,50 +111,66 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             <Pressable onPress={toBack} style={{ zIndex: 100 }}>
               <BackButton />
             </Pressable>
-            <View className="flex flex-row">
-              <Pressable onPress={toChatRoom}>
-                <MessageIcon />
-              </Pressable>
+            {roomId === myRoom.roomId ? (
               <Pressable>
-                <HeartIcon />
+                <SettingIcon />
               </Pressable>
-            </View>
+            ) : (
+              <View className="flex flex-row">
+                <Pressable
+                //onPress={toChatRoom}
+                >
+                  <MessageIcon />
+                </Pressable>
+                <Pressable>
+                  <HeartIcon />
+                </Pressable>
+              </View>
+            )}
           </View>
 
-          <View className="mb-6 flex flex-row items-center px-5">
-            {getProfileImage(roomData.result.profileImage, 40, 40)}
-            <View className="ml-2 flex flex-col">
-              <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
-                {roomData.result.name}
-              </Text>
-              <View className="flex flex-row">
-                {roomData.result.hashtags.length !== 0 ? (
-                  roomData.result.hashtags.map((hash, index) => (
-                    <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
-                      #{hash}
-                    </Text>
-                  ))
-                ) : (
-                  <Text className="text-sm font-medium text-basicFont">비공개방이에요</Text>
-                )}
+          <View className="mb-6 flex flex-col px-5">
+            <View className="mb-5 flex flex-row items-center">
+              {getProfileImage(roomData.result.profileImage, 40, 40)}
+              <View className="ml-2 flex flex-col">
+                <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
+                  {roomData.result.name}
+                </Text>
+                <View className="flex flex-row">
+                  {roomData.result.hashtags.length !== 0 ? (
+                    roomData.result.hashtags.map((hash, index) => (
+                      <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
+                        #{hash}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text className="text-sm font-medium text-basicFont">비공개방이에요</Text>
+                  )}
+                </View>
               </View>
             </View>
+
+            <View className="flex rounded-xl border border-main1 bg-sub2 p-3">
+              <Text className="text-center text-sm font-semibold text-main1">
+                방 평균일치율 {roomData.result.equaility}%
+              </Text>
+            </View>
           </View>
 
-          <View className="flex-1 rounded-t-[20px] bg-white pt-[37px]">
+          <View className="flex-1 rounded-t-[20px] bg-white pt-[32px]">
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
-              <View className="mb-16 px-5">
-                {/* <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
+              {/* <View className="mb-16 px-5">
+                <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                 <Text className="text-main1">{roomData.requestList.length}</Text>개의
                 {'\n'}룸메이트 요청이 도착했어요
-              </Text> */}
+              </Text>
 
-                {/* <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
                 {roomData.requestList.map((request, index) => (
                   <MemberComponent key={index} index={index} memberData={request} />
                 ))}
-              </View> */}
               </View>
+              </View> */}
 
               <View className="mb-16 px-5">
                 <View className="mb-4 flex flex-row items-center justify-between px-1">
@@ -152,7 +188,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                         key={index}
                         index={index}
                         memberData={member}
-                        length={roomData.result.mateList.length}
+                        length={roomData.result.numOfArrival}
+                        pressFunc={toUserDetail}
                       />
                     ))}
                 </View>

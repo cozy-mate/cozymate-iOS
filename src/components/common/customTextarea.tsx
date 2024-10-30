@@ -71,7 +71,7 @@ const CustomTextarea: React.FC<CustomTextareaProps> = ({
             style={{ height: height }}
           />
           <Text className="absolute bottom-4 right-5 text-sm text-gray-500">
-            {`${value.length} / ${maxLength}`}
+            {`${value !== null ? value.length : 0} / ${maxLength}`}
           </Text>
         </View>
       </Pressable>

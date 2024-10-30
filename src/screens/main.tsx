@@ -76,8 +76,6 @@ const HapticTabButton: React.FC<TouchableOpacityProps> = (props) => {
 const MainScreen = () => {
   const { myRoom } = useHasRoomStore();
 
-  // const hasRoom = useRecoilValue(hasRoomState);
-
   const isOldiPhone = useIsOldiPhone();
 
   return (

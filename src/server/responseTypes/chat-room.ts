@@ -10,3 +10,9 @@ export interface GetChatRoomListResponse {
     chatRoomId: number;
   }[];
 }
+
+export interface GetChatRoomIdResponse {
+  result: {
+    chatRoomId: number;
+  };
+}
