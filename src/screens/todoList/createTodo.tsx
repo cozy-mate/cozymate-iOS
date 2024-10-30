@@ -27,6 +27,7 @@ const CreateTodoScreen = ({ navigation, route }: CreateTodoScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
   const [type, setType] = useState<string>(route.params.type);
+  const { mode } = route.params.mode;
 
   const toTodo = () => {
     navigation.navigate('MainScreen', { screen: 'TodoListScreen' });

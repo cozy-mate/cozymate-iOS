@@ -12,6 +12,7 @@ import OthersTodoBox from '@components/todoList/othersTodoBox';
 import CustomCalendar from '@components/todoList/customCalendar';
 
 import { useRoomInfoStore } from '@zustand/room/room';
+import { useTodoItemStore } from '@zustand/todo/todo';
 import { useProfileStore } from '@zustand/member/member';
 
 import { useIsOldiPhone } from '@hooks/device';
@@ -47,14 +48,16 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
+  const { setTodoItem } = useTodoItemStore();
+
   const [isTodo, setIsTodo] = useState<boolean>(true);
 
   const handleNav = () => {
     setIsTodo(!isTodo);
   };
 
-  const toCreate = () => {
-    navigation.navigate('CreateTodoScreen', { type: isTodo ? 'todo' : 'role' });
+  const toCreateOrEdit = (type: boolean, mode: 'create' | 'edit', id?: number) => {
+    navigation.navigate('CreateTodoScreen', { type: type ? 'todo' : 'role', mode: mode, id: id });
   };
 
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
@@ -69,6 +72,8 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
   const changeTodo = async (todo: TodoItem): Promise<void> => {
     changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
   };
+
+  const handleTodoItem = (todo: TodoItem) => {};
 
   return (
     <>
@@ -130,7 +135,12 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
                       알려드릴게요!
                     </Text>
                   </View>
-                  <RuleBox ruleData={ruledata.result} />
+
+                  <View className="rounded-xl bg-white p-2 pl-4 shadow-custom">
+                    {ruledata.result.map((rule) => (
+                      <RuleBox ruleData={rule} toEdit={toCreateOrEdit} />
+                    ))}
+                  </View>
                 </View>
 
                 {/* 코지홈의 Role */}
@@ -167,7 +177,7 @@ const TodoListScreen = ({ navigation }: TodoListScreenProps) => {
         </ScrollView>
 
         <View className="fixed bottom-28 right-5 z-20 flex w-fit items-end">
-          <Pressable onPress={toCreate}>
+          <Pressable onPress={() => toCreateOrEdit(isTodo, 'create')}>
             <PlusButton />
           </Pressable>
         </View>

@@ -1,5 +1,6 @@
-export interface RequestInviteRequest {
-  memberId: number;
+export interface UpdateRoomRequest {
+  name: string;
+  hashtags?: string[];
 }
 
 export interface CreatePublicRoomRequest {

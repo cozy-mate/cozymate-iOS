@@ -16,8 +16,20 @@ export type StackParamList = {
   RecommendRoomScreen: undefined;
 
   // 롤앤룰 스크린
+  RoleNRuleScreen: undefined;
+  CreateRoleNRuleScreen: { type: string };
+  EditRoleNRuleScreen: {
+    type: string;
+    id: number;
+  };
+
+  // 롤앤룰 스크린
   TodoListScreen: undefined;
-  CreateTodoScreen: { type: 'todo' | 'role' | 'rule' };
+  CreateTodoScreen: {
+    type: 'todo' | 'role' | 'rule';
+    mode: 'create' | 'edit';
+    id?: number;
+  };
 
   // 라이프 스타일 입력 스크린
   LifeStyleOnboardingScreen: undefined;
@@ -32,6 +44,9 @@ export type StackParamList = {
   CreateRoomScreen: { type: 'PUBLIC' | 'PRIVATE' };
   SelectCharacterScreen: { type: 'PUBLIC' | 'PRIVATE' };
   CompleteCreateRoomScreen: { type: 'PUBLIC' | 'PRIVATE' };
+
+  // 방 수정 스크린
+  EditRoomScreen: { id: number; type: string };
 
   // 방 입장 스크린
   JoinRoomScreen: undefined;
@@ -59,7 +74,7 @@ export type StackParamList = {
   // 쪽지 스크린
   ChatScreen: undefined;
   ChatRoomScreen: { chatRoomId: number };
-  SendChatScreen: { recipientId: number };
+  SendChatScreen: { recipientId: number; chatRoomId: number };
 
   // 알림 스크린
   NotificationScreen: undefined;
@@ -68,10 +83,9 @@ export type StackParamList = {
 export type TabNavigatorParamList = {
   CozyHomeScreen: undefined;
   RoomMainScreen: undefined;
-  TodoListScreen: undefined;
+  RoleNRuleScreen: undefined;
   FeedMainScreen: undefined;
   RoomMateScreen: undefined;
-  LifeStyleOnboardingScreen: undefined;
   MyPageScreen: undefined;
 };
 
@@ -88,6 +102,17 @@ export type RoomDetailScreenProps = NativeStackScreenProps<StackParamList, 'Room
 export type RecommendRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'RecommendRoomScreen'
+>;
+
+// 롤앤룰 스크린
+export type RoleNRuleScreenProps = NativeStackScreenProps<StackParamList, 'RoleNRuleScreen'>;
+export type CreateRoleNRuleScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'CreateRoleNRuleScreen'
+>;
+export type EditRoleNRuleScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'EditRoleNRuleScreen'
 >;
 
 // 롤앤룰 스크린
@@ -126,6 +151,9 @@ export type CompleteCreateRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'CompleteCreateRoomScreen'
 >;
+
+// 방 수정 스크린
+export type EditRoomScreenProps = NativeStackScreenProps<StackParamList, 'EditRoomScreen'>;
 
 // 방 입장 스크린
 export type JoinRoomScreenProps = NativeStackScreenProps<StackParamList, 'JoinRoomScreen'>;

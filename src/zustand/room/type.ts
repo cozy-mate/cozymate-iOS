@@ -22,6 +22,8 @@ export type MateType = {
   memberId: number;
   mateId: number;
   nickname: string;
+  persona: number;
+  mateEquality: number;
 };
 
 // 생성된 방 정보
@@ -31,8 +33,12 @@ export type RoomInfo = {
   inviteCode: string;
   profileImage: number;
   mateList: MateType[];
+  maxMateNum: number;
+  numOfArrival: number;
   roomType: string;
   hashtags: string[];
+  equaility: number;
+  roomManager: boolean;
 };
 
 export type InviteCodeRoomInfo = {

@@ -5,11 +5,16 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import { CreatePublicRoomRequest, CreatePrivateRoomRequest } from '@server/requestTypes/room';
+import {
+  UpdateRoomRequest,
+  CreatePublicRoomRequest,
+  CreatePrivateRoomRequest,
+} from '@server/requestTypes/room';
 import {
   JoinRoomResponse,
   ExitRoomResponse,
   DeleteRoomResponse,
+  UpdateRoomResponse,
   GetRoomDataResponse,
   CheckHasRoomResponse,
   CheckRoomNameResponse,
@@ -70,6 +75,16 @@ export const checkRoomName = async (roomName: string): Promise<CheckRoomNameResp
 // 방 나가기 기능
 export const exitRoom = async (roomId: number): Promise<ExitRoomResponse> => {
   const response = await PatchAxiosInstance<ExitRoomResponse>(`/rooms/${roomId}/quit`);
+
+  return response.data;
+};
+
+// 방 정보 수정
+export const updateRoom = async (
+  roomId: number,
+  data: UpdateRoomRequest,
+): Promise<UpdateRoomResponse> => {
+  const response = await PatchAxiosInstance<UpdateRoomResponse>(`/rooms/rooms/${roomId}`, data);
 
   return response.data;
 };

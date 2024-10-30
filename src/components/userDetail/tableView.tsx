@@ -3,7 +3,7 @@ import { View, Text, Pressable } from 'react-native';
 
 import { TableViewProps } from '@type/userDetail/userDetail';
 
-const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
+const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModal }) => {
   const intensityMapping = [
     { index: 0, name: '아예 틀지 않아요' },
     { index: 1, name: '약하게 틀어요' },
@@ -127,7 +127,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData }) => {
       <View className="flex flex-col">
         <View className="flex flex-row items-center justify-between px-1">
           <Text className="mb-3 text-base font-semibold text-emphasizedFont">하고 싶은 말</Text>
-          <Pressable>
+          <Pressable onPress={openModal}>
             <Text className="text-xs font-medium text-disabledFont underline">신고하기</Text>
           </Pressable>
         </View>

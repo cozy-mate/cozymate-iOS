@@ -1,5 +1,3 @@
-export type IsLoggedIn = boolean;
-
 export interface SignUp {
   nickname: string;
   gender: string;
@@ -14,4 +12,12 @@ export interface Profile {
   gender: string;
   birthday: string;
   persona: number;
+}
+
+export interface MemberInfo {
+  memberId: number;
+  memberNickName: string;
+  memberAge: number;
+  memberPersona: number;
+  equality: number;
 }

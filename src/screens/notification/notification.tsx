@@ -8,7 +8,7 @@ import { NotificationScreenProps } from '@type/param/stack';
 import BackButton from '@assets/backButton.svg';
 
 const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
-  const { data: notificationlist, refetch: refetchNotification } = useGetNotificationList();
+  const { data: notificationlist } = useGetNotificationList();
 
   const toBack = () => {
     navigation.goBack();
@@ -16,11 +16,16 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
 
   const toScreen = (category: string) => {
     if (category === 'COZY_ROLE') {
-      navigation.navigate('MainScreen', { screen: 'TodoListScreen' });
+      navigation.navigate('MainScreen', { screen: 'RoleNRuleScreen' });
     } else {
       navigation.navigate('MainScreen');
     }
   };
+
+  // const translateTitle = (category: string) => {
+  //   if (category === "")
+
+  // }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -31,7 +36,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
           </Pressable>
         </View>
 
-        <ScrollView className="flex-1">
+        <ScrollView className="flex-1" bounces={false}>
           <View className="flex-1">
             {notificationlist.result.length > 0 ? (
               notificationlist.result.map((noti, index) => (

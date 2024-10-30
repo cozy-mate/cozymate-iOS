@@ -1,40 +1,62 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 
-// import { getProfileImage } from '@utils/profileImage';
+import { useProfileStore } from '@zustand/member/member';
+
+import { getProfileImage } from '@utils/profileImage';
 
 import RightArrow from '@assets/smallRightArrow.svg';
 
-interface MemberComponentProps {
-  index: number;
-  memberData: {
-    memberId: number;
-    mateId: number;
-    nickname: string;
-  };
-  length: number;
+interface MemberItem {
+  memberId: number;
+  mateId: number;
+  nickname: string;
+  persona: number;
+  mateEquality: number;
 }
 
-const MemberComponent: React.FC<MemberComponentProps> = ({ index, memberData, length }) => {
+interface MemberComponentProps {
+  index: number;
+  memberData: MemberItem;
+  length: number;
+  pressFunc: (member: MemberItem) => void;
+}
+
+const MemberComponent: React.FC<MemberComponentProps> = ({
+  index,
+  memberData,
+  length,
+  pressFunc,
+}) => {
+  const { profile } = useProfileStore();
+
   return (
-    <View
+    <Pressable
+      onPress={() => pressFunc(memberData)}
       className={`flex flex-row justify-between border-b border-b-[#F1F2F4] py-3 ${
         index === 0 && 'pt-2'
       } ${index === length - 1 && 'border-b-0 pb-2'}`}
     >
       <View className="flex flex-row items-center">
-        {/* {getProfileImage(memberData.persona, 24, 24)} */}
+        {getProfileImage(memberData.persona, 24, 24)}
         <Text className="ml-1.5 text-sm font-medium text-emphasizedFont">
           {memberData.nickname}
+          {memberData.nickname === profile.nickname && (
+            <Text className="text-colorFont"> (나)</Text>
+          )}
           {/* {memberData.isChief && <Text className="text-colorFont"> (방장)</Text>} */}
         </Text>
       </View>
 
       <View className="flex flex-row items-center">
-        {/* <Text className="mr-2 text-sm font-medium text-colorFont">{memberData.equality}%</Text> */}
+        {memberData.nickname !== profile.nickname && (
+          <Text className="mr-2 text-sm font-medium text-colorFont">
+            {memberData.mateEquality !== null ? memberData.mateEquality : '?? '}%
+          </Text>
+        )}
         <RightArrow />
       </View>
-    </View>
+    </Pressable>
   );
 };
 

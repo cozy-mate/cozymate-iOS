@@ -1,21 +1,12 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { addRule, getRuleData } from '@server/api/rule';
-import { AddRuleRequest } from '@server/requestTypes/rule';
-import { AddRuleResponse, GetRuleDataResponse } from '@server/responseTypes/rule';
-
-// Rule 생성
-export const useAddRule = (
-  roomId: number,
-  refetchRuleData: () => void,
-): UseMutationResult<AddRuleResponse, void, AddRuleRequest, unknown> => {
-  return useMutation({
-    mutationFn: (addRuleRequest: AddRuleRequest) => addRule(roomId, addRuleRequest),
-    onSuccess: () => {
-      refetchRuleData();
-    },
-  });
-};
+import { addRule, updateRule, getRuleData } from '@server/api/rule';
+import { AddRuleRequest, UpdateRuleRequest } from '@server/requestTypes/rule';
+import {
+  AddRuleResponse,
+  UpdateRuleResponse,
+  GetRuleDataResponse,
+} from '@server/responseTypes/rule';
 
 // Rule 조회
 export const useGetRuleData = (
@@ -31,4 +22,32 @@ export const useGetRuleData = (
   });
 
   return { data, refetch };
+};
+
+// Rule 생성
+export const useAddRule = (
+  roomId: number,
+  refetchRuleData: () => void,
+): UseMutationResult<AddRuleResponse, void, AddRuleRequest, unknown> => {
+  return useMutation({
+    mutationFn: (addRuleRequest: AddRuleRequest) => addRule(roomId, addRuleRequest),
+    onSuccess: () => {
+      refetchRuleData();
+    },
+  });
+};
+
+// Rule 수정
+export const useUpdateRule = (
+  roomId: number,
+  ruleId: number,
+  refetchRuleData: () => void,
+): UseMutationResult<UpdateRuleResponse, void, AddRuleRequest, unknown> => {
+  return useMutation({
+    mutationFn: (updateRuleRequest: UpdateRuleRequest) =>
+      updateRule(roomId, ruleId, updateRuleRequest),
+    onSuccess: () => {
+      refetchRuleData();
+    },
+  });
 };
