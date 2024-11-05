@@ -96,9 +96,9 @@ export type LifestyleOptionKey =
   | 'cleanSensitivity'
   | 'noiseSensitivity'
   | 'cleaningFrequency'
+  | 'drinkingFrequency'
   | 'personality'
-  | 'mbti'
-  | 'drink';
+  | 'mbti';
 
 interface LifestyleOption {
   blueIcon: JSX.Element;
@@ -229,6 +229,12 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
     redIcon: <RedCleaningFrequency />,
     label: '청소빈도',
   },
+  drinkingFrequency: {
+    blueIcon: <BlueDrink />,
+    grayIcon: <GrayDrink />,
+    redIcon: <RedDrink />,
+    label: '음주빈도',
+  },
   personality: {
     blueIcon: <BluePersonality />,
     grayIcon: <GrayPersonality />,
@@ -236,12 +242,6 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
     label: '성격',
   },
   mbti: { blueIcon: <BlueMbti />, grayIcon: <GrayMbti />, redIcon: <RedMbti />, label: 'MBTI' },
-  drink: {
-    blueIcon: <BlueDrink />,
-    grayIcon: <GrayDrink />,
-    redIcon: <RedDrink />,
-    label: '음주빈도',
-  },
 };
 
 interface LifeStyleIconProps {

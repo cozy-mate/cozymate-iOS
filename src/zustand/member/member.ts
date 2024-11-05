@@ -35,10 +35,11 @@ export const useProfileStore = create<{
   setProfile: (newProfile: Partial<Profile>) => void;
 }>((set) => ({
   profile: {
-    name: '',
     nickname: '',
     gender: '',
     birthday: '',
+    universityName: '',
+    majorName: '',
     persona: 0,
   },
   setProfile: (newProfile) => set((state) => ({ profile: { ...state.profile, ...newProfile } })),

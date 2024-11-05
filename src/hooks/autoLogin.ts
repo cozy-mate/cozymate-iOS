@@ -2,12 +2,17 @@ import { useEffect } from 'react';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import {
+  useLifeStyleStore,
+  usePreferencesStore,
+  useHasLifeStyleStore,
+} from '@zustand/member-stat/member-stat';
 
 import { reissueToken } from '@server/api/auth';
 import { getMyProfile } from '@server/api/member';
 import { getUserDetailData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
+import { getPreferenceList } from '@server/api/member-stat-preference';
 
 import { deleteToken, setAccessToken, setRefreshToken, getRefreshToken } from '@utils/token';
 
@@ -16,6 +21,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setPreferences } = usePreferencesStore();
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
@@ -59,6 +65,10 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
         const profileResponse = await getMyProfile();
         console.log(8, profileResponse); // 프로필 조회
         setProfile(profileResponse.result);
+
+        const preferenceResponse = await getPreferenceList();
+        console.log(9, preferenceResponse);
+        setPreferences(preferenceResponse.result.preferences);
 
         // 방 존재 여부 확인
         const roomCheckResponse = await checkHasRoom();

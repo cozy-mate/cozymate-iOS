@@ -7,10 +7,11 @@ export interface SignUp {
 }
 
 export interface Profile {
-  name: string;
   nickname: string;
   gender: string;
   birthday: string;
+  universityName: string;
+  majorName: string;
   persona: number;
 }
 

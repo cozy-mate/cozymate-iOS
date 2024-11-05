@@ -32,10 +32,11 @@ export interface DeleteMemberResponse {
 
 export interface GetProfileResponse {
   result: {
-    name: string;
     nickname: string;
     gender: string;
     birthday: string;
+    universityName: string;
+    majorName: string;
     persona: number;
   };
 }
