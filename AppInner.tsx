@@ -32,6 +32,7 @@ import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 import LifeStyleEditScreen from 'src/screens/lifeStyle/lifeStyleEdit';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
+import BasicInfoUpdateScreen from 'src/screens/myPage/basicInfoUpdate';
 import EditRoleNRuleScreen from 'src/screens/roleNrule/editRoleAndRule';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
@@ -114,6 +115,7 @@ function AppInner() {
 
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
           <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
+          <stack.Screen name="BasicInfoUpdateScreen" component={BasicInfoUpdateScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />

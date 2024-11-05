@@ -8,7 +8,7 @@ import { useProfileStore } from '@zustand/member/member';
 import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 
 import { getProfileImage } from '@utils/profileImage';
-import { LifestyleOptionKey, getMyImportantLifeStyle } from '@utils/getLifeStyleIcon';
+import { getMyImportantLifeStyle } from '@utils/getLifeStyleIcon';
 
 import { MyInfoScreenProps } from '@type/param/stack';
 
@@ -32,6 +32,10 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
 
   const toMyPage = () => {
     navigation.goBack();
+  };
+
+  const toUpdate = (type: 'nickname' | 'birthday' | 'majorName') => {
+    navigation.navigate('BasicInfoUpdateScreen', { type: type });
   };
 
   const translateBirthDay = (birth: string) => {
@@ -61,7 +65,10 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
 
             <View className="mt-8 px-5">
               <View className="mb-4 flex w-full flex-col rounded-xl border border-disabled p-4 py-1">
-                <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
+                <Pressable
+                  onPress={() => toUpdate('nickname')}
+                  className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+                >
                   <View className="flex flex-row">
                     <Text className="text-sm font-medium text-disabledFont">닉네임</Text>
                     <Text className="ml-2 text-sm font-medium text-emphasizedFont">
@@ -73,7 +80,10 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
                   </View>
                 </Pressable>
 
-                <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
+                <Pressable
+                  onPress={() => toUpdate('majorName')}
+                  className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+                >
                   <View className="flex flex-row">
                     <Text className="text-sm font-medium text-disabledFont">학과</Text>
                     <Text className="ml-2 text-sm font-medium text-emphasizedFont">
@@ -85,7 +95,10 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
                   </View>
                 </Pressable>
 
-                <Pressable className="flex flex-row justify-between py-3">
+                <Pressable
+                  onPress={() => toUpdate('birthday')}
+                  className="flex flex-row justify-between py-3"
+                >
                   <View className="flex flex-row">
                     <Text className="text-sm font-medium text-disabledFont">생년월일</Text>
                     <Text className="ml-2 text-sm font-medium text-emphasizedFont">

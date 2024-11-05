@@ -70,6 +70,7 @@ export type StackParamList = {
   // 마이페이지 스크린
   MyPageScreen: undefined;
   MyInfoScreen: undefined;
+  BasicInfoUpdateScreen: { type: 'nickname' | 'birthday' | 'majorName' };
 
   // 쪽지 스크린
   ChatScreen: undefined;
@@ -180,6 +181,10 @@ export type FeedViewScreenProps = NativeStackScreenProps<StackParamList, 'FeedVi
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<StackParamList, 'MyPageScreen'>;
 export type MyInfoScreenProps = NativeStackScreenProps<StackParamList, 'MyInfoScreen'>;
+export type BasicInfoUpdateScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'BasicInfoUpdateScreen'
+>;
 
 // 쪽지 스크린
 export type ChatScreenProps = NativeStackScreenProps<StackParamList, 'ChatScreen'>;
