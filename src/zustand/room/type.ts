@@ -1,3 +1,5 @@
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 export interface MyRoom {
   hasRoom: boolean;
   roomId: number;
@@ -33,12 +35,18 @@ export type RoomInfo = {
   inviteCode: string;
   profileImage: number;
   mateList: MateType[];
+  managerId: number;
+  isRoomManager: boolean;
   maxMateNum: number;
   numOfArrival: number;
   roomType: string;
   hashtags: string[];
-  equaility: number;
-  roomManager: boolean;
+  equality: number;
+  difference: {
+    blue: LifestyleOptionKey[];
+    red: LifestyleOptionKey[];
+    white: LifestyleOptionKey[];
+  };
 };
 
 export type InviteCodeRoomInfo = {

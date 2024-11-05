@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
-import ChipComponent from '@components/roomDetail/chipComponent';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
@@ -12,6 +11,7 @@ import { useMemberInfoStore } from '@zustand/member/member';
 import { useGetRoomData } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
+import { getLifestyleLabel } from '@utils/getLifeStyleIcon';
 
 import { RoomDetailScreenProps } from '@type/param/stack';
 
@@ -20,11 +20,6 @@ import SettingIcon from '@assets/settingIcon.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
-
-type ChipItems = {
-  title: string;
-  color: string;
-};
 
 interface MemberItem {
   memberId: number;
@@ -59,32 +54,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // const toChatRoom = () => {
   //   navigation.navigate('SendChatScreen', { recipientId: 1 });
   // };
-
-  const [items, setItems] = useState<ChipItems[]>([
-    { title: '학번', color: 'blue' },
-    { title: '학과', color: 'gray' },
-    { title: '신청실', color: 'red' },
-    { title: '합격여부', color: 'gray' },
-    { title: '기상시간', color: 'red' },
-    { title: '취침시간', color: 'blue' },
-    { title: '소등시간', color: 'red' },
-    { title: '흡연여부', color: 'gray' },
-    { title: '잠버릇', color: 'blue' },
-    { title: '에어컨', color: 'red' },
-    { title: '히터', color: 'blue' },
-    { title: '생활패턴', color: 'gray' },
-    { title: '친밀도', color: 'blue' },
-    { title: '물건공유', color: 'blue' },
-    { title: '공부여부', color: 'red' },
-    { title: '게임여부', color: 'blue' },
-    { title: '전화여부', color: 'red' },
-    { title: '섭취여부', color: 'blue' },
-    { title: '청결예민도', color: 'gray' },
-    { title: '소음예민도', color: 'blue' },
-    { title: '청소빈도', color: 'blue' },
-    { title: '성격', color: 'blue' },
-    { title: 'MBTI', color: 'blue' },
-  ]);
 
   const [isRequested, setIsRequested] = useState<boolean>(false);
 
@@ -152,7 +121,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
             <View className="flex rounded-xl border border-main1 bg-sub2 p-3">
               <Text className="text-center text-sm font-semibold text-main1">
-                방 평균일치율 {roomData.result.equaility}%
+                방 평균일치율 {roomData.result.equality}%
               </Text>
             </View>
           </View>
@@ -222,13 +191,37 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 </Text>
 
                 <View className="flex flex-row flex-wrap">
-                  {items.map((item, index) => (
-                    <ChipComponent
+                  {roomData.result.difference.blue.map((blue, index) => (
+                    <Pressable
                       key={index}
-                      index={index}
-                      chipData={item}
-                      handleModal={handleLifeStyleModal}
-                    />
+                      className="mb-2 mr-2 rounded-full border border-main1 bg-sub1 px-3.5 py-2"
+                    >
+                      <Text className="text-xs font-semibold text-main1">
+                        {getLifestyleLabel(blue)}
+                      </Text>
+                    </Pressable>
+                  ))}
+
+                  {roomData.result.difference.red.map((red, index) => (
+                    <Pressable
+                      key={index}
+                      className="mb-2 mr-2 rounded-full border border-[#FF6868] bg-[#FFCACA] px-3.5 py-2"
+                    >
+                      <Text className="text-xs font-semibold text-[#FF6868]">
+                        {getLifestyleLabel(red)}
+                      </Text>
+                    </Pressable>
+                  ))}
+
+                  {roomData.result.difference.white.map((white, index) => (
+                    <Pressable
+                      key={index}
+                      className="mb-2 mr-2 rounded-full border border-disabledFont bg-white px-3.5 py-2"
+                    >
+                      <Text className="text-xs font-medium text-disabledFont">
+                        {getLifestyleLabel(white)}
+                      </Text>
+                    </Pressable>
                   ))}
                 </View>
               </View>

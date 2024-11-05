@@ -76,6 +76,7 @@ import GrayAirConditioningIntensity from '@assets/lifeStyleIcon/gray/grayAirCond
 
 export type LifestyleOptionKey =
   | 'admissionYear'
+  | 'numOfRoommate'
   | 'birthYear'
   | 'major'
   | 'acceptance'
@@ -113,6 +114,12 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
     grayIcon: <GrayAdmissionYear />,
     redIcon: <RedAdmissionYear />,
     label: '학번',
+  },
+  numOfRoommate: {
+    blueIcon: <BlueAdmissionYear />,
+    grayIcon: <GrayAdmissionYear />,
+    redIcon: <RedAdmissionYear />,
+    label: '신청실',
   },
   birthYear: {
     blueIcon: <BlueBirthYear />,
@@ -275,6 +282,11 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
     )}
   </View>
 );
+
+export const getLifestyleLabel = (key: LifestyleOptionKey): string => {
+  const option = lifestyleOptions[key];
+  return option ? option.label : 'Unknown Option';
+};
 
 // 마이페이지의 내 정보에서 선택한 라이프 스타일을 보여주는 컴포넌트를 생성하는 메서드
 export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
