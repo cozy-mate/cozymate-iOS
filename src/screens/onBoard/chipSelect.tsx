@@ -3,10 +3,12 @@ import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
+import { addPreferenceList } from '@server/api/member-stat-preference';
+
 import { ChipSelectScreenProps } from '@type/param/rootStack';
 
 const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
-  const [selectedChips, setSelectedChips] = useState<string[]>([]);
+  const [preferences, setPreferences] = useState<string[]>([]);
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -35,10 +37,13 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 24, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const isComplete = selectedChips.length === 4;
+  const isComplete = preferences.length === 4;
 
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
+
+    await addPreferenceList({ preferences: preferences });
+
     navigation.navigate('CompleteScreen');
   };
 
@@ -56,8 +61,8 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
           </View>
 
           <CheckBoxContainer
-            value={selectedChips}
-            setValue={setSelectedChips}
+            value={preferences}
+            setValue={setPreferences}
             items={items}
             setItems={setItems}
           />

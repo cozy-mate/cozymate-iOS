@@ -2,7 +2,7 @@ export interface SignUp {
   nickname: string;
   gender: string;
   birthday: string;
-  school: number;
+  universityId: number;
   persona: number;
 }
 

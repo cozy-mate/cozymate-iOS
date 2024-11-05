@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
+import { NumberProp } from 'react-native-svg';
 import { View, Pressable } from 'react-native';
 
 import Check from '@assets/characterItem/check.svg';
 
-interface CustomRadioBoxComponentProps {
-  value: number;
-  setValue: React.Dispatch<React.SetStateAction<number>>;
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-}
-
 type IconProps = {
-  width: number;
-  height: number;
+  width?: NumberProp;
+  height?: NumberProp;
 };
 
 type Item = {
@@ -21,6 +15,13 @@ type Item = {
   select: boolean;
   icon: React.FC<IconProps>;
 };
+
+interface CustomRadioBoxComponentProps {
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+}
 
 const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   value,

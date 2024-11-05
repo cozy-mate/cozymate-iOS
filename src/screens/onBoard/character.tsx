@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import { NumberProp } from 'react-native-svg';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
 
-import { useSignUpStore } from '@zustand/member/member';
+import { useHasRoomStore } from '@zustand/room/room';
+import { useSignUpStore, useProfileStore } from '@zustand/member/member';
+
+import { signUp, getMyProfile } from '@server/api/member';
+
+import { setAccessToken } from '@utils/token';
 
 import { CharacterInputScreenProps } from '@type/param/rootStack';
 
@@ -25,8 +31,8 @@ import Thirteenth from '@assets/characterItem/13.svg';
 import Fourteenth from '@assets/characterItem/14.svg';
 
 type IconProps = {
-  width: number;
-  height: number;
+  width?: NumberProp;
+  height?: NumberProp;
 };
 
 type Item = {
@@ -37,7 +43,9 @@ type Item = {
 };
 
 const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
-  const { setSignUpState } = useSignUpStore();
+  const { signUpState, setSignUpState } = useSignUpStore();
+  const { setProfile } = useProfileStore();
+  const { setMyRoom } = useHasRoomStore();
 
   const [character, setCharacter] = useState<number>(0);
 
@@ -62,12 +70,35 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
     { index: 16, item: 16, select: false, icon: Sixteenth },
   ]);
 
+  const doSignUp = async () => {
+    try {
+      const response = await signUp({
+        nickname: signUpState.nickname,
+        gender: signUpState.gender,
+        birthday: signUpState.birthday,
+        persona: signUpState.persona,
+        universityId: signUpState.universityId,
+      });
+
+      await setAccessToken(response.result.tokenResponseDTO.accessToken);
+
+      const getProfileResponse = await getMyProfile();
+      setProfile(getProfileResponse.result);
+
+      setMyRoom({ roomId: 0, hasRoom: false });
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
+
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
 
     setSignUpState({
       persona: character,
     });
+
+    await doSignUp();
 
     navigation.navigate('ChipSelectScreen');
   };

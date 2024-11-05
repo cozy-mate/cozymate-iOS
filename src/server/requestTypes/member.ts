@@ -2,8 +2,8 @@ export interface SignUpRequest {
   nickname: string;
   gender: string;
   birthday: string;
-  school: number;
   persona: number;
+  universityId: number;
 }
 
 export interface SignInRequest {

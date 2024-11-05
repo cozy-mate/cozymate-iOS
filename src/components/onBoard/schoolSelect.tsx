@@ -4,12 +4,12 @@ import { View, Text, Pressable, TextInput } from 'react-native';
 import DownArrow from '@assets/onBoard/downArrow.svg';
 
 interface SchoolSelectProps {
-  school: number;
-  setSchool: React.Dispatch<React.SetStateAction<number>>;
+  universityId: number;
+  setUniversityId: React.Dispatch<React.SetStateAction<number>>;
   title: string;
 }
 
-const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title }) => {
+const SchoolSelect: React.FC<SchoolSelectProps> = ({ universityId, setUniversityId, title }) => {
   const inputRef = React.useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [displaySchool, setDisplaySchool] = useState<string>('');
@@ -47,7 +47,7 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title })
 
   const selectedList = title === '학교' ? schoolList : majorList;
 
-  const isActive = isFocused || school !== 0;
+  const isActive = isFocused || universityId !== 0;
 
   return (
     <>
@@ -69,10 +69,10 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title })
           <View className="mt-1.5 flex w-full flex-row items-center justify-between pb-[3px]">
             <Text
               className={`${
-                school === 0 ? 'text-disabledFont' : 'text-basicFont'
+                universityId === 0 ? 'text-disabledFont' : 'text-basicFont'
               } text-sm font-medium`}
             >
-              {school === 0 ? '학교를 선택해주세요' : displaySchool}
+              {universityId === 0 ? '학교를 선택해주세요' : displaySchool}
             </Text>
             <DownArrow />
           </View>
@@ -86,7 +86,7 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ school, setSchool, title })
             <Pressable
               key={school.index}
               onPress={() => {
-                setSchool(school.value);
+                setUniversityId(school.value);
                 setDisplaySchool(school.title);
                 setIsSchoolListOpen(false);
               }}

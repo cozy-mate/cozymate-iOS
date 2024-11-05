@@ -19,9 +19,9 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
-  const [school, setSchool] = useState<number>(0);
+  const [universityId, setUniversityId] = useState<number>(0);
 
-  const isComplete = nickname !== '' && gender !== '' && birthday !== '' && school !== 0;
+  const isComplete = nickname !== '' && gender !== '' && birthday !== '' && universityId !== 0;
 
   const [items, setItems] = useState([
     { index: 1, value: 'MALE', item: '남자', select: false },
@@ -69,7 +69,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
       nickname: nickname,
       gender: gender,
       birthday: birthday,
-      school: school,
+      universityId: universityId,
     });
 
     navigation.navigate('CharacterInputScreen');
@@ -126,7 +126,11 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             />
 
             {/* 학교 입력 Input */}
-            <SchoolSelect school={school} setSchool={setSchool} title="학교" />
+            <SchoolSelect
+              universityId={universityId}
+              setUniversityId={setUniversityId}
+              title="학교"
+            />
           </View>
 
           {/* 하단 View */}

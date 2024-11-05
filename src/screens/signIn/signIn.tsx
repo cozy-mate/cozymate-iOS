@@ -44,20 +44,22 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       const signInResponse = await signIn({ clientId: 'test', socialType: 'TEST' });
       await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
 
-      const signUpResponse = await testSignUp({
-        name: '테스트',
-        nickname: '테스트',
-        gender: 'MALE',
-        birthday: '1999-02-13',
-        persona: 1,
-      });
+      navigation.navigate('PersonalInfoInputScreen');
 
-      await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
-      setProfile(signUpResponse.result.memberInfoDTO);
+      // const signUpResponse = await testSignUp({
+      //   name: '테스트',
+      //   nickname: '테스트',
+      //   gender: 'MALE',
+      //   birthday: '1999-02-13',
+      //   persona: 1,
+      // });
 
-      const response = await getUserDetailData();
-      setHasLifeStyle(true);
-      setLifeStyle(response.result);
+      // await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
+      // setProfile(signUpResponse.result.memberInfoDTO);
+
+      // const response = await getUserDetailData();
+      // setHasLifeStyle(true);
+      // setLifeStyle(response.result);
     } catch (error: any) {
       const errorCode = error?.response?.data?.code;
 
@@ -68,7 +70,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       }
     }
 
-    setLoggedIn(true);
+    // setLoggedIn(true);
   };
 
   return (

@@ -20,7 +20,7 @@ export const useSignUpStore = create<{
     nickname: '',
     gender: '',
     birthday: '',
-    school: 0,
+    universityId: 0,
     persona: 0,
   },
   setSignUpState: (newSignUpState) =>
