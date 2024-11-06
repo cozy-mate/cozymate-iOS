@@ -12,7 +12,7 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import { RoomDummyData, sameAnswerDummyData, recommendRoomDummyData } from './dummyData';
+import { RoomDummyData, recommendRoomDummyData } from './dummyData';
 
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
@@ -23,6 +23,8 @@ import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponen
 
 import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+
+import { searchUsers, getRandomUser } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 
@@ -37,6 +39,13 @@ import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
 import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
+interface RandomUserType {
+  memberId: number;
+  memberNickName: string;
+  equality: number;
+  preferenceStats: Record<string, string | number>;
+}
+
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const width = Dimensions.get('screen').width;
 
@@ -45,6 +54,26 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { roomInfo } = useRoomInfoStore();
 
   const { bottom } = useSafeAreaInsets();
+
+  const [seenMemberStatIds, setSeenMemberStatIds] = useState<number[]>([]);
+  // const { data: randomUser } = useGetRandomUser(seenMemberStatIds);
+
+  // console.log(randomUser);
+
+  const [randomUser, setRandomUser] = useState<RandomUserType[]>([]);
+
+  const page = 0;
+  const needsPreferences = true;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      //const response = await getRandomUser({ seenMemberStatIds });
+      const response = await searchUsers(page, needsPreferences);
+
+      setRandomUser(response.result.result);
+    };
+    fetchData();
+  }, []);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
@@ -302,7 +331,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                 scrollEventThrottle={16}
                 bounces={false}
               >
-                {sameAnswerDummyData.map((data, index) => (
+                {randomUser.map((data, index) => (
                   <SameAnswerUserComponent
                     key={index}
                     userData={data}
@@ -353,7 +382,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                     key={index}
                     roomData={data}
                     onLayout={onLayoutRoom}
-                    pressFunc={() => toRoomDetail(myRoom.roomId)}
+                    pressFunc={() => toRoomDetail(data.roomId)}
                   />
                 ))}
               </ScrollView>

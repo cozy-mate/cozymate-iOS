@@ -29,6 +29,10 @@ export interface RegisterUserDataRequest {
   selfIntroduction: string;
 }
 
+export interface GetRandomUserRequest {
+  seenMemberStatIds: number[];
+}
+
 export interface UpdateUserDataRequest {
   universityId: number;
   admissionYear: string;

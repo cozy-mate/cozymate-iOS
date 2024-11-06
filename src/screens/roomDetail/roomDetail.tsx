@@ -9,6 +9,7 @@ import { useHasRoomStore } from '@zustand/room/room';
 import { useMemberInfoStore } from '@zustand/member/member';
 
 import { useGetRoomData } from '@hooks/api/room';
+import { useGetChatRoomId } from '@hooks/api/chat-room';
 
 import { getProfileImage } from '@utils/profileImage';
 import { getLifestyleLabel } from '@utils/getLifeStyleIcon';
@@ -40,6 +41,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   const { data: roomData } = useGetRoomData(roomId);
+  const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerId);
 
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
@@ -51,9 +53,11 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     navigation.goBack();
   };
 
-  // const toChatRoom = () => {
-  //   navigation.navigate('SendChatScreen', { recipientId: 1 });
-  // };
+  const toChatRoom = () => {
+    navigation.navigate('ChatRoomScreen', {
+      chatRoomId: chatRoomId.result.chatRoomId,
+    });
+  };
 
   const [isRequested, setIsRequested] = useState<boolean>(false);
 
@@ -86,9 +90,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
               </Pressable>
             ) : (
               <View className="flex flex-row">
-                <Pressable
-                //onPress={toChatRoom}
-                >
+                <Pressable onPress={toChatRoom}>
                   <MessageIcon />
                 </Pressable>
                 <Pressable>
@@ -235,7 +237,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             onPress={() => setIsRequested(!isRequested)}
             className={`fixed bottom-[42px] rounded-xl px-5 py-4 ${
               myRoom.roomId === roomId
-                ? 'bg-warning'
+                ? 'bg-[#f85e5e]'
                 : myRoom.roomId !== roomId && myRoom.roomId !== 0
                 ? 'bg-[#c4c4c4]'
                 : myRoom.roomId === 0 && isRequested

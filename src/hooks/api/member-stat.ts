@@ -1,10 +1,16 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
+import {
+  searchUsers,
+  getRandomUser,
+  getUserDetailData,
+  getOtherUserDetailData,
+} from '@server/api/member-stat';
 import {
   SearchUsersResponse,
+  GetRandomUserResponse,
   GetUserDetailDataResponse,
   GetOtherUserDetailDataResponse,
 } from '@server/responseTypes/member-stat';
@@ -78,4 +84,14 @@ export const useSearchUsers = (): {
   });
 
   return { data, refetch };
+};
+
+// 사용자 랜덤 추천
+export const useGetRandomUser = (
+  seenMemberStatIds: number[],
+): UseMutationResult<GetRandomUserResponse, void, void, unknown> => {
+  return useMutation({
+    mutationFn: () => getRandomUser({ seenMemberStatIds }),
+    onSuccess: () => {},
+  });
 };

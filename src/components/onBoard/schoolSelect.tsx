@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput } from 'react-native';
+
+import { getUniversityList } from '@server/api/university';
 
 import DownArrow from '@assets/onBoard/downArrow.svg';
 
@@ -7,6 +9,11 @@ interface SchoolSelectProps {
   universityId: number;
   setUniversityId: React.Dispatch<React.SetStateAction<number>>;
   title: string;
+}
+
+interface SchoolListItem {
+  id: number;
+  name: string;
 }
 
 const SchoolSelect: React.FC<SchoolSelectProps> = ({ universityId, setUniversityId, title }) => {
@@ -31,18 +38,30 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ universityId, setUniversity
     setIsSchoolListOpen(false);
   };
 
-  const schoolList = [
-    { index: 1, value: 1, title: '인하대학교' },
-    { index: 2, value: 2, title: '한국공학대학교' },
-    { index: 3, value: 3, title: '가톨릭대학교' },
-    { index: 4, value: 4, title: '숭실대학교' },
-  ];
+  const [schoolList, setSchoolList] = useState<SchoolListItem[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getUniversityList();
+
+      setSchoolList(response.result.universityList);
+    };
+
+    fetchData();
+  }, []);
+
+  // const schoolList = [
+  //   { index: 1, value: 1, title: '인하대학교' },
+  //   { index: 2, value: 2, title: '한국공학대학교' },
+  //   { index: 3, value: 3, title: '가톨릭대학교' },
+  //   { index: 4, value: 4, title: '숭실대학교' },
+  // ];
 
   const majorList = [
-    { index: 1, value: 1, title: '경영학과' },
-    { index: 2, value: 2, title: '정보통신공학과' },
-    { index: 3, value: 3, title: '컴퓨터공학과' },
-    { index: 4, value: 4, title: '문화콘텐츠문화경영학과' },
+    { id: 1, name: '경영학과' },
+    { id: 2, name: '정보통신공학과' },
+    { id: 3, name: '컴퓨터공학과' },
+    { id: 4, name: '문화콘텐츠문화경영학과' },
   ];
 
   const selectedList = title === '학교' ? schoolList : majorList;
@@ -84,17 +103,17 @@ const SchoolSelect: React.FC<SchoolSelectProps> = ({ universityId, setUniversity
         <View className="mb-4 mt-[-12px] rounded-xl border border-sub1 px-5 py-3">
           {selectedList.map((school) => (
             <Pressable
-              key={school.index}
+              key={school.id}
               onPress={() => {
-                setUniversityId(school.value);
-                setDisplaySchool(school.title);
+                setUniversityId(school.id);
+                setDisplaySchool(school.name);
                 setIsSchoolListOpen(false);
               }}
-              className={`border-b border-b-[#f6f6f6] py-2 ${school.index == 1 && 'pt-0'} ${
-                school.index == schoolList.length && 'border-0 pb-0'
+              className={`border-b border-b-[#f6f6f6] py-2 ${school.id == 1 && 'pt-0'} ${
+                school.id == schoolList.length && 'border-0 pb-0'
               }`}
             >
-              <Text className="text-sm font-medium text-basicFont">{school.title}</Text>
+              <Text className="text-sm font-medium text-basicFont">{school.name}</Text>
             </Pressable>
           ))}
         </View>

@@ -41,7 +41,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const testLogin = async (): Promise<void> => {
     try {
-      const signInResponse = await signIn({ clientId: 'test', socialType: 'TEST' });
+      const signInResponse = await signIn({ clientId: '1232132131', socialType: 'TEST' });
+      console.log(signInResponse);
+
       await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
 
       navigation.navigate('PersonalInfoInputScreen');

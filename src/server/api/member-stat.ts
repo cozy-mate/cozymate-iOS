@@ -1,8 +1,13 @@
 import { GetAxiosInstance, PutAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
 
-import { UpdateUserDataRequest, RegisterUserDataRequest } from '@server/requestTypes/member-stat';
+import {
+  GetRandomUserRequest,
+  UpdateUserDataRequest,
+  RegisterUserDataRequest,
+} from '@server/requestTypes/member-stat';
 import {
   SearchUsersResponse,
+  GetRandomUserResponse,
   UpdateUserDataResponse,
   RegisterUserDataResponse,
   GetUserDetailDataResponse,
@@ -39,8 +44,9 @@ export const checkDormitoryNum = async (): Promise<CheckDormitoryNumResponse> =>
 
 // 사용자 상세정보 필터링, 일치율 조회
 export const searchUsers = async (
-  filterList?: string[],
   page?: number,
+  needsPreferences?: boolean,
+  filterList?: string[],
   needsDetail?: boolean,
 ): Promise<SearchUsersResponse> => {
   const response = await GetAxiosInstance<SearchUsersResponse>(`/members/stat/filter`, {
@@ -48,6 +54,7 @@ export const searchUsers = async (
       filterList: filterList,
       page: page,
       needsDetail: needsDetail,
+      needsPreferences: needsPreferences,
     },
   });
 
@@ -59,6 +66,16 @@ export const registerUserData = async (
   data: RegisterUserDataRequest,
 ): Promise<RegisterUserDataResponse> => {
   const response = await PostAxiosInstance<RegisterUserDataResponse>(`/members/stat`, data);
+
+  return response.data;
+};
+
+// 사용자 랜덤 추천
+export const getRandomUser = async (data: GetRandomUserRequest): Promise<GetRandomUserResponse> => {
+  const response = await PostAxiosInstance<GetRandomUserResponse>(
+    `/members/stat/random/list`,
+    data,
+  );
 
   return response.data;
 };

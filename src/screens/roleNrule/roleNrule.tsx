@@ -87,10 +87,10 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
 
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
-  const { mutateAsync: changeTodoMutate } = useChangeTodo(refetchTodo);
+  const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
 
   const changeTodo = async (todo: TodoItem): Promise<void> => {
-    changeTodoMutate({ todoId: todo.id, completed: !todo.completed });
+    changeTodoMutate({ todoId: todo.id, data: { completed: !todo.completed } });
   };
 
   const { data: ruledata } = useGetRuleData(roomInfo.roomId);
@@ -120,30 +120,36 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               </View>
 
               <View className="rounded-xl border border-[#F1F1F1] bg-white p-2">
-                {tododata.result.myTodoList.mateTodoList.map((todo, index) => (
-                  <View
-                    key={todo.id}
-                    className={`mb-1 flex flex-row items-center justify-between ${
-                      index == tododata.result.myTodoList.mateTodoList.length - 1 && 'mb-0'
-                    }`}
-                  >
-                    <View className="flex flex-row items-center">
-                      <Pressable onPress={() => changeTodo(todo)}>
-                        {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
-                      </Pressable>
-                      <Text>{todo.content}</Text>
-                    </View>
-
-                    <Pressable
-                      onPress={() => {
-                        toEdit('todo', todo.id);
-                        handleTodoItem(todo);
-                      }}
+                {tododata.result.myTodoList.mateTodoList.length !== 0 ? (
+                  tododata.result.myTodoList.mateTodoList.map((todo, index) => (
+                    <View
+                      key={todo.id}
+                      className={`mb-1 flex flex-row items-center justify-between ${
+                        index == tododata.result.myTodoList.mateTodoList.length - 1 && 'mb-0'
+                      }`}
                     >
-                      <SettingIcon />
-                    </Pressable>
+                      <View className="flex flex-row items-center">
+                        <Pressable onPress={() => changeTodo(todo)}>
+                          {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
+                        </Pressable>
+                        <Text>{todo.content}</Text>
+                      </View>
+
+                      <Pressable
+                        onPress={() => {
+                          toEdit('todo', todo.id);
+                          handleTodoItem(todo);
+                        }}
+                      >
+                        <SettingIcon />
+                      </Pressable>
+                    </View>
+                  ))
+                ) : (
+                  <View>
+                    <Text>없음</Text>
                   </View>
-                ))}
+                )}
               </View>
             </View>
           </Fragment>

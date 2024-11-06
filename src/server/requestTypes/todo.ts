@@ -5,11 +5,11 @@ export interface UpdateTodoRequest {
 }
 
 export interface ChangeTodoStateRequest {
-  todoId: number;
   completed: boolean;
 }
 
 export interface AddMyTodoRequest {
+  mateIdList: number[];
   content: string;
   timePoint: string;
 }

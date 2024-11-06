@@ -94,6 +94,18 @@ export interface RegisterUserDataResponse {
   result: number;
 }
 
+export interface GetRandomUserResponse {
+  result: {
+    memberList: {
+      memberId: number;
+      memberNickName: string;
+      equality: number;
+      preferenceStats: Record<string, string | number>;
+    }[];
+    seenMemberStatIds: number[];
+  };
+}
+
 export interface GetFilteredMemberListResponse {
   result: {
     page: number;

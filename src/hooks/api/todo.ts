@@ -23,11 +23,16 @@ export const useAddMyTodo = (
 
 // Todo 상태 변경 (완료 <-> 미완료)
 export const useChangeTodo = (
+  roomId: number,
   refetchTodoData: () => void,
-): UseMutationResult<ChangeTodoStateResponse, void, ChangeTodoStateRequest> => {
+): UseMutationResult<
+  ChangeTodoStateResponse,
+  void,
+  { todoId: number; data: ChangeTodoStateRequest }
+> => {
   return useMutation({
-    mutationFn: (changeTodoStateRequest: ChangeTodoStateRequest) =>
-      changeTodoState(changeTodoStateRequest),
+    mutationFn: async ({ todoId, data }: { todoId: number; data: ChangeTodoStateRequest }) =>
+      changeTodoState(roomId, todoId, data),
     onSuccess: () => {
       // mutation 성공 시, Todo 데이터를 다시 불러옴
       refetchTodoData();
