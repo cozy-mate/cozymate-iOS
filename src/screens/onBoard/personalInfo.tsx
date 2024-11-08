@@ -3,7 +3,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Text, View, Keyboard, Pressable, SafeAreaView } from 'react-native';
 
 import RadioBoxComponent from '@components/basicRadioBox';
-import SchoolSelect from '@components/onBoard/schoolSelect';
+import SchoolSelect from '@components/onBoard/univInfoSelect';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 
@@ -126,11 +126,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             />
 
             {/* 학교 입력 Input */}
-            <SchoolSelect
-              universityId={universityId}
-              setUniversityId={setUniversityId}
-              title="학교"
-            />
+            <SchoolSelect value={universityId} setValue={setUniversityId} title="학교" />
           </View>
 
           {/* 하단 View */}

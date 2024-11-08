@@ -74,12 +74,9 @@ export interface CheckDormitoryNumResponse {
 
 export interface SearchedUsers {
   memberId: number;
-  memberName: string;
   memberNickName: string;
-  memberAge: number;
-  memberPersona: number;
-  numOfRoommate: number;
   equality: number;
+  preferenceStats: Record<string, string | number>;
 }
 
 export interface SearchUsersResponse {

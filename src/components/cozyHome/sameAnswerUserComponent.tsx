@@ -14,7 +14,7 @@ interface SameAnswerUserComponentProps {
     equality: number;
     preferenceStats: Record<string, string | number>;
   };
-  onLayout: (event: LayoutChangeEvent) => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: () => void;
 }
 

@@ -9,10 +9,7 @@ import { getUserDetailData } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useIsOldiPhone } from '@hooks/device';
-import {
-  //useAppleLogin,
-  useKakaoLogin,
-} from '@hooks/api/member';
+import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { setAccessToken } from '@utils/token';
 
@@ -37,7 +34,15 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   }, [getDeviceId, refreshFcmToken]);
 
   const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
-  // const { mutateAsync: appleLogin } = useAppleLogin(navigation);
+  const { mutateAsync: appleLogin } = useAppleLogin(navigation);
+
+  const toSignUp = async (): Promise<void> => {
+    const signInResponse = await signIn({ clientId: '1232132131', socialType: 'TEST' });
+
+    await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
+
+    navigation.navigate('PersonalInfoInputScreen');
+  };
 
   const testLogin = async (): Promise<void> => {
     try {
@@ -46,22 +51,20 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
       await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
 
-      navigation.navigate('PersonalInfoInputScreen');
+      const signUpResponse = await testSignUp({
+        nickname: '테스트트트트',
+        gender: 'MALE',
+        birthday: '1999-02-13',
+        persona: 1,
+        universityId: 1,
+      });
 
-      // const signUpResponse = await testSignUp({
-      //   name: '테스트',
-      //   nickname: '테스트',
-      //   gender: 'MALE',
-      //   birthday: '1999-02-13',
-      //   persona: 1,
-      // });
+      await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
+      setProfile(signUpResponse.result.memberInfoDTO);
 
-      // await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
-      // setProfile(signUpResponse.result.memberInfoDTO);
-
-      // const response = await getUserDetailData();
-      // setHasLifeStyle(true);
-      // setLifeStyle(response.result);
+      const response = await getUserDetailData();
+      setHasLifeStyle(true);
+      setLifeStyle(response.result);
     } catch (error: any) {
       const errorCode = error?.response?.data?.code;
 
@@ -72,7 +75,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       }
     }
 
-    // setLoggedIn(true);
+    setLoggedIn(true);
   };
 
   return (
@@ -111,16 +114,21 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
         <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-            onPress={() => kakaoLogin()}
+            onPress={() => appleLogin()}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
           </Pressable>
         </View>
 
-        <Pressable onPress={testLogin}>
-          <Text>테스트 로그인</Text>
-        </Pressable>
+        <View className="flex flex-row items-center justify-between">
+          <Pressable onPress={testLogin}>
+            <Text>테스트 로그인</Text>
+          </Pressable>
+          <Pressable onPress={toSignUp}>
+            <Text>온보딩</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );

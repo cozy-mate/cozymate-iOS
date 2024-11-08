@@ -163,7 +163,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
                 {type === 'list' && (
                   <ListView
-                    //userBasicData={otherUserBasicData}
+                    userBasicData={memberInfo}
                     userData={otherlifestyledata.result}
                     openModal={handleReportModal}
                   />

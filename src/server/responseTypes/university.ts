@@ -1,5 +1,6 @@
 export interface GetUserUniversityResponse {
   result: {
+    id: number;
     name: string;
     mailPattern: string;
     dormitoryNames: string[];
