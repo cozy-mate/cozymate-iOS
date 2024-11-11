@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
+import BottomButton from '@components/common/bottomButton';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
@@ -231,40 +232,38 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           </View>
         </View>
 
-        <View className="px-5">
+        <View className="fixed bottom-[42px] px-5">
           {/* 순서대로 1. 해당 방에 참가한 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
-          <Pressable
-            onPress={() => setIsRequested(!isRequested)}
-            className={`fixed bottom-[42px] rounded-xl px-5 py-4 ${
+          <BottomButton
+            color={
               myRoom.roomId === roomId
                 ? 'bg-[#f85e5e]'
                 : myRoom.roomId !== roomId && myRoom.roomId !== 0
                 ? 'bg-[#c4c4c4]'
                 : myRoom.roomId === 0 && isRequested
-                ? 'border border-main1 bg-colorBox'
+                ? 'bg-colorBox'
                 : 'bg-main1'
-            }`}
-          >
-            <Text
-              className={`text-center text-base font-semibold ${
-                myRoom.roomId === roomId
-                  ? 'text-white'
-                  : myRoom.roomId !== roomId && myRoom.roomId !== 0
-                  ? 'text-white'
-                  : myRoom.roomId === 0 && isRequested
-                  ? 'text-main1'
-                  : 'text-white'
-              }`}
-            >
-              {myRoom.roomId === roomId
+            }
+            borderColor={myRoom.roomId === 0 && isRequested ? 'border-main1' : 'border-[#f85e5e]'}
+            textColor={
+              myRoom.roomId === roomId || myRoom.roomId !== 0
+                ? 'text-white'
+                : myRoom.roomId === 0 && isRequested
+                ? 'text-main1'
+                : 'text-white'
+            }
+            text={
+              myRoom.roomId === roomId
                 ? '방 나가기'
                 : myRoom.roomId !== roomId && myRoom.roomId !== 0
                 ? '방 참여 요청'
                 : myRoom.roomId === 0 && isRequested
                 ? '방 참여 요청 취소'
-                : '방 참여 요청'}
-            </Text>
-          </Pressable>
+                : '방 참여 요청'
+            }
+            disabled={myRoom.roomId !== 0 && myRoom.roomId !== roomId}
+            onPressFunc={() => setIsRequested(!isRequested)}
+          />
         </View>
       </View>
       {isLifeStyleModalOpen && <LifeStyleModal closeModal={handleLifeStyleModal} />}

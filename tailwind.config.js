@@ -47,6 +47,8 @@ module.exports = {
 
         warning: '#FF6868',
 
+        disabledButton: '#C4C4C4',
+
         // 소셜 로그인용 색깔
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',

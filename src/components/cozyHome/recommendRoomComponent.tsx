@@ -52,7 +52,11 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
         {Object.entries(roomData.equalMemberStatNum).map(([key, value], index) => (
           <View key={index} className="flex w-[50px] flex-col items-center">
             {isLifestyleOptionKey(key)
-              ? getRoomLifeStyleIcon(key, 'blue', `${value}명 일치`)
+              ? getRoomLifeStyleIcon(
+                  key,
+                  value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
+                  value === roomData.numOfArrival ? '모두 일치' : `${value}명 일치`,
+                )
               : null}
           </View>
         ))}

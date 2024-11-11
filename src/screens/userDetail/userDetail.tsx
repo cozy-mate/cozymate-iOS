@@ -4,6 +4,7 @@ import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'rea
 
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
+import BottomButton from '@components/common/bottomButton';
 import ReportModal from '@components/report/reportComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
@@ -180,30 +181,26 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
           </View>
 
           {memberInfo.memberNickName !== profile.nickname ? (
-            <View className="px-5">
+            <View className="fixed bottom-[42px] px-5">
               {/* 순서대로 1. 방이 있고 초대한 경우 2. 방이 있고 초대하지 않은 경우 3. 방이 없는 경우 */}
-              <Pressable
-                onPress={() => setIsInvited(!isInvited)}
-                className={`fixed bottom-[42px] rounded-xl px-5 py-4 ${
+              <BottomButton
+                color={
+                  myRoom.hasRoom ? (isInvited ? 'bg-colorBox' : 'bg-main1') : 'bg-disabledButton'
+                }
+                borderColor={myRoom.hasRoom && isInvited ? 'border-main1' : 'border-main1'}
+                textColor={
+                  myRoom.hasRoom ? (isInvited ? 'text-main1' : 'text-white') : 'text-white'
+                }
+                text={
                   myRoom.hasRoom
-                    ? isInvited
-                      ? 'border border-main1 bg-colorBox'
-                      : 'bg-main1'
-                    : 'bg-[#c4c4c4]'
-                }`}
-              >
-                <Text
-                  className={`text-center text-base font-semibold ${
-                    myRoom.hasRoom ? (isInvited ? 'text-main1' : 'text-white') : 'text-white'
-                  }`}
-                >
-                  {myRoom.hasRoom
                     ? isInvited
                       ? '초대 취소하기'
                       : '내 방으로 초대하기'
-                    : '내 방으로 초대하기'}
-                </Text>
-              </Pressable>
+                    : '내 방으로 초대하기'
+                }
+                disabled={!myRoom.hasRoom}
+                onPressFunc={() => setIsInvited(!isInvited)}
+              />
             </View>
           ) : (
             <SafeAreaView className="bg-white" />

@@ -27,8 +27,7 @@
       "@server/*": ["src/server/*"],
       "@zustand/*": ["src/zustand/*"],
       "@recoil/*": ["src/recoil/*"],
-      "@axios/*": ["src/axios/*"],
-      "@screens/*": ["src/screens/*"]
+      "@axios/*": ["src/axios/*"]
     }
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
