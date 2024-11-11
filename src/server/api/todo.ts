@@ -5,15 +5,12 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import {
-  AddMyTodoRequest,
-  UpdateTodoRequest,
-  ChangeTodoStateRequest,
-} from '@server/requestTypes/todo';
+import { AddMyTodoRequest, UpdateTodoRequest } from '@server/requestTypes/todo';
 import {
   AddMyTodoResponse,
   DeleteTodoResponse,
   UpdateTodoResponse,
+  GetTodoDataResponse,
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
 
@@ -27,8 +24,11 @@ export const deleteTodo = async (roomId: number, todoId: number): Promise<Delete
 };
 
 // 특정 방의 특정 날짜 기준 룸메별 Todo 조회
-export const getTodoData = async (roomId: number, timePoint?: string) => {
-  const response = await GetAxiosInstance(`/rooms/${roomId}/todos`, {
+export const getTodoData = async (
+  roomId: number,
+  timePoint?: string,
+): Promise<GetTodoDataResponse> => {
+  const response = await GetAxiosInstance<GetTodoDataResponse>(`/rooms/${roomId}/todos`, {
     params: {
       timePoint: timePoint,
     },
@@ -55,11 +55,11 @@ export const updateTodo = async (
 export const changeTodoState = async (
   roomId: number,
   todoId: number,
-  data: ChangeTodoStateRequest,
+  completed: boolean,
 ): Promise<ChangeTodoStateResponse> => {
   const response = await PatchAxiosInstance<ChangeTodoStateResponse>(
     `/rooms/${roomId}/todos/${todoId}/state`,
-    data,
+    { params: { completed: completed } },
   );
 
   return response.data;

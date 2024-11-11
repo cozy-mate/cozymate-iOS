@@ -16,10 +16,13 @@ export interface MateRoleItem {
 
 export interface GetRoleDataResponse {
   result: {
-    myRoleList: MateRoleItem;
-    otherRoleList: {
-      [key: string]: MateRoleItem;
-    };
+    roleList: {
+      id: number;
+      mateNameList: string[];
+      content: string;
+      repeatDayList: string[];
+      allDays: boolean;
+    }[];
   };
 }
 

@@ -5,6 +5,7 @@ export interface DeleteTodoResponse {
 export interface TodoItem {
   id: number;
   content: string;
+  type: string;
   completed: boolean;
 }
 
@@ -32,5 +33,7 @@ export interface ChangeTodoStateResponse {
 }
 
 export interface AddMyTodoResponse {
-  result: string;
+  result: {
+    id: number;
+  };
 }

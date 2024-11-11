@@ -1,11 +1,7 @@
 export interface UpdateTodoRequest {
-  todoId: number;
+  mateIdList: number[];
   content: string;
   timePoint: string;
-}
-
-export interface ChangeTodoStateRequest {
-  completed: boolean;
 }
 
 export interface AddMyTodoRequest {

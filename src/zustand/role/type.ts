@@ -1,4 +1,7 @@
 export interface RoleItem {
-  title: string;
+  id: number;
+  mateNameList: string[];
+  content: string;
   repeatDayList: string[];
+  allDays: boolean;
 }
