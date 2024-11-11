@@ -10,7 +10,7 @@ import {
 interface SameAnswerUserComponentProps {
   userData: {
     memberId: number;
-    memberNickName: string;
+    memberNickname: string;
     equality: number;
     preferenceStats: Record<string, string | number>;
   };
@@ -39,7 +39,7 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
         <Text className="pl-2 text-base font-semibold text-basicFont">
-          {userData.memberNickName}
+          {userData.memberNickname}
         </Text>
         <View className="flex flex-row items-center">
           <Text className="mr-1 text-xs font-medium text-disabledFont">

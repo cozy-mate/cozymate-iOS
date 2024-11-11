@@ -8,11 +8,11 @@ export const useRoleItemStore = create<{
   setRoleItem: (newRole: RoleItem) => void;
 }>((set) => ({
   roleItem: {
-    id: 0,
+    roleId: 0,
     mateNameList: [],
     content: '',
     repeatDayList: [],
-    allDays: false,
+    isAllDays: false,
   },
   setRoleItem: (newRole) => set((state) => ({ roleItem: { ...state.roleItem, ...newRole } })),
 }));

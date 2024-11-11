@@ -103,10 +103,8 @@ export interface SearchUsersResponse {
     memberList: {
       memberId: number;
       memberNickname: string;
-      memberAge: number;
-      memberPersona: number;
-      numOfRoommate: number;
       equality: number;
+      preferenceStats: Record<string, string | number>;
     }[];
   };
 }

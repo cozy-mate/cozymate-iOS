@@ -259,7 +259,7 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
 interface LifeStyleIconProps {
   icon: JSX.Element;
   label: string;
-  answer?: string;
+  answer?: string | number;
   isMine: boolean;
 }
 
@@ -282,7 +282,7 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
     </Text>
     {answer !== undefined && (
       <Text className="text-xs font-semibold tracking-tighter text-basicFont">
-        {truncateAnswer(answer, 5)}
+        {truncateAnswer(answer.toString(), 5)}
       </Text>
     )}
   </View>
@@ -300,7 +300,7 @@ export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
 };
 
 // 룸메이트의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoommateLifeStyleIcon = (option: LifestyleOptionKey, answer: string) => {
+export const getRoommateLifeStyleIcon = (option: LifestyleOptionKey, answer: string | number) => {
   const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
   return <LifestyleIcon icon={blueIcon} label={label} answer={answer} isMine={false} />;
 };

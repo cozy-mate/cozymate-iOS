@@ -3,7 +3,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
-import RoleBox from '@components/todoList/roleBox';
 import CustomCalendar from '@components/todoList/customCalendar';
 
 import { RuleItem } from '@zustand/rule/type';
@@ -17,7 +16,7 @@ import { useGetRuleData } from '@hooks/api/rule';
 import { useGetRoleData } from '@hooks/api/role';
 import { useChangeTodo, useGetTodoData } from '@hooks/api/todo';
 
-import { getDayOfWeek } from '@utils/getDay';
+import { formatDate } from '@utils/getDay';
 import { getProfileImage } from '@utils/profileImage';
 
 import { RoleNRuleScreenProps } from '@type/param/stack';
@@ -29,18 +28,18 @@ import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
 import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
 
 interface TodoItem {
-  id: number;
+  todoId: number;
   content: string;
-  type: string;
   completed: boolean;
+  todoType: string;
 }
 
 interface RoleItem {
-  id: number;
+  roleId: number;
   mateNameList: string[];
   content: string;
   repeatDayList: string[];
-  allDays: boolean;
+  isAllDays: boolean;
 }
 
 const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
@@ -71,30 +70,6 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
-  const { setTodoItem } = useTodoItemStore();
-
-  const handleTodoItem = (todo: TodoItem) => {
-    setTodoItem({ todoId: todo.id, content: todo.content, type: todo.type, timePoint: timePoint });
-  };
-
-  const { setRuleItem } = useRuleItemStore();
-
-  const handleRuleItem = (rule: RuleItem) => {
-    setRuleItem(rule);
-  };
-
-  const { setRoleItem } = useRoleItemStore();
-
-  const handleRoleItem = (role: RoleItem) => {
-    setRoleItem({
-      id: role.id,
-      mateNameList: role.mateNameList,
-      content: role.content,
-      repeatDayList: role.repeatDayList,
-      allDays: role.allDays,
-    });
-  };
-
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
   // const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
@@ -103,9 +78,38 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
   //   changeTodoMutate({ todoId: todo.id });
   // };
 
+  const { setTodoItem } = useTodoItemStore();
+
+  const handleTodoItem = (todo: TodoItem) => {
+    setTodoItem({
+      todoId: todo.todoId,
+      content: todo.content,
+      type: todo.todoType,
+      timePoint: timePoint,
+    });
+  };
+
   const { data: ruledata } = useGetRuleData(roomInfo.roomId);
 
+  const { setRuleItem } = useRuleItemStore();
+
+  const handleRuleItem = (rule: RuleItem) => {
+    setRuleItem(rule);
+  };
+
   const { data: roledata } = useGetRoleData(roomInfo.roomId);
+
+  const { setRoleItem } = useRoleItemStore();
+
+  const handleRoleItem = (role: RoleItem) => {
+    setRoleItem({
+      roleId: role.roleId,
+      mateNameList: role.mateNameList,
+      content: role.content,
+      repeatDayList: role.repeatDayList,
+      isAllDays: role.isAllDays,
+    });
+  };
 
   return (
     <View className="flex-1 bg-sub1">
@@ -119,7 +123,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
             <View>
               <View className="mb-4 flex flex-row justify-between px-1">
                 <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-                  <Text className="text-main1">{tododata.result.timePoint}, </Text>
+                  <Text className="text-main1">{formatDate(tododata.result.timePoint)}, </Text>
                   {profile.nickname}님이
                   {'\n'}해야할 일들을 알려드릴게요!
                 </Text>
@@ -129,11 +133,11 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                 <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
               </View>
 
-              <View className="rounded-xl border border-[#F1F1F1] bg-white p-2">
+              <View className="rounded-xl border border-[#F1F1F1] bg-white p-2 pr-4">
                 {tododata.result.myTodoList.mateTodoList.length !== 0 ? (
                   tododata.result.myTodoList.mateTodoList.map((todo, index) => (
                     <View
-                      key={todo.id}
+                      key={todo.todoId}
                       className={`mb-1 flex flex-row items-center justify-between ${
                         index == tododata.result.myTodoList.mateTodoList.length - 1 && 'mb-0'
                       }`}
@@ -145,14 +149,14 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         <Text>{todo.content}</Text>
                         <View
                           className={`ml-1.5 h-1.5 w-1.5 rounded-full ${
-                            todo.type === 'group' && 'bg-main1'
-                          } ${todo.type === 'other' && 'bg-main2'}`}
+                            todo.todoType === 'group' && 'bg-main1'
+                          } ${todo.todoType === 'other' && 'bg-main2'}`}
                         />
                       </View>
 
                       <Pressable
                         onPress={() => {
-                          toEdit('todo', todo.id);
+                          toEdit('todo', todo.todoId);
                           handleTodoItem(todo);
                         }}
                       >
@@ -161,8 +165,10 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                     </View>
                   ))
                 ) : (
-                  <View>
-                    <Text>없음</Text>
+                  <View className="flex h-36 items-center justify-center">
+                    <Text className="text-sm font-medium text-disabledFont">
+                      오늘 등록된 할 일이 없어요!
+                    </Text>
                   </View>
                 )}
               </View>
@@ -178,13 +184,13 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                   className="flex flex-col rounded-xl border border-[#F1F1F1] bg-white pb-2 pt-4"
                 >
                   <View className="mb-2 flex flex-row items-center space-x-1.5 px-4">
-                    <View>{getProfileImage(value.persona, 24, 24)}</View>
+                    <View>{getProfileImage(value.memberDetail.persona, 24, 24)}</View>
                     <Text>{key}</Text>
                   </View>
                   <View className="flex flex-col">
                     {value.mateTodoList.length !== 0 ? (
                       value.mateTodoList.map((todo) => (
-                        <View className="flex flex-row items-center px-2">
+                        <View className="flex flex-row items-center px-2" key={todo.todoId}>
                           {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
                           <Text>{todo.content}</Text>
                         </View>
@@ -212,7 +218,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               <View className="rounded-xl border border-[#F1F1F1] bg-white px-4 py-2">
                 {ruledata.result.map((rule, index) => (
                   <View
-                    key={rule.id}
+                    key={rule.ruleId}
                     className={`mb-1 flex flex-row items-center justify-between ${
                       index == ruledata.result.length - 1 && 'mb-0'
                     }`}
@@ -235,7 +241,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
 
                     <Pressable
                       onPress={() => {
-                        toEdit('rule', rule.id);
+                        toEdit('rule', rule.ruleId);
                         handleRuleItem(rule);
                       }}
                     >
@@ -252,7 +258,10 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               </Text>
               {roledata.result.roleList.length !== 0 ? (
                 roledata.result.roleList.map((role) => (
-                  <View key={role.id} className="rounded-xl border border-[#F1F1F1] bg-white p-4">
+                  <View
+                    key={role.roleId}
+                    className="rounded-xl border border-[#F1F1F1] bg-white p-4"
+                  >
                     <View className="flex flex-row items-center justify-between">
                       {role.repeatDayList.length === 7 ? (
                         <View className="rounded-sm bg-colorBox px-2 py-0.5">
@@ -267,7 +276,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                       )}
                       <Pressable
                         onPress={() => {
-                          toEdit('role', role.id);
+                          toEdit('role', role.roleId);
                           handleRoleItem(role);
                         }}
                       >

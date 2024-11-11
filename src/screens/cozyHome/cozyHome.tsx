@@ -68,7 +68,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
         setUserList(response.result.memberList);
       } else {
-        const response = await getRandomUser({ seenMemberStatIds: [] });
+        const response = await getRandomUser();
 
         setUserList(response.result.memberList);
       }
@@ -172,7 +172,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const handleUser = (user: UserItem) => {
     setMemberInfo({
       memberId: user.memberId,
-      memberNickName: user.memberNickName,
+      memberNickName: user.memberNickname,
       memberAge: 0,
       memberPersona: 1,
       equality: user.equality,

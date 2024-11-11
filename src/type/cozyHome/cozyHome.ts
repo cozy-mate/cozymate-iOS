@@ -1,6 +1,6 @@
 export interface UserItem {
   memberId: number;
-  memberNickName: string;
+  memberNickname: string;
   equality: number;
   preferenceStats: Record<string, string | number>;
 }

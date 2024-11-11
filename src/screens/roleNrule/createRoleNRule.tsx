@@ -47,7 +47,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
 
   // Role
   const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
-  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
   const [repeatDayList, setRepeatDayList] = useState<string[]>([]);
 
   const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
@@ -69,7 +69,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return roleMateIdList.length > 0 && title.trim() !== '' && repeatDayList.length > 0;
+      return roleMateIdList.length > 0 && content.trim() !== '' && repeatDayList.length > 0;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -93,13 +93,13 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
         console.log(error.response.data.message);
       }
     } else if (type === 'role') {
-      if (roleMateIdList.length === 0 || title.trim() === '' || repeatDayList.length === 0) {
+      if (roleMateIdList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
         return;
       }
       try {
         await addRoleMutate({
           mateIdList: roleMateIdList,
-          title: title,
+          content: content,
           repeatDayList: repeatDayList,
         });
         toRoleNRule();
@@ -160,8 +160,8 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
 
               <CustomTextInputBox
                 title="역할을 입력해주세요"
-                value={title}
-                setValue={setTitle}
+                value={content}
+                setValue={setContent}
                 placeholder="역할을 입력해주세요"
               />
               <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />

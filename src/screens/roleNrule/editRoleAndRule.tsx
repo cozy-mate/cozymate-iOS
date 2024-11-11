@@ -74,7 +74,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
   const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
   const { mutateAsync: updateRoleMutate } = useUpdateRole(
     roomInfo.roomId,
-    roleItem.id,
+    roleItem.roleId,
     refetchRole,
   );
 
@@ -121,13 +121,9 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
   // 생성 가능한 지 여부 확인
   const canSubmit = () => {
     if (type === 'todo') {
-      return (
-        todoContent.trim() !== '' &&
-        //&& todoMateIdList.length > 0
-        !!timePoint
-      );
+      return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return content.trim() !== '' && repeatDayList.length > 0; // roleMateIdList.length > 0 &&
+      return content.trim() !== '' && roleMateIdList.length > 0 && repeatDayList.length > 0;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -139,7 +135,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
       <ScrollView bounces={false}>
         <View style={{ paddingBottom: bottom }}>
           <BackNav leftPressFunc={toBack} />
-          <RoleNRuleNav type={type} changeType={changeType} />
+          <RoleNRuleNav type={type} changeType={changeType} isEdit={true} />
 
           {type == 'todo' && (
             <View className="px-5">
