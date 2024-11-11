@@ -1,13 +1,10 @@
 export interface ListViewProps {
-  // userBasicData: {
-  //   memberId: number;
-  //   memberName: string;
-  //   memberNickName: string;
-  //   memberAge: number;
-  //   memberPersona: number;
-  //   numOfRoommate: number;
-  //   equality: number;
-  // };
+  userBasicData: {
+    memberId: number;
+    memberNickName: string;
+    equality: number;
+    preferenceStats: Record<string, string | number>;
+  };
   userData: {
     universityId: number;
     admissionYear: string;

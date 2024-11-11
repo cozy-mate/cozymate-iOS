@@ -18,13 +18,6 @@ export const deleteMember = async (): Promise<DeleteMemberResponse> => {
   return response.data;
 };
 
-// 로그아웃
-export const signOut = async () => {
-  const response = await GetAxiosInstance(`/members/sign-out`);
-
-  return response.data;
-};
-
 // 사용자 정보 조회
 export const getMyProfile = async (): Promise<GetProfileResponse> => {
   const response = await GetAxiosInstance<GetProfileResponse>(`/members/member-info`);

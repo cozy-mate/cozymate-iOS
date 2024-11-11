@@ -45,7 +45,9 @@ module.exports = {
         box: '#F1F1F1',
         colorBox: '#F3F6FA',
 
-        warning: '#FF391E',
+        warning: '#FF6868',
+
+        disabledButton: '#C4C4C4',
 
         // 소셜 로그인용 색깔
         kakaoyellow: '#FEE500',

@@ -6,9 +6,9 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
+import { signIn, getMyProfile } from '@server/api/member';
 import { getUserDetailData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
-import { signIn, signUp, getMyProfile } from '@server/api/member';
 import {
   GetProfileResponse,
   AppleLoginResponse,
@@ -124,8 +124,9 @@ export const appleLoginAuth = async (): Promise<AppleLoginResponse> => {
 };
 
 // 애플 로그인
-export const useAppleLogin = (): //navigation: any,
-UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
+export const useAppleLogin = (
+  navigation: any,
+): UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
   // 로그인 정보
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
@@ -151,14 +152,7 @@ UseMutationResult<AppleLoginResponse, Error, void, unknown> => {
         await setAccessToken(accessToken);
 
         if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
-          // navigation.navigate('PersonalInfoInputScreen');
-          await signUp({
-            name: '정진혁',
-            nickname: '테스트으으으',
-            gender: 'MALE',
-            birthday: '1999-02-13',
-            persona: 1,
-          });
+          navigation.navigate('PersonalInfoInputScreen');
         } else {
           await setRefreshToken(refreshToken);
 

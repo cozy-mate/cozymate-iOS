@@ -1,10 +1,12 @@
 export interface GetUserDetailDataResponse {
   result: {
     universityId: number;
-    admissionYear: string;
+    admissionYear: number;
     birthYear: number;
     major: string;
+    memberPersona: number;
     numOfRoommate: number;
+    dormitoryNames: string;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number;
@@ -36,10 +38,12 @@ export interface GetUserDetailDataResponse {
 export interface GetOtherUserDetailDataResponse {
   result: {
     universityId: number;
-    admissionYear: string;
+    admissionYear: number;
     birthYear: number;
     major: string;
+    memberPersona: number;
     numOfRoommate: number;
+    dormitoryNames: string;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number;
@@ -68,25 +72,40 @@ export interface GetOtherUserDetailDataResponse {
   };
 }
 
-export interface CheckDormitoryNumResponse {
-  result: number;
+export interface SearchUserByKeywordResponse {
+  result: {
+    memberId: number;
+    memberNickname: string;
+    memberPersona: number;
+    equality: number;
+  }[];
 }
 
-export interface SearchedUsers {
-  memberId: number;
-  memberName: string;
-  memberNickName: string;
-  memberAge: number;
-  memberPersona: number;
-  numOfRoommate: number;
-  equality: number;
+export interface GetRandomUserResponse {
+  result: {
+    memberList: {
+      memberId: number;
+      memberNickname: string;
+      equality: number;
+      preferenceStats: Record<string, string | number>;
+    }[];
+  };
+}
+
+export interface CheckDormitoryNumResponse {
+  result: number;
 }
 
 export interface SearchUsersResponse {
   result: {
     page: number;
     hasNext: boolean;
-    result: SearchedUsers[];
+    memberList: {
+      memberId: number;
+      memberNickname: string;
+      equality: number;
+      preferenceStats: Record<string, string | number>;
+    }[];
   };
 }
 

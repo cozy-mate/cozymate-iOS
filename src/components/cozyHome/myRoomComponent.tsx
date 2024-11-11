@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 interface MatelistItem {
   memberId: number;
   mateId: number;
@@ -18,12 +20,18 @@ interface MyRoomComponentProps {
     inviteCode: string;
     profileImage: number;
     mateList: MatelistItem[];
+    managerId: number;
+    isRoomManager: boolean;
     maxMateNum: number;
     numOfArrival: number;
     roomType: string;
     hashtags: string[];
-    equaility: number;
-    roomManager: boolean;
+    equality: number;
+    difference: {
+      blue: LifestyleOptionKey[];
+      red: LifestyleOptionKey[];
+      white: LifestyleOptionKey[];
+    };
   };
 }
 
@@ -59,7 +67,7 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
             <Text className="text-main1">{roomData.numOfArrival}명</Text>의 룸메이트가 있어요
           </Text>
 
-          <Text className="text-base font-medium text-colorFont">{roomData.equaility}%</Text>
+          <Text className="text-base font-medium text-colorFont">{roomData.equality}%</Text>
         </View>
       </LinearGradient>
     </Pressable>

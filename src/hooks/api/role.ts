@@ -1,8 +1,12 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { addRole, getRoleData } from '@server/api/role';
-import { AddRoleRequest } from '@server/requestTypes/role';
-import { AddRoleResponse, GetRoleDataResponse } from '@server/responseTypes/role';
+import { addRole, updateRole, getRoleData } from '@server/api/role';
+import { AddRoleRequest, UpdateRoleRequest } from '@server/requestTypes/role';
+import {
+  AddRoleResponse,
+  UpdateRoleResponse,
+  GetRoleDataResponse,
+} from '@server/responseTypes/role';
 
 // Role 생성
 export const useAddRole = (
@@ -33,4 +37,19 @@ export const useGetRoleData = (
   });
 
   return { data, refetch };
+};
+
+// Role 수정
+export const useUpdateRole = (
+  roomId: number,
+  roleId: number,
+  refetchRoleData: () => void,
+): UseMutationResult<UpdateRoleResponse, void, UpdateRoleRequest, unknown> => {
+  return useMutation({
+    mutationFn: (updateRoleRequest: UpdateRoleRequest) =>
+      updateRole(roomId, roleId, updateRoleRequest),
+    onSuccess: () => {
+      refetchRoleData();
+    },
+  });
 };

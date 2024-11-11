@@ -3,13 +3,7 @@ import { View, Text, Pressable } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ListViewProps> = ({
-  //userBasicData,
-  userData,
-  openModal,
-}) => {
-  console.log(userData);
-
+const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal }) => {
   const intensityMapping = [
     { index: 0, name: '아예 틀지 않아요' },
     { index: 1, name: '약하게 틀어요' },
@@ -24,6 +18,42 @@ const ListView: React.FC<ListViewProps> = ({
     { index: 4, name: '예민해요' },
     { index: 5, name: '매우 예민해요' },
   ];
+
+  const basicInfo = {
+    nickname: userBasicData.memberNickName,
+    birthYear: userData.birthYear,
+    // universityId: userBasicData.universityId,
+    admissionYear: userData.admissionYear,
+    major: userData.major,
+  };
+
+  const dormInfo = {
+    numOfRoommate: userData.numOfRoommate,
+    acceptance: userData.acceptance,
+  };
+
+  const essentialInfo = {
+    wakeUpTime: userData.wakeUpTime,
+    sleepingTime: userData.sleepingTime,
+    turnOffTime: userData.turnOffTime,
+    smokingState: userData.smokingState,
+    sleepingHabit: userData.sleepingHabit,
+    airConditioningIntensity: userData.airConditioningIntensity,
+    heatingIntensity: userData.heatingIntensity,
+    lifePattern: userData.lifePattern,
+    intimacy: userData.intimacy,
+    canShare: userData.canShare,
+    studying: userData.studying,
+    isPlayGame: userData.isPlayGame,
+    isPhoneCall: userData.isPhoneCall,
+    intake: userData.intake,
+    cleanSensitivity: userData.cleanSensitivity,
+    noiseSensitivity: userData.noiseSensitivity,
+    cleaningFrequency: userData.cleaningFrequency,
+    drinkingFrequency: userData.drinkingFrequency,
+    personality: userData.personality,
+    mbti: userData.mbti,
+  };
 
   const formatValue = (key: string, value: any) => {
     if (key === 'birthYear') {
@@ -50,13 +80,15 @@ const ListView: React.FC<ListViewProps> = ({
 
   const renderInfo = (info: Record<string, any>, title: string) => {
     const labels: Record<string, string> = {
-      memberName: '이름',
+      nickname: '닉네임',
       birthYear: '출생년도',
       universityId: '학교',
       admissionYear: '학번',
       major: '학과',
+
       numOfRoommate: '인실',
       acceptance: '합격여부',
+
       wakeUpTime: '기상시간',
       sleepingTime: '취침시간',
       turnOffTime: '소등시간',
@@ -67,13 +99,14 @@ const ListView: React.FC<ListViewProps> = ({
       lifePattern: '생활 패턴',
       intimacy: '친밀도',
       canShare: '물건공유',
-      studying: '공부여부',
       isPlayGame: '게임여부',
       isPhoneCall: '전화여부',
+      studying: '공부여부',
       intake: '섭취여부',
       cleanSensitivity: '청결 예민도',
       noiseSensitivity: '소음 예민도',
       cleaningFrequency: '청소 빈도',
+      drinkingFrequency: '음주 빈도',
       personality: '성격',
       mbti: 'MBTI',
     };
@@ -81,7 +114,7 @@ const ListView: React.FC<ListViewProps> = ({
     const infoEntries = Object.entries(info);
 
     return (
-      <View className={`mb-14 ${info == essentialInfo && 'mb-0'}`}>
+      <View className={`mb-14 ${info === essentialInfo ? 'mb-0' : ''}`}>
         <Text className="mb-2 px-1 text-base font-semibold text-emphasizedFont">{title}</Text>
         <View className="rounded-xl border border-[#F1F2F4] p-4">
           {infoEntries.map(([key, value], index) =>
@@ -104,45 +137,10 @@ const ListView: React.FC<ListViewProps> = ({
     );
   };
 
-  // const basicInfo = {
-  //   memberName: userBasicData.memberName,
-  //   birthYear: userData.birthYear,
-  //   universityId: userData.universityId,
-  //   admissionYear: userData.admissionYear,
-  //   major: userData.major,
-  // };
-
-  const dormInfo = {
-    numOfRoommate: userData.numOfRoommate,
-    acceptance: userData.acceptance,
-  };
-
-  const essentialInfo = {
-    wakeUpTime: userData.wakeUpTime,
-    sleepingTime: userData.sleepingTime,
-    turnOffTime: userData.turnOffTime,
-    smokingState: userData.smokingState,
-    sleepingHabit: userData.sleepingHabit,
-    airConditioningIntensity: userData.airConditioningIntensity,
-    heatingIntensity: userData.heatingIntensity,
-    lifePattern: userData.lifePattern,
-    intimacy: userData.intimacy,
-    canShare: userData.canShare,
-    studying: userData.studying,
-    isPlayGame: userData.isPlayGame,
-    isPhoneCall: userData.isPhoneCall,
-    intake: userData.intake,
-    cleanSensitivity: userData.cleanSensitivity,
-    noiseSensitivity: userData.noiseSensitivity,
-    cleaningFrequency: userData.cleaningFrequency,
-    personality: userData.personality,
-    mbti: userData.mbti,
-  };
-
   return (
     <View className="mt-4 px-5 pb-[54px]">
       <View className="mb-14">
-        {/* {renderInfo(basicInfo, '기본정보')} */}
+        {renderInfo(basicInfo, '기본정보')}
         {renderInfo(dormInfo, '기숙사 정보')}
         {renderInfo(essentialInfo, '필수정보')}
       </View>

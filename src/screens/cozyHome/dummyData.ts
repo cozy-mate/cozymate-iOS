@@ -11,18 +11,6 @@ export const RoomDummyData = [
     currentNum: 3,
     equality: 32,
   },
-  {
-    title: '피그말리온',
-    hashTag: ['담배사절', '같이애니보실?'],
-    currentNum: 3,
-    equality: 75,
-  },
-  {
-    title: '피그말리온',
-    hashTag: ['담배사절', '같이애니보실?'],
-    currentNum: 3,
-    equality: 32,
-  },
 ];
 
 export const UserDummyData = [

@@ -3,21 +3,19 @@ import { View, Text, Pressable } from 'react-native';
 
 import { getProfileImage } from '@utils/profileImage';
 
+interface UserItem {
+  memberId: number;
+  memberNickName: string;
+  equality: number;
+  preferenceStats: Record<string, string | number>;
+}
+
 interface SameAnswerContainerProps {
   index: number;
   user: UserItem;
   toUserDetail: (user: UserItem) => void;
 }
 
-type UserItem = {
-  memberId: number;
-  memberName: string;
-  memberNickName: string;
-  memberAge: number;
-  memberPersona: number;
-  numOfRoommate: number;
-  equality: number;
-};
 
 const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ index, user, toUserDetail }) => {
   return (
@@ -29,7 +27,7 @@ const SameAnswerContainer: React.FC<SameAnswerContainerProps> = ({ index, user, 
       >
         <View className="flex w-full flex-row items-center justify-between">
           <View className="flex flex-row items-center">
-            {getProfileImage(user.memberPersona, 46, 46)}
+            {getProfileImage(user., 46, 46)}
             <View className="ml-2 flex-col">
               <View className="mb-1.5 flex-row">
                 <View className="mr-1.5 rounded-[4px] bg-colorBox">

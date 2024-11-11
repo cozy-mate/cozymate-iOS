@@ -95,7 +95,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
 
       <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
         <View className="absolute right-2 top-[-120px]">
-          <Pressable onPress={toEdit} disabled={!roomInfo.roomManager}>
+          <Pressable onPress={toEdit} disabled={!roomInfo.isRoomManager}>
             {getProfileImage(roomInfo.profileImage, 140, 140)}
           </Pressable>
         </View>

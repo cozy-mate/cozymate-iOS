@@ -3,19 +3,19 @@ import { View } from 'react-native';
 
 import CustomCheckBoxComponent from '@components/customCheckBox';
 
-interface CheckBoxContainerProps {
-  value: string[];
-  setValue: React.Dispatch<React.SetStateAction<string[]>>;
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-}
-
 type Item = {
   index: number;
   id: string;
   name: string;
   select: boolean;
 };
+
+interface CheckBoxContainerProps {
+  value: string[];
+  setValue: React.Dispatch<React.SetStateAction<string[]>>;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+}
 
 const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
   value,

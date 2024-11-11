@@ -2,15 +2,16 @@ export interface SignUp {
   nickname: string;
   gender: string;
   birthday: string;
-  school: number;
+  universityId: number;
   persona: number;
 }
 
 export interface Profile {
-  name: string;
   nickname: string;
   gender: string;
   birthday: string;
+  universityName: string;
+  majorName: string;
   persona: number;
 }
 

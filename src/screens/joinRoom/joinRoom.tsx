@@ -63,8 +63,14 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         inviteCode: response.result.inviteCode,
         profileImage: response.result.profileImage,
         mateList: response.result.mateList,
+        managerId: response.result.managerId,
+        isRoomManager: response.result.isRoomManager,
+        maxMateNum: response.result.maxMateNum,
+        numOfArrival: response.result.numOfArrival,
         roomType: response.result.roomType,
-        hashtags: response.result.hashtags || [],
+        hashtags: response.result.hashtags,
+        equality: response.result.equality,
+        difference: response.result.difference,
       });
 
       setMyRoom({ hasRoom: true, roomId: inviteCodeRoomInfo.roomId });

@@ -100,7 +100,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                     }`}
                     style={{ width: '50%', textAlign: 'center' }}
                   >
-                    {truncateString(formatValue(key, my[key]))}
+                    {formatValue(key, my[key])}
                   </Text>
                   <Text
                     className={`font-medium tracking-tight ${
@@ -110,7 +110,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                     }`}
                     style={{ width: '50%', textAlign: 'center' }}
                   >
-                    {truncateString(formatValue(key, other[key]))}
+                    {formatValue(key, other[key])}
                   </Text>
                 </View>
               </View>

@@ -8,6 +8,7 @@ export interface GetChatRoomListResponse {
     nickName: string;
     lastContent: string;
     chatRoomId: number;
+    memberId: number;
   }[];
 }
 

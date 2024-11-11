@@ -89,12 +89,14 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           inviteCode: response.result.inviteCode,
           profileImage: response.result.profileImage,
           mateList: response.result.mateList,
+          managerId: response.result.managerId,
+          isRoomManager: response.result.isRoomManager,
           maxMateNum: response.result.maxMateNum,
           numOfArrival: response.result.numOfArrival,
           roomType: response.result.roomType,
           hashtags: response.result.hashtags,
-          equaility: response.result.equaility,
-          roomManager: response.result.roomManager,
+          equality: response.result.equality,
+          difference: response.result.difference,
         });
       } else if (type === 'PRIVATE') {
         const response = await updateRoom(id, { name: name });
@@ -105,12 +107,14 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           inviteCode: response.result.inviteCode,
           profileImage: response.result.profileImage,
           mateList: response.result.mateList,
+          managerId: response.result.managerId,
+          isRoomManager: response.result.isRoomManager,
           maxMateNum: response.result.maxMateNum,
           numOfArrival: response.result.numOfArrival,
           roomType: response.result.roomType,
           hashtags: response.result.hashtags,
-          equaility: response.result.equaility,
-          roomManager: response.result.roomManager,
+          equality: response.result.equality,
+          difference: response.result.difference,
         });
       }
 

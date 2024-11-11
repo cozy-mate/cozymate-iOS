@@ -2,14 +2,25 @@ export interface DeleteTodoResponse {
   result: string;
 }
 
+export interface MemberDetailItem {
+  memberId: number;
+  nickname: string;
+  gender: string;
+  birthday: string;
+  universityName: string;
+  majorName: string;
+  persona: number;
+}
+
 export interface TodoItem {
-  id: number;
+  todoId: number;
   content: string;
   completed: boolean;
+  todoType: string;
 }
 
 export interface MateTodoItem {
-  persona: number;
+  memberDetail: MemberDetailItem;
   mateTodoList: TodoItem[];
 }
 
@@ -32,5 +43,7 @@ export interface ChangeTodoStateResponse {
 }
 
 export interface AddMyTodoResponse {
-  result: string;
+  result: {
+    todoId: number;
+  };
 }

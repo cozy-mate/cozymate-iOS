@@ -10,6 +10,7 @@ export const useTodoItemStore = create<{
   todoItem: {
     todoId: 0,
     content: '',
+    type: '',
     timePoint: '',
   },
   setTodoItem: (newTodo) => set((state) => ({ todoItem: { ...state.todoItem, ...newTodo } })),

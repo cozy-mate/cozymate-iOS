@@ -1,17 +1,13 @@
-import { useRecoilState } from 'recoil';
 import React, { useState, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import SearchModal from '@components/roomMate/searchModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
-import SameAnswerContainer from '@components/roomMate/sameAnswerContainer';
-import DetailSearchModal from '@components/roomMate/trash/detailSearchModal';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
+import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
-import { OtherBasicData, OtherLifeStyleState } from '@recoil/recoil';
 
 import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
 
@@ -22,15 +18,12 @@ import { RoomMateScreenProps } from '@type/param/stack';
 import BackButton from '@assets/backButton.svg';
 import FilterIcon from '@assets/roomMate/filter.svg';
 
-type UserItem = {
+interface UserItem {
   memberId: number;
-  memberName: string;
   memberNickName: string;
-  memberAge: number;
-  memberPersona: number;
-  numOfRoommate: number;
   equality: number;
-};
+  preferenceStats: Record<string, string | number>;
+}
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -41,13 +34,22 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [page, setPage] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
-  const [displayedUsers, setDisplayedUsers] = useState<UserItem[]>([]); // 표시할 사용자 목록
+  const [userList, setUserList] = useState<UserItem[]>([]); // 표시할 사용자 목록
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleModal = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await searchUsers(page, true);
+
+      setUserList(response.result.result);
+    };
+    fetchData();
+  }, []);
 
   const [items, setItems] = useState([
     { index: 1, id: 'admissionYear', name: '학번', select: false },
@@ -75,8 +77,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
-  const { data: similarmatedata } = useSearchUsers();
+  // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
 
   const toHome = () => {
     navigation.goBack();
@@ -116,25 +117,25 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
         {/* 사용자 목록 */}
         <View
-          className="mb-9 flex flex-col items-center px-5"
+          className="mb-9 flex flex-col items-center space-y-6 px-5"
           style={{ paddingBottom: bottom + 20 }}
         >
           {hasLifeStyle ? (
-            displayedUsers.length > 0 ? (
-              displayedUsers.map((user, index) => (
-                <SameAnswerContainer
-                  key={user.memberId}
-                  index={index}
-                  user={user}
-                  toUserDetail={() => toOtherDetail(user.memberId)}
-                />
+            userList.length > 0 ? (
+              userList.map((user) => (
+                <View key={user.memberId}>
+                  <SameAnswerUserComponent
+                    userData={user}
+                    pressFunc={() => toOtherDetail(user.memberId)}
+                  />
+                </View>
               ))
             ) : (
               <View>
                 <Text>비어있음</Text>
               </View>
             )
-          ) : displayedUsers.length > 0 || filterList.length > 0 ? (
+          ) : userList.length > 0 || filterList.length > 0 ? (
             <NoLifeStyleComponent />
           ) : (
             <View>

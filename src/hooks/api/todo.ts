@@ -1,9 +1,10 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { addMyTodo, getTodoData, changeTodoState } from '@server/api/todo';
-import { AddMyTodoRequest, ChangeTodoStateRequest } from '@server/requestTypes/todo';
+import { AddMyTodoRequest, UpdateTodoRequest } from '@server/requestTypes/todo';
+import { addMyTodo, updateTodo, getTodoData, changeTodoState } from '@server/api/todo';
 import {
   AddMyTodoResponse,
+  UpdateTodoResponse,
   GetTodoDataResponse,
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
@@ -23,11 +24,13 @@ export const useAddMyTodo = (
 
 // Todo 상태 변경 (완료 <-> 미완료)
 export const useChangeTodo = (
+  roomId: number,
+  completed: boolean,
   refetchTodoData: () => void,
-): UseMutationResult<ChangeTodoStateResponse, void, ChangeTodoStateRequest> => {
+): UseMutationResult<ChangeTodoStateResponse, void, { todoId: number }> => {
   return useMutation({
-    mutationFn: (changeTodoStateRequest: ChangeTodoStateRequest) =>
-      changeTodoState(changeTodoStateRequest),
+    mutationFn: async ({ todoId }: { todoId: number }) =>
+      changeTodoState(roomId, todoId, completed),
     onSuccess: () => {
       // mutation 성공 시, Todo 데이터를 다시 불러옴
       refetchTodoData();
@@ -50,4 +53,19 @@ export const useGetTodoData = (
   });
 
   return { data, refetch };
+};
+
+// Todo 수정
+export const useUpdateTodo = (
+  roomId: number,
+  todoId: number,
+  refetchTodoData: () => void,
+): UseMutationResult<UpdateTodoResponse, void, UpdateTodoRequest, unknown> => {
+  return useMutation({
+    mutationFn: (updateTodoRequest: UpdateTodoRequest) =>
+      updateTodo(roomId, todoId, updateTodoRequest),
+    onSuccess: () => {
+      refetchTodoData();
+    },
+  });
 };

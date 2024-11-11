@@ -2,6 +2,8 @@ import { create } from 'zustand';
 
 import { LifeStyle } from './type';
 
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 export const useHasLifeStyleStore = create<{
   hasLifeStyle: boolean;
   setHasLifeStyle: (status: boolean) => void;
@@ -47,4 +49,12 @@ export const useLifeStyleStore = create<{
     set((state) => ({
       lifeStyle: { ...state.lifeStyle, ...newLifeStyle },
     })),
+}));
+
+export const usePreferencesStore = create<{
+  preferences: LifestyleOptionKey[];
+  setPreferences: (status: LifestyleOptionKey[]) => void;
+}>((set) => ({
+  preferences: [],
+  setPreferences: (status) => set({ preferences: status }),
 }));

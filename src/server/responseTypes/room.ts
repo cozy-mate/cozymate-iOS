@@ -1,3 +1,5 @@
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 export interface DeleteRoomResponse {
   result: string;
 }
@@ -15,12 +17,18 @@ export interface GetRoomDataResponse {
       persona: number;
       mateEquality: number;
     }[];
+    managerId: number;
+    isRoomManager: boolean;
     maxMateNum: number;
     numOfArrival: number;
     roomType: string;
     hashtags: string[];
-    equaility: number;
-    roomManager: boolean;
+    equality: number;
+    difference: {
+      blue: LifestyleOptionKey[];
+      red: LifestyleOptionKey[];
+      white: LifestyleOptionKey[];
+    };
   };
 }
 
@@ -60,12 +68,18 @@ export interface UpdateRoomResponse {
       persona: number;
       mateEquality: number;
     }[];
+    managerId: number;
+    isRoomManager: boolean;
     maxMateNum: number;
     numOfArrival: number;
     roomType: string;
     hashtags: string[];
-    equaility: number;
-    roomManager: boolean;
+    equality: number;
+    difference: {
+      blue: LifestyleOptionKey[];
+      red: LifestyleOptionKey[];
+      white: LifestyleOptionKey[];
+    };
   };
 }
 

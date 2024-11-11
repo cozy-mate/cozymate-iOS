@@ -3,30 +3,25 @@ export interface DeleteRoleResponse {
 }
 
 export interface RoleItem {
-  id: number;
+  roleId: number;
+  mateNameList: string[];
   content: string;
   repeatDayList: string[];
-  allDays: boolean;
-}
-
-export interface MateRoleItem {
-  persona: number;
-  mateRoleList: RoleItem[];
+  isAllDays: boolean;
 }
 
 export interface GetRoleDataResponse {
   result: {
-    myRoleList: MateRoleItem;
-    otherRoleList: {
-      [key: string]: MateRoleItem;
-    };
+    roleList: RoleItem[];
+  };
+}
+
+export interface AddRoleResponse {
+  result: {
+    roleId: number;
   };
 }
 
 export interface UpdateRoleResponse {
-  result: string;
-}
-
-export interface AddRoleResponse {
   result: string;
 }

@@ -5,32 +5,30 @@ import {
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
-import {
-  AddMyTodoRequest,
-  UpdateTodoRequest,
-  ChangeTodoStateRequest,
-} from '@server/requestTypes/todo';
+import { AddMyTodoRequest, UpdateTodoRequest } from '@server/requestTypes/todo';
 import {
   AddMyTodoResponse,
   DeleteTodoResponse,
   UpdateTodoResponse,
+  GetTodoDataResponse,
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
 
 // 특정 방의 특정 Todo 삭제
-export const deleteTodo = async (todoId: number): Promise<DeleteTodoResponse> => {
-  const response = await DeleteAxiosInstance<DeleteTodoResponse>(`/todo`, {
-    params: {
-      todoId: todoId,
-    },
-  });
+export const deleteTodo = async (roomId: number, todoId: number): Promise<DeleteTodoResponse> => {
+  const response = await DeleteAxiosInstance<DeleteTodoResponse>(
+    `/rooms/${roomId}/todos/${todoId}`,
+  );
 
   return response.data;
 };
 
 // 특정 방의 특정 날짜 기준 룸메별 Todo 조회
-export const getTodoData = async (roomId: number, timePoint?: string) => {
-  const response = await GetAxiosInstance(`/todo/${roomId}`, {
+export const getTodoData = async (
+  roomId: number,
+  timePoint?: string,
+): Promise<GetTodoDataResponse> => {
+  const response = await GetAxiosInstance<GetTodoDataResponse>(`/rooms/${roomId}/todos`, {
     params: {
       timePoint: timePoint,
     },
@@ -40,17 +38,29 @@ export const getTodoData = async (roomId: number, timePoint?: string) => {
 };
 
 // Todo의 내용을 수정
-export const updateTodo = async (data: UpdateTodoRequest): Promise<UpdateTodoResponse> => {
-  const response = await PatchAxiosInstance<UpdateTodoResponse>(`/todo`, data);
+export const updateTodo = async (
+  roomId: number,
+  todoId: number,
+  data: UpdateTodoRequest,
+): Promise<UpdateTodoResponse> => {
+  const response = await PatchAxiosInstance<UpdateTodoResponse>(
+    `/rooms/${roomId}/todos/${todoId}`,
+    data,
+  );
 
   return response.data;
 };
 
 // Todo 완료 여부를 변경
 export const changeTodoState = async (
-  data: ChangeTodoStateRequest,
+  roomId: number,
+  todoId: number,
+  completed: boolean,
 ): Promise<ChangeTodoStateResponse> => {
-  const response = await PatchAxiosInstance<ChangeTodoStateResponse>(`/todo/state`, data);
+  const response = await PatchAxiosInstance<ChangeTodoStateResponse>(
+    `/rooms/${roomId}/todos/${todoId}/state`,
+    { params: { completed: completed } },
+  );
 
   return response.data;
 };
@@ -60,7 +70,7 @@ export const addMyTodo = async (
   roomId: number,
   data: AddMyTodoRequest,
 ): Promise<AddMyTodoResponse> => {
-  const response = await PostAxiosInstance<AddMyTodoResponse>(`/todo/${roomId}`, data);
+  const response = await PostAxiosInstance<AddMyTodoResponse>(`/rooms/${roomId}/todos`, data);
 
   return response.data;
 };

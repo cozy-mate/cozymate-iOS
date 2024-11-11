@@ -12,21 +12,27 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import { RoomDummyData, sameAnswerDummyData, recommendRoomDummyData } from './dummyData';
+import { RoomDummyData } from './dummyData';
 
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
 import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
+import RecommendationSection from '@components/cozyHome/recommendationSection';
 import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
-import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useProfileStore, useMemberInfoStore } from '@zustand/member/member';
+
+import { searchUsers, getRandomUser } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
+import { useGetRandomRoom } from '@hooks/api/room-recommend';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
+import { RoomItem, UserItem } from '@type/cozyHome/cozyHome';
 
 import HomeBack from '@assets/cozyHome/homeBack.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
@@ -34,17 +40,41 @@ import MegaPhoneIcon from '@assets/cozyHome/megaPhone.svg';
 import ArrowIcon from '@assets/cozyHome/rightGrayArrow.svg';
 import GraySchool from '@assets/cozyHome/graySchoolIcon.svg';
 import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
-import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
 const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const width = Dimensions.get('screen').width;
 
+  const { bottom } = useSafeAreaInsets();
+
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
   const { roomInfo } = useRoomInfoStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { setMemberInfo } = useMemberInfoStore();
 
-  const { bottom } = useSafeAreaInsets();
+  const [userList, setUserList] = useState<UserItem[]>([]);
+
+  const { data: roomList } = useGetRandomRoom(5);
+
+  const { initFcm } = useInitFcm();
+
+  useEffect(() => {
+    initFcm();
+
+    const fetchData = async () => {
+      if (hasLifeStyle) {
+        const response = await searchUsers(0, true);
+
+        setUserList(response.result.memberList);
+      } else {
+        const response = await getRandomUser();
+
+        setUserList(response.result.memberList);
+      }
+    };
+    fetchData();
+  }, []);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
@@ -78,12 +108,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     setRoomCurrentIndex(index);
   };
 
-  const { initFcm } = useInitFcm();
-
-  useEffect(() => {
-    initFcm();
-  }, []);
-
   // 학교 인증 관련
   const [school, setSchool] = useState<boolean>(false);
 
@@ -108,12 +132,8 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   // 방 만들기 시 방 타입 선택 모달
   const [createRoomOpen, setCreateRoomOpen] = useState<boolean>(false);
 
-  const createRoomModalOpen = () => {
-    setCreateRoomOpen(true);
-  };
-
-  const createRoomModalClose = () => {
-    setCreateRoomOpen(false);
+  const handleCreateRoomModal = () => {
+    setCreateRoomOpen(!createRoomOpen);
   };
 
   const toCreatePublicRoom = () => {
@@ -149,8 +169,19 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RecommendRoomScreen');
   };
 
-  const toUserDetail = (memberId: number) => {
-    navigation.navigate('UserDetailScreen', { memberId: memberId });
+  const handleUser = (user: UserItem) => {
+    setMemberInfo({
+      memberId: user.memberId,
+      memberNickName: user.memberNickname,
+      memberAge: 0,
+      memberPersona: 1,
+      equality: user.equality,
+    });
+  };
+
+  const toUserDetail = (user: UserItem) => {
+    handleUser(user);
+    navigation.navigate('UserDetailScreen', { memberId: user.memberId });
   };
 
   const toRoomDetail = (roomId: number) => {
@@ -227,7 +258,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                   {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
                   <View className="mb-6 flex h-[100px] w-full flex-row justify-between">
                     <Pressable
-                      onPress={createRoomModalOpen}
+                      onPress={handleCreateRoomModal}
                       className="w-[49%] items-start rounded-xl bg-colorBox p-4"
                     >
                       <Text className="text-base font-semibold leading-[19px] text-main1">
@@ -280,95 +311,45 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            <View className="px-5">
-              <View className="mb-4 flex flex-row items-center justify-between">
-                <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                  {profile.nickname}님,{'\n'}이런 룸메이트는 어때요?
-                </Text>
-                <Pressable className="flex flex-row items-center" onPress={toRoomMate}>
-                  <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
-                  <RightArrow />
-                </Pressable>
-              </View>
-              <ScrollView
-                className="flex flex-row"
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                pagingEnabled={true}
-                snapToInterval={userComponentWidth}
-                onScroll={handleSameAnswerUserScroll}
-                decelerationRate="fast"
-                disableIntervalMomentum={true}
-                scrollEventThrottle={16}
-                bounces={false}
-              >
-                {sameAnswerDummyData.map((data, index) => (
-                  <SameAnswerUserComponent
-                    key={index}
-                    userData={data}
-                    onLayout={onLayoutUser}
-                    pressFunc={() => toUserDetail(data.memberId)}
-                  />
-                ))}
-              </ScrollView>
-
-              <View className="mt-4 flex flex-row justify-center space-x-2">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <View
-                    key={index}
-                    className={`${
-                      index == userCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-                    } h-2 rounded-full`}
-                  />
-                ))}
-              </View>
-            </View>
+            <RecommendationSection<UserItem>
+              title={`${profile.nickname}님과\n꼭 맞는 룸메이트를 추천해드릴게요`}
+              onPressMore={toRoomMate}
+              dataList={userList}
+              onScrollHandler={handleSameAnswerUserScroll}
+              snapToInterval={userComponentWidth}
+              renderItem={(data, index, onLayout) => (
+                <SameAnswerUserComponent
+                  key={index}
+                  userData={data}
+                  onLayout={onLayout}
+                  pressFunc={() => toUserDetail(data)}
+                />
+              )}
+              onLayout={onLayoutUser}
+              currentIndex={userCurrentIndex}
+            />
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            <View className="mb-6 px-5">
-              <View className="mb-4 flex flex-row items-center justify-between">
-                <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                  {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
-                </Text>
-                <Pressable className="flex flex-row items-center" onPress={toRecommendRoom}>
-                  <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
-                  <RightArrow />
-                </Pressable>
-              </View>
-              <ScrollView
-                className="flex flex-row"
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                pagingEnabled={true}
-                snapToInterval={roomComponentWidth}
-                onScroll={handleRecommendRoomScroll}
-                disableIntervalMomentum={true}
-                decelerationRate="fast"
-                scrollEventThrottle={16}
-                bounces={false}
-              >
-                {recommendRoomDummyData.map((data, index) => (
-                  <RecommendRoomComponent
-                    key={index}
-                    roomData={data}
-                    onLayout={onLayoutRoom}
-                    pressFunc={() => toRoomDetail(myRoom.roomId)}
-                  />
-                ))}
-              </ScrollView>
+            <RecommendationSection<RoomItem>
+              title={`${profile.nickname}님과\n꼭 맞는 방을 추천해드릴게요`}
+              onPressMore={toRecommendRoom}
+              dataList={roomList?.result.recommendations || []}
+              onScrollHandler={handleRecommendRoomScroll}
+              snapToInterval={roomComponentWidth}
+              renderItem={(data, index, onLayout) => (
+                <RecommendRoomComponent
+                  key={index}
+                  roomData={data}
+                  onLayout={onLayout}
+                  pressFunc={() => toRoomDetail(data.roomId)}
+                />
+              )}
+              onLayout={onLayoutRoom}
+              currentIndex={roomCurrentIndex}
+            />
 
-              <View className="mt-4 flex flex-row justify-center space-x-2">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <View
-                    key={index}
-                    className={`${
-                      index == roomCurrentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-                    } h-2 rounded-full`}
-                  />
-                ))}
-              </View>
-            </View>
+            <View className="h-[25px]" />
 
             <Advertisement />
           </View>
@@ -377,7 +358,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
             <CreateRoomModal
               createPublic={toCreatePublicRoom}
               createPrivate={toCreatePrivateRoom}
-              close={createRoomModalClose}
+              close={handleCreateRoomModal}
             />
           )}
         </ScrollView>

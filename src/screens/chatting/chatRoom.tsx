@@ -38,6 +38,8 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
     navigation.goBack();
   };
 
+  console.log(chatlist.result);
+
   return (
     <Fragment>
       <SafeAreaView className="flex-1 bg-white">
@@ -76,7 +78,7 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
                 ))}
               </ScrollView>
             ) : (
-              <View className="flex flex-1 items-center justify-center">
+              <View className="flex items-center justify-center">
                 <Text className="text-center text-sm font-medium text-disabledFont">
                   아직 주고 받은 쪽지가 없어요!
                 </Text>

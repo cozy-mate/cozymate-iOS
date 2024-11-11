@@ -13,6 +13,10 @@ import CustomTextInputBox from '@components/common/customTextInputBox';
 
 import { useRoomInfoStore } from '@zustand/room/room';
 
+import { useAddRole, useGetRoleData } from '@hooks/api/role';
+import { useAddRule, useGetRuleData } from '@hooks/api/rule';
+import { useAddMyTodo, useGetTodoData } from '@hooks/api/todo';
+
 import { CreateRoleNRuleScreenProps } from '@type/param/stack';
 
 const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps) => {
@@ -29,18 +33,32 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
     navigation.goBack();
   };
 
+  const toRoleNRule = () => {
+    navigation.navigate('MainScreen', { screen: 'RoleNRuleScreen' });
+  };
+
+  // Todo
   const [todoContent, setTodoContent] = useState<string>('');
   const [todoMateIdList, setTodoMateIdList] = useState<number[]>([]);
   const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
 
+  const { refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
+  const { mutateAsync: addTodoMutate } = useAddMyTodo(roomInfo.roomId, refetchTodo);
+
   // Role
   const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
-  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
   const [repeatDayList, setRepeatDayList] = useState<string[]>([]);
+
+  const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
+  const { mutateAsync: addRoleMutate } = useAddRole(roomInfo.roomId, refetchRole, refetchTodo);
 
   // Rule
   const [ruleContent, setRuleContent] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
+
+  const { refetch: refetchRule } = useGetRuleData(roomInfo.roomId);
+  const { mutateAsync: addRuleMutate } = useAddRule(roomInfo.roomId, refetchRule);
 
   const handleDateTimeSelect = (dateTime: string) => {
     setTimePoint(dateTime);
@@ -51,11 +69,54 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return roleMateIdList.length > 0 && title.trim() !== '' && repeatDayList.length > 0;
+      return roleMateIdList.length > 0 && content.trim() !== '' && repeatDayList.length > 0;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
     return false;
+  };
+
+  // Todo / Role / Rule 생성하기
+  const handleSubmit = async () => {
+    if (type === 'todo') {
+      if (todoContent.trim() === '' || !timePoint) {
+        return;
+      }
+      try {
+        await addTodoMutate({
+          content: todoContent,
+          mateIdList: todoMateIdList,
+          timePoint: timePoint,
+        });
+        toRoleNRule();
+      } catch (error: any) {
+        console.log(error.response.data.message);
+      }
+    } else if (type === 'role') {
+      if (roleMateIdList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
+        return;
+      }
+      try {
+        await addRoleMutate({
+          mateIdList: roleMateIdList,
+          content: content,
+          repeatDayList: repeatDayList,
+        });
+        toRoleNRule();
+      } catch (error: any) {
+        console.log(error.response.data.message);
+      }
+    } else if (type === 'rule') {
+      if (ruleContent.trim() === '') {
+        return;
+      }
+      try {
+        await addRuleMutate({ content: ruleContent, memo });
+        toRoleNRule();
+      } catch (error: any) {
+        console.log(error.response.data.message);
+      }
+    }
   };
 
   return (
@@ -99,8 +160,8 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
 
               <CustomTextInputBox
                 title="역할을 입력해주세요"
-                value={title}
-                setValue={setTitle}
+                value={content}
+                setValue={setContent}
                 placeholder="역할을 입력해주세요"
               />
               <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />
@@ -129,7 +190,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
       </ScrollView>
 
       <View className="fixed bottom-0 w-full bg-transparent px-5">
-        <Pressable disabled={!canSubmit()}>
+        <Pressable onPress={handleSubmit} disabled={!canSubmit()}>
           <View className={`${canSubmit() ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}>
             <Text className="text-center text-base font-semibold text-white">확인</Text>
           </View>
