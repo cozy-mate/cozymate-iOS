@@ -29,15 +29,14 @@ export interface RegisterUserDataRequest {
   selfIntroduction: string;
 }
 
-export interface GetRandomUserRequest {
-  seenMemberStatIds: number[];
-}
-
 export interface UpdateUserDataRequest {
   universityId: number;
-  admissionYear: string;
+  admissionYear: number;
+  birthYear: number;
   major: string;
+  memberPersona: number;
   numOfRoommate: number;
+  dormitoryNames: string;
   acceptance: string;
   wakeUpMeridian: string;
   wakeUpTime: number;

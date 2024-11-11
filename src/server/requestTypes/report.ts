@@ -1,6 +1,6 @@
 export interface CreateReportRequest {
-  reportedMemberId: number;
-  reportSource: string;
-  reportReason: string;
+  memberId: number;
+  source: string;
+  reason: string;
   content?: string;
 }

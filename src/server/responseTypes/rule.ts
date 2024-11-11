@@ -4,7 +4,7 @@ export interface DeleteRuleResponse {
 
 export interface GetRuleDataResponse {
   result: {
-    id: number;
+    ruleId: number;
     content: string;
     memo: string;
   }[];
@@ -12,7 +12,7 @@ export interface GetRuleDataResponse {
 
 export interface AddRuleResponse {
   result: {
-    id: number;
+    ruleId: number;
   };
 }
 

@@ -1,7 +1,7 @@
 import {
   GetAxiosInstance,
+  PutAxiosInstance,
   PostAxiosInstance,
-  PatchAxiosInstance,
   DeleteAxiosInstance,
 } from '@axios/axios.method';
 
@@ -29,23 +29,23 @@ export const getRoleData = async (roomId: number): Promise<GetRoleDataResponse> 
   return response.data;
 };
 
+// 특정 방에 Role 생성
+export const addRole = async (roomId: number, data: AddRoleRequest): Promise<AddRoleResponse> => {
+  const response = await PostAxiosInstance<AddRoleResponse>(`/rooms/${roomId}/roles`, data);
+
+  return response.data;
+};
+
 // 특정 Role 수정
 export const updateRole = async (
   roomId: number,
   roleId: number,
   data: UpdateRoleRequest,
 ): Promise<UpdateRoleResponse> => {
-  const response = await PatchAxiosInstance<UpdateRoleResponse>(
+  const response = await PutAxiosInstance<UpdateRoleResponse>(
     `/rooms/${roomId}/roles/${roleId}`,
     data,
   );
-
-  return response.data;
-};
-
-// 특정 방에 Role 생성
-export const addRole = async (roomId: number, data: AddRoleRequest): Promise<AddRoleResponse> => {
-  const response = await PostAxiosInstance<AddRoleResponse>(`/rooms/${roomId}/roles`, data);
 
   return response.data;
 };

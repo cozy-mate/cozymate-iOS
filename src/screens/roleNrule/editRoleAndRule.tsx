@@ -7,7 +7,7 @@ import DaySelect from '@components/todoList/daySelect';
 import RoleNRuleNav from '@components/todoList/roleNruleNav';
 import CustomTextarea from '@components/common/customTextarea';
 import CustomCalendar from '@components/todoList/customCalendar';
-// import SelectMateComponent from '@components/todoList/selectMate';
+import SelectMateComponent from '@components/todoList/selectMate';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 
 import { useRoomInfoStore } from '@zustand/room/room';
@@ -15,6 +15,8 @@ import { useTodoItemStore } from '@zustand/todo/todo';
 import { useRuleItemStore } from '@zustand/rule/rule';
 import { useRoleItemStore } from '@zustand/role/role';
 
+import { useUpdateTodo, useGetTodoData } from '@hooks/api/todo';
+import { useUpdateRole, useGetRoleData } from '@hooks/api/role';
 import { useUpdateRule, useGetRuleData } from '@hooks/api/rule';
 
 import { EditRoleNRuleScreenProps } from '@type/param/stack';
@@ -39,14 +41,14 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
 
   // Todo
   const [todoContent, setTodoContent] = useState<string>(todoItem.content);
-  // const [todoMateIdList, setTodoMateIdList] = useState<number[]>([]);
+  const [todoMateIdList, setTodoMateIdList] = useState<number[]>([]);
   const [timePoint, setTimePoint] = useState<string>(todoItem.timePoint);
 
   const { roleItem } = useRoleItemStore();
 
   // Role
-  // const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
-  const [title, setTitle] = useState<string>(roleItem.title);
+  const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
+  const [content, setContent] = useState<string>(roleItem.content);
   const [repeatDayList, setRepeatDayList] = useState<string[]>(roleItem.repeatDayList);
 
   const { ruleItem } = useRuleItemStore();
@@ -59,54 +61,53 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     setTimePoint(dateTime);
   };
 
-  // const { mutateAsync: addTodoMutate, isPending: addTodoPending } = useAddMyTodo(
-  //   roomInfo.roomId,
-  //   refetchTodo,
-  // );
+  const { refetch: refetchTodo } = useGetTodoData(roomInfo.roomId);
+  const { mutateAsync: updateTodoMutate } = useUpdateTodo(
+    roomInfo.roomId,
+    todoItem.todoId,
+    refetchTodo,
+  );
 
   const { refetch: refetchRule } = useGetRuleData(roomInfo.roomId);
   const { mutateAsync: updateRuleMutate } = useUpdateRule(roomInfo.roomId, id, refetchRule);
 
-  // const { mutateAsync: addRoleMutate, isPending: addRolePending } = useAddRole(
-  //   roomInfo.roomId,
-  //   refetchRole,
-  //   refetchTodo,
-  // );
+  const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
+  const { mutateAsync: updateRoleMutate } = useUpdateRole(
+    roomInfo.roomId,
+    roleItem.id,
+    refetchRole,
+  );
 
   // Todo / Role / Rule 수정하기
   const handleSubmit = async () => {
-    // if (type === 'todo') {
-    //   if (todoContent.trim() === '' || !timePoint) {
-    //     return;
-    //   }
-    //   try {
-    //     await addTodoMutate({
-    //       content: todoContent,
-    //       // mateIdList: todoMateIdList,
-    //       timePoint: timePoint,
-    //     });
-    //     resetState();
-    //     toTodo();
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // } else if (type === 'role') {
-    //   if (roleMateIdList.length === 0 || title.trim() === '' || repeatDayList.length === 0) {
-    //     return;
-    //   }
-    //   try {
-    //     await addRoleMutate({
-    //       mateIdList: roleMateIdList,
-    //       title: title,
-    //       repeatDayList: repeatDayList,
-    //     });
-    //     resetState();
-    //     toTodo();
-    //   } catch (error: any) {
-    //     console.log(error.response.data.message);
-    //   }
-    // } else
-    if (type === 'rule') {
+    if (type === 'todo') {
+      try {
+        await updateTodoMutate({
+          mateIdList: todoMateIdList,
+          content: todoContent,
+          timePoint: timePoint,
+        });
+        // resetState();
+        toBack();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (type === 'role') {
+      if (roleMateIdList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
+        return;
+      }
+      try {
+        await updateRoleMutate({
+          mateIdList: roleMateIdList,
+          content: content,
+          repeatDayList: repeatDayList,
+        });
+        // resetState();
+        toBack();
+      } catch (error: any) {
+        console.log(error.response.data.message);
+      }
+    } else if (type === 'rule') {
       try {
         await updateRuleMutate({ content: ruleContent, memo });
         // resetState();
@@ -126,7 +127,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
         !!timePoint
       );
     } else if (type === 'role') {
-      return title.trim() !== '' && repeatDayList.length > 0; // roleMateIdList.length > 0 &&
+      return content.trim() !== '' && repeatDayList.length > 0; // roleMateIdList.length > 0 &&
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -149,12 +150,12 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
                 placeholder="할 일을 입력해주세요"
               />
 
-              {/* <SelectMateComponent
+              <SelectMateComponent
                 title="담당자를 선택해주세요"
                 selectedValues={todoMateIdList}
                 setSelectedValues={setTodoMateIdList}
                 items={roomInfo.mateList}
-              /> */}
+              />
 
               <Text className="mb-2 px-1 text-lg font-semibold text-basicFont">
                 날짜를 선택해주세요
@@ -165,17 +166,17 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
 
           {type == 'role' && (
             <View className="px-5">
-              {/* <SelectMateComponent
+              <SelectMateComponent
                 title="담당자를 선택해주세요"
                 selectedValues={roleMateIdList}
                 setSelectedValues={setRoleMateIdList}
                 items={roomInfo.mateList}
-              /> */}
+              />
 
               <CustomTextInputBox
                 title="역할을 입력해주세요"
-                value={title}
-                setValue={setTitle}
+                value={content}
+                setValue={setContent}
                 placeholder="역할을 입력해주세요"
               />
               <DaySelect repeatDayList={repeatDayList} setRepeatDayList={setRepeatDayList} />

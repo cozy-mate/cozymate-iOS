@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
@@ -12,9 +12,6 @@ import { useTodoItemStore } from '@zustand/todo/todo';
 import { useRuleItemStore } from '@zustand/rule/rule';
 import { useRoleItemStore } from '@zustand/role/role';
 import { useProfileStore } from '@zustand/member/member';
-
-import { getTodoData } from '@server/api/todo';
-import { GetTodoDataResponse } from '@server/responseTypes/todo';
 
 import { useGetRuleData } from '@hooks/api/rule';
 import { useGetRoleData } from '@hooks/api/role';
@@ -109,8 +106,6 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
   const { data: ruledata } = useGetRuleData(roomInfo.roomId);
 
   const { data: roledata } = useGetRoleData(roomInfo.roomId);
-
-  console.log(roledata);
 
   return (
     <View className="flex-1 bg-sub1">

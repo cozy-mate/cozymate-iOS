@@ -1,10 +1,12 @@
 export interface GetUserDetailDataResponse {
   result: {
     universityId: number;
-    admissionYear: string;
+    admissionYear: number;
     birthYear: number;
     major: string;
+    memberPersona: number;
     numOfRoommate: number;
+    dormitoryNames: string;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number;
@@ -36,10 +38,12 @@ export interface GetUserDetailDataResponse {
 export interface GetOtherUserDetailDataResponse {
   result: {
     universityId: number;
-    admissionYear: string;
+    admissionYear: number;
     birthYear: number;
     major: string;
+    memberPersona: number;
     numOfRoommate: number;
+    dormitoryNames: string;
     acceptance: string;
     wakeUpMeridian: string;
     wakeUpTime: number;
@@ -68,39 +72,47 @@ export interface GetOtherUserDetailDataResponse {
   };
 }
 
-export interface CheckDormitoryNumResponse {
-  result: number;
-}
-
-export interface SearchedUsers {
-  memberId: number;
-  memberNickName: string;
-  equality: number;
-  preferenceStats: Record<string, string | number>;
-}
-
-export interface SearchUsersResponse {
+export interface SearchUserByKeywordResponse {
   result: {
-    page: number;
-    hasNext: boolean;
-    result: SearchedUsers[];
-  };
-}
-
-export interface RegisterUserDataResponse {
-  result: number;
+    memberId: number;
+    memberNickname: string;
+    memberPersona: number;
+    equality: number;
+  }[];
 }
 
 export interface GetRandomUserResponse {
   result: {
     memberList: {
       memberId: number;
-      memberNickName: string;
+      memberNickname: string;
       equality: number;
       preferenceStats: Record<string, string | number>;
     }[];
-    seenMemberStatIds: number[];
   };
+}
+
+export interface CheckDormitoryNumResponse {
+  result: number;
+}
+
+export interface SearchUsersResponse {
+  result: {
+    page: number;
+    hasNext: boolean;
+    memberList: {
+      memberId: number;
+      memberNickname: string;
+      memberAge: number;
+      memberPersona: number;
+      numOfRoommate: number;
+      equality: number;
+    }[];
+  };
+}
+
+export interface RegisterUserDataResponse {
+  result: number;
 }
 
 export interface GetFilteredMemberListResponse {

@@ -66,7 +66,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
       if (hasLifeStyle) {
         const response = await searchUsers(0, true);
 
-        setUserList(response.result.result);
+        setUserList(response.result.memberList);
       } else {
         const response = await getRandomUser({ seenMemberStatIds: [] });
 

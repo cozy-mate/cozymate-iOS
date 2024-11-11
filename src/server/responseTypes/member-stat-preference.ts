@@ -1,6 +1,6 @@
 export interface GetPreferenceListResponse {
   result: {
-    preferences: string[];
+    preferenceList: string[];
   };
 }
 

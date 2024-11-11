@@ -3,5 +3,6 @@ export interface GetNotificationResponse {
     content: string;
     createdAt: string;
     category: string;
+    targetId: number;
   }[];
 }

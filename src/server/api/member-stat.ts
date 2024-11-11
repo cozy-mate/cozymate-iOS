@@ -1,10 +1,6 @@
 import { GetAxiosInstance, PutAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
 
-import {
-  GetRandomUserRequest,
-  UpdateUserDataRequest,
-  RegisterUserDataRequest,
-} from '@server/requestTypes/member-stat';
+import { UpdateUserDataRequest, RegisterUserDataRequest } from '@server/requestTypes/member-stat';
 import {
   SearchUsersResponse,
   GetRandomUserResponse,
@@ -12,6 +8,7 @@ import {
   RegisterUserDataResponse,
   GetUserDetailDataResponse,
   CheckDormitoryNumResponse,
+  SearchUserByKeywordResponse,
   GetFilteredMemberListResponse,
   GetOtherUserDetailDataResponse,
   GetFilteredMemberListCountResponse,
@@ -35,6 +32,26 @@ export const getOtherUserDetailData = async (
   return response.data;
 };
 
+// 사용자 검색
+export const searchUserByKeyword = async (
+  keyword: string,
+): Promise<SearchUserByKeywordResponse> => {
+  const response = await GetAxiosInstance<SearchUserByKeywordResponse>(`/members/stat/search`, {
+    params: {
+      keyword: keyword,
+    },
+  });
+
+  return response.data;
+};
+
+// 사용자 랜덤 추천
+export const getRandomUser = async (): Promise<GetRandomUserResponse> => {
+  const response = await PostAxiosInstance<GetRandomUserResponse>(`/members/stat/random`);
+
+  return response.data;
+};
+
 // 기숙사 인원 미정 여부 조회
 export const checkDormitoryNum = async (): Promise<CheckDormitoryNumResponse> => {
   const response = await GetAxiosInstance<CheckDormitoryNumResponse>(`/members/stat/numOfRoommate`);
@@ -42,7 +59,7 @@ export const checkDormitoryNum = async (): Promise<CheckDormitoryNumResponse> =>
   return response.data;
 };
 
-// 사용자 상세정보 필터링, 일치율 조회
+// 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
 export const searchUsers = async (
   page?: number,
   needsPreferences?: boolean,
@@ -70,16 +87,6 @@ export const registerUserData = async (
   return response.data;
 };
 
-// 사용자 랜덤 추천
-export const getRandomUser = async (data: GetRandomUserRequest): Promise<GetRandomUserResponse> => {
-  const response = await PostAxiosInstance<GetRandomUserResponse>(
-    `/members/stat/random/list`,
-    data,
-  );
-
-  return response.data;
-};
-
 // 사용자 상세정보를 키-값으로 필터링하고, 사용자 목록 받아오기 (일치율 포함)
 export const getFilteredMemberList = async (
   page?: number,
@@ -95,7 +102,7 @@ export const getFilteredMemberList = async (
   return response.data;
 };
 
-// 사용자 상세정보를 키-값으로 필터링하고, 사용자 목록 받아오기 (일치율 포함)
+// 사용자 상세정보를 키-값으로 필터링하고, 필터링에 맞는 인원 수 리턴받기
 export const getFilteredMemberListCount = async (): Promise<GetFilteredMemberListCountResponse> => {
   const response = await GetAxiosInstance<GetFilteredMemberListCountResponse>(
     `/members/stat/filter/search/count`,

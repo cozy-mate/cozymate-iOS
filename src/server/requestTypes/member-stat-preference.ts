@@ -1,7 +1,7 @@
 export interface AddPreferenceListRequest {
-  preferences: string[];
+  preferenceList: string[];
 }
 
 export interface UpdatePreferenceListRequest {
-  preferences: string[];
+  preferenceList: string[];
 }

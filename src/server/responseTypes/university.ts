@@ -11,14 +11,15 @@ export interface GetUserUniversityResponse {
 export interface GetUniversityListResponse {
   result: {
     universityList: {
-      name: string;
       id: number;
+      name: string;
     }[];
   };
 }
 
 export interface GetUniversityDataResponse {
   result: {
+    id: number;
     name: string;
     mailPattern: string;
     dormitoryNames: string[];

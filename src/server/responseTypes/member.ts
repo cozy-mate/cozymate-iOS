@@ -32,6 +32,7 @@ export interface DeleteMemberResponse {
 
 export interface GetProfileResponse {
   result: {
+    memberId: number;
     nickname: string;
     gender: string;
     birthday: string;
@@ -52,11 +53,13 @@ export interface SignUpResponse {
       accessToken: string;
       refreshToken: string;
     };
-    memberInfoDTO: {
-      name: string;
+    memberDetailResponseDTO: {
+      memberId: number;
       nickname: string;
       gender: string;
       birthday: string;
+      universityName: string;
+      majorName: string;
       persona: number;
     };
   };
@@ -69,11 +72,13 @@ export interface SignInResponse {
       accessToken: string;
       refreshToken: string;
     };
-    memberInfoDTO: {
-      name: string;
+    memberDetailResponseDTO: {
+      memberId: number;
       nickname: string;
       gender: string;
       birthday: string;
+      universityName: string;
+      majorName: string;
       persona: number;
     };
   };
@@ -86,11 +91,13 @@ export interface TestSignUpResponse {
       accessToken: string;
       refreshToken: string;
     };
-    memberInfoDTO: {
-      name: string;
+    memberDetailResponseDTO: {
+      memberId: number;
       nickname: string;
       gender: string;
       birthday: string;
+      universityName: string;
+      majorName: string;
       persona: number;
     };
   };

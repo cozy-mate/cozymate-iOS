@@ -1,9 +1,10 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { AddMyTodoRequest } from '@server/requestTypes/todo';
-import { addMyTodo, getTodoData, changeTodoState } from '@server/api/todo';
+import { AddMyTodoRequest, UpdateTodoRequest } from '@server/requestTypes/todo';
+import { addMyTodo, updateTodo, getTodoData, changeTodoState } from '@server/api/todo';
 import {
   AddMyTodoResponse,
+  UpdateTodoResponse,
   GetTodoDataResponse,
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
@@ -52,4 +53,19 @@ export const useGetTodoData = (
   });
 
   return { data, refetch };
+};
+
+// Todo 수정
+export const useUpdateTodo = (
+  roomId: number,
+  todoId: number,
+  refetchTodoData: () => void,
+): UseMutationResult<UpdateTodoResponse, void, UpdateTodoRequest, unknown> => {
+  return useMutation({
+    mutationFn: (updateTodoRequest: UpdateTodoRequest) =>
+      updateTodo(roomId, todoId, updateTodoRequest),
+    onSuccess: () => {
+      refetchTodoData();
+    },
+  });
 };

@@ -1,7 +1,7 @@
 export interface GetChatDetailDataResponse {
   result: {
-    recipientId: number;
-    chatContents: {
+    memberId: number;
+    content: {
       nickname: string;
       content: string;
       dateTime: string;

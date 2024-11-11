@@ -1,10 +1,11 @@
 export interface AddRoleRequest {
   mateIdList: number[];
-  title: string;
+  content: string;
   repeatDayList: string[];
 }
 
 export interface UpdateRoleRequest {
-  title: string;
+  mateIdList: number[];
+  content: string;
   repeatDayList: string[];
 }
