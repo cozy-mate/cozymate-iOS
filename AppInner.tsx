@@ -8,6 +8,7 @@ import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
 import MyInfoScreen from 'src/screens/myPage/myInfo';
+import SearchScreen from 'src/screens/search/search';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -28,7 +29,6 @@ import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
 import RoomDetailScreen from 'src/screens/roomDetail/roomDetail';
-import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
 import LifeStyleEditScreen from 'src/screens/lifeStyle/lifeStyleEdit';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
@@ -101,8 +101,6 @@ function AppInner() {
 
           <stack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
 
-          <stack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
-
           <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
 
           <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
@@ -122,6 +120,8 @@ function AppInner() {
           <stack.Screen name="SendChatScreen" component={SendChatScreen} />
 
           <stack.Screen name="NotificationScreen" component={NotificationScreen} />
+
+          <stack.Screen name="SearchScreen" component={SearchScreen} />
         </stack.Navigator>
       ) : (
         <rootStack.Navigator screenOptions={{ headerShown: false }}>

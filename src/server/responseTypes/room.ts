@@ -108,12 +108,18 @@ export interface CreatePublicRoomResponse {
       persona: number;
       mateEquality: number;
     }[];
+    managerId: number;
+    isRoomManager: boolean;
     maxMateNum: number;
     numOfArrival: number;
     roomType: string;
     hashtags: string[];
-    equaility: number;
-    roomManager: boolean;
+    equality: number;
+    difference: {
+      blue: LifestyleOptionKey[];
+      red: LifestyleOptionKey[];
+      white: LifestyleOptionKey[];
+    };
   };
 }
 
@@ -130,11 +136,17 @@ export interface CreatePrivateRoomResponse {
       persona: number;
       mateEquality: number;
     }[];
+    managerId: number;
+    isRoomManager: boolean;
     maxMateNum: number;
     numOfArrival: number;
     roomType: string;
     hashtags: string[];
-    equaility: number;
-    roomManager: boolean;
+    equality: number;
+    difference: {
+      blue: LifestyleOptionKey[];
+      red: LifestyleOptionKey[];
+      white: LifestyleOptionKey[];
+    };
   };
 }

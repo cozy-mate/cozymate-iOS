@@ -20,8 +20,8 @@ export const useSignUpStore = create<{
     nickname: '',
     gender: '',
     birthday: '',
-    universityId: 0,
     persona: 0,
+    universityId: 0,
   },
   setSignUpState: (newSignUpState) =>
     set((state) => ({
@@ -35,6 +35,7 @@ export const useProfileStore = create<{
   setProfile: (newProfile: Partial<Profile>) => void;
 }>((set) => ({
   profile: {
+    memberId: 0,
     nickname: '',
     gender: '',
     birthday: '',

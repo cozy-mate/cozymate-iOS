@@ -9,7 +9,7 @@ export const useRoleItemStore = create<{
 }>((set) => ({
   roleItem: {
     roleId: 0,
-    mateNameList: [],
+    mateList: [],
     content: '',
     repeatDayList: [],
     isAllDays: false,

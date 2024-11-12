@@ -21,7 +21,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
   // 프로필 정보
   const { setProfile } = useProfileStore();
-  const { setPreferences } = usePreferencesStore();
+  const { setPreferenceList } = usePreferencesStore();
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
@@ -68,7 +68,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
         const preferenceResponse = await getPreferenceList();
         console.log(9, preferenceResponse);
-        setPreferences(preferenceResponse.result.preferences);
+        setPreferenceList(preferenceResponse.result.preferenceList);
 
         // 방 존재 여부 확인
         const roomCheckResponse = await checkHasRoom();
@@ -81,6 +81,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           setMyRoom({ hasRoom: true, roomId });
           const roomInfoResponse = await getRoomData(roomId);
           console.log(11, roomInfoResponse); // 방 정보 조회
+          console.log(roomInfoResponse.result.difference);
           setRoomInfo(roomInfoResponse.result);
         }
 

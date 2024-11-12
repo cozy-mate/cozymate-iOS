@@ -1,6 +1,11 @@
 export interface LifeStyle {
-  admissionYear: string;
+  universityId: number;
+  admissionYear: number;
+  birthYear: number;
+  major: string;
+  memberPersona: number;
   numOfRoommate: number;
+  dormitoryNames: string;
   acceptance: string;
   wakeUpMeridian: string;
   wakeUpTime: number;

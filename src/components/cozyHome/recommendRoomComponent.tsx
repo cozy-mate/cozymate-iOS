@@ -17,7 +17,7 @@ interface RecommendRoomComponentProps {
     maxMateNum: number;
     equalMemberStatNum: Record<string, number>;
   };
-  onLayout: (event: LayoutChangeEvent) => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: (roomId: number) => void;
 }
 

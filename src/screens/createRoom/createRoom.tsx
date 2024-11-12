@@ -135,12 +135,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         inviteCode: response.result.inviteCode,
         profileImage: response.result.profileImage,
         mateList: response.result.mateList,
+        managerId: response.result.managerId,
+        isRoomManager: response.result.isRoomManager,
         maxMateNum: response.result.maxMateNum,
         numOfArrival: response.result.numOfArrival,
         roomType: response.result.roomType,
         hashtags: response.result.hashtags,
-        equaility: response.result.equaility,
-        roomManager: response.result.roomManager,
+        equality: response.result.equality,
+        difference: response.result.difference,
       });
 
       navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
@@ -165,12 +167,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         inviteCode: response.result.inviteCode,
         profileImage: response.result.profileImage,
         mateList: response.result.mateList,
+        managerId: response.result.managerId,
+        isRoomManager: response.result.isRoomManager,
         maxMateNum: response.result.maxMateNum,
         numOfArrival: response.result.numOfArrival,
         roomType: response.result.roomType,
         hashtags: response.result.hashtags,
-        equaility: response.result.equaility,
-        roomManager: response.result.roomManager,
+        equality: response.result.equality,
+        difference: response.result.difference,
       });
 
       navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });

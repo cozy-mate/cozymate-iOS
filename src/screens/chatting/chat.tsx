@@ -11,7 +11,7 @@ import XButton from '@assets/xButton.svg';
 import RightArrow from '@assets/chatting/grayRightArrow.svg';
 
 const ChatScreen = ({ navigation }: ChatScreenProps) => {
-  const { data: chatroomlist, refetch: refetchChatRoom } = useGetChatRoomList();
+  const { data: chatroomlist } = useGetChatRoomList();
 
   const toBack = () => {
     navigation.goBack();

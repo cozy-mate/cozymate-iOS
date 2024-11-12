@@ -17,8 +17,13 @@ export const useLifeStyleStore = create<{
   setLifeStyle: (newLifeStyle: Partial<LifeStyle>) => void;
 }>((set) => ({
   lifeStyle: {
-    admissionYear: '',
+    universityId: 0,
+    admissionYear: 0,
+    birthYear: 0,
+    major: '',
+    memberPersona: 0,
     numOfRoommate: 0,
+    dormitoryNames: '',
     acceptance: '',
     wakeUpMeridian: '',
     wakeUpTime: 0,
@@ -52,9 +57,9 @@ export const useLifeStyleStore = create<{
 }));
 
 export const usePreferencesStore = create<{
-  preferences: LifestyleOptionKey[];
-  setPreferences: (status: LifestyleOptionKey[]) => void;
+  preferenceList: LifestyleOptionKey[];
+  setPreferenceList: (status: LifestyleOptionKey[]) => void;
 }>((set) => ({
-  preferences: [],
-  setPreferences: (status) => set({ preferences: status }),
+  preferenceList: [],
+  setPreferenceList: (status) => set({ preferenceList: status }),
 }));

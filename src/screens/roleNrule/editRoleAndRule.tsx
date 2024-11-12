@@ -41,7 +41,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
 
   // Todo
   const [todoContent, setTodoContent] = useState<string>(todoItem.content);
-  const [todoMateIdList, setTodoMateIdList] = useState<number[]>([]);
+  const [todoMateIdList, setTodoMateIdList] = useState<number[]>(todoItem.mateIdList);
   const [timePoint, setTimePoint] = useState<string>(todoItem.timePoint);
 
   const { roleItem } = useRoleItemStore();

@@ -20,7 +20,7 @@ const SendChatScreen = ({ navigation, route }: SendChatScreenProps) => {
 
   const { refetch: refetchChats } = useGetChatDetailData(route.params.chatRoomId);
 
-  const { mutateAsync: sendChatMutate } = useSendChat(route.params.recipientId, refetchChats);
+  const { mutateAsync: sendChatMutate } = useSendChat(route.params.memberId, refetchChats);
 
   const SendChat = async () => {
     try {

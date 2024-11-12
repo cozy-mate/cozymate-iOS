@@ -29,7 +29,7 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   };
   const toSend = () => {
     navigation.navigate('SendChatScreen', {
-      recipientId: chatlist.result.recipientId,
+      memberId: chatlist.result.memberId,
       chatRoomId: chatRoomId,
     });
   };
@@ -56,13 +56,13 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
           </View>
 
           <View style={{ marginBottom: bottom + 80 }}>
-            {chatlist.result.chatContents.length !== 0 ? (
+            {chatlist.result.content.length !== 0 ? (
               <ScrollView className="px-5" bounces={false}>
-                {chatlist.result.chatContents.reverse().map((chat, index) => (
+                {chatlist.result.content.reverse().map((chat, index) => (
                   <View
                     key={index}
                     className={`border-b border-b-[#F1F2F4] py-[18px] ${index === 0 && 'pt-0'} ${
-                      index === chatlist.result.chatContents.length - 1 && 'border-b-0 pb-0'
+                      index === chatlist.result.content.length - 1 && 'border-b-0 pb-0'
                     }`}
                   >
                     <Text
@@ -97,8 +97,8 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
 
       {isReportModalOpen && (
         <ReportModal
-          reportedMemberId={chatlist.result.recipientId}
-          reportSource="CHAT"
+          memberId={chatlist.result.memberId}
+          source="CHAT"
           closeModal={handleReportModal}
         />
       )}

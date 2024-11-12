@@ -4,11 +4,16 @@ import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import {
+  useLifeStyleStore,
+  usePreferencesStore,
+  useHasLifeStyleStore,
+} from '@zustand/member-stat/member-stat';
 
 import { signIn, getMyProfile } from '@server/api/member';
 import { getUserDetailData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
+import { getPreferenceList } from '@server/api/member-stat-preference';
 import {
   GetProfileResponse,
   AppleLoginResponse,
@@ -37,6 +42,7 @@ export const useKakaoLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setPreferenceList } = usePreferencesStore();
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -68,6 +74,9 @@ export const useKakaoLogin = (
           // 프로필 정보 저장
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);
+
+          const preferenceResponse = await getPreferenceList();
+          setPreferenceList(preferenceResponse.result.preferenceList);
 
           // 방 존재 여부 저장
           const roomCheckResponse = await checkHasRoom();
@@ -131,6 +140,8 @@ export const useAppleLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setPreferenceList } = usePreferencesStore();
+
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -159,6 +170,9 @@ export const useAppleLogin = (
           // 프로필 정보 저장
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);
+
+          const preferenceResponse = await getPreferenceList();
+          setPreferenceList(preferenceResponse.result.preferenceList);
 
           // 방 존재 여부 저장
           const roomCheckResponse = await checkHasRoom();

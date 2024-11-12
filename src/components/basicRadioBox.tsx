@@ -60,7 +60,7 @@ const RadioBoxComponent: React.FC<RadioBoxComponentProps> = ({
     >
       <View>
         <Text
-          className={`text-main text-xs font-semibold leading-[17px] tracking-tight ${
+          className={`text-xs font-semibold leading-[17px] tracking-tight ${
             isFocused ? 'text-main1' : 'text-colorFont'
           }`}
         >

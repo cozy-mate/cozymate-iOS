@@ -23,7 +23,6 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
 
   const [isListOpen, setIsListOpen] = useState<boolean>(false);
 
-  // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
   const handleFocus = () => {
     setIsFocused(true);
 
@@ -32,7 +31,6 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
     }
   };
 
-  // 다른 곳에 focusing 옮겨졌을때 기존 focusing 없애는 함수
   const handleBlur = () => {
     setIsFocused(false);
     setIsListOpen(false);

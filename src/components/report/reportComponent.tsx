@@ -15,36 +15,32 @@ import SelectedIcon from '@assets/report/selectedItem.svg';
 import NotSelectedIcon from '@assets/report/notSelectedItem.svg';
 
 interface ReportModalProps {
-  reportedMemberId: number;
-  reportSource: string;
+  memberId: number;
+  source: string;
   closeModal: () => void;
 }
 
-interface ReportReasonItem {
+interface ReasonItem {
   index: number;
   title: string;
   value: string;
   selected: boolean;
 }
 
-const ReportModal: React.FC<ReportModalProps> = ({
-  reportedMemberId,
-  reportSource,
-  closeModal,
-}) => {
-  const [reportReason, setReportReason] = useState<string>('');
+const ReportModal: React.FC<ReportModalProps> = ({ memberId, source, closeModal }) => {
+  const [reason, setReason] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  const [reportReasonItems, setReportReasonItems] = useState<ReportReasonItem[]>([
+  const [reasonItems, setReasonItems] = useState<ReasonItem[]>([
     { index: 1, title: '음란성/선정성', value: 'OBSCENITY', selected: false },
     { index: 2, title: '욕설/인신공격', value: 'INSULT', selected: false },
     { index: 3, title: '영리목적/홍보성', value: 'COMMERCIAL', selected: false },
     { index: 4, title: '기타', value: 'OTHER', selected: false },
   ]);
 
-  const handleItem = (item: ReportReasonItem) => {
-    setReportReason(item.value);
-    setReportReasonItems((prevItems) =>
+  const handleItem = (item: ReasonItem) => {
+    setReason(item.value);
+    setReasonItems((prevItems) =>
       prevItems.map((prevItem) =>
         prevItem.index === item.index
           ? { ...prevItem, selected: true }
@@ -53,15 +49,15 @@ const ReportModal: React.FC<ReportModalProps> = ({
     );
   };
 
-  const canSubmit = reportReason !== '' && (reportReason !== 'OTHER' || content !== '');
+  const canSubmit = reason !== '' && (reason !== 'OTHER' || content !== '');
 
   const sendReport = async () => {
     try {
       const response = await createReport({
-        reportedMemberId: reportedMemberId,
-        reportSource: reportSource,
-        reportReason: reportReason,
-        ...(reportReason === 'OTHER' && { content: content }),
+        memberId: memberId,
+        source: source,
+        reason: reason,
+        ...(reason === 'OTHER' && { content: content }),
       });
 
       console.log(response.result);
@@ -79,7 +75,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
             <View className="flex flex-col justify-between rounded-xl bg-white px-4 pb-5 pt-6">
               <Text className="mb-2 px-2 text-lg font-semibold text-emphasizedFont">신고사유</Text>
               <View className="mb-2 flex flex-row flex-wrap">
-                {reportReasonItems.map((item) => (
+                {reasonItems.map((item) => (
                   <Pressable
                     key={item.index}
                     onPress={() => handleItem(item)}
@@ -96,7 +92,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
                   </Pressable>
                 ))}
               </View>
-              {reportReason === 'OTHER' && (
+              {reason === 'OTHER' && (
                 <TextInput
                   className="h-40 rounded-xl bg-colorBox p-4 pb-5"
                   multiline
@@ -108,7 +104,7 @@ const ReportModal: React.FC<ReportModalProps> = ({
               <Pressable
                 disabled={!canSubmit}
                 onPress={sendReport}
-                className={`${reportReason === 'OTHER' ? 'mt-4' : 'mt-3'} ${
+                className={`${reason === 'OTHER' ? 'mt-4' : 'mt-3'} ${
                   canSubmit ? 'bg-main1' : 'bg-[#C4C4C4]'
                 } rounded-lg px-7 py-3.5`}
               >

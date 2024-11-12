@@ -51,9 +51,6 @@ export type StackParamList = {
   // 방 입장 스크린
   JoinRoomScreen: undefined;
 
-  // 방 입장 대기 스크린
-  WaitingRoomScreen: undefined;
-
   // 학교 인증 스크린
   SchoolAuthenticationScreen: undefined;
 
@@ -75,10 +72,13 @@ export type StackParamList = {
   // 쪽지 스크린
   ChatScreen: undefined;
   ChatRoomScreen: { chatRoomId: number };
-  SendChatScreen: { recipientId: number; chatRoomId: number };
+  SendChatScreen: { memberId: number; chatRoomId: number };
 
   // 알림 스크린
   NotificationScreen: undefined;
+
+  // 검색 스크린
+  SearchScreen: { type: string };
 };
 
 export type TabNavigatorParamList = {
@@ -159,9 +159,6 @@ export type EditRoomScreenProps = NativeStackScreenProps<StackParamList, 'EditRo
 // 방 입장 스크린
 export type JoinRoomScreenProps = NativeStackScreenProps<StackParamList, 'JoinRoomScreen'>;
 
-// 방 입장 대기 스크린
-export type WaitingRoomScreenProps = NativeStackScreenProps<StackParamList, 'WaitingRoomScreen'>;
-
 // 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
   StackParamList,
@@ -193,3 +190,6 @@ export type SendChatScreenProps = NativeStackScreenProps<StackParamList, 'SendCh
 
 // 알림 스크린
 export type NotificationScreenProps = NativeStackScreenProps<StackParamList, 'NotificationScreen'>;
+
+// 검색 스크린
+export type SearchScreenProps = NativeStackScreenProps<StackParamList, 'SearchScreen'>;

@@ -59,6 +59,7 @@ export const changeTodoState = async (
 ): Promise<ChangeTodoStateResponse> => {
   const response = await PatchAxiosInstance<ChangeTodoStateResponse>(
     `/rooms/${roomId}/todos/${todoId}/state`,
+    null,
     { params: { completed: completed } },
   );
 

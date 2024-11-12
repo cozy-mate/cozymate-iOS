@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NumberProp } from 'react-native-svg';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CustomRadioBoxComponent from '@components/customRadioBox';
@@ -25,8 +26,8 @@ import Thirteenth from '@assets/characterItem/13.svg';
 import Fourteenth from '@assets/characterItem/14.svg';
 
 type IconProps = {
-  width: number;
-  height: number;
+  width?: NumberProp;
+  height?: NumberProp;
 };
 
 type Item = {

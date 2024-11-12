@@ -1,6 +1,8 @@
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 export interface GetPreferenceListResponse {
   result: {
-    preferenceList: string[];
+    preferenceList: LifestyleOptionKey[];
   };
 }
 

@@ -17,11 +17,12 @@ export interface TodoItem {
   content: string;
   completed: boolean;
   todoType: string;
+  mateIdList: number[];
 }
 
 export interface MateTodoItem {
   memberDetail: MemberDetailItem;
-  mateTodoList: TodoItem[];
+  todoList: TodoItem[];
 }
 
 export interface GetTodoDataResponse {

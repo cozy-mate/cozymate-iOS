@@ -37,7 +37,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { mutateAsync: appleLogin } = useAppleLogin(navigation);
 
   const toSignUp = async (): Promise<void> => {
-    const signInResponse = await signIn({ clientId: '1232132131', socialType: 'TEST' });
+    const signInResponse = await signIn({ clientId: 'TEST', socialType: 'TEST' });
+
+    console.log(signInResponse);
 
     await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
 
@@ -60,7 +62,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       });
 
       await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
-      setProfile(signUpResponse.result.memberInfoDTO);
+      setProfile(signUpResponse.result.memberDetailResponseDTO);
 
       const response = await getUserDetailData();
       setHasLifeStyle(true);

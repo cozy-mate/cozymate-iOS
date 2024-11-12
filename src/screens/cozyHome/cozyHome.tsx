@@ -64,13 +64,21 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
     const fetchData = async () => {
       if (hasLifeStyle) {
-        const response = await searchUsers(0, true);
+        try {
+          const response = await searchUsers(0, true);
 
-        setUserList(response.result.memberList);
+          setUserList(response.result.memberList);
+        } catch (error: any) {
+          console.log(error.response);
+        }
       } else {
-        const response = await getRandomUser();
+        try {
+          const response = await getRandomUser();
 
-        setUserList(response.result.memberList);
+          setUserList(response.result.memberList);
+        } catch (error: any) {
+          console.log(error.response);
+        }
       }
     };
     fetchData();

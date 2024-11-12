@@ -8,7 +8,7 @@ import { addPreferenceList } from '@server/api/member-stat-preference';
 import { ChipSelectScreenProps } from '@type/param/rootStack';
 
 const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
-  const [preferences, setPreferences] = useState<string[]>([]);
+  const [preferenceList, setPreferenceList] = useState<string[]>([]);
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -18,7 +18,7 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 5, id: 'wakeUpTime', name: '기상시간', select: false },
     { index: 6, id: 'sleepingTime', name: '취침시간', select: false },
     { index: 7, id: 'turnOffTime', name: '소등시간', select: false },
-    { index: 8, id: 'smoking', name: '흡연여부', select: false },
+    { index: 8, id: 'smokingState', name: '흡연여부', select: false },
     { index: 9, id: 'sleepingHabit', name: '잠버릇', select: false },
     { index: 10, id: 'airConditioningIntensity', name: '에어컨', select: false },
     { index: 11, id: 'heatingIntensity', name: '히터', select: false },
@@ -37,12 +37,20 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 24, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const isComplete = preferences.length === 4;
+  const isComplete = preferenceList.length === 4;
+
+  const registerPreference = async () => {
+    try {
+      await addPreferenceList({ preferenceList: preferenceList });
+    } catch (error: any) {
+      console.log(error.response);
+    }
+  };
 
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
 
-    await addPreferenceList({ preferences: preferences });
+    await registerPreference();
 
     navigation.navigate('CompleteScreen');
   };
@@ -61,8 +69,8 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
           </View>
 
           <CheckBoxContainer
-            value={preferences}
-            setValue={setPreferences}
+            value={preferenceList}
+            setValue={setPreferenceList}
             items={items}
             setItems={setItems}
           />

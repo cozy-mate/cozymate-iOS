@@ -521,6 +521,13 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
         })),
       );
 
+      setDrinkingFrequencyItems((prevItems) =>
+        prevItems.map((item) => ({
+          ...item,
+          select: item.value === result.drinkingFrequency,
+        })),
+      );
+
       setPersonalityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,

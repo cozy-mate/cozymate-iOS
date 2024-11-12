@@ -1,21 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  SafeAreaView,
-  LayoutChangeEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-} from 'react-native';
+import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import { RoomDummyData } from './dummyData';
-
-import RoomComponent from '@components/recommendRoom/RoomComponent';
+import SearchInputBox from '@components/common/searchInputBox';
+import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 
 import { useProfileStore } from '@zustand/member/member';
+
+import { useGetRandomRoom } from '@hooks/api/room-recommend';
 
 import { RecommendRoomScreenProps } from '@type/param/stack';
 
@@ -26,22 +18,14 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
   const { bottom } = useSafeAreaInsets();
 
-  // 스크롤 시 SafeAreaView 색상 관련
-  const [scrollY, setScrollY] = useState<number>(0);
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollY(event.nativeEvent.contentOffset.y);
-  };
-
-  const [height, setHeight] = useState<number>(0);
-
-  const handleLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setHeight(height);
-  };
+  const { data: roomList } = useGetRandomRoom(10);
 
   const toHome = () => {
     navigation.goBack();
+  };
+
+  const toSearch = () => {
+    navigation.navigate('SearchScreen', { type: 'room' });
   };
 
   const toRoomDetail = (roomId: number) => {
@@ -49,40 +33,39 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
   };
 
   return (
-    <View className="bg-sub1">
-      <SafeAreaView
-        style={{
-          backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
-        }}
-      />
-      <ScrollView onScroll={handleScroll} scrollEventThrottle={16} bounces={false}>
-        <View onLayout={handleLayout}>
-          {/* 상단 이전 버튼 */}
-          <View className="mb-6 flex flex-row items-center pl-2">
+    <SafeAreaView className="bg-white">
+      <ScrollView bounces={false}>
+        <View className="px-5">
+          <View className="mb-4 flex flex-row items-center">
             <Pressable onPress={toHome}>
               <BackButton />
             </Pressable>
           </View>
 
-          <View className="px-5 pb-12">
-            <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
-              {profile.nickname}님과{'\n'}꼭 맞는 방을 추천해드릴게요
+          <View className="mb-4">
+            <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+              {profile.nickname}님과,{'\n'}꼭 맞는 방을 추천해드릴게요
             </Text>
           </View>
-        </View>
 
-        <View className="flex-1 bg-white px-5 pt-4" style={{ paddingBottom: bottom + 80 }}>
-          {RoomDummyData.map((room, index) => (
-            <RoomComponent
-              key={index}
-              index={index}
-              roomData={room}
-              toRoomDetail={() => toRoomDetail(room.roomId)}
-            />
-          ))}
+          <SearchInputBox type="touch" placeholder="방 이름을 검색해보세요!" pressFunc={toSearch} />
+
+          <Pressable></Pressable>
+
+          <View style={{ paddingBottom: bottom + 80 }}>
+            <View className="flex flex-col space-y-6">
+              {roomList?.result.recommendations.map((room, index) => (
+                <RecommendRoomComponent
+                  key={index}
+                  roomData={room}
+                  pressFunc={() => toRoomDetail(room.roomId)}
+                />
+              ))}
+            </View>
+          </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
