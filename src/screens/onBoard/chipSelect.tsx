@@ -18,7 +18,7 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 5, id: 'wakeUpTime', name: '기상시간', select: false },
     { index: 6, id: 'sleepingTime', name: '취침시간', select: false },
     { index: 7, id: 'turnOffTime', name: '소등시간', select: false },
-    { index: 8, id: 'smokingState', name: '흡연여부', select: false },
+    { index: 8, id: 'smoking', name: '흡연여부', select: false },
     { index: 9, id: 'sleepingHabit', name: '잠버릇', select: false },
     { index: 10, id: 'airConditioningIntensity', name: '에어컨', select: false },
     { index: 11, id: 'heatingIntensity', name: '히터', select: false },

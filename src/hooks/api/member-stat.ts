@@ -1,29 +1,29 @@
-import { useQuery, useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import {
-  searchUsers,
-  getRandomUser,
-  getUserDetailData,
-  getOtherUserDetailData,
+  searchMembers,
+  getRandomMember,
+  getMemberStatData,
+  getOtherMemberStatData,
 } from '@server/api/member-stat';
 import {
-  SearchUsersResponse,
-  GetRandomUserResponse,
-  GetUserDetailDataResponse,
-  GetOtherUserDetailDataResponse,
+  SearchMembersResponse,
+  GetRandomMemberResponse,
+  GetMemberStatDataResponse,
+  GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
 
-// 내 라이프 스타일 조회
-export const useGetUserDetailData = (): {
-  data: GetUserDetailDataResponse;
+// 사용자 상세정보 조회
+export const useGetMemberStatData = (): {
+  data: GetMemberStatDataResponse;
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['mylifestyledata'],
-    queryFn: () => getUserDetailData(),
-    select: (reseponse: GetUserDetailDataResponse) => {
+    queryFn: () => getMemberStatData(),
+    select: (reseponse: GetMemberStatDataResponse) => {
       return reseponse;
     },
   });
@@ -31,67 +31,74 @@ export const useGetUserDetailData = (): {
   return { data, refetch };
 };
 
-export const useGetOtherDetailData = (
+// 사용자 상세정보 조회 (타인용)
+export const useGetOtherMemberStatData = (
   memberId: number,
 ): {
-  data: GetOtherUserDetailDataResponse;
+  data: GetOtherMemberStatDataResponse;
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['otherlifestyledata', memberId],
-    queryFn: () => getOtherUserDetailData(memberId),
-    select: (response: GetOtherUserDetailDataResponse) => {
+    queryFn: () => getOtherMemberStatData(memberId),
+    select: (response: GetOtherMemberStatDataResponse) => {
       return response;
     },
-  });
-
-  return { data, refetch };
-};
-
-// 사용자 상세정보 필터링, 일치율 조회
-export const useSearchUsersWithFilters = (
-  filterList?: string[],
-  page?: number,
-): { data: SearchUsersResponse | undefined; refetch: () => void } => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
-  const { data, refetch } = useQuery({
-    queryKey: ['sameanswerdata', filterList, page],
-    queryFn: () => searchUsers(filterList, page),
-    select: (response: SearchUsersResponse) => {
-      return response;
-    },
-    enabled: hasLifeStyle,
-  });
-
-  return { data, refetch };
-};
-
-// 비슷한 라이프 스타일 코지메이트 조회
-export const useSearchUsers = (): {
-  data: SearchUsersResponse | undefined;
-  refetch: () => void;
-} => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
-  const { data, refetch } = useQuery({
-    queryKey: ['similarmatedata'],
-    queryFn: () => searchUsers(),
-    select: (response: SearchUsersResponse) => {
-      return response;
-    },
-    enabled: hasLifeStyle,
   });
 
   return { data, refetch };
 };
 
 // 사용자 랜덤 추천
-export const useGetRandomUser = (
-  seenMemberStatIds: number[],
-): UseMutationResult<GetRandomUserResponse, void, void, unknown> => {
-  return useMutation({
-    mutationFn: () => getRandomUser({ seenMemberStatIds }),
-    onSuccess: () => {},
+export const useGetRandomMember = (): {
+  data: GetRandomMemberResponse;
+  refetch: () => void;
+} => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['randomMemberList'],
+    queryFn: () => getRandomMember(),
+    select: (reseponse: GetRandomMemberResponse) => {
+      return reseponse;
+    },
   });
+
+  return { data, refetch };
+};
+
+// 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
+export const useSearchMembersByFilter = (
+  page?: number,
+  filterList?: string[],
+): { data: SearchMembersResponse | undefined; refetch: () => void } => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  const { data, refetch } = useQuery({
+    queryKey: ['sameanswerdata', page, filterList],
+    queryFn: () => searchMembers(page, filterList),
+    select: (response: SearchMembersResponse) => {
+      return response;
+    },
+    enabled: hasLifeStyle,
+  });
+
+  return { data, refetch };
+};
+
+// 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
+export const useSearchMembers = (): {
+  data: SearchMembersResponse | undefined;
+  refetch: () => void;
+} => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  const { data, refetch } = useQuery({
+    queryKey: ['similarmatedata'],
+    queryFn: () => searchMembers(),
+    select: (response: SearchMembersResponse) => {
+      return response;
+    },
+    enabled: hasLifeStyle,
+  });
+
+  return { data, refetch };
 };

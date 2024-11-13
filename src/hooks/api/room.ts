@@ -22,7 +22,7 @@ export const useGetRoomData = (
   roomId: number,
 ): { data: GetRoomDataResponse; refetch: () => void } => {
   const { data, refetch } = useSuspenseQuery({
-    queryKey: ['roomData', roomId],
+    queryKey: ['roomdata', roomId],
     queryFn: () => getRoomData(roomId),
     select: (response: GetRoomDataResponse) => {
       return response;

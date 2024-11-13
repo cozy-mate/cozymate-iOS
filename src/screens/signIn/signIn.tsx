@@ -5,7 +5,7 @@ import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { signIn, testSignUp } from '@server/api/member';
-import { getUserDetailData } from '@server/api/member-stat';
+import { getMemberStatData } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useIsOldiPhone } from '@hooks/device';
@@ -64,9 +64,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
       await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
       setProfile(signUpResponse.result.memberDetailResponseDTO);
 
-      const response = await getUserDetailData();
+      const response = await getMemberStatData();
       setHasLifeStyle(true);
-      setLifeStyle(response.result);
+      setLifeStyle(response.result.memberStatDetail);
     } catch (error: any) {
       const errorCode = error?.response?.data?.code;
 

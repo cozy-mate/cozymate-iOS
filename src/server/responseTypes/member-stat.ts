@@ -1,91 +1,120 @@
-export interface GetUserDetailDataResponse {
+export interface GetMemberStatDataResponse {
   result: {
-    universityId: number;
-    admissionYear: number;
-    birthYear: number;
-    major: string;
-    memberPersona: number;
-    numOfRoommate: number;
-    dormitoryNames: string;
-    acceptance: string;
-    wakeUpMeridian: string;
-    wakeUpTime: number;
-    sleepingMeridian: string;
-    sleepingTime: number;
-    turnOffMeridian: string;
-    turnOffTime: number;
-    smokingState: string;
-    sleepingHabit: string[];
-    airConditioningIntensity: number;
-    heatingIntensity: number;
-    lifePattern: string;
-    intimacy: string;
-    canShare: string;
-    isPlayGame: string;
-    isPhoneCall: string;
-    studying: string;
-    intake: string;
-    cleanSensitivity: number;
-    noiseSensitivity: number;
-    cleaningFrequency: string;
-    drinkingFrequency: string;
-    personality: string[];
-    mbti: string;
-    selfIntroduction: string;
+    memberDetail: {
+      memberId: number;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      universityName: string;
+      majorName: string;
+      persona: number;
+    };
+    memberStatDetail: {
+      admissionYear: string;
+      numOfRoommate: number;
+      dormitoryName: string;
+      acceptance: string;
+      wakeUpMeridian: string;
+      wakeUpTime: number;
+      sleepingMeridian: string;
+      sleepingTime: number;
+      turnOffMeridian: string;
+      turnOffTime: number;
+      smoking: string;
+      sleepingHabit: string[];
+      airConditioningIntensity: number;
+      heatingIntensity: number;
+      lifePattern: string;
+      intimacy: string;
+      canShare: string;
+      isPlayGame: string;
+      isPhoneCall: string;
+      studying: string;
+      intake: string;
+      cleanSensitivity: number;
+      noiseSensitivity: number;
+      cleaningFrequency: string;
+      drinkingFrequency: string;
+      personality: string[];
+      mbti: string;
+      selfIntroduction: string;
+    };
   };
 }
 
-export interface GetOtherUserDetailDataResponse {
+export interface GetOtherMemberStatDataResponse {
   result: {
-    universityId: number;
-    admissionYear: number;
-    birthYear: number;
-    major: string;
-    memberPersona: number;
-    numOfRoommate: number;
-    dormitoryNames: string;
-    acceptance: string;
-    wakeUpMeridian: string;
-    wakeUpTime: number;
-    sleepingMeridian: string;
-    sleepingTime: number;
-    turnOffMeridian: string;
-    turnOffTime: number;
-    smokingState: string;
-    sleepingHabit: string[];
-    airConditioningIntensity: number;
-    heatingIntensity: number;
-    lifePattern: string;
-    intimacy: string;
-    canShare: string;
-    isPlayGame: string;
-    isPhoneCall: string;
-    studying: string;
-    intake: string;
-    cleanSensitivity: number;
-    noiseSensitivity: number;
-    cleaningFrequency: string;
-    drinkingFrequency: string;
-    personality: string[];
-    mbti: string;
-    selfIntroduction: string;
+    memberDetail: {
+      memberId: number;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      universityName: string;
+      majorName: string;
+      persona: number;
+    };
+    memberStatDetail: {
+      admissionYear: string;
+      numOfRoommate: number;
+      dormitoryName: string;
+      acceptance: string;
+      wakeUpMeridian: string;
+      wakeUpTime: number;
+      sleepingMeridian: string;
+      sleepingTime: number;
+      turnOffMeridian: string;
+      turnOffTime: number;
+      smoking: string;
+      sleepingHabit: string[];
+      airConditioningIntensity: number;
+      heatingIntensity: number;
+      lifePattern: string;
+      intimacy: string;
+      canShare: string;
+      isPlayGame: string;
+      isPhoneCall: string;
+      studying: string;
+      intake: string;
+      cleanSensitivity: number;
+      noiseSensitivity: number;
+      cleaningFrequency: string;
+      drinkingFrequency: string;
+      personality: string[];
+      mbti: string;
+      selfIntroduction: string;
+    };
+    equality: number;
+    roomId: number;
   };
 }
 
-export interface SearchUserByKeywordResponse {
+export interface SearchMemberByKeywordResponse {
   result: {
-    memberId: number;
-    memberNickname: string;
-    memberPersona: number;
+    memberDetail: {
+      memberId: number;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      universityName: string;
+      majorName: string;
+      persona: number;
+    };
     equality: number;
   }[];
 }
 
-export interface GetRandomUserResponse {
+export interface GetRandomMemberResponse {
   result: {
     memberList: {
-      memberId: number;
-      memberNickname: string;
+      memberDetail: {
+        memberId: number;
+        nickname: string;
+        gender: string;
+        birthday: string;
+        universityName: string;
+        majorName: string;
+        persona: number;
+      };
       equality: number;
       preferenceStats: Record<string, string | number>;
     }[];
@@ -96,20 +125,27 @@ export interface CheckDormitoryNumResponse {
   result: number;
 }
 
-export interface SearchUsersResponse {
+export interface SearchMembersResponse {
   result: {
     page: number;
     hasNext: boolean;
     memberList: {
-      memberId: number;
-      memberNickname: string;
+      memberDetail: {
+        memberId: number;
+        nickname: string;
+        gender: string;
+        birthday: string;
+        universityName: string;
+        majorName: string;
+        persona: number;
+      };
       equality: number;
       preferenceStats: Record<string, string | number>;
     }[];
   };
 }
 
-export interface RegisterUserDataResponse {
+export interface RegisterMemberStatResponse {
   result: number;
 }
 
@@ -117,14 +153,18 @@ export interface GetFilteredMemberListResponse {
   result: {
     page: number;
     hasNext: boolean;
-    result: {
-      memberId: number;
-      memberName: string;
-      memberNickName: string;
-      memberAge: number;
-      memberPersona: number;
-      numOfRoommate: number;
+    memberList: {
+      memberDetail: {
+        memberId: number;
+        nickname: string;
+        gender: string;
+        birthday: string;
+        universityName: string;
+        majorName: string;
+        persona: number;
+      };
       equality: number;
+      preferenceStats: Record<string, string | number>;
     }[];
   };
 }
@@ -133,6 +173,6 @@ export interface GetFilteredMemberListCountResponse {
   result: number;
 }
 
-export interface UpdateUserDataResponse {
+export interface UpdateMemberStatResponse {
   result: number;
 }

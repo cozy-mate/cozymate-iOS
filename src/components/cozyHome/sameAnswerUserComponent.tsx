@@ -7,13 +7,10 @@ import {
   getRoommateLifeStyleIcon,
 } from '@utils/getLifeStyleIcon';
 
+import { UserItem } from '@type/cozyHome/cozyHome';
+
 interface SameAnswerUserComponentProps {
-  userData: {
-    memberId: number;
-    memberNickname: string;
-    equality: number;
-    preferenceStats: Record<string, string | number>;
-  };
+  userData: UserItem;
   onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: () => void;
 }
@@ -39,7 +36,7 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
         <Text className="pl-2 text-base font-semibold text-basicFont">
-          {userData.memberNickname}
+          {userData.memberDetail.nickname}
         </Text>
         <View className="flex flex-row items-center">
           <Text className="mr-1 text-xs font-medium text-disabledFont">

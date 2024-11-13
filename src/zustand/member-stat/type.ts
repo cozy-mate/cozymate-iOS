@@ -1,11 +1,7 @@
 export interface LifeStyle {
-  universityId: number;
-  admissionYear: number;
-  birthYear: number;
-  major: string;
-  memberPersona: number;
+  admissionYear: string;
   numOfRoommate: number;
-  dormitoryNames: string;
+  dormitoryName: string;
   acceptance: string;
   wakeUpMeridian: string;
   wakeUpTime: number;
@@ -13,7 +9,7 @@ export interface LifeStyle {
   sleepingTime: number;
   turnOffMeridian: string;
   turnOffTime: number;
-  smokingState: string;
+  smoking: string;
   sleepingHabit: string[];
   airConditioningIntensity: number;
   heatingIntensity: number;

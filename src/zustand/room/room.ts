@@ -62,8 +62,8 @@ export const useRoomInfoStore = create<{
     roomId: 0,
     name: '',
     inviteCode: '',
-    profileImage: 0,
-    mateList: [
+    persona: 0,
+    mateDetailList: [
       {
         memberId: 0,
         mateId: 0,
@@ -72,12 +72,13 @@ export const useRoomInfoStore = create<{
         mateEquality: 0,
       },
     ],
-    managerId: 0,
+    managerMemberId: 0,
+    managerNickname: '',
     isRoomManager: false,
     maxMateNum: 0,
-    numOfArrival: 0,
+    arrivalMateNum: 0,
     roomType: '',
-    hashtags: [],
+    hashtagList: [],
     equality: 0,
     difference: {
       blue: [],

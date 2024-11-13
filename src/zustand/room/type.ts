@@ -20,27 +20,26 @@ export interface CreatePrivateRoomInfo {
   maxMateNum: number;
 }
 
-export type MateType = {
-  memberId: number;
-  mateId: number;
-  nickname: string;
-  persona: number;
-  mateEquality: number;
-};
-
 // 생성된 방 정보
 export type RoomInfo = {
   roomId: number;
   name: string;
   inviteCode: string;
-  profileImage: number;
-  mateList: MateType[];
-  managerId: number;
+  persona: number;
+  mateDetailList: {
+    memberId: number;
+    mateId: number;
+    nickname: string;
+    persona: number;
+    mateEquality: number;
+  }[];
+  managerMemberId: number;
+  managerNickname: string;
   isRoomManager: boolean;
   maxMateNum: number;
-  numOfArrival: number;
+  arrivalMateNum: number;
   roomType: string;
-  hashtags: string[];
+  hashtagList: string[];
   equality: number;
   difference: {
     blue: LifestyleOptionKey[];

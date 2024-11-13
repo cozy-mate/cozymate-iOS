@@ -11,7 +11,7 @@ import {
 } from '@zustand/member-stat/member-stat';
 
 import { signIn, getMyProfile } from '@server/api/member';
-import { getUserDetailData } from '@server/api/member-stat';
+import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
 import {
@@ -92,9 +92,9 @@ export const useKakaoLogin = (
 
           // getUserDetailData 호출 및 라이프스타일 정보 처리
           try {
-            const userDetailResponse = await getUserDetailData();
+            const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
+            setLifeStyle(userDetailResponse.result.memberStatDetail);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {
@@ -188,9 +188,9 @@ export const useAppleLogin = (
 
           // getUserDetailData 호출 및 라이프스타일 정보 처리
           try {
-            const userDetailResponse = await getUserDetailData();
+            const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
+            setLifeStyle(userDetailResponse.result.memberStatDetail);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {

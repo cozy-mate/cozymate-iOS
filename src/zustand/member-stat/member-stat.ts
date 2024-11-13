@@ -17,13 +17,9 @@ export const useLifeStyleStore = create<{
   setLifeStyle: (newLifeStyle: Partial<LifeStyle>) => void;
 }>((set) => ({
   lifeStyle: {
-    universityId: 0,
-    admissionYear: 0,
-    birthYear: 0,
-    major: '',
-    memberPersona: 0,
+    admissionYear: '',
     numOfRoommate: 0,
-    dormitoryNames: '',
+    dormitoryName: '',
     acceptance: '',
     wakeUpMeridian: '',
     wakeUpTime: 0,
@@ -31,7 +27,7 @@ export const useLifeStyleStore = create<{
     sleepingTime: 0,
     turnOffMeridian: '',
     turnOffTime: 0,
-    smokingState: '',
+    smoking: '',
     sleepingHabit: [],
     airConditioningIntensity: 0,
     heatingIntensity: 0,

@@ -74,6 +74,8 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
 
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
+  console.log(tododata.result.myTodoList);
+
   const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
 
   const changeTodo = async (todo: TodoItem): Promise<void> => {
@@ -175,7 +177,9 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         <View
                           className={`ml-1.5 h-1.5 w-1.5 rounded-full ${
                             todo.todoType === 'group' && 'bg-main1'
-                          } ${todo.todoType === 'other' && 'bg-main2'}`}
+                          } ${todo.todoType === 'other' && 'bg-main2'} ${
+                            todo.todoType === 'role' && 'bg-[#ACE246]'
+                          }`}
                         />
                       </View>
 
@@ -277,7 +281,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               </View>
             </View>
 
-            <View className="space-y-4">
+            <View style={{ paddingBottom: bottom + 60 }} className="space-y-4">
               <Text className="px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해 알려드릴게요!
               </Text>

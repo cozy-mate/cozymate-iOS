@@ -8,6 +8,8 @@ import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
 // import { deleteMember } from '@server/api/member';
 
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
 import { deleteToken } from '@utils/token';
 // import { deleteFcmToken } from '@utils/fcm';
 import { getProfileImage } from '@utils/profileImage';
@@ -26,6 +28,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
 
   const school = true;
 
@@ -36,15 +39,19 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: 1 });
+    navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
   };
 
   const toSchoolAuthentication = () => {
     navigation.navigate('SchoolAuthenticationScreen');
   };
 
-  const toLifeStyleEdit = () => {
-    navigation.navigate('LifeStyleEditScreen');
+  const toLifeStyle = () => {
+    if (hasLifeStyle) {
+      navigation.navigate('LifeStyleEditScreen');
+    } else {
+      navigation.navigate('LifeStyleOnboardingScreen');
+    }
   };
 
   const logout = async (): Promise<void> => {
@@ -136,7 +143,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
             <Pressable
               className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
-              onPress={toLifeStyleEdit}
+              onPress={toLifeStyle}
             >
               <Text className="text-sm font-medium text-emphasizedFont">나의 라이프스타일</Text>
               <View className="flex flex-row items-center">

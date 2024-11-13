@@ -5,10 +5,10 @@ import { TableViewProps } from '@type/userDetail/userDetail';
 
 const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModal }) => {
   const intensityMapping = [
-    { index: 0, name: '아예 틀지 않아요' },
+    { index: 0, name: '안 틀어요' },
     { index: 1, name: '약하게 틀어요' },
     { index: 2, name: '적당하게 틀어요' },
-    { index: 3, name: '세게 틀어요' },
+    { index: 3, name: '강하게 틀어요' },
   ];
 
   const sensitivityMapping = [
@@ -24,55 +24,57 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
   };
 
   const formatValue = (key: string, value: any) => {
-    if (key === 'birthYear') {
-      return `${value}년`;
-    } else if (key === 'isPlayGame' || key === 'isPhoneCall' || key === 'canShare') {
-      return value ? 'O' : 'X';
+    if (key === 'birthday') {
+      return value.slice(0, 4) + '년';
     } else if (key === 'numOfRoommate') {
       return `${value}인 1실`;
     } else if (key === 'wakeUpTime') {
-      return `${userData.wakeUpMeridian} ${value}시`;
+      return `${userData.memberStatDetail.wakeUpMeridian} ${value}시`;
     } else if (key === 'sleepingTime') {
-      return `${userData.sleepingMeridian} ${value}시`;
+      return `${userData.memberStatDetail.sleepingMeridian} ${value}시`;
     } else if (key === 'turnOffTime') {
-      return `${userData.turnOffMeridian} ${value}시`;
+      return `${userData.memberStatDetail.turnOffMeridian} ${value}시`;
     } else if (key === 'airConditioningIntensity' || key === 'heatingIntensity') {
       const intensity = intensityMapping.find((item) => item.index === value);
       return intensity ? intensity.name : value;
     } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
       const sensitivity = sensitivityMapping.find((item) => item.index === value);
       return sensitivity ? sensitivity.name : value;
+    } else if (value === null) {
+      return '-';
     }
     return value;
   };
 
   const renderInfo = (my: Record<string, any>, other: Record<string, any>) => {
     const labels: Record<string, string> = {
-      name: '이름', // From userBasicData
-      memberName: '이름', // From otherUserBasicData
-      birthYear: '출생년도',
-      universityId: '학교',
+      nickname: '닉네임',
+      birthday: '출생년도',
+      universityName: '학교',
       admissionYear: '학번',
-      major: '학과',
+      majorName: '학과',
+
       numOfRoommate: '인실',
       acceptance: '합격여부',
+
       wakeUpTime: '기상시간',
       sleepingTime: '취침시간',
       turnOffTime: '소등시간',
-      smokingState: '흡연여부',
+      smoking: '흡연여부',
       sleepingHabit: '잠버릇',
       airConditioningIntensity: '에어컨 강도',
       heatingIntensity: '히터 강도',
       lifePattern: '생활 패턴',
       intimacy: '친밀도',
       canShare: '물건공유',
-      studying: '공부여부',
       isPlayGame: '게임여부',
       isPhoneCall: '전화여부',
+      studying: '공부여부',
       intake: '섭취여부',
       cleanSensitivity: '청결 예민도',
       noiseSensitivity: '소음 예민도',
       cleaningFrequency: '청소 빈도',
+      drinkingFrequency: '음주 빈도',
       personality: '성격',
       mbti: 'MBTI',
     };
@@ -94,23 +96,23 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                 <View className="flex w-[75%] flex-row items-center justify-center">
                   <Text
                     className={`font-medium tracking-tight ${
-                      key !== 'name' && key !== 'memberName' && my[key] !== other[key]
+                      key !== 'nickname' && key !== 'nickname' && my[key] !== other[key]
                         ? 'text-[#F7473B]'
                         : 'text-[#505059]'
                     }`}
                     style={{ width: '50%', textAlign: 'center' }}
                   >
-                    {formatValue(key, my[key])}
+                    {truncateString(formatValue(key, my[key]))}
                   </Text>
                   <Text
                     className={`font-medium tracking-tight ${
-                      key !== 'name' && key !== 'memberName' && my[key] !== other[key]
+                      key !== 'nickname' && key !== 'nickname' && my[key] !== other[key]
                         ? 'text-[#F7473B]'
                         : 'text-[#505059]'
                     }`}
                     style={{ width: '50%', textAlign: 'center' }}
                   >
-                    {formatValue(key, other[key])}
+                    {truncateString(formatValue(key, other[key]))}
                   </Text>
                 </View>
               </View>
@@ -123,7 +125,11 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
 
   return (
     <View className="mt-4 px-5 pb-[54px]">
-      <View className="mb-14">{renderInfo(userData, otherUserData)}</View>
+      <View className="mb-14">
+        {renderInfo(userData.memberDetail, otherUserData.memberDetail)}
+        {renderInfo(userData.memberStatDetail, otherUserData.memberStatDetail)}
+      </View>
+
       <View className="flex flex-col">
         <View className="flex flex-row items-center justify-between px-1">
           <Text className="mb-3 text-base font-semibold text-emphasizedFont">하고 싶은 말</Text>
@@ -133,7 +139,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
         </View>
         <View className="rounded-xl border border-[#F1F2F4] p-4">
           <Text className="text-sm font-medium text-basicFont">
-            {otherUserData.selfIntroduction}
+            {otherUserData.memberStatDetail.selfIntroduction}
           </Text>
         </View>
       </View>

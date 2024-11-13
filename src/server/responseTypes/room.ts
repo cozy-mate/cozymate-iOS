@@ -9,20 +9,21 @@ export interface GetRoomDataResponse {
     roomId: number;
     name: string;
     inviteCode: string;
-    profileImage: number;
-    mateList: {
+    persona: number;
+    mateDetailList: {
       memberId: number;
       mateId: number;
       nickname: string;
       persona: number;
       mateEquality: number;
     }[];
-    managerId: number;
+    managerMemberId: number;
+    managerNickname: string;
     isRoomManager: boolean;
     maxMateNum: number;
-    numOfArrival: number;
+    arrivalMateNum: number;
     roomType: string;
-    hashtags: string[];
+    hashtagList: string[];
     equality: number;
     difference: {
       blue: LifestyleOptionKey[];
@@ -60,20 +61,21 @@ export interface UpdateRoomResponse {
     roomId: number;
     name: string;
     inviteCode: string;
-    profileImage: number;
-    mateList: {
+    persona: number;
+    mateDetailList: {
       memberId: number;
       mateId: number;
       nickname: string;
       persona: number;
       mateEquality: number;
     }[];
-    managerId: number;
+    managerMemberId: number;
+    managerNickname: string;
     isRoomManager: boolean;
     maxMateNum: number;
-    numOfArrival: number;
+    arrivalMateNum: number;
     roomType: string;
-    hashtags: string[];
+    hashtagList: string[];
     equality: number;
     difference: {
       blue: LifestyleOptionKey[];
@@ -100,20 +102,21 @@ export interface CreatePublicRoomResponse {
     roomId: number;
     name: string;
     inviteCode: string;
-    profileImage: number;
-    mateList: {
+    persona: number;
+    mateDetailList: {
       memberId: number;
       mateId: number;
       nickname: string;
       persona: number;
       mateEquality: number;
     }[];
-    managerId: number;
+    managerMemberId: number;
+    managerNickname: string;
     isRoomManager: boolean;
     maxMateNum: number;
-    numOfArrival: number;
+    arrivalMateNum: number;
     roomType: string;
-    hashtags: string[];
+    hashtagList: string[];
     equality: number;
     difference: {
       blue: LifestyleOptionKey[];
@@ -128,20 +131,21 @@ export interface CreatePrivateRoomResponse {
     roomId: number;
     name: string;
     inviteCode: string;
-    profileImage: number;
-    mateList: {
+    persona: number;
+    mateDetailList: {
       memberId: number;
       mateId: number;
       nickname: string;
       persona: number;
       mateEquality: number;
     }[];
-    managerId: number;
+    managerMemberId: number;
+    managerNickname: string;
     isRoomManager: boolean;
     maxMateNum: number;
-    numOfArrival: number;
+    arrivalMateNum: number;
     roomType: string;
-    hashtags: string[];
+    hashtagList: string[];
     equality: number;
     difference: {
       blue: LifestyleOptionKey[];

@@ -28,7 +28,7 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
     { index: 5, id: 'wakeUpTime', name: '기상시간' },
     { index: 6, id: 'sleepingTime', name: '취침시간' },
     { index: 7, id: 'turnOffTime', name: '소등시간' },
-    { index: 8, id: 'smokingState', name: '흡연여부' },
+    { index: 8, id: 'smoking', name: '흡연여부' },
     { index: 9, id: 'sleepingHabit', name: '잠버릇' },
     { index: 10, id: 'airConditioningIntensity', name: '에어컨' },
     { index: 11, id: 'heatingIntensity', name: '히터' },

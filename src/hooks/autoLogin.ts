@@ -10,7 +10,7 @@ import {
 
 import { reissueToken } from '@server/api/auth';
 import { getMyProfile } from '@server/api/member';
-import { getUserDetailData } from '@server/api/member-stat';
+import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
 
@@ -87,10 +87,10 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
         // 라이프스타일 정보 처리
         try {
-          const userDetailResponse = await getUserDetailData();
+          const userDetailResponse = await getMemberStatData();
           console.log(12, userDetailResponse); // 라이프스타일 정보 조회
           setHasLifeStyle(true);
-          setLifeStyle(userDetailResponse.result);
+          setLifeStyle(userDetailResponse.result.memberStatDetail);
         } catch (error: any) {
           console.log(13, error); // 라이프스타일 정보 오류
           const errorCode = error?.response?.data?.code;

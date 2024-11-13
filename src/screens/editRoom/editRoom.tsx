@@ -33,7 +33,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
   const [name, setName] = useState<string>(roomInfo.name);
 
   const [hashTag, setHashTag] = useState<string>('');
-  const [hashtags, setHashtags] = useState<string[]>(roomInfo.hashtags);
+  const [hashtagList, setHashtagList] = useState<string[]>(roomInfo.hashtagList);
 
   const [isLongName, setIsLongName] = useState<boolean>(false);
 
@@ -45,7 +45,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
     } else {
       setIsComplete(false);
     }
-  }, [hashtags, isLongName, name]);
+  }, [hashtagList, isLongName, name]);
 
   const valueHandleChange = (text: string) => {
     setName(text);
@@ -57,14 +57,14 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
   };
 
   const handleHashTagSubmit = () => {
-    if (hashTag.trim() !== '' && hashtags.length < 3) {
-      setHashtags([...hashtags, hashTag.trim()]);
+    if (hashTag.trim() !== '' && hashtagList.length < 3) {
+      setHashtagList([...hashtagList, hashTag.trim()]);
       setHashTag('');
     }
   };
 
   const removeHashTag = (index: number) => {
-    setHashtags((prevList) => prevList.filter((_, i) => i !== index));
+    setHashtagList((prevList) => prevList.filter((_, i) => i !== index));
   };
 
   const toMain = () => {
@@ -80,21 +80,22 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
       if (type === 'PUBLIC') {
         const response = await updateRoom(id, {
           name: name,
-          hashtags: hashtags,
+          hashtags: hashtagList,
         });
 
         setRoomInfo({
           roomId: response.result.roomId,
           name: response.result.name,
           inviteCode: response.result.inviteCode,
-          profileImage: response.result.profileImage,
-          mateList: response.result.mateList,
-          managerId: response.result.managerId,
+          persona: response.result.persona,
+          mateDetailList: response.result.mateDetailList,
+          managerMemberId: response.result.managerMemberId,
+          managerNickname: response.result.managerNickname,
           isRoomManager: response.result.isRoomManager,
           maxMateNum: response.result.maxMateNum,
-          numOfArrival: response.result.numOfArrival,
+          arrivalMateNum: response.result.arrivalMateNum,
           roomType: response.result.roomType,
-          hashtags: response.result.hashtags,
+          hashtagList: response.result.hashtagList,
           equality: response.result.equality,
           difference: response.result.difference,
         });
@@ -105,14 +106,15 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           roomId: response.result.roomId,
           name: response.result.name,
           inviteCode: response.result.inviteCode,
-          profileImage: response.result.profileImage,
-          mateList: response.result.mateList,
-          managerId: response.result.managerId,
+          persona: response.result.persona,
+          mateDetailList: response.result.mateDetailList,
+          managerMemberId: response.result.managerMemberId,
+          managerNickname: response.result.managerNickname,
           isRoomManager: response.result.isRoomManager,
           maxMateNum: response.result.maxMateNum,
-          numOfArrival: response.result.numOfArrival,
+          arrivalMateNum: response.result.arrivalMateNum,
           roomType: response.result.roomType,
-          hashtags: response.result.hashtags,
+          hashtagList: response.result.hashtagList,
           equality: response.result.equality,
           difference: response.result.difference,
         });
@@ -141,7 +143,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
             {/* 캐릭터 선택 */}
             <View className="relative mb-10 flex items-center justify-center">
               <View className="relative">
-                {getProfileImage(roomInfo.profileImage, 130, 130)}
+                {getProfileImage(roomInfo.persona, 130, 130)}
                 <View className="absolute bottom-0 right-0">
                   <Pressable>
                     <SelectIcon />
@@ -183,8 +185,8 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
                     placeholder="해시태그를 입력해주세요"
                   />
                   <View className="flex flex-row">
-                    {hashtags.length > 0 &&
-                      hashtags.map((hash, index) => (
+                    {hashtagList.length > 0 &&
+                      hashtagList.map((hash, index) => (
                         <View
                           key={index}
                           className="mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"

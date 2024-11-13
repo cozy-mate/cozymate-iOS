@@ -26,10 +26,11 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useMemberInfoStore } from '@zustand/member/member';
 
-import { searchUsers, getRandomUser } from '@server/api/member-stat';
+import { searchMembers, getRandomMember } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
+import { useSearchMembers, useGetRandomMember } from '@hooks/api/member-stat';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 import { RoomItem, UserItem } from '@type/cozyHome/cozyHome';
@@ -55,7 +56,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   const [userList, setUserList] = useState<UserItem[]>([]);
 
-  const { data: roomList } = useGetRandomRoom(5);
+  // const { data: roomList } = useGetRandomRoom(5);
 
   const { initFcm } = useInitFcm();
 
@@ -65,7 +66,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     const fetchData = async () => {
       if (hasLifeStyle) {
         try {
-          const response = await searchUsers(0, true);
+          const response = await searchMembers(0);
+
+          console.log('라이프스타일 있음', response);
 
           setUserList(response.result.memberList);
         } catch (error: any) {
@@ -73,11 +76,13 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
         }
       } else {
         try {
-          const response = await getRandomUser();
+          const response = await getRandomMember();
+
+          console.log('라이프스타일 없음', response);
 
           setUserList(response.result.memberList);
         } catch (error: any) {
-          console.log(error.response);
+          console.log(error.response.data);
         }
       }
     };
@@ -179,17 +184,17 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
   const handleUser = (user: UserItem) => {
     setMemberInfo({
-      memberId: user.memberId,
-      memberNickName: user.memberNickname,
+      memberId: user.memberDetail.memberId,
+      memberNickName: user.memberDetail.nickname,
       memberAge: 0,
-      memberPersona: 1,
+      memberPersona: user.memberDetail.persona,
       equality: user.equality,
     });
   };
 
   const toUserDetail = (user: UserItem) => {
     handleUser(user);
-    navigation.navigate('UserDetailScreen', { memberId: user.memberId });
+    navigation.navigate('UserDetailScreen', { memberId: user.memberDetail.memberId });
   };
 
   const toRoomDetail = (roomId: number) => {
@@ -339,10 +344,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            <RecommendationSection<RoomItem>
+            {/* <RecommendationSection<RoomItem>
               title={`${profile.nickname}님과\n꼭 맞는 방을 추천해드릴게요`}
               onPressMore={toRecommendRoom}
-              dataList={roomList?.result.recommendations || []}
+              dataList={roomList.result.recommendations}
               onScrollHandler={handleRecommendRoomScroll}
               snapToInterval={roomComponentWidth}
               renderItem={(data, index, onLayout) => (
@@ -355,7 +360,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               )}
               onLayout={onLayoutRoom}
               currentIndex={roomCurrentIndex}
-            />
+            /> */}
 
             <View className="h-[25px]" />
 

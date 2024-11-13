@@ -11,7 +11,7 @@ import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore, useMemberInfoStore } from '@zustand/member/member';
 
 import { useGetChatRoomId } from '@hooks/api/chat-room';
-import { useGetUserDetailData, useGetOtherDetailData } from '@hooks/api/member-stat';
+import { useGetMemberStatData, useGetOtherMemberStatData } from '@hooks/api/member-stat';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -38,8 +38,10 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
 
   const [type, setType] = useState<string>('list');
 
-  const { data: mylifestyledata } = useGetUserDetailData();
-  const { data: otherlifestyledata } = useGetOtherDetailData(memberId);
+  const { data: mylifestyledata } = useGetMemberStatData();
+  const { data: otherlifestyledata } = useGetOtherMemberStatData(memberId);
+
+  console.log(otherlifestyledata);
 
   const { data: chatRoomId } = useGetChatRoomId(memberId);
 
@@ -66,6 +68,10 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
   }, []);
 
   const [isInvited, setIsInvited] = useState<boolean>(false);
+
+  const toUserRoom = () => {
+    navigation.navigate('RoomDetailScreen', { roomId: otherlifestyledata.result.roomId });
+  };
 
   const toEditMyLifeStyle = () => {
     navigation.navigate('LifeStyleEditScreen');
@@ -100,24 +106,39 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
                   <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
                     {memberInfo.memberNickName}
                   </Text>
-                  {memberInfo.memberNickName !== profile.nickname && (
+                  {memberInfo.memberId !== profile.memberId && (
                     <Text className="text-sm font-medium text-basicFont">
                       나와의 일치율 {memberInfo.equality !== null && memberInfo.equality}%
                     </Text>
                   )}
                 </View>
               </View>
-              {memberInfo.memberNickName === profile.nickname && (
+              {memberInfo.memberId === profile.memberId ? (
                 <Pressable onPress={toEditMyLifeStyle} className="mt-5 rounded-xl bg-main1 p-3">
                   <Text className="text-center text-sm font-semibold text-white">
                     내 라이프스타일 수정하기
                   </Text>
                 </Pressable>
+              ) : otherlifestyledata.result.roomId !== 0 ? (
+                <Pressable
+                  onPress={toUserRoom}
+                  className="mt-5 rounded-xl border border-main1 bg-sub2 p-3"
+                >
+                  <Text className="text-center text-sm font-semibold text-main1">
+                    {memberInfo.memberNickName}님이 속한 방 보러가기
+                  </Text>
+                </Pressable>
+              ) : (
+                <View className="mt-5 rounded-xl border border-disabledFont bg-colorBox p-3">
+                  <Text className="text-center text-sm font-semibold text-disabledFont">
+                    {memberInfo.memberNickName}님은 아직 속한 방이 없어요
+                  </Text>
+                </View>
               )}
             </View>
 
             <View className="mt-5 flex-1 rounded-t-[20px] bg-white pt-3">
-              {memberInfo.memberNickName !== profile.nickname && (
+              {memberInfo.memberId !== profile.memberId && (
                 <View className="flex flex-row items-center justify-center">
                   {/* 리스트로 보기 */}
                   <Pressable
@@ -164,8 +185,8 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
                 {type === 'list' && (
                   <ListView
-                    userBasicData={memberInfo}
-                    userData={otherlifestyledata.result}
+                    memberDetail={otherlifestyledata.result.memberDetail}
+                    memberStatDetail={otherlifestyledata.result.memberStatDetail}
                     openModal={handleReportModal}
                   />
                 )}
@@ -209,11 +230,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
       </View>
 
       {isReportModalOpen && (
-        <ReportModal
-          reportedMemberId={memberId}
-          reportSource="MEMBER_STAT"
-          closeModal={handleReportModal}
-        />
+        <ReportModal memberId={memberId} source="MEMBER_STAT" closeModal={handleReportModal} />
       )}
     </Fragment>
   );

@@ -42,7 +42,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   const { data: roomData } = useGetRoomData(roomId);
-  const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerId);
+  const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerMemberId);
 
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
@@ -103,14 +103,14 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
           <View className="mb-6 flex flex-col px-5">
             <View className="mb-5 flex flex-row items-center">
-              {getProfileImage(roomData.result.profileImage, 40, 40)}
+              {getProfileImage(roomData.result.persona, 40, 40)}
               <View className="ml-2 flex flex-col">
                 <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
                   {roomData.result.name}
                 </Text>
                 <View className="flex flex-row">
-                  {roomData.result.hashtags.length !== 0 ? (
-                    roomData.result.hashtags.map((hash, index) => (
+                  {roomData.result.hashtagList.length !== 0 ? (
+                    roomData.result.hashtagList.map((hash, index) => (
                       <Text key={index} className="mr-1 text-sm font-medium text-basicFont">
                         #{hash}
                       </Text>
@@ -148,19 +148,19 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 <View className="mb-4 flex flex-row items-center justify-between px-1">
                   <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
                   <Text className="text-xs font-medium text-disabledFont">
-                    <Text className="text-main1">{roomData.result.numOfArrival}</Text> /{' '}
+                    <Text className="text-main1">{roomData.result.arrivalMateNum}</Text> /{' '}
                     {roomData.result.maxMateNum}
                   </Text>
                 </View>
 
                 <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
-                  {roomData.result.mateList &&
-                    roomData.result.mateList.map((member, index) => (
+                  {roomData.result.mateDetailList &&
+                    roomData.result.mateDetailList.map((member, index) => (
                       <MemberComponent
                         key={index}
                         index={index}
                         memberData={member}
-                        length={roomData.result.numOfArrival}
+                        length={roomData.result.arrivalMateNum}
                         pressFunc={toUserDetail}
                       />
                     ))}
