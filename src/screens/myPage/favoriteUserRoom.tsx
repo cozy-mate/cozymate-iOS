@@ -1,0 +1,71 @@
+import React from 'react';
+import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
+
+import { FavoriteUserRoomScreenProps } from '@type/param/stack';
+
+import BackButton from '@assets/backButton.svg';
+
+const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenProps) => {
+  const { type } = route.params;
+
+  console.log(type);
+
+  const changeUserType = () => {
+    navigation.navigate('FavoriteUserRoomScreen', { type: 'user' });
+  };
+
+  const changeRoomType = () => {
+    navigation.navigate('FavoriteUserRoomScreen', { type: 'room' });
+  };
+
+  const toBack = () => {
+    navigation.goBack();
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView bounces={false}>
+        <View className="flex flex-col">
+          <View className="my-2 flex flex-row justify-between px-5">
+            <Pressable onPress={toBack}>
+              <BackButton />
+            </Pressable>
+          </View>
+
+          <View className="flex flex-row space-x-2 px-5">
+            <Pressable
+              onPress={changeUserType}
+              className={`rounded-lg border px-3.5 py-2 ${
+                type === 'user' ? 'border-main1 bg-sub1' : 'border-disabled bg-white'
+              }`}
+            >
+              <Text
+                className={`text-xs ${
+                  type === 'user' ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
+                }`}
+              >
+                내가 찜한 룸메이트
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={changeRoomType}
+              className={`rounded-lg border px-3.5 py-2 ${
+                type === 'room' ? 'border-main1 bg-sub1' : 'border-disabled bg-white'
+              }`}
+            >
+              <Text
+                className={`text-xs ${
+                  type === 'room' ? 'font-semibold text-main1' : 'font-medium text-disabledFont'
+                }`}
+              >
+                내가 찜한 방
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default FavoriteUserRoomScreen;

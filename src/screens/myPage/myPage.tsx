@@ -54,6 +54,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     }
   };
 
+  const toFavorite = () => {
+    navigation.navigate('FavoriteUserRoomScreen', { type: 'user' });
+  };
+
   const logout = async (): Promise<void> => {
     try {
       await deleteToken();
@@ -151,7 +155,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               </View>
             </Pressable>
 
-            <Pressable className="flex flex-row justify-between py-3">
+            <Pressable className="flex flex-row justify-between py-3" onPress={toFavorite}>
               <Text className="text-sm font-medium text-emphasizedFont">내가 찜한 룸메이트</Text>
               <View className="flex flex-row items-center">
                 <RightArrow />

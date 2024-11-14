@@ -35,6 +35,7 @@ import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
 import BasicInfoUpdateScreen from 'src/screens/myPage/basicInfoUpdate';
 import EditRoleNRuleScreen from 'src/screens/roleNrule/editRoleAndRule';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
+import FavoriteUserRoomScreen from 'src/screens/myPage/favoriteUserRoom';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import RecommendRoomScreen from 'src/screens/recommendRoom/recommendRoom';
 import CreateRoleNRuleScreen from 'src/screens/roleNrule/createRoleNRule';
@@ -114,6 +115,7 @@ function AppInner() {
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
           <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
           <stack.Screen name="BasicInfoUpdateScreen" component={BasicInfoUpdateScreen} />
+          <stack.Screen name="FavoriteUserRoomScreen" component={FavoriteUserRoomScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
