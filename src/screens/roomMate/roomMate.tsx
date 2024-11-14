@@ -9,9 +9,7 @@ import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponen
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchMembers, getMemberStatData, getOtherMemberStatData } from '@server/api/member-stat';
-
-import { useSearchMembers, useSearchMembersByFilter } from '@hooks/api/member-stat';
+import { searchMembers } from '@server/api/member-stat';
 
 import { UserItem } from '@type/cozyHome/cozyHome';
 import { RoomMateScreenProps } from '@type/param/stack';
@@ -28,7 +26,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [page, setPage] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
-  const [userList, setUserList] = useState<UserItem[]>([]); // 표시할 사용자 목록
+  const [userList, setUserList] = useState<UserItem[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -70,8 +68,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 22, id: 'personality', name: '성격', select: false },
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
-
-  // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
 
   const toHome = () => {
     navigation.goBack();

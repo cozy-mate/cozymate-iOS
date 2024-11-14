@@ -5,11 +5,11 @@ export interface UserItem {
     gender: string;
     birthday: string;
     universityName: string;
-    majorName: string;
+    majorName: string | null;
     persona: number;
   };
   equality: number;
-  preferenceStats: Record<string, string | number>;
+  preferenceStats: Record<string, string | number | null>;
 }
 
 export interface RoomItem {

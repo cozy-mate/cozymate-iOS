@@ -1,47 +1,25 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import {
-  searchMembers,
-  getRandomMember,
-  getMemberStatData,
-  getOtherMemberStatData,
-} from '@server/api/member-stat';
+import { searchMembers, getRandomMember, getOtherMemberStatData } from '@server/api/member-stat';
 import {
   SearchMembersResponse,
   GetRandomMemberResponse,
   GetMemberStatDataResponse,
-  GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
 
 // 사용자 상세정보 조회
-export const useGetMemberStatData = (): {
-  data: GetMemberStatDataResponse;
-  refetch: () => void;
-} => {
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['mylifestyledata'],
-    queryFn: () => getMemberStatData(),
-    select: (reseponse: GetMemberStatDataResponse) => {
-      return reseponse;
-    },
-  });
-
-  return { data, refetch };
-};
-
-// 사용자 상세정보 조회 (타인용)
-export const useGetOtherMemberStatData = (
+export const useGetMemberStatData = (
   memberId: number,
 ): {
-  data: GetOtherMemberStatDataResponse;
+  data: GetMemberStatDataResponse;
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['otherlifestyledata', memberId],
     queryFn: () => getOtherMemberStatData(memberId),
-    select: (response: GetOtherMemberStatDataResponse) => {
+    select: (response: GetMemberStatDataResponse) => {
       return response;
     },
   });
@@ -101,4 +79,37 @@ export const useSearchMembers = (): {
   });
 
   return { data, refetch };
+};
+
+export const useGetMemberList = (): {
+  data: GetRandomMemberResponse | SearchMembersResponse;
+  refetch: () => void;
+} => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: ['memberlistdata'],
+    queryFn: () => (hasLifeStyle ? searchMembers() : getRandomMember()),
+    select: (response: GetRandomMemberResponse | SearchMembersResponse) => {
+      return response;
+    },
+  });
+
+  return { data, refetch };
+};
+
+export const useGetMember = () => {
+  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery({
+    queryKey: ['memberdata'],
+    queryFn: ({ pageParam = 0 }) => searchMembers(pageParam),
+    getNextPageParam: (lastPage) => {
+      return lastPage.result.hasNext ? lastPage.result.page + 1 : undefined;
+    },
+    select: (data) => {
+      return data;
+    },
+    initialPageParam: 0,
+  });
+
+  return { data, fetchNextPage, hasNextPage };
 };

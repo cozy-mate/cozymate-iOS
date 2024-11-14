@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
 import { TableViewProps } from '@type/userDetail/userDetail';
 
 const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModal }) => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
   const intensityMapping = [
     { index: 0, name: '안 틀어요' },
     { index: 1, name: '약하게 틀어요' },
@@ -94,26 +98,31 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
               >
                 <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
                 <View className="flex w-[75%] flex-row items-center justify-center">
-                  <Text
-                    className={`font-medium tracking-tight ${
-                      key !== 'nickname' && key !== 'nickname' && my[key] !== other[key]
-                        ? 'text-[#F7473B]'
-                        : 'text-[#505059]'
-                    }`}
-                    style={{ width: '50%', textAlign: 'center' }}
-                  >
-                    {truncateString(formatValue(key, my[key]))}
-                  </Text>
-                  <Text
-                    className={`font-medium tracking-tight ${
-                      key !== 'nickname' && key !== 'nickname' && my[key] !== other[key]
-                        ? 'text-[#F7473B]'
-                        : 'text-[#505059]'
-                    }`}
-                    style={{ width: '50%', textAlign: 'center' }}
-                  >
-                    {truncateString(formatValue(key, other[key]))}
-                  </Text>
+                  <View className="w-1/2">
+                    <Text
+                      className={`text-center font-medium tracking-tight ${
+                        key !== 'nickname' &&
+                        key !== 'nickname' &&
+                        my[key] !== other[key] &&
+                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-[#505059]')
+                      }`}
+                    >
+                      {truncateString(formatValue(key, my[key]))}
+                    </Text>
+                  </View>
+
+                  <View className="w-1/2">
+                    <Text
+                      className={`text-center font-medium tracking-tight ${
+                        key !== 'nickname' &&
+                        key !== 'nickname' &&
+                        my[key] !== other[key] &&
+                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-[#505059]')
+                      }`}
+                    >
+                      {truncateString(formatValue(key, other[key]))}
+                    </Text>
+                  </View>
                 </View>
               </View>
             ) : null,

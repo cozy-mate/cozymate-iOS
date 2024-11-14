@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
 import {
   lifestyleOptions,
   LifestyleOptionKey,
@@ -20,6 +22,8 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
   onLayout,
   pressFunc,
 }) => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
   const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
     return key in lifestyleOptions;
   };
@@ -42,7 +46,9 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
           <Text className="mr-1 text-xs font-medium text-disabledFont">
             내 라이프스타일과 일치율
           </Text>
-          <Text className="text-base font-medium text-main1">{userData.equality}%</Text>
+          <Text className="text-base font-medium text-main1">
+            {userData.equality !== null && hasLifeStyle ? userData.equality : '?? '}%
+          </Text>
         </View>
       </View>
 

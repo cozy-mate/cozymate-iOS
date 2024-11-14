@@ -7,6 +7,8 @@ import CustomTextInputBox from '@components/common/customTextInputBox';
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomCheckBoxInput from '@components/lifeStyle/customCheckBoxInput';
 
+import { useProfileStore } from '@zustand/member/member';
+
 import { updateMemberStat } from '@server/api/member-stat';
 
 import { useGetMemberStatData } from '@hooks/api/member-stat';
@@ -24,6 +26,8 @@ type Item = {
 };
 
 const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
+  const { profile } = useProfileStore();
+
   const toMyPage = () => {
     navigation.goBack();
   };
@@ -356,7 +360,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     { index: 16, value: 'ENTJ', name: 'ENTJ', select: false },
   ]);
 
-  const { data } = useGetMemberStatData();
+  const { data } = useGetMemberStatData(profile.memberId);
 
   useEffect(() => {
     if (data && data.result) {

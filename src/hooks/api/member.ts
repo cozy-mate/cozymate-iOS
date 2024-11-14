@@ -1,5 +1,5 @@
 import appleAuth from '@invertase/react-native-apple-authentication';
-import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
@@ -14,25 +14,9 @@ import { signIn, getMyProfile } from '@server/api/member';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
-import {
-  GetProfileResponse,
-  AppleLoginResponse,
-  KakaoLoginResponse,
-} from '@server/responseTypes/member';
+import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
 
 import { setAccessToken, setRefreshToken } from '@utils/token';
-
-export const useGetMyProfile = (): { data: GetProfileResponse; refetch: () => void } => {
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['mylifestyledata'],
-    queryFn: () => getMyProfile(),
-    select: (reseponse: GetProfileResponse) => {
-      return reseponse;
-    },
-  });
-
-  return { data, refetch };
-};
 
 // 카카오 로그인
 export const useKakaoLogin = (

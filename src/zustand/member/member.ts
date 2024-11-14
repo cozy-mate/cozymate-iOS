@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { SignUp, Profile, MemberInfo } from './type';
+import { SignUp, Profile } from './type';
 
 // 로그인 상태
 export const useLoggedInStore = create<{
@@ -44,20 +44,4 @@ export const useProfileStore = create<{
     persona: 0,
   },
   setProfile: (newProfile) => set((state) => ({ profile: { ...state.profile, ...newProfile } })),
-}));
-
-// 다른 사용자의 기본 정보 저장
-export const useMemberInfoStore = create<{
-  memberInfo: MemberInfo;
-  setMemberInfo: (newMemberInfo: Partial<MemberInfo>) => void;
-}>((set) => ({
-  memberInfo: {
-    memberId: 0,
-    memberNickName: '',
-    memberAge: 0,
-    memberPersona: 0,
-    equality: 0,
-  },
-  setMemberInfo: (newMemberInfo) =>
-    set((state) => ({ memberInfo: { ...state.memberInfo, ...newMemberInfo } })),
 }));

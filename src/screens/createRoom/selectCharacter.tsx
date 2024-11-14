@@ -43,9 +43,9 @@ const SelectCharacterScreen = ({ navigation, route }: SelectCharacterScreenProps
   const { setCreatePublicRoomInfo } = useCreatePublicRoomStore();
   const { setCreatePrivateRoomInfo } = useCreatePrivateRoomStore();
 
-  const [profileImage, setProfileImage] = useState<number>(0);
+  const [persona, setPersona] = useState<number>(0);
 
-  const isComplete = profileImage !== 0;
+  const isComplete = persona !== 0;
 
   const [items, setItems] = useState<Item[]>([
     { index: 1, item: 1, select: false, icon: First },
@@ -69,11 +69,11 @@ const SelectCharacterScreen = ({ navigation, route }: SelectCharacterScreenProps
   const toNext = async (): Promise<void> => {
     if (type === 'PUBLIC') {
       setCreatePublicRoomInfo({
-        profileImage: profileImage,
+        persona: persona,
       });
     } else if (type === 'PRIVATE') {
       setCreatePrivateRoomInfo({
-        profileImage: profileImage,
+        persona: persona,
       });
     }
     navigation.goBack();
@@ -93,8 +93,8 @@ const SelectCharacterScreen = ({ navigation, route }: SelectCharacterScreenProps
 
           {/* 캐릭터 선택 Input */}
           <CustomRadioBoxComponent
-            value={profileImage}
-            setValue={setProfileImage}
+            value={persona}
+            setValue={setPersona}
             items={items}
             setItems={setItems}
           />

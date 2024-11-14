@@ -1,6 +1,6 @@
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
-export interface DeleteRequestRoomResponse {
+export interface DeleteRoomRequestResponse {
   result: string;
 }
 

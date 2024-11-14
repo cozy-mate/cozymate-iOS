@@ -27,18 +27,18 @@ import {
   CreatePublicRoomResponse,
   ChangeRoomPublicResponse,
   CreatePrivateRoomResponse,
-  DeleteRequestRoomResponse,
   GetInvitedMembersResponse,
   CheckOtherHasRoomResponse,
   AcceptRequestRoomResponse,
+  DeleteRoomRequestResponse,
   DeleteInviteMemberResponse,
   AcceptRequestMemberResponse,
   GetRoomDataByInviteCodeResponse,
 } from '@server/responseTypes/room';
 
 // 사용자 -> 방 참여 요청 취소
-export const deleteRequestRoom = async (roomId: number): Promise<DeleteRequestRoomResponse> => {
-  const response = await DeleteAxiosInstance<DeleteRequestRoomResponse>(
+export const deleteRoomRequest = async (roomId: number): Promise<DeleteRoomRequestResponse> => {
+  const response = await DeleteAxiosInstance<DeleteRoomRequestResponse>(
     `/rooms/${roomId}/request-join`,
   );
 

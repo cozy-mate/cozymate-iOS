@@ -8,10 +8,11 @@ import BottomButton from '@components/common/bottomButton';
 import ReportModal from '@components/report/reportComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useProfileStore, useMemberInfoStore } from '@zustand/member/member';
+import { useProfileStore } from '@zustand/member/member';
+import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useGetChatRoomId } from '@hooks/api/chat-room';
-import { useGetMemberStatData, useGetOtherMemberStatData } from '@hooks/api/member-stat';
+import { useGetMemberStatData } from '@hooks/api/member-stat';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -31,17 +32,18 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
 
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
-  const { memberInfo } = useMemberInfoStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { lifeStyle } = useLifeStyleStore();
 
   const { bottom } = useSafeAreaInsets();
   const width = Dimensions.get('screen').width;
 
   const [type, setType] = useState<string>('list');
 
-  const { data: mylifestyledata } = useGetMemberStatData();
-  const { data: otherlifestyledata } = useGetOtherMemberStatData(memberId);
+  // const { data: mylifestyledata } = useGetMemberStatData();
+  const { data: lifeStyleData } = useGetMemberStatData(memberId);
 
-  console.log(otherlifestyledata);
+  // console.log(otherlifestyledata);
 
   const { data: chatRoomId } = useGetChatRoomId(memberId);
 
@@ -70,7 +72,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
   const [isInvited, setIsInvited] = useState<boolean>(false);
 
   const toUserRoom = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: otherlifestyledata.result.roomId });
+    navigation.navigate('RoomDetailScreen', { roomId: lifeStyleData.result.roomId });
   };
 
   const toEditMyLifeStyle = () => {
@@ -101,44 +103,48 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
 
             <View className="flex flex-col px-[23px]">
               <View className="flex flex-row items-center px-[2px]">
-                {getProfileImage(memberInfo.memberPersona, 40, 40)}
+                {getProfileImage(lifeStyleData.result.memberDetail.persona, 40, 40)}
                 <View className="ml-2 flex flex-col">
                   <Text className="mb-1 text-base font-semibold leading-5 text-emphasizedFont">
-                    {memberInfo.memberNickName}
+                    {lifeStyleData.result.memberDetail.nickname}
                   </Text>
-                  {memberInfo.memberId !== profile.memberId && (
+                  {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
                     <Text className="text-sm font-medium text-basicFont">
-                      나와의 일치율 {memberInfo.equality !== null && memberInfo.equality}%
+                      나와의 일치율{' '}
+                      {lifeStyleData.result.equality !== null && hasLifeStyle
+                        ? lifeStyleData.result.equality
+                        : '?? '}
+                      %
                     </Text>
                   )}
                 </View>
               </View>
-              {memberInfo.memberId === profile.memberId ? (
+              {lifeStyleData.result.memberDetail.memberId === profile.memberId ? (
                 <Pressable onPress={toEditMyLifeStyle} className="mt-5 rounded-xl bg-main1 p-3">
                   <Text className="text-center text-sm font-semibold text-white">
                     내 라이프스타일 수정하기
                   </Text>
                 </Pressable>
-              ) : otherlifestyledata.result.roomId !== 0 ? (
+              ) : lifeStyleData.result.roomId !== 0 ? (
                 <Pressable
                   onPress={toUserRoom}
                   className="mt-5 rounded-xl border border-main1 bg-sub2 p-3"
                 >
                   <Text className="text-center text-sm font-semibold text-main1">
-                    {memberInfo.memberNickName}님이 속한 방 보러가기
+                    {lifeStyleData.result.memberDetail.nickname}님이 속한 방 보러가기
                   </Text>
                 </Pressable>
               ) : (
                 <View className="mt-5 rounded-xl border border-disabledFont bg-colorBox p-3">
                   <Text className="text-center text-sm font-semibold text-disabledFont">
-                    {memberInfo.memberNickName}님은 아직 속한 방이 없어요
+                    {lifeStyleData.result.memberDetail.nickname}님은 아직 속한 방이 없어요
                   </Text>
                 </View>
               )}
             </View>
 
             <View className="mt-5 flex-1 rounded-t-[20px] bg-white pt-3">
-              {memberInfo.memberId !== profile.memberId && (
+              {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
                 <View className="flex flex-row items-center justify-center">
                   {/* 리스트로 보기 */}
                   <Pressable
@@ -185,15 +191,15 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
               <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
                 {type === 'list' && (
                   <ListView
-                    memberDetail={otherlifestyledata.result.memberDetail}
-                    memberStatDetail={otherlifestyledata.result.memberStatDetail}
+                    memberDetail={lifeStyleData.result.memberDetail}
+                    memberStatDetail={lifeStyleData.result.memberStatDetail}
                     openModal={handleReportModal}
                   />
                 )}
                 {type === 'table' && (
                   <TableView
-                    userData={mylifestyledata.result}
-                    otherUserData={otherlifestyledata.result}
+                    userData={lifeStyle}
+                    otherUserData={lifeStyleData.result}
                     openModal={handleReportModal}
                   />
                 )}
@@ -201,7 +207,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
             </View>
           </View>
 
-          {memberInfo.memberNickName !== profile.nickname ? (
+          {lifeStyleData.result.memberDetail.memberId !== profile.memberId ? (
             <View className="fixed bottom-[42px] px-5">
               {/* 순서대로 1. 방이 있고 초대한 경우 2. 방이 있고 초대하지 않은 경우 3. 방이 없는 경우 */}
               <BottomButton

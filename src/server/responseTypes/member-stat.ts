@@ -39,6 +39,8 @@ export interface GetMemberStatDataResponse {
       mbti: string;
       selfIntroduction: string;
     };
+    equality: number | null;
+    roomId: number;
   };
 }
 
@@ -83,7 +85,7 @@ export interface GetOtherMemberStatDataResponse {
       mbti: string;
       selfIntroduction: string;
     };
-    equality: number;
+    equality: number | null;
     roomId: number;
   };
 }
@@ -112,11 +114,11 @@ export interface GetRandomMemberResponse {
         gender: string;
         birthday: string;
         universityName: string;
-        majorName: string;
+        majorName: string | null;
         persona: number;
       };
       equality: number;
-      preferenceStats: Record<string, string | number>;
+      preferenceStats: Record<string, string | number | null>;
     }[];
   };
 }

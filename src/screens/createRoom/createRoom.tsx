@@ -38,7 +38,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const [name, setName] = useState<string>('');
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
   const [hashTag, setHashTag] = useState<string>('');
-  const [hashtags, setHashtags] = useState<string[]>([]);
+  const [hashtagList, setHashtagList] = useState<string[]>([]);
   const [isLongName, setIsLongName] = useState<boolean>(false);
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -54,12 +54,12 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       type === 'PUBLIC' &&
       (name !== createPublicRoomInfo.name ||
         maxMateNum !== createPublicRoomInfo.maxMateNum ||
-        hashtags !== createPublicRoomInfo.hashtags)
+        hashtagList !== createPublicRoomInfo.hashtagList)
     ) {
       setCreatePublicRoomInfo({
         name: name,
         maxMateNum: maxMateNum,
-        hashtags: hashtags,
+        hashtagList: hashtagList,
       });
     } else if (
       type === 'PRIVATE' &&
@@ -73,7 +73,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   }, [
     createPrivateRoomInfo,
     createPublicRoomInfo,
-    hashtags,
+    hashtagList,
     isLongName,
     maxMateNum,
     name,
@@ -100,14 +100,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   };
 
   const handleHashTagSubmit = () => {
-    if (hashTag.trim() !== '' && hashtags.length < 3) {
-      setHashtags([...hashtags, hashTag.trim()]);
+    if (hashTag.trim() !== '' && hashtagList.length < 3) {
+      setHashtagList([...hashtagList, hashTag.trim()]);
       setHashTag('');
     }
   };
 
   const removeHashTag = (index: number) => {
-    setHashtags((prevList) => prevList.filter((_, i) => i !== index));
+    setHashtagList((prevList) => prevList.filter((_, i) => i !== index));
   };
 
   const toMain = () => {
@@ -122,9 +122,9 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     try {
       const response = await createPublicRoom({
         name: createPublicRoomInfo.name,
-        profileImage: createPublicRoomInfo.profileImage,
+        persona: createPublicRoomInfo.persona,
         maxMateNum: createPublicRoomInfo.maxMateNum,
-        hashtags: createPublicRoomInfo.hashtags,
+        hashtagList: createPublicRoomInfo.hashtagList,
       });
 
       console.log(response.result);
@@ -133,14 +133,15 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         roomId: response.result.roomId,
         name: response.result.name,
         inviteCode: response.result.inviteCode,
-        profileImage: response.result.profileImage,
-        mateList: response.result.mateList,
-        managerId: response.result.managerId,
+        persona: response.result.persona,
+        mateDetailList: response.result.mateDetailList,
+        managerMemberId: response.result.managerMemberId,
+        managerNickname: response.result.managerNickname,
         isRoomManager: response.result.isRoomManager,
         maxMateNum: response.result.maxMateNum,
-        numOfArrival: response.result.numOfArrival,
+        arrivalMateNum: response.result.arrivalMateNum,
         roomType: response.result.roomType,
-        hashtags: response.result.hashtags,
+        hashtagList: response.result.hashtagList,
         equality: response.result.equality,
         difference: response.result.difference,
       });
@@ -155,7 +156,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     try {
       const response = await createPrivateRoom({
         name: createPrivateRoomInfo.name,
-        profileImage: createPrivateRoomInfo.profileImage,
+        persona: createPrivateRoomInfo.persona,
         maxMateNum: createPrivateRoomInfo.maxMateNum,
       });
 
@@ -165,14 +166,15 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         roomId: response.result.roomId,
         name: response.result.name,
         inviteCode: response.result.inviteCode,
-        profileImage: response.result.profileImage,
-        mateList: response.result.mateList,
-        managerId: response.result.managerId,
+        persona: response.result.persona,
+        mateDetailList: response.result.mateDetailList,
+        managerMemberId: response.result.managerMemberId,
+        managerNickname: response.result.managerNickname,
         isRoomManager: response.result.isRoomManager,
         maxMateNum: response.result.maxMateNum,
-        numOfArrival: response.result.numOfArrival,
+        arrivalMateNum: response.result.arrivalMateNum,
         roomType: response.result.roomType,
-        hashtags: response.result.hashtags,
+        hashtagList: response.result.hashtagList,
         equality: response.result.equality,
         difference: response.result.difference,
       });
@@ -198,10 +200,10 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
             {/* 캐릭터 선택 */}
             <View className="relative mb-10 flex items-center justify-center">
               <View className="relative">
-                {type === 'PUBLIC' && createPublicRoomInfo?.profileImage ? (
-                  getProfileImage(createPublicRoomInfo.profileImage, 130, 130)
-                ) : type === 'PRIVATE' && createPrivateRoomInfo?.profileImage ? (
-                  getProfileImage(createPrivateRoomInfo.profileImage, 130, 130)
+                {type === 'PUBLIC' && createPublicRoomInfo?.persona ? (
+                  getProfileImage(createPublicRoomInfo.persona, 130, 130)
+                ) : type === 'PRIVATE' && createPrivateRoomInfo?.persona ? (
+                  getProfileImage(createPrivateRoomInfo.persona, 130, 130)
                 ) : (
                   <CharacterBox />
                 )}
@@ -259,8 +261,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                     placeholder="해시태그를 입력해주세요"
                   />
                   <View className="flex flex-row">
-                    {hashtags.length > 0 &&
-                      hashtags.map((hash, index) => (
+                    {hashtagList.length > 0 &&
+                      hashtagList.map((hash, index) => (
                         <View
                           key={index}
                           className="mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"

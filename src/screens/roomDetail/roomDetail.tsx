@@ -7,13 +7,21 @@ import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useMemberInfoStore } from '@zustand/member/member';
+// import { useMemberInfoStore } from '@zustand/member/member';
 
-import { useGetRoomData } from '@hooks/api/room';
+import { sendRoomRequest } from '@server/api/room';
+import { getChipDetailData } from '@server/api/room-member-stat';
+
 import { useGetChatRoomId } from '@hooks/api/chat-room';
+import {
+  useExitRoom,
+  useGetRoomData,
+  useSendRoomRequest,
+  useDeleteRoomRequest,
+} from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
-import { getLifestyleLabel } from '@utils/getLifeStyleIcon';
+import { getLifestyleLabel, LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
 import { RoomDetailScreenProps } from '@type/param/stack';
 
@@ -31,10 +39,21 @@ interface MemberItem {
   mateEquality: number;
 }
 
+interface Item {
+  memberDetail: {
+    memberId: number;
+    nickname: string;
+    gender: string;
+    birthday: string;
+    universityName: string;
+    majorName: string;
+    persona: number;
+  };
+  memberStat: Record<LifestyleOptionKey, string | number>;
+}
+
 const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
-
-  const { setMemberInfo } = useMemberInfoStore();
 
   const { myRoom } = useHasRoomStore();
 
@@ -43,12 +62,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   const { data: roomData } = useGetRoomData(roomId);
   const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerMemberId);
-
-  const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
-
-  const handleLifeStyleModal = () => {
-    setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
-  };
 
   const toBack = () => {
     navigation.goBack();
@@ -64,14 +77,44 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   const toUserDetail = (member: MemberItem) => {
     navigation.navigate('UserDetailScreen', { memberId: member.memberId });
+  };
 
-    setMemberInfo({
-      memberId: member.memberId,
-      memberNickName: member.nickname,
-      memberAge: 20,
-      memberPersona: member.persona,
-      equality: member.mateEquality,
-    });
+  const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('');
+  const [color, setColor] = useState<string>('');
+  const [chipDetailData, setChipDetailData] = useState<Item[]>([]);
+
+  const handleLifeStyleModal = () => {
+    setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
+  };
+
+  const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId);
+  const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(roomId);
+  const { mutateAsync: mutateExitRoom } = useExitRoom(roomId);
+
+  const sendRequest = async () => {
+    await mutateSendRoomRequest(roomId);
+  };
+
+  const deleteRequest = async () => {
+    await mutateDeleteRoomRequest(roomId);
+  };
+
+  const exitRoom = async () => {
+    await mutateExitRoom(roomId);
+  };
+
+  const handleChipClick = async (chip: LifestyleOptionKey): Promise<void> => {
+    try {
+      const response = await getChipDetailData(roomId, chip);
+
+      setIsLifeStyleModalOpen(true);
+      setTitle(getLifestyleLabel(chip));
+      setColor(response.result.color);
+      setChipDetailData(response.result.memberList);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   return (
@@ -197,6 +240,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   {roomData.result.difference.blue.map((blue, index) => (
                     <Pressable
                       key={index}
+                      onPress={() => handleChipClick(blue)}
                       className="mb-2 mr-2 rounded-full border border-main1 bg-sub1 px-3.5 py-2"
                     >
                       <Text className="text-xs font-semibold text-main1">
@@ -208,6 +252,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   {roomData.result.difference.red.map((red, index) => (
                     <Pressable
                       key={index}
+                      onPress={() => handleChipClick(red)}
                       className="mb-2 mr-2 rounded-full border border-[#FF6868] bg-[#FFCACA] px-3.5 py-2"
                     >
                       <Text className="text-xs font-semibold text-[#FF6868]">
@@ -219,6 +264,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   {roomData.result.difference.white.map((white, index) => (
                     <Pressable
                       key={index}
+                      onPress={() => handleChipClick(white)}
                       className="mb-2 mr-2 rounded-full border border-disabledFont bg-white px-3.5 py-2"
                     >
                       <Text className="text-xs font-medium text-disabledFont">
@@ -234,39 +280,59 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
         <View className="fixed bottom-[42px] px-5">
           {/* 순서대로 1. 해당 방에 참가한 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
-          <BottomButton
-            color={
-              myRoom.roomId === roomId
-                ? 'bg-[#f85e5e]'
-                : myRoom.roomId !== roomId && myRoom.roomId !== 0
-                ? 'bg-[#c4c4c4]'
-                : myRoom.roomId === 0 && isRequested
-                ? 'bg-colorBox'
-                : 'bg-main1'
-            }
-            borderColor={myRoom.roomId === 0 && isRequested ? 'border-main1' : 'border-[#f85e5e]'}
-            textColor={
-              myRoom.roomId === roomId || myRoom.roomId !== 0
-                ? 'text-white'
-                : myRoom.roomId === 0 && isRequested
-                ? 'text-main1'
-                : 'text-white'
-            }
-            text={
-              myRoom.roomId === roomId
-                ? '방 나가기'
-                : myRoom.roomId !== roomId && myRoom.roomId !== 0
-                ? '방 참여 요청'
-                : myRoom.roomId === 0 && isRequested
-                ? '방 참여 요청 취소'
-                : '방 참여 요청'
-            }
-            disabled={myRoom.roomId !== 0 && myRoom.roomId !== roomId}
-            onPressFunc={() => setIsRequested(!isRequested)}
-          />
+          {myRoom.roomId === roomId && (
+            <BottomButton
+              color="bg-[#f85e5e]"
+              borderColor="border-[#f85e5e]"
+              textColor="text-white"
+              text="방 나가기"
+              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              onPressFunc={exitRoom}
+            />
+          )}
+
+          {myRoom.roomId !== roomId && myRoom.roomId !== 0 && (
+            <BottomButton
+              color="bg-[#c4c4c4]"
+              borderColor="border-[#c4c4c4]"
+              textColor="text-white"
+              text="방 참여 요청"
+              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              onPressFunc={undefined}
+            />
+          )}
+
+          {myRoom.roomId === 0 && isRequested && (
+            <BottomButton
+              color="bg-colorBox"
+              borderColor="border-main1"
+              textColor="text-main1"
+              text="방 참여 요청 취소"
+              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              onPressFunc={deleteRequest}
+            />
+          )}
+
+          {myRoom.roomId === 0 && !isRequested && (
+            <BottomButton
+              color="bg-main1"
+              borderColor="border-main1"
+              textColor="text-white"
+              text="방 참여 요청"
+              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              onPressFunc={sendRequest}
+            />
+          )}
         </View>
       </View>
-      {isLifeStyleModalOpen && <LifeStyleModal closeModal={handleLifeStyleModal} />}
+      {isLifeStyleModalOpen && (
+        <LifeStyleModal
+          title={title}
+          color={color}
+          memberList={chipDetailData}
+          closeModal={handleLifeStyleModal}
+        />
+      )}
     </View>
   );
 };

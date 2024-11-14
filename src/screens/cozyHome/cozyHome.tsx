@@ -12,8 +12,6 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
-import { RoomDummyData } from './dummyData';
-
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
@@ -22,13 +20,12 @@ import RecommendationSection from '@components/cozyHome/recommendationSection';
 import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
 import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
+import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-import { useProfileStore, useMemberInfoStore } from '@zustand/member/member';
-
-import { searchMembers, getRandomMember } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
+import { useGetRequestRooms } from '@hooks/api/room';
+import { useGetMemberList } from '@hooks/api/member-stat';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
@@ -50,42 +47,15 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
   const { roomInfo } = useRoomInfoStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { setMemberInfo } = useMemberInfoStore();
 
-  const [userList, setUserList] = useState<UserItem[]>([]);
-
+  const { data: requestRoomList, refetch } = useGetRequestRooms();
+  // const { data: userList } = useGetMemberList();
   // const { data: roomList } = useGetRandomRoom(5);
 
   const { initFcm } = useInitFcm();
 
   useEffect(() => {
     initFcm();
-
-    const fetchData = async () => {
-      if (hasLifeStyle) {
-        try {
-          const response = await searchMembers(0);
-
-          console.log('라이프스타일 있음', response);
-
-          setUserList(response.result.memberList);
-        } catch (error: any) {
-          console.log(error.response);
-        }
-      } else {
-        try {
-          const response = await getRandomMember();
-
-          console.log('라이프스타일 없음', response);
-
-          setUserList(response.result.memberList);
-        } catch (error: any) {
-          console.log(error.response.data);
-        }
-      }
-    };
-    fetchData();
   }, []);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
@@ -148,6 +118,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     setCreateRoomOpen(!createRoomOpen);
   };
 
+  const toRoom = () => {
+    navigation.navigate('RoomDetailScreen', { roomId: 11 });
+  };
+
   const toCreatePublicRoom = () => {
     navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
     setCreateRoomOpen(false);
@@ -181,18 +155,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RecommendRoomScreen');
   };
 
-  const handleUser = (user: UserItem) => {
-    setMemberInfo({
-      memberId: user.memberDetail.memberId,
-      memberNickName: user.memberDetail.nickname,
-      memberAge: 0,
-      memberPersona: user.memberDetail.persona,
-      equality: user.equality,
-    });
-  };
-
   const toUserDetail = (user: UserItem) => {
-    handleUser(user);
     navigation.navigate('UserDetailScreen', { memberId: user.memberDetail.memberId });
   };
 
@@ -236,10 +199,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                       </View>
                     </Pressable>
                   ) : (
-                    <Pressable
-                      className="flex flex-row items-center py-2"
-                      onPress={toSchoolAuthentication}
-                    >
+                    <Pressable className="flex flex-row items-center py-2" onPress={toRoom}>
                       <View className="flex flex-row items-center">
                         <GraySchool />
                         <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
@@ -314,19 +274,25 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
                 {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
               </Text>
-              <ScrollView className="flex flex-col">
-                {RoomDummyData.map((data, index) => (
-                  <RequestRoomComponent key={index} index={index} roomData={data} />
+              <View className="flex flex-col">
+                {requestRoomList?.result.map((data, index) => (
+                  <RequestRoomComponent
+                    key={index}
+                    index={index}
+                    length={requestRoomList?.result.length}
+                    roomData={data}
+                    pressFunc={() => toRoomDetail(data.roomId)}
+                  />
                 ))}
-              </ScrollView>
+              </View>
             </View>
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            <RecommendationSection<UserItem>
+            {/* <RecommendationSection<UserItem>
               title={`${profile.nickname}님과\n꼭 맞는 룸메이트를 추천해드릴게요`}
               onPressMore={toRoomMate}
-              dataList={userList}
+              dataList={userList.result.memberList}
               onScrollHandler={handleSameAnswerUserScroll}
               snapToInterval={userComponentWidth}
               renderItem={(data, index, onLayout) => (
@@ -339,7 +305,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               )}
               onLayout={onLayoutUser}
               currentIndex={userCurrentIndex}
-            />
+            /> */}
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
