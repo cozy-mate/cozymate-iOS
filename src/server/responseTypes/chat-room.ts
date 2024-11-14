@@ -5,7 +5,7 @@ export interface DeleteChatRoomResponse {
 export interface GetChatRoomListResponse {
   result: {
     persona: number;
-    nickName: string;
+    nickname: string;
     lastContent: string;
     chatRoomId: number;
     memberId: number;

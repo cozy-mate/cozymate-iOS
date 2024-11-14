@@ -30,7 +30,6 @@ import { searchMembers, getRandomMember } from '@server/api/member-stat';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
-import { useSearchMembers, useGetRandomMember } from '@hooks/api/member-stat';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 import { RoomItem, UserItem } from '@type/cozyHome/cozyHome';
