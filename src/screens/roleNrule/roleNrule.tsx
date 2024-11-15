@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
+import SettingModal from '@components/common/settingModal';
 import CustomCalendar from '@components/todoList/customCalendar';
 
 import { RuleItem } from '@zustand/rule/type';
@@ -32,11 +33,12 @@ interface TodoItem {
   content: string;
   completed: boolean;
   todoType: string;
+  mateIdList: number[];
 }
 
 interface RoleItem {
   roleId: number;
-  mateNameList: string[];
+  mateList: { mateId: number; nickname: string }[];
   content: string;
   repeatDayList: string[];
   isAllDays: boolean;
@@ -72,11 +74,13 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
 
   const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
 
-  // const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
+  console.log(tododata.result.myTodoList);
 
-  // const changeTodo = async (todo: TodoItem): Promise<void> => {
-  //   changeTodoMutate({ todoId: todo.id });
-  // };
+  const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
+
+  const changeTodo = async (todo: TodoItem): Promise<void> => {
+    changeTodoMutate({ todoId: todo.todoId, completed: !todo.completed });
+  };
 
   const { setTodoItem } = useTodoItemStore();
 
@@ -86,6 +90,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
       content: todo.content,
       type: todo.todoType,
       timePoint: timePoint,
+      mateIdList: todo.mateIdList,
     });
   };
 
@@ -104,11 +109,33 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
   const handleRoleItem = (role: RoleItem) => {
     setRoleItem({
       roleId: role.roleId,
-      mateNameList: role.mateNameList,
+      mateList: role.mateList,
       content: role.content,
       repeatDayList: role.repeatDayList,
       isAllDays: role.isAllDays,
     });
+  };
+
+  const [settingModalOpenId, setSettingModalOpenId] = useState<number | null>(null);
+  const items = [
+    {
+      text: '수정하기',
+      pressFunc: (item: TodoItem) => {
+        toEdit('todo', item.todoId);
+        handleTodoItem(item);
+      },
+    },
+    {
+      text: '삭제하기',
+      ppressFunc: (item: TodoItem) => {
+        toEdit('todo', item.todoId);
+        handleTodoItem(item);
+      },
+    },
+  ];
+
+  const handleSettingModalToggle = (todoId: number) => {
+    setSettingModalOpenId((prevId) => (prevId === todoId ? null : todoId));
   };
 
   return (
@@ -134,33 +161,35 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               </View>
 
               <View className="rounded-xl border border-[#F1F1F1] bg-white p-2 pr-4">
-                {tododata.result.myTodoList.mateTodoList.length !== 0 ? (
-                  tododata.result.myTodoList.mateTodoList.map((todo, index) => (
+                {tododata.result.myTodoList.todoList.length !== 0 ? (
+                  tododata.result.myTodoList.todoList.map((todo, index) => (
                     <View
                       key={todo.todoId}
                       className={`mb-1 flex flex-row items-center justify-between ${
-                        index == tododata.result.myTodoList.mateTodoList.length - 1 && 'mb-0'
+                        index == tododata.result.myTodoList.todoList.length - 1 && 'mb-0'
                       }`}
                     >
                       <View className="flex flex-row items-center">
-                        <Pressable>
+                        <Pressable onPress={() => changeTodo(todo)}>
                           {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
                         </Pressable>
                         <Text>{todo.content}</Text>
                         <View
                           className={`ml-1.5 h-1.5 w-1.5 rounded-full ${
                             todo.todoType === 'group' && 'bg-main1'
-                          } ${todo.todoType === 'other' && 'bg-main2'}`}
+                          } ${todo.todoType === 'other' && 'bg-main2'} ${
+                            todo.todoType === 'role' && 'bg-[#ACE246]'
+                          }`}
                         />
                       </View>
 
                       <Pressable
                         onPress={() => {
-                          toEdit('todo', todo.todoId);
-                          handleTodoItem(todo);
+                          handleSettingModalToggle(todo.todoId);
                         }}
                       >
                         <SettingIcon />
+                        {settingModalOpenId === todo.todoId && <SettingModal items={items} />}
                       </Pressable>
                     </View>
                   ))
@@ -188,8 +217,8 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                     <Text>{key}</Text>
                   </View>
                   <View className="flex flex-col">
-                    {value.mateTodoList.length !== 0 ? (
-                      value.mateTodoList.map((todo) => (
+                    {value.todoList.length !== 0 ? (
+                      value.todoList.map((todo) => (
                         <View className="flex flex-row items-center px-2" key={todo.todoId}>
                           {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
                           <Text>{todo.content}</Text>
@@ -252,7 +281,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               </View>
             </View>
 
-            <View className="space-y-4">
+            <View style={{ paddingBottom: bottom + 60 }} className="space-y-4">
               <Text className="px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해 알려드릴게요!
               </Text>
@@ -287,7 +316,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                       {role.content}
                     </Text>
                     <Text className="text-sm font-medium text-basicFont">
-                      {role.mateNameList.join(', ')}
+                      {role.mateList.map((mate) => mate.nickname).join(', ')}
                     </Text>
                   </View>
                 ))

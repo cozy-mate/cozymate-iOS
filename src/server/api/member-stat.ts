@@ -1,31 +1,36 @@
 import { GetAxiosInstance, PutAxiosInstance, PostAxiosInstance } from '@axios/axios.method';
 
-import { UpdateUserDataRequest, RegisterUserDataRequest } from '@server/requestTypes/member-stat';
 import {
-  SearchUsersResponse,
-  GetRandomUserResponse,
-  UpdateUserDataResponse,
-  RegisterUserDataResponse,
-  GetUserDetailDataResponse,
+  UpdateMemberStatRequest,
+  RegisterMemberStatRequest,
+  GetFilteredMemberListRequest,
+  GetFilteredMemberListCountRequest,
+} from '@server/requestTypes/member-stat';
+import {
+  SearchMembersResponse,
+  GetRandomMemberResponse,
+  UpdateMemberStatResponse,
   CheckDormitoryNumResponse,
-  SearchUserByKeywordResponse,
+  GetMemberStatDataResponse,
+  RegisterMemberStatResponse,
   GetFilteredMemberListResponse,
-  GetOtherUserDetailDataResponse,
+  SearchMemberByKeywordResponse,
+  GetOtherMemberStatDataResponse,
   GetFilteredMemberListCountResponse,
 } from '@server/responseTypes/member-stat';
 
 // 사용자 상세정보 조회
-export const getUserDetailData = async (): Promise<GetUserDetailDataResponse> => {
-  const response = await GetAxiosInstance<GetUserDetailDataResponse>(`/members/stat`);
+export const getMemberStatData = async (): Promise<GetMemberStatDataResponse> => {
+  const response = await GetAxiosInstance<GetMemberStatDataResponse>(`/members/stat`);
 
   return response.data;
 };
 
 // 사용자 상세정보 조회 (타인용)
-export const getOtherUserDetailData = async (
+export const getOtherMemberStatData = async (
   memberId: number,
-): Promise<GetOtherUserDetailDataResponse> => {
-  const response = await GetAxiosInstance<GetOtherUserDetailDataResponse>(
+): Promise<GetOtherMemberStatDataResponse> => {
+  const response = await GetAxiosInstance<GetOtherMemberStatDataResponse>(
     `/members/stat/${memberId}`,
   );
 
@@ -33,10 +38,10 @@ export const getOtherUserDetailData = async (
 };
 
 // 사용자 검색
-export const searchUserByKeyword = async (
+export const searchMemberByKeyword = async (
   keyword: string,
-): Promise<SearchUserByKeywordResponse> => {
-  const response = await GetAxiosInstance<SearchUserByKeywordResponse>(`/members/stat/search`, {
+): Promise<SearchMemberByKeywordResponse> => {
+  const response = await GetAxiosInstance<SearchMemberByKeywordResponse>(`/members/stat/search`, {
     params: {
       keyword: keyword,
     },
@@ -46,8 +51,8 @@ export const searchUserByKeyword = async (
 };
 
 // 사용자 랜덤 추천
-export const getRandomUser = async (): Promise<GetRandomUserResponse> => {
-  const response = await PostAxiosInstance<GetRandomUserResponse>(`/members/stat/random`);
+export const getRandomMember = async (): Promise<GetRandomMemberResponse> => {
+  const response = await GetAxiosInstance<GetRandomMemberResponse>(`/members/stat/random`);
 
   return response.data;
 };
@@ -60,18 +65,14 @@ export const checkDormitoryNum = async (): Promise<CheckDormitoryNumResponse> =>
 };
 
 // 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
-export const searchUsers = async (
+export const searchMembers = async (
   page?: number,
-  needsPreferences?: boolean,
   filterList?: string[],
-  needsDetail?: boolean,
-): Promise<SearchUsersResponse> => {
-  const response = await GetAxiosInstance<SearchUsersResponse>(`/members/stat/filter`, {
+): Promise<SearchMembersResponse> => {
+  const response = await GetAxiosInstance<SearchMembersResponse>(`/members/stat/filter`, {
     params: {
-      filterList: filterList,
       page: page,
-      needsDetail: needsDetail,
-      needsPreferences: needsPreferences,
+      filterList: filterList,
     },
   });
 
@@ -79,23 +80,24 @@ export const searchUsers = async (
 };
 
 // 사용자 상세정보 등록
-export const registerUserData = async (
-  data: RegisterUserDataRequest,
-): Promise<RegisterUserDataResponse> => {
-  const response = await PostAxiosInstance<RegisterUserDataResponse>(`/members/stat`, data);
+export const registerMemberStat = async (
+  data: RegisterMemberStatRequest,
+): Promise<RegisterMemberStatResponse> => {
+  const response = await PostAxiosInstance<RegisterMemberStatResponse>(`/members/stat`, data);
 
   return response.data;
 };
 
 // 사용자 상세정보를 키-값으로 필터링하고, 사용자 목록 받아오기 (일치율 포함)
 export const getFilteredMemberList = async (
+  data: GetFilteredMemberListRequest,
   page?: number,
-  needsDetail?: boolean,
 ): Promise<GetFilteredMemberListResponse> => {
-  const response = await GetAxiosInstance<GetFilteredMemberListResponse>(
+  const response = await PostAxiosInstance<GetFilteredMemberListResponse>(
     `/members/stat/filter/search`,
+    data,
     {
-      params: { page: page, needsDetail: needsDetail },
+      params: { page: page },
     },
   );
 
@@ -103,19 +105,22 @@ export const getFilteredMemberList = async (
 };
 
 // 사용자 상세정보를 키-값으로 필터링하고, 필터링에 맞는 인원 수 리턴받기
-export const getFilteredMemberListCount = async (): Promise<GetFilteredMemberListCountResponse> => {
+export const getFilteredMemberListCount = async (
+  data: GetFilteredMemberListCountRequest,
+): Promise<GetFilteredMemberListCountResponse> => {
   const response = await GetAxiosInstance<GetFilteredMemberListCountResponse>(
     `/members/stat/filter/search/count`,
+    data,
   );
 
   return response.data;
 };
 
 // 사용자 상세정보 수정
-export const updateUserData = async (
-  data: UpdateUserDataRequest,
-): Promise<UpdateUserDataResponse> => {
-  const response = await PutAxiosInstance<UpdateUserDataResponse>(`/members/stat`, data);
+export const updateMemberStat = async (
+  data: UpdateMemberStatRequest,
+): Promise<UpdateMemberStatResponse> => {
+  const response = await PutAxiosInstance<UpdateMemberStatResponse>(`/members/stat`, data);
 
   return response.data;
 };

@@ -4,7 +4,7 @@ export interface DeleteRoleResponse {
 
 export interface RoleItem {
   roleId: number;
-  mateNameList: string[];
+  mateList: { mateId: number; nickname: string }[];
   content: string;
   repeatDayList: string[];
   isAllDays: boolean;

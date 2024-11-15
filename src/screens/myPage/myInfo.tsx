@@ -17,7 +17,7 @@ import RightArrow from '@assets/myPage/rightArrow.svg';
 
 const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
   const { profile } = useProfileStore();
-  const { preferences } = usePreferencesStore();
+  const { preferenceList } = usePreferencesStore();
 
   const [isCharacterSelectOpen, setIsCharacterSelectOpen] = useState<boolean>(false);
   const [isChipModalOpen, setIsChipModalOpen] = useState<boolean>(false);
@@ -113,7 +113,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
 
               <View className="mb-4 flex w-full flex-col   rounded-xl border border-disabled px-4 py-5">
                 <View className="mb-3 flex flex-row justify-between">
-                  {preferences.map((chip, index) => (
+                  {preferenceList.map((chip, index) => (
                     <View key={index} className="flex w-[60px] flex-col items-center">
                       {getMyImportantLifeStyle(chip)}
                     </View>

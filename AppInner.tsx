@@ -8,9 +8,12 @@ import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
 import MyInfoScreen from 'src/screens/myPage/myInfo';
+import SearchScreen from 'src/screens/search/search';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
+import InquiryScreen from 'src/screens/myPage/inquiry';
+import WithdrawScreen from 'src/screens/myPage/withdraw';
 import CompleteScreen from 'src/screens/onBoard/complete';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
@@ -28,13 +31,13 @@ import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
 import RoomDetailScreen from 'src/screens/roomDetail/roomDetail';
-import WaitingRoomScreen from 'src/screens/waitingRoom/waitingRoom';
-import LifeStyleEditScreen from 'src/screens/lifeStyle/lifeStyleEdit';
+import LifeStyleEditScreen from 'src/screens/myPage/lifeStyleEdit';
 import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
 import BasicInfoUpdateScreen from 'src/screens/myPage/basicInfoUpdate';
 import EditRoleNRuleScreen from 'src/screens/roleNrule/editRoleAndRule';
 import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
+import FavoriteUserRoomScreen from 'src/screens/myPage/favoriteUserRoom';
 import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import RecommendRoomScreen from 'src/screens/recommendRoom/recommendRoom';
 import CreateRoleNRuleScreen from 'src/screens/roleNrule/createRoleNRule';
@@ -101,8 +104,6 @@ function AppInner() {
 
           <stack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
 
-          <stack.Screen name="WaitingRoomScreen" component={WaitingRoomScreen} />
-
           <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
 
           <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
@@ -116,12 +117,17 @@ function AppInner() {
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
           <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
           <stack.Screen name="BasicInfoUpdateScreen" component={BasicInfoUpdateScreen} />
+          <stack.Screen name="FavoriteUserRoomScreen" component={FavoriteUserRoomScreen} />
+          <stack.Screen name="InquiryScreen" component={InquiryScreen} />
+          <stack.Screen name="WithdrawScreen" component={WithdrawScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
           <stack.Screen name="SendChatScreen" component={SendChatScreen} />
 
           <stack.Screen name="NotificationScreen" component={NotificationScreen} />
+
+          <stack.Screen name="SearchScreen" component={SearchScreen} />
         </stack.Navigator>
       ) : (
         <rootStack.Navigator screenOptions={{ headerShown: false }}>

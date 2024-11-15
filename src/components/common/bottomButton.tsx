@@ -19,8 +19,8 @@ const BottomButton: React.FC<BottomButtonProps> = ({
   onPressFunc,
 }) => {
   const buttonStyle = disabled
-    ? `bg-disabledButton p-4 border border-disabledButton rounded-xl`
-    : `${color} p-4 border ${borderColor} rounded-xl`;
+    ? `box-border bg-disabledButton p-4 border border-disabledButton rounded-xl`
+    : `box-border ${color} p-4 border ${borderColor} rounded-xl`;
 
   const textStyle = disabled
     ? `text-white text-center font-semibold text-base `

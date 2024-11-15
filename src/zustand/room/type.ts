@@ -8,39 +8,38 @@ export interface MyRoom {
 // 공개방 생성 정보
 export interface CreatePublicRoomInfo {
   name: string;
-  profileImage: number;
+  persona: number;
   maxMateNum: number;
-  hashtags: string[];
+  hashtagList: string[];
 }
 
 // 비공개방 생성 정보
 export interface CreatePrivateRoomInfo {
   name: string;
-  profileImage: number;
+  persona: number;
   maxMateNum: number;
 }
-
-export type MateType = {
-  memberId: number;
-  mateId: number;
-  nickname: string;
-  persona: number;
-  mateEquality: number;
-};
 
 // 생성된 방 정보
 export type RoomInfo = {
   roomId: number;
   name: string;
   inviteCode: string;
-  profileImage: number;
-  mateList: MateType[];
-  managerId: number;
+  persona: number;
+  mateDetailList: {
+    memberId: number;
+    mateId: number;
+    nickname: string;
+    persona: number;
+    mateEquality: number;
+  }[];
+  managerMemberId: number;
+  managerNickname: string;
   isRoomManager: boolean;
   maxMateNum: number;
-  numOfArrival: number;
+  arrivalMateNum: number;
   roomType: string;
-  hashtags: string[];
+  hashtagList: string[];
   equality: number;
   difference: {
     blue: LifestyleOptionKey[];
@@ -52,6 +51,26 @@ export type RoomInfo = {
 export type InviteCodeRoomInfo = {
   roomId: number;
   name: string;
-  managerName: string;
+  inviteCode: string;
+  persona: number;
+  mateDetailList: {
+    memberId: number;
+    mateId: number;
+    nickname: string;
+    persona: number;
+    mateEquality: number;
+  }[];
+  managerMemberId: number;
+  managerNickname: string;
+  isRoomManager: boolean;
   maxMateNum: number;
+  arrivalMateNum: number;
+  roomType: string;
+  hashtagList: string[];
+  equality: number;
+  difference: {
+    blue: LifestyleOptionKey[];
+    red: LifestyleOptionKey[];
+    white: LifestyleOptionKey[];
+  };
 };

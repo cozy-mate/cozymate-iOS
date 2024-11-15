@@ -27,9 +27,9 @@ export const useCreatePublicRoomStore = create<{
 }>((set) => ({
   createPublicRoomInfo: {
     name: '',
-    profileImage: 0,
+    persona: 0,
     maxMateNum: 0,
-    hashtags: [],
+    hashtagList: [],
   },
   setCreatePublicRoomInfo: (newCreatePublicRoomInfo) =>
     set((state) => ({
@@ -44,7 +44,7 @@ export const useCreatePrivateRoomStore = create<{
 }>((set) => ({
   createPrivateRoomInfo: {
     name: '',
-    profileImage: 0,
+    persona: 0,
     maxMateNum: 0,
   },
   setCreatePrivateRoomInfo: (newCreatePrivateRoomInfo) =>
@@ -62,8 +62,8 @@ export const useRoomInfoStore = create<{
     roomId: 0,
     name: '',
     inviteCode: '',
-    profileImage: 0,
-    mateList: [
+    persona: 0,
+    mateDetailList: [
       {
         memberId: 0,
         mateId: 0,
@@ -72,12 +72,13 @@ export const useRoomInfoStore = create<{
         mateEquality: 0,
       },
     ],
-    managerId: 0,
+    managerMemberId: 0,
+    managerNickname: '',
     isRoomManager: false,
     maxMateNum: 0,
-    numOfArrival: 0,
+    arrivalMateNum: 0,
     roomType: '',
-    hashtags: [],
+    hashtagList: [],
     equality: 0,
     difference: {
       blue: [],
@@ -97,8 +98,30 @@ export const useInviteCodeRoomStore = create<{
   inviteCodeRoomInfo: {
     roomId: 0,
     name: '',
-    managerName: '',
+    inviteCode: '',
+    persona: 0,
+    mateDetailList: [
+      {
+        memberId: 0,
+        mateId: 0,
+        nickname: '',
+        persona: 0,
+        mateEquality: 0,
+      },
+    ],
+    managerMemberId: 0,
+    managerNickname: '',
+    isRoomManager: false,
     maxMateNum: 0,
+    arrivalMateNum: 0,
+    roomType: '',
+    hashtagList: [],
+    equality: 0,
+    difference: {
+      blue: [],
+      red: [],
+      white: [],
+    },
   },
   setInviteCodeRoomInfo: (newRoomInfo) =>
     set((state) => ({ inviteCodeRoomInfo: { ...state.inviteCodeRoomInfo, ...newRoomInfo } })),

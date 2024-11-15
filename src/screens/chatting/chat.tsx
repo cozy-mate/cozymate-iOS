@@ -11,7 +11,7 @@ import XButton from '@assets/xButton.svg';
 import RightArrow from '@assets/chatting/grayRightArrow.svg';
 
 const ChatScreen = ({ navigation }: ChatScreenProps) => {
-  const { data: chatroomlist, refetch: refetchChatRoom } = useGetChatRoomList();
+  const { data: chatroomlist } = useGetChatRoomList();
 
   const toBack = () => {
     navigation.goBack();
@@ -42,7 +42,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
                   <View className="mb-3 flex flex-row items-center">
                     {getProfileImage(room.persona, 24, 24)}
                     <Text className="ml-1.5 text-sm font-medium text-colorFont">
-                      {room.nickName}
+                      {room.nickname}
                     </Text>
                   </View>
                   <Text className="text-sm font-medium text-basicFont">{room.lastContent}</Text>

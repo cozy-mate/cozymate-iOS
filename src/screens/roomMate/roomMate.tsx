@@ -9,21 +9,13 @@ import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponen
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchUsers, getUserDetailData, getOtherUserDetailData } from '@server/api/member-stat';
+import { searchMembers } from '@server/api/member-stat';
 
-import { useSearchUsers, useSearchUsersWithFilters } from '@hooks/api/member-stat';
-
+import { UserItem } from '@type/cozyHome/cozyHome';
 import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 import FilterIcon from '@assets/roomMate/filter.svg';
-
-interface UserItem {
-  memberId: number;
-  memberNickName: string;
-  equality: number;
-  preferenceStats: Record<string, string | number>;
-}
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { bottom } = useSafeAreaInsets();
@@ -34,7 +26,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const [page, setPage] = useState<number>(0);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
-  const [userList, setUserList] = useState<UserItem[]>([]); // 표시할 사용자 목록
+  const [userList, setUserList] = useState<UserItem[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -44,9 +36,9 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await searchUsers(page, true);
+      const response = await searchMembers(page);
 
-      setUserList(response.result.result);
+      setUserList(response.result.memberList);
     };
     fetchData();
   }, []);
@@ -76,8 +68,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 22, id: 'personality', name: '성격', select: false },
     { index: 23, id: 'mbti', name: 'MBTI', select: false },
   ]);
-
-  // const { data: sameanswerdata } = useSearchUsersWithFilters(filterList);
 
   const toHome = () => {
     navigation.goBack();
@@ -123,10 +113,10 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           {hasLifeStyle ? (
             userList.length > 0 ? (
               userList.map((user) => (
-                <View key={user.memberId}>
+                <View key={user.memberDetail.memberId}>
                   <SameAnswerUserComponent
                     userData={user}
-                    pressFunc={() => toOtherDetail(user.memberId)}
+                    pressFunc={() => toOtherDetail(user.memberDetail.memberId)}
                   />
                 </View>
               ))

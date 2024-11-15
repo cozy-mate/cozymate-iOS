@@ -5,14 +5,15 @@ import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import CustomTextarea from '@components/common/customTextarea';
 
-import { useLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { registerUserData } from '@server/api/member-stat';
+import { registerMemberStat } from '@server/api/member-stat';
 
 import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 
 const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScreenProps) => {
   const { lifeStyle, setLifeStyle } = useLifeStyleStore();
+  const { setHasLifeStyle } = useHasLifeStyleStore();
 
   const [selfIntroduction, setSelfIntroduction] = useState<string>('');
 
@@ -26,11 +27,10 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
     });
 
     try {
-      await registerUserData({
-        universityId: 1,
-        major: '컴공',
+      await registerMemberStat({
         admissionYear: lifeStyle.admissionYear,
         numOfRoommate: lifeStyle.numOfRoommate,
+        dormitoryName: '123',
         acceptance: lifeStyle.acceptance,
         wakeUpMeridian: lifeStyle.wakeUpMeridian,
         wakeUpTime: lifeStyle.wakeUpTime,
@@ -38,7 +38,7 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
         sleepingTime: lifeStyle.sleepingTime,
         turnOffMeridian: lifeStyle.turnOffMeridian,
         turnOffTime: lifeStyle.turnOffTime,
-        smokingState: lifeStyle.smokingState,
+        smoking: lifeStyle.smoking,
         sleepingHabit: lifeStyle.sleepingHabit,
         airConditioningIntensity: lifeStyle.airConditioningIntensity,
         heatingIntensity: lifeStyle.heatingIntensity,
@@ -55,9 +55,10 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
         drinkingFrequency: lifeStyle.drinkingFrequency,
         personality: lifeStyle.personality,
         mbti: lifeStyle.mbti,
-        selfIntroduction: lifeStyle.selfIntroduction,
+        selfIntroduction: selfIntroduction,
       });
 
+      setHasLifeStyle(true);
       navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
     } catch (error: any) {
       console.log(error.response.data);

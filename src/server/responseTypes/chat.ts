@@ -4,7 +4,7 @@ export interface GetChatDetailDataResponse {
     content: {
       nickname: string;
       content: string;
-      dateTime: string;
+      datetime: string;
     }[];
   };
 }

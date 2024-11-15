@@ -53,7 +53,7 @@ const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScree
             </Pressable>
           )}
 
-          <View className="flex">{getProfileImage(roomInfo.profileImage, 300, 300)}</View>
+          <View className="flex">{getProfileImage(roomInfo.persona, 300, 300)}</View>
         </View>
 
         <View className="flex">

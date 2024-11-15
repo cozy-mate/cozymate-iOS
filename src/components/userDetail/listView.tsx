@@ -3,12 +3,12 @@ import { View, Text, Pressable } from 'react-native';
 
 import { ListViewProps } from '@type/userDetail/userDetail';
 
-const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal }) => {
+const ListView: React.FC<ListViewProps> = ({ memberDetail, memberStatDetail, openModal }) => {
   const intensityMapping = [
-    { index: 0, name: '아예 틀지 않아요' },
+    { index: 0, name: '안 틀어요' },
     { index: 1, name: '약하게 틀어요' },
     { index: 2, name: '적당하게 틀어요' },
-    { index: 3, name: '세게 틀어요' },
+    { index: 3, name: '강하게 틀어요' },
   ];
 
   const sensitivityMapping = [
@@ -20,61 +20,52 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal 
   ];
 
   const basicInfo = {
-    nickname: userBasicData.memberNickName,
-    birthYear: userData.birthYear,
-    // universityId: userBasicData.universityId,
-    admissionYear: userData.admissionYear,
-    major: userData.major,
+    nickname: memberDetail.nickname,
+    birthYear: memberDetail.birthday.slice(0, 4) + '년',
+    universityName: memberDetail.universityName,
+    admissionYear: memberStatDetail.admissionYear + '학번',
+    majorName: memberDetail.majorName,
   };
 
   const dormInfo = {
-    numOfRoommate: userData.numOfRoommate,
-    acceptance: userData.acceptance,
+    numOfRoommate: memberStatDetail.numOfRoommate + '인 1실',
+    acceptance: memberStatDetail.acceptance,
   };
 
   const essentialInfo = {
-    wakeUpTime: userData.wakeUpTime,
-    sleepingTime: userData.sleepingTime,
-    turnOffTime: userData.turnOffTime,
-    smokingState: userData.smokingState,
-    sleepingHabit: userData.sleepingHabit,
-    airConditioningIntensity: userData.airConditioningIntensity,
-    heatingIntensity: userData.heatingIntensity,
-    lifePattern: userData.lifePattern,
-    intimacy: userData.intimacy,
-    canShare: userData.canShare,
-    studying: userData.studying,
-    isPlayGame: userData.isPlayGame,
-    isPhoneCall: userData.isPhoneCall,
-    intake: userData.intake,
-    cleanSensitivity: userData.cleanSensitivity,
-    noiseSensitivity: userData.noiseSensitivity,
-    cleaningFrequency: userData.cleaningFrequency,
-    drinkingFrequency: userData.drinkingFrequency,
-    personality: userData.personality,
-    mbti: userData.mbti,
+    wakeUpTime: memberStatDetail.wakeUpMeridian + ' ' + memberStatDetail.wakeUpTime + '시',
+    sleepingTime: memberStatDetail.sleepingMeridian + ' ' + memberStatDetail.sleepingTime + '시',
+    turnOffTime: memberStatDetail.turnOffMeridian + ' ' + memberStatDetail.turnOffTime + '시',
+    smoking: memberStatDetail.smoking,
+    sleepingHabit: memberStatDetail.sleepingHabit,
+    airConditioningIntensity: memberStatDetail.airConditioningIntensity,
+    heatingIntensity: memberStatDetail.heatingIntensity,
+    lifePattern: memberStatDetail.lifePattern,
+    intimacy: memberStatDetail.intimacy,
+    canShare: memberStatDetail.canShare,
+    studying: memberStatDetail.studying,
+    isPlayGame: memberStatDetail.isPlayGame,
+    isPhoneCall: memberStatDetail.isPhoneCall,
+    intake: memberStatDetail.intake,
+    cleanSensitivity: memberStatDetail.cleanSensitivity,
+    noiseSensitivity: memberStatDetail.noiseSensitivity,
+    cleaningFrequency: memberStatDetail.cleaningFrequency,
+    drinkingFrequency: memberStatDetail.drinkingFrequency,
+    personality: memberStatDetail.personality,
+    mbti: memberStatDetail.mbti,
   };
 
   const formatValue = (key: string, value: any) => {
-    if (key === 'birthYear') {
-      return `${value}년`;
-    } else if (key === 'isPlayGame' || key === 'isPhoneCall' || key === 'canShare') {
-      return value ? 'O' : 'X';
-    } else if (key === 'numOfRoommate') {
-      return `${value}인 1실`;
-    } else if (key === 'wakeUpTime') {
-      return `${userData.wakeUpMeridian} ${value}시`;
-    } else if (key === 'sleepingTime') {
-      return `${userData.sleepingMeridian} ${value}시`;
-    } else if (key === 'turnOffTime') {
-      return `${userData.turnOffMeridian} ${value}시`;
-    } else if (key === 'airConditioningIntensity' || key === 'heatingIntensity') {
+    if (key === 'airConditioningIntensity' || key === 'heatingIntensity') {
       const intensity = intensityMapping.find((item) => item.index === value);
       return intensity ? intensity.name : value;
     } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
       const sensitivity = sensitivityMapping.find((item) => item.index === value);
       return sensitivity ? sensitivity.name : value;
+    } else if (value === null) {
+      return '-';
     }
+
     return value;
   };
 
@@ -82,9 +73,9 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal 
     const labels: Record<string, string> = {
       nickname: '닉네임',
       birthYear: '출생년도',
-      universityId: '학교',
+      universityName: '학교',
       admissionYear: '학번',
-      major: '학과',
+      majorName: '학과',
 
       numOfRoommate: '인실',
       acceptance: '합격여부',
@@ -92,7 +83,7 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal 
       wakeUpTime: '기상시간',
       sleepingTime: '취침시간',
       turnOffTime: '소등시간',
-      smokingState: '흡연여부',
+      smoking: '흡연여부',
       sleepingHabit: '잠버릇',
       airConditioningIntensity: '에어컨 강도',
       heatingIntensity: '히터 강도',
@@ -117,21 +108,17 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal 
       <View className={`mb-14 ${info === essentialInfo ? 'mb-0' : ''}`}>
         <Text className="mb-2 px-1 text-base font-semibold text-emphasizedFont">{title}</Text>
         <View className="rounded-xl border border-[#F1F2F4] p-4">
-          {infoEntries.map(([key, value], index) =>
-            value ? (
-              <View
-                key={key}
-                className={`flex flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
-                  index === infoEntries.length - 1
-                    ? 'border-b-0 pb-0'
-                    : 'border-b border-b-[#f1f2f4]'
-                }`}
-              >
-                <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
-                <Text className="font-medium text-[#505059]">{formatValue(key, value)}</Text>
-              </View>
-            ) : null,
-          )}
+          {infoEntries.map(([key, value], index) => (
+            <View
+              key={key}
+              className={`flex flex-row items-center py-3 ${index === 0 ? 'pt-0' : ''} ${
+                index === infoEntries.length - 1 ? 'border-b-0 pb-0' : 'border-b border-b-[#f1f2f4]'
+              }`}
+            >
+              <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
+              <Text className="font-medium text-[#505059]">{formatValue(key, value)}</Text>
+            </View>
+          ))}
         </View>
       </View>
     );
@@ -152,7 +139,9 @@ const ListView: React.FC<ListViewProps> = ({ userBasicData, userData, openModal 
           </Pressable>
         </View>
         <View className="rounded-xl border border-[#F1F2F4] p-4">
-          <Text className="text-sm font-medium text-basicFont">{userData.selfIntroduction}</Text>
+          <Text className="text-sm font-medium text-basicFont">
+            {memberStatDetail.selfIntroduction}
+          </Text>
         </View>
       </View>
     </View>

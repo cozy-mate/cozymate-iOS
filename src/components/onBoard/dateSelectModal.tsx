@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import DownArrow from '@assets/onBoard/downArrow.svg';
@@ -19,65 +18,55 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const inputRef = React.useRef<TextInput>(null);
-
-  // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
   const handleFocus = () => {
     setIsFocused(true);
     setDatePickerVisibility(true);
-
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   };
 
-  // 다른 곳에 focusing 옮겨졌을때 기존 focusing 없애는 함수
   const handleBlur = () => {
+    setDatePickerVisibility(false);
     setIsFocused(false);
   };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+  const hideDatePicker = () => {};
 
   const [displayDate, setDisplayDate] = useState<string>(selectedDate ? selectedDate : '');
 
   const handleConfirm = (date: Date) => {
-    // Store the date in "YYYY-MM-DD" format
     const formattedDateForStorage = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
-    // Display the date in "YYYY년 M월 D일" format
     const formattedDateForDisplay = `${date.getFullYear()}년 ${
       date.getMonth() + 1
     }월 ${date.getDate()}일`;
 
-    setSelectedDate(formattedDateForStorage); // Store the "YYYY-MM-DD" format
-    setDisplayDate(formattedDateForDisplay); // Update the displayed date
-    hideDatePicker();
+    setSelectedDate(formattedDateForStorage);
+    setDisplayDate(formattedDateForDisplay);
+    handleBlur();
   };
 
-  const isActive = isFocused || selectedDate !== '';
+  const isCompleted = isFocused || selectedDate !== '';
 
   return (
     <Pressable
       onPress={handleFocus}
-      className={`mb-4 box-border flex flex-row items-center justify-between rounded-xl border bg-white px-5 py-4
-        ${isActive ? 'border-sub1' : 'border-disabled'}`}
+      className={`flex flex-row items-center justify-between rounded-xl border bg-white p-5
+        ${isFocused ? 'border-sub1' : 'border-disabled'}`}
     >
-      <View className="flex flex-col items-start justify-center">
+      <View className="flex flex-col justify-center space-y-1.5">
         <Text
-          className={`text-xs font-semibold leading-[17px] tracking-tight
-            ${isFocused ? 'text-main1' : 'text-colorFont'}`}
+          className={`text-xs font-semibold leading-[18px] tracking-tight
+            ${isCompleted ? 'text-main1' : 'text-colorFont'}`}
         >
           {title}
         </Text>
-        <View className="mt-1.5 flex w-full flex-row items-center justify-between pb-[3px]">
-          <Text className="text-sm font-medium text-basicFont">{displayDate}</Text>
+        <View className="flex w-full flex-row items-center justify-between">
+          <Text className="text-sm font-medium leading-[18px] text-basicFont">{displayDate}</Text>
           <DownArrow />
         </View>
       </View>
+
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
@@ -85,7 +74,6 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
         onCancel={hideDatePicker}
         locale="ko-KR"
       />
-      <TextInput className="hidden" ref={inputRef} onBlur={handleBlur} />
     </Pressable>
   );
 };

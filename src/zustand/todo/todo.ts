@@ -12,6 +12,7 @@ export const useTodoItemStore = create<{
     content: '',
     type: '',
     timePoint: '',
+    mateIdList: [],
   },
   setTodoItem: (newTodo) => set((state) => ({ todoItem: { ...state.todoItem, ...newTodo } })),
 }));

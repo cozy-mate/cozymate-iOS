@@ -1,33 +1,22 @@
 import appleAuth from '@invertase/react-native-apple-authentication';
-import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import {
+  useLifeStyleStore,
+  usePreferencesStore,
+  useHasLifeStyleStore,
+} from '@zustand/member-stat/member-stat';
 
 import { signIn, getMyProfile } from '@server/api/member';
-import { getUserDetailData } from '@server/api/member-stat';
+import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
-import {
-  GetProfileResponse,
-  AppleLoginResponse,
-  KakaoLoginResponse,
-} from '@server/responseTypes/member';
+import { getPreferenceList } from '@server/api/member-stat-preference';
+import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
 
 import { setAccessToken, setRefreshToken } from '@utils/token';
-
-export const useGetMyProfile = (): { data: GetProfileResponse; refetch: () => void } => {
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['mylifestyledata'],
-    queryFn: () => getMyProfile(),
-    select: (reseponse: GetProfileResponse) => {
-      return reseponse;
-    },
-  });
-
-  return { data, refetch };
-};
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -37,6 +26,7 @@ export const useKakaoLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setPreferenceList } = usePreferencesStore();
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -69,6 +59,9 @@ export const useKakaoLogin = (
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);
 
+          const preferenceResponse = await getPreferenceList();
+          setPreferenceList(preferenceResponse.result.preferenceList);
+
           // 방 존재 여부 저장
           const roomCheckResponse = await checkHasRoom();
           const roomId = roomCheckResponse.result.roomId;
@@ -83,9 +76,9 @@ export const useKakaoLogin = (
 
           // getUserDetailData 호출 및 라이프스타일 정보 처리
           try {
-            const userDetailResponse = await getUserDetailData();
+            const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
+            setLifeStyle(userDetailResponse.result.memberStatDetail);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {
@@ -131,6 +124,8 @@ export const useAppleLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setPreferenceList } = usePreferencesStore();
+
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -160,6 +155,9 @@ export const useAppleLogin = (
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);
 
+          const preferenceResponse = await getPreferenceList();
+          setPreferenceList(preferenceResponse.result.preferenceList);
+
           // 방 존재 여부 저장
           const roomCheckResponse = await checkHasRoom();
           const roomId = roomCheckResponse.result.roomId;
@@ -174,9 +172,9 @@ export const useAppleLogin = (
 
           // getUserDetailData 호출 및 라이프스타일 정보 처리
           try {
-            const userDetailResponse = await getUserDetailData();
+            const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
+            setLifeStyle(userDetailResponse.result.memberStatDetail);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {

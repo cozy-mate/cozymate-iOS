@@ -1,17 +1,18 @@
 export interface UpdateRoomRequest {
   name: string;
-  hashtags?: string[];
+  persona: number;
+  hashtagList?: string[];
 }
 
 export interface CreatePublicRoomRequest {
   name: string;
-  profileImage: number;
+  persona: number;
   maxMateNum: number;
-  hashtags: string[];
+  hashtagList: string[];
 }
 
 export interface CreatePrivateRoomRequest {
   name: string;
-  profileImage: number;
+  persona: number;
   maxMateNum: number;
 }

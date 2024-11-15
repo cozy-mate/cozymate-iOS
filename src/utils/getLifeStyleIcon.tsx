@@ -9,12 +9,14 @@ import RedIntake from '@assets/lifeStyleIcon/red/redIntake.svg';
 import BlueMajor from '@assets/lifeStyleIcon/blue/blueMajor.svg';
 import BlueDrink from '@assets/lifeStyleIcon/blue/blueDrink.svg';
 import WhiteMbti from '@assets/lifeStyleIcon/white/whiteMbti.svg';
+import RedSmoking from '@assets/lifeStyleIcon/red/redSmoking.svg';
 import BlueIntake from '@assets/lifeStyleIcon/blue/blueIntake.svg';
 import WhiteMajor from '@assets/lifeStyleIcon/white/whiteMajor.svg';
 import WhiteDrink from '@assets/lifeStyleIcon/white/whiteDrink.svg';
 import RedIntimacy from '@assets/lifeStyleIcon/red/redIntimacy.svg';
 import RedCanShare from '@assets/lifeStyleIcon/red/redCanShare.svg';
 import RedStudying from '@assets/lifeStyleIcon/red/redStudying.svg';
+import BlueSmoking from '@assets/lifeStyleIcon/blue/blueSmoking.svg';
 import WhiteIntake from '@assets/lifeStyleIcon/white/whiteIntake.svg';
 import RedBirthYear from '@assets/lifeStyleIcon/red/redBirthYear.svg';
 import BlueIntimacy from '@assets/lifeStyleIcon/blue/blueIntimacy.svg';
@@ -23,6 +25,7 @@ import BlueStudying from '@assets/lifeStyleIcon/blue/blueStudying.svg';
 import RedAcceptance from '@assets/lifeStyleIcon/red/redAcceptance.svg';
 import RedWakeUpTime from '@assets/lifeStyleIcon/red/redWakeUpTime.svg';
 import RedIsPlayGame from '@assets/lifeStyleIcon/red/redIsPlayGame.svg';
+import WhiteSmoking from '@assets/lifeStyleIcon/white/whiteSmoking.svg';
 import BlueBirthYear from '@assets/lifeStyleIcon/blue/blueBirthYear.svg';
 import WhiteIntimacy from '@assets/lifeStyleIcon/white/whiteIntimacy.svg';
 import WhiteCanShare from '@assets/lifeStyleIcon/white/whiteCanShare.svg';
@@ -36,7 +39,6 @@ import BlueWakeUpTime from '@assets/lifeStyleIcon/blue/blueWakeUpTime.svg';
 import BlueIsPlayGame from '@assets/lifeStyleIcon/blue/blueIsPlayGame.svg';
 import WhiteBirthYear from '@assets/lifeStyleIcon/white/whiteBirthYear.svg';
 import RedSleepingTime from '@assets/lifeStyleIcon/red/redSleepingTime.svg';
-import RedSmokingState from '@assets/lifeStyleIcon/red/redSmokingState.svg';
 import BlueTurnOffTime from '@assets/lifeStyleIcon/blue/blueTurnOffTime.svg';
 import BlueLifePattern from '@assets/lifeStyleIcon/blue/blueLifePattern.svg';
 import BlueIsPhoneCall from '@assets/lifeStyleIcon/blue/blueIsPhoneCall.svg';
@@ -47,7 +49,6 @@ import WhiteIsPlayGame from '@assets/lifeStyleIcon/white/whiteIsPlayGame.svg';
 import RedAdmissionYear from '@assets/lifeStyleIcon/red/redAdmissionYear.svg';
 import RedSleepingHabit from '@assets/lifeStyleIcon/red/redSleepingHabit.svg';
 import BlueSleepingTime from '@assets/lifeStyleIcon/blue/blueSleepingTime.svg';
-import BlueSmokingState from '@assets/lifeStyleIcon/blue/blueSmokingState.svg';
 import WhiteTurnOffTime from '@assets/lifeStyleIcon/white/whiteTurnOffTime.svg';
 import WhiteLifePattern from '@assets/lifeStyleIcon/white/whiteLifePattern.svg';
 import WhiteIsPhoneCall from '@assets/lifeStyleIcon/white/whiteIsPhoneCall.svg';
@@ -55,7 +56,6 @@ import WhitePersonality from '@assets/lifeStyleIcon/white/whitePersonality.svg';
 import BlueAdmissionYear from '@assets/lifeStyleIcon/blue/blueAdmissionYear.svg';
 import BlueSleepingHabit from '@assets/lifeStyleIcon/blue/blueSleepingHabit.svg';
 import WhiteSleepingTime from '@assets/lifeStyleIcon/white/whiteSleepingTime.svg';
-import WhiteSmokingState from '@assets/lifeStyleIcon/white/whiteSmokingState.svg';
 import WhiteAdmissionYear from '@assets/lifeStyleIcon/white/whiteAdmissionYear.svg';
 import WhiteSleepingHabit from '@assets/lifeStyleIcon/white/whiteSleepingHabit.svg';
 import RedHeatingIntensity from '@assets/lifeStyleIcon/red/redHeatingIntensity.svg';
@@ -78,12 +78,12 @@ export type LifestyleOptionKey =
   | 'admissionYear'
   | 'numOfRoommate'
   | 'birthYear'
-  | 'major'
+  | 'majorName'
   | 'acceptance'
   | 'wakeUpTime'
   | 'sleepingTime'
   | 'turnOffTime'
-  | 'smokingState'
+  | 'smoking'
   | 'sleepingHabit'
   | 'airConditioningIntensity'
   | 'heatingIntensity'
@@ -127,7 +127,7 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
     redIcon: <RedBirthYear />,
     label: '출생년도',
   },
-  major: {
+  majorName: {
     blueIcon: <BlueMajor />,
     whiteIcon: <WhiteMajor />,
     redIcon: <RedMajor />,
@@ -157,10 +157,10 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
     redIcon: <RedTurnOffTime />,
     label: '소등시간',
   },
-  smokingState: {
-    blueIcon: <BlueSmokingState />,
-    whiteIcon: <WhiteSmokingState />,
-    redIcon: <RedSmokingState />,
+  smoking: {
+    blueIcon: <BlueSmoking />,
+    whiteIcon: <WhiteSmoking />,
+    redIcon: <RedSmoking />,
     label: '흡연여부',
   },
   sleepingHabit: {
@@ -259,7 +259,7 @@ export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
 interface LifeStyleIconProps {
   icon: JSX.Element;
   label: string;
-  answer?: string | number;
+  answer?: string | number | null;
   isMine: boolean;
 }
 
@@ -280,11 +280,15 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
     >
       {label}
     </Text>
-    {answer !== undefined && (
-      <Text className="text-xs font-semibold tracking-tighter text-basicFont">
-        {truncateAnswer(answer.toString(), 5)}
-      </Text>
-    )}
+    {!isMine ? (
+      answer !== undefined && answer !== null ? (
+        <Text className="text-xs font-semibold tracking-tighter text-basicFont">
+          {truncateAnswer(answer.toString(), 5)}
+        </Text>
+      ) : (
+        <Text className="text-xs font-semibold tracking-tighter text-basicFont">-</Text>
+      )
+    ) : null}
   </View>
 );
 
@@ -300,7 +304,10 @@ export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
 };
 
 // 룸메이트의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoommateLifeStyleIcon = (option: LifestyleOptionKey, answer: string | number) => {
+export const getRoommateLifeStyleIcon = (
+  option: LifestyleOptionKey,
+  answer: string | number | null,
+) => {
   const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
   return <LifestyleIcon icon={blueIcon} label={label} answer={answer} isMine={false} />;
 };

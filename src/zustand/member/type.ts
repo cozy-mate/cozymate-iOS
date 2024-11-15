@@ -7,6 +7,7 @@ export interface SignUp {
 }
 
 export interface Profile {
+  memberId: number;
   nickname: string;
   gender: string;
   birthday: string;

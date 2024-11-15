@@ -23,7 +23,6 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
 
   const [isListOpen, setIsListOpen] = useState<boolean>(false);
 
-  // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
   const handleFocus = () => {
     setIsFocused(true);
 
@@ -32,7 +31,6 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
     }
   };
 
-  // 다른 곳에 focusing 옮겨졌을때 기존 focusing 없애는 함수
   const handleBlur = () => {
     setIsFocused(false);
     setIsListOpen(false);
@@ -45,15 +43,15 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
       <Pressable
         onPress={() => {
           handleFocus();
-          setIsListOpen(true);
+          setIsListOpen(!isListOpen);
         }}
         className={`mb-4 box-border flex flex-row items-center justify-between rounded-xl border bg-white px-5 py-4
-         ${isActive ? 'border-main1' : 'border-disabled'}`}
+         ${isActive ? 'border-sub1' : 'border-disabled'}`}
       >
         <View className="flex flex-col items-start justify-center">
           <Text
             className={`text-xs font-semibold leading-[17px] tracking-tight
-            ${isActive ? 'text-main1' : 'text-colorFont'}`}
+            ${isFocused ? 'text-main1' : 'text-colorFont'}`}
           >
             {title}
           </Text>

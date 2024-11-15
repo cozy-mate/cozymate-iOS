@@ -1,19 +1,18 @@
 import React from 'react';
 import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+
 import {
   lifestyleOptions,
   LifestyleOptionKey,
   getRoommateLifeStyleIcon,
 } from '@utils/getLifeStyleIcon';
 
+import { UserItem } from '@type/cozyHome/cozyHome';
+
 interface SameAnswerUserComponentProps {
-  userData: {
-    memberId: number;
-    memberNickname: string;
-    equality: number;
-    preferenceStats: Record<string, string | number>;
-  };
+  userData: UserItem;
   onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: () => void;
 }
@@ -23,6 +22,8 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
   onLayout,
   pressFunc,
 }) => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
   const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
     return key in lifestyleOptions;
   };
@@ -39,13 +40,15 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
         <Text className="pl-2 text-base font-semibold text-basicFont">
-          {userData.memberNickname}
+          {userData.memberDetail.nickname}
         </Text>
         <View className="flex flex-row items-center">
           <Text className="mr-1 text-xs font-medium text-disabledFont">
             내 라이프스타일과 일치율
           </Text>
-          <Text className="text-base font-medium text-main1">{userData.equality}%</Text>
+          <Text className="text-base font-medium text-main1">
+            {userData.equality !== null && hasLifeStyle ? userData.equality : '?? '}%
+          </Text>
         </View>
       </View>
 

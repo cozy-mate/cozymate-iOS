@@ -7,9 +7,11 @@ import CustomTextInputBox from '@components/common/customTextInputBox';
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomCheckBoxInput from '@components/lifeStyle/customCheckBoxInput';
 
-import { updateUserData } from '@server/api/member-stat';
+import { useProfileStore } from '@zustand/member/member';
 
-import { useGetUserDetailData } from '@hooks/api/member-stat';
+import { updateMemberStat } from '@server/api/member-stat';
+
+import { useGetMemberStatData } from '@hooks/api/member-stat';
 
 import { LifeStyleEditScreenProps } from '@type/param/stack';
 
@@ -24,12 +26,15 @@ type Item = {
 };
 
 const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
+  const { profile } = useProfileStore();
+
   const toMyPage = () => {
     navigation.goBack();
   };
 
   const [admissionYear, setAdmissionYear] = useState<string>('');
   const [numOfRoommate, setNumOfRoommate] = useState<number>(0);
+  const [dormitoryName, setDormitoryName] = useState<string>('123');
   const [acceptance, setAcceptance] = useState<string>('');
   const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
   const [wakeUpTime, setWakeUpTime] = useState<number>(0);
@@ -37,7 +42,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
   const [sleepingTime, setSleepingTime] = useState<number>(0);
   const [turnOffMeridian, setTurnOffMeridian] = useState<string>('');
   const [turnOffTime, setTurnOffTime] = useState<number>(0);
-  const [smokingState, setSmokingState] = useState<string>('');
+  const [smoking, setSmoking] = useState<string>('');
   const [sleepingHabit, setSleepingHabit] = useState<string[]>([]);
   const [airConditioningIntensity, setAirConditioningIntensity] = useState<number>(0);
   const [heatingIntensity, setHeatingIntensity] = useState<number>(0);
@@ -116,7 +121,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     { index: 12, value: 12, name: '12', select: false },
   ]);
 
-  const [smokingStateItems, setSmokingStateItems] = useState<Item[]>([
+  const [smokingItems, setSmokingItems] = useState<Item[]>([
     { index: 1, value: '비흡연자', name: '비흡연자', select: false },
     { index: 2, value: '연초', name: '연초', select: false },
     { index: 3, value: '궐련형 전자담배', name: '궐련형 전자담배', select: false },
@@ -355,183 +360,196 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     { index: 16, value: 'ENTJ', name: 'ENTJ', select: false },
   ]);
 
-  const { data } = useGetUserDetailData();
+  const { data } = useGetMemberStatData(profile.memberId);
 
   useEffect(() => {
     if (data && data.result) {
       const result = data.result;
 
-      setAdmissionYear(result.admissionYear.toString());
-      setNumOfRoommate(result.numOfRoommate);
-      setAcceptance(result.acceptance);
-      setWakeUpMeridian(result.wakeUpMeridian);
-      setWakeUpTime(result.wakeUpTime);
-      setSleepingMeridian(result.sleepingMeridian);
-      setSleepingTime(result.sleepingTime);
-      setTurnOffMeridian(result.turnOffMeridian);
-      setTurnOffTime(result.turnOffTime);
-      setSmokingState(result.smokingState);
-      setSleepingHabit(result.sleepingHabit);
-      setAirConditioningIntensity(result.airConditioningIntensity);
-      setHeatingIntensity(result.heatingIntensity);
-      setLifePattern(result.lifePattern);
-      setIntimacy(result.intimacy);
-      setCanShare(result.canShare);
-      setIsPlayGame(result.isPlayGame);
-      setIsPhoneCall(result.isPhoneCall);
-      setStudying(result.studying);
-      setIntake(result.intake);
-      setCleanSensitivity(result.cleanSensitivity);
-      setNoiseSensitivity(result.noiseSensitivity);
-      setCleaningFrequency(result.cleaningFrequency);
-      setPersonality(result.personality);
-      setMbti(result.mbti);
-      setSelfIntroduction(result.selfIntroduction);
+      setAdmissionYear(result.memberStatDetail.admissionYear.toString());
+      setNumOfRoommate(result.memberStatDetail.numOfRoommate);
+      setDormitoryName(result.memberStatDetail.dormitoryName);
+      setAcceptance(result.memberStatDetail.acceptance);
+      setWakeUpMeridian(result.memberStatDetail.wakeUpMeridian);
+      setWakeUpTime(result.memberStatDetail.wakeUpTime);
+      setSleepingMeridian(result.memberStatDetail.sleepingMeridian);
+      setSleepingTime(result.memberStatDetail.sleepingTime);
+      setTurnOffMeridian(result.memberStatDetail.turnOffMeridian);
+      setTurnOffTime(result.memberStatDetail.turnOffTime);
+      setSmoking(result.memberStatDetail.smoking);
+      setSleepingHabit(result.memberStatDetail.sleepingHabit);
+      setAirConditioningIntensity(result.memberStatDetail.airConditioningIntensity);
+      setHeatingIntensity(result.memberStatDetail.heatingIntensity);
+      setLifePattern(result.memberStatDetail.lifePattern);
+      setIntimacy(result.memberStatDetail.intimacy);
+      setCanShare(result.memberStatDetail.canShare);
+      setIsPlayGame(result.memberStatDetail.isPlayGame);
+      setIsPhoneCall(result.memberStatDetail.isPhoneCall);
+      setStudying(result.memberStatDetail.studying);
+      setIntake(result.memberStatDetail.intake);
+      setCleanSensitivity(result.memberStatDetail.cleanSensitivity);
+      setNoiseSensitivity(result.memberStatDetail.noiseSensitivity);
+      setCleaningFrequency(result.memberStatDetail.cleaningFrequency);
+      setDrinkingFrequency(result.memberStatDetail.drinkingFrequency);
+      setPersonality(result.memberStatDetail.personality);
+      setMbti(result.memberStatDetail.mbti);
+      setSelfIntroduction(result.memberStatDetail.selfIntroduction);
 
       setNumOfRoommateItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.numOfRoommate,
+          select: item.value === result.memberStatDetail.numOfRoommate,
         })),
       );
 
       setAcceptanceItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.acceptance,
+          select: item.value === result.memberStatDetail.acceptance,
         })),
       );
 
       setWakeUpTimeItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.wakeUpTime,
+          select: item.value === result.memberStatDetail.wakeUpTime,
         })),
       );
 
       setSleepingTimeItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.sleepingTime,
+          select: item.value === result.memberStatDetail.sleepingTime,
         })),
       );
 
       setTurnOffTimeItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.turnOffTime,
+          select: item.value === result.memberStatDetail.turnOffTime,
         })),
       );
 
-      setSmokingStateItems((prevItems) =>
+      setSmokingItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.smokingState,
+          select: item.value === result.memberStatDetail.smoking,
         })),
       );
 
       setSleepingHabitItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: typeof item.value === 'string' && result.sleepingHabit.includes(item.value),
+          select:
+            typeof item.value === 'string' &&
+            result.memberStatDetail.sleepingHabit.includes(item.value),
         })),
       );
 
       setAirConditioningIntensityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.airConditioningIntensity,
+          select: item.value === result.memberStatDetail.airConditioningIntensity,
         })),
       );
 
       setHeatingIntensityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.heatingIntensity,
+          select: item.value === result.memberStatDetail.heatingIntensity,
         })),
       );
 
       setLifePatternItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.lifePattern,
+          select: item.value === result.memberStatDetail.lifePattern,
         })),
       );
 
       setIntimacyItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.intimacy,
+          select: item.value === result.memberStatDetail.intimacy,
         })),
       );
 
       setCanShareItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.canShare,
+          select: item.value === result.memberStatDetail.canShare,
         })),
       );
 
       setIsPlayGameItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.isPlayGame,
+          select: item.value === result.memberStatDetail.isPlayGame,
         })),
       );
 
       setIsPhoneCallItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.isPhoneCall,
+          select: item.value === result.memberStatDetail.isPhoneCall,
         })),
       );
 
       setStudyingItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.studying,
+          select: item.value === result.memberStatDetail.studying,
         })),
       );
 
       setIntakeItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.intake,
+          select: item.value === result.memberStatDetail.intake,
         })),
       );
 
       setCleanSensitivityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.cleanSensitivity,
+          select: item.value === result.memberStatDetail.cleanSensitivity,
         })),
       );
 
       setNoiseSensitivityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.noiseSensitivity,
+          select: item.value === result.memberStatDetail.noiseSensitivity,
         })),
       );
 
       setCleaningFrequencyItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.cleaningFrequency,
+          select: item.value === result.memberStatDetail.cleaningFrequency,
+        })),
+      );
+
+      setDrinkingFrequencyItems((prevItems) =>
+        prevItems.map((item) => ({
+          ...item,
+          select: item.value === result.memberStatDetail.drinkingFrequency,
         })),
       );
 
       setPersonalityItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: typeof item.value === 'string' && result.personality.includes(item.value),
+          select:
+            typeof item.value === 'string' &&
+            result.memberStatDetail.personality.includes(item.value),
         })),
       );
 
       setMbtiItems((prevItems) =>
         prevItems.map((item) => ({
           ...item,
-          select: item.value === result.mbti,
+          select: item.value === result.memberStatDetail.mbti,
         })),
       );
     }
@@ -539,11 +557,10 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
 
   const updateInfo = async () => {
     try {
-      await updateUserData({
-        universityId: 1,
-        major: '',
+      await updateMemberStat({
         admissionYear: admissionYear,
         numOfRoommate: numOfRoommate,
+        dormitoryName: dormitoryName,
         acceptance: acceptance,
         wakeUpMeridian: wakeUpMeridian,
         wakeUpTime: wakeUpTime,
@@ -551,7 +568,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
         sleepingTime: sleepingTime,
         turnOffMeridian: turnOffMeridian,
         turnOffTime: turnOffTime,
-        smokingState: smokingState,
+        smoking: smoking,
         sleepingHabit: sleepingHabit,
         airConditioningIntensity: airConditioningIntensity,
         heatingIntensity: heatingIntensity,
@@ -671,10 +688,10 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
 
         <CustomRadioInputBox
           title="흡연여부를 선택해주세요"
-          value={smokingState}
-          setValue={setSmokingState}
-          items={smokingStateItems}
-          setItems={setSmokingStateItems}
+          value={smoking}
+          setValue={setSmoking}
+          items={smokingItems}
+          setItems={setSmokingItems}
           isTime={false}
         />
 

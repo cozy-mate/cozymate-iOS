@@ -54,7 +54,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         {/* 헤더 */}
         <Pressable className="mb-2 flex flex-row items-center" onPress={toRoomDetail}>
           <View className="mr-2 flex flex-row">
-            {roomInfo.mateList.map((icon, index) => (
+            {roomInfo.mateDetailList.map((icon, index) => (
               <View
                 key={index}
                 className="-ml-1 rounded-full"
@@ -96,7 +96,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
         <View className="absolute right-2 top-[-120px]">
           <Pressable onPress={toEdit} disabled={!roomInfo.isRoomManager}>
-            {getProfileImage(roomInfo.profileImage, 140, 140)}
+            {getProfileImage(roomInfo.persona, 140, 140)}
           </Pressable>
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: bottom + 40 }}>

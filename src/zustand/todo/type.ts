@@ -3,4 +3,5 @@ export interface TodoItem {
   content: string;
   type: string;
   timePoint: string;
+  mateIdList: number[];
 }

@@ -4,28 +4,27 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
-interface MatelistItem {
-  memberId: number;
-  mateId: number;
-  nickname: string;
-  persona: number;
-  mateEquality: number;
-}
-
 interface MyRoomComponentProps {
   toRoom: () => void;
   roomData: {
     roomId: number;
     name: string;
     inviteCode: string;
-    profileImage: number;
-    mateList: MatelistItem[];
-    managerId: number;
+    persona: number;
+    mateDetailList: {
+      memberId: number;
+      mateId: number;
+      nickname: string;
+      persona: number;
+      mateEquality: number;
+    }[];
+    managerMemberId: number;
+    managerNickname: string;
     isRoomManager: boolean;
     maxMateNum: number;
-    numOfArrival: number;
+    arrivalMateNum: number;
     roomType: string;
-    hashtags: string[];
+    hashtagList: string[];
     equality: number;
     difference: {
       blue: LifestyleOptionKey[];
@@ -45,8 +44,8 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
         className="rounded-xl p-4"
       >
         <View className="flex flex-row">
-          {roomData.hashtags.length !== 0 ? (
-            roomData.hashtags.map((hash, index) => (
+          {roomData.hashtagList.length !== 0 ? (
+            roomData.hashtagList.map((hash, index) => (
               <View key={index} className="mr-1.5 rounded bg-white px-2 py-[2px]">
                 <Text className="text-xs font-medium text-colorFont">#{hash}</Text>
               </View>
@@ -64,7 +63,7 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ toRoom, roomData }) =
 
         <View className="flex flex-row items-center justify-between">
           <Text className="text-xs font-medium text-disabledFont">
-            <Text className="text-main1">{roomData.numOfArrival}명</Text>의 룸메이트가 있어요
+            <Text className="text-main1">{roomData.arrivalMateNum}명</Text>의 룸메이트가 있어요
           </Text>
 
           <Text className="text-base font-medium text-colorFont">{roomData.equality}%</Text>

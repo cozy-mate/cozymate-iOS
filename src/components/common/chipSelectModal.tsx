@@ -18,7 +18,7 @@ interface ChipSelectModalProps {
 }
 
 const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
-  const { preferences, setPreferences } = usePreferencesStore();
+  const { preferenceList, setPreferenceList } = usePreferencesStore();
 
   const items: Item[] = [
     { index: 1, id: 'birthYear', name: '출생년도' },
@@ -28,7 +28,7 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
     { index: 5, id: 'wakeUpTime', name: '기상시간' },
     { index: 6, id: 'sleepingTime', name: '취침시간' },
     { index: 7, id: 'turnOffTime', name: '소등시간' },
-    { index: 8, id: 'smokingState', name: '흡연여부' },
+    { index: 8, id: 'smoking', name: '흡연여부' },
     { index: 9, id: 'sleepingHabit', name: '잠버릇' },
     { index: 10, id: 'airConditioningIntensity', name: '에어컨' },
     { index: 11, id: 'heatingIntensity', name: '히터' },
@@ -48,15 +48,15 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
   ];
 
   const handleSelect = (itemId: LifestyleOptionKey) => {
-    if (preferences.includes(itemId)) {
-      setPreferences(preferences.filter((pref) => pref !== itemId));
-    } else if (preferences.length < 4) {
-      setPreferences([...preferences, itemId]);
+    if (preferenceList.includes(itemId)) {
+      setPreferenceList(preferenceList.filter((pref) => pref !== itemId));
+    } else if (preferenceList.length < 4) {
+      setPreferenceList([...preferenceList, itemId]);
     }
   };
 
   const updatePreferences = async (): Promise<void> => {
-    await updatePreferenceList({ preferences });
+    await updatePreferenceList({ preferenceList });
 
     closeModal();
   };
@@ -73,7 +73,7 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
                     <Pressable
                       key={item.index}
                       className={`mb-3 mr-2 flex-row flex-wrap items-center justify-center rounded-full border px-[14px] py-2 ${
-                        preferences.includes(item.id)
+                        preferenceList.includes(item.id)
                           ? 'border-main1 bg-sub1'
                           : 'border-disabled bg-white'
                       }`}
@@ -81,7 +81,7 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
                     >
                       <Text
                         className={`text-center text-sm font-medium tracking-tighter ${
-                          preferences.includes(item.id) ? 'text-main1' : 'text-disabledFont'
+                          preferenceList.includes(item.id) ? 'text-main1' : 'text-disabledFont'
                         }`}
                       >
                         {item.name}

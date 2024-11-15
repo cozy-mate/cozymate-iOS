@@ -51,12 +51,6 @@ export type StackParamList = {
   // 방 입장 스크린
   JoinRoomScreen: undefined;
 
-  // 방 입장 대기 스크린
-  WaitingRoomScreen: undefined;
-
-  // 학교 인증 스크린
-  SchoolAuthenticationScreen: undefined;
-
   // 룸메이트 스크린
   RoomMateScreen: undefined;
   UserDetailScreen: { memberId: number };
@@ -70,15 +64,22 @@ export type StackParamList = {
   // 마이페이지 스크린
   MyPageScreen: undefined;
   MyInfoScreen: undefined;
+  SchoolAuthenticationScreen: { isVerified: true | false };
   BasicInfoUpdateScreen: { type: 'nickname' | 'birthday' | 'majorName' };
+  FavoriteUserRoomScreen: { type: 'user' | 'room' };
+  InquiryScreen: { hasInquiry: true | false };
+  WithdrawScreen: undefined;
 
   // 쪽지 스크린
   ChatScreen: undefined;
   ChatRoomScreen: { chatRoomId: number };
-  SendChatScreen: { recipientId: number; chatRoomId: number };
+  SendChatScreen: { memberId: number; chatRoomId: number };
 
   // 알림 스크린
   NotificationScreen: undefined;
+
+  // 검색 스크린
+  SearchScreen: { type: string };
 };
 
 export type TabNavigatorParamList = {
@@ -137,10 +138,6 @@ export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
   StackParamList,
   'AdditionalLifeStyleScreen'
 >;
-export type LifeStyleEditScreenProps = NativeStackScreenProps<
-  StackParamList,
-  'LifeStyleEditScreen'
->;
 
 // 방 생성 스크린
 export type CreateRoomScreenProps = NativeStackScreenProps<StackParamList, 'CreateRoomScreen'>;
@@ -158,9 +155,6 @@ export type EditRoomScreenProps = NativeStackScreenProps<StackParamList, 'EditRo
 
 // 방 입장 스크린
 export type JoinRoomScreenProps = NativeStackScreenProps<StackParamList, 'JoinRoomScreen'>;
-
-// 방 입장 대기 스크린
-export type WaitingRoomScreenProps = NativeStackScreenProps<StackParamList, 'WaitingRoomScreen'>;
 
 // 학교 인증 스크린
 export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
@@ -185,6 +179,16 @@ export type BasicInfoUpdateScreenProps = NativeStackScreenProps<
   StackParamList,
   'BasicInfoUpdateScreen'
 >;
+export type LifeStyleEditScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'LifeStyleEditScreen'
+>;
+export type FavoriteUserRoomScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'FavoriteUserRoomScreen'
+>;
+export type InquiryScreenProps = NativeStackScreenProps<StackParamList, 'InquiryScreen'>;
+export type WithdrawScreenProps = NativeStackScreenProps<StackParamList, 'WithdrawScreen'>;
 
 // 쪽지 스크린
 export type ChatScreenProps = NativeStackScreenProps<StackParamList, 'ChatScreen'>;
@@ -193,3 +197,6 @@ export type SendChatScreenProps = NativeStackScreenProps<StackParamList, 'SendCh
 
 // 알림 스크린
 export type NotificationScreenProps = NativeStackScreenProps<StackParamList, 'NotificationScreen'>;
+
+// 검색 스크린
+export type SearchScreenProps = NativeStackScreenProps<StackParamList, 'SearchScreen'>;

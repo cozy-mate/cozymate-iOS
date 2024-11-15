@@ -29,7 +29,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
   const [sleepingTime, setSleepingTime] = useState<number | undefined>(undefined);
   const [turnOffMeridian, setTurnOffMeridian] = useState<string>('');
   const [turnOffTime, setTurnOffTime] = useState<number | undefined>(undefined);
-  const [smokingState, setSmokingState] = useState<string>('');
+  const [smoking, setSmoking] = useState<string>('');
   const [sleepingHabit, setSleepingHabit] = useState<string[]>([]);
   const [airConditioningIntensity, setAirConditioningIntensity] = useState<number | undefined>(
     undefined,
@@ -56,7 +56,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     sleepingTime !== undefined &&
     turnOffMeridian !== '' &&
     turnOffTime !== undefined &&
-    smokingState !== '' &&
+    smoking !== '' &&
     sleepingHabit.length !== 0 &&
     airConditioningIntensity !== undefined &&
     heatingIntensity !== undefined &&
@@ -83,7 +83,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
       sleepingTime,
       turnOffMeridian,
       turnOffTime,
-      smokingState,
+      smoking,
       sleepingHabit,
       airConditioningIntensity,
       heatingIntensity,
@@ -116,7 +116,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
       sleepingTime: sleepingTime,
       turnOffMeridian: turnOffMeridian,
       turnOffTime: turnOffTime,
-      smokingState: smokingState,
+      smoking: smoking,
       sleepingHabit: sleepingHabit,
       airConditioningIntensity: airConditioningIntensity,
       heatingIntensity: heatingIntensity,
@@ -140,7 +140,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
 
   const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);
   const [showTurnOffTime, setShowTurnOffTime] = useState<boolean>(false);
-  const [showSmokingState, setShowSmokingState] = useState<boolean>(false);
+  const [showSmoking, setShowSmoking] = useState<boolean>(false);
   const [showSleepingHabit, setShowSleepingHabit] = useState<boolean>(false);
   const [showAirConditioningIntensity, setShowAirConditioningIntensity] = useState<boolean>(false);
   const [showHeatingIntensity, setShowHeatingIntensity] = useState<boolean>(false);
@@ -160,7 +160,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
 
   const sleepingTimeAnimation = useInputAnimation(showSleepingTime, 400);
   const turnOffTimeAnimation = useInputAnimation(showTurnOffTime, 400);
-  const smokingStateAnimation = useInputAnimation(showSmokingState, 400);
+  const smokingAnimation = useInputAnimation(showSmoking, 400);
   const sleepingHabitAnimation = useInputAnimation(showSleepingHabit, 400);
   const airConditioningIntensityAnimation = useInputAnimation(showAirConditioningIntensity, 400);
   const heatingIntensityAnimation = useInputAnimation(showHeatingIntensity, 400);
@@ -223,7 +223,7 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
     { index: 12, value: 12, name: '12', select: false },
   ]);
 
-  const [smokingStateItems, setSmokingStateItems] = useState<Item[]>([
+  const [smokingItems, setSmokingItems] = useState<Item[]>([
     { index: 1, value: '비흡연자', name: '비흡연자', select: false },
     { index: 2, value: '연초', name: '연초', select: false },
     { index: 3, value: '궐련형 전자담배', name: '궐련형 전자담배', select: false },
@@ -808,22 +808,22 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
           </Animated.View>
         )}
 
-        {showSmokingState && (
+        {showSmoking && (
           <Animated.View
             style={{
-              opacity: smokingStateAnimation.opacity,
-              transform: [{ translateY: smokingStateAnimation.translateY }],
+              opacity: smokingAnimation.opacity,
+              transform: [{ translateY: smokingAnimation.translateY }],
             }}
           >
             <CustomRadioInputBox
               title="흡연여부를 선택해주세요"
-              value={smokingState}
+              value={smoking}
               setValue={(text) => {
-                setSmokingState(text);
+                setSmoking(text);
                 setShowSleepingHabit(!!text);
               }}
-              items={smokingStateItems}
-              setItems={setSmokingStateItems}
+              items={smokingItems}
+              setItems={setSmokingItems}
               isTime={false}
             />
           </Animated.View>
@@ -842,14 +842,14 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
               setValue={(text) => {
                 setTurnOffTime(text);
                 if (text && turnOffMeridian) {
-                  setShowSmokingState(true);
+                  setShowSmoking(true);
                 }
               }}
               meridian={turnOffMeridian}
               setMeridian={(meridian) => {
                 setTurnOffMeridian(meridian);
                 if (turnOffTime) {
-                  setShowSmokingState(true);
+                  setShowSmoking(true);
                 }
               }}
               items={turnOffTimeItems}
