@@ -8,6 +8,7 @@ interface ButtonTextInputProps {
   placeholder: string;
   buttonString: string;
   buttonFunc: () => void;
+  pattern?: string;
 }
 
 const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
@@ -17,11 +18,11 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
   placeholder,
   buttonString,
   buttonFunc,
+  pattern,
 }) => {
   const inputRef = React.useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  // TextInput 밖에 영역 클릭 시에도 focusing 하게 하는 함수
   const handleFocus = () => {
     setIsFocused(true);
 
@@ -30,12 +31,18 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
     }
   };
 
-  // 다른 곳에 focusing 옮겨졌을때 기존 focusing 없애는 함수
   const handleBlur = () => {
     setIsFocused(false);
   };
 
   const isActive = isFocused || value !== '';
+
+  const getDomain = (value: string) => {
+    const atIndex = value.indexOf('@');
+    return atIndex !== -1 ? value.slice(atIndex + 1) : '';
+  };
+
+  const isButtonVisible = value && (!pattern || getDomain(value) === pattern);
 
   return (
     <Pressable
@@ -61,7 +68,7 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
         />
       </View>
 
-      {value && (
+      {isButtonVisible && (
         <Pressable className="rounded-full bg-colorBox px-4 py-2" onPress={buttonFunc}>
           <Text className="text-xs font-medium text-main1">{buttonString}</Text>
         </Pressable>

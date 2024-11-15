@@ -48,9 +48,9 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { myRoom } = useHasRoomStore();
   const { roomInfo } = useRoomInfoStore();
 
-  const { data: requestRoomList, refetch } = useGetRequestRooms();
-  // const { data: userList } = useGetMemberList();
-  // const { data: roomList } = useGetRandomRoom(5);
+  const { data: requestRoomList } = useGetRequestRooms();
+  const { data: userList } = useGetMemberList();
+  const { data: roomList } = useGetRandomRoom(5);
 
   const { initFcm } = useInitFcm();
 
@@ -269,26 +269,27 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               </>
             )}
 
-            <View className="px-5">
-              <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
-              </Text>
-              <View className="flex flex-col">
-                {requestRoomList?.result.map((data, index) => (
-                  <RequestRoomComponent
-                    key={index}
-                    index={index}
-                    length={requestRoomList?.result.length}
-                    roomData={data}
-                    pressFunc={() => toRoomDetail(data.roomId)}
-                  />
-                ))}
+            {!myRoom.hasRoom && (
+              <View className="px-5">
+                <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                  {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
+                </Text>
+                <View className="flex flex-col">
+                  {requestRoomList?.result.map((data, index) => (
+                    <RequestRoomComponent
+                      key={index}
+                      index={index}
+                      length={requestRoomList?.result.length}
+                      roomData={data}
+                      pressFunc={() => toRoomDetail(data.roomId)}
+                    />
+                  ))}
+                </View>
+                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
               </View>
-            </View>
+            )}
 
-            <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-
-            {/* <RecommendationSection<UserItem>
+            <RecommendationSection<UserItem>
               title={`${profile.nickname}님과\n꼭 맞는 룸메이트를 추천해드릴게요`}
               onPressMore={toRoomMate}
               dataList={userList.result.memberList}
@@ -304,11 +305,11 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               )}
               onLayout={onLayoutUser}
               currentIndex={userCurrentIndex}
-            /> */}
+            />
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            {/* <RecommendationSection<RoomItem>
+            <RecommendationSection<RoomItem>
               title={`${profile.nickname}님과\n꼭 맞는 방을 추천해드릴게요`}
               onPressMore={toRecommendRoom}
               dataList={roomList.result.recommendations}
@@ -324,7 +325,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
               )}
               onLayout={onLayoutRoom}
               currentIndex={roomCurrentIndex}
-            /> */}
+            />
 
             <View className="h-[25px]" />
 

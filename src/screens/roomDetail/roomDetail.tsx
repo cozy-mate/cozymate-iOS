@@ -7,9 +7,7 @@ import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
-// import { useMemberInfoStore } from '@zustand/member/member';
 
-import { sendRoomRequest } from '@server/api/room';
 import { getChipDetailData } from '@server/api/room-member-stat';
 
 import { useGetChatRoomId } from '@hooks/api/chat-room';

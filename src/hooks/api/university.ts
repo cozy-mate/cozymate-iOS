@@ -1,7 +1,10 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, UseSuspenseQueryResult } from '@tanstack/react-query';
 
-import { getUniversityList } from '@server/api/university';
-import { GetUniversityListResponse } from '@server/responseTypes/university';
+import { getUniversityList, getUserUniversity } from '@server/api/university';
+import {
+  GetUniversityListResponse,
+  GetUserUniversityResponse,
+} from '@server/responseTypes/university';
 
 export const useGetUniversityList = (): {
   data: GetUniversityListResponse;
@@ -16,4 +19,11 @@ export const useGetUniversityList = (): {
   });
 
   return { data, refetch };
+};
+
+export const useGetUserUniversity = (): UseSuspenseQueryResult<GetUserUniversityResponse> => {
+  return useSuspenseQuery({
+    queryKey: [`/university/get-member-univ-info`],
+    queryFn: () => getUserUniversity(),
+  });
 };
