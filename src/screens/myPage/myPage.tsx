@@ -58,6 +58,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('FavoriteUserRoomScreen', { type: 'user' });
   };
 
+  const toInquiry = () => {
+    navigation.navigate('InquiryScreen');
+  };
+
   const logout = async (): Promise<void> => {
     try {
       await deleteToken();
@@ -164,7 +168,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
 
           <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
-            <Pressable className="flex flex-row justify-between py-3">
+            <Pressable className="flex flex-row justify-between py-3" onPress={toInquiry}>
               <Text className="text-sm font-medium text-emphasizedFont">문의하기</Text>
               <RightArrow />
             </Pressable>

@@ -69,6 +69,7 @@ export type StackParamList = {
   MyInfoScreen: undefined;
   BasicInfoUpdateScreen: { type: 'nickname' | 'birthday' | 'majorName' };
   FavoriteUserRoomScreen: { type: 'user' | 'room' };
+  InquiryScreen: undefined;
 
   // 쪽지 스크린
   ChatScreen: undefined;
@@ -187,6 +188,7 @@ export type FavoriteUserRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'FavoriteUserRoomScreen'
 >;
+export type InquiryScreenProps = NativeStackScreenProps<StackParamList, 'InquiryScreen'>;
 
 // 쪽지 스크린
 export type ChatScreenProps = NativeStackScreenProps<StackParamList, 'ChatScreen'>;
