@@ -280,13 +280,15 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
     >
       {label}
     </Text>
-    {answer !== undefined && answer !== null ? (
-      <Text className="text-xs font-semibold tracking-tighter text-basicFont">
-        {truncateAnswer(answer.toString(), 5)}
-      </Text>
-    ) : (
-      <Text className="text-xs font-semibold tracking-tighter text-basicFont">-</Text>
-    )}
+    {!isMine ? (
+      answer !== undefined && answer !== null ? (
+        <Text className="text-xs font-semibold tracking-tighter text-basicFont">
+          {truncateAnswer(answer.toString(), 5)}
+        </Text>
+      ) : (
+        <Text className="text-xs font-semibold tracking-tighter text-basicFont">-</Text>
+      )
+    ) : null}
   </View>
 );
 

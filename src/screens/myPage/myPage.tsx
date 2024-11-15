@@ -1,17 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
-// import ButtonModal from '@components/common/buttonModal';
+import LogoutModal from '@components/myPage/logoutModal';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
-// import { deleteMember } from '@server/api/member';
-
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
 import { deleteToken } from '@utils/token';
-// import { deleteFcmToken } from '@utils/fcm';
 import { getProfileImage } from '@utils/profileImage';
 
 import { MyPageScreenProps } from '@type/param/stack';
@@ -32,7 +28,11 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   const school = true;
 
-  // const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+
+  const handleLogoutModal = () => {
+    setIsLogoutModalOpen(!isLogoutModalOpen);
+  };
 
   const toMyInfo = () => {
     navigation.navigate('MyInfoScreen');
@@ -43,7 +43,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('SchoolAuthenticationScreen', { isVerified: true });
   };
 
   const toLifeStyle = () => {
@@ -59,7 +59,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toInquiry = () => {
-    navigation.navigate('InquiryScreen');
+    navigation.navigate('InquiryScreen', { hasInquiry: true });
   };
 
   const toWithdraw = () => {
@@ -68,26 +68,13 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
   const logout = async (): Promise<void> => {
     try {
+      setIsLogoutModalOpen(false);
       await deleteToken();
       setLoggedIn(false);
     } catch (error: any) {
       console.log(error.response.data);
     }
   };
-
-  // const withdraw = async () => {
-  //   try {
-  //     const response = await deleteMember();
-
-  //     console.log(response);
-
-  //     await deleteToken();
-  //     await deleteFcmToken();
-  //     setLoggedIn(false);
-  //   } catch (error: any) {
-  //     console.log(error.response.data);
-  //   }
-  // };
 
   return (
     <View className="flex-1 bg-white">
@@ -99,10 +86,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             {profile.nickname}
           </Text>
 
-          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
+          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
             <Pressable
               onPress={toMyInfo}
-              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+              className="flex flex-row justify-between border-b border-b-[#f1f2f4] pb-3"
             >
               <Text className="text-sm font-medium text-emphasizedFont">내 정보</Text>
               <View className="flex flex-row items-center">
@@ -110,27 +97,33 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               </View>
             </Pressable>
 
-            <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
+            <Pressable
+              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+              onPress={myRoom.hasRoom ? toRoomDetail : null}
+            >
               <Text className="text-sm font-medium text-emphasizedFont">나의 코지룸</Text>
               <View className="flex flex-row items-center">
                 {myRoom.hasRoom ? (
-                  <Pressable onPress={toRoomDetail} className="flex flex-row items-center">
+                  <View className="flex flex-row items-center">
                     <HomeIcon />
                     <Text className="mx-1 text-sm font-medium text-main1">{roomInfo.name}</Text>
                     <RightArrow />
-                  </Pressable>
+                  </View>
                 ) : (
-                  <Fragment>
+                  <View>
                     <Text className="mr-1 text-sm font-medium text-disabledFont">
                       아직 방이 존재하지 않아요
                     </Text>
                     <RightArrow />
-                  </Fragment>
+                  </View>
                 )}
               </View>
             </Pressable>
 
-            <Pressable className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3">
+            <Pressable
+              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+              onPress={toSchoolAuthentication}
+            >
               <Text className="text-sm font-medium text-emphasizedFont">학교 인증</Text>
               <View className="flex flex-row items-center">
                 {school ? (
@@ -163,7 +156,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
               </View>
             </Pressable>
 
-            <Pressable className="flex flex-row justify-between py-3" onPress={toFavorite}>
+            <Pressable className="flex flex-row justify-between pt-3" onPress={toFavorite}>
               <Text className="text-sm font-medium text-emphasizedFont">내가 찜한 룸메이트</Text>
               <View className="flex flex-row items-center">
                 <RightArrow />
@@ -171,15 +164,15 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             </Pressable>
           </View>
 
-          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4 py-1">
-            <Pressable className="flex flex-row justify-between py-3" onPress={toInquiry}>
+          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
+            <Pressable className="flex flex-row justify-between" onPress={toInquiry}>
               <Text className="text-sm font-medium text-emphasizedFont">문의하기</Text>
               <RightArrow />
             </Pressable>
           </View>
 
           <View className="flex flex-row items-center justify-center">
-            <Pressable onPress={logout}>
+            <Pressable onPress={() => setIsLogoutModalOpen(true)}>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
             </Pressable>
 
@@ -191,15 +184,13 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
           </View>
         </View>
 
-        {/* <ButtonModal
-          title="로그아웃 하시겠어요?"
-          cancelText="취소"
-          submitText="확인"
-          isVisible={isLogoutModalOpen}
-          closeModal={() => setIsLogoutModalOpen(false)}
-          onSubmit={() => logout()}
-          buttonCount={2}
-        /> */}
+        {isLogoutModalOpen && (
+          <LogoutModal
+            closeModal={handleLogoutModal}
+            cancelFunc={handleLogoutModal}
+            submitFunc={logout}
+          />
+        )}
       </ScrollView>
     </View>
   );

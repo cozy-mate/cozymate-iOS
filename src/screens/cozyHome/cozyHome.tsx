@@ -160,7 +160,7 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen');
+    navigation.navigate('SchoolAuthenticationScreen', { isVerified: false });
   };
 
   return (

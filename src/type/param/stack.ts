@@ -51,9 +51,6 @@ export type StackParamList = {
   // 방 입장 스크린
   JoinRoomScreen: undefined;
 
-  // 학교 인증 스크린
-  SchoolAuthenticationScreen: undefined;
-
   // 룸메이트 스크린
   RoomMateScreen: undefined;
   UserDetailScreen: { memberId: number };
@@ -67,9 +64,10 @@ export type StackParamList = {
   // 마이페이지 스크린
   MyPageScreen: undefined;
   MyInfoScreen: undefined;
+  SchoolAuthenticationScreen: { isVerified: true | false };
   BasicInfoUpdateScreen: { type: 'nickname' | 'birthday' | 'majorName' };
   FavoriteUserRoomScreen: { type: 'user' | 'room' };
-  InquiryScreen: undefined;
+  InquiryScreen: { hasInquiry: true | false };
   WithdrawScreen: undefined;
 
   // 쪽지 스크린
@@ -140,10 +138,6 @@ export type AdditionalLifeStyleScreenProps = NativeStackScreenProps<
   StackParamList,
   'AdditionalLifeStyleScreen'
 >;
-export type LifeStyleEditScreenProps = NativeStackScreenProps<
-  StackParamList,
-  'LifeStyleEditScreen'
->;
 
 // 방 생성 스크린
 export type CreateRoomScreenProps = NativeStackScreenProps<StackParamList, 'CreateRoomScreen'>;
@@ -184,6 +178,10 @@ export type MyInfoScreenProps = NativeStackScreenProps<StackParamList, 'MyInfoSc
 export type BasicInfoUpdateScreenProps = NativeStackScreenProps<
   StackParamList,
   'BasicInfoUpdateScreen'
+>;
+export type LifeStyleEditScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'LifeStyleEditScreen'
 >;
 export type FavoriteUserRoomScreenProps = NativeStackScreenProps<
   StackParamList,
