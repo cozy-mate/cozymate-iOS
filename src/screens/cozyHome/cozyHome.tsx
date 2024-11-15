@@ -118,10 +118,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
     setCreateRoomOpen(!createRoomOpen);
   };
 
-  const toRoom = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: 11 });
-  };
-
   const toCreatePublicRoom = () => {
     navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
     setCreateRoomOpen(false);
@@ -199,7 +195,10 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
                       </View>
                     </Pressable>
                   ) : (
-                    <Pressable className="flex flex-row items-center py-2" onPress={toRoom}>
+                    <Pressable
+                      className="flex flex-row items-center py-2"
+                      onPress={toSchoolAuthentication}
+                    >
                       <View className="flex flex-row items-center">
                         <GraySchool />
                         <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
