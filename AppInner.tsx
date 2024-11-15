@@ -13,6 +13,7 @@ import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
 import InquiryScreen from 'src/screens/myPage/inquiry';
+import WithdrawScreen from 'src/screens/myPage/withdraw';
 import CompleteScreen from 'src/screens/onBoard/complete';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
@@ -118,6 +119,7 @@ function AppInner() {
           <stack.Screen name="BasicInfoUpdateScreen" component={BasicInfoUpdateScreen} />
           <stack.Screen name="FavoriteUserRoomScreen" component={FavoriteUserRoomScreen} />
           <stack.Screen name="InquiryScreen" component={InquiryScreen} />
+          <stack.Screen name="WithdrawScreen" component={WithdrawScreen} />
 
           <stack.Screen name="ChatScreen" component={ChatScreen} />
           <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />

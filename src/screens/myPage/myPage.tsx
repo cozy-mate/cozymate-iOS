@@ -62,6 +62,10 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('InquiryScreen');
   };
 
+  const toWithdraw = () => {
+    navigation.navigate('WithdrawScreen');
+  };
+
   const logout = async (): Promise<void> => {
     try {
       await deleteToken();
@@ -181,7 +185,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
 
             <View className="mx-4 h-[18px] w-px bg-[#d9d9d9]" />
 
-            <Pressable>
+            <Pressable onPress={toWithdraw}>
               <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
             </Pressable>
           </View>
