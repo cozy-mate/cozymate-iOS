@@ -23,7 +23,6 @@ import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponen
 import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
-import useInitFcm from '@hooks/useInitFcm';
 import { useGetRequestRooms } from '@hooks/api/room';
 import { useGetMemberList } from '@hooks/api/member-stat';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
@@ -51,12 +50,6 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
   const { data: requestRoomList } = useGetRequestRooms();
   const { data: userList } = useGetMemberList();
   const { data: roomList } = useGetRandomRoom(5);
-
-  const { initFcm } = useInitFcm();
-
-  useEffect(() => {
-    initFcm();
-  }, []);
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
   const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);

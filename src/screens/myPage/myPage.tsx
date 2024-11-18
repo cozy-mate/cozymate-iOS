@@ -16,6 +16,7 @@ import HomeIcon from '@assets/myPage/home.svg';
 import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
+import useFcm from '@hooks/useFcm';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
@@ -25,6 +26,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
+  const { deactivateFcmToken } = useFcm();
 
   const school = true;
 
@@ -70,6 +72,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
     try {
       setIsLogoutModalOpen(false);
       await deleteToken();
+      await deactivateFcmToken();
       setLoggedIn(false);
     } catch (error: any) {
       console.log(error.response.data);

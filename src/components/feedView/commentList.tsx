@@ -16,9 +16,8 @@ const CommentList = (props: CommentListProps) => {
   return (
     <View className="mb-10 w-full flex-1 flex-col items-start px-5">
       {commentCards.map((comment, commentIndex) => (
-        <Fragment>
+        <Fragment key={commentIndex}>
           <CommentCard
-            key={commentIndex}
             comment={comment}
             postId={postId}
             updateComment={updateComment}
