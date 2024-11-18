@@ -56,7 +56,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex flex-1 flex-col bg-white">
-        <Pressable onPress={toBack} className="pl-3">
+        <Pressable onPress={toBack} className="px-5">
           <BackButton />
         </Pressable>
 
