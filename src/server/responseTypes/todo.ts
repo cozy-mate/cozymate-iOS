@@ -2,7 +2,7 @@ export interface DeleteTodoResponse {
   result: string;
 }
 
-export interface MemberDetailItem {
+interface MemberDetailItem {
   memberId: number;
   nickname: string;
   gender: string;
@@ -12,7 +12,7 @@ export interface MemberDetailItem {
   persona: number;
 }
 
-export interface TodoItem {
+interface TodoItem {
   todoId: number;
   content: string;
   completed: boolean;
