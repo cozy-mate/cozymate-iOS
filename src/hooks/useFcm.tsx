@@ -8,6 +8,24 @@ import { postFcmToken } from '@server/api/fcm';
 
 import { deleteFcmToken, getFcmToken, hasFcmToken, setFcmToken } from '@utils/fcm/fcmTokenUtil';
 
+// 전역 상태 X
+//const processedMessageIds = new Set();
+
+// 클로저 사용 O
+const createMessageProcessor = () => {
+  const processedMessageIds = new Set();
+
+  return (messageId: number) => {
+    if (processedMessageIds.has(messageId)) {
+      return false; // 이미 처리된 메시지
+    }
+
+    processedMessageIds.add(messageId);
+    return true; // 새 메시지
+  };
+};
+
+
 const useFcm = () => {
   const { loggedIn } = useLoggedInStore();
 
@@ -55,10 +73,23 @@ const useFcm = () => {
 
   // 포그라운드 알림 리스너
   const foregroundNotificationListener = (): void => {
-    messaging().onMessage(async (remoteMessage: any) => {
-      await notifee.displayNotification({
-        title: remoteMessage?.data.title?.replace(/{(.*?)}/g, '$1') || '알림',
-        body: remoteMessage?.data.body?.replace(/{(.*?)}/g, '$1') || '새로운 메시지가 도착했습니다.',
+    const isNewMessage = createMessageProcessor();
+
+    messaging().onMessage((remoteMessage: any) => {
+
+      // 백엔드 서버가 data, notification 둘 다 보내어, 하나의 메세지를 받아도
+      // onMessage가 두번 호출되는 함(Firebase SDK 내부 로직)
+      // 이를 방지하기 위해 메세지 ID를 기반으로 중복 메세지를 걸러내는 로직
+      if (!isNewMessage(remoteMessage.messageId)) {
+        //console.log('Duplicate message detected, skipping...');
+        return;
+      }
+
+      //console.log('Foreground message received:', remoteMessage);
+
+      notifee.displayNotification({
+        title: remoteMessage?.data?.title || '알림',
+        body: remoteMessage?.data?.body || '새로운 메시지가 도착했습니다.',
         ios: {
           sound: 'default',
         },

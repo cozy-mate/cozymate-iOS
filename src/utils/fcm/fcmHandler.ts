@@ -24,7 +24,7 @@ export async function displayNotification(remoteMessage : any) {
  * @param {Object} remoteMessage - The Firebase Cloud Message
  */
 export async function handleBackgroundMessage(remoteMessage : any) {
-  // console.log('[Background Message]', remoteMessage);
+  console.log('[Background Message]', remoteMessage);
   await displayNotification(remoteMessage);
 }
 
@@ -34,6 +34,8 @@ export async function handleBackgroundMessage(remoteMessage : any) {
  */
 export async function handleBackgroundEvent({ type , detail }:any) {
   const { notification, pressAction } = detail;
+
+  console.log('Notification clicked in background');
 
   if (type === EventType.ACTION_PRESS && pressAction.id === 'default') {
     // console.log('Notification clicked in background');
