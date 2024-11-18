@@ -7,6 +7,7 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
+import useFcm from '@hooks/useFcm';
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
 
 import { deleteToken } from '@utils/token';
@@ -18,7 +19,6 @@ import HomeIcon from '@assets/myPage/home.svg';
 import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
-import useFcm from '@hooks/useFcm';
 
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
