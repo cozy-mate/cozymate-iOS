@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
+import LottieView from 'lottie-react-native';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
-import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
-import { signIn, testSignUp } from '@server/api/member';
-import { getMemberStatData } from '@server/api/member-stat';
+import { signIn } from '@server/api/member';
 
 import useInitFcm from '@hooks/useInitFcm';
 import { useIsOldiPhone } from '@hooks/device';
@@ -20,10 +17,6 @@ import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const isOldiPhone = useIsOldiPhone();
-  const { setLoggedIn } = useLoggedInStore();
-  const { setProfile } = useProfileStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setLifeStyle } = useLifeStyleStore();
 
   const { getDeviceId, refreshFcmToken } = useInitFcm();
 
@@ -46,64 +39,22 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     navigation.navigate('PersonalInfoInputScreen');
   };
 
-  const testLogin = async (): Promise<void> => {
-    try {
-      const signInResponse = await signIn({ clientId: '1232132131', socialType: 'TEST' });
-      console.log(signInResponse);
-
-      await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
-
-      const signUpResponse = await testSignUp({
-        nickname: '테스트트트트',
-        gender: 'MALE',
-        birthday: '1999-02-13',
-        persona: 1,
-        universityId: 1,
-      });
-
-      await setAccessToken(signUpResponse.result.tokenResponseDTO.accessToken);
-      setProfile(signUpResponse.result.memberDetailResponseDTO);
-
-      const response = await getMemberStatData();
-      setHasLifeStyle(true);
-      setLifeStyle(response.result.memberStatDetail);
-    } catch (error: any) {
-      const errorCode = error?.response?.data?.code;
-
-      if (errorCode === 'MEMBERSTAT402') {
-        setHasLifeStyle(false);
-      } else {
-        console.error(error);
-      }
-    }
-
-    setLoggedIn(true);
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="mx-6 flex-1">
-        <View
-          className={`mx-auto ${isOldiPhone ? 'mb-[100px] mt-[200px]' : 'mb-[200px] mt-[236px]'}`}
-        >
-          <View className="mb-[7px]">
-            <Text
-              className="text-center font-['Cafe24_Meongi_B'] text-[48px] font-normal"
-              allowFontScaling={false}
-            >
-              <Text className="text-[#FFE28B]">cozy</Text>
-              <Text className="text-[#BDD8FF]">mate</Text>
-            </Text>
+      <View className="mx-6 flex flex-1 flex-col justify-between">
+        <View className="mx-auto">
+          <View className="mt-[58px]">
+            <LottieView
+              source={require('@assets/onboarding.json')}
+              style={{ width: 300, height: 300 }}
+              progress={0.5}
+              autoPlay={true}
+              loop={true}
+            />
           </View>
-          <Text
-            className="text-center text-sm font-semibold text-basicFont"
-            allowFontScaling={false}
-          >
-            “나와 꼭 맞는 룸메이트와 함께 만드는{'\n'}우리만의 편안한 공간”
-          </Text>
         </View>
 
-        <View className="mx-3 mb-4">
+        <View className="mx-3 mb-[57px] flex flex-col space-y-3">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-kakaoyellow px-6 py-4"
             onPress={() => kakaoLogin()}
@@ -111,24 +62,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
             <KakaoLogo className="mr-2" />
             <Text className="text-base font-semibold text-black">카카오톡으로 계속하기</Text>
           </Pressable>
-        </View>
 
-        <View className="mx-3 mb-4">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
             onPress={() => appleLogin()}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
-          </Pressable>
-        </View>
-
-        <View className="flex flex-row items-center justify-between">
-          <Pressable onPress={testLogin}>
-            <Text>테스트 로그인</Text>
-          </Pressable>
-          <Pressable onPress={toSignUp}>
-            <Text>온보딩</Text>
           </Pressable>
         </View>
       </View>
