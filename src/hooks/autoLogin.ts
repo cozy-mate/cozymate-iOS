@@ -90,7 +90,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           const userDetailResponse = await getMemberStatData();
           console.log(12, userDetailResponse); // 라이프스타일 정보 조회
           setHasLifeStyle(true);
-          setLifeStyle(userDetailResponse.result.memberStatDetail);
+          setLifeStyle(userDetailResponse.result);
         } catch (error: any) {
           console.log(13, error); // 라이프스타일 정보 오류
           const errorCode = error?.response?.data?.code;

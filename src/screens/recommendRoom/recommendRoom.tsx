@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import SearchInputBox from '@components/common/searchInputBox';
-import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
+import RoomComponent from '@components/recommendRoom/roomComponent';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -48,18 +48,24 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
             </Text>
           </View>
 
-          <SearchInputBox type="touch" placeholder="방 이름을 검색해보세요!" pressFunc={toSearch} />
+          <View className="mb-5">
+            <SearchInputBox
+              type="touch"
+              placeholder="방 이름을 검색해보세요!"
+              pressFunc={toSearch}
+            />
+          </View>
 
-          <Pressable></Pressable>
+          <Pressable className="mb-2 flex flex-row justify-end">
+            <Text className="text-sm font-medium text-basicFont">평균일치율순</Text>
+          </Pressable>
 
           <View style={{ paddingBottom: bottom + 80 }}>
             <View className="flex flex-col space-y-6">
               {roomList?.result.recommendations.map((room, index) => (
-                <RecommendRoomComponent
-                  key={index}
-                  roomData={room}
-                  pressFunc={() => toRoomDetail(room.roomId)}
-                />
+                <View key={index}>
+                  <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
+                </View>
               ))}
             </View>
           </View>

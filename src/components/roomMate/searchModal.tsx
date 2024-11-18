@@ -34,7 +34,6 @@ interface ItemList {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
-  // 필터링 항목 목록
   const [filterList, setFilterList] = useState<FilterList[]>([
     { index: 1, key: 'birthYear', title: '출생년도', selected: true },
     { index: 2, key: 'acceptance', title: '합격여부', selected: false },
@@ -67,13 +66,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
 
   // 필터링 선택
   const handleFilter = (filterList: FilterList) => {
-    // 선택한 필터링의 selected를 true로 변경 (나머지 항목은 false)
     setFilterList((prevList) =>
-      prevList.map(
-        (filter) =>
-          filter.index === filterList.index
-            ? { ...filter, selected: true } // Set the selected item to true
-            : { ...filter, selected: false }, // Set all other items to false
+      prevList.map((filter) =>
+        filter.index === filterList.index
+          ? { ...filter, selected: true }
+          : { ...filter, selected: false },
       ),
     );
 
@@ -513,7 +510,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose }) => {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              className="mb-4 border-b border-b-[#f6f6f6]"
+              className="mb-4 space-x-2 border-b border-b-[#f6f6f6]"
             >
               {filterList.map((filter) => (
                 <Pressable

@@ -78,7 +78,7 @@ export const useKakaoLogin = (
           try {
             const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result.memberStatDetail);
+            setLifeStyle(userDetailResponse.result);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {
@@ -174,7 +174,7 @@ export const useAppleLogin = (
           try {
             const userDetailResponse = await getMemberStatData();
             setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result.memberStatDetail);
+            setLifeStyle(userDetailResponse.result);
           } catch (error: any) {
             const errorCode = error?.response?.data?.code;
             if (errorCode === 'MEMBERSTAT402') {

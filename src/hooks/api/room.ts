@@ -12,6 +12,7 @@ import {
   checkHasRoom,
   sendRoomRequest,
   getRequestRooms,
+  changeRoomPublic,
   deleteRoomRequest,
 } from '@server/api/room';
 import {
@@ -20,6 +21,7 @@ import {
   CheckHasRoomResponse,
   SendRoomRequestResponse,
   GetRequestRoomsResponse,
+  ChangeRoomPublicResponse,
   DeleteRoomRequestResponse,
 } from '@server/responseTypes/room';
 
@@ -87,5 +89,14 @@ export const useExitRoom = (
   return useMutation({
     mutationFn: () => exitRoom(roomId),
     onSuccess: () => {},
+  });
+};
+
+// 4. 공개방으로 전환
+export const useChangeRoomPublic = (
+  roomId: number,
+): UseMutationResult<ChangeRoomPublicResponse, void, unknown, unknown> => {
+  return useMutation({
+    mutationFn: () => changeRoomPublic(roomId),
   });
 };
