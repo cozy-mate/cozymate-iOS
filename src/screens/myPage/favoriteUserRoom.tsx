@@ -35,9 +35,9 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView bounces={false}>
-        <View className="flex flex-col">
-          <View className="my-2 flex flex-row justify-between px-3">
+      <ScrollView bounces={false} contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="flex flex-1 flex-col">
+          <View className="my-2 flex flex-row justify-between px-5">
             <Pressable onPress={toBack}>
               <BackButton />
             </Pressable>
@@ -74,7 +74,7 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
             </Pressable>
           </View>
 
-          <View className="flex flex-col space-y-6 px-5">
+          <View className="flex flex-1 flex-col space-y-6 px-5">
             {type === 'user' ? (
               userList.result.length !== 0 ? (
                 userList.result.map((user) => (
@@ -83,8 +83,10 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
                   </View>
                 ))
               ) : (
-                <View className="flex items-center justify-center">
-                  <Text>사람 없음</Text>
+                <View className="flex flex-1 items-center justify-center">
+                  <Text className="text-sm font-medium text-disabledFont">
+                    찜한 룸메이트가 없어요
+                  </Text>
                 </View>
               )
             ) : type === 'room' ? (
@@ -95,8 +97,8 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
                   </View>
                 ))
               ) : (
-                <View className="flex items-center justify-center">
-                  <Text>방 없음</Text>
+                <View className="flex flex-1 items-center justify-center">
+                  <Text className="text-sm font-medium text-disabledFont">찜한 방이 없어요</Text>
                 </View>
               )
             ) : null}
