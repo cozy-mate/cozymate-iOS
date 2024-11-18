@@ -11,6 +11,7 @@ import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
+import { useDibsOnUser } from '@hooks/api/favorite';
 import { useGetChatRoomId } from '@hooks/api/chat-room';
 import { useGetMemberStatData } from '@hooks/api/member-stat';
 
@@ -40,14 +41,13 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
 
   const [type, setType] = useState<string>('list');
 
-  // const { data: mylifestyledata } = useGetMemberStatData();
   const { data: lifeStyleData } = useGetMemberStatData(memberId);
-
-  // console.log(otherlifestyledata);
 
   const { data: chatRoomId } = useGetChatRoomId(memberId);
 
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+
+  const { mutateAsync: dibsUser } = useDibsOnUser(memberId);
 
   const handleReportModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
@@ -71,10 +71,6 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
 
   const [isInvited, setIsInvited] = useState<boolean>(false);
 
-  const toUserRoom = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: lifeStyleData.result.roomId });
-  };
-
   const toEditMyLifeStyle = () => {
     navigation.navigate('LifeStyleEditScreen');
   };
@@ -86,22 +82,24 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
         <View className="flex-1">
           <View className="flex flex-1 flex-col bg-sub1">
             {/* 상단 헤더 */}
-            <View className="mb-[15px] mt-2 flex flex-row justify-between pl-3 pr-5">
+            <View className="mb-[15px] mt-2 flex flex-row justify-between px-5">
               <Background width={width} style={{ position: 'absolute', zIndex: 99 }} />
               <Pressable onPress={toBack} style={{ zIndex: 100 }}>
                 <BackButton />
               </Pressable>
-              <View className="flex flex-row">
-                <Pressable onPress={toChatRoom}>
-                  <MessageIcon />
-                </Pressable>
-                <Pressable>
-                  <HeartIcon />
-                </Pressable>
-              </View>
+              {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
+                <View className="flex flex-row">
+                  <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
+                    <MessageIcon />
+                  </Pressable>
+                  <Pressable onPress={dibsUser}>
+                    <HeartIcon />
+                  </Pressable>
+                </View>
+              )}
             </View>
 
-            <View className="flex flex-col px-[23px]">
+            <View className="flex flex-col px-[25px]">
               <View className="flex flex-row items-center px-[2px]">
                 {getProfileImage(lifeStyleData.result.memberDetail.persona, 40, 40)}
                 <View className="ml-2 flex flex-col">
@@ -119,13 +117,15 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
                   )}
                 </View>
               </View>
-              {lifeStyleData.result.memberDetail.memberId === profile.memberId ? (
+              {lifeStyleData.result.memberDetail.memberId === profile.memberId && (
                 <Pressable onPress={toEditMyLifeStyle} className="mt-5 rounded-xl bg-main1 p-3">
                   <Text className="text-center text-sm font-semibold text-white">
                     내 라이프스타일 수정하기
                   </Text>
                 </Pressable>
-              ) : lifeStyleData.result.roomId !== 0 ? (
+              )}
+
+              {/* : lifeStyleData.result.roomId !== 0 ? (
                 <Pressable
                   onPress={toUserRoom}
                   className="mt-5 rounded-xl border border-main1 bg-sub2 p-3"
@@ -140,7 +140,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
                     {lifeStyleData.result.memberDetail.nickname}님은 아직 속한 방이 없어요
                   </Text>
                 </View>
-              )}
+              )} */}
             </View>
 
             <View className="mt-5 flex-1 rounded-t-[20px] bg-white pt-3">
