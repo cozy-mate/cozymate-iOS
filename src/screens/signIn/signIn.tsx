@@ -7,7 +7,7 @@ import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/me
 import { signIn, testSignUp } from '@server/api/member';
 import { getMemberStatData } from '@server/api/member-stat';
 
-import useInitFcm from '@hooks/useInitFcm';
+import useFcm from '@hooks/useFcm';
 import { useIsOldiPhone } from '@hooks/device';
 import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
@@ -25,13 +25,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const { setHasLifeStyle } = useHasLifeStyleStore();
   const { setLifeStyle } = useLifeStyleStore();
 
-  const { getDeviceId, refreshFcmToken } = useInitFcm();
+  const { getDeviceId, resetFcmToken } = useFcm();
 
   useEffect(() => {
     // 같은 디바이스면 같은 값을 내는 순수 함수
     getDeviceId();
-    refreshFcmToken();
-  }, [getDeviceId, refreshFcmToken]);
+    resetFcmToken();
+  }, [getDeviceId, resetFcmToken]);
 
   const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
   const { mutateAsync: appleLogin } = useAppleLogin(navigation);
@@ -49,7 +49,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const testLogin = async (): Promise<void> => {
     try {
       const signInResponse = await signIn({ clientId: '1232132131', socialType: 'TEST' });
-      console.log(signInResponse);
+      console.log("SIGN: ", signInResponse);
 
       await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
 
