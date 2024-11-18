@@ -9,6 +9,7 @@ import CustomTextarea from '@components/common/customTextarea';
 import CustomCalendar from '@components/todoList/customCalendar';
 import SelectMateComponent from '@components/todoList/selectMate';
 import CustomTextInputBox from '@components/common/customTextInputBox';
+import RoleSelectMateComponent from '@components/todoList/roleSelectMate';
 
 import { useRoomInfoStore } from '@zustand/room/room';
 import { useTodoItemStore } from '@zustand/todo/todo';
@@ -20,6 +21,11 @@ import { useUpdateRole, useGetRoleData } from '@hooks/api/role';
 import { useUpdateRule, useGetRuleData } from '@hooks/api/rule';
 
 import { EditRoleNRuleScreenProps } from '@type/param/stack';
+
+interface RoleMateItem {
+  mateId: number;
+  nickname: string;
+}
 
 const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) => {
   const { roomInfo } = useRoomInfoStore();
@@ -47,7 +53,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
   const { roleItem } = useRoleItemStore();
 
   // Role
-  const [roleMateIdList, setRoleMateIdList] = useState<number[]>(roleItem.mateList);
+  const [roleMateIdNameList, setRoleMateIdNameList] = useState<RoleMateItem[]>(roleItem.mateList);
   const [content, setContent] = useState<string>(roleItem.content);
   const [repeatDayList, setRepeatDayList] = useState<string[]>(roleItem.repeatDayList);
 
@@ -93,12 +99,12 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
         console.log(error.response.data);
       }
     } else if (type === 'role') {
-      if (roleMateIdList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
+      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
         return;
       }
       try {
         await updateRoleMutate({
-          mateIdList: roleMateIdList,
+          mateIdNameList: roleMateIdNameList,
           content: content,
           repeatDayList: repeatDayList,
         });
@@ -123,7 +129,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return content.trim() !== '' && roleMateIdList.length > 0 && repeatDayList.length > 0;
+      return content.trim() !== '' && roleMateIdNameList.length > 0 && repeatDayList.length > 0;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -168,10 +174,10 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
 
           {type == 'role' && (
             <View className="px-5">
-              <SelectMateComponent
+              <RoleSelectMateComponent
                 title="담당자를 선택해주세요"
-                selectedValues={roleMateIdList}
-                setSelectedValues={setRoleMateIdList}
+                selectedValues={roleMateIdNameList}
+                setSelectedValues={setRoleMateIdNameList}
                 items={roomInfo.mateDetailList}
               />
 
