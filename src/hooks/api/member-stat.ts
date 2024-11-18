@@ -1,12 +1,27 @@
-import { useQuery, useSuspenseQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  UseQueryResult,
+  useSuspenseQuery,
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchMembers, getRandomMember, getOtherMemberStatData } from '@server/api/member-stat';
+import { GetFilteredMemberListCountRequest } from '@server/requestTypes/member-stat';
+import {
+  searchMembers,
+  getRandomMember,
+  searchMemberByKeyword,
+  getOtherMemberStatData,
+  getFilteredMemberListCount,
+} from '@server/api/member-stat';
 import {
   SearchMembersResponse,
   GetRandomMemberResponse,
   GetMemberStatDataResponse,
+  SearchMemberByKeywordResponse,
 } from '@server/responseTypes/member-stat';
 
 // 사용자 상세정보 조회
@@ -63,23 +78,23 @@ export const useSearchMembersByFilter = (
 };
 
 // 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
-export const useSearchMembers = (): {
-  data: SearchMembersResponse | undefined;
-  refetch: () => void;
-} => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+// export const useSearchMembers = (): {
+//   data: SearchMembersResponse | undefined;
+//   refetch: () => void;
+// } => {
+//   const { hasLifeStyle } = useHasLifeStyleStore();
 
-  const { data, refetch } = useQuery({
-    queryKey: ['similarmatedata'],
-    queryFn: () => searchMembers(),
-    select: (response: SearchMembersResponse) => {
-      return response;
-    },
-    enabled: hasLifeStyle,
-  });
+//   const { data, refetch } = useQuery({
+//     queryKey: ['similarmatedata'],
+//     queryFn: () => searchMembers(),
+//     select: (response: SearchMembersResponse) => {
+//       return response;
+//     },
+//     enabled: hasLifeStyle,
+//   });
 
-  return { data, refetch };
-};
+//   return { data, refetch };
+// };
 
 export const useGetMemberList = (): {
   data: GetRandomMemberResponse | SearchMembersResponse;
@@ -112,4 +127,42 @@ export const useGetMember = () => {
   });
 
   return { data, fetchNextPage, hasNextPage };
+};
+
+// 사용자 닉네임 검색
+export const useSearchMemberByKeyword = (
+  keyword: string,
+): UseQueryResult<SearchMemberByKeywordResponse, unknown> => {
+  return useQuery({
+    queryKey: [`/members/stat/search`, keyword],
+    queryFn: () => searchMemberByKeyword(keyword),
+    enabled: keyword !== '',
+  });
+};
+
+// 칩 기반 필터링
+export const useSearchMembers = (filter: string[]) => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  return useInfiniteQuery({
+    queryKey: [`/members/stat/filter`, filter],
+    queryFn: async ({ pageParam }) => {
+      const response = await searchMembers(pageParam, filter);
+      console.log(response); // 응답 데이터를 확인하여 구조가 올바른지 확인
+      return response;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
+    enabled: hasLifeStyle,
+  });
+};
+
+export const useGetFilteredMemberListCount = () => {
+  return useMutation({
+    mutationFn: (data: GetFilteredMemberListCountRequest) => getFilteredMemberListCount(data),
+  });
 };

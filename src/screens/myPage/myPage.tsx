@@ -7,6 +7,8 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 
+import { useCheckHasInquiry } from '@hooks/api/inquiry';
+
 import { deleteToken } from '@utils/token';
 import { getProfileImage } from '@utils/profileImage';
 
@@ -28,6 +30,8 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { deactivateFcmToken } = useFcm();
 
+  const { data: hasInquiry } = useCheckHasInquiry();
+
   const school = true;
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
@@ -45,7 +49,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { isVerified: true });
+    navigation.navigate('SchoolAuthenticationScreen', { isVerified: false });
   };
 
   const toLifeStyle = () => {
@@ -61,7 +65,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toInquiry = () => {
-    navigation.navigate('InquiryScreen', { hasInquiry: true });
+    navigation.navigate('InquiryScreen', { hasInquiry: hasInquiry.result });
   };
 
   const toWithdraw = () => {

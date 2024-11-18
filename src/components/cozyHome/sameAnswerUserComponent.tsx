@@ -42,14 +42,9 @@ const SameAnswerUserComponent: React.FC<SameAnswerUserComponentProps> = ({
         <Text className="pl-2 text-base font-semibold text-basicFont">
           {userData.memberDetail.nickname}
         </Text>
-        <View className="flex flex-row items-center">
-          <Text className="mr-1 text-xs font-medium text-disabledFont">
-            내 라이프스타일과 일치율
-          </Text>
-          <Text className="text-base font-medium text-main1">
-            {userData.equality !== null && hasLifeStyle ? userData.equality : '?? '}%
-          </Text>
-        </View>
+        <Text className="text-base font-medium text-main1">
+          {userData.equality !== null && hasLifeStyle ? userData.equality : '?? '}%
+        </Text>
       </View>
 
       <View className="flex flex-row items-center justify-between px-2 pt-3">

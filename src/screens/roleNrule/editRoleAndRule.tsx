@@ -1,5 +1,5 @@
 import BackNav from '@layout/backNav';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
@@ -47,7 +47,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
   const { roleItem } = useRoleItemStore();
 
   // Role
-  const [roleMateIdList, setRoleMateIdList] = useState<number[]>([]);
+  const [roleMateIdList, setRoleMateIdList] = useState<number[]>(roleItem.mateList);
   const [content, setContent] = useState<string>(roleItem.content);
   const [repeatDayList, setRepeatDayList] = useState<string[]>(roleItem.repeatDayList);
 
@@ -89,8 +89,8 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
         });
         // resetState();
         toBack();
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.log(error.response.data);
       }
     } else if (type === 'role') {
       if (roleMateIdList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
@@ -130,6 +130,12 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     return false;
   };
 
+  useEffect(() => {
+    console.log(todoContent);
+    console.log(todoMateIdList);
+    console.log(timePoint);
+  });
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView bounces={false}>
@@ -150,7 +156,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
                 title="담당자를 선택해주세요"
                 selectedValues={todoMateIdList}
                 setSelectedValues={setTodoMateIdList}
-                items={roomInfo.mateList}
+                items={roomInfo.mateDetailList}
               />
 
               <Text className="mb-2 px-1 text-lg font-semibold text-basicFont">
@@ -166,7 +172,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
                 title="담당자를 선택해주세요"
                 selectedValues={roleMateIdList}
                 setSelectedValues={setRoleMateIdList}
-                items={roomInfo.mateList}
+                items={roomInfo.mateDetailList}
               />
 
               <CustomTextInputBox

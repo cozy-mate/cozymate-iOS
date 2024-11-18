@@ -116,7 +116,7 @@ const ListView: React.FC<ListViewProps> = ({ memberDetail, memberStatDetail, ope
               }`}
             >
               <Text className="mr-3 font-medium text-colorFont">{labels[key]}</Text>
-              <Text className="font-medium text-[#505059]">{formatValue(key, value)}</Text>
+              <Text className="font-medium text-basicFont">{formatValue(key, value)}</Text>
             </View>
           ))}
         </View>

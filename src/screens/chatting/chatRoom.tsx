@@ -7,10 +7,8 @@ import ControlModal from '@components/chatting/controlModal';
 import WarningModal from '@components/chatting/warningModal';
 import CompleteModal from '@components/chatting/completeModal';
 
-import { deleteChatRoom } from '@server/api/chat-room';
-
 import { useGetChatDetailData } from '@hooks/api/chat';
-import { useGetChatRoomList } from '@hooks/api/chat-room';
+import { useDeleteChatRoom, useGetChatRoomList } from '@hooks/api/chat-room';
 
 import { ChatRoomScreenProps } from '@type/param/stack';
 
@@ -19,8 +17,8 @@ import SettingIcon from '@assets/todoList/settingIcon.svg';
 
 interface ControlItem {
   index: number;
-  title: string;
-  pressFunc: () => void;
+  name: string;
+  pressFunc: any;
 }
 
 const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
@@ -28,8 +26,10 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
 
   const { chatRoomId } = route.params;
 
-  const { refetch } = useGetChatRoomList();
+  const { refetch: refetchChatRoomList } = useGetChatRoomList();
   const { data: chatlist } = useGetChatDetailData(chatRoomId);
+
+  const { mutateAsync: deleteChatRoom } = useDeleteChatRoom(chatRoomId, refetchChatRoomList);
 
   const [isControlModalOpen, setIsControlModalOpen] = useState<boolean>(false);
 
@@ -37,20 +37,47 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
 
+  const handleWarningModal = () => {
+    console.log('경고 모달 열림'); // Ensure the function is called
+    setIsWarningModalOpen(true); // Make sure this state change happens correctly
+  };
+
   const handleReportModal = () => {
-    setIsReportModalOpen(!isReportModalOpen);
+    setIsControlModalOpen(false);
+    setIsReportModalOpen(true);
+  };
+
+  const handleControlModal = () => {
+    setIsControlModalOpen(!isControlModalOpen);
   };
 
   const controlItems: ControlItem[] = [
-    { index: 1, title: '삭제하기', pressFunc: () => setIsWarningModalOpen(true) },
-    { index: 2, title: '신고하기', pressFunc: () => setIsReportModalOpen(true) },
+    {
+      index: 1,
+      name: '삭제하기',
+      pressFunc: () => {
+        handleControlModal();
+        handleWarningModal();
+      },
+    },
+    {
+      index: 2,
+      name: '신고하기',
+      pressFunc: () => {
+        setIsControlModalOpen(false);
+        setIsReportModalOpen(true);
+      },
+    },
   ];
 
   const deleteRoom = async (): Promise<void> => {
-    await deleteChatRoom(chatRoomId);
-    refetch();
-    setIsWarningModalOpen(false);
-    setIsCompleteModalOpen(true);
+    try {
+      await deleteChatRoom(chatRoomId);
+      setIsWarningModalOpen(false);
+      setIsCompleteModalOpen(true);
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   const close = () => {
@@ -79,15 +106,12 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
               <BackButton />
             </Pressable>
 
-            <Pressable
-              onPress={() => setIsControlModalOpen(!isControlModalOpen)}
-              className="relative"
-            >
+            <Pressable onPress={handleControlModal} className="relative">
               <SettingIcon />
 
               {isControlModalOpen && (
                 <View className="relative">
-                  <ControlModal items={controlItems} />
+                  <ControlModal items={controlItems} closeModal={handleControlModal} />
                 </View>
               )}
             </Pressable>
@@ -96,24 +120,29 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
           <View style={{ marginBottom: bottom + 80 }}>
             {chatlist.result.content.length !== 0 ? (
               <ScrollView className="px-5" bounces={false}>
-                {chatlist.result.content.reverse().map((chat, index) => (
-                  <View
-                    key={index}
-                    className={`border-b border-b-[#F1F2F4] py-[18px] ${index === 0 && 'pt-0'} ${
-                      index === chatlist.result.content.length - 1 && 'border-b-0 pb-0'
-                    }`}
-                  >
-                    <Text
-                      className={`${
-                        chat.nickname.includes('(나)') ? 'text-main1' : 'text-colorFont'
-                      } mb-1.5 text-base font-semibold`}
+                {chatlist.result.content
+                  .slice()
+                  .reverse()
+                  .map((chat, index) => (
+                    <View
+                      key={index}
+                      className={`border-b border-b-[#F1F2F4] py-[18px] ${index === 0 && 'pt-0'} ${
+                        index === chatlist.result.content.length - 1 && 'border-b-0 pb-0'
+                      }`}
                     >
-                      {chat.nickname}
-                    </Text>
-                    <Text className="mb-1 text-sm font-medium text-basicFont">{chat.content}</Text>
-                    <Text className="text-xs font-normal text-disabledFont">{chat.datetime}</Text>
-                  </View>
-                ))}
+                      <Text
+                        className={`${
+                          chat.nickname.includes('(나)') ? 'text-main1' : 'text-colorFont'
+                        } mb-1.5 text-base font-semibold`}
+                      >
+                        {chat.nickname}
+                      </Text>
+                      <Text className="mb-1 text-sm font-medium text-basicFont">
+                        {chat.content}
+                      </Text>
+                      <Text className="text-xs font-normal text-disabledFont">{chat.datetime}</Text>
+                    </View>
+                  ))}
               </ScrollView>
             ) : (
               <View className="flex items-center justify-center">
@@ -135,8 +164,8 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
 
       {isWarningModalOpen && (
         <WarningModal
-          closeModal={() => setIsWarningModalOpen(false)}
-          cancelFunc={() => setIsWarningModalOpen(false)}
+          closeModal={handleWarningModal}
+          cancelFunc={handleWarningModal}
           submitFunc={deleteRoom}
         />
       )}

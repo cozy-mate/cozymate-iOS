@@ -127,7 +127,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
     },
     {
       text: '삭제하기',
-      ppressFunc: (item: TodoItem) => {
+      pressFunc: (item: TodoItem) => {
         toEdit('todo', item.todoId);
         handleTodoItem(item);
       },
@@ -185,11 +185,12 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
 
                       <Pressable
                         onPress={() => {
-                          handleSettingModalToggle(todo.todoId);
+                          toEdit('todo', todo.todoId);
+                          handleTodoItem(todo);
                         }}
                       >
                         <SettingIcon />
-                        {settingModalOpenId === todo.todoId && <SettingModal items={items} />}
+                        {/* {settingModalOpenId === todo.todoId && <SettingModal items={items} />} */}
                       </Pressable>
                     </View>
                   ))
@@ -244,24 +245,19 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               <Text className="mb-4 px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해 알려드릴게요!
               </Text>
-              <View className="rounded-xl border border-[#F1F1F1] bg-white px-4 py-2">
+              <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white px-4 py-2">
                 {ruledata.result.map((rule, index) => (
-                  <View
-                    key={rule.ruleId}
-                    className={`mb-1 flex flex-row items-center justify-between ${
-                      index == ruledata.result.length - 1 && 'mb-0'
-                    }`}
-                  >
+                  <View key={rule.ruleId} className={`flex flex-row items-center justify-between`}>
                     <View className="flex flex-row items-center">
                       <View className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-colorBox">
                         <Text className="text-center text-xs font-medium text-colorFont">
                           {index + 1}
                         </Text>
                       </View>
-                      <View className="flex flex-col justify-center">
+                      <View className="flex flex-col justify-center space-y-0.5">
                         <Text className="text-sm font-medium text-basicFont">{rule.content}</Text>
                         {rule.memo !== '' && (
-                          <Text className="mt-0.5 text-[10px] font-medium text-disabledFont">
+                          <Text className="text-[10px] font-medium text-disabledFont">
                             {rule.memo}
                           </Text>
                         )}
@@ -293,11 +289,15 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                   >
                     <View className="flex flex-row items-center justify-between">
                       {role.repeatDayList.length === 7 ? (
-                        <View className="rounded-sm bg-colorBox px-2 py-0.5">
+                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
                           <Text className="text-xs font-medium text-colorFont">매일</Text>
                         </View>
+                      ) : role.repeatDayList.length === 0 ? (
+                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
+                          <Text className="text-xs font-medium text-colorFont">미정</Text>
+                        </View>
                       ) : (
-                        <View className="rounded-sm bg-colorBox px-2 py-0.5">
+                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
                           <Text className="text-xs font-medium text-colorFont">
                             {role.repeatDayList.join(', ')}
                           </Text>
@@ -312,7 +312,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         <SettingIcon />
                       </Pressable>
                     </View>
-                    <Text className="text-sm font-semibold text-emphasizedFont">
+                    <Text className="mb-2 text-sm font-semibold text-emphasizedFont">
                       {role.content}
                     </Text>
                     <Text className="text-sm font-medium text-basicFont">

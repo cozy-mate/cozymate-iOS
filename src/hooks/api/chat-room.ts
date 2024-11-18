@@ -1,7 +1,22 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { getChatRoomId, getChatRoomList } from '@server/api/chat-room';
-import { GetChatRoomIdResponse, GetChatRoomListResponse } from '@server/responseTypes/chat-room';
+import { getChatRoomId, deleteChatRoom, getChatRoomList } from '@server/api/chat-room';
+import {
+  GetChatRoomIdResponse,
+  DeleteChatRoomResponse,
+  GetChatRoomListResponse,
+} from '@server/responseTypes/chat-room';
+
+// 쪽지방 삭제 기능
+export const useDeleteChatRoom = (
+  chatRoomId: number,
+  refetch: () => void,
+): UseMutationResult<DeleteChatRoomResponse> => {
+  return useMutation({
+    mutationFn: () => deleteChatRoom(chatRoomId),
+    onSuccess: () => refetch(),
+  });
+};
 
 // 쪽지방 목록 조회
 export const useGetChatRoomList = (): {

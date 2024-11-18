@@ -1,32 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import SearchModal from '@components/roomMate/searchModal';
+import UserComponent from '@components/roomMate/userComponent';
+import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
-import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
-import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { searchMembers } from '@server/api/member-stat';
+import { useSearchMembers } from '@hooks/api/member-stat';
 
-import { UserItem } from '@type/cozyHome/cozyHome';
 import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
+import MagnifierIcon from '@assets/magnifier.svg';
 import FilterIcon from '@assets/roomMate/filter.svg';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
-  const { bottom } = useSafeAreaInsets();
-
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   const [filterList, setFilterList] = useState<string[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
-
-  const [userList, setUserList] = useState<UserItem[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -34,27 +27,26 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await searchMembers(page);
+  const { fetchNextPage, hasNextPage, ...result } = useSearchMembers(filterList);
 
-      setUserList(response.result.memberList);
-    };
-    fetchData();
-  }, []);
+  const loadMoreList = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const [items, setItems] = useState([
-    { index: 1, id: 'admissionYear', name: '학번', select: false },
-    { index: 2, id: 'major', name: '학과', select: false },
-    { index: 3, id: 'numOfRoommate', name: '신청실', select: false },
+    { index: 1, id: 'birthYear', name: '출생년도', select: false },
+    { index: 2, id: 'admissionYear', name: '학번', select: false },
+    { index: 3, id: 'major', name: '학과', select: false },
     { index: 4, id: 'acceptance', name: '합격여부', select: false },
     { index: 5, id: 'wakeUpTime', name: '기상시간', select: false },
     { index: 6, id: 'sleepingTime', name: '취침시간', select: false },
     { index: 7, id: 'turnOffTime', name: '소등시간', select: false },
     { index: 8, id: 'smoking', name: '흡연여부', select: false },
     { index: 9, id: 'sleepingHabit', name: '잠버릇', select: false },
-    { index: 10, id: 'airConditioningIntensity', name: '에어컨 강도', select: false },
-    { index: 11, id: 'heatingIntensity', name: '히터 강도', select: false },
+    { index: 10, id: 'airConditioningIntensity', name: '에어컨', select: false },
+    { index: 11, id: 'heatingIntensity', name: '히터', select: false },
     { index: 12, id: 'lifePattern', name: '생활패턴', select: false },
     { index: 13, id: 'intimacy', name: '친밀도', select: false },
     { index: 14, id: 'canShare', name: '물건공유', select: false },
@@ -65,28 +57,48 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     { index: 19, id: 'cleanSensitivity', name: '청결예민도', select: false },
     { index: 20, id: 'noiseSensitivity', name: '소음예민도', select: false },
     { index: 21, id: 'cleaningFrequency', name: '청소빈도', select: false },
-    { index: 22, id: 'personality', name: '성격', select: false },
-    { index: 23, id: 'mbti', name: 'MBTI', select: false },
+    { index: 22, id: 'drinkingFrequency', name: '음주빈도', select: false },
+    { index: 23, id: 'personality', name: '성격', select: false },
+    { index: 24, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
   const toHome = () => {
     navigation.goBack();
   };
 
+  const toSearch = () => {
+    navigation.navigate('SearchScreen', { type: 'user' });
+  };
+
   const toOtherDetail = (memberId: number) => {
     navigation.navigate('UserDetailScreen', { memberId: memberId });
   };
 
+  const handleScroll = (event: any) => {
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const contentOffsetY = event.nativeEvent.contentOffset.y;
+    const layoutHeight = event.nativeEvent.layoutMeasurement.height;
+
+    if (contentHeight - contentOffsetY - layoutHeight < 100) {
+      loadMoreList();
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1">
-        {/* 상단 이전 버튼 */}
-        <View className="mb-6 flex flex-row items-center pl-2">
-          <Pressable onPress={toHome}>
-            <BackButton />
-          </Pressable>
-        </View>
+      {/* 상단 이전 버튼 */}
+      <View className="flex flex-row items-center pb-2 pl-2">
+        <Pressable onPress={toHome}>
+          <BackButton />
+        </Pressable>
+      </View>
 
+      <ScrollView
+        className="flex-1"
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        bounces={false}
+      >
         <View className="mb-4 flex flex-row items-center justify-between pr-5">
           <Text className="px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
             원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
@@ -98,6 +110,20 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           </Pressable>
         </View>
 
+        <View className="mb-5 px-5">
+          <Pressable
+            className="flex flex-row items-center rounded-xl bg-colorBox px-1 py-2"
+            onPress={toSearch}
+          >
+            <View className="p-2">
+              <MagnifierIcon />
+            </View>
+            <Text className="flex flex-row items-center py-[5.5px] text-sm font-medium text-disabledFont">
+              룸메이트 닉네임을 검색해보세요!
+            </Text>
+          </Pressable>
+        </View>
+
         <CheckBoxContainer
           value={filterList}
           setValue={setFilterList}
@@ -106,36 +132,40 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         />
 
         {/* 사용자 목록 */}
-        <View
-          className="mb-9 flex flex-col items-center space-y-6 px-5"
-          style={{ paddingBottom: bottom + 20 }}
-        >
-          {hasLifeStyle ? (
-            userList.length > 0 ? (
-              userList.map((user) => (
-                <View key={user.memberDetail.memberId}>
-                  <SameAnswerUserComponent
-                    userData={user}
-                    pressFunc={() => toOtherDetail(user.memberDetail.memberId)}
-                  />
-                </View>
-              ))
+
+        <View className="px-5">
+          {hasLifeStyle && result.data?.pages ? (
+            result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
+              <Text className="text-center text-gray-500">검색된 사용자가 없습니다.</Text>
             ) : (
-              <View>
-                <Text>비어있음</Text>
-              </View>
+              result.data?.pages
+                .flatMap((page) => page.result.memberList)
+                .map((user) => (
+                  <UserComponent
+                    key={user.memberDetail.memberId}
+                    user={user}
+                    toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
+                  />
+                ))
             )
-          ) : userList.length > 0 || filterList.length > 0 ? (
-            <NoLifeStyleComponent />
-          ) : (
-            <View>
-              <Text>비어있음</Text>
-            </View>
-          )}
+          ) : null}
         </View>
+
+        {/* //   ) : (
+          //     <View>
+          //       <Text>비어있음</Text>
+          //     </View>
+          //   )
+          // ) : userList?.result?.memberList.length > 0 || filterList.length > 0 ? (
+          //   <NoLifeStyleComponent />
+          // ) : (
+          //   <View>
+          //     <Text>비어있음</Text>
+          //   </View>
+          // ) */}
       </ScrollView>
 
-      {isModalOpen && <SearchModal onClose={handleModal} />}
+      {isModalOpen && <FilteringModal onClose={handleModal} />}
     </SafeAreaView>
   );
 };

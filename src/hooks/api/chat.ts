@@ -26,11 +26,13 @@ export const useGetChatDetailData = (
 export const useSendChat = (
   recipientId: number,
   refetchChat: () => void,
+  refetchChatRoom: () => void,
 ): UseMutationResult<SendChatResponse, void, SendChatRequest, unknown> => {
   return useMutation({
     mutationFn: (sendChatRequest: SendChatRequest) => sendChat(recipientId, sendChatRequest),
     onSuccess: () => {
-      refetchChat;
+      refetchChat();
+      refetchChatRoom();
     },
   });
 };

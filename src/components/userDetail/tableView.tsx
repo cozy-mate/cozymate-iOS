@@ -100,11 +100,11 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                 <View className="flex w-[75%] flex-row items-center justify-center">
                   <View className="w-1/2">
                     <Text
-                      className={`text-center font-medium tracking-tight ${
+                      className={`text-center font-medium tracking-tight text-basicFont ${
                         key !== 'nickname' &&
                         key !== 'nickname' &&
                         my[key] !== other[key] &&
-                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-[#505059]')
+                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
                       }`}
                     >
                       {truncateString(formatValue(key, my[key]))}
@@ -113,11 +113,11 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
 
                   <View className="w-1/2">
                     <Text
-                      className={`text-center font-medium tracking-tight ${
+                      className={`text-center font-medium tracking-tight text-basicFont ${
                         key !== 'nickname' &&
                         key !== 'nickname' &&
                         my[key] !== other[key] &&
-                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-[#505059]')
+                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
                       }`}
                     >
                       {truncateString(formatValue(key, other[key]))}

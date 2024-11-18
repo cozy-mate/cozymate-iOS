@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, Pressable, SafeAreaView } from 'react-native';
 
+import SelectCharacterModal from 'src/screens/editRoom/selectCharacterModal';
+
 import ChipSelectModal from '@components/common/chipSelectModal';
 
 import { useProfileStore } from '@zustand/member/member';
@@ -19,6 +21,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
   const { profile } = useProfileStore();
   const { preferenceList } = usePreferencesStore();
 
+  const [persona, setPersona] = useState<number>(profile.persona);
   const [isCharacterSelectOpen, setIsCharacterSelectOpen] = useState<boolean>(false);
   const [isChipModalOpen, setIsChipModalOpen] = useState<boolean>(false);
 
@@ -56,10 +59,13 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
 
             <View className="relative flex items-center">
               <View className="relative h-[120px] w-[120px] overflow-hidden rounded-[60px]">
-                <View>{getProfileImage(profile.persona, 120, 120)}</View>
-                <View className="absolute bottom-0 flex h-[32px] w-[120px] items-center justify-center overflow-hidden rounded-b-[32px] bg-updateButtonBack">
+                <View>{getProfileImage(persona, 120, 120)}</View>
+                <Pressable
+                  onPress={() => setIsCharacterSelectOpen(true)}
+                  className="absolute bottom-0 flex h-[32px] w-[120px] items-center justify-center overflow-hidden rounded-b-[32px] bg-updateButtonBack"
+                >
                   <Text className="text-center text-xs font-semibold text-white">수정</Text>
-                </View>
+                </Pressable>
               </View>
             </View>
 
@@ -128,7 +134,13 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
         </ScrollView>
       </SafeAreaView>
 
-      {/* {isCharacterSelectOpen && <} */}
+      {isCharacterSelectOpen && (
+        <SelectCharacterModal
+          persona={persona}
+          setPersona={setPersona}
+          closeModal={() => setIsCharacterSelectOpen(false)}
+        />
+      )}
       {isChipModalOpen && <ChipSelectModal closeModal={closeChipModal} />}
     </Fragment>
   );

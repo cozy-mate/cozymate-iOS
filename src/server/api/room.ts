@@ -140,7 +140,7 @@ export const updateRoom = async (
   roomId: number,
   data: UpdateRoomRequest,
 ): Promise<UpdateRoomResponse> => {
-  const response = await PatchAxiosInstance<UpdateRoomResponse>(`/rooms/rooms/${roomId}`, data);
+  const response = await PatchAxiosInstance<UpdateRoomResponse>(`/rooms/${roomId}`, data);
 
   return response.data;
 };

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
+import LottieView from 'lottie-react-native';
+import Animated from 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -65,9 +66,14 @@ function AppInner() {
 
   if (!appLoaded) {
     return (
-      <View className="flex flex-1 items-center justify-center">
-        <Text>로티 이미지 나올 곳 (앱이 로딩 중입니다)</Text>
-      </View>
+      <Animated.View className="flex-1">
+        <LottieView
+          source={require('./src/assets/splash.json')}
+          style={{ flex: 1 }}
+          autoPlay={true}
+          loop={false}
+        />
+      </Animated.View>
     );
   }
 

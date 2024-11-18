@@ -28,7 +28,9 @@ const DateSelectModal: React.FC<DatePickerComponentProps> = ({
     setIsFocused(false);
   };
 
-  const hideDatePicker = () => {};
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
   const [displayDate, setDisplayDate] = useState<string>(selectedDate ? selectedDate : '');
 

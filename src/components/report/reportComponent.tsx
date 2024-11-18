@@ -68,7 +68,7 @@ const ReportModal: React.FC<ReportModalProps> = ({ memberId, source, closeModal 
   };
 
   return (
-    <Modal transparent={true} animationType="none">
+    <Modal transparent={true} visible={true} animationType="fade">
       <TouchableWithoutFeedback onPress={closeModal}>
         <View className="absolute left-0 top-0 flex h-screen w-screen items-center justify-center bg-modalBack px-5">
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

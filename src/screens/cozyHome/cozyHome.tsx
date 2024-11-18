@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState, Suspense, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -12,6 +13,7 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
+import LoadingComponent from '@components/loading/loading';
 import Advertisement from '@components/common/advertisement';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
@@ -38,7 +40,7 @@ import GraySchool from '@assets/cozyHome/graySchoolIcon.svg';
 import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
-const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
+const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   const { bottom } = useSafeAreaInsets();
@@ -335,6 +337,14 @@ const CozyHomeScreen = ({ navigation }: CozyHomeScreenProps) => {
         </ScrollView>
       </View>
     </>
+  );
+};
+
+const CozyHomeScreen = ({ navigation, route }: CozyHomeScreenProps) => {
+  return (
+    <ErrorBoundary fallback={<Text>Error loading CozyHome</Text>}>
+      <CozyHome navigation={navigation} route={route} />
+    </ErrorBoundary>
   );
 };
 

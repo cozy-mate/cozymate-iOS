@@ -30,6 +30,7 @@ export interface GetRoomDataResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -69,6 +70,7 @@ export interface GetRequestRoomsResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -98,6 +100,7 @@ export interface GetRoomDataByInviteCodeResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -127,6 +130,7 @@ export interface GetInvitedRoomsResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -172,6 +176,7 @@ export interface UpdateRoomResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -237,6 +242,7 @@ export interface CreatePublicRoomResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
@@ -266,6 +272,7 @@ export interface CreatePrivateRoomResponse {
     isRoomManager: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
+    dormitoryName: string;
     roomType: string;
     hashtagList: string[];
     equality: number;
