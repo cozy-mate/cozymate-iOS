@@ -68,7 +68,7 @@ function AppInner() {
     return (
       <Animated.View className="flex-1">
         <LottieView
-          source={require('./src/assets/splaashjjin.json')}
+          source={require('./src/assets/splash.json')}
           style={{ flex: 1 }}
           autoPlay={true}
           loop={false}
