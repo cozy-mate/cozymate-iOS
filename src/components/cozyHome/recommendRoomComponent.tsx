@@ -42,10 +42,7 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-4">
         <Text className="pl-2 text-base font-semibold text-basicFont">{roomData.name}</Text>
-        <View className="flex flex-row items-center">
-          <Text className="mr-1 text-xs font-medium text-disabledFont">방 평균 일치율</Text>
-          <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
-        </View>
+        <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-4">
