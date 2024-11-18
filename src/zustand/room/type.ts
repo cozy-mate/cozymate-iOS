@@ -38,6 +38,7 @@ export type RoomInfo = {
   isRoomManager: boolean;
   maxMateNum: number;
   arrivalMateNum: number;
+  dormitoryName: string;
   roomType: string;
   hashtagList: string[];
   equality: number;
@@ -65,6 +66,7 @@ export type InviteCodeRoomInfo = {
   isRoomManager: boolean;
   maxMateNum: number;
   arrivalMateNum: number;
+  dormitoryName: string;
   roomType: string;
   hashtagList: string[];
   equality: number;
