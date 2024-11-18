@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
 import BottomButton from '@components/common/bottomButton';
+import ControlModal from '@components/roomDetail/controlModal';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
@@ -10,11 +11,13 @@ import { useHasRoomStore } from '@zustand/room/room';
 
 import { getChipDetailData } from '@server/api/room-member-stat';
 
+import { useDibsOnRoom } from '@hooks/api/favorite';
 import { useGetChatRoomId } from '@hooks/api/chat-room';
 import {
   useExitRoom,
   useGetRoomData,
   useSendRoomRequest,
+  useChangeRoomPublic,
   useDeleteRoomRequest,
 } from '@hooks/api/room';
 
@@ -23,6 +26,7 @@ import { getLifestyleLabel, LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
 import { RoomDetailScreenProps } from '@type/param/stack';
 
+import ExitButton from '@assets/exitButton.svg';
 import BackButton from '@assets/backButton.svg';
 import SettingIcon from '@assets/settingIcon.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
@@ -71,6 +75,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
+  const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId);
+
   const [isRequested, setIsRequested] = useState<boolean>(false);
 
   const toUserDetail = (member: MemberItem) => {
@@ -90,12 +96,21 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(roomId);
   const { mutateAsync: mutateExitRoom } = useExitRoom(roomId);
 
+  const { mutateAsync: mutateChangeRoomPublic } = useChangeRoomPublic(roomId);
+
   const sendRequest = async () => {
     await mutateSendRoomRequest(roomId);
   };
 
   const deleteRequest = async () => {
     await mutateDeleteRoomRequest(roomId);
+  };
+
+  const toEditRoom = async () => {
+    navigation.navigate('EditRoomScreen', {
+      id: roomId,
+      type: roomData.result.roomType,
+    });
   };
 
   const exitRoom = async () => {
@@ -115,28 +130,67 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     }
   };
 
+  const [isControlModalOpen, setIsControlModalOpen] = useState<boolean>(false);
+
+  const handleControlModal = () => {
+    setIsControlModalOpen(!isControlModalOpen);
+  };
+
+  const items = [
+    {
+      index: 1,
+      name: '수정하기',
+      pressFunc: toEditRoom,
+    },
+    { index: 2, name: '방 나가기', pressFunc: exitRoom },
+
+    {
+      index: 3,
+      name: roomData.result.roomType === 'PUBLIC' ? '비공개방 전환' : '공개방 전환',
+      pressFunc:
+        roomData.result.roomType === 'PUBLIC'
+          ? () => console.log('성공') //mutateChangeRoomPublic
+          : mutateChangeRoomPublic,
+    },
+  ];
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="bg-sub1" />
       <View className="flex-1">
         <View className="flex flex-1 flex-col bg-sub1">
           {/* 상단 헤더 */}
-          <View className="mb-[15px] mt-2 flex flex-row justify-between pl-3 pr-5">
+          <View className="mb-5 mt-2 flex flex-row justify-between px-5">
             <Background width={width} style={{ position: 'absolute', zIndex: 99 }} />
             <Pressable onPress={toBack} style={{ zIndex: 100 }}>
               <BackButton />
             </Pressable>
-            {roomId === myRoom.roomId ? (
-              <Pressable>
-                <SettingIcon />
-              </Pressable>
-            ) : (
+            {roomId !== myRoom.roomId ? (
               <View className="flex flex-row">
-                <Pressable onPress={toChatRoom}>
+                <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
                   <MessageIcon />
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={dibsRoom}>
                   <HeartIcon />
+                </Pressable>
+              </View>
+            ) : roomData.result.isRoomManager ? (
+              <View>
+                <Pressable onPress={handleControlModal}>
+                  <SettingIcon />
+                </Pressable>
+
+                {isControlModalOpen && (
+                  <ControlModal items={items} closeModal={handleControlModal} />
+                )}
+              </View>
+            ) : (
+              <View className="flex flex-row space-x-1">
+                <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
+                  <MessageIcon />
+                </Pressable>
+                <Pressable onPress={exitRoom} className="p-2">
+                  <ExitButton />
                 </Pressable>
               </View>
             )}
@@ -163,10 +217,12 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
               </View>
             </View>
 
-            <View className="flex rounded-xl border border-main1 bg-sub2 p-3">
-              <Text className="text-center text-sm font-semibold text-main1">
-                방 평균일치율 {roomData.result.equality}%
-              </Text>
+            <View className="relative z-10">
+              <View className="flex rounded-xl border border-main1 bg-sub2 p-3">
+                <Text className="text-center text-sm font-semibold text-main1">
+                  방 평균일치율 {roomData.result.equality}%
+                </Text>
+              </View>
             </View>
           </View>
 
@@ -217,7 +273,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   <View className="flex flex-row border-b border-b-[#F1F2F4] pb-3">
                     <Text className="mr-3 text-sm font-medium text-colorFont">분류</Text>
                     <Text className="text-sm font-medium text-basicFont">
-                      {roomData.result.roomType}
+                      {roomData.result.dormitoryName}
                     </Text>
                   </View>
                   <View className="flex flex-row pt-3">
@@ -277,18 +333,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
         </View>
 
         <View className="fixed bottom-[42px] px-5">
-          {/* 순서대로 1. 해당 방에 참가한 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === roomId && (
-            <BottomButton
-              color="bg-[#f85e5e]"
-              borderColor="border-[#f85e5e]"
-              textColor="text-white"
-              text="방 나가기"
-              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
-              onPressFunc={exitRoom}
-            />
-          )}
-
+          {/* 순서대로 1. 해당 방이 아닌 다른 방에 참가한 경우 2. 해당 방에 요청을 보낸 경우 3. 해당 방에 요청을 보내지 않은 경우 */}
           {myRoom.roomId !== roomId && myRoom.roomId !== 0 && (
             <BottomButton
               color="bg-[#c4c4c4]"
