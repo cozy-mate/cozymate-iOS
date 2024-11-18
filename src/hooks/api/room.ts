@@ -4,12 +4,14 @@ import {
   UseQueryResult,
   useSuspenseQuery,
   UseMutationResult,
+  UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
 import {
   exitRoom,
   getRoomData,
   checkHasRoom,
+  checkRequested,
   sendRoomRequest,
   getRequestRooms,
   changeRoomPublic,
@@ -19,6 +21,7 @@ import {
   ExitRoomResponse,
   GetRoomDataResponse,
   CheckHasRoomResponse,
+  CheckRequestedResponse,
   SendRoomRequestResponse,
   GetRequestRoomsResponse,
   ChangeRoomPublicResponse,
@@ -62,23 +65,35 @@ export const useGetRequestRooms = (): UseQueryResult<GetRequestRoomsResponse, vo
 };
 
 // 방 상세페이지에서 사용
+// 0. 방 참여 요청 여부 확인
+export const useCheckRequested = (
+  roomId: number,
+): UseSuspenseQueryResult<CheckRequestedResponse, void> => {
+  return useSuspenseQuery({
+    queryKey: [`/rooms/${roomId}/pending-status`, roomId],
+    queryFn: () => checkRequested(roomId),
+  });
+};
+
 // 1. 방 참여 요청
 export const useSendRoomRequest = (
   roomId: number,
+  refetch: () => void,
 ): UseMutationResult<SendRoomRequestResponse, void, unknown, unknown> => {
   return useMutation({
     mutationFn: () => sendRoomRequest(roomId),
-    onSuccess: () => {},
+    onSuccess: () => refetch(),
   });
 };
 
 // 2. 방 참여 요청 취소
 export const useDeleteRoomRequest = (
   roomId: number,
+  refetch: () => void,
 ): UseMutationResult<DeleteRoomRequestResponse, void, unknown, unknown> => {
   return useMutation({
     mutationFn: () => deleteRoomRequest(roomId),
-    onSuccess: () => {},
+    onSuccess: () => refetch(),
   });
 };
 

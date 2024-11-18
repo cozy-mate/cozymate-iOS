@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import SearchModal from '@components/roomMate/searchModal';
 import UserComponent from '@components/roomMate/userComponent';
 import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
@@ -87,7 +86,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* 상단 이전 버튼 */}
-      <View className="flex flex-row items-center pb-2 pl-2">
+      <View className="flex flex-row items-center px-5 pb-2">
         <Pressable onPress={toHome}>
           <BackButton />
         </Pressable>
@@ -119,7 +118,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
               <MagnifierIcon />
             </View>
             <Text className="flex flex-row items-center py-[5.5px] text-sm font-medium text-disabledFont">
-              룸메이트 닉네임을 검색해보세요!
+              룸메이트 닉네임을 검색해보세요
             </Text>
           </Pressable>
         </View>
@@ -132,7 +131,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         />
 
         {/* 사용자 목록 */}
-
         <View className="px-5">
           {hasLifeStyle && result.data?.pages ? (
             result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (

@@ -16,6 +16,7 @@ import { useGetChatRoomId } from '@hooks/api/chat-room';
 import {
   useExitRoom,
   useGetRoomData,
+  useCheckRequested,
   useSendRoomRequest,
   useChangeRoomPublic,
   useDeleteRoomRequest,
@@ -62,6 +63,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
   const width = Dimensions.get('screen').width;
 
+  const { data: isRequested, refetch: refetchCheckRequested } = useCheckRequested(roomId);
   const { data: roomData } = useGetRoomData(roomId);
   const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerMemberId);
 
@@ -77,8 +79,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId);
 
-  const [isRequested, setIsRequested] = useState<boolean>(false);
-
   const toUserDetail = (member: MemberItem) => {
     navigation.navigate('UserDetailScreen', { memberId: member.memberId });
   };
@@ -92,8 +92,11 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
   };
 
-  const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId);
-  const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(roomId);
+  const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId, refetchCheckRequested);
+  const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(
+    roomId,
+    refetchCheckRequested,
+  );
   const { mutateAsync: mutateExitRoom } = useExitRoom(roomId);
 
   const { mutateAsync: mutateChangeRoomPublic } = useChangeRoomPublic(roomId);
@@ -345,7 +348,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             />
           )}
 
-          {myRoom.roomId === 0 && isRequested && (
+          {myRoom.roomId === 0 && isRequested.result && (
             <BottomButton
               color="bg-colorBox"
               borderColor="border-main1"
@@ -356,7 +359,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             />
           )}
 
-          {myRoom.roomId === 0 && !isRequested && (
+          {myRoom.roomId === 0 && !isRequested.result && (
             <BottomButton
               color="bg-main1"
               borderColor="border-main1"
@@ -368,6 +371,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           )}
         </View>
       </View>
+
       {isLifeStyleModalOpen && (
         <LifeStyleModal
           title={title}
