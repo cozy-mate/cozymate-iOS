@@ -3,7 +3,7 @@ import { View, Text, Pressable, TextInput, ScrollView, SafeAreaView } from 'reac
 
 import BottomButton from '@components/common/bottomButton';
 
-import { useProfileStore } from '@zustand/member/member';
+import { useGetInquiry, useSendInquiry } from '@hooks/api/inquiry';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -11,45 +11,17 @@ import { InquiryScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 
-interface InquiryItem {
-  id: number;
-  content: string;
-  isAnswered: boolean;
-  createdAt: string;
-}
-
 const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
   const { hasInquiry } = route.params;
-  const { profile } = useProfileStore();
 
-  const inquiryData: InquiryItem[] = [
-    {
-      id: 1,
-      content:
-        '방장이 잠수를 타서 룸메이트 수락을 못해요 ㅜㅜㅜ 그래서 지금 방 활성화가 안 되고 있는 상황이에요....',
-      isAnswered: false,
-      createdAt: '2024. 10. 09',
-    },
-    {
-      id: 2,
-      content:
-        '방장이 잠수를 타서 룸메이트 수락을 못해요 ㅜㅜㅜ 그래서 지금 방 활성화가 안 되고 있는 상황이에요....',
-      isAnswered: false,
-      createdAt: '2024. 10. 10',
-    },
-    {
-      id: 3,
-      content:
-        '아휴우ㅜ우우우웅우우우ㅁㅇㄹㅁㅇㄴㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㅇㄴㅁㄹ어ㅏ링머ㅣ라;넝말니어ㅏㄴ아ㅓ앙ㄴㅇㅁㄴㄹㅇㅁㅇㄴㄴㅇㅁㄴㅇㄹ',
-      isAnswered: true,
-      createdAt: '2024. 09.28',
-    },
-  ];
+  const { data: inquiryList } = useGetInquiry();
 
   const [content, setContent] = useState<string>('');
   const [email, setEmail] = useState<string>('');
 
   const isComplete = content !== '' && email !== '';
+
+  const { mutateAsync: sendInquiry } = useSendInquiry();
 
   const toMyPage = () => {
     navigation.goBack();
@@ -59,9 +31,9 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
     navigation.navigate('InquiryScreen', { hasInquiry: false });
   };
 
-  const send = () => {
-    console.log('문의하기 성공');
-    toMyPage();
+  const handleSend = () => {
+    sendInquiry({ content: content, email: email });
+    navigation.goBack();
   };
 
   return (
@@ -70,24 +42,25 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
         <View className="flex-1 flex-col justify-between">
           <ScrollView bounces={false} className="flex-1">
             <View>
-              <View className="mb-4 mt-2 flex flex-row justify-between px-3">
+              <View className="mb-4 mt-2 flex flex-row justify-between px-5">
                 <Pressable onPress={toMyPage}>
                   <BackButton />
                 </Pressable>
               </View>
 
               <View className="mb-10 flex flex-col space-y-3 px-5">
-                {inquiryData.map((inquiry) => (
-                  <View key={inquiry.id} className="flex flex-col">
+                {inquiryList.result.map((inquiry) => (
+                  <View key={inquiry.inquiryId} className="flex flex-col">
                     <View className="mb-4 mt-3 flex flex-row items-center justify-between">
                       <View className="flex flex-row items-center space-x-2">
-                        {getProfileImage(profile.persona, 24, 24)}
+                        {getProfileImage(inquiry.persona, 24, 24)}
                         <Text className="text-sm font-medium text-emphasizedFont">
-                          {profile.nickname}
+                          {inquiry.nickname}
                         </Text>
                       </View>
 
-                      {inquiry.isAnswered ? (
+                      {/* 답변 대기 & 답변 완료 */}
+                      {inquiry.status !== '답변 대기' ? (
                         <Text className="text-xs font-medium text-main1">답변완료</Text>
                       ) : (
                         <Text className="text-xs font-medium text-disabledFont">답변대기</Text>
@@ -99,7 +72,7 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
                     </Text>
 
                     <Text className="text-right text-xs font-medium text-disabledFont">
-                      {inquiry.createdAt}
+                      {inquiry.datetime}
                     </Text>
                   </View>
                 ))}
@@ -166,7 +139,7 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
               textColor="text-white"
               text="등록"
               disabled={!isComplete}
-              onPressFunc={send}
+              onPressFunc={handleSend}
             />
           </View>
         </View>
