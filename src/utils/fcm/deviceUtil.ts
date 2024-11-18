@@ -22,21 +22,3 @@ export const getDeviceId = async (): Promise<string | null> => {
   }
   return AsyncStorage.getItem('deviceId');
 };
-
-export const hasFcmToken = async (): Promise<boolean> => {
-  const fcmToken = await AsyncStorage.getItem('fcmToken');
-  return fcmToken !== null;
-};
-
-export const setFcmToken = async (fcmToken: string): Promise<void> => {
-  return AsyncStorage.setItem('fcmToken', fcmToken);
-};
-
-export const getFcmToken = async (): Promise<string | null> => {
-  return AsyncStorage.getItem('fcmToken');
-};
-
-export const deleteFcmToken = async (): Promise<void> => {
-  console.log('FCM Token deleted');
-  return AsyncStorage.removeItem('fcmToken');
-};
