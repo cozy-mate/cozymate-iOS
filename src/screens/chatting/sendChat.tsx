@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import { useGetChatRoomList } from '@hooks/api/chat-room';
 import { useSendChat, useGetChatDetailData } from '@hooks/api/chat';
 
 import { SendChatScreenProps } from '@type/param/stack';
@@ -18,23 +19,27 @@ import XButton from '@assets/xButton.svg';
 const SendChatScreen = ({ navigation, route }: SendChatScreenProps) => {
   const [content, setContent] = useState<string>('');
 
-  const { refetch: refetchChats } = useGetChatDetailData(route.params.chatRoomId);
+  const toBack = () => {
+    navigation.goBack();
+  };
 
-  const { mutateAsync: sendChatMutate } = useSendChat(route.params.memberId, refetchChats);
+  // 쪽지 작성 후 쪽지방 목록 및 쪽지 내용 업데이트
+  const { refetch: refetchChats } = useGetChatDetailData(route.params.chatRoomId);
+  const { refetch: refetchChatRooms } = useGetChatRoomList();
+
+  const { mutateAsync: sendChatMutate } = useSendChat(
+    route.params.memberId,
+    refetchChats,
+    refetchChatRooms,
+  );
 
   const SendChat = async () => {
     try {
       await sendChatMutate({ content: content });
-      refetchChats();
-
-      navigation.goBack();
+      toBack();
     } catch (error: any) {
       console.log(error.response.data);
     }
-  };
-
-  const toBack = () => {
-    navigation.goBack();
   };
 
   return (
