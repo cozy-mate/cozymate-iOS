@@ -20,10 +20,12 @@ import {
   AcceptInviteResponse,
   InviteMemberResponse,
   CheckRoomNameResponse,
+  CheckRequestedResponse,
   GetRequestRoomsResponse,
   GetInvitedRoomsResponse,
   ForceExitMemberResponse,
   SendRoomRequestResponse,
+  GetRoomRequestsResponse,
   CreatePublicRoomResponse,
   ChangeRoomPublicResponse,
   CreatePrivateRoomResponse,
@@ -74,6 +76,15 @@ export const getRoomData = async (roomId: number): Promise<GetRoomDataResponse> 
   return response.data;
 };
 
+// 사용자가 해당 방에 참여 요청을 했는지 여부 조회
+export const checkRequested = async (roomId: number): Promise<CheckRequestedResponse> => {
+  const response = await GetAxiosInstance<CheckRequestedResponse>(
+    `/rooms/${roomId}/pending-status`,
+  );
+
+  return response.data;
+};
+
 // 우리방으로 초대한 멤버 목록 조회
 export const getInvitedMembers = async (roomId: number): Promise<GetInvitedMembersResponse> => {
   const response = await GetAxiosInstance<GetInvitedMembersResponse>(
@@ -88,6 +99,13 @@ export const getRequestRooms = async (): Promise<GetRequestRoomsResponse> => {
   const response = await GetAxiosInstance<GetRequestRoomsResponse>(`/rooms/requested`);
 
   return response.data;
+};
+
+// 방장에게 보이는 방 참여 요청 목록 조회
+export const getRoomRequests = async (): Promise<GetRoomRequestsResponse> => {
+  const reseponse = await GetAxiosInstance<GetRoomRequestsResponse>(`/rooms/pending-members`);
+
+  return reseponse.data;
 };
 
 // 초대코드로 방 정보 조회 기능
