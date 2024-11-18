@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import Animated from 'react-native-reanimated';
+=======
+import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
+>>>>>>> 35afb7221ed3a1b4a72e157e233e3bb117be4e24
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 

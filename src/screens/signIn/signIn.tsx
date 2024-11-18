@@ -2,13 +2,9 @@ import React, { useEffect } from 'react';
 import LottieView from 'lottie-react-native';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
-import { signIn } from '@server/api/member';
-
-import useInitFcm from '@hooks/useInitFcm';
-import { useIsOldiPhone } from '@hooks/device';
+import useFcm from '@hooks/useFcm';
+// import { useIsOldiPhone } from '@hooks/device';
 import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
-
-import { setAccessToken } from '@utils/token';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -16,28 +12,18 @@ import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  const isOldiPhone = useIsOldiPhone();
+  // const isOldiPhone = useIsOldiPhone();
 
-  const { getDeviceId, refreshFcmToken } = useInitFcm();
+  const { getDeviceId, resetFcmToken } = useFcm();
 
   useEffect(() => {
     // 같은 디바이스면 같은 값을 내는 순수 함수
     getDeviceId();
-    refreshFcmToken();
-  }, [getDeviceId, refreshFcmToken]);
+    resetFcmToken();
+  }, [getDeviceId, resetFcmToken]);
 
   const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
   const { mutateAsync: appleLogin } = useAppleLogin(navigation);
-
-  const toSignUp = async (): Promise<void> => {
-    const signInResponse = await signIn({ clientId: 'TEST', socialType: 'TEST' });
-
-    console.log(signInResponse);
-
-    await setAccessToken(signInResponse.result.tokenResponseDTO.accessToken);
-
-    navigation.navigate('PersonalInfoInputScreen');
-  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">

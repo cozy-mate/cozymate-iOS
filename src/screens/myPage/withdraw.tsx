@@ -8,7 +8,7 @@ import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import { deleteMember } from '@server/api/member';
 
 import { deleteToken } from '@utils/token';
-import { deleteFcmToken } from '@utils/fcm';
+import { deleteFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 import { WithdrawScreenProps } from '@type/param/stack';
 
