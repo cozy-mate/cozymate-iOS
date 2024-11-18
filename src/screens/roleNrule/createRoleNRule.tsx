@@ -139,7 +139,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
                 title="담당자를 선택해주세요"
                 selectedValues={todoMateIdList}
                 setSelectedValues={setTodoMateIdList}
-                items={roomInfo.mateList}
+                items={roomInfo.mateDetailList}
               />
 
               <Text className="mb-2 px-1 text-lg font-semibold text-basicFont">
@@ -155,7 +155,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
                 title="담당자를 선택해주세요"
                 selectedValues={roleMateIdList}
                 setSelectedValues={setRoleMateIdList}
-                items={roomInfo.mateList}
+                items={roomInfo.mateDetailList}
               />
 
               <CustomTextInputBox
