@@ -1,47 +1,40 @@
-import React, { useState } from 'react';
-import { Text, View, Pressable, Dimensions } from 'react-native';
+import React from 'react';
+import { Text, View, Pressable } from 'react-native';
+
+import { getProfileImage } from '@utils/profileImage';
 
 interface UserComponentProps {
   index: number;
+  length: number;
   userData: {
-    name: string;
-    hashTag: string[];
-    equality: number;
+    memberId: number;
+    mateId: number;
+    nickname: string;
+    persona: number;
+    mateEquality: number;
   };
+  pressFunc: (memberId: number) => void;
 }
 
-const UserComponent: React.FC<UserComponentProps> = ({ index, userData }) => {
-  const screenWidth = Dimensions.get('window').width;
-  const containerWidth = screenWidth * 0.65;
-
-  const [hasTagLen, setHashTagLen] = useState<number>(0);
-
+const UserComponent: React.FC<UserComponentProps> = ({ index, length, userData, pressFunc }) => {
   return (
     <Pressable
-      style={{ width: containerWidth }}
-      className="mr-5 rounded-xl border border-disabled p-4"
+      onPress={() => pressFunc(userData.memberId)}
+      className={`flex flex-row justify-between border-b border-b-[#f6f6f6] py-[22px] ${
+        index === 0 && 'pt-2.5'
+      } ${index === length - 1 && 'border-b-0 pb-2.5'}`}
     >
-      <View className="flex flex-row">
-        {userData.hashTag.map((data, index) => (
-          <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
-            <Text className="text-xs font-medium text-colorFont">{data} </Text>
-          </View>
-        ))}
+      <View className="flex flex-row space-x-2">
+        {getProfileImage(userData.persona, 28, 28)}
+        <Text className="text-base font-semibold text-emphasizedFont">{userData.nickname}</Text>
       </View>
-
-      <View className="my-2">
-        <Text className="text-base font-semibold text-emphasizedFont">{userData.name}</Text>
-      </View>
-
       <View className="flex flex-row items-center justify-between">
-        <Text className="text-xs font-medium text-disabledFont">내 라이프스타일과 일치율</Text>
-
         <Text
           className={`text-base font-medium ${
-            userData.equality < 50 ? 'text-colorFont' : 'text-main1'
+            userData.mateEquality < 50 ? 'text-colorFont' : 'text-main1'
           }`}
         >
-          {userData.equality}%
+          {userData.mateEquality !== null ? userData.mateEquality : '?? '}%
         </Text>
       </View>
     </Pressable>

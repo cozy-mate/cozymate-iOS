@@ -7,6 +7,8 @@ import {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+
 import {
   exitRoom,
   getRoomData,
@@ -14,6 +16,7 @@ import {
   checkRequested,
   sendRoomRequest,
   getRequestRooms,
+  getRoomRequests,
   changeRoomPublic,
   deleteRoomRequest,
 } from '@server/api/room';
@@ -24,6 +27,7 @@ import {
   CheckRequestedResponse,
   SendRoomRequestResponse,
   GetRequestRoomsResponse,
+  GetRoomRequestsResponse,
   ChangeRoomPublicResponse,
   DeleteRoomRequestResponse,
 } from '@server/responseTypes/room';
@@ -57,10 +61,26 @@ export const useGetRoomData = (
   return { data, refetch };
 };
 
+// 사용자 -> 참여 요청한 방 목록
 export const useGetRequestRooms = (): UseQueryResult<GetRequestRoomsResponse, void> => {
+  const { myRoom } = useHasRoomStore();
+
   return useQuery({
     queryKey: [`/rooms/requested`],
     queryFn: () => getRequestRooms(),
+    enabled: !myRoom.hasRoom,
+  });
+};
+
+// 방장 -> 참여 요청한 멤버 목록
+export const useGetRoomRequests = (): UseQueryResult<GetRoomRequestsResponse, void> => {
+  const { myRoom } = useHasRoomStore();
+  const { roomInfo } = useRoomInfoStore();
+
+  return useQuery({
+    queryKey: [`/rooms/pending-members`],
+    queryFn: () => getRoomRequests(),
+    enabled: myRoom.hasRoom && roomInfo.isRoomManager,
   });
 };
 

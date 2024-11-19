@@ -8,6 +8,7 @@ import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { getChipDetailData } from '@server/api/room-member-stat';
 
@@ -58,15 +59,22 @@ interface Item {
 const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { roomId } = route.params;
 
-  const { myRoom } = useHasRoomStore();
-
+  // 스타일 관련
   const { bottom } = useSafeAreaInsets();
   const width = Dimensions.get('screen').width;
 
+  // 내 방인지 여부 및 라이프스타일 존재 여부
+  const { myRoom } = useHasRoomStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  // 방 참여 요청 여부 확인
   const { data: isRequested, refetch: refetchCheckRequested } = useCheckRequested(roomId);
+  // 방 정보 조회
   const { data: roomData } = useGetRoomData(roomId);
+  // 해당 방의 방장과의 쪽지방 조회
   const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerMemberId);
 
+  // 상단 헤더 관련 메서드
   const toBack = () => {
     navigation.goBack();
   };
@@ -79,36 +87,54 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId);
 
+  // 방 인원 상세 페이지 이동
   const toUserDetail = (member: MemberItem) => {
     navigation.navigate('UserDetailScreen', { memberId: member.memberId });
   };
 
+  // 방 인원 라이프스타일 상세 모달
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
+  // 라이프스타일 이름
   const [title, setTitle] = useState<string>('');
+  // 라이프스타일 색상
   const [color, setColor] = useState<string>('');
+  // 라이프스타일 상세 정보
   const [chipDetailData, setChipDetailData] = useState<Item[]>([]);
 
   const handleLifeStyleModal = () => {
     setIsLifeStyleModalOpen(!isLifeStyleModalOpen);
   };
 
+  // 방 참여 요청
   const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId, refetchCheckRequested);
+  // 방 참여 요청 취소
   const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(
     roomId,
     refetchCheckRequested,
   );
+
+  // 방 나가기
   const { mutateAsync: mutateExitRoom } = useExitRoom(roomId);
 
+  // 방 공개방으로 전환
   const { mutateAsync: mutateChangeRoomPublic } = useChangeRoomPublic(roomId);
 
+  // 방 참여 요청
   const sendRequest = async () => {
     await mutateSendRoomRequest(roomId);
   };
 
+  // 방 참여 요청 취소
   const deleteRequest = async () => {
     await mutateDeleteRoomRequest(roomId);
   };
 
+  // 라이프스타일 없는 인원 이동
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
+  };
+
+  // 방 수정
   const toEditRoom = async () => {
     navigation.navigate('EditRoomScreen', {
       id: roomId,
@@ -116,10 +142,12 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
+  // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
   };
 
+  // 방 인원 라이프스타일 칩 클릭 메서드
   const handleChipClick = async (chip: LifestyleOptionKey): Promise<void> => {
     try {
       const response = await getChipDetailData(roomId, chip);
@@ -133,12 +161,15 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     }
   };
 
+  // 방장 케밥 모달
   const [isControlModalOpen, setIsControlModalOpen] = useState<boolean>(false);
 
+  // 케밥 모달 메서드
   const handleControlModal = () => {
     setIsControlModalOpen(!isControlModalOpen);
   };
 
+  // 케밥 모달 아이템
   const items = [
     {
       index: 1,
@@ -336,7 +367,18 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
         </View>
 
         <View className="fixed bottom-[42px] px-5">
-          {/* 순서대로 1. 해당 방이 아닌 다른 방에 참가한 경우 2. 해당 방에 요청을 보낸 경우 3. 해당 방에 요청을 보내지 않은 경우 */}
+          {/* 순서대로 1. 라이프스타일이 없는 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
+          {!hasLifeStyle && !isRequested.result && (
+            <BottomButton
+              color="bg-main1"
+              borderColor="border-main1"
+              textColor="text-white"
+              text="라이프스타일 입력하고 방 참여하기"
+              disabled={null}
+              onPressFunc={toLifeStyleOnboarding}
+            />
+          )}
+
           {myRoom.roomId !== roomId && myRoom.roomId !== 0 && (
             <BottomButton
               color="bg-[#c4c4c4]"
@@ -344,7 +386,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
               textColor="text-white"
               text="방 참여 요청"
               disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
-              onPressFunc={undefined}
+              onPressFunc={sendRequest}
             />
           )}
 
@@ -359,7 +401,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             />
           )}
 
-          {myRoom.roomId === 0 && !isRequested.result && (
+          {hasLifeStyle && myRoom.roomId === 0 && !isRequested.result && (
             <BottomButton
               color="bg-main1"
               borderColor="border-main1"

@@ -96,21 +96,18 @@ export const useSearchMembersByFilter = (
 //   return { data, refetch };
 // };
 
-export const useGetMemberList = (): {
-  data: GetRandomMemberResponse | SearchMembersResponse;
-  refetch: () => void;
-} => {
+export const useGetMemberList = () => {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['memberlistdata'],
+  const { data } = useSuspenseQuery({
+    queryKey: ['/members/stat/random'],
     queryFn: () => (hasLifeStyle ? searchMembers() : getRandomMember()),
     select: (response: GetRandomMemberResponse | SearchMembersResponse) => {
       return response;
     },
   });
 
-  return { data, refetch };
+  return { data };
 };
 
 export const useGetMember = () => {

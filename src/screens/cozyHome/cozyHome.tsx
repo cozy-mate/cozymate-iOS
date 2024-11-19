@@ -1,6 +1,6 @@
+import React, { useState, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React, { useState, Suspense, useEffect, useCallback } from 'react';
 import {
   Text,
   View,
@@ -15,22 +15,21 @@ import {
 
 import LoadingComponent from '@components/loading/loading';
 import Advertisement from '@components/common/advertisement';
+import UserComponent from '@components/cozyHome/userComponent';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
+import RecommendUserList from '@components/cozyHome/recommentUserList';
+import RecommendRoomList from '@components/cozyHome/recommendRoomList';
 import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
-import RecommendationSection from '@components/cozyHome/recommendationSection';
-import RecommendRoomComponent from '@components/cozyHome/recommendRoomComponent';
-import SameAnswerUserComponent from '@components/cozyHome/sameAnswerUserComponent';
 
 import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
-import { useGetRequestRooms } from '@hooks/api/room';
 import { useGetMemberList } from '@hooks/api/member-stat';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
+import { useGetRequestRooms, useGetRoomRequests } from '@hooks/api/room';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
-import { RoomItem, UserItem } from '@type/cozyHome/cozyHome';
 
 import HomeBack from '@assets/cozyHome/homeBack.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
@@ -50,40 +49,9 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const { roomInfo } = useRoomInfoStore();
 
   const { data: requestRoomList } = useGetRequestRooms();
+  const { data: requestMemberList } = useGetRoomRequests();
   const { data: userList } = useGetMemberList();
   const { data: roomList } = useGetRandomRoom(5);
-
-  const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
-  const [userCurrentIndex, setUserCurrentIndex] = useState<number>(0);
-
-  // 레이아웃이 변경될 때 크기를 계산하는 함수
-  const onLayoutUser = useCallback((event: LayoutChangeEvent) => {
-    const { width } = event.nativeEvent.layout;
-    setUserComponentWidth(width);
-  }, []);
-
-  // "이런 룸메이트는 어때요?" 부분의 유저 컴포넌트의 index가 변경될 때 현재 인덱스를 계산하는 메서드
-  const handleSameAnswerUserScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.floor(offsetX / userComponentWidth);
-    setUserCurrentIndex(index);
-  };
-
-  const [roomComponentWidth, setRoomComponentWidth] = useState<number>(0);
-  const [roomCurrentIndex, setRoomCurrentIndex] = useState<number>(0);
-
-  // 레이아웃이 변경될 때 크기를 계산하는 함수
-  const onLayoutRoom = useCallback((event: LayoutChangeEvent) => {
-    const { width } = event.nativeEvent.layout;
-    setRoomComponentWidth(width);
-  }, []);
-
-  // "꼭 맞는 방을 추천해드릴게요" 부분의 룸 컴포넌트의 index가 변경될 때 현재 인덱스를 계산하는 메서드
-  const handleRecommendRoomScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.floor(offsetX / roomComponentWidth);
-    setRoomCurrentIndex(index);
-  };
 
   // 학교 인증 관련
   const [school, setSchool] = useState<boolean>(false);
@@ -146,8 +114,8 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('RecommendRoomScreen');
   };
 
-  const toUserDetail = (user: UserItem) => {
-    navigation.navigate('UserDetailScreen', { memberId: user.memberDetail.memberId });
+  const toUserDetail = (memberId: number) => {
+    navigation.navigate('UserDetailScreen', { memberId: memberId });
   };
 
   const toRoomDetail = (roomId: number) => {
@@ -167,7 +135,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           }}
         />
         <ScrollView
-          className="flex-1"
+          // className="flex-1"
           onScroll={handleScroll}
           scrollEventThrottle={16}
           bounces={false}
@@ -264,62 +232,64 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
               </>
             )}
 
-            {!myRoom.hasRoom && (
-              <View className="px-5">
-                <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                  {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
-                </Text>
-                <View className="flex flex-col">
-                  {requestRoomList?.result.map((data, index) => (
-                    <RequestRoomComponent
-                      key={index}
-                      index={index}
-                      length={requestRoomList?.result.length}
-                      roomData={data}
-                      pressFunc={() => toRoomDetail(data.roomId)}
-                    />
-                  ))}
+            {!myRoom.hasRoom && requestRoomList?.result.length !== 0 && (
+              <>
+                <View className="px-5">
+                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                    {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
+                  </Text>
+                  <View className="flex flex-col">
+                    {requestRoomList?.result.map((data, index) => (
+                      <RequestRoomComponent
+                        key={index}
+                        index={index}
+                        length={requestRoomList.result.length}
+                        roomData={data}
+                        pressFunc={() => toRoomDetail(data.roomId)}
+                      />
+                    ))}
+                  </View>
                 </View>
+
                 <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-              </View>
+              </>
             )}
 
-            <RecommendationSection<UserItem>
-              title={`${profile.nickname}님과\n꼭 맞는 룸메이트를 추천해드릴게요`}
-              onPressMore={toRoomMate}
-              dataList={userList.result.memberList}
-              onScrollHandler={handleSameAnswerUserScroll}
-              snapToInterval={userComponentWidth}
-              renderItem={(data, index, onLayout) => (
-                <SameAnswerUserComponent
-                  key={index}
-                  userData={data}
-                  onLayout={onLayout}
-                  pressFunc={() => toUserDetail(data)}
-                />
-              )}
-              onLayout={onLayoutUser}
-              currentIndex={userCurrentIndex}
+            {myRoom.hasRoom && roomInfo.isRoomManager && (
+              <>
+                <View className="px-5">
+                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+                    {requestMemberList?.result.length}개의{'\n'}방 참여 요청이 도착했어요
+                  </Text>
+                  <View className="flex flex-col">
+                    {requestMemberList?.result.map((data, index) => (
+                      <UserComponent
+                        key={data.memberId}
+                        index={index}
+                        length={requestMemberList?.result.length}
+                        userData={data}
+                        pressFunc={() => toUserDetail(data.memberId)}
+                      />
+                    ))}
+                  </View>
+                </View>
+
+                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+              </>
+            )}
+
+            <RecommendUserList
+              users={userList.result.memberList}
+              toUserDetail={toUserDetail}
+              toRoommate={toRoomMate}
             />
 
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
-            <RecommendationSection<RoomItem>
-              title={`${profile.nickname}님과\n꼭 맞는 방을 추천해드릴게요`}
-              onPressMore={toRecommendRoom}
-              dataList={roomList.result.recommendations}
-              onScrollHandler={handleRecommendRoomScroll}
-              snapToInterval={roomComponentWidth}
-              renderItem={(data, index, onLayout) => (
-                <RecommendRoomComponent
-                  key={index}
-                  roomData={data}
-                  onLayout={onLayout}
-                  pressFunc={() => toRoomDetail(data.roomId)}
-                />
-              )}
-              onLayout={onLayoutRoom}
-              currentIndex={roomCurrentIndex}
+            <RecommendRoomList
+              rooms={roomList.result.recommendations}
+              toRoomDetail={toRoomDetail}
+              toRoomRecommend={toRecommendRoom}
             />
 
             <View className="h-[25px]" />
@@ -342,8 +312,16 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
 const CozyHomeScreen = ({ navigation, route }: CozyHomeScreenProps) => {
   return (
-    <ErrorBoundary fallback={<Text>Error loading CozyHome</Text>}>
-      <CozyHome navigation={navigation} route={route} />
+    <ErrorBoundary
+      fallback={
+        <View className="h-full w-full flex-1 items-center justify-center">
+          <Text>Error loading CozyHome</Text>
+        </View>
+      }
+    >
+      <Suspense fallback={<LoadingComponent />}>
+        <CozyHome navigation={navigation} route={route} />
+      </Suspense>
     </ErrorBoundary>
   );
 };

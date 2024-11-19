@@ -117,7 +117,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
                     <RightArrow />
                   </View>
                 ) : (
-                  <View>
+                  <View className="flex flex-row items-center">
                     <Text className="mr-1 text-sm font-medium text-disabledFont">
                       아직 방이 존재하지 않아요
                     </Text>
