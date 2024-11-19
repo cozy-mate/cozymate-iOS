@@ -14,6 +14,7 @@ export type StackParamList = {
 
   // 방 추천 스크린
   RecommendRoomScreen: undefined;
+  RoomSearchScreen: undefined;
 
   // 롤앤룰 스크린
   RoleNRuleScreen: undefined;
@@ -79,7 +80,7 @@ export type StackParamList = {
   NotificationScreen: undefined;
 
   // 검색 스크린
-  SearchScreen: { type: string };
+  UserSearchScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
@@ -105,6 +106,7 @@ export type RecommendRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'RecommendRoomScreen'
 >;
+export type RoomSearchScreenProps = NativeStackScreenProps<StackParamList, 'RoomSearchScreen'>;
 
 // 롤앤룰 스크린
 export type RoleNRuleScreenProps = NativeStackScreenProps<StackParamList, 'RoleNRuleScreen'>;
@@ -199,4 +201,4 @@ export type SendChatScreenProps = NativeStackScreenProps<StackParamList, 'SendCh
 export type NotificationScreenProps = NativeStackScreenProps<StackParamList, 'NotificationScreen'>;
 
 // 검색 스크린
-export type SearchScreenProps = NativeStackScreenProps<StackParamList, 'SearchScreen'>;
+export type UserSearchScreenProps = NativeStackScreenProps<StackParamList, 'UserSearchScreen'>;

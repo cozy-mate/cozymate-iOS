@@ -15,7 +15,7 @@ interface RecommendRoomProps {
     equality: number;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number>;
+    equalMemberStatNum: Record<string, number> | null;
   };
   onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: (roomId: number) => void;
@@ -38,21 +38,24 @@ const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-4">
         <Text className="pl-2 text-base font-semibold text-basicFont">{room.name}</Text>
-        <Text className="text-base font-medium text-main1">{room.equality}%</Text>
+        <Text className="text-base font-medium text-main1">
+          {room.equality !== null ? room.equality : '?? '}%
+        </Text>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-4">
-        {Object.entries(room.equalMemberStatNum).map(([key, value], index) => (
-          <View key={index} className="flex w-[50px] flex-col items-center">
-            {isLifestyleOptionKey(key)
-              ? getRoomLifeStyleIcon(
-                  key,
-                  value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                  value === room.numOfArrival ? '모두 일치' : `${value}명 일치`,
-                )
-              : null}
-          </View>
-        ))}
+        {room.equalMemberStatNum !== null &&
+          Object.entries(room.equalMemberStatNum).map(([key, value], index) => (
+            <View key={index} className="flex w-[50px] flex-col items-center">
+              {isLifestyleOptionKey(key)
+                ? getRoomLifeStyleIcon(
+                    key,
+                    value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
+                    value === room.numOfArrival ? '모두 일치' : `${value}명 일치`,
+                  )
+                : null}
+            </View>
+          ))}
       </View>
 
       <View className="flex flex-row items-center justify-between">

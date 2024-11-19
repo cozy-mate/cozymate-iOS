@@ -95,7 +95,7 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
         <View className="flex-1 flex-col justify-between">
           <ScrollView bounces={false} className="flex-1">
             <View>
-              <View className="mb-3 mt-2 flex flex-row justify-between px-3">
+              <View className="mb-3 mt-2 flex flex-row justify-between px-5">
                 <Pressable onPress={toMyPage}>
                   <BackButton />
                 </Pressable>

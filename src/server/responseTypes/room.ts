@@ -56,6 +56,15 @@ export interface GetInvitedMembersResponse {
   }[];
 }
 
+export interface SearchRoomByKeywordResponse {
+  result: {
+    roomId: number;
+    name: string;
+    arrivalMateNum: number;
+    equality: number;
+  }[];
+}
+
 export interface GetRequestRoomsResponse {
   result: {
     roomId: number;

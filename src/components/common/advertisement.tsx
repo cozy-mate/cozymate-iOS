@@ -12,20 +12,20 @@ interface ADItem {
 const Advertisement: React.FC = () => {
   const width = Dimensions.get('screen').width;
 
-  const [adArray, setAdArray] = useState<ADItem[]>([
+  const adArray: ADItem[] = [
     { index: 1, element: <Advertisement1 width={width} /> },
     { index: 2, element: <Advertisement2 width={width} /> },
-  ]);
+  ];
 
-  const [currentAdIndex, setCurrentAdIndex] = useState(0); // 현재 광고 인덱스 관리
-  const adDisplayInterval = 5000; // 광고가 변경되는 시간 간격 (밀리초)
+  const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
+  const adDisplayInterval = 5000;
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentAdIndex((prevIndex) => (prevIndex + 1) % adArray.length);
     }, adDisplayInterval);
 
-    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 제거
+    return () => clearInterval(interval);
   }, [adArray.length]);
 
   return (

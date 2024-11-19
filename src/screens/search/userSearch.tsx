@@ -7,13 +7,11 @@ import { useSearchMemberByKeyword } from '@hooks/api/member-stat';
 
 import { getProfileImage } from '@utils/profileImage';
 
-import { SearchScreenProps } from '@type/param/stack';
+import { UserSearchScreenProps } from '@type/param/stack';
 
 import XButton from '@assets/search/xButton.svg';
 
-const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
-  const { type } = route.params;
-
+const UserSearchScreen = ({ navigation }: UserSearchScreenProps) => {
   const [keyword, setKeyword] = useState<string>('');
   const [debouncedKeyword, setDebouncedKeyword] = useState<string>('');
 
@@ -94,7 +92,7 @@ const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
                         user.equality > 50 ? 'text-main1' : 'text-colorFont'
                       }`}
                     >
-                      {user.equality}%
+                      {user.equality !== null ? user.equality : '?? '}%
                     </Text>
                   </Pressable>
                 ))
@@ -111,4 +109,4 @@ const SearchScreen = ({ navigation, route }: SearchScreenProps) => {
   );
 };
 
-export default SearchScreen;
+export default UserSearchScreen;

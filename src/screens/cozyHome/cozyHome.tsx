@@ -51,7 +51,9 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const { data: requestRoomList } = useGetRequestRooms();
   const { data: requestMemberList } = useGetRoomRequests();
   const { data: userList } = useGetMemberList();
-  const { data: roomList } = useGetRandomRoom(5);
+  const { data: roomList } = useGetRandomRoom(5, 0);
+
+  console.log(roomList.result.result);
 
   // 학교 인증 관련
   const [school, setSchool] = useState<boolean>(false);
@@ -287,7 +289,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
             <View className="my-6 h-2.5 bg-[#F7F9FA]" />
 
             <RecommendRoomList
-              rooms={roomList.result.recommendations}
+              rooms={roomList.result.result.recommendations}
               toRoomDetail={toRoomDetail}
               toRoomRecommend={toRecommendRoom}
             />

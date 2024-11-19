@@ -6,13 +6,15 @@ import { GetRandomRoomResponse } from '@server/responseTypes/room-recommend';
 // 방 추천 리스트 조회
 export const useGetRandomRoom = (
   size: number,
+  page: number,
+  sortType?: string,
 ): {
   data: GetRandomRoomResponse;
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
-    queryKey: ['recommendrooms'],
-    queryFn: () => getRandomRoom(size),
+    queryKey: ['recommendrooms', size, page, sortType],
+    queryFn: () => getRandomRoom(size, page, sortType),
     select: (response: GetRandomRoomResponse) => {
       return response;
     },

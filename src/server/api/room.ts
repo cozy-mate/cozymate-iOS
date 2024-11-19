@@ -35,6 +35,7 @@ import {
   DeleteRoomRequestResponse,
   DeleteInviteMemberResponse,
   AcceptRequestMemberResponse,
+  SearchRoomByKeywordResponse,
   GetRoomDataByInviteCodeResponse,
 } from '@server/responseTypes/room';
 
@@ -90,6 +91,17 @@ export const getInvitedMembers = async (roomId: number): Promise<GetInvitedMembe
   const response = await GetAxiosInstance<GetInvitedMembersResponse>(
     `/rooms/${roomId}/invited-members`,
   );
+
+  return response.data;
+};
+
+// 방 검색
+export const searchRoomByKeyword = async (
+  keyword: string,
+): Promise<SearchRoomByKeywordResponse> => {
+  const response = await GetAxiosInstance<SearchRoomByKeywordResponse>(`/rooms/search`, {
+    params: { keyword: keyword },
+  });
 
   return response.data;
 };
