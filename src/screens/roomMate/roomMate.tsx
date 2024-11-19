@@ -4,10 +4,11 @@ import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 import UserComponent from '@components/roomMate/userComponent';
 import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
+import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { useSearchMembers } from '@hooks/api/member-stat';
+import { useSearchMembers, useGetRandomMember } from '@hooks/api/member-stat';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 
@@ -20,19 +21,17 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   const [filterList, setFilterList] = useState<string[]>([]);
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleModal = () => {
-    setIsModalOpen(false);
-  };
-
+  // 라이프스타일이 있는 사용자
   const { fetchNextPage, hasNextPage, ...result } = useSearchMembers(filterList);
-
+  // 무한 스크롤
   const loadMoreList = () => {
     if (hasNextPage) {
       fetchNextPage();
     }
   };
+
+  // 라이프스타일이 없는 사용자
+  const { data: userList } = useGetRandomMember();
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -66,11 +65,15 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   };
 
   const toSearch = () => {
-    navigation.navigate('SearchScreen', { type: 'user' });
+    navigation.navigate('UserSearchScreen');
   };
 
   const toOtherDetail = (memberId: number) => {
     navigation.navigate('UserDetailScreen', { memberId: memberId });
+  };
+
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
   };
 
   const handleScroll = (event: any) => {
@@ -81,6 +84,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     if (contentHeight - contentOffsetY - layoutHeight < 100) {
       loadMoreList();
     }
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -98,8 +107,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         scrollEventThrottle={16}
         bounces={false}
       >
-        <View className="mb-4 flex flex-row items-center justify-between pr-5">
-          <Text className="px-5 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
+        <View className="mb-4 mt-6 flex flex-row items-center justify-between pr-5">
+          <Text className="px-6 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
             원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
           </Text>
           <Pressable onPress={() => setIsModalOpen(true)}>
@@ -130,7 +139,26 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           setItems={setItems}
         />
 
-        {/* 사용자 목록 */}
+        {/* 라이프스타일이 없는 사용자 컴포넌트 (필터링 칩 클릭 시 데이터 안보임) */}
+        <View className="px-5">
+          {!hasLifeStyle &&
+            filterList.length === 0 &&
+            userList?.result &&
+            userList?.result.memberList.map((user) => (
+              <UserComponent
+                key={user.memberDetail.memberId}
+                user={user}
+                toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
+              />
+            ))}
+
+          <NoLifeStyleComponent
+            pressFunc={toLifeStyleOnboarding}
+            isChipClicked={filterList.length !== 0}
+          />
+        </View>
+
+        {/* 라이프스타일이 있는 사용자 컴포넌트 */}
         <View className="px-5">
           {hasLifeStyle && result.data?.pages ? (
             result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
@@ -148,19 +176,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
             )
           ) : null}
         </View>
-
-        {/* //   ) : (
-          //     <View>
-          //       <Text>비어있음</Text>
-          //     </View>
-          //   )
-          // ) : userList?.result?.memberList.length > 0 || filterList.length > 0 ? (
-          //   <NoLifeStyleComponent />
-          // ) : (
-          //   <View>
-          //     <Text>비어있음</Text>
-          //   </View>
-          // ) */}
       </ScrollView>
 
       {isModalOpen && <FilteringModal onClose={handleModal} />}

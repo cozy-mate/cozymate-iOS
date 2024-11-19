@@ -9,7 +9,6 @@ import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
 import MyInfoScreen from 'src/screens/myPage/myInfo';
-import SearchScreen from 'src/screens/search/search';
 import FeedMainScreen from 'src/screens/feed/feedMain';
 import FeedEditScreen from 'src/screens/feed/feedEdit';
 import FeedViewScreen from 'src/screens/feed/feedView';
@@ -18,16 +17,16 @@ import WithdrawScreen from 'src/screens/myPage/withdraw';
 import CompleteScreen from 'src/screens/onBoard/complete';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
-import TodoListScreen from 'src/screens/todoList/todoList';
 import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import ChatRoomScreen from 'src/screens/chatting/chatRoom';
 import SendChatScreen from 'src/screens/chatting/sendChat';
 import EditRoomScreen from 'src/screens/editRoom/editRoom';
+import RoomSearchScreen from 'src/screens/search/roomSearch';
+import UserSearchScreen from 'src/screens/search/userSearch';
 import ChipSelectScreen from 'src/screens/onBoard/chipSelect';
 import RoleNRuleScreen from 'src/screens/roleNrule/roleNrule';
-import CreateTodoScreen from 'src/screens/todoList/createTodo';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
@@ -88,13 +87,11 @@ function AppInner() {
           <stack.Screen name="RoomMainScreen" component={RoomMainScreen} />
           <stack.Screen name="RoomDetailScreen" component={RoomDetailScreen} />
           <stack.Screen name="RecommendRoomScreen" component={RecommendRoomScreen} />
+          <stack.Screen name="RoomSearchScreen" component={RoomSearchScreen} />
 
           <stack.Screen name="RoleNRuleScreen" component={RoleNRuleScreen} />
           <stack.Screen name="CreateRoleNRuleScreen" component={CreateRoleNRuleScreen} />
           <stack.Screen name="EditRoleNRuleScreen" component={EditRoleNRuleScreen} />
-
-          <stack.Screen name="TodoListScreen" component={TodoListScreen} />
-          <stack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
 
           <stack.Screen name="LifeStyleOnboardingScreen" component={LifeStyleOnboardingScreen} />
           <stack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
@@ -113,6 +110,7 @@ function AppInner() {
           <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
 
           <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
+          <stack.Screen name="UserSearchScreen" component={UserSearchScreen} />
           <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
 
           <stack.Screen name="FeedMainScreen" component={FeedMainScreen} />
@@ -132,8 +130,6 @@ function AppInner() {
           <stack.Screen name="SendChatScreen" component={SendChatScreen} />
 
           <stack.Screen name="NotificationScreen" component={NotificationScreen} />
-
-          <stack.Screen name="SearchScreen" component={SearchScreen} />
         </stack.Navigator>
       ) : (
         <rootStack.Navigator screenOptions={{ headerShown: false }}>

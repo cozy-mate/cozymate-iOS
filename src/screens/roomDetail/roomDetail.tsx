@@ -34,6 +34,7 @@ import SettingIcon from '@assets/settingIcon.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
+import FilledHeart from '@assets/userDetail/filledHeart.svg';
 
 interface MemberItem {
   memberId: number;
@@ -204,9 +205,16 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
                   <MessageIcon />
                 </Pressable>
-                <Pressable onPress={dibsRoom}>
-                  <HeartIcon />
-                </Pressable>
+
+                {roomData.result.isFavorited ? (
+                  <Pressable onPress={dibsRoom} className="px-2.5 py-[11px]">
+                    <FilledHeart />
+                  </Pressable>
+                ) : (
+                  <Pressable onPress={dibsRoom} className="px-2.5 py-[11px]">
+                    <HeartIcon />
+                  </Pressable>
+                )}
               </View>
             ) : roomData.result.isRoomManager ? (
               <View>

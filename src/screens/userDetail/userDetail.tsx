@@ -24,6 +24,7 @@ import BackButton from '@assets/backButton.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
+import FilledHeart from '@assets/userDetail/filledHeart.svg';
 import NotSelectedListIcon from '@assets/userDetail/listIcon.svg';
 import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
 import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
@@ -49,6 +50,8 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
 
   const { mutateAsync: dibsUser } = useDibsOnUser(memberId);
+
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
 
   const handleReportModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
@@ -93,9 +96,15 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                   <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
                     <MessageIcon />
                   </Pressable>
-                  <Pressable onPress={dibsUser}>
-                    <HeartIcon />
-                  </Pressable>
+                  {isFavorited ? (
+                    <Pressable onPress={dibsUser} className="px-2.5 py-[11px]">
+                      <FilledHeart />
+                    </Pressable>
+                  ) : (
+                    <Pressable onPress={dibsUser} className="px-2.5 py-[11px]">
+                      <HeartIcon />
+                    </Pressable>
+                  )}
                 </View>
               )}
             </View>
@@ -125,23 +134,6 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                   </Text>
                 </Pressable>
               )}
-
-              {/* : lifeStyleData.result.roomId !== 0 ? (
-                <Pressable
-                  onPress={toUserRoom}
-                  className="mt-5 rounded-xl border border-main1 bg-sub2 p-3"
-                >
-                  <Text className="text-center text-sm font-semibold text-main1">
-                    {lifeStyleData.result.memberDetail.nickname}님이 속한 방 보러가기
-                  </Text>
-                </Pressable>
-              ) : (
-                <View className="mt-5 rounded-xl border border-disabledFont bg-colorBox p-3">
-                  <Text className="text-center text-sm font-semibold text-disabledFont">
-                    {lifeStyleData.result.memberDetail.nickname}님은 아직 속한 방이 없어요
-                  </Text>
-                </View>
-              )} */}
             </View>
 
             <View className="mt-5 flex-1 rounded-t-[20px] bg-white pt-3">

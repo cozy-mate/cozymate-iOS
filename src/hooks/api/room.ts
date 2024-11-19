@@ -19,6 +19,7 @@ import {
   getRoomRequests,
   changeRoomPublic,
   deleteRoomRequest,
+  searchRoomByKeyword,
 } from '@server/api/room';
 import {
   ExitRoomResponse,
@@ -30,6 +31,7 @@ import {
   GetRoomRequestsResponse,
   ChangeRoomPublicResponse,
   DeleteRoomRequestResponse,
+  SearchRoomByKeywordResponse,
 } from '@server/responseTypes/room';
 
 export const useCheckHasRoom = (): {
@@ -133,5 +135,16 @@ export const useChangeRoomPublic = (
 ): UseMutationResult<ChangeRoomPublicResponse, void, unknown, unknown> => {
   return useMutation({
     mutationFn: () => changeRoomPublic(roomId),
+  });
+};
+
+// 방 검색
+export const useSearchRoomByKeyword = (
+  keyword: string,
+): UseQueryResult<SearchRoomByKeywordResponse> => {
+  return useQuery({
+    queryKey: [`/rooms/search`, keyword],
+    queryFn: () => searchRoomByKeyword(keyword),
+    enabled: keyword !== '',
   });
 };

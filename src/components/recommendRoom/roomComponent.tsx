@@ -13,9 +13,9 @@ interface RoomComponentProps {
     equality: number;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number>;
+    equalMemberStatNum: Record<string, number> | null;
   };
-  pressFunc?: (memberId: number) => void;
+  pressFunc: (roomId: number) => void;
 }
 
 const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, pressFunc }) => {
@@ -23,7 +23,7 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, pressFunc }) =>
 
   return (
     <Pressable
-      //   onPress={() => pressFunc(userData.memberStatPreferenceDetail.memberDetail.memberId)}
+      onPress={() => pressFunc(roomData.roomId)}
       className="flex flex-col rounded-xl border border-disabled px-4 py-5"
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
@@ -34,15 +34,16 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, pressFunc }) =>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-3">
-        {Object.entries(roomData.equalMemberStatNum).map(([key, value], index) => (
-          <View key={index} className="flex w-[60px] flex-col items-center">
-            {getRoomLifeStyleIcon(
-              key,
-              value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-              value === roomData.numOfArrival ? '모두 일치' : `${value}명 일치`,
-            )}
-          </View>
-        ))}
+        {roomData.equalMemberStatNum !== null &&
+          Object.entries(roomData.equalMemberStatNum).map(([key, value], index) => (
+            <View key={index} className="flex w-[60px] flex-col items-center">
+              {getRoomLifeStyleIcon(
+                key,
+                value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
+                value === roomData.numOfArrival ? '모두 일치' : `${value}명 일치`,
+              )}
+            </View>
+          ))}
       </View>
 
       <View className="flex flex-row items-center justify-between">

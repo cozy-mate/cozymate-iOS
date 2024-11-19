@@ -7,23 +7,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AppInner from './AppInner';
 
-const queryClient = new QueryClient();
-//   {
-//   defaultOptions: {
-//     queries: {
-//       staleTime: 0,
-//     },
-//   },
-// }
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+    },
+  },
+});
 
 function App(): React.JSX.Element {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (SplashScreen) {
-        SplashScreen.hide();
-      }
-    }, 3000);
-    return () => clearTimeout(timer);
+    SplashScreen.hide();
   }, []);
 
   return (

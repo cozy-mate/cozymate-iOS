@@ -44,15 +44,18 @@ export const useGetMemberStatData = (
 
 // 사용자 랜덤 추천
 export const useGetRandomMember = (): {
-  data: GetRandomMemberResponse;
+  data: GetRandomMemberResponse | undefined;
   refetch: () => void;
 } => {
-  const { data, refetch } = useSuspenseQuery({
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  const { data, refetch } = useQuery({
     queryKey: ['randomMemberList'],
     queryFn: () => getRandomMember(),
     select: (reseponse: GetRandomMemberResponse) => {
       return reseponse;
     },
+    enabled: !hasLifeStyle,
   });
 
   return { data, refetch };

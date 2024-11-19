@@ -14,6 +14,7 @@ export type StackParamList = {
 
   // 방 추천 스크린
   RecommendRoomScreen: undefined;
+  RoomSearchScreen: undefined;
 
   // 롤앤룰 스크린
   RoleNRuleScreen: undefined;
@@ -21,14 +22,6 @@ export type StackParamList = {
   EditRoleNRuleScreen: {
     type: string;
     id: number;
-  };
-
-  // 롤앤룰 스크린
-  TodoListScreen: undefined;
-  CreateTodoScreen: {
-    type: 'todo' | 'role' | 'rule';
-    mode: 'create' | 'edit';
-    id?: number;
   };
 
   // 라이프 스타일 입력 스크린
@@ -79,7 +72,7 @@ export type StackParamList = {
   NotificationScreen: undefined;
 
   // 검색 스크린
-  SearchScreen: { type: string };
+  UserSearchScreen: undefined;
 };
 
 export type TabNavigatorParamList = {
@@ -105,6 +98,7 @@ export type RecommendRoomScreenProps = NativeStackScreenProps<
   StackParamList,
   'RecommendRoomScreen'
 >;
+export type RoomSearchScreenProps = NativeStackScreenProps<StackParamList, 'RoomSearchScreen'>;
 
 // 롤앤룰 스크린
 export type RoleNRuleScreenProps = NativeStackScreenProps<StackParamList, 'RoleNRuleScreen'>;
@@ -116,10 +110,6 @@ export type EditRoleNRuleScreenProps = NativeStackScreenProps<
   StackParamList,
   'EditRoleNRuleScreen'
 >;
-
-// 롤앤룰 스크린
-export type TodoListScreenProps = NativeStackScreenProps<StackParamList, 'TodoListScreen'>;
-export type CreateTodoScreenProps = NativeStackScreenProps<StackParamList, 'CreateTodoScreen'>;
 
 // 라이프 스타일 입력 스크린
 export type LifeStyleOnboardingScreenProps = NativeStackScreenProps<
@@ -199,4 +189,4 @@ export type SendChatScreenProps = NativeStackScreenProps<StackParamList, 'SendCh
 export type NotificationScreenProps = NativeStackScreenProps<StackParamList, 'NotificationScreen'>;
 
 // 검색 스크린
-export type SearchScreenProps = NativeStackScreenProps<StackParamList, 'SearchScreen'>;
+export type UserSearchScreenProps = NativeStackScreenProps<StackParamList, 'UserSearchScreen'>;
