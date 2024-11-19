@@ -28,6 +28,7 @@ export interface GetRoomDataResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -81,6 +82,7 @@ export interface GetRequestRoomsResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -121,6 +123,7 @@ export interface GetRoomDataByInviteCodeResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -151,6 +154,7 @@ export interface GetInvitedRoomsResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -197,6 +201,7 @@ export interface UpdateRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -263,6 +268,7 @@ export interface CreatePublicRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -293,6 +299,7 @@ export interface CreatePrivateRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
+    isFavorited: boolean;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;

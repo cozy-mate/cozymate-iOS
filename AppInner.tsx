@@ -17,7 +17,6 @@ import WithdrawScreen from 'src/screens/myPage/withdraw';
 import CompleteScreen from 'src/screens/onBoard/complete';
 import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
-import TodoListScreen from 'src/screens/todoList/todoList';
 import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
 import FeedCreateScreen from 'src/screens/feed/feedCreate';
@@ -28,7 +27,6 @@ import RoomSearchScreen from 'src/screens/search/roomSearch';
 import UserSearchScreen from 'src/screens/search/userSearch';
 import ChipSelectScreen from 'src/screens/onBoard/chipSelect';
 import RoleNRuleScreen from 'src/screens/roleNrule/roleNrule';
-import CreateTodoScreen from 'src/screens/todoList/createTodo';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
@@ -94,9 +92,6 @@ function AppInner() {
           <stack.Screen name="RoleNRuleScreen" component={RoleNRuleScreen} />
           <stack.Screen name="CreateRoleNRuleScreen" component={CreateRoleNRuleScreen} />
           <stack.Screen name="EditRoleNRuleScreen" component={EditRoleNRuleScreen} />
-
-          <stack.Screen name="TodoListScreen" component={TodoListScreen} />
-          <stack.Screen name="CreateTodoScreen" component={CreateTodoScreen} />
 
           <stack.Screen name="LifeStyleOnboardingScreen" component={LifeStyleOnboardingScreen} />
           <stack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />

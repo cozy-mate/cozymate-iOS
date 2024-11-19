@@ -24,14 +24,6 @@ export type StackParamList = {
     id: number;
   };
 
-  // 롤앤룰 스크린
-  TodoListScreen: undefined;
-  CreateTodoScreen: {
-    type: 'todo' | 'role' | 'rule';
-    mode: 'create' | 'edit';
-    id?: number;
-  };
-
   // 라이프 스타일 입력 스크린
   LifeStyleOnboardingScreen: undefined;
   BasicLifeStyleScreen: undefined;
@@ -118,10 +110,6 @@ export type EditRoleNRuleScreenProps = NativeStackScreenProps<
   StackParamList,
   'EditRoleNRuleScreen'
 >;
-
-// 롤앤룰 스크린
-export type TodoListScreenProps = NativeStackScreenProps<StackParamList, 'TodoListScreen'>;
-export type CreateTodoScreenProps = NativeStackScreenProps<StackParamList, 'CreateTodoScreen'>;
 
 // 라이프 스타일 입력 스크린
 export type LifeStyleOnboardingScreenProps = NativeStackScreenProps<

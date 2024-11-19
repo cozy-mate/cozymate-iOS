@@ -36,6 +36,7 @@ export type RoomInfo = {
   managerMemberId: number;
   managerNickname: string;
   isRoomManager: boolean;
+  isFavorited: boolean;
   maxMateNum: number;
   arrivalMateNum: number;
   dormitoryName: string;
@@ -64,6 +65,7 @@ export type InviteCodeRoomInfo = {
   managerMemberId: number;
   managerNickname: string;
   isRoomManager: boolean;
+  isFavorited: boolean;
   maxMateNum: number;
   arrivalMateNum: number;
   dormitoryName: string;
