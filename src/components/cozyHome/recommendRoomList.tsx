@@ -82,7 +82,7 @@ const RecommendRoomList: React.FC<RecommendRoomListProps> = ({
       />
 
       <View className="mt-4 flex flex-row justify-center space-x-2">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: rooms.length }).map((_, index) => (
           <View
             key={index}
             className={`${

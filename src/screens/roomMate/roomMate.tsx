@@ -21,20 +21,17 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
   const [filterList, setFilterList] = useState<string[]>([]);
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleModal = () => {
-    setIsModalOpen(false);
-  };
-
+  // 라이프스타일이 있는 사용자
   const { fetchNextPage, hasNextPage, ...result } = useSearchMembers(filterList);
-  const { data: userList } = useGetRandomMember();
-
+  // 무한 스크롤
   const loadMoreList = () => {
     if (hasNextPage) {
       fetchNextPage();
     }
   };
+
+  // 라이프스타일이 없는 사용자
+  const { data: userList } = useGetRandomMember();
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -87,6 +84,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     if (contentHeight - contentOffsetY - layoutHeight < 100) {
       loadMoreList();
     }
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
