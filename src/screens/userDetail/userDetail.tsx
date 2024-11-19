@@ -1,5 +1,6 @@
-import React, { useState, Fragment, useCallback } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useState, Fragment, Suspense, useCallback } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
 import ListView from '@components/userDetail/listView';
@@ -28,7 +29,7 @@ import NotSelectedTableIcon from '@assets/userDetail/tableIcon.svg';
 import SelectedListIcon from '@assets/userDetail/coloredListIcon.svg';
 import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 
-const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
+const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
   const { memberId } = route.params;
 
   const { myRoom } = useHasRoomStore();
@@ -239,6 +240,28 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
         <ReportModal memberId={memberId} source="MEMBER_STAT" closeModal={handleReportModal} />
       )}
     </Fragment>
+  );
+};
+
+const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
+  return (
+    <ErrorBoundary
+      fallback={
+        <View className="h-full w-full flex-1 items-center justify-center">
+          <Text>Error loading CozyHome</Text>
+        </View>
+      }
+    >
+      <Suspense
+        fallback={
+          <View className="h-full w-full flex-1 items-center justify-center">
+            <Text>서스펜스 에러</Text>
+          </View>
+        }
+      >
+        <UserDetail navigation={navigation} route={route} />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

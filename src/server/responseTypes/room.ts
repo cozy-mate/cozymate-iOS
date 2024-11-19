@@ -42,6 +42,10 @@ export interface GetRoomDataResponse {
   };
 }
 
+export interface CheckRequestedResponse {
+  result: boolean;
+}
+
 export interface GetInvitedMembersResponse {
   result: {
     memberId: number;
@@ -79,6 +83,16 @@ export interface GetRequestRoomsResponse {
       red: LifestyleOptionKey[];
       white: LifestyleOptionKey[];
     };
+  }[];
+}
+
+export interface GetRoomRequestsResponse {
+  result: {
+    memberId: number;
+    mateId: number;
+    nickname: string;
+    persona: number;
+    mateEquality: number;
   }[];
 }
 

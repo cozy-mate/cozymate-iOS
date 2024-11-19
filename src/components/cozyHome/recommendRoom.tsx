@@ -7,8 +7,8 @@ import {
   getRoomLifeStyleIcon,
 } from '@utils/getLifeStyleIcon';
 
-interface RecommendRoomComponentProps {
-  roomData: {
+interface RecommendRoomProps {
+  room: {
     roomId: number;
     name: string;
     hashtags: string[];
@@ -21,11 +21,7 @@ interface RecommendRoomComponentProps {
   pressFunc: (roomId: number) => void;
 }
 
-const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
-  roomData,
-  onLayout,
-  pressFunc,
-}) => {
+const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc }) => {
   const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
     return key in lifestyleOptions;
   };
@@ -35,24 +31,24 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
 
   return (
     <Pressable
-      onPress={() => pressFunc(roomData.roomId)}
+      onPress={() => pressFunc(room.roomId)}
       style={{ width: calculatedWidth }}
       className="flex flex-col rounded-xl border border-disabled px-4 pb-[18px] pt-5"
       onLayout={onLayout}
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-4">
-        <Text className="pl-2 text-base font-semibold text-basicFont">{roomData.name}</Text>
-        <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
+        <Text className="pl-2 text-base font-semibold text-basicFont">{room.name}</Text>
+        <Text className="text-base font-medium text-main1">{room.equality}%</Text>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-4">
-        {Object.entries(roomData.equalMemberStatNum).map(([key, value], index) => (
+        {Object.entries(room.equalMemberStatNum).map(([key, value], index) => (
           <View key={index} className="flex w-[50px] flex-col items-center">
             {isLifestyleOptionKey(key)
               ? getRoomLifeStyleIcon(
                   key,
-                  value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                  value === roomData.numOfArrival ? '모두 일치' : `${value}명 일치`,
+                  value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
+                  value === room.numOfArrival ? '모두 일치' : `${value}명 일치`,
                 )
               : null}
           </View>
@@ -61,7 +57,7 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
 
       <View className="flex flex-row items-center justify-between">
         <View className="flex flex-row">
-          {roomData.hashtags.map((hash, index) => (
+          {room.hashtags.map((hash, index) => (
             <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-0.5">
               <Text className="text-xs font-medium text-colorFont">#{hash}</Text>
             </View>
@@ -70,7 +66,7 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
 
         <View className="flex flex-row items-center">
           <Text className="text-xs font-medium text-disabledFont">
-            {roomData.numOfArrival} / {roomData.maxMateNum}명
+            {room.numOfArrival} / {room.maxMateNum}명
           </Text>
         </View>
       </View>
@@ -78,4 +74,4 @@ const RecommendRoomComponent: React.FC<RecommendRoomComponentProps> = ({
   );
 };
 
-export default RecommendRoomComponent;
+export default RecommendRoom;

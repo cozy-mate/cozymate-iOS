@@ -113,11 +113,11 @@ export interface GetRandomMemberResponse {
         nickname: string;
         gender: string;
         birthday: string;
-        universityName: string;
+        universityName: string | null;
         majorName: string | null;
         persona: number;
       };
-      equality: number;
+      equality: number | null;
       preferenceStats: Record<string, string | number | null>;
     }[];
   };
@@ -137,12 +137,12 @@ export interface SearchMembersResponse {
         nickname: string;
         gender: string;
         birthday: string;
-        universityName: string;
-        majorName: string;
+        universityName: string | null;
+        majorName: string | null;
         persona: number;
       };
-      equality: number;
-      preferenceStats: Record<string, string | number>;
+      equality: number | null;
+      preferenceStats: Record<string, string | number | null>;
     }[];
   };
 }

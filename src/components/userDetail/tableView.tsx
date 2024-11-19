@@ -85,6 +85,10 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
 
     const keys = Object.keys(labels).filter((key) => key in my || key in other);
 
+    const areArraysEqual = (arr1: string[], arr2: string[]) => {
+      return JSON.stringify(arr1) === JSON.stringify(arr2);
+    };
+
     return (
       <View className="mb-[7px] mt-4 flex rounded-xl border border-[#f1f2f4] p-4">
         <View className="w-full leading-loose">
@@ -102,8 +106,10 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                     <Text
                       className={`text-center font-medium tracking-tight text-basicFont ${
                         key !== 'nickname' &&
-                        key !== 'nickname' &&
                         my[key] !== other[key] &&
+                        (key === 'sleepingHabit' || key === 'personality'
+                          ? !areArraysEqual(my[key], other[key])
+                          : my[key] !== other[key]) &&
                         (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
                       }`}
                     >
@@ -115,8 +121,10 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                     <Text
                       className={`text-center font-medium tracking-tight text-basicFont ${
                         key !== 'nickname' &&
-                        key !== 'nickname' &&
                         my[key] !== other[key] &&
+                        (key === 'sleepingHabit' || key === 'personality'
+                          ? !areArraysEqual(my[key], other[key])
+                          : my[key] !== other[key]) &&
                         (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
                       }`}
                     >

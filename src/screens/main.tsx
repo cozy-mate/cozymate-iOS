@@ -20,8 +20,8 @@ import RoleNRuleScreen from './roleNrule/roleNrule';
 
 import { useHasRoomStore } from '@zustand/room/room';
 
-import { useIsOldiPhone } from '@hooks/device';
 import useFcm from '@hooks/useFcm';
+import { useIsOldiPhone } from '@hooks/device';
 
 import { TabNavigatorParamList } from '@type/param/stack';
 
@@ -83,7 +83,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     initFcm();
-  }, [])
+  }, []);
 
   return (
     <Tab.Navigator
@@ -91,35 +91,35 @@ const MainScreen = () => {
         headerShown: false,
         tabBarStyle: isOldiPhone
           ? {
-            backgroundColor: '#FFFFFF',
-            height: 60,
-            paddingTop: 8,
-            paddingBottom: 16,
-            borderTopWidth: 0,
-            borderRadius: 20,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            position: 'absolute',
-            shadowColor: 'rgba(160,160,160, 0.25)',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 1,
-            shadowRadius: 8,
-          }
+              backgroundColor: '#FFFFFF',
+              height: 60,
+              paddingTop: 8,
+              paddingBottom: 16,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            }
           : {
-            backgroundColor: '#FFFFFF',
-            height: 94,
-            paddingTop: 12,
-            paddingBottom: 40,
-            borderTopWidth: 0,
-            borderRadius: 20,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            position: 'absolute',
-            shadowColor: 'rgba(160,160,160, 0.25)',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 1,
-            shadowRadius: 8,
-          },
+              backgroundColor: '#FFFFFF',
+              height: 94,
+              paddingTop: 12,
+              paddingBottom: 40,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            },
       }}
     >
       <Tab.Screen
