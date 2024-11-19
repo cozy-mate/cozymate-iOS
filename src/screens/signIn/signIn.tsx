@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
 import LottieView from 'lottie-react-native';
-import { Text, View, Pressable, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Pressable, Dimensions, SafeAreaView } from 'react-native';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
@@ -27,7 +27,7 @@ import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
-  // const isOldiPhone = useIsOldiPhone();
+  const width = Dimensions.get('screen').width;
 
   // 로그인 정보
   const { setLoggedIn } = useLoggedInStore();
@@ -101,22 +101,70 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     setLoggedIn(true);
   };
 
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  const items = [
+    {
+      index: 1,
+      title: '나와 꼭 맞는 룸메이트 찾기',
+      path: require('@assets/lottie/findRoomMate.json'),
+      duration: 6,
+    },
+    {
+      index: 2,
+      title: '학교인증으로 신뢰성 UP!',
+      path: require('@assets/lottie/schoolAuthentication.json'),
+      duration: 6,
+    },
+    {
+      index: 3,
+      title: '정형화된 라이프스타일로',
+      path: require('@assets/lottie/lifestyle.json'),
+      duration: 6,
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+    }, items[currentIndex].duration * 1000);
+
+    return () => clearTimeout(timer);
+  }, [currentIndex]);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="mx-6 flex flex-1 flex-col justify-between">
+      <View className="flex flex-1 flex-col justify-between">
         <View className="mx-auto">
-          <View className="mt-[58px]">
+          <View className="mt-12">
             <LottieView
-              source={require('@assets/onboarding.json')}
-              style={{ width: 300, height: 300 }}
-              progress={0.5}
-              autoPlay={true}
-              loop={true}
+              source={items[currentIndex].path}
+              style={{ width: width, height: 300 }}
+              autoPlay
+              loop={false}
             />
+            <Text className="mb-[18px] mt-4 text-center text-xl font-bold text-emphasizedFont">
+              {items[currentIndex].title}
+            </Text>
+
+            <Text className="mb-11 text-center text-sm font-medium text-basicFont">
+              다양한 기능으로{'\n'}나와 꼭 맞는 룸메이트를 쉽고 빠르게 찾아봐요
+            </Text>
+
+            <View className="mt-4 flex flex-row justify-center space-x-2">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <View
+                  key={index}
+                  className={`${
+                    index === currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                  } h-2 rounded-full`}
+                />
+              ))}
+            </View>
           </View>
         </View>
 
-        <View className="mx-3 mb-[57px] flex flex-col space-y-3">
+        <View className="mx-9 mb-[57px] flex flex-col space-y-3">
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-kakaoyellow px-6 py-4"
             onPress={() => kakaoLogin()}

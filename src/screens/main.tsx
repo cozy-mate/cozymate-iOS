@@ -79,11 +79,11 @@ const MainScreen = () => {
 
   const isOldiPhone = useIsOldiPhone();
 
-  // const { initFcm } = useFcm();
+  const { initFcm } = useFcm();
 
-  // useEffect(() => {
-  //   initFcm();
-  // }, [])
+  useEffect(() => {
+    initFcm();
+  }, []);
 
   return (
     <Tab.Navigator

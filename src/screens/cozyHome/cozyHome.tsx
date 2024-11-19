@@ -15,11 +15,11 @@ import {
 
 import LoadingComponent from '@components/loading/loading';
 import Advertisement from '@components/common/advertisement';
-import UserComponent from '@components/cozyHome/userComponent';
 import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
 import RecommendUserList from '@components/cozyHome/recommentUserList';
 import RecommendRoomList from '@components/cozyHome/recommendRoomList';
+import RequestUserComponent from '@components/cozyHome/requestUserComponent';
 import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
 
 import { useProfileStore } from '@zustand/member/member';
@@ -263,7 +263,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                   </Text>
                   <View className="flex flex-col">
                     {requestMemberList?.result.map((data, index) => (
-                      <UserComponent
+                      <RequestUserComponent
                         key={data.memberId}
                         index={index}
                         length={requestMemberList?.result.length}

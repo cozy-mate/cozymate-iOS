@@ -16,7 +16,12 @@ interface UserComponentProps {
   pressFunc: (memberId: number) => void;
 }
 
-const UserComponent: React.FC<UserComponentProps> = ({ index, length, userData, pressFunc }) => {
+const RequestUserComponent: React.FC<UserComponentProps> = ({
+  index,
+  length,
+  userData,
+  pressFunc,
+}) => {
   return (
     <Pressable
       onPress={() => pressFunc(userData.memberId)}
@@ -41,4 +46,4 @@ const UserComponent: React.FC<UserComponentProps> = ({ index, length, userData, 
   );
 };
 
-export default UserComponent;
+export default RequestUserComponent;
