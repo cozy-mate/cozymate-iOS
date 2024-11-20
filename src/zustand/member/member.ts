@@ -45,3 +45,12 @@ export const useProfileStore = create<{
   },
   setProfile: (newProfile) => set((state) => ({ profile: { ...state.profile, ...newProfile } })),
 }));
+
+// 학교 인증 여부
+export const useIsVerifiedStore = create<{
+  isVerified: boolean;
+  setIsVerified: (newStatus: boolean) => void;
+}>((set) => ({
+  isVerified: false,
+  setIsVerified: (status) => set({ isVerified: status }),
+}));
