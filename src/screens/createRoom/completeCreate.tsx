@@ -18,7 +18,7 @@ const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScree
 
   const toCozyHome = () => {
     setMyRoom({ hasRoom: true, roomId: roomInfo.roomId });
-    navigation.navigate('MainScreen');
+    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
   const handleCopyInviteCode = () => {
