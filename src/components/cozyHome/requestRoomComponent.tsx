@@ -1,12 +1,15 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
+import { useProfileStore } from '@zustand/member/member';
+
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
-interface RequestRoomComponentProps {
-  index: number;
-  length: number;
-  roomData: {
+import { CozyHomeScreenProps } from '@type/param/stack';
+
+interface RequestRoomsComponentProps {
+  navigation: CozyHomeScreenProps['navigation'];
+  roomList: {
     roomId: number;
     name: string;
     inviteCode: string;
@@ -31,56 +34,67 @@ interface RequestRoomComponentProps {
       red: LifestyleOptionKey[];
       white: LifestyleOptionKey[];
     };
-  };
-  pressFunc: () => void;
+  }[];
 }
 
-const RequestRoomComponent: React.FC<RequestRoomComponentProps> = ({
-  index,
-  length,
-  roomData,
-  pressFunc,
-}) => {
+const RequestRoomsComponent: React.FC<RequestRoomsComponentProps> = ({ navigation, roomList }) => {
+  const toRoomDetail = (roomId: number) => {
+    navigation.navigate('RoomDetailScreen', { roomId: roomId });
+  };
+
+  const { profile } = useProfileStore();
+
   return (
-    <Pressable
-      onPress={pressFunc}
-      className={`border-b border-b-[#F6F6F6] px-1 py-[18px] ${index === 0 && 'pt-2.5'} ${
-        index === length - 1 && 'border-b-0 pb-2.5'
-      }`}
-    >
-      <View className="flex flex-row">
-        {roomData.hashtagList.length !== 0 ? (
-          roomData.hashtagList.map((hash, index) => (
-            <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
-              <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
+    <View className="px-5">
+      <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+        {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
+      </Text>
+
+      <View className="flex flex-col">
+        {roomList.map((room, index) => (
+          <Pressable
+            key={room.roomId}
+            onPress={() => toRoomDetail(room.roomId)}
+            className={`border-b border-b-[#F6F6F6] px-1 py-[18px] ${index === 0 && 'pt-2.5'} ${
+              index === roomList.length - 1 && 'border-b-0 pb-2.5'
+            }`}
+          >
+            <View className="flex flex-row">
+              {room.hashtagList.length !== 0 ? (
+                room.hashtagList.map((hash, index) => (
+                  <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
+                    <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
+                  </View>
+                ))
+              ) : (
+                <View className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
+                  <Text className="text-xs font-medium text-colorFont">비공개방이에요</Text>
+                </View>
+              )}
             </View>
-          ))
-        ) : (
-          <View className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
-            <Text className="text-xs font-medium text-colorFont">비공개방이에요</Text>
-          </View>
-        )}
-      </View>
 
-      <View className="my-2">
-        <Text className="text-base font-semibold text-emphasizedFont">{roomData.name}</Text>
-      </View>
+            <View className="my-2">
+              <Text className="text-base font-semibold text-emphasizedFont">{room.name}</Text>
+            </View>
 
-      <View className="flex flex-row items-center justify-between">
-        <Text className="text-xs font-medium text-disabledFont">
-          <Text className="text-main1">{roomData.arrivalMateNum}명</Text>의 룸메이트가 있어요
-        </Text>
+            <View className="flex flex-row items-center justify-between">
+              <Text className="text-xs font-medium text-disabledFont">
+                <Text className="text-main1">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
+              </Text>
 
-        <Text
-          className={`text-base font-medium ${
-            roomData.equality < 50 ? 'text-colorFont' : 'text-main1'
-          }`}
-        >
-          {roomData.equality}%
-        </Text>
+              <Text
+                className={`text-base font-medium ${
+                  room.equality < 50 ? 'text-colorFont' : 'text-main1'
+                }`}
+              >
+                {room.equality}%
+              </Text>
+            </View>
+          </Pressable>
+        ))}
       </View>
-    </Pressable>
+    </View>
   );
 };
 
-export default RequestRoomComponent;
+export default RequestRoomsComponent;
