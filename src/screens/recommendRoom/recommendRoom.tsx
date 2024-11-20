@@ -129,7 +129,7 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
         <View className="px-5">
           <View className="flex flex-col space-y-6">
-            {roomList?.result.result.recommendations.map((room, index) => (
+            {roomList?.result.result.map((room, index) => (
               <View key={index}>
                 <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
               </View>
