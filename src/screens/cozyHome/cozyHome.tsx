@@ -19,11 +19,13 @@ import MyRoomComponent from '@components/cozyHome/myRoomComponent';
 import CreateRoomModal from '@components/cozyHome/createRoomModal';
 import RecommendUserList from '@components/cozyHome/recommentUserList';
 import RecommendRoomList from '@components/cozyHome/recommendRoomList';
-import RequestUserComponent from '@components/cozyHome/requestUserComponent';
-import RequestRoomComponent from '@components/cozyHome/requestRoomComponent';
+import TwoButtonModal from '@components/commonComponents/twoButtonModal';
+import RequestRoomsComponent from '@components/cozyHome/requestRoomComponent';
+import RequestUsersComponent from '@components/cozyHome/requestUserComponent';
 
-import { useProfileStore } from '@zustand/member/member';
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
 
 import { useGetMemberList } from '@hooks/api/member-stat';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
@@ -44,24 +46,6 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
   const { bottom } = useSafeAreaInsets();
 
-  const { profile } = useProfileStore();
-  const { myRoom } = useHasRoomStore();
-  const { roomInfo } = useRoomInfoStore();
-
-  const { data: requestRoomList } = useGetRequestRooms();
-  const { data: requestMemberList } = useGetRoomRequests();
-  const { data: userList } = useGetMemberList();
-  const { data: roomList } = useGetRandomRoom(5, 0);
-
-  console.log(roomList.result.result);
-
-  // 학교 인증 관련
-  const [school, setSchool] = useState<boolean>(false);
-
-  const handleSchool = () => {
-    setSchool(!school);
-  };
-
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState(0);
 
@@ -76,27 +60,16 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
     setHeight(height);
   };
 
-  // 방 만들기 시 방 타입 선택 모달
-  const [createRoomOpen, setCreateRoomOpen] = useState<boolean>(false);
+  const { profile } = useProfileStore();
+  const { myRoom } = useHasRoomStore();
+  const { roomInfo } = useRoomInfoStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { isVerified } = useIsVerifiedStore();
 
-  const handleCreateRoomModal = () => {
-    setCreateRoomOpen(!createRoomOpen);
-  };
-
-  const toCreatePublicRoom = () => {
-    navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
-    setCreateRoomOpen(false);
-  };
-
-  const toCreatePrivateRoom = () => {
-    navigation.navigate('CreateRoomScreen', { type: 'PRIVATE' });
-    setCreateRoomOpen(false);
-  };
-
-  // 방 참여하기
-  const toJoinRoom = () => {
-    navigation.navigate('JoinRoomScreen');
-  };
+  const { data: requestRoomList } = useGetRequestRooms();
+  const { data: requestMemberList } = useGetRoomRequests();
+  const { data: userList } = useGetMemberList();
+  const { data: roomList } = useGetRandomRoom(5, 0);
 
   // 쪽지
   const toChat = () => {
@@ -108,207 +81,232 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
     navigation.navigate('NotificationScreen');
   };
 
-  const toRoomMate = () => {
-    navigation.navigate('RoomMateScreen');
-  };
-
-  const toRecommendRoom = () => {
-    navigation.navigate('RecommendRoomScreen');
-  };
-
-  const toUserDetail = (memberId: number) => {
-    navigation.navigate('UserDetailScreen', { memberId: memberId });
-  };
-
-  const toRoomDetail = (roomId: number) => {
-    navigation.navigate('RoomDetailScreen', { roomId: roomId });
-  };
-
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { isVerified: false });
+    navigation.navigate('SchoolAuthenticationScreen', { isVerified: isVerified });
+  };
+
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen');
+  };
+
+  // 방 만들기 시 방 타입 선택 모달
+  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState<boolean>(false);
+
+  const handleCreateRoomModal = () => {
+    setIsCreateRoomOpen(!isCreateRoomOpen);
+  };
+
+  const [isNoLifeStyleModalOpen, setIsNoLifeStyleModalOpen] = useState<boolean>(false);
+
+  const [isNotVerifiedModalOpen, setIsNotVerifiedModalOpen] = useState<boolean>(false);
+
+  // 공개방 생성 이동 로직
+  const toCreatePublicRoom = () => {
+    if (!isVerified) {
+      // 학교 인증 X
+      setIsCreateRoomOpen(false);
+      setIsNotVerifiedModalOpen(true);
+    } else if (hasLifeStyle) {
+      // 학교 인증 O & 라이프 스타일 입력 X
+      setIsCreateRoomOpen(false);
+      setIsNoLifeStyleModalOpen(true);
+    } else {
+      // 학교 인증 O & 라이프 스타일 입력 O
+      setIsCreateRoomOpen(false);
+      navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
+    }
+  };
+
+  // 비공개방 생성 이동 로직
+  const toCreatePrivateRoom = () => {
+    setIsCreateRoomOpen(false);
+    navigation.navigate('CreateRoomScreen', { type: 'PRIVATE' });
+  };
+
+  // 방 참여하기 이동 로직
+  const toJoinRoom = () => {
+    navigation.navigate('JoinRoomScreen');
   };
 
   return (
-    <>
-      <View className="flex-1 bg-sub1">
-        <SafeAreaView
-          style={{
-            backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
-          }}
-        />
-        <ScrollView
-          // className="flex-1"
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          bounces={false}
-        >
-          <View className="bg-white">
-            <View className="flex rounded-br-[40px] bg-sub1 pt-[18px]" onLayout={handleLayout}>
-              <HomeBack width={width} style={{ position: 'absolute' }} />
-              <View style={{ position: 'relative', zIndex: 100 }}>
-                <View className="mb-[8.5px] flex flex-row items-center justify-between pl-5">
-                  {school ? (
-                    <Pressable
-                      className="flex flex-row items-center py-2"
-                      onPress={toSchoolAuthentication}
-                    >
-                      <View className="flex flex-row items-center">
-                        <BlueSchool />
-                        <Text className="ml-1.5 text-lg font-semibold text-[#5B9CFF]">
-                          인하대학교
-                        </Text>
-                      </View>
-                    </Pressable>
-                  ) : (
-                    <Pressable
-                      className="flex flex-row items-center py-2"
-                      onPress={toSchoolAuthentication}
-                    >
-                      <View className="flex flex-row items-center">
-                        <GraySchool />
-                        <Text className="ml-1.5 mr-1 text-lg font-semibold text-disabledFont">
+    <View className="flex-1 bg-sub1">
+      <SafeAreaView
+        style={{
+          backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
+        }}
+      />
+      <ScrollView onScroll={handleScroll} scrollEventThrottle={16} bounces={false}>
+        <View className="bg-white">
+          <View className="flex bg-sub1 pt-[18px]" onLayout={handleLayout}>
+            <HomeBack width={width} style={{ position: 'absolute' }} />
+            <View style={{ position: 'relative', zIndex: 100 }}>
+              <View className="mb-3 flex flex-row items-center justify-between px-5">
+                {isVerified ? (
+                  <Pressable
+                    className="flex flex-row items-center py-2"
+                    onPress={toSchoolAuthentication}
+                  >
+                    <View className="flex flex-row items-center space-x-1.5">
+                      <BlueSchool />
+                      <Text className="text-lg font-semibold text-[#5B9CFF]">
+                        {profile.universityName}
+                      </Text>
+                    </View>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    className="flex flex-row items-center py-2"
+                    onPress={toSchoolAuthentication}
+                  >
+                    <View className="flex flex-row items-center space-x-1.5">
+                      <GraySchool />
+                      <View className="flex flex-row items-center space-x-1">
+                        <Text className="text-lg font-semibold text-disabledFont">
                           학교 인증을 해주세요
                         </Text>
                         <ArrowIcon />
                       </View>
-                    </Pressable>
-                  )}
+                    </View>
+                  </Pressable>
+                )}
 
-                  <View className="flex flex-row pr-5">
-                    <Pressable onPress={toChat}>
-                      <ChatIcon />
-                    </Pressable>
-                    <Pressable onPress={toNotification}>
-                      <NotificationIcon />
-                    </Pressable>
-                  </View>
+                <View className="flex flex-row">
+                  <Pressable onPress={toChat} className="py-2.5 pl-[17px] pr-[3px]">
+                    <ChatIcon />
+                  </Pressable>
+                  <Pressable onPress={toNotification} className="py-2.5 pl-[19px] pr-[3px]">
+                    <NotificationIcon />
+                  </Pressable>
                 </View>
-                <View className="flex flex-col items-start px-5">
-                  <View className="mb-[14.5px] flex w-full flex-row rounded-lg bg-colorBox px-2 py-1.5">
+              </View>
+              <View className="flex flex-col items-start px-5">
+                <View className="mb-3 flex w-full flex-row space-x-2 rounded-lg bg-colorBox px-2 py-1.5">
+                  <View className="p-[1.6px]">
                     <MegaPhoneIcon />
-                    <Text className="ml-2 text-xs font-medium text-emphasizedFont">
-                      [공지] 시험기간으로 인한 기숙사 통금시간 변경
+                  </View>
+                  <Text className="text-xs font-medium text-emphasizedFont">
+                    [공지] 시험기간으로 인한 기숙사 통금시간 변경
+                  </Text>
+                </View>
+
+                {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
+                <View className="mb-6 flex h-[100px] flex-row space-x-3">
+                  <Pressable
+                    onPress={handleCreateRoomModal}
+                    // disabled={myRoom.hasRoom}
+                    className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
+                  >
+                    <Text
+                      className={`text-base font-semibold leading-[19px] ${
+                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                      }`}
+                    >
+                      방 만들기
                     </Text>
-                  </View>
+                  </Pressable>
 
-                  {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
-                  <View className="mb-6 flex h-[100px] w-full flex-row justify-between">
-                    <Pressable
-                      onPress={handleCreateRoomModal}
-                      className="w-[49%] items-start rounded-xl bg-colorBox p-4"
+                  <Pressable
+                    onPress={toJoinRoom}
+                    // disabled={myRoom.hasRoom}
+                    className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
+                  >
+                    <Text
+                      className={`text-base font-semibold leading-[19px] ${
+                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                      }`}
                     >
-                      <Text className="text-base font-semibold leading-[19px] text-main1">
-                        방 만들기
-                      </Text>
-                    </Pressable>
-
-                    <Pressable
-                      onPress={toJoinRoom}
-                      className="w-[49%] items-start rounded-xl bg-colorBox p-4"
-                    >
-                      <Text className="text-base font-semibold leading-[19px] text-main1">
-                        방 참여하기
-                      </Text>
-                    </Pressable>
-                  </View>
+                      방 참여하기
+                    </Text>
+                  </Pressable>
                 </View>
               </View>
             </View>
           </View>
+        </View>
 
-          <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
-            {myRoom.hasRoom && roomInfo && (
+        <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
+          {/* 방이 없는 사용자에 대하여 참여 요청한 방 목록 컴포넌트 */}
+          {!myRoom.hasRoom &&
+            requestRoomList !== undefined &&
+            requestRoomList?.result.length !== 0 && (
               <>
-                <View className="px-5">
-                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                    {profile.nickname}님이{'\n'}현재 참여하고 있는 방이에요
-                  </Text>
-
-                  <MyRoomComponent
-                    roomData={roomInfo}
-                    toRoom={() => toRoomDetail(roomInfo.roomId)}
-                  />
-                </View>
+                <RequestRoomsComponent navigation={navigation} roomList={requestRoomList?.result} />
 
                 <View className="my-6 h-2.5 bg-[#F7F9FA]" />
               </>
             )}
 
-            {!myRoom.hasRoom && requestRoomList?.result.length !== 0 && (
-              <>
-                <View className="px-5">
-                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                    {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
-                  </Text>
-                  <View className="flex flex-col">
-                    {requestRoomList?.result.map((data, index) => (
-                      <RequestRoomComponent
-                        key={index}
-                        index={index}
-                        length={requestRoomList.result.length}
-                        roomData={data}
-                        pressFunc={() => toRoomDetail(data.roomId)}
-                      />
-                    ))}
-                  </View>
-                </View>
+          {/* 방이 있는 사용자에 대하여 본인 방 컴포넌트 */}
+          {myRoom.hasRoom && roomInfo && (
+            <>
+              <MyRoomComponent navigation={navigation} roomData={roomInfo} />
 
-                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-              </>
-            )}
-
-            {myRoom.hasRoom && roomInfo.isRoomManager && (
-              <>
-                <View className="px-5">
-                  <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-                    {requestMemberList?.result.length}개의{'\n'}방 참여 요청이 도착했어요
-                  </Text>
-                  <View className="flex flex-col">
-                    {requestMemberList?.result.map((data, index) => (
-                      <RequestUserComponent
-                        key={data.memberId}
-                        index={index}
-                        length={requestMemberList?.result.length}
-                        userData={data}
-                        pressFunc={() => toUserDetail(data.memberId)}
-                      />
-                    ))}
-                  </View>
-                </View>
-
-                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-              </>
-            )}
-
-            <RecommendUserList
-              users={userList.result.memberList}
-              toUserDetail={toUserDetail}
-              toRoommate={toRoomMate}
-            />
-
-            <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-
-            <RecommendRoomList
-              rooms={roomList.result.result.recommendations}
-              toRoomDetail={toRoomDetail}
-              toRoomRecommend={toRecommendRoom}
-            />
-
-            <View className="h-[25px]" />
-
-            <Advertisement />
-          </View>
-
-          {createRoomOpen && (
-            <CreateRoomModal
-              createPublic={toCreatePublicRoom}
-              createPrivate={toCreatePrivateRoom}
-              close={handleCreateRoomModal}
-            />
+              <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+            </>
           )}
-        </ScrollView>
-      </View>
-    </>
+
+          {/* 방장인 사용자에 대하여 참여 요청한 사용자 목록 컴포넌트 */}
+          {myRoom.hasRoom && requestMemberList !== undefined && roomInfo.isRoomManager && (
+            <>
+              <RequestUsersComponent navigation={navigation} userList={requestMemberList?.result} />
+
+              <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+            </>
+          )}
+
+          {/* 룸메이트 추천 컴포넌트 */}
+          <RecommendUserList navigation={navigation} users={userList.result.memberList} />
+
+          <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+
+          {/* 방 추천 컴포넌트 */}
+          <RecommendRoomList navigation={navigation} rooms={roomList.result.result} />
+
+          <View className="h-[25px]" />
+
+          {/* 광고 컴포넌트 */}
+          <Advertisement />
+        </View>
+
+        {/* 방 생성 시 방 타입 선택 모달 */}
+        <CreateRoomModal
+          isVisible={isCreateRoomOpen}
+          createPublic={toCreatePublicRoom}
+          createPrivate={toCreatePrivateRoom}
+          close={() => setIsCreateRoomOpen(false)}
+        />
+
+        {/* 학교 미인증 유저에 대한 학교 인증 유도 모달 */}
+        <TwoButtonModal
+          isVisible={isNotVerifiedModalOpen}
+          title={`방을 만들려면\n먼저 학교인증을 해야해요!`}
+          closeFunc={() => setIsNotVerifiedModalOpen(false)}
+          leftButtonText="안할래요"
+          leftButtonFunc={() => setIsNotVerifiedModalOpen(false)}
+          rightButtonText="할래요"
+          righttButtonFunc={() => {
+            setIsNoLifeStyleModalOpen(false);
+            setIsCreateRoomOpen(false);
+            toSchoolAuthentication();
+          }}
+        />
+
+        {/* 라이프 스타일 미입력 유저에 대한 라이프 스타일 입력 유도 모달 */}
+        <TwoButtonModal
+          isVisible={isNoLifeStyleModalOpen}
+          title={`방을 만들려면\n라이프스타일을 입력해야해요!`}
+          closeFunc={() => setIsNoLifeStyleModalOpen(false)}
+          leftButtonText="안할래요"
+          leftButtonFunc={() => setIsNoLifeStyleModalOpen(false)}
+          rightButtonText="할래요"
+          righttButtonFunc={() => {
+            setIsNoLifeStyleModalOpen(false);
+            setIsCreateRoomOpen(false);
+            toLifeStyleOnboarding();
+          }}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
