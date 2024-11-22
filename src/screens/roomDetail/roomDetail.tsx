@@ -71,7 +71,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 참여 요청 여부 확인
   const { data: isRequested, refetch: refetchCheckRequested } = useCheckRequested(roomId);
   // 방 정보 조회
-  const { data: roomData } = useGetRoomData(roomId);
+  const { data: roomData, refetch: refetchRoomData } = useGetRoomData(roomId);
   // 해당 방의 방장과의 쪽지방 조회
   const { data: chatRoomId } = useGetChatRoomId(roomData.result.managerMemberId);
 
@@ -86,7 +86,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
-  const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId);
+  const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId, refetchRoomData);
 
   // 방 인원 상세 페이지 이동
   const toUserDetail = (member: MemberItem) => {

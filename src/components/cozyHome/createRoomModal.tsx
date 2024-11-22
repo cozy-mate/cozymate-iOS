@@ -6,18 +6,20 @@ import GrayXButton from '@assets/createRoom/grayXButton.svg';
 import PrivateRoom from '@assets/createRoom/privateRoom.svg';
 
 interface CreateRoomModalProps {
-  createPublic: () => void;
-  createPrivate: () => void;
-  close: () => void;
+  isVisible: boolean;
+  createPublic: any;
+  createPrivate: any;
+  close: any;
 }
 
 const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
+  isVisible,
   createPublic,
   createPrivate,
   close,
 }) => {
   return (
-    <Modal transparent={true} animationType="fade">
+    <Modal visible={isVisible} transparent={true} animationType="fade">
       <View className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-modalBack2 px-5">
         <Pressable onPress={close} className="absolute right-5 top-12">
           <GrayXButton />

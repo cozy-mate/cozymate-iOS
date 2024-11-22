@@ -151,11 +151,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                 toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
               />
             ))}
-
-          <NoLifeStyleComponent
-            pressFunc={toLifeStyleOnboarding}
-            isChipClicked={filterList.length !== 0}
-          />
+          {!hasLifeStyle && filterList.length !== 0 && (
+            <NoLifeStyleComponent
+              pressFunc={toLifeStyleOnboarding}
+              isChipClicked={filterList.length !== 0}
+            />
+          )}
         </View>
 
         {/* 라이프스타일이 있는 사용자 컴포넌트 */}

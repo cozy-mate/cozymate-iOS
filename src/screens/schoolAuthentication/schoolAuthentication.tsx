@@ -8,12 +8,15 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import ButtonModal from '@components/common/buttonModal';
+import LoadingComponent from '@components/loading/loading';
 import UnivInfoSelect from '@components/onBoard/univInfoSelect';
+import OneButtonModal from '@components/commonComponents/oneButtonModal';
 import ButtonTextInput from '@components/schoolAuthentication/buttonTextInput';
 
-import { useGetUserUniversity } from '@hooks/api/university';
+import { useProfileStore } from '@zustand/member/member';
+
 import { useSendMail, useVerifyMail } from '@hooks/api/mail';
+import { useGetUniversityInfo } from '@hooks/api/university';
 
 import { SchoolAuthenticationScreenProps } from '@type/param/stack';
 
@@ -21,6 +24,7 @@ import BackButton from '@assets/backButton.svg';
 
 const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationScreenProps) => {
   const { isVerified } = route.params;
+  const { profile } = useProfileStore();
 
   const [majorName, setMajorName] = useState<string>('');
   const [mailAddress, setMailAddress] = useState<string>('');
@@ -34,24 +38,35 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   };
 
   const toBack = () => {
-    navigation.goBack();
+    setIsModalOpen(false);
+    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
   // 사용자 학교 정보 조회
-  const { data: userSchoolInfo } = useGetUserUniversity();
+  const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
 
   // 인증메일 전송
-  const { mutateAsync: sendAuthenticationMail } = useSendMail(
-    mailAddress,
-    userSchoolInfo.result.id,
-  );
+  const { mutateAsync: sendAuthenticationMail, isPending: sendMailPending } = useSendMail();
 
   // 인증번호 확인
-  const { mutateAsync: verifyAuthenticationCode } = useVerifyMail(
-    authenticationCode,
-    userSchoolInfo.result.id,
-    majorName,
-  );
+  const { mutateAsync: verifyAuthenticationCode, isPending: verifyMailPending } = useVerifyMail();
+
+  const handleMailSend = async (): Promise<void> => {
+    await sendAuthenticationMail({
+      mailAddress: mailAddress,
+      universityId: profile.universityId,
+    });
+    setIsSended(true);
+  };
+
+  const handleVerifyCode = async (): Promise<void> => {
+    await verifyAuthenticationCode({
+      code: authenticationCode,
+      universityId: profile.universityId,
+      majorName: majorName,
+    });
+    setIsModalOpen(true);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -129,10 +144,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
               setValue={setMailAddress}
               placeholder="이메일을 입력해주세요"
               buttonString={isSended ? '인증번호 재전송' : '인증번호 전송'}
-              buttonFunc={() => {
-                sendAuthenticationMail;
-                setIsSended(true);
-              }}
+              buttonFunc={handleMailSend}
               pattern={userSchoolInfo.result.mailPattern}
             />
 
@@ -143,23 +155,22 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
                 setValue={setAuthenticationCode}
                 placeholder="인증번호를 입력해주세요"
                 buttonString="인증번호 확인"
-                buttonFunc={() => {
-                  verifyAuthenticationCode;
-                  setIsModalOpen(true);
-                }}
+                buttonFunc={handleVerifyCode}
               />
             )}
 
-            <ButtonModal
-              title="학교인증이 완료됐어요"
-              submitText="확인"
+            <OneButtonModal
               isVisible={isModalOpen}
-              buttonCount={1}
-              closeModal={() => setIsModalOpen(false)}
-              onSubmit={toBack}
+              title="학교인증이 완료됐어요"
+              closeFunc={toBack}
+              buttonText="확인"
+              buttonFunc={toBack}
             />
           </View>
         )}
+
+        {sendMailPending && <LoadingComponent />}
+        {verifyMailPending && <LoadingComponent />}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

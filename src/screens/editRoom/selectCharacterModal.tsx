@@ -8,13 +8,20 @@ interface SelectCharacterModalProps {
   persona: number;
   setPersona: React.Dispatch<React.SetStateAction<number>>;
   closeModal: () => void;
+  pressFunc: any;
 }
 
 const SelectCharacterModal: React.FC<SelectCharacterModalProps> = ({
   persona,
   setPersona,
   closeModal,
+  pressFunc,
 }) => {
+  const handleUpdate = async (): Promise<void> => {
+    pressFunc(persona);
+    closeModal();
+  };
+
   return (
     <Modal transparent={true} animationType="fade">
       <View className="absolute left-0 top-0 flex h-screen w-screen flex-col justify-between bg-white px-5 pb-[56px] pt-[47px]">
@@ -32,7 +39,7 @@ const SelectCharacterModal: React.FC<SelectCharacterModalProps> = ({
           textColor="text-white"
           text="확인"
           disabled={persona === 0}
-          onPressFunc={closeModal}
+          onPressFunc={handleUpdate}
         />
       </View>
     </Modal>

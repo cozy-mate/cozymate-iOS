@@ -3,15 +3,13 @@ export interface GetRandomRoomResponse {
     page: number;
     hasNext: boolean;
     result: {
-      recommendations: {
-        roomId: number;
-        name: string;
-        hashtags: string[];
-        equality: number;
-        numOfArrival: number;
-        maxMateNum: number;
-        equalMemberStatNum: Record<string, number>;
-      }[];
-    };
+      roomId: number;
+      name: string;
+      hashtags: string[];
+      equality: number | undefined;
+      numOfArrival: number;
+      maxMateNum: number;
+      equalMemberStatNum: Record<string, number | undefined>;
+    }[];
   };
 }

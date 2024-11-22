@@ -36,6 +36,7 @@ export interface GetProfileResponse {
     nickname: string;
     gender: string;
     birthday: string;
+    universityId: number;
     universityName: string;
     majorName: string;
     persona: number;
@@ -43,6 +44,22 @@ export interface GetProfileResponse {
 }
 
 export interface CheckNicknameResponse {
+  result: boolean;
+}
+
+export interface UpdatePersonaResponse {
+  result: boolean;
+}
+
+export interface UpdateNicknameResponse {
+  result: boolean;
+}
+
+export interface UpdateMajorNameResponse {
+  result: boolean;
+}
+
+export interface UpdateBirthdayResponse {
   result: boolean;
 }
 

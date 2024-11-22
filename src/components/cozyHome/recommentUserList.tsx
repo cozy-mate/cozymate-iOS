@@ -13,9 +13,12 @@ import RecommendUserComponent from './recommendUser';
 
 import { useProfileStore } from '@zustand/member/member';
 
+import { CozyHomeScreenProps } from '@type/param/stack';
+
 import RightArrow from '@assets/cozyHome/smallRightArrow.svg';
 
 interface RecommendUserListProps {
+  navigation: CozyHomeScreenProps['navigation'];
   users: {
     memberDetail: {
       memberId: number;
@@ -29,15 +32,17 @@ interface RecommendUserListProps {
     equality: number | null;
     preferenceStats: Record<string, string | number | null>;
   }[];
-  toRoommate: () => void;
-  toUserDetail: (id: number) => void;
 }
 
-const RecommendUserList: React.FC<RecommendUserListProps> = ({
-  users,
-  toRoommate,
-  toUserDetail,
-}) => {
+const RecommendUserList: React.FC<RecommendUserListProps> = ({ navigation, users }) => {
+  const toRoomMate = () => {
+    navigation.navigate('RoomMateScreen');
+  };
+
+  const toUserDetail = (memberId: number) => {
+    navigation.navigate('UserDetailScreen', { memberId: memberId });
+  };
+
   const { profile } = useProfileStore();
 
   const [userComponentWidth, setUserComponentWidth] = useState<number>(0);
@@ -62,7 +67,7 @@ const RecommendUserList: React.FC<RecommendUserListProps> = ({
         <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
           {profile.nickname}님과{'\n'}꼭 맞는 룸메이트를 추천해드릴게요
         </Text>
-        <Pressable className="flex flex-row items-center" onPress={toRoommate}>
+        <Pressable className="flex flex-row items-center" onPress={toRoomMate}>
           <Text className="mr-1 text-xs font-semibold text-disabledFont">더보기</Text>
           <RightArrow />
         </Pressable>

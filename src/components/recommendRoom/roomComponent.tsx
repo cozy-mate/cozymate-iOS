@@ -10,10 +10,10 @@ interface RoomComponentProps {
     roomId: number;
     name: string;
     hashtags: string[];
-    equality: number;
+    equality: number | undefined;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number> | null;
+    equalMemberStatNum: Record<string, number | undefined>;
   };
   pressFunc: (roomId: number) => void;
 }

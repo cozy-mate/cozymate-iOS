@@ -39,9 +39,19 @@ export const useProfileStore = create<{
     nickname: '',
     gender: '',
     birthday: '',
+    universityId: 0,
     universityName: '',
     majorName: '',
     persona: 0,
   },
   setProfile: (newProfile) => set((state) => ({ profile: { ...state.profile, ...newProfile } })),
+}));
+
+// 학교 인증 여부
+export const useIsVerifiedStore = create<{
+  isVerified: boolean;
+  setIsVerified: (newStatus: boolean) => void;
+}>((set) => ({
+  isVerified: false,
+  setIsVerified: (status) => set({ isVerified: status }),
 }));

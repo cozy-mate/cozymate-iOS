@@ -11,29 +11,41 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
 import {
   exitRoom,
+  deleteRoom,
   getRoomData,
   checkHasRoom,
+  inviteMember,
   checkRequested,
   sendRoomRequest,
   getRequestRooms,
   getRoomRequests,
   changeRoomPublic,
   deleteRoomRequest,
+  getInvitedMembers,
+  deleteInviteMember,
   searchRoomByKeyword,
+  acceptRequestMember,
 } from '@server/api/room';
 import {
   ExitRoomResponse,
+  DeleteRoomResponse,
   GetRoomDataResponse,
   CheckHasRoomResponse,
+  InviteMemberResponse,
   CheckRequestedResponse,
   SendRoomRequestResponse,
   GetRequestRoomsResponse,
   GetRoomRequestsResponse,
   ChangeRoomPublicResponse,
   DeleteRoomRequestResponse,
+  GetInvitedMembersResponse,
+  DeleteInviteMemberResponse,
   SearchRoomByKeywordResponse,
+  AcceptRequestMemberResponse,
 } from '@server/responseTypes/room';
 
+// 어플 시작 시 사용
+// 사용자가 참여한 방이 있는지 여부 조회
 export const useCheckHasRoom = (): {
   data: CheckHasRoomResponse | undefined;
   refetch: () => void;
@@ -49,6 +61,45 @@ export const useCheckHasRoom = (): {
   return { data, refetch };
 };
 
+// 코지홈
+// 1. 사용자 -> 참여 요청한 방 목록
+export const useGetRequestRooms = (): UseQueryResult<GetRequestRoomsResponse, void> => {
+  const { myRoom } = useHasRoomStore();
+
+  return useQuery({
+    queryKey: [`/rooms/requested`],
+    queryFn: () => getRequestRooms(),
+    enabled: !myRoom.hasRoom,
+  });
+};
+
+// 2. 방장 -> 참여 요청한 멤버 목록
+export const useGetRoomRequests = (): UseQueryResult<GetRoomRequestsResponse, void> => {
+  const { myRoom } = useHasRoomStore();
+  const { roomInfo } = useRoomInfoStore();
+
+  return useQuery({
+    queryKey: [`/rooms/pending-members`],
+    queryFn: () => getRoomRequests(),
+    enabled: myRoom.hasRoom && roomInfo.isRoomManager,
+  });
+};
+
+// 추천 방 스크린
+// 방 검색
+export const useSearchRoomByKeyword = (
+  keyword: string,
+): UseQueryResult<SearchRoomByKeywordResponse> => {
+  return useQuery({
+    queryKey: [`/rooms/search`, keyword],
+    queryFn: () => searchRoomByKeyword(keyword),
+    enabled: keyword !== '',
+  });
+};
+
+// 방 상세페이지에서 사용
+// 공통
+// 방 정보 조회 기능
 export const useGetRoomData = (
   roomId: number,
 ): { data: GetRoomDataResponse; refetch: () => void } => {
@@ -63,52 +114,45 @@ export const useGetRoomData = (
   return { data, refetch };
 };
 
-// 사용자 -> 참여 요청한 방 목록
-export const useGetRequestRooms = (): UseQueryResult<GetRequestRoomsResponse, void> => {
-  const { myRoom } = useHasRoomStore();
-
-  return useQuery({
-    queryKey: [`/rooms/requested`],
-    queryFn: () => getRequestRooms(),
-    enabled: !myRoom.hasRoom,
-  });
-};
-
-// 방장 -> 참여 요청한 멤버 목록
-export const useGetRoomRequests = (): UseQueryResult<GetRoomRequestsResponse, void> => {
-  const { myRoom } = useHasRoomStore();
-  const { roomInfo } = useRoomInfoStore();
-
-  return useQuery({
-    queryKey: [`/rooms/pending-members`],
-    queryFn: () => getRoomRequests(),
-    enabled: myRoom.hasRoom && roomInfo.isRoomManager,
-  });
-};
-
-// 방 상세페이지에서 사용
-// 0. 방 참여 요청 여부 확인
-export const useCheckRequested = (
+// 우리 방으로 초대한 멤버 목록 조회
+export const useGetInvitedMembers = (
   roomId: number,
-): UseSuspenseQueryResult<CheckRequestedResponse, void> => {
+): UseSuspenseQueryResult<GetInvitedMembersResponse> => {
   return useSuspenseQuery({
-    queryKey: [`/rooms/${roomId}/pending-status`, roomId],
-    queryFn: () => checkRequested(roomId),
+    queryKey: [`/rooms/${roomId}/invited-members`, roomId],
+    queryFn: () => getInvitedMembers(roomId),
   });
 };
 
-// 1. 방 참여 요청
-export const useSendRoomRequest = (
+// 방 나가기
+export const useExitRoom = (
   roomId: number,
-  refetch: () => void,
-): UseMutationResult<SendRoomRequestResponse, void, unknown, unknown> => {
+): UseMutationResult<ExitRoomResponse, void, unknown, unknown> => {
   return useMutation({
-    mutationFn: () => sendRoomRequest(roomId),
-    onSuccess: () => refetch(),
+    mutationFn: () => exitRoom(roomId),
+    onSuccess: () => {},
   });
 };
 
-// 2. 방 참여 요청 취소
+// 방장
+// 1. 방 삭제 기능
+export const useDeleteRoom = (roomId: number): UseMutationResult<DeleteRoomResponse> => {
+  return useMutation({
+    mutationFn: () => deleteRoom(roomId),
+  });
+};
+
+// 2. 공개방으로 전환
+export const useChangeRoomPublic = (
+  roomId: number,
+): UseMutationResult<ChangeRoomPublicResponse, void, unknown, unknown> => {
+  return useMutation({
+    mutationFn: () => changeRoomPublic(roomId),
+  });
+};
+
+// 사용자
+// 1. 방 참여 요청 취소
 export const useDeleteRoomRequest = (
   roomId: number,
   refetch: () => void,
@@ -119,32 +163,57 @@ export const useDeleteRoomRequest = (
   });
 };
 
-// 3. 방 나가기
-export const useExitRoom = (
+// 2. 방 참여 요청 여부 조회
+export const useCheckRequested = (
   roomId: number,
-): UseMutationResult<ExitRoomResponse, void, unknown, unknown> => {
-  return useMutation({
-    mutationFn: () => exitRoom(roomId),
-    onSuccess: () => {},
+): UseSuspenseQueryResult<CheckRequestedResponse> => {
+  return useSuspenseQuery({
+    queryKey: [`/rooms/${roomId}/pending`, roomId],
+    queryFn: () => checkRequested(roomId),
   });
 };
 
-// 4. 공개방으로 전환
-export const useChangeRoomPublic = (
+// 3. 방 참여 요청
+export const useSendRoomRequest = (
   roomId: number,
-): UseMutationResult<ChangeRoomPublicResponse, void, unknown, unknown> => {
+  refetch: () => void,
+): UseMutationResult<SendRoomRequestResponse, void, unknown, unknown> => {
   return useMutation({
-    mutationFn: () => changeRoomPublic(roomId),
+    mutationFn: () => sendRoomRequest(roomId),
+    onSuccess: () => refetch(),
   });
 };
 
-// 방 검색
-export const useSearchRoomByKeyword = (
-  keyword: string,
-): UseQueryResult<SearchRoomByKeywordResponse> => {
-  return useQuery({
-    queryKey: [`/rooms/search`, keyword],
-    queryFn: () => searchRoomByKeyword(keyword),
-    enabled: keyword !== '',
+// 유저 상세페이지
+// 방장
+// 1. 내 방으로 초대하기
+export const useInviteMember = (inviteeId: number): UseMutationResult<InviteMemberResponse> => {
+  return useMutation({
+    mutationFn: () => inviteMember(inviteeId),
+    onSuccess: () => console.log('초대 성공'),
+  });
+};
+
+// 2. 내 방으로 초대 취소하기
+export const useDeleteInviteMember = (
+  inviteeId: number,
+): UseMutationResult<DeleteInviteMemberResponse> => {
+  return useMutation({
+    mutationFn: () => deleteInviteMember(inviteeId),
+    onSuccess: () => console.log('초대 취소 성공'),
+  });
+};
+
+// 3. 초대 요청 수락/거절
+export const useAcceptRequestMember = (
+  requesterId: number,
+  refetch: () => void,
+): UseMutationResult<AcceptRequestMemberResponse, unknown, boolean, unknown> => {
+  return useMutation({
+    mutationFn: (accept: boolean) => acceptRequestMember(requesterId, accept),
+    onSuccess: () => {
+      console.log('초대 요청 수락/거절 성공');
+      refetch();
+    },
   });
 };

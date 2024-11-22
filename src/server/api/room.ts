@@ -17,7 +17,6 @@ import {
   UpdateRoomResponse,
   GetRoomDataResponse,
   CheckHasRoomResponse,
-  AcceptInviteResponse,
   InviteMemberResponse,
   CheckRoomNameResponse,
   CheckRequestedResponse,
@@ -49,12 +48,8 @@ export const deleteRoomRequest = async (roomId: number): Promise<DeleteRoomReque
 };
 
 // 방 삭제 기능 (방장 권한)
-export const deleteRoom = async (roomId: number, memberId: number): Promise<DeleteRoomResponse> => {
-  const response = await DeleteAxiosInstance<DeleteRoomResponse>(`/rooms/${roomId}`, {
-    params: {
-      memberId: memberId,
-    },
-  });
+export const deleteRoom = async (roomId: number): Promise<DeleteRoomResponse> => {
+  const response = await DeleteAxiosInstance<DeleteRoomResponse>(`/rooms/${roomId}`);
 
   return response.data;
 };
@@ -206,7 +201,7 @@ export const acceptRequestMember = async (
   requesterId: number,
   accept: boolean,
 ): Promise<AcceptRequestMemberResponse> => {
-  const response = await PatchAxiosInstance<AcceptInviteResponse>(
+  const response = await PatchAxiosInstance<AcceptRequestMemberResponse>(
     `/rooms/request-join/${requesterId}`,
     null,
     {

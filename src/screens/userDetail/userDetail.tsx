@@ -6,15 +6,22 @@ import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'rea
 import ListView from '@components/userDetail/listView';
 import TableView from '@components/userDetail/tableView';
 import BottomButton from '@components/common/bottomButton';
+import LoadingComponent from '@components/loading/loading';
 import ReportModal from '@components/report/reportComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { useDibsOnUser } from '@hooks/api/favorite';
 import { useGetChatRoomId } from '@hooks/api/chat-room';
 import { useGetMemberStatData } from '@hooks/api/member-stat';
+import { useDibsOnUser, useDeleteFavorite } from '@hooks/api/favorite';
+import {
+  useInviteMember,
+  useGetRoomRequests,
+  useDeleteInviteMember,
+  useAcceptRequestMember,
+} from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -33,25 +40,27 @@ import SelectedTableIcon from '@assets/userDetail/coloredTableIcon.svg';
 const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
   const { memberId } = route.params;
 
+  const { bottom } = useSafeAreaInsets();
+  const width = Dimensions.get('screen').width;
+
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { lifeStyle } = useLifeStyleStore();
 
-  const { bottom } = useSafeAreaInsets();
-  const width = Dimensions.get('screen').width;
-
   const [type, setType] = useState<string>('list');
 
-  const { data: lifeStyleData } = useGetMemberStatData(memberId);
+  const { data: lifeStyleData, refetch: refetchMemberStatData } = useGetMemberStatData(memberId);
 
   const { data: chatRoomId } = useGetChatRoomId(memberId);
 
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
 
-  const { mutateAsync: dibsUser } = useDibsOnUser(memberId);
-
-  const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const { mutateAsync: dibsUser } = useDibsOnUser(memberId, refetchMemberStatData);
+  const { mutateAsync: cancelDibsUser } = useDeleteFavorite(
+    lifeStyleData.result.favoriteId,
+    refetchMemberStatData,
+  );
 
   const handleReportModal = () => {
     setIsReportModalOpen(!isReportModalOpen);
@@ -79,6 +88,12 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
     navigation.navigate('LifeStyleEditScreen');
   };
 
+  const { mutateAsync: inviteMember } = useInviteMember(memberId);
+  const { mutateAsync: deleteInvite } = useDeleteInviteMember(memberId);
+
+  const { refetch: refetchRoomRequest } = useGetRoomRequests();
+  const { mutateAsync: acceptRequest } = useAcceptRequestMember(memberId, refetchRoomRequest);
+
   return (
     <Fragment>
       <View className="flex-1 bg-white">
@@ -96,8 +111,8 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                   <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
                     <MessageIcon />
                   </Pressable>
-                  {isFavorited ? (
-                    <Pressable onPress={dibsUser} className="px-2.5 py-[11px]">
+                  {lifeStyleData.result.favoriteId !== 0 ? (
+                    <Pressable onPress={cancelDibsUser} className="px-2.5 py-[11px]">
                       <FilledHeart />
                     </Pressable>
                   ) : (
@@ -202,25 +217,60 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
           {lifeStyleData.result.memberDetail.memberId !== profile.memberId ? (
             <View className="fixed bottom-[42px] px-5">
-              {/* 순서대로 1. 방이 있고 초대한 경우 2. 방이 있고 초대하지 않은 경우 3. 방이 없는 경우 */}
-              <BottomButton
-                color={
-                  myRoom.hasRoom ? (isInvited ? 'bg-colorBox' : 'bg-main1') : 'bg-disabledButton'
-                }
-                borderColor={myRoom.hasRoom && isInvited ? 'border-main1' : 'border-main1'}
-                textColor={
-                  myRoom.hasRoom ? (isInvited ? 'text-main1' : 'text-white') : 'text-white'
-                }
-                text={
-                  myRoom.hasRoom
-                    ? isInvited
-                      ? '초대 취소하기'
-                      : '내 방으로 초대하기'
-                    : '내 방으로 초대하기'
-                }
-                disabled={!myRoom.hasRoom}
-                onPressFunc={() => setIsInvited(!isInvited)}
-              />
+              {lifeStyleData.result.hasRequestedRoomEntry && (
+                <View className="flex flex-row space-x-2">
+                  <View className="flex-1">
+                    <BottomButton
+                      color="bg-white"
+                      borderColor="border-main1"
+                      textColor="text-main1"
+                      text="거절"
+                      disabled={null}
+                      onPressFunc={() => acceptRequest(false)}
+                    />
+                  </View>
+                  <View className="flex-1">
+                    <BottomButton
+                      color="bg-main1"
+                      borderColor="border-main1"
+                      textColor="text-white"
+                      text="수락"
+                      disabled={null}
+                      onPressFunc={() => acceptRequest(true)}
+                    />
+                  </View>
+                </View>
+              )}
+
+              {/* 초대 요청 보내지 않았고 방이 없고 초대되지 않은 사용자 */}
+              {!lifeStyleData.result.hasRequestedRoomEntry &&
+                myRoom.hasRoom &&
+                !isInvited &&
+                lifeStyleData.result.roomId === 0 && (
+                  <BottomButton
+                    color="bg-main1"
+                    borderColor="border-main1"
+                    textColor="text-white"
+                    text="내 방으로 초대하기"
+                    disabled={null}
+                    onPressFunc={() => inviteMember}
+                  />
+                )}
+
+              {/* 초대 요청 보냈고 않았고 방이 없고 초대되지 않은 사용자 */}
+              {!lifeStyleData.result.hasRequestedRoomEntry &&
+                myRoom.hasRoom &&
+                isInvited &&
+                lifeStyleData.result.roomId === 0 && (
+                  <BottomButton
+                    color="bg-white"
+                    borderColor="border-main1"
+                    textColor="text-main1"
+                    text="초대 취소하기"
+                    disabled={null}
+                    onPressFunc={() => deleteInvite}
+                  />
+                )}
             </View>
           ) : (
             <SafeAreaView className="bg-white" />
@@ -244,13 +294,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
         </View>
       }
     >
-      <Suspense
-        fallback={
-          <View className="h-full w-full flex-1 items-center justify-center">
-            <Text>서스펜스 에러</Text>
-          </View>
-        }
-      >
+      <Suspense fallback={<LoadingComponent />}>
         <UserDetail navigation={navigation} route={route} />
       </Suspense>
     </ErrorBoundary>
