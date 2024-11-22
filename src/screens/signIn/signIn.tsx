@@ -54,7 +54,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const test = async () => {
     const response = await signIn({
-      clientId: 'OGZmNDU5ZDktYjMwYi00YzQwLWEzMGUtN2IwMTkwMGYyMGMx',
+      clientId: 'ZDQzN2JmMGYtMzE0Yy00ZWNhLTk3ODctZTcyMzkxNDliMTc0',
       socialType: 'KAKAO',
     });
 

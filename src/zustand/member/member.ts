@@ -39,6 +39,7 @@ export const useProfileStore = create<{
     nickname: '',
     gender: '',
     birthday: '',
+    universityId: 0,
     universityName: '',
     majorName: '',
     persona: 0,

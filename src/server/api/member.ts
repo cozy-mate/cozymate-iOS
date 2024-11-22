@@ -9,6 +9,10 @@ import {
   TestSignUpResponse,
   DeleteMemberResponse,
   CheckNicknameResponse,
+  UpdatePersonaResponse,
+  UpdateNicknameResponse,
+  UpdateBirthdayResponse,
+  UpdateMajorNameResponse,
 } from '@server/responseTypes/member';
 
 // 회원 탈퇴
@@ -30,6 +34,62 @@ export const checkNickname = async (nickname: string): Promise<CheckNicknameResp
   const response = await GetAxiosInstance<CheckNicknameResponse>(`/members/check-nickname`, {
     params: { nickname: nickname },
   });
+
+  return response.data;
+};
+
+// 사용자 프로필 이미지 수정
+export const updatePersona = async (persona: number): Promise<UpdatePersonaResponse> => {
+  const response = await PostAxiosInstance<UpdatePersonaResponse>(`/members/update-persona`, null, {
+    params: {
+      persona: persona,
+    },
+  });
+
+  return response.data;
+};
+
+// 사용자 닉네임 수정
+export const updateNickname = async (nickname: string): Promise<UpdateNicknameResponse> => {
+  const response = await PostAxiosInstance<UpdateNicknameResponse>(
+    `/members/update-nickname`,
+    null,
+    {
+      params: {
+        nickname: nickname,
+      },
+    },
+  );
+
+  return response.data;
+};
+
+// 사용자 학과 수정
+export const updateMajorName = async (majorName: string): Promise<UpdateMajorNameResponse> => {
+  const response = await PostAxiosInstance<UpdateMajorNameResponse>(
+    `/members/update-majorName`,
+    null,
+    {
+      params: {
+        majorName: majorName,
+      },
+    },
+  );
+
+  return response.data;
+};
+
+// 사용자 생일 수정
+export const updateBirthday = async (localDate: string): Promise<UpdateBirthdayResponse> => {
+  const response = await PostAxiosInstance<UpdateBirthdayResponse>(
+    `/members/update-birthday`,
+    null,
+    {
+      params: {
+        localDate: localDate,
+      },
+    },
+  );
 
   return response.data;
 };

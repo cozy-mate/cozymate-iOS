@@ -246,13 +246,19 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           )}
 
           {/* 방장인 사용자에 대하여 참여 요청한 사용자 목록 컴포넌트 */}
-          {myRoom.hasRoom && requestMemberList !== undefined && roomInfo.isRoomManager && (
-            <>
-              <RequestUsersComponent navigation={navigation} userList={requestMemberList?.result} />
+          {myRoom.hasRoom &&
+            requestMemberList !== undefined &&
+            requestMemberList.result.length !== 0 &&
+            roomInfo.isRoomManager && (
+              <>
+                <RequestUsersComponent
+                  navigation={navigation}
+                  userList={requestMemberList?.result}
+                />
 
-              <View className="my-6 h-2.5 bg-[#F7F9FA]" />
-            </>
-          )}
+                <View className="my-6 h-2.5 bg-[#F7F9FA]" />
+              </>
+            )}
 
           {/* 룸메이트 추천 컴포넌트 */}
           <RecommendUserList navigation={navigation} users={userList.result.memberList} />

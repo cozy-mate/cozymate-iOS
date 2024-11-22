@@ -9,6 +9,8 @@ import ChipSelectModal from '@components/common/chipSelectModal';
 import { useProfileStore } from '@zustand/member/member';
 import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 
+import { useUpdatePersona } from '@hooks/api/member';
+
 import { getProfileImage } from '@utils/profileImage';
 import { getMyImportantLifeStyle } from '@utils/getLifeStyleIcon';
 
@@ -18,7 +20,7 @@ import BackButton from '@assets/backButton.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 
 const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
-  const { profile } = useProfileStore();
+  const { profile, setProfile } = useProfileStore();
   const { preferenceList } = usePreferencesStore();
 
   const [persona, setPersona] = useState<number>(profile.persona);
@@ -44,6 +46,15 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
   const translateBirthDay = (birth: string) => {
     const [year, month, day] = birth.split('-');
     return `${year}년 ${parseInt(month, 10)}월 ${parseInt(day, 10)}일`;
+  };
+
+  const { mutateAsync: changePersona } = useUpdatePersona();
+
+  const handleUpdate = async (persona: number): Promise<void> => {
+    changePersona(persona);
+    setProfile({
+      persona: persona,
+    });
   };
 
   return (
@@ -139,6 +150,7 @@ const MyInfoScreen = ({ navigation }: MyInfoScreenProps) => {
           persona={persona}
           setPersona={setPersona}
           closeModal={() => setIsCharacterSelectOpen(false)}
+          pressFunc={handleUpdate}
         />
       )}
       {isChipModalOpen && <ChipSelectModal closeModal={closeChipModal} />}

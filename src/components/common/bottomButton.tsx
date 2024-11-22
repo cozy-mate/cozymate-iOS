@@ -7,7 +7,7 @@ interface BottomButtonProps {
   textColor: string;
   text: string;
   disabled: any;
-  onPressFunc: () => Promise<void> | void;
+  onPressFunc: any;
 }
 
 const BottomButton: React.FC<BottomButtonProps> = ({
@@ -23,7 +23,7 @@ const BottomButton: React.FC<BottomButtonProps> = ({
     : `box-border ${color} p-4 border ${borderColor} rounded-xl`;
 
   const textStyle = disabled
-    ? `text-white text-center font-semibold text-base `
+    ? `text-white text-center font-semibold text-base`
     : `${textColor} text-center font-semibold text-base`;
 
   return (

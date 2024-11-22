@@ -22,10 +22,11 @@ import {
 
 export const useDeleteFavorite = (
   favoriteId: number,
+  refetch: () => void,
 ): UseMutationResult<DeleteFavoriteResponse> => {
   return useMutation({
     mutationFn: () => deleteFavorite(favoriteId),
-    onSuccess: () => console.log('찜 제거'),
+    onSuccess: () => refetch(),
   });
 };
 
@@ -52,17 +53,23 @@ export const useGetFavoriteUserList = (): UseSuspenseQueryResult<
 };
 
 // 방 찜하기
-export const useDibsOnRoom = (roomId: number): UseMutationResult<DibsOnRoomResponse> => {
+export const useDibsOnRoom = (
+  roomId: number,
+  refetch: () => void,
+): UseMutationResult<DibsOnRoomResponse> => {
   return useMutation({
     mutationFn: () => dibsOnRoom(roomId),
-    onSuccess: () => console.log('방 찜 성공'),
+    onSuccess: () => refetch(),
   });
 };
 
 // 사용자 찜하기
-export const useDibsOnUser = (memberId: number): UseMutationResult<DibsOnUserResponse> => {
+export const useDibsOnUser = (
+  memberId: number,
+  refetch: () => void,
+): UseMutationResult<DibsOnUserResponse> => {
   return useMutation({
     mutationFn: () => dibsOnUser(memberId),
-    onSuccess: () => console.log('유저 찜 성공'),
+    onSuccess: () => refetch(),
   });
 };

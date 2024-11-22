@@ -13,6 +13,8 @@ import UnivInfoSelect from '@components/onBoard/univInfoSelect';
 import OneButtonModal from '@components/commonComponents/oneButtonModal';
 import ButtonTextInput from '@components/schoolAuthentication/buttonTextInput';
 
+import { useProfileStore } from '@zustand/member/member';
+
 import { useSendMail, useVerifyMail } from '@hooks/api/mail';
 import { useGetUniversityInfo } from '@hooks/api/university';
 
@@ -22,6 +24,7 @@ import BackButton from '@assets/backButton.svg';
 
 const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationScreenProps) => {
   const { isVerified } = route.params;
+  const { profile } = useProfileStore();
 
   const [majorName, setMajorName] = useState<string>('');
   const [mailAddress, setMailAddress] = useState<string>('');
@@ -36,11 +39,11 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
 
   const toBack = () => {
     setIsModalOpen(false);
-    navigation.goBack();
+    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
   // 사용자 학교 정보 조회
-  const { data: userSchoolInfo } = useGetUniversityInfo(1);
+  const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
 
   // 인증메일 전송
   const { mutateAsync: sendAuthenticationMail, isPending: sendMailPending } = useSendMail();
@@ -51,7 +54,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   const handleMailSend = async (): Promise<void> => {
     await sendAuthenticationMail({
       mailAddress: mailAddress,
-      universityId: userSchoolInfo.result.id,
+      universityId: profile.universityId,
     });
     setIsSended(true);
   };
@@ -59,7 +62,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   const handleVerifyCode = async (): Promise<void> => {
     await verifyAuthenticationCode({
       code: authenticationCode,
-      universityId: userSchoolInfo.result.id,
+      universityId: profile.universityId,
       majorName: majorName,
     });
     setIsModalOpen(true);

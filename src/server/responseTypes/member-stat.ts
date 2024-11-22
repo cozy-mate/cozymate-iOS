@@ -87,6 +87,8 @@ export interface GetOtherMemberStatDataResponse {
     };
     equality: number | null;
     roomId: number;
+    hasRequestedRoomEntry: boolean;
+    favoriteId: number;
   };
 }
 

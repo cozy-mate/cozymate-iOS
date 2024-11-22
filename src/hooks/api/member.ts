@@ -10,11 +10,25 @@ import {
   useHasLifeStyleStore,
 } from '@zustand/member-stat/member-stat';
 
-import { signIn, getMyProfile } from '@server/api/member';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
-import { AppleLoginResponse, KakaoLoginResponse } from '@server/responseTypes/member';
+import {
+  signIn,
+  getMyProfile,
+  updatePersona,
+  updateBirthday,
+  updateNickname,
+  updateMajorName,
+} from '@server/api/member';
+import {
+  AppleLoginResponse,
+  KakaoLoginResponse,
+  UpdatePersonaResponse,
+  UpdateBirthdayResponse,
+  UpdateNicknameResponse,
+  UpdateMajorNameResponse,
+} from '@server/responseTypes/member';
 
 import { setAccessToken, setRefreshToken } from '@utils/token';
 
@@ -191,5 +205,45 @@ export const useAppleLogin = (
         console.error('Login error:', error);
       }
     },
+  });
+};
+
+export const useUpdatePersona = (): UseMutationResult<UpdatePersonaResponse, undefined, number> => {
+  return useMutation({
+    mutationFn: (persona: number) => updatePersona(persona),
+    onSuccess: () => console.log('프로필 이미지 변경 성공'),
+  });
+};
+
+export const useUpdateNickname = (): UseMutationResult<
+  UpdateNicknameResponse,
+  undefined,
+  string
+> => {
+  return useMutation({
+    mutationFn: (nickname: string) => updateNickname(nickname),
+    onSuccess: () => console.log('닉네임 변경 성공'),
+  });
+};
+
+export const useUpdatMajorName = (): UseMutationResult<
+  UpdateMajorNameResponse,
+  undefined,
+  string
+> => {
+  return useMutation({
+    mutationFn: (majorName: string) => updateMajorName(majorName),
+    onSuccess: () => console.log('학과 변경 성공'),
+  });
+};
+
+export const useUpdateBirthday = (): UseMutationResult<
+  UpdateBirthdayResponse,
+  undefined,
+  string
+> => {
+  return useMutation({
+    mutationFn: (localDate: string) => updateBirthday(localDate),
+    onSuccess: () => console.log('생일 변경 성공'),
   });
 };

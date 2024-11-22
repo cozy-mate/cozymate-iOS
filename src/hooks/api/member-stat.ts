@@ -20,21 +20,21 @@ import {
 import {
   SearchMembersResponse,
   GetRandomMemberResponse,
-  GetMemberStatDataResponse,
   SearchMemberByKeywordResponse,
+  GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
 
 // 사용자 상세정보 조회
 export const useGetMemberStatData = (
   memberId: number,
 ): {
-  data: GetMemberStatDataResponse;
+  data: GetOtherMemberStatDataResponse;
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
     queryKey: ['otherlifestyledata', memberId],
     queryFn: () => getOtherMemberStatData(memberId),
-    select: (response: GetMemberStatDataResponse) => {
+    select: (response: GetOtherMemberStatDataResponse) => {
       return response;
     },
   });
