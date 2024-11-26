@@ -97,6 +97,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           managerMemberId: response.result.managerMemberId,
           managerNickname: response.result.managerNickname,
           isRoomManager: response.result.isRoomManager,
+          favoriteId: response.result.favoriteId,
           maxMateNum: response.result.maxMateNum,
           arrivalMateNum: response.result.arrivalMateNum,
           dormitoryName: response.result.dormitoryName,
@@ -117,6 +118,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           managerMemberId: response.result.managerMemberId,
           managerNickname: response.result.managerNickname,
           isRoomManager: response.result.isRoomManager,
+          favoriteId: response.result.favoriteId,
           maxMateNum: response.result.maxMateNum,
           arrivalMateNum: response.result.arrivalMateNum,
           dormitoryName: response.result.dormitoryName,
@@ -228,6 +230,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           persona={persona}
           setPersona={setPersona}
           closeModal={handleCharacterModal}
+          pressFunc={null}
         />
       )}
     </>

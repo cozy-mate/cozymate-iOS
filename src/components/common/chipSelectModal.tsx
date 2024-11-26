@@ -5,6 +5,9 @@ import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 
 import { updatePreferenceList } from '@server/api/member-stat-preference';
 
+import { useGetMemberList } from '@hooks/api/member-stat';
+import { useGetRandomRoom } from '@hooks/api/room-recommend';
+
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
 interface Item {
@@ -20,10 +23,13 @@ interface ChipSelectModalProps {
 const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
   const { preferenceList, setPreferenceList } = usePreferencesStore();
 
+  const { refetch: refetchRecommendMembers } = useGetMemberList();
+  const { refetch: refetchRecommendRooms } = useGetRandomRoom(5, 0);
+
   const items: Item[] = [
     { index: 1, id: 'birthYear', name: '출생년도' },
     { index: 2, id: 'admissionYear', name: '학번' },
-    { index: 3, id: 'major', name: '학과' },
+    { index: 3, id: 'majorName', name: '학과' },
     { index: 4, id: 'acceptance', name: '합격여부' },
     { index: 5, id: 'wakeUpTime', name: '기상시간' },
     { index: 6, id: 'sleepingTime', name: '취침시간' },
@@ -57,7 +63,8 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
 
   const updatePreferences = async (): Promise<void> => {
     await updatePreferenceList({ preferenceList });
-
+    refetchRecommendMembers();
+    refetchRecommendRooms();
     closeModal();
   };
 

@@ -5,7 +5,7 @@ import LogoutModal from '@components/myPage/logoutModal';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
 
 import useFcm from '@hooks/useFcm';
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
@@ -26,13 +26,12 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const { setLoggedIn } = useLoggedInStore();
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
+  const { isVerified } = useIsVerifiedStore();
   const { roomInfo } = useRoomInfoStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { deactivateFcmToken } = useFcm();
 
   const { data: hasInquiry } = useCheckHasInquiry();
-
-  const school = true;
 
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
 
@@ -49,7 +48,7 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { isVerified: false });
+    navigation.navigate('SchoolAuthenticationScreen', { verified: Boolean(isVerified) });
   };
 
   const toLifeStyle = () => {
@@ -133,10 +132,12 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
             >
               <Text className="text-sm font-medium text-emphasizedFont">학교 인증</Text>
               <View className="flex flex-row items-center">
-                {school ? (
+                {isVerified ? (
                   <Fragment>
                     <CertificationIcon />
-                    <Text className="mx-1 text-sm font-medium text-main1">인하대학교</Text>
+                    <Text className="mx-1 text-sm font-medium text-main1">
+                      {profile.universityName}
+                    </Text>
                     <RightArrow />
                   </Fragment>
                 ) : (

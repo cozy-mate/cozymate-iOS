@@ -3,13 +3,14 @@ import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
 import {
   useLifeStyleStore,
   usePreferencesStore,
   useHasLifeStyleStore,
 } from '@zustand/member-stat/member-stat';
 
+import { checkVerified } from '@server/api/mail';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
@@ -40,6 +41,7 @@ export const useKakaoLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setIsVerified } = useIsVerifiedStore();
   const { setPreferenceList } = usePreferencesStore();
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
@@ -53,60 +55,79 @@ export const useKakaoLogin = (
     onSuccess: async (response: KakaoOAuthToken) => {
       try {
         const profile: KakaoProfile = await getProfile();
+        console.log('카카오 프로필 조회 성공', profile);
 
-        const signInResponse = await signIn({
-          clientId: profile.id.toString(),
-          socialType: 'KAKAO',
-        });
+        try {
+          const signInResponse = await signIn({
+            clientId: profile.id.toString(),
+            socialType: 'KAKAO',
+          });
 
-        const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
+          console.log('로그인 성공', signInResponse);
 
-        // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
-        await setAccessToken(accessToken);
+          const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
 
-        if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
-          navigation.navigate('PersonalInfoInputScreen');
-        } else {
-          await setRefreshToken(refreshToken);
+          // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
+          await setAccessToken(accessToken);
+          console.log('토큰 저장 완료');
 
-          // 프로필 정보 저장
-          const getProfileResponse = await getMyProfile();
-          setProfile(getProfileResponse.result);
+          console.log(accessToken);
 
-          const preferenceResponse = await getPreferenceList();
-          setPreferenceList(preferenceResponse.result.preferenceList);
+          if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
+            console.log('리프레쉬 없음');
+            navigation.navigate('PersonalInfoInputScreen');
+          } else {
+            console.log('리프레쉬 있음');
+            await setRefreshToken(refreshToken);
 
-          // 방 존재 여부 저장
-          const roomCheckResponse = await checkHasRoom();
-          const roomId = roomCheckResponse.result.roomId;
+            // 프로필 정보 저장
+            const getProfileResponse = await getMyProfile();
+            setProfile(getProfileResponse.result);
 
-          // 방이 존재하는 경우 방 정보 저장
-          if (roomId !== 0) {
-            setMyRoom({ hasRoom: true, roomId: roomId });
+            const checkVerifiedResponse = await checkVerified();
+            setIsVerified(checkVerifiedResponse.result);
 
-            const roomInfoResponse = await getRoomData(roomId);
-            setRoomInfo(roomInfoResponse.result);
-          }
+            const preferenceResponse = await getPreferenceList();
+            setPreferenceList(preferenceResponse.result.preferenceList);
 
-          // getUserDetailData 호출 및 라이프스타일 정보 처리
-          try {
-            const userDetailResponse = await getMemberStatData();
-            setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
-          } catch (error: any) {
-            const errorCode = error?.response?.data?.code;
-            if (errorCode === 'MEMBERSTAT402') {
-              setHasLifeStyle(false);
-            } else {
-              // 예상하지 못한 에러 처리
-              console.error(error);
+            // 방 존재 여부 저장
+            const roomCheckResponse = await checkHasRoom();
+            const roomId = roomCheckResponse.result.roomId;
+
+            // 방이 존재하는 경우 방 정보 저장
+            if (roomId !== 0) {
+              setMyRoom({ hasRoom: true, roomId: roomId });
+
+              const roomInfoResponse = await getRoomData(roomId);
+              setRoomInfo(roomInfoResponse.result);
+              setMyRoom({
+                isRoomManager: roomInfoResponse.result.isRoomManager,
+                isFullRoom:
+                  roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+              });
             }
-          }
 
-          setLoggedIn(true);
+            // getUserDetailData 호출 및 라이프스타일 정보 처리
+            try {
+              const userDetailResponse = await getMemberStatData();
+              setHasLifeStyle(true);
+              setLifeStyle(userDetailResponse.result);
+            } catch (error: any) {
+              const errorCode = error?.response?.data?.code;
+              if (errorCode === 'MEMBERSTAT402') {
+                setHasLifeStyle(false);
+              } else {
+                // 예상하지 못한 에러 처리
+                console.error(error);
+              }
+            }
+            setLoggedIn(true);
+          }
+        } catch (error: any) {
+          console.log('로그인 에러', error);
         }
-      } catch (error) {
-        console.error('Login error:', error);
+      } catch (error: any) {
+        console.error('Login error:', error.response.data.code);
       }
     },
   });
@@ -138,6 +159,7 @@ export const useAppleLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setIsVerified } = useIsVerifiedStore();
   const { setPreferenceList } = usePreferencesStore();
 
   // 방 여부 및 방 정보
@@ -169,6 +191,9 @@ export const useAppleLogin = (
           const getProfileResponse = await getMyProfile();
           setProfile(getProfileResponse.result);
 
+          const checkVerifiedResponse = await checkVerified();
+          setIsVerified(checkVerifiedResponse.result);
+
           const preferenceResponse = await getPreferenceList();
           setPreferenceList(preferenceResponse.result.preferenceList);
 
@@ -182,6 +207,11 @@ export const useAppleLogin = (
 
             const roomInfoResponse = await getRoomData(roomId);
             setRoomInfo(roomInfoResponse.result);
+            setMyRoom({
+              isRoomManager: roomInfoResponse.result.isRoomManager,
+              isFullRoom:
+                roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+            });
           }
 
           // getUserDetailData 호출 및 라이프스타일 정보 처리
@@ -198,7 +228,6 @@ export const useAppleLogin = (
               console.error(error);
             }
           }
-
           setLoggedIn(true);
         }
       } catch (error) {

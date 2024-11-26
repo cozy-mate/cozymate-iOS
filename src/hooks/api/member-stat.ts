@@ -102,7 +102,7 @@ export const useSearchMembersByFilter = (
 export const useGetMemberList = () => {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
-  const { data } = useSuspenseQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['/members/stat/random'],
     queryFn: () => (hasLifeStyle ? searchMembers() : getRandomMember()),
     select: (response: GetRandomMemberResponse | SearchMembersResponse) => {
@@ -110,7 +110,7 @@ export const useGetMemberList = () => {
     },
   });
 
-  return { data };
+  return { data, refetch };
 };
 
 export const useGetMember = () => {

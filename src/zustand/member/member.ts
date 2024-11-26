@@ -15,6 +15,7 @@ export const useLoggedInStore = create<{
 export const useSignUpStore = create<{
   signUpState: SignUp;
   setSignUpState: (newSignUpState: Partial<SignUp>) => void;
+  clearSignUpState: () => void;
 }>((set) => ({
   signUpState: {
     nickname: '',
@@ -26,6 +27,16 @@ export const useSignUpStore = create<{
   setSignUpState: (newSignUpState) =>
     set((state) => ({
       signUpState: { ...state.signUpState, ...newSignUpState },
+    })),
+  clearSignUpState: () =>
+    set(() => ({
+      signUpState: {
+        nickname: '',
+        gender: '',
+        birthday: '',
+        persona: 0,
+        universityId: 0,
+      },
     })),
 }));
 
@@ -49,9 +60,9 @@ export const useProfileStore = create<{
 
 // 학교 인증 여부
 export const useIsVerifiedStore = create<{
-  isVerified: boolean;
-  setIsVerified: (newStatus: boolean) => void;
+  isVerified: string;
+  setIsVerified: (newStatus: string) => void;
 }>((set) => ({
-  isVerified: false,
+  isVerified: '',
   setIsVerified: (status) => set({ isVerified: status }),
 }));

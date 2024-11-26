@@ -3,6 +3,8 @@ import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 export interface MyRoom {
   hasRoom: boolean;
   roomId: number;
+  isRoomManager: boolean;
+  isFullRoom: boolean;
 }
 
 // 공개방 생성 정보
@@ -36,7 +38,7 @@ export type RoomInfo = {
   managerMemberId: number;
   managerNickname: string;
   isRoomManager: boolean;
-  isFavorited: boolean;
+  favoriteId: number;
   maxMateNum: number;
   arrivalMateNum: number;
   dormitoryName: string;
@@ -65,7 +67,7 @@ export type InviteCodeRoomInfo = {
   managerMemberId: number;
   managerNickname: string;
   isRoomManager: boolean;
-  isFavorited: boolean;
+  favoriteId: number;
   maxMateNum: number;
   arrivalMateNum: number;
   dormitoryName: string;

@@ -28,7 +28,7 @@ export interface GetRoomDataResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -82,7 +82,7 @@ export interface GetRequestRoomsResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -123,7 +123,7 @@ export interface GetRoomDataByInviteCodeResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -154,7 +154,7 @@ export interface GetInvitedRoomsResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -167,6 +167,10 @@ export interface GetInvitedRoomsResponse {
       white: LifestyleOptionKey[];
     };
   }[];
+}
+
+export interface CheckRequestedToJoinResponse {
+  result: boolean;
 }
 
 export interface CheckHasRoomResponse {
@@ -201,7 +205,7 @@ export interface UpdateRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -268,7 +272,7 @@ export interface CreatePublicRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;
@@ -299,7 +303,7 @@ export interface CreatePrivateRoomResponse {
     managerMemberId: number;
     managerNickname: string;
     isRoomManager: boolean;
-    isFavorited: boolean;
+    favoriteId: number;
     maxMateNum: number;
     arrivalMateNum: number;
     dormitoryName: string;

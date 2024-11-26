@@ -26,8 +26,10 @@ type Item = {
   select: boolean;
 };
 
-const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) => {
-  const { setLifeStyle } = useLifeStyleStore();
+const BasicInformationComponent = ({ navigation, route }: BasicLifeStyleScreenProps) => {
+  const { returnToUser, returnToRoom } = route.params ?? {};
+
+  const { lifeStyle, setLifeStyle } = useLifeStyleStore();
 
   const [admissionYear, setAdmissionYear] = useState<string>('');
   const [numOfRoommate, setNumOfRoommate] = useState<number | undefined>(undefined);
@@ -56,12 +58,20 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
 
   const toNext = async (): Promise<void> => {
     setLifeStyle({
-      admissionYear: admissionYear,
-      numOfRoommate: numOfRoommate,
-      acceptance: acceptance,
+      memberStatDetail: {
+        admissionYear: admissionYear,
+        numOfRoommate: numOfRoommate,
+        acceptance: acceptance,
+      },
     });
 
-    navigation.navigate('EssentialLifeStyleScreen');
+    if (returnToUser) {
+      navigation.navigate('EssentialLifeStyleScreen', { returnToUser });
+    } else if (returnToRoom) {
+      navigation.navigate('EssentialLifeStyleScreen', { returnToRoom });
+    } else {
+      navigation.navigate('EssentialLifeStyleScreen');
+    }
   };
 
   const [showRoommateInput, setShowRoommateInput] = useState<boolean>(false);
@@ -79,6 +89,8 @@ const BasicInformationComponent = ({ navigation }: BasicLifeStyleScreenProps) =>
     },
     totalFields,
   });
+
+  console.log(lifeStyle);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

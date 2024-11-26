@@ -20,7 +20,9 @@ type Item = {
   select: boolean;
 };
 
-const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenProps) => {
+const EssentialInformationComponent = ({ navigation, route }: EssentialLifeStyleScreenProps) => {
+  const { returnToUser, returnToRoom } = route.params ?? {};
+
   const { setLifeStyle } = useLifeStyleStore();
 
   const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
@@ -110,32 +112,40 @@ const EssentialInformationComponent = ({ navigation }: EssentialLifeStyleScreenP
 
   const toNext = async (): Promise<void> => {
     setLifeStyle({
-      wakeUpMeridian: wakeUpMeridian,
-      wakeUpTime: wakeUpTime,
-      sleepingMeridian: sleepingMeridian,
-      sleepingTime: sleepingTime,
-      turnOffMeridian: turnOffMeridian,
-      turnOffTime: turnOffTime,
-      smoking: smoking,
-      sleepingHabit: sleepingHabit,
-      airConditioningIntensity: airConditioningIntensity,
-      heatingIntensity: heatingIntensity,
-      lifePattern: lifePattern,
-      intimacy: intimacy,
-      canShare: canShare,
-      isPlayGame: isPlayGame,
-      isPhoneCall: isPhoneCall,
-      studying: studying,
-      intake: intake,
-      cleanSensitivity: cleanSensitivity,
-      noiseSensitivity: noiseSensitivity,
-      cleaningFrequency: cleaningFrequency,
-      drinkingFrequency: drinkingFrequency,
-      personality: personality,
-      mbti: mbti,
+      memberStatDetail: {
+        wakeUpMeridian: wakeUpMeridian,
+        wakeUpTime: wakeUpTime,
+        sleepingMeridian: sleepingMeridian,
+        sleepingTime: sleepingTime,
+        turnOffMeridian: turnOffMeridian,
+        turnOffTime: turnOffTime,
+        smoking: smoking,
+        sleepingHabit: sleepingHabit,
+        airConditioningIntensity: airConditioningIntensity,
+        heatingIntensity: heatingIntensity,
+        lifePattern: lifePattern,
+        intimacy: intimacy,
+        canShare: canShare,
+        isPlayGame: isPlayGame,
+        isPhoneCall: isPhoneCall,
+        studying: studying,
+        intake: intake,
+        cleanSensitivity: cleanSensitivity,
+        noiseSensitivity: noiseSensitivity,
+        cleaningFrequency: cleaningFrequency,
+        drinkingFrequency: drinkingFrequency,
+        personality: personality,
+        mbti: mbti,
+      },
     });
 
-    navigation.navigate('AdditionalLifeStyleScreen');
+    if (returnToUser) {
+      navigation.navigate('AdditionalLifeStyleScreen', { returnToUser });
+    } else if (returnToRoom) {
+      navigation.navigate('AdditionalLifeStyleScreen', { returnToRoom });
+    } else {
+      navigation.navigate('AdditionalLifeStyleScreen');
+    }
   };
 
   const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);

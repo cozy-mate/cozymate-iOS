@@ -35,6 +35,7 @@ import {
   DeleteInviteMemberResponse,
   AcceptRequestMemberResponse,
   SearchRoomByKeywordResponse,
+  CheckRequestedToJoinResponse,
   GetRoomDataByInviteCodeResponse,
 } from '@server/responseTypes/room';
 
@@ -133,6 +134,17 @@ export const getInvitedRooms = async (): Promise<GetInvitedRoomsResponse> => {
   const response = await GetAxiosInstance<GetInvitedRoomsResponse>(`/rooms/invited`);
 
   return response.data;
+};
+
+// 방장이 사용자한테 방 참여 요청을 보냈는지 여부 조회
+export const checkRequestedToJoin = async (
+  memberId: number,
+): Promise<CheckRequestedToJoinResponse> => {
+  const reseponse = await GetAxiosInstance<CheckRequestedToJoinResponse>(
+    `/rooms/invited-status/${memberId}`,
+  );
+
+  return reseponse.data;
 };
 
 // 로그인한 사용자가 참여한 방이 있는지 여부 조회

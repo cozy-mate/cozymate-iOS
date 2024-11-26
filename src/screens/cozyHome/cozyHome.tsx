@@ -1,6 +1,9 @@
-import React, { useState, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, {
+  useState,
+  Suspense, //useCallback
+} from 'react';
 import {
   Text,
   View,
@@ -8,6 +11,7 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
+  // RefreshControl,
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -46,6 +50,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
   const { bottom } = useSafeAreaInsets();
 
+  // const [refreshing, setRefreshing] = useState<boolean>(false);
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState(0);
 
@@ -71,6 +76,14 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const { data: userList } = useGetMemberList();
   const { data: roomList } = useGetRandomRoom(5, 0);
 
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   refetchMemberList();
+  //   setTimeout(() => {
+  //     setRefreshing(false);
+  //   }, 2000); // 예시로 2초 후 새로고침 완료
+  // }, []);
+
   // 쪽지
   const toChat = () => {
     navigation.navigate('ChatScreen');
@@ -82,7 +95,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   };
 
   const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { isVerified: isVerified });
+    navigation.navigate('SchoolAuthenticationScreen', { verified: Boolean(isVerified) });
   };
 
   const toLifeStyleOnboarding = () => {
@@ -135,13 +148,18 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
         }}
       />
-      <ScrollView onScroll={handleScroll} scrollEventThrottle={16} bounces={false}>
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        bounces={false}
+        // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View className="bg-white">
           <View className="flex bg-sub1 pt-[18px]" onLayout={handleLayout}>
             <HomeBack width={width} style={{ position: 'absolute' }} />
             <View style={{ position: 'relative', zIndex: 100 }}>
               <View className="mb-3 flex flex-row items-center justify-between px-5">
-                {isVerified ? (
+                {isVerified !== '' ? (
                   <Pressable
                     className="flex flex-row items-center py-2"
                     onPress={toSchoolAuthentication}
@@ -193,7 +211,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                 <View className="mb-6 flex h-[100px] flex-row space-x-3">
                   <Pressable
                     onPress={handleCreateRoomModal}
-                    // disabled={myRoom.hasRoom}
+                    disabled={myRoom.hasRoom}
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text
@@ -207,7 +225,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
                   <Pressable
                     onPress={toJoinRoom}
-                    // disabled={myRoom.hasRoom}
+                    disabled={myRoom.hasRoom}
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text

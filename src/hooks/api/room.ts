@@ -25,6 +25,7 @@ import {
   deleteInviteMember,
   searchRoomByKeyword,
   acceptRequestMember,
+  checkRequestedToJoin,
 } from '@server/api/room';
 import {
   ExitRoomResponse,
@@ -42,6 +43,7 @@ import {
   DeleteInviteMemberResponse,
   SearchRoomByKeywordResponse,
   AcceptRequestMemberResponse,
+  CheckRequestedToJoinResponse,
 } from '@server/responseTypes/room';
 
 // 어플 시작 시 사용
@@ -186,21 +188,49 @@ export const useSendRoomRequest = (
 
 // 유저 상세페이지
 // 방장
+// 0. 방 참여 요청 조회 여부
+export const useCheckRequestedToJoin = (
+  memberId: number,
+): { data: CheckRequestedToJoinResponse | undefined; refetch: () => void } => {
+  const { myRoom } = useHasRoomStore();
+
+  const { data, refetch } = useQuery({
+    queryKey: [`/rooms/invited-status/memberId`, memberId],
+    queryFn: () => checkRequestedToJoin(memberId),
+    select: (response: CheckRequestedToJoinResponse) => {
+      return response;
+    },
+    enabled: myRoom.isRoomManager,
+  });
+
+  return { data, refetch };
+};
+
 // 1. 내 방으로 초대하기
-export const useInviteMember = (inviteeId: number): UseMutationResult<InviteMemberResponse> => {
+export const useInviteMember = (
+  inviteeId: number,
+  refetch: () => void,
+): UseMutationResult<InviteMemberResponse> => {
   return useMutation({
     mutationFn: () => inviteMember(inviteeId),
-    onSuccess: () => console.log('초대 성공'),
+    onSuccess: () => {
+      console.log('초대 성공');
+      refetch();
+    },
   });
 };
 
 // 2. 내 방으로 초대 취소하기
 export const useDeleteInviteMember = (
   inviteeId: number,
+  refetch: () => void,
 ): UseMutationResult<DeleteInviteMemberResponse> => {
   return useMutation({
     mutationFn: () => deleteInviteMember(inviteeId),
-    onSuccess: () => console.log('초대 취소 성공'),
+    onSuccess: () => {
+      console.log('초대 취소 성공');
+      refetch();
+    },
   });
 };
 
