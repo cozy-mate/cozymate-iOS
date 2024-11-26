@@ -1,12 +1,25 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { addRole, updateRole, getRoleData } from '@server/api/role';
 import { AddRoleRequest, UpdateRoleRequest } from '@server/requestTypes/role';
+import { addRole, updateRole, deleteRole, getRoleData } from '@server/api/role';
 import {
   AddRoleResponse,
   UpdateRoleResponse,
+  DeleteRoleResponse,
   GetRoleDataResponse,
 } from '@server/responseTypes/role';
+
+// Role 삭제
+export const useDeleteRole = (
+  roomId: number,
+  roleId: number,
+  refetch: () => void,
+): UseMutationResult<DeleteRoleResponse, void> => {
+  return useMutation({
+    mutationFn: () => deleteRole(roomId, roleId),
+    onSuccess: () => refetch(),
+  });
+};
 
 // Role 생성
 export const useAddRole = (
