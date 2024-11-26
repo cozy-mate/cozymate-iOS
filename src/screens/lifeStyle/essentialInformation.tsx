@@ -6,7 +6,7 @@ import BackHeader from 'src/layout/backHeader';
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomCheckBoxInput from '@components/lifeStyle/customCheckBoxInput';
 
-import { useLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useRegisterLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
@@ -23,7 +23,7 @@ type Item = {
 const EssentialInformationComponent = ({ navigation, route }: EssentialLifeStyleScreenProps) => {
   const { returnToUser, returnToRoom } = route.params ?? {};
 
-  const { setLifeStyle } = useLifeStyleStore();
+  const { setRegisterLifeStyle } = useRegisterLifeStyleStore();
 
   const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
   const [wakeUpTime, setWakeUpTime] = useState<number | undefined>(undefined);
@@ -111,32 +111,30 @@ const EssentialInformationComponent = ({ navigation, route }: EssentialLifeStyle
   };
 
   const toNext = async (): Promise<void> => {
-    setLifeStyle({
-      memberStatDetail: {
-        wakeUpMeridian: wakeUpMeridian,
-        wakeUpTime: wakeUpTime,
-        sleepingMeridian: sleepingMeridian,
-        sleepingTime: sleepingTime,
-        turnOffMeridian: turnOffMeridian,
-        turnOffTime: turnOffTime,
-        smoking: smoking,
-        sleepingHabit: sleepingHabit,
-        airConditioningIntensity: airConditioningIntensity,
-        heatingIntensity: heatingIntensity,
-        lifePattern: lifePattern,
-        intimacy: intimacy,
-        canShare: canShare,
-        isPlayGame: isPlayGame,
-        isPhoneCall: isPhoneCall,
-        studying: studying,
-        intake: intake,
-        cleanSensitivity: cleanSensitivity,
-        noiseSensitivity: noiseSensitivity,
-        cleaningFrequency: cleaningFrequency,
-        drinkingFrequency: drinkingFrequency,
-        personality: personality,
-        mbti: mbti,
-      },
+    setRegisterLifeStyle({
+      wakeUpMeridian: wakeUpMeridian,
+      wakeUpTime: wakeUpTime,
+      sleepingMeridian: sleepingMeridian,
+      sleepingTime: sleepingTime,
+      turnOffMeridian: turnOffMeridian,
+      turnOffTime: turnOffTime,
+      smoking: smoking,
+      sleepingHabit: sleepingHabit,
+      airConditioningIntensity: airConditioningIntensity,
+      heatingIntensity: heatingIntensity,
+      lifePattern: lifePattern,
+      intimacy: intimacy,
+      canShare: canShare,
+      isPlayGame: isPlayGame,
+      isPhoneCall: isPhoneCall,
+      studying: studying,
+      intake: intake,
+      cleanSensitivity: cleanSensitivity,
+      noiseSensitivity: noiseSensitivity,
+      cleaningFrequency: cleaningFrequency,
+      drinkingFrequency: drinkingFrequency,
+      personality: personality,
+      mbti: mbti,
     });
 
     if (returnToUser) {

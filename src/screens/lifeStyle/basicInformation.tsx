@@ -12,9 +12,11 @@ import BackHeader from 'src/layout/backHeader';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 
-import { useLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useProfileStore } from '@zustand/member/member';
+import { useRegisterLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useInputAnimation } from '@hooks/inputAnimation';
+import { useGetUniversityInfo } from '@hooks/api/university';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
 
 import { BasicLifeStyleScreenProps } from '@type/param/stack';
@@ -29,13 +31,31 @@ type Item = {
 const BasicInformationComponent = ({ navigation, route }: BasicLifeStyleScreenProps) => {
   const { returnToUser, returnToRoom } = route.params ?? {};
 
-  const { lifeStyle, setLifeStyle } = useLifeStyleStore();
+  const { profile } = useProfileStore();
+  const { data: universityData } = useGetUniversityInfo(profile.universityId);
+
+  const { setRegisterLifeStyle } = useRegisterLifeStyleStore();
 
   const [admissionYear, setAdmissionYear] = useState<string>('');
+  const [dormitoryName, setDormitoryName] = useState<string>('');
   const [numOfRoommate, setNumOfRoommate] = useState<number | undefined>(undefined);
   const [acceptance, setAcceptance] = useState<string>('');
 
-  const canNext = admissionYear !== '' && numOfRoommate !== undefined && acceptance !== '';
+  const canNext =
+    admissionYear !== '' &&
+    dormitoryName !== '' &&
+    numOfRoommate !== undefined &&
+    acceptance !== '';
+
+  // 유저 대학교의 기숙사 정보(string[])를 Item 형식으로 변환
+  const dormitoryItems: Item[] = universityData.result.dormitoryNames.map((name, index) => ({
+    index: index + 1,
+    value: name,
+    name: name,
+    select: false,
+  }));
+
+  const [dormitoryNameItems, setDormitoryNameItems] = useState<Item[]>(dormitoryItems);
 
   const [numOfRoommateItems, setNumOfRoommateItems] = useState<Item[]>([
     { index: 1, value: 0, name: '미정', select: false },
@@ -57,12 +77,11 @@ const BasicInformationComponent = ({ navigation, route }: BasicLifeStyleScreenPr
   };
 
   const toNext = async (): Promise<void> => {
-    setLifeStyle({
-      memberStatDetail: {
-        admissionYear: admissionYear,
-        numOfRoommate: numOfRoommate,
-        acceptance: acceptance,
-      },
+    setRegisterLifeStyle({
+      admissionYear: admissionYear,
+      dormitoryName: dormitoryName,
+      numOfRoommate: numOfRoommate,
+      acceptance: acceptance,
     });
 
     if (returnToUser) {
@@ -74,23 +93,24 @@ const BasicInformationComponent = ({ navigation, route }: BasicLifeStyleScreenPr
     }
   };
 
+  const [showDormitoryName, setShowDormitoryName] = useState<boolean>(false);
   const [showRoommateInput, setShowRoommateInput] = useState<boolean>(false);
   const [showAcceptance, setShowAcceptance] = useState<boolean>(false);
 
+  const dormitoryNameAnimation = useInputAnimation(showDormitoryName, 400);
   const roommateInputAnimation = useInputAnimation(showRoommateInput, 400);
   const acceptanceInputAnimation = useInputAnimation(showAcceptance, 400);
 
-  const totalFields = 3;
+  const totalFields = 4;
   const progressWidth = useCompletionPercentage({
     fields: {
       admissionYear,
+      dormitoryName,
       numOfRoommate,
       acceptance,
     },
     totalFields,
   });
-
-  console.log(lifeStyle);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -143,12 +163,33 @@ const BasicInformationComponent = ({ navigation, route }: BasicLifeStyleScreenPr
             </Animated.View>
           )}
 
+          {showDormitoryName && (
+            <Animated.View
+              style={{
+                opacity: dormitoryNameAnimation.opacity,
+                transform: [{ translateY: dormitoryNameAnimation.translateY }],
+              }}
+            >
+              <CustomRadioInputBox
+                title="신청한 기숙사를 선택해주세요"
+                value={dormitoryName}
+                setValue={(text) => {
+                  setDormitoryName(text);
+                  setShowRoommateInput(true);
+                }}
+                items={dormitoryNameItems}
+                setItems={setDormitoryNameItems}
+                isTime={false}
+              />
+            </Animated.View>
+          )}
+
           <CustomTextInputBox
             title="학번을 입력해주세요"
             value={admissionYear}
             setValue={setAdmissionYear}
             placeholder="ex. 23"
-            enterFunc={() => setShowRoommateInput(true)}
+            enterFunc={() => setShowDormitoryName(true)}
           />
         </ScrollView>
       </SafeAreaView>

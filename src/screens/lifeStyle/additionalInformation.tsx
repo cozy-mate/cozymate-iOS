@@ -5,7 +5,7 @@ import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import CustomTextarea from '@components/common/customTextarea';
 
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useHasLifeStyleStore, useRegisterLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { registerMemberStat } from '@server/api/member-stat';
 
@@ -14,7 +14,7 @@ import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeStyleScreenProps) => {
   const { returnToUser, returnToRoom } = route.params ?? {};
 
-  const { lifeStyle, setLifeStyle } = useLifeStyleStore();
+  const { registerLifeStyle, setRegisterLifeStyle } = useRegisterLifeStyleStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
 
   const [selfIntroduction, setSelfIntroduction] = useState<string>('');
@@ -24,41 +24,39 @@ const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeSty
   };
 
   const toNext = async () => {
-    setLifeStyle({
-      memberStatDetail: {
-        selfIntroduction: selfIntroduction,
-      },
+    setRegisterLifeStyle({
+      selfIntroduction: selfIntroduction,
     });
 
     try {
       await registerMemberStat({
-        admissionYear: lifeStyle.memberStatDetail.admissionYear,
-        numOfRoommate: lifeStyle.memberStatDetail.numOfRoommate,
-        dormitoryName: '123',
-        acceptance: lifeStyle.memberStatDetail.acceptance,
-        wakeUpMeridian: lifeStyle.memberStatDetail.wakeUpMeridian,
-        wakeUpTime: lifeStyle.memberStatDetail.wakeUpTime,
-        sleepingMeridian: lifeStyle.memberStatDetail.sleepingMeridian,
-        sleepingTime: lifeStyle.memberStatDetail.sleepingTime,
-        turnOffMeridian: lifeStyle.memberStatDetail.turnOffMeridian,
-        turnOffTime: lifeStyle.memberStatDetail.turnOffTime,
-        smoking: lifeStyle.memberStatDetail.smoking,
-        sleepingHabit: lifeStyle.memberStatDetail.sleepingHabit,
-        airConditioningIntensity: lifeStyle.memberStatDetail.airConditioningIntensity,
-        heatingIntensity: lifeStyle.memberStatDetail.heatingIntensity,
-        lifePattern: lifeStyle.memberStatDetail.lifePattern,
-        intimacy: lifeStyle.memberStatDetail.intimacy,
-        canShare: lifeStyle.memberStatDetail.canShare,
-        isPlayGame: lifeStyle.memberStatDetail.isPlayGame,
-        isPhoneCall: lifeStyle.memberStatDetail.isPhoneCall,
-        studying: lifeStyle.memberStatDetail.studying,
-        intake: lifeStyle.memberStatDetail.intake,
-        cleanSensitivity: lifeStyle.memberStatDetail.cleanSensitivity,
-        noiseSensitivity: lifeStyle.memberStatDetail.noiseSensitivity,
-        cleaningFrequency: lifeStyle.memberStatDetail.cleaningFrequency,
-        drinkingFrequency: lifeStyle.memberStatDetail.drinkingFrequency,
-        personality: lifeStyle.memberStatDetail.personality,
-        mbti: lifeStyle.memberStatDetail.mbti,
+        admissionYear: registerLifeStyle.admissionYear,
+        numOfRoommate: registerLifeStyle.numOfRoommate,
+        dormitoryName: registerLifeStyle.dormitoryName,
+        acceptance: registerLifeStyle.acceptance,
+        wakeUpMeridian: registerLifeStyle.wakeUpMeridian,
+        wakeUpTime: registerLifeStyle.wakeUpTime,
+        sleepingMeridian: registerLifeStyle.sleepingMeridian,
+        sleepingTime: registerLifeStyle.sleepingTime,
+        turnOffMeridian: registerLifeStyle.turnOffMeridian,
+        turnOffTime: registerLifeStyle.turnOffTime,
+        smoking: registerLifeStyle.smoking,
+        sleepingHabit: registerLifeStyle.sleepingHabit,
+        airConditioningIntensity: registerLifeStyle.airConditioningIntensity,
+        heatingIntensity: registerLifeStyle.heatingIntensity,
+        lifePattern: registerLifeStyle.lifePattern,
+        intimacy: registerLifeStyle.intimacy,
+        canShare: registerLifeStyle.canShare,
+        isPlayGame: registerLifeStyle.isPlayGame,
+        isPhoneCall: registerLifeStyle.isPhoneCall,
+        studying: registerLifeStyle.studying,
+        intake: registerLifeStyle.intake,
+        cleanSensitivity: registerLifeStyle.cleanSensitivity,
+        noiseSensitivity: registerLifeStyle.noiseSensitivity,
+        cleaningFrequency: registerLifeStyle.cleaningFrequency,
+        drinkingFrequency: registerLifeStyle.drinkingFrequency,
+        personality: registerLifeStyle.personality,
+        mbti: registerLifeStyle.mbti,
         selfIntroduction: selfIntroduction,
       });
 
@@ -75,8 +73,6 @@ const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeSty
       console.log(error.response.data);
     }
   };
-
-  console.log(lifeStyle);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
