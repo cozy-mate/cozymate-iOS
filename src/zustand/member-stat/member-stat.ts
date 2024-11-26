@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { LifeStyle } from './type';
+import { LifeStyle, RegisterLifeStyle } from './type';
 
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
@@ -62,6 +62,46 @@ export const useLifeStyleStore = create<{
   setLifeStyle: (newLifeStyle) =>
     set((state) => ({
       lifeStyle: { ...state.lifeStyle, ...newLifeStyle },
+    })),
+}));
+
+export const useRegisterLifeStyleStore = create<{
+  registerLifeStyle: RegisterLifeStyle;
+  setRegisterLifeStyle: (newLifeStyle: Partial<RegisterLifeStyle>) => void;
+}>((set) => ({
+  registerLifeStyle: {
+    admissionYear: '',
+    numOfRoommate: 0,
+    dormitoryName: '',
+    acceptance: '',
+    wakeUpMeridian: '',
+    wakeUpTime: 0,
+    sleepingMeridian: '',
+    sleepingTime: 0,
+    turnOffMeridian: '',
+    turnOffTime: 0,
+    smoking: '',
+    sleepingHabit: [],
+    airConditioningIntensity: 0,
+    heatingIntensity: 0,
+    lifePattern: '',
+    intimacy: '',
+    canShare: '',
+    isPlayGame: '',
+    isPhoneCall: '',
+    studying: '',
+    intake: '',
+    cleanSensitivity: 0,
+    noiseSensitivity: 0,
+    cleaningFrequency: '',
+    drinkingFrequency: '',
+    personality: [],
+    mbti: '',
+    selfIntroduction: '',
+  },
+  setRegisterLifeStyle: (newLifeStyle) =>
+    set((state) => ({
+      registerLifeStyle: { ...state.registerLifeStyle, ...newLifeStyle },
     })),
 }));
 
