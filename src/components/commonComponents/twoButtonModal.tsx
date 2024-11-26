@@ -9,7 +9,7 @@ interface TwoButtonModalProps {
   leftButtonText: string;
   leftButtonFunc: any;
   rightButtonText: string;
-  righttButtonFunc: any;
+  rightButtonFunc: any;
 }
 
 const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
@@ -20,7 +20,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
   leftButtonText,
   leftButtonFunc,
   rightButtonText,
-  righttButtonFunc,
+  rightButtonFunc,
 }) => {
   return (
     <Modal visible={isVisible} transparent={true} animationType="fade">
@@ -43,7 +43,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
               </Text>
             </Pressable>
 
-            <Pressable onPress={righttButtonFunc} className="rounded-lg bg-main1 px-7 py-3.5">
+            <Pressable onPress={rightButtonFunc} className="rounded-lg bg-main1 px-7 py-3.5">
               <Text className="px-3.5 text-center text-sm font-semibold text-white">
                 {rightButtonText}
               </Text>
