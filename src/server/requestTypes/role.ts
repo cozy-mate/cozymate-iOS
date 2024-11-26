@@ -4,7 +4,7 @@ export interface AddRoleRequest {
     nickname: string;
   }[];
   content: string;
-  repeatDayList: string[];
+  repeatDayList: string[] | null;
 }
 
 export interface UpdateRoleRequest {
