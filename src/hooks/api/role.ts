@@ -9,14 +9,14 @@ import {
   GetRoleDataResponse,
 } from '@server/responseTypes/role';
 
+type DeleteRoleVariables = { roomId: number; roleId: number };
+
 // Role 삭제
 export const useDeleteRole = (
-  roomId: number,
-  roleId: number,
   refetch: () => void,
-): UseMutationResult<DeleteRoleResponse, void> => {
+): UseMutationResult<DeleteRoleResponse, void, DeleteRoleVariables, unknown> => {
   return useMutation({
-    mutationFn: () => deleteRole(roomId, roleId),
+    mutationFn: ({ roomId, roleId }) => deleteRole(roomId, roleId),
     onSuccess: () => refetch(),
   });
 };

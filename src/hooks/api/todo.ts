@@ -10,14 +10,14 @@ import {
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
 
+type DeleteTodoVariables = { roomId: number; todoId: number };
+
 // Todo 삭제
 export const useDeleteTodo = (
-  roomId: number,
-  todoId: number,
   refetch: () => void,
-): UseMutationResult<DeleteTodoResponse, void> => {
+): UseMutationResult<DeleteTodoResponse, void, DeleteTodoVariables, unknown> => {
   return useMutation({
-    mutationFn: () => deleteTodo(roomId, todoId),
+    mutationFn: ({ roomId, todoId }) => deleteTodo(roomId, todoId),
     onSuccess: () => refetch(),
   });
 };

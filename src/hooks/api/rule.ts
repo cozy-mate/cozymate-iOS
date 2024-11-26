@@ -9,14 +9,14 @@ import {
   GetRuleDataResponse,
 } from '@server/responseTypes/rule';
 
+type DeleteRuleVariables = { roomId: number; ruleId: number };
+
 // Rule 삭제
 export const useDeleteRule = (
-  roomId: number,
-  ruleId: number,
   refetch: () => void,
-): UseMutationResult<DeleteRuleResponse, void> => {
+): UseMutationResult<DeleteRuleResponse, void, DeleteRuleVariables, unknown> => {
   return useMutation({
-    mutationFn: () => deleteRule(roomId, ruleId),
+    mutationFn: ({ roomId, ruleId }) => deleteRule(roomId, ruleId),
     onSuccess: () => refetch(),
   });
 };
