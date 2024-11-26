@@ -8,6 +8,7 @@ export const useRuleItemStore = create<{
   setRuleItem: (newRule: RuleItem) => void;
 }>((set) => ({
   ruleItem: {
+    ruleId: 0,
     content: '',
     memo: '',
   },
