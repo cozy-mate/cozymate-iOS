@@ -6,14 +6,16 @@ import BottomButton from '@components/common/bottomButton';
 import ControlModal from '@components/roomDetail/controlModal';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
+import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
-import { useHasRoomStore } from '@zustand/room/room';
+import { useIsVerifiedStore } from '@zustand/member/member';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { getChipDetailData } from '@server/api/room-member-stat';
 
-import { useDibsOnRoom } from '@hooks/api/favorite';
 import { useGetChatRoomId } from '@hooks/api/chat-room';
+import { useDibsOnRoom, useDeleteFavorite } from '@hooks/api/favorite';
 import {
   useExitRoom,
   useGetRoomData,
@@ -65,7 +67,9 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   // 내 방인지 여부 및 라이프스타일 존재 여부
-  const { myRoom } = useHasRoomStore();
+  const { myRoom, clearMyRoom } = useHasRoomStore();
+  const { clearRoomInfo } = useRoomInfoStore();
+  const { isVerified } = useIsVerifiedStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   // 방 참여 요청 여부 확인
@@ -86,6 +90,10 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
+  const { mutateAsync: cancelDibsRoom } = useDeleteFavorite(
+    roomData.result.favoriteId,
+    refetchRoomData,
+  );
   const { mutateAsync: dibsRoom } = useDibsOnRoom(roomId, refetchRoomData);
 
   // 방 인원 상세 페이지 이동
@@ -132,7 +140,15 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   // 라이프스타일 없는 인원 이동
   const toLifeStyleOnboarding = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
+    navigation.navigate('LifeStyleOnboardingScreen', { returnToRoom: roomId });
+  };
+
+  // 학교 인증하지 않은 인원 이동
+  const toSchoolAuthentication = () => {
+    navigation.navigate('SchoolAuthenticationScreen', {
+      verified: Boolean(isVerified),
+      returnToRoom: roomId,
+    });
   };
 
   // 방 수정
@@ -146,6 +162,9 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
+    clearMyRoom();
+    clearRoomInfo();
+    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
   // 방 인원 라이프스타일 칩 클릭 메서드
@@ -206,8 +225,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   <MessageIcon />
                 </Pressable>
 
-                {roomData.result.isFavorited ? (
-                  <Pressable onPress={dibsRoom} className="px-2.5 py-[11px]">
+                {roomData.result.favoriteId !== 0 ? (
+                  <Pressable onPress={cancelDibsRoom} className="px-2.5 py-[11px]">
                     <FilledHeart />
                   </Pressable>
                 ) : (
@@ -375,48 +394,63 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
         </View>
 
         <View className="fixed bottom-[42px] px-5">
-          {/* 순서대로 1. 라이프스타일이 없는 경우 2. 해당 방이 아닌 다른 방에 참가한 경우 3. 해당 방에 요청을 보낸 경우 4. 해당 방에 요청을 보내지 않은 경우 */}
-          {!hasLifeStyle && !isRequested.result && (
-            <BottomButton
-              color="bg-main1"
-              borderColor="border-main1"
-              textColor="text-white"
-              text="라이프스타일 입력하고 방 참여하기"
-              disabled={null}
-              onPressFunc={toLifeStyleOnboarding}
-            />
-          )}
-
+          {/* 내 방이 아닌 다른 방을 조회하는 경우 */}
           {myRoom.roomId !== roomId && myRoom.roomId !== 0 && (
             <BottomButton
               color="bg-[#c4c4c4]"
               borderColor="border-[#c4c4c4]"
               textColor="text-white"
               text="방 참여 요청"
-              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              disabled={true}
               onPressFunc={sendRequest}
             />
           )}
 
+          {/* 방이 없는 사용자가 참여 요청을 보낸 경우 */}
           {myRoom.roomId === 0 && isRequested.result && (
             <BottomButton
               color="bg-colorBox"
               borderColor="border-main1"
               textColor="text-main1"
               text="방 참여 요청 취소"
-              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              disabled={false}
               onPressFunc={deleteRequest}
             />
           )}
 
-          {hasLifeStyle && myRoom.roomId === 0 && !isRequested.result && (
+          {/* 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
+          {myRoom.roomId === 0 && !isRequested.result && hasLifeStyle && isVerified && (
             <BottomButton
               color="bg-main1"
               borderColor="border-main1"
               textColor="text-white"
-              text="방 참여 요청"
-              disabled={myRoom.roomId !== roomId && myRoom.roomId !== 0}
+              text="방 참여 요청하기"
+              disabled={false}
               onPressFunc={sendRequest}
+            />
+          )}
+
+          {/* 라이프스타일이 없고 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
+          {myRoom.roomId === 0 && !isRequested.result && !hasLifeStyle && (
+            <BottomButton
+              color="bg-main1"
+              borderColor="border-main1"
+              textColor="text-white"
+              text="라이프스타일 입력하고 방 참여하기"
+              disabled={false}
+              onPressFunc={toLifeStyleOnboarding}
+            />
+          )}
+
+          {/* 라이프스타일은 있지만 학교인증이 되지 않은 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
+          {myRoom.roomId === 0 && !isRequested.result && hasLifeStyle && !isVerified && (
+            <BottomButton
+              color="bg-main1"
+              borderColor="border-main1"
+              textColor="text-white"
+              text="학교 인증하고 방 참여하기"
+              disabled={false}
+              onPressFunc={toSchoolAuthentication}
             />
           )}
         </View>

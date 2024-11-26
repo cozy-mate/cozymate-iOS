@@ -18,7 +18,9 @@ const SelectCharacterModal: React.FC<SelectCharacterModalProps> = ({
   pressFunc,
 }) => {
   const handleUpdate = async (): Promise<void> => {
-    pressFunc(persona);
+    if (pressFunc !== null) {
+      pressFunc(persona);
+    }
     closeModal();
   };
 

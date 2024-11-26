@@ -12,12 +12,24 @@ import {
 export const useHasRoomStore = create<{
   myRoom: MyRoom;
   setMyRoom: (newMyRoom: Partial<MyRoom>) => void;
+  clearMyRoom: () => void;
 }>((set) => ({
   myRoom: {
     hasRoom: false,
     roomId: 0,
+    isRoomManager: false,
+    isFullRoom: false,
   },
   setMyRoom: (newMyRoom) => set((state) => ({ myRoom: { ...state.myRoom, ...newMyRoom } })),
+  clearMyRoom: () =>
+    set(() => ({
+      myRoom: {
+        hasRoom: false,
+        roomId: 0,
+        isRoomManager: false,
+        isFullRoom: false,
+      },
+    })),
 }));
 
 // 공개방 생성
@@ -57,6 +69,7 @@ export const useCreatePrivateRoomStore = create<{
 export const useRoomInfoStore = create<{
   roomInfo: RoomInfo;
   setRoomInfo: (info: RoomInfo) => void;
+  clearRoomInfo: () => void;
 }>((set) => ({
   roomInfo: {
     roomId: 0,
@@ -75,7 +88,7 @@ export const useRoomInfoStore = create<{
     managerMemberId: 0,
     managerNickname: '',
     isRoomManager: false,
-    isFavorited: false,
+    favoriteId: 0,
     maxMateNum: 0,
     arrivalMateNum: 0,
     dormitoryName: '',
@@ -90,6 +103,39 @@ export const useRoomInfoStore = create<{
   },
   setRoomInfo: (newRoomInfo) =>
     set((state) => ({ roomInfo: { ...state.roomInfo, ...newRoomInfo } })),
+  clearRoomInfo: () =>
+    set(() => ({
+      roomInfo: {
+        roomId: 0,
+        name: '',
+        inviteCode: '',
+        persona: 0,
+        mateDetailList: [
+          {
+            memberId: 0,
+            mateId: 0,
+            nickname: '',
+            persona: 0,
+            mateEquality: 0,
+          },
+        ],
+        managerMemberId: 0,
+        managerNickname: '',
+        isRoomManager: false,
+        favoriteId: 0,
+        maxMateNum: 0,
+        arrivalMateNum: 0,
+        dormitoryName: '',
+        roomType: '',
+        hashtagList: [],
+        equality: 0,
+        difference: {
+          blue: [],
+          red: [],
+          white: [],
+        },
+      },
+    })),
 }));
 
 // 초대코드로 조회한 방 정보
@@ -114,7 +160,7 @@ export const useInviteCodeRoomStore = create<{
     managerMemberId: 0,
     managerNickname: '',
     isRoomManager: false,
-    isFavorited: false,
+    favoriteId: 0,
     maxMateNum: 0,
     arrivalMateNum: 0,
     dormitoryName: '',

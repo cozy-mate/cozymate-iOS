@@ -27,7 +27,7 @@ const BottomButton: React.FC<BottomButtonProps> = ({
     : `${textColor} text-center font-semibold text-base`;
 
   return (
-    <Pressable className={buttonStyle} onPress={onPressFunc}>
+    <Pressable className={buttonStyle} onPress={onPressFunc} disabled={disabled}>
       <Text className={textStyle}>{text}</Text>
     </Pressable>
   );

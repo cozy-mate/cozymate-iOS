@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
 import {
   useLifeStyleStore,
   usePreferencesStore,
@@ -9,6 +9,7 @@ import {
 } from '@zustand/member-stat/member-stat';
 
 import { reissueToken } from '@server/api/auth';
+import { checkVerified } from '@server/api/mail';
 import { getMyProfile } from '@server/api/member';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
@@ -21,6 +22,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
   // 프로필 정보
   const { setProfile } = useProfileStore();
+  const { setIsVerified } = useIsVerifiedStore();
   const { setPreferenceList } = usePreferencesStore();
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -31,13 +33,10 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
   useEffect(() => {
     const checkLogin = async (): Promise<void> => {
-      console.log(1); // 시작
       try {
         const oldRefreshToken = await getRefreshToken();
-        console.log(2, oldRefreshToken); // Refresh Token 확인
 
         if (!oldRefreshToken) {
-          console.log(3); // Refresh Token이 없는 경우
           setLoggedIn(false);
           await deleteToken();
           const elapsed = Date.now() - start;
@@ -47,52 +46,51 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
         }
 
         try {
-          console.log(4); // Access Token 설정
           await setAccessToken(oldRefreshToken);
           const response = await reissueToken();
-          console.log(5, response); // Token 재발급
 
           // 토큰 저장
           await Promise.all([
             setAccessToken(response.result.accessToken),
             setRefreshToken(response.result.refreshToken),
           ]);
-          console.log(6); // 토큰 저장 완료
+
+          console.log(response.result.accessToken);
         } catch (error: any) {
-          console.log(7, error.response); // 토큰 재발급 실패
+          console.log(error.response);
         }
 
         const profileResponse = await getMyProfile();
-        console.log(8, profileResponse); // 프로필 조회
         setProfile(profileResponse.result);
 
+        const checkVerifiedResponse = await checkVerified();
+        setIsVerified(checkVerifiedResponse.result);
+
         const preferenceResponse = await getPreferenceList();
-        console.log(9, preferenceResponse);
         setPreferenceList(preferenceResponse.result.preferenceList);
 
         // 방 존재 여부 확인
         const roomCheckResponse = await checkHasRoom();
-        console.log(9, roomCheckResponse); // 방 존재 여부 확인
         const roomId = roomCheckResponse.result.roomId;
 
         // 방이 존재하는 경우 방 정보 저장
         if (roomId !== 0) {
-          console.log(10); // 방이 존재하는 경우
           setMyRoom({ hasRoom: true, roomId });
           const roomInfoResponse = await getRoomData(roomId);
-          console.log(11, roomInfoResponse); // 방 정보 조회
-          console.log(roomInfoResponse.result.difference);
           setRoomInfo(roomInfoResponse.result);
+          setMyRoom({
+            isRoomManager: roomInfoResponse.result.isRoomManager,
+            isFullRoom:
+              roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+          });
         }
 
         // 라이프스타일 정보 처리
         try {
           const userDetailResponse = await getMemberStatData();
-          console.log(12, userDetailResponse); // 라이프스타일 정보 조회
           setHasLifeStyle(true);
           setLifeStyle(userDetailResponse.result);
         } catch (error: any) {
-          console.log(13, error); // 라이프스타일 정보 오류
           const errorCode = error?.response?.data?.code;
           if (errorCode === 'MEMBERSTAT402') {
             setHasLifeStyle(false);
@@ -103,7 +101,6 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
         }
 
         setLoggedIn(true);
-        console.log(14); // 로그인 성공
 
         const elapsed = Date.now() - start;
         const remainingTime = 3500 - elapsed;

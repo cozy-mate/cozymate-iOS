@@ -25,10 +25,17 @@ export type StackParamList = {
   };
 
   // 라이프 스타일 입력 스크린
-  LifeStyleOnboardingScreen: undefined;
-  BasicLifeStyleScreen: undefined;
-  EssentialLifeStyleScreen: undefined;
-  AdditionalLifeStyleScreen: undefined;
+  LifeStyleOnboardingScreen: undefined | { returnToUser?: number; returnToRoom?: number };
+  BasicLifeStyleScreen: undefined | { returnToUser?: number; returnToRoom?: number };
+  EssentialLifeStyleScreen: undefined | { returnToUser?: number; returnToRoom?: number };
+  AdditionalLifeStyleScreen: undefined | { returnToUser?: number; returnToRoom?: number };
+
+  // 학교 인증 스크린
+  SchoolAuthenticationScreen: {
+    verified: true | false;
+    returnToUser?: number;
+    returnToRoom?: number;
+  };
 
   // 라이프 스타일 수정 스크린
   LifeStyleEditScreen: undefined;
@@ -57,7 +64,6 @@ export type StackParamList = {
   // 마이페이지 스크린
   MyPageScreen: undefined;
   MyInfoScreen: undefined;
-  SchoolAuthenticationScreen: { isVerified: true | false };
   BasicInfoUpdateScreen: { type: 'nickname' | 'birthday' | 'majorName' };
   FavoriteUserRoomScreen: { type: 'user' | 'room' };
   InquiryScreen: { hasInquiry: true | false };

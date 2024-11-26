@@ -30,7 +30,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
         </Pressable>
       </View>
 
-      <ScrollView bounces={false} contentContainerStyle={{ flex: 1 }}>
+      <ScrollView bounces={false}>
         <View className="flex-1">
           {notificationlist.result.length > 0 ? (
             notificationlist.result.map((noti, index) => (

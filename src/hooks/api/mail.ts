@@ -1,8 +1,20 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { sendMail, verifyMail } from '@server/api/mail';
-import { VerifyMailResponse } from '@server/responseTypes/mail';
+import { sendMail, verifyMail, checkVerified } from '@server/api/mail';
 import { SendMailRequest, VerifyMailRequest } from '@server/requestTypes/mail';
+import { VerifyMailResponse, CheckVerifiedResponse } from '@server/responseTypes/mail';
+
+export const useCheckVerified = (): { data: CheckVerifiedResponse; refetch: () => void } => {
+  const { data, refetch } = useSuspenseQuery({
+    queryKey: [`/members/mail/verify`],
+    queryFn: () => checkVerified(),
+    select: (response: CheckVerifiedResponse) => {
+      return response;
+    },
+  });
+
+  return { data, refetch };
+};
 
 export const useSendMail = (): UseMutationResult<unknown, unknown, SendMailRequest, unknown> => {
   return useMutation({
@@ -11,14 +23,12 @@ export const useSendMail = (): UseMutationResult<unknown, unknown, SendMailReque
   });
 };
 
-export const useVerifyMail = (): UseMutationResult<
-  VerifyMailResponse,
-  unknown,
-  VerifyMailRequest,
-  unknown
-> => {
+export const useVerifyMail = (
+  refetch: () => void,
+): UseMutationResult<VerifyMailResponse, unknown, VerifyMailRequest, unknown> => {
   return useMutation({
     mutationKey: [`/members/mail/verify`],
     mutationFn: (data: VerifyMailRequest) => verifyMail(data),
+    onSuccess: () => refetch(),
   });
 };

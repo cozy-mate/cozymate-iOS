@@ -10,7 +10,7 @@ import LoadingComponent from '@components/loading/loading';
 import ReportModal from '@components/report/reportComponent';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useProfileStore } from '@zustand/member/member';
+import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
 import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useGetChatRoomId } from '@hooks/api/chat-room';
@@ -21,6 +21,7 @@ import {
   useGetRoomRequests,
   useDeleteInviteMember,
   useAcceptRequestMember,
+  useCheckRequestedToJoin,
 } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
@@ -45,6 +46,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
+  const { isVerified } = useIsVerifiedStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { lifeStyle } = useLifeStyleStore();
 
@@ -82,17 +84,23 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
     setType('table');
   }, []);
 
-  const [isInvited, setIsInvited] = useState<boolean>(false);
-
   const toEditMyLifeStyle = () => {
     navigation.navigate('LifeStyleEditScreen');
   };
 
-  const { mutateAsync: inviteMember } = useInviteMember(memberId);
-  const { mutateAsync: deleteInvite } = useDeleteInviteMember(memberId);
+  const { data: isInvited, refetch: refetchCheckRequestedToJoin } =
+    useCheckRequestedToJoin(memberId);
+  const { mutateAsync: inviteMember } = useInviteMember(memberId, refetchCheckRequestedToJoin);
+  const { mutateAsync: deleteInvite } = useDeleteInviteMember(
+    memberId,
+    refetchCheckRequestedToJoin,
+  );
 
   const { refetch: refetchRoomRequest } = useGetRoomRequests();
   const { mutateAsync: acceptRequest } = useAcceptRequestMember(memberId, refetchRoomRequest);
+
+  console.log(isInvited);
+  console.log(myRoom);
 
   return (
     <Fragment>
@@ -215,64 +223,110 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
             </View>
           </View>
 
-          {lifeStyleData.result.memberDetail.memberId !== profile.memberId ? (
+          {/* 타인의 상세 페이지 */}
+          {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
             <View className="fixed bottom-[42px] px-5">
-              {lifeStyleData.result.hasRequestedRoomEntry && (
-                <View className="flex flex-row space-x-2">
-                  <View className="flex-1">
-                    <BottomButton
-                      color="bg-white"
-                      borderColor="border-main1"
-                      textColor="text-main1"
-                      text="거절"
-                      disabled={null}
-                      onPressFunc={() => acceptRequest(false)}
-                    />
-                  </View>
-                  <View className="flex-1">
-                    <BottomButton
-                      color="bg-main1"
-                      borderColor="border-main1"
-                      textColor="text-white"
-                      text="수락"
-                      disabled={null}
-                      onPressFunc={() => acceptRequest(true)}
-                    />
-                  </View>
-                </View>
+              {/* 방 인원이 다 찬 방의 방장이 타인을 볼 때 */}
+              {myRoom.hasRoom && myRoom.isRoomManager && myRoom.isFullRoom && (
+                <BottomButton
+                  color="bg-[#c4c4c4]"
+                  borderColor="border-[#c4c4c4]"
+                  textColor="text-white"
+                  text="내 방으로 초대하기"
+                  disabled={true}
+                  onPressFunc={undefined}
+                />
               )}
 
-              {/* 초대 요청 보내지 않았고 방이 없고 초대되지 않은 사용자 */}
-              {!lifeStyleData.result.hasRequestedRoomEntry &&
-                myRoom.hasRoom &&
-                !isInvited &&
-                lifeStyleData.result.roomId === 0 && (
+              {/* 방 인원이 다 차지 않은 방의 방장이 방이 존재하는 타인을 볼 때 */}
+              {myRoom.hasRoom &&
+                myRoom.isRoomManager &&
+                !myRoom.isFullRoom &&
+                lifeStyleData.result.roomId !== 0 && (
+                  <BottomButton
+                    color="bg-[#c4c4c4]"
+                    borderColor="border-[#c4c4c4]"
+                    textColor="text-white"
+                    text="내 방으로 초대하기"
+                    disabled={false}
+                    onPressFunc={undefined}
+                  />
+                )}
+
+              {/* 방 인원이 다 차지 않은 방의 방장이 방이 존재하지 않는 타인을 볼 때 */}
+              {myRoom.hasRoom &&
+                myRoom.isRoomManager &&
+                !myRoom.isFullRoom &&
+                lifeStyleData.result.roomId === 0 &&
+                isInvited !== undefined && (
+                  <BottomButton
+                    color={isInvited.result ? 'bg-colorBox' : 'bg-main1'}
+                    borderColor="border-main1"
+                    textColor={isInvited.result ? 'text-main1' : 'text-white'}
+                    text={isInvited.result ? '초대 취소하기' : '내 방으로 초대하기'}
+                    disabled={false}
+                    onPressFunc={isInvited.result ? deleteInvite : inviteMember}
+                  />
+                )}
+
+              {/* 방이 존재하지 않는 유저가 방이 존재하는 유저를 볼 때 */}
+              {!myRoom.hasRoom && lifeStyleData.result.roomId !== 0 && (
+                <BottomButton
+                  color="bg-[#c4c4c4]"
+                  borderColor="border-[#c4c4c4]"
+                  textColor="text-white"
+                  text="내 방으로 초대하기"
+                  disabled={true}
+                  onPressFunc={undefined}
+                />
+              )}
+
+              {/* 라이프스타일을 입력했고 학교 인증을 한, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
+              {!myRoom.hasRoom &&
+                lifeStyleData.result.roomId === 0 &&
+                hasLifeStyle &&
+                isVerified && (
                   <BottomButton
                     color="bg-main1"
                     borderColor="border-main1"
                     textColor="text-white"
                     text="내 방으로 초대하기"
-                    disabled={null}
-                    onPressFunc={() => inviteMember}
+                    disabled={true}
+                    onPressFunc={undefined}
                   />
                 )}
 
-              {/* 초대 요청 보냈고 않았고 방이 없고 초대되지 않은 사용자 */}
-              {!lifeStyleData.result.hasRequestedRoomEntry &&
-                myRoom.hasRoom &&
-                isInvited &&
-                lifeStyleData.result.roomId === 0 && (
+              {/* 학교인증을 하지 않은, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
+              {!myRoom.hasRoom &&
+                lifeStyleData.result.roomId === 0 &&
+                hasLifeStyle &&
+                !isVerified && (
                   <BottomButton
-                    color="bg-white"
+                    color="bg-main1"
                     borderColor="border-main1"
-                    textColor="text-main1"
-                    text="초대 취소하기"
-                    disabled={null}
-                    onPressFunc={() => deleteInvite}
+                    textColor="text-white"
+                    text="학교 인증하고 초대하기"
+                    disabled={true}
+                    onPressFunc={undefined}
                   />
                 )}
+
+              {/* 라이프스타일을 입력하지 않은, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
+              {!myRoom.hasRoom && lifeStyleData.result.roomId === 0 && !hasLifeStyle && (
+                <BottomButton
+                  color="bg-main1"
+                  borderColor="border-main1"
+                  textColor="text-white"
+                  text="라이프 스타일 입력하고 초대하기"
+                  disabled={true}
+                  onPressFunc={undefined}
+                />
+              )}
             </View>
-          ) : (
+          )}
+
+          {/* 본인의 상세 페이지 */}
+          {lifeStyleData.result.memberDetail.memberId == profile.memberId && (
             <SafeAreaView className="bg-white" />
           )}
         </View>

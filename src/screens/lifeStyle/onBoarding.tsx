@@ -8,11 +8,18 @@ import { LifeStyleOnboardingScreenProps } from '@type/param/stack';
 import XButton from '@assets/xButton.svg';
 import ExampleImage from '@assets/lifeStyle/exampleImage.svg';
 
-const LifeStyleOnboardingScreen = ({ navigation }: LifeStyleOnboardingScreenProps) => {
+const LifeStyleOnboardingScreen = ({ navigation, route }: LifeStyleOnboardingScreenProps) => {
   const { profile } = useProfileStore();
+  const { returnToUser, returnToRoom } = route.params ?? {}; // Fallback to empty object if route.params is undefined
 
   const toInput = () => {
-    navigation.navigate('BasicLifeStyleScreen');
+    if (returnToUser) {
+      navigation.navigate('BasicLifeStyleScreen', { returnToUser });
+    } else if (returnToRoom) {
+      navigation.navigate('BasicLifeStyleScreen', { returnToRoom });
+    } else {
+      navigation.navigate('BasicLifeStyleScreen');
+    }
   };
 
   const toBack = () => {

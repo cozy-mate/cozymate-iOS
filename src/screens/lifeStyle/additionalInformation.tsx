@@ -11,7 +11,9 @@ import { registerMemberStat } from '@server/api/member-stat';
 
 import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 
-const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScreenProps) => {
+const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeStyleScreenProps) => {
+  const { returnToUser, returnToRoom } = route.params ?? {};
+
   const { lifeStyle, setLifeStyle } = useLifeStyleStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
 
@@ -23,47 +25,58 @@ const AdditionalInformationComponent = ({ navigation }: AdditionalLifeStyleScree
 
   const toNext = async () => {
     setLifeStyle({
-      selfIntroduction: selfIntroduction,
+      memberStatDetail: {
+        selfIntroduction: selfIntroduction,
+      },
     });
 
     try {
       await registerMemberStat({
-        admissionYear: lifeStyle.admissionYear,
-        numOfRoommate: lifeStyle.numOfRoommate,
+        admissionYear: lifeStyle.memberStatDetail.admissionYear,
+        numOfRoommate: lifeStyle.memberStatDetail.numOfRoommate,
         dormitoryName: '123',
-        acceptance: lifeStyle.acceptance,
-        wakeUpMeridian: lifeStyle.wakeUpMeridian,
-        wakeUpTime: lifeStyle.wakeUpTime,
-        sleepingMeridian: lifeStyle.sleepingMeridian,
-        sleepingTime: lifeStyle.sleepingTime,
-        turnOffMeridian: lifeStyle.turnOffMeridian,
-        turnOffTime: lifeStyle.turnOffTime,
-        smoking: lifeStyle.smoking,
-        sleepingHabit: lifeStyle.sleepingHabit,
-        airConditioningIntensity: lifeStyle.airConditioningIntensity,
-        heatingIntensity: lifeStyle.heatingIntensity,
-        lifePattern: lifeStyle.lifePattern,
-        intimacy: lifeStyle.intimacy,
-        canShare: lifeStyle.canShare,
-        isPlayGame: lifeStyle.isPlayGame,
-        isPhoneCall: lifeStyle.isPhoneCall,
-        studying: lifeStyle.studying,
-        intake: lifeStyle.intake,
-        cleanSensitivity: lifeStyle.cleanSensitivity,
-        noiseSensitivity: lifeStyle.noiseSensitivity,
-        cleaningFrequency: lifeStyle.cleaningFrequency,
-        drinkingFrequency: lifeStyle.drinkingFrequency,
-        personality: lifeStyle.personality,
-        mbti: lifeStyle.mbti,
+        acceptance: lifeStyle.memberStatDetail.acceptance,
+        wakeUpMeridian: lifeStyle.memberStatDetail.wakeUpMeridian,
+        wakeUpTime: lifeStyle.memberStatDetail.wakeUpTime,
+        sleepingMeridian: lifeStyle.memberStatDetail.sleepingMeridian,
+        sleepingTime: lifeStyle.memberStatDetail.sleepingTime,
+        turnOffMeridian: lifeStyle.memberStatDetail.turnOffMeridian,
+        turnOffTime: lifeStyle.memberStatDetail.turnOffTime,
+        smoking: lifeStyle.memberStatDetail.smoking,
+        sleepingHabit: lifeStyle.memberStatDetail.sleepingHabit,
+        airConditioningIntensity: lifeStyle.memberStatDetail.airConditioningIntensity,
+        heatingIntensity: lifeStyle.memberStatDetail.heatingIntensity,
+        lifePattern: lifeStyle.memberStatDetail.lifePattern,
+        intimacy: lifeStyle.memberStatDetail.intimacy,
+        canShare: lifeStyle.memberStatDetail.canShare,
+        isPlayGame: lifeStyle.memberStatDetail.isPlayGame,
+        isPhoneCall: lifeStyle.memberStatDetail.isPhoneCall,
+        studying: lifeStyle.memberStatDetail.studying,
+        intake: lifeStyle.memberStatDetail.intake,
+        cleanSensitivity: lifeStyle.memberStatDetail.cleanSensitivity,
+        noiseSensitivity: lifeStyle.memberStatDetail.noiseSensitivity,
+        cleaningFrequency: lifeStyle.memberStatDetail.cleaningFrequency,
+        drinkingFrequency: lifeStyle.memberStatDetail.drinkingFrequency,
+        personality: lifeStyle.memberStatDetail.personality,
+        mbti: lifeStyle.memberStatDetail.mbti,
         selfIntroduction: selfIntroduction,
       });
 
       setHasLifeStyle(true);
-      navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+
+      if (returnToUser) {
+        navigation.navigate('UserDetailScreen', { memberId: returnToUser });
+      } else if (returnToRoom) {
+        navigation.navigate('RoomDetailScreen', { roomId: returnToRoom });
+      } else {
+        navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+      }
     } catch (error: any) {
       console.log(error.response.data);
     }
   };
+
+  console.log(lifeStyle);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

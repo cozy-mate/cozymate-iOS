@@ -13,18 +13,19 @@ import UnivInfoSelect from '@components/onBoard/univInfoSelect';
 import OneButtonModal from '@components/commonComponents/oneButtonModal';
 import ButtonTextInput from '@components/schoolAuthentication/buttonTextInput';
 
-import { useProfileStore } from '@zustand/member/member';
+import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
 
-import { useSendMail, useVerifyMail } from '@hooks/api/mail';
 import { useGetUniversityInfo } from '@hooks/api/university';
+import { useSendMail, useVerifyMail, useCheckVerified } from '@hooks/api/mail';
 
 import { SchoolAuthenticationScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 
 const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationScreenProps) => {
-  const { isVerified } = route.params;
+  const { verified } = route.params;
   const { profile } = useProfileStore();
+  const { isVerified, setIsVerified } = useIsVerifiedStore();
 
   const [majorName, setMajorName] = useState<string>('');
   const [mailAddress, setMailAddress] = useState<string>('');
@@ -34,7 +35,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const toReVerify = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { isVerified: false });
+    navigation.navigate('SchoolAuthenticationScreen', { verified: false });
   };
 
   const toBack = () => {
@@ -45,11 +46,14 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   // 사용자 학교 정보 조회
   const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
 
+  const { refetch: checkVerified } = useCheckVerified();
+
   // 인증메일 전송
   const { mutateAsync: sendAuthenticationMail, isPending: sendMailPending } = useSendMail();
 
   // 인증번호 확인
-  const { mutateAsync: verifyAuthenticationCode, isPending: verifyMailPending } = useVerifyMail();
+  const { mutateAsync: verifyAuthenticationCode, isPending: verifyMailPending } =
+    useVerifyMail(checkVerified);
 
   const handleMailSend = async (): Promise<void> => {
     await sendAuthenticationMail({
@@ -65,6 +69,8 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
       universityId: profile.universityId,
       majorName: majorName,
     });
+
+    setIsVerified(mailAddress);
     setIsModalOpen(true);
   };
 
@@ -75,7 +81,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
           <BackButton />
         </Pressable>
 
-        {isVerified ? (
+        {verified ? (
           <View className="mt-2 px-5">
             <View className="mb-4 flex flex-row items-center justify-between rounded-xl border border-sub1 bg-white px-5 py-4">
               <View className="flex flex-col items-start justify-center">
@@ -96,9 +102,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
                   학교 이메일
                 </Text>
                 <View className="mt-1.5 flex w-full flex-row items-center justify-between pb-[3px]">
-                  <Text className="text-sm font-medium text-basicFont ">
-                    {userSchoolInfo.result.mailPattern}
-                  </Text>
+                  <Text className="text-sm font-medium text-basicFont ">{isVerified}</Text>
                 </View>
               </View>
             </View>
