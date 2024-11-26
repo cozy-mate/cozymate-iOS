@@ -24,6 +24,8 @@ import BackButton from '@assets/backButton.svg';
 
 const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationScreenProps) => {
   const { verified } = route.params;
+  const { returnToUser, returnToRoom } = route.params ?? {};
+
   const { profile } = useProfileStore();
   const { isVerified, setIsVerified } = useIsVerifiedStore();
 
@@ -40,7 +42,13 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
 
   const toBack = () => {
     setIsModalOpen(false);
-    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+    if (returnToUser) {
+      navigation.navigate('UserDetailScreen', { memberId: returnToUser });
+    } else if (returnToRoom) {
+      navigation.navigate('RoomDetailScreen', { roomId: returnToRoom });
+    } else {
+      navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+    }
   };
 
   // 사용자 학교 정보 조회
