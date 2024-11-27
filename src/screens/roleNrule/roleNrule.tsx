@@ -163,15 +163,17 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         />
                       </View>
 
-                      <Pressable
-                        onPress={() => {
-                          toEdit('todo', todo.todoId);
-                          handleTodoItem(todo);
-                        }}
-                        className="px-2.5 py-[18px]"
-                      >
-                        <SettingIcon />
-                      </Pressable>
+                      {todo.todoType !== 'role' && (
+                        <Pressable
+                          onPress={() => {
+                            toEdit('todo', todo.todoId);
+                            handleTodoItem(todo);
+                          }}
+                          className="px-2.5 py-[18px]"
+                        >
+                          <SettingIcon />
+                        </Pressable>
+                      )}
                     </View>
                   ))
                 ) : (
@@ -288,15 +290,17 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                       </Text>
                     </View>
 
-                    <Pressable
-                      onPress={() => {
-                        toEdit('role', role.roleId);
-                        handleRoleItem(role);
-                      }}
-                      className="p-2.5 pb-[26px]"
-                    >
-                      <SettingIcon />
-                    </Pressable>
+                    {role.mateList.some((mate) => mate.nickname === profile.nickname) && (
+                      <Pressable
+                        onPress={() => {
+                          toEdit('role', role.roleId);
+                          handleRoleItem(role);
+                        }}
+                        className="p-2.5 pb-[26px]"
+                      >
+                        <SettingIcon />
+                      </Pressable>
+                    )}
                   </View>
                 ))
               ) : (
