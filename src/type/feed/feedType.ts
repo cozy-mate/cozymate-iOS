@@ -1,5 +1,5 @@
-export interface FeedType {
-  name: string;
-  description: string;
-  isEnabled: boolean;
-}
+// export interface FeedType {
+//   name: string;
+//   description: string;
+//   isEnabled: boolean;
+// }

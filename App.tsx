@@ -1,4 +1,3 @@
-import { RecoilRoot } from 'recoil';
 import React, { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,15 +20,13 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <RecoilRoot>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <QueryClientProvider client={queryClient}>
-            <AppInner />
-          </QueryClientProvider>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </RecoilRoot>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+          <AppInner />
+        </QueryClientProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
