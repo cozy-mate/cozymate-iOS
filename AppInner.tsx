@@ -9,9 +9,6 @@ import ChatScreen from 'src/screens/chatting/chat';
 import MyPageScreen from 'src/screens/myPage/myPage';
 import SignInScreen from 'src/screens/signIn/signIn';
 import MyInfoScreen from 'src/screens/myPage/myInfo';
-import FeedMainScreen from 'src/screens/feed/feedMain';
-import FeedEditScreen from 'src/screens/feed/feedEdit';
-import FeedViewScreen from 'src/screens/feed/feedView';
 import InquiryScreen from 'src/screens/myPage/inquiry';
 import WithdrawScreen from 'src/screens/myPage/withdraw';
 import CompleteScreen from 'src/screens/onBoard/complete';
@@ -19,7 +16,6 @@ import CozyHomeScreen from 'src/screens/cozyHome/cozyHome';
 import RoomMainScreen from 'src/screens/roomMain/roomMain';
 import JoinRoomScreen from 'src/screens/joinRoom/joinRoom';
 import RoomMateScreen from 'src/screens/roomMate/roomMate';
-import FeedCreateScreen from 'src/screens/feed/feedCreate';
 import ChatRoomScreen from 'src/screens/chatting/chatRoom';
 import SendChatScreen from 'src/screens/chatting/sendChat';
 import EditRoomScreen from 'src/screens/editRoom/editRoom';
@@ -113,10 +109,10 @@ function AppInner() {
           <stack.Screen name="UserSearchScreen" component={UserSearchScreen} />
           <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
 
-          <stack.Screen name="FeedMainScreen" component={FeedMainScreen} />
+          {/* <stack.Screen name="FeedMainScreen" component={FeedMainScreen} />
           <stack.Screen name="FeedEditScreen" component={FeedEditScreen} />
           <stack.Screen name="FeedViewScreen" component={FeedViewScreen} />
-          <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} />
+          <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} /> */}
 
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
           <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
