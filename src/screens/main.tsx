@@ -10,10 +10,9 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 
-import { Feed, MyPage, CozyBot, CozyHome, RoleNRule } from 'src/layout/bottomNavBar';
+import { MyPage, CozyBot, CozyHome, RoleNRule } from 'src/layout/bottomNavBar';
 
 import MyPageScreen from './myPage/myPage';
-import FeedMainScreen from './feed/feedMain';
 import RoomMainScreen from './roomMain/roomMain';
 import CozyHomeScreen from './cozyHome/cozyHome';
 import RoleNRuleScreen from './roleNrule/roleNrule';
@@ -91,35 +90,35 @@ const MainScreen = () => {
         headerShown: false,
         tabBarStyle: isOldiPhone
           ? {
-              backgroundColor: '#FFFFFF',
-              height: 60,
-              paddingTop: 8,
-              paddingBottom: 16,
-              borderTopWidth: 0,
-              borderRadius: 20,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              position: 'absolute',
-              shadowColor: 'rgba(160,160,160, 0.25)',
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 1,
-              shadowRadius: 8,
-            }
+            backgroundColor: '#FFFFFF',
+            height: 60,
+            paddingTop: 8,
+            paddingBottom: 16,
+            borderTopWidth: 0,
+            borderRadius: 20,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            position: 'absolute',
+            shadowColor: 'rgba(160,160,160, 0.25)',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 1,
+            shadowRadius: 8,
+          }
           : {
-              backgroundColor: '#FFFFFF',
-              height: 94,
-              paddingTop: 12,
-              paddingBottom: 40,
-              borderTopWidth: 0,
-              borderRadius: 20,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              position: 'absolute',
-              shadowColor: 'rgba(160,160,160, 0.25)',
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 1,
-              shadowRadius: 8,
-            },
+            backgroundColor: '#FFFFFF',
+            height: 94,
+            paddingTop: 12,
+            paddingBottom: 40,
+            borderTopWidth: 0,
+            borderRadius: 20,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            position: 'absolute',
+            shadowColor: 'rgba(160,160,160, 0.25)',
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 1,
+            shadowRadius: 8,
+          },
       }}
     >
       <Tab.Screen
@@ -174,7 +173,7 @@ const MainScreen = () => {
         />
       )}
 
-      {myRoom.hasRoom ? (
+      {/* {myRoom.hasRoom ? (
         <Tab.Screen
           name="FeedMainScreen"
           component={FeedMainScreen}
@@ -194,7 +193,7 @@ const MainScreen = () => {
             tabBarButton: (props) => <DisabledTabButton {...props} />,
           }}
         />
-      )}
+      )} */}
 
       <Tab.Screen
         name="MyPageScreen"

@@ -1,2 +1,2 @@
-export * from './postType';
-export * from './feedType';
+// export * from './postType';
+// export * from './feedType';
