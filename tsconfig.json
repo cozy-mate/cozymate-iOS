@@ -26,7 +26,6 @@
       "@assets/*": ["src/assets/*"],
       "@server/*": ["src/server/*"],
       "@zustand/*": ["src/zustand/*"],
-      "@recoil/*": ["src/recoil/*"],
       "@axios/*": ["src/axios/*"]
     }
   },

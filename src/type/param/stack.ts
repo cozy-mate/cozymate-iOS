@@ -55,11 +55,11 @@ export type StackParamList = {
   RoomMateScreen: undefined;
   UserDetailScreen: { memberId: number };
 
-  // 피드 스크린
-  FeedMainScreen: undefined;
-  FeedEditScreen: { mode: 'create' | 'edit' };
-  FeedCreateScreen: { mode: 'create' | 'edit'; postId?: number };
-  FeedViewScreen: { postId: number };
+  // // 피드 스크린
+  // FeedMainScreen: undefined;
+  // FeedEditScreen: { mode: 'create' | 'edit' };
+  // FeedCreateScreen: { mode: 'create' | 'edit'; postId?: number };
+  // FeedViewScreen: { postId: number };
 
   // 마이페이지 스크린
   MyPageScreen: undefined;
@@ -85,7 +85,7 @@ export type TabNavigatorParamList = {
   CozyHomeScreen: undefined;
   RoomMainScreen: undefined;
   RoleNRuleScreen: undefined;
-  FeedMainScreen: undefined;
+  // FeedMainScreen: undefined;
   RoomMateScreen: undefined;
   MyPageScreen: undefined;
 };
@@ -162,11 +162,11 @@ export type SchoolAuthenticationScreenProps = NativeStackScreenProps<
 export type RoomMateScreenProps = NativeStackScreenProps<StackParamList, 'RoomMateScreen'>;
 export type UserDetailScreenProps = NativeStackScreenProps<StackParamList, 'UserDetailScreen'>;
 
-// 피드 스크린
-export type FeedMainScreenProps = NativeStackScreenProps<StackParamList, 'FeedMainScreen'>;
-export type FeedEditScreenProps = NativeStackScreenProps<StackParamList, 'FeedEditScreen'>;
-export type FeedCreateScreenProps = NativeStackScreenProps<StackParamList, 'FeedCreateScreen'>;
-export type FeedViewScreenProps = NativeStackScreenProps<StackParamList, 'FeedViewScreen'>;
+// // 피드 스크린
+// export type FeedMainScreenProps = NativeStackScreenProps<StackParamList, 'FeedMainScreen'>;
+// export type FeedEditScreenProps = NativeStackScreenProps<StackParamList, 'FeedEditScreen'>;
+// export type FeedCreateScreenProps = NativeStackScreenProps<StackParamList, 'FeedCreateScreen'>;
+// export type FeedViewScreenProps = NativeStackScreenProps<StackParamList, 'FeedViewScreen'>;
 
 // 마이페이지 스크린
 export type MyPageScreenProps = NativeStackScreenProps<StackParamList, 'MyPageScreen'>;
