@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { LifeStyle } from './type';
+import { LifeStyle, DetailFilterList, RegisterLifeStyle } from './type';
 
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
@@ -65,10 +65,143 @@ export const useLifeStyleStore = create<{
     })),
 }));
 
+export const useRegisterLifeStyleStore = create<{
+  registerLifeStyle: RegisterLifeStyle;
+  setRegisterLifeStyle: (newLifeStyle: Partial<RegisterLifeStyle>) => void;
+}>((set) => ({
+  registerLifeStyle: {
+    admissionYear: '',
+    numOfRoommate: 0,
+    dormitoryName: '',
+    acceptance: '',
+    wakeUpMeridian: '',
+    wakeUpTime: 0,
+    sleepingMeridian: '',
+    sleepingTime: 0,
+    turnOffMeridian: '',
+    turnOffTime: 0,
+    smoking: '',
+    sleepingHabit: [],
+    airConditioningIntensity: 0,
+    heatingIntensity: 0,
+    lifePattern: '',
+    intimacy: '',
+    canShare: '',
+    isPlayGame: '',
+    isPhoneCall: '',
+    studying: '',
+    intake: '',
+    cleanSensitivity: 0,
+    noiseSensitivity: 0,
+    cleaningFrequency: '',
+    drinkingFrequency: '',
+    personality: [],
+    mbti: '',
+    selfIntroduction: '',
+  },
+  setRegisterLifeStyle: (newLifeStyle) =>
+    set((state) => ({
+      registerLifeStyle: { ...state.registerLifeStyle, ...newLifeStyle },
+    })),
+}));
+
 export const usePreferencesStore = create<{
   preferenceList: LifestyleOptionKey[];
   setPreferenceList: (status: LifestyleOptionKey[]) => void;
 }>((set) => ({
   preferenceList: [],
   setPreferenceList: (status) => set({ preferenceList: status }),
+}));
+
+export const useDetailFilterListStore = create<{
+  initialValue: DetailFilterList;
+  detailFilterList: DetailFilterList;
+  setDetailFilterList: (status: Partial<DetailFilterList>) => void;
+  clearDetailFilterList: () => void;
+}>((set) => ({
+  initialValue: {
+    birthYear: [],
+    admissionYear: [],
+    majorName: [],
+    acceptance: [],
+    wakeUpTime: [],
+    sleepingTime: [],
+    turnOffTime: [],
+    smoking: [],
+    sleepingHabit: [],
+    airConditioningIntensity: [],
+    heatingIntensity: [],
+    lifePattern: [],
+    intimacy: [],
+    canShare: [],
+    isPlayGame: [],
+    isPhoneCall: [],
+    studying: [],
+    intake: [],
+    cleanSensitivity: [],
+    noiseSensitivity: [],
+    cleaningFrequency: [],
+    drinkingFrequency: [],
+    personality: [],
+    mbti: [],
+  },
+  detailFilterList: {
+    birthYear: [],
+    admissionYear: [],
+    majorName: [],
+    acceptance: [],
+    wakeUpTime: [],
+    sleepingTime: [],
+    turnOffTime: [],
+    smoking: [],
+    sleepingHabit: [],
+    airConditioningIntensity: [],
+    heatingIntensity: [],
+    lifePattern: [],
+    intimacy: [],
+    canShare: [],
+    isPlayGame: [],
+    isPhoneCall: [],
+    studying: [],
+    intake: [],
+    cleanSensitivity: [],
+    noiseSensitivity: [],
+    cleaningFrequency: [],
+    drinkingFrequency: [],
+    personality: [],
+    mbti: [],
+  },
+  setDetailFilterList: (newFilter) =>
+    set((state) => ({
+      detailFilterList: { ...state.detailFilterList, ...newFilter },
+    })),
+  clearDetailFilterList: () =>
+    set(() => ({
+      detailFilterList: {
+        birthYear: [],
+        admissionYear: [],
+        majorName: [],
+        acceptance: [],
+        wakeUpTime: [],
+        sleepingTime: [],
+        turnOffTime: [],
+        smoking: [],
+        sleepingHabit: [],
+        airConditioningIntensity: [],
+        heatingIntensity: [],
+        lifePattern: [],
+        intimacy: [],
+        canShare: [],
+        isPlayGame: [],
+        isPhoneCall: [],
+        studying: [],
+        intake: [],
+        cleanSensitivity: [],
+        noiseSensitivity: [],
+        cleaningFrequency: [],
+        drinkingFrequency: [],
+        personality: [],
+        mbti: [],
+      },
+    })),
 }));

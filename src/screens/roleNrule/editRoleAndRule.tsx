@@ -1,5 +1,4 @@
-import BackNav from '@layout/backNav';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
@@ -9,6 +8,7 @@ import CustomTextarea from '@components/common/customTextarea';
 import CustomCalendar from '@components/todoList/customCalendar';
 import SelectMateComponent from '@components/todoList/selectMate';
 import CustomTextInputBox from '@components/common/customTextInputBox';
+import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 import RoleSelectMateComponent from '@components/todoList/roleSelectMate';
 
 import { useRoomInfoStore } from '@zustand/room/room';
@@ -16,11 +16,13 @@ import { useTodoItemStore } from '@zustand/todo/todo';
 import { useRuleItemStore } from '@zustand/rule/rule';
 import { useRoleItemStore } from '@zustand/role/role';
 
-import { useUpdateTodo, useGetTodoData } from '@hooks/api/todo';
-import { useUpdateRole, useGetRoleData } from '@hooks/api/role';
-import { useUpdateRule, useGetRuleData } from '@hooks/api/rule';
+import { useUpdateRole, useDeleteRole, useGetRoleData } from '@hooks/api/role';
+import { useUpdateTodo, useDeleteTodo, useGetTodoData } from '@hooks/api/todo';
+import { useUpdateRule, useDeleteRule, useGetRuleData } from '@hooks/api/rule';
 
 import { EditRoleNRuleScreenProps } from '@type/param/stack';
+
+import BackButton from '@assets/backButton.svg';
 
 interface RoleMateItem {
   mateId: number;
@@ -73,9 +75,11 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     todoItem.todoId,
     refetchTodo,
   );
+  const { mutateAsync: deleteTodoMutate } = useDeleteTodo(refetchTodo);
 
   const { refetch: refetchRule } = useGetRuleData(roomInfo.roomId);
   const { mutateAsync: updateRuleMutate } = useUpdateRule(roomInfo.roomId, id, refetchRule);
+  const { mutateAsync: deleteRuleMutate } = useDeleteRule(refetchRule);
 
   const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
   const { mutateAsync: updateRoleMutate } = useUpdateRole(
@@ -83,9 +87,10 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     roleItem.roleId,
     refetchRole,
   );
+  const { mutateAsync: deleteRoleMutate } = useDeleteRole(refetchRole);
 
   // Todo / Role / Rule 수정하기
-  const handleSubmit = async () => {
+  const handleUpdate = async () => {
     if (type === 'todo') {
       try {
         await updateTodoMutate({
@@ -93,7 +98,6 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
           content: todoContent,
           timePoint: timePoint,
         });
-        // resetState();
         toBack();
       } catch (error: any) {
         console.log(error.response.data);
@@ -108,7 +112,6 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
           content: content,
           repeatDayList: repeatDayList,
         });
-        // resetState();
         toBack();
       } catch (error: any) {
         console.log(error.response.data.message);
@@ -116,7 +119,43 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     } else if (type === 'rule') {
       try {
         await updateRuleMutate({ content: ruleContent, memo });
-        // resetState();
+        toBack();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+
+  // Todo / Role / Rule 삭제하기
+  const handleDelete = async () => {
+    if (type === 'todo') {
+      try {
+        await deleteTodoMutate({
+          roomId: roomInfo.roomId,
+          todoId: todoItem.todoId,
+        });
+        toBack();
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
+    } else if (type === 'role') {
+      try {
+        await deleteRoleMutate({
+          roomId: roomInfo.roomId,
+          roleId: roleItem.roleId,
+        });
+        toBack();
+      } catch (error: any) {
+        console.log(error.response.data.message);
+      }
+    } else if (type === 'rule') {
+      try {
+        await deleteRuleMutate({
+          roomId: roomInfo.roomId,
+          ruleId: ruleItem.ruleId,
+        });
         toBack();
       } catch (error) {
         console.log(error);
@@ -136,17 +175,20 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     return false;
   };
 
-  useEffect(() => {
-    console.log(todoContent);
-    console.log(todoMateIdList);
-    console.log(timePoint);
-  });
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView bounces={false}>
         <View style={{ paddingBottom: bottom }}>
-          <BackNav leftPressFunc={toBack} />
+          <View className="mb-2 flex flex-row items-center justify-between px-5">
+            <Pressable onPress={toBack}>
+              <BackButton />
+            </Pressable>
+
+            <Pressable onPress={() => setIsDeleteModalOpen(true)} className="p-2">
+              <Text className="text-base font-semibold text-warning">삭제</Text>
+            </Pressable>
+          </View>
+
           <RoleNRuleNav type={type} changeType={changeType} isEdit={true} />
 
           {type == 'todo' && (
@@ -213,12 +255,22 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
       </ScrollView>
 
       <View className="fixed bottom-0 w-full bg-transparent px-5">
-        <Pressable onPress={handleSubmit} disabled={!canSubmit()}>
+        <Pressable onPress={handleUpdate} disabled={!canSubmit()}>
           <View className={`${canSubmit() ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}>
             <Text className="text-center text-base font-semibold text-white">확인</Text>
           </View>
         </Pressable>
       </View>
+
+      <TwoButtonModal
+        isVisible={isDeleteModalOpen}
+        title={`해당 ${type === 'todo' ? '투두' : type === 'role' ? '롤' : '룰'}을 삭제하시겠어요?`}
+        closeFunc={() => setIsDeleteModalOpen(false)}
+        leftButtonText="취소"
+        leftButtonFunc={() => setIsDeleteModalOpen(false)}
+        rightButtonText="확인"
+        rightButtonFunc={handleDelete}
+      />
     </SafeAreaView>
   );
 };

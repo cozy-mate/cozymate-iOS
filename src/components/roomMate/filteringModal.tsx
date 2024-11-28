@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Modal, Pressable, ScrollView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, View, Modal, FlatList, Pressable, ScrollView } from 'react-native';
 
-import FilteringOption from './filteringOption';
+import { useProfileStore } from '@zustand/member/member';
+import { DetailFilterList } from '@zustand/member-stat/type';
+import { useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
+import { useGetUniversityInfo } from '@hooks/api/university';
 import { useGetFilteredMemberListCount } from '@hooks/api/member-stat';
 
 import XButton from '@assets/roomMate/xButton.svg';
+import SelectedBox from '@assets/roomMate/selectedBox.svg';
 import SmallXButton from '@assets/roomMate/smallXButton.svg';
-
-interface FilteringModalProps {
-  onClose: () => void;
-}
+import NotSelectedBox from '@assets/roomMate/notSelectedBox.svg';
 
 interface FilterList {
   index: number;
@@ -19,16 +20,35 @@ interface FilterList {
   selected: boolean;
 }
 
-interface SelectedValueList {
-  [key: string]: (string | number)[];
+interface Item {
+  index: number;
+  value: string | number;
+  name: string;
+  meridian?: string;
+  select: boolean;
+}
+
+interface ItemList {
+  [key: string]: Item[];
+}
+
+interface FilteringModalProps {
+  onClose: () => void;
 }
 
 const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
+  const { profile } = useProfileStore();
+
+  const { detailFilterList, setDetailFilterList, clearDetailFilterList } =
+    useDetailFilterListStore();
+
+  const { data: filterCount } = useGetFilteredMemberListCount(detailFilterList);
+
   const [filterList, setFilterList] = useState<FilterList[]>([
     { index: 1, key: 'birthYear', title: '출생년도', selected: true },
     { index: 2, key: 'acceptance', title: '합격여부', selected: false },
     { index: 3, key: 'admissionYear', title: '학번', selected: false },
-    { index: 4, key: 'major', title: '학과', selected: false },
+    { index: 4, key: 'majorName', title: '학과', selected: false },
     { index: 5, key: 'wakeUpTime', title: '기상시간', selected: false },
     { index: 6, key: 'sleepingTime', title: '취침시간', selected: false },
     { index: 7, key: 'turnOffTime', title: '소등시간', selected: false },
@@ -62,60 +82,121 @@ const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
           : { ...filter, selected: false },
       ),
     );
-
     setSelectedFilter(filterList.key);
   };
 
-  const [selectedValueList, setSelectedValueList] = useState<SelectedValueList>({
-    birthYear: [],
-    acceptance: [],
-    admissionYear: [],
-    major: [],
-    wakeUpTime: [],
-    sleepingTime: [],
-    turnOffTime: [],
-    smoking: [],
-    sleepingHabit: [],
-    airConditioningIntensity: [],
-    heatingIntensity: [],
-    lifePattern: [],
-    intimacy: [],
-    canShare: [],
-    isPlayGame: [],
-    isPhoneCall: [],
-    studying: [],
-    intake: [],
-    cleanSensitivity: [],
-    noiseSensitivity: [],
-    cleaningFrequency: [],
-    drinkingFrequency: [],
-    personality: [],
-    mbti: [],
+  const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
+
+  const majorNameItems: Item[] = userSchoolInfo.result.departments.map((name, index) => ({
+    index: index + 1,
+    value: name,
+    name: name,
+    select: false,
+  }));
+
+  const [filterDetailItem, setFilterDetailItem] = useState<ItemList>({
+    birthYear: [
+      { index: 1, value: 1990, name: '1990년', select: false },
+      { index: 2, value: 1991, name: '1991년', select: false },
+      { index: 3, value: 1992, name: '1992년', select: false },
+      { index: 4, value: 1993, name: '1993년', select: false },
+      { index: 5, value: 1994, name: '1994년', select: false },
+      { index: 6, value: 1995, name: '1995년', select: false },
+      { index: 7, value: 1996, name: '1996년', select: false },
+      { index: 8, value: 1997, name: '1997년', select: false },
+      { index: 9, value: 1998, name: '1998년', select: false },
+      { index: 10, value: 1999, name: '1999년', select: false },
+      { index: 11, value: 2000, name: '2000년', select: false },
+      { index: 12, value: 2001, name: '2001년', select: false },
+      { index: 13, value: 2002, name: '2002년', select: false },
+      { index: 14, value: 2003, name: '2003년', select: false },
+      { index: 15, value: 2004, name: '2004년', select: false },
+      { index: 16, value: 2005, name: '2005년', select: false },
+    ],
   });
 
-  const clearAllValues = () => {
-    setSelectedValueList((prevSelected) => {
-      const updatedList = { ...prevSelected };
-      Object.keys(updatedList).forEach((key) => {
-        updatedList[key] = []; // 각 키의 값을 빈 배열로 설정
+  const selectDetailItem = useCallback(
+    (key: string, item: Item) => {
+      setFilterDetailItem((prevItems) => {
+        const updatedItems = { ...prevItems };
+        updatedItems[key] = updatedItems[key].map((detailItem) =>
+          detailItem.index === item.index
+            ? { ...detailItem, select: !detailItem.select }
+            : detailItem,
+        );
+
+        const selectedValues = updatedItems[key]
+          .filter((detailItem) => detailItem.select)
+          .map((detailItem) => detailItem.value);
+
+        setDetailFilterList({ [key]: selectedValues });
+        return updatedItems;
       });
-      return updatedList;
+    },
+    [setDetailFilterList],
+  );
+
+  const removeSelectedValue = (key: string, value: string | number) => {
+    setFilterDetailItem((prevItems) => {
+      const updatedItems = { ...prevItems };
+      if (updatedItems[key]) {
+        updatedItems[key] = updatedItems[key].map((item) =>
+          item.value === value ? { ...item, select: false } : item,
+        );
+      }
+
+      // Zustand 상태 업데이트
+      const updatedSelectedValues = updatedItems[key]
+        .filter((item) => item.select)
+        .map((item) => item.value);
+
+      setDetailFilterList({ [key]: updatedSelectedValues });
+
+      return updatedItems;
     });
   };
 
-  const allSelectedValues = Object.values(selectedValueList)
-    .flat()
-    .filter((value) => value !== undefined && value !== null && value !== ''); // 빈 값 제외
+  const handleClearItems = () => {
+    clearDetailFilterList();
+    setFilterDetailItem((prevItems) => {
+      const updatedItems = { ...prevItems };
+      Object.keys(updatedItems).forEach((key) => {
+        updatedItems[key] = updatedItems[key].map((item) => ({
+          ...item,
+          select: false,
+        }));
+      });
+      return updatedItems;
+    });
+  };
 
-  const { mutateAsync: filterCount } = useGetFilteredMemberListCount();
+  const allSelectedValues = Object.values(detailFilterList)
+    .flat()
+    .filter((value) => value !== undefined && value !== null && value !== '');
+
+  console.log(detailFilterList);
 
   useEffect(() => {
-    const getFilteredMemberCount = async () => {
-      const count = await filterCount(selectedValueList);
-      console.log(count);
-    };
-    getFilteredMemberCount();
-  }, [selectedValueList]);
+    setFilterDetailItem((prevItems) => {
+      const updatedItems = { ...prevItems };
+      Object.keys(detailFilterList).forEach((key) => {
+        const typedKey = key as keyof DetailFilterList;
+        if (filterDetailItem[typedKey]) {
+          updatedItems[typedKey] = filterDetailItem[typedKey].map((item) => {
+            // 타입 확인
+            const isIncluded =
+              Array.isArray(detailFilterList[typedKey]) &&
+              detailFilterList[typedKey].includes(item.value as never);
+            return {
+              ...item,
+              select: isIncluded,
+            };
+          });
+        }
+      });
+      return updatedItems;
+    });
+  }, [detailFilterList]);
 
   return (
     <Modal transparent={true} animationType="slide">
@@ -154,7 +235,32 @@ const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
               ))}
             </ScrollView>
 
-            <FilteringOption selectedFilter={selectedFilter} selectFunc={setSelectedValueList} />
+            <FlatList
+              data={filterDetailItem[selectedFilter] || []}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <Pressable
+                  key={item.index}
+                  onPress={() => selectDetailItem(selectedFilter, item)}
+                  className={`flex flex-row items-center`}
+                >
+                  <View className="p-1.5">
+                    {item.select ? <SelectedBox /> : <NotSelectedBox />}
+                  </View>
+                  <Text
+                    className={`tracking-tight ${
+                      item.select ? 'font-medium text-basicFont' : 'font-normal text-disabledFont'
+                    }`}
+                  >
+                    {item.name}
+                  </Text>
+                </Pressable>
+              )}
+              showsVerticalScrollIndicator={false}
+              numColumns={4}
+              contentContainerStyle={{ columnGap: 8, rowGap: 8 }}
+              key={selectedFilter}
+            />
           </View>
 
           <View className="space-y-4">
@@ -166,18 +272,27 @@ const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
                     className="flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
                   >
                     <Text className="text-xs font-semibold text-main1">{value}</Text>
-                    <Pressable className="p-2">
+                    <Pressable
+                      onPress={() => {
+                        const key = Object.keys(detailFilterList).find((key) =>
+                          detailFilterList[key]?.includes(value),
+                        );
+                        if (key) removeSelectedValue(key, value);
+                      }}
+                      className="p-2"
+                    >
                       <SmallXButton />
                     </Pressable>
                   </Pressable>
                 ))}
             </View>
-            <Pressable onPress={clearAllValues} className="flex flex-row justify-end">
+            <Pressable onPress={handleClearItems} className="flex flex-row justify-end">
               <Text className="text-sm text-disabledFont underline">초기화</Text>
             </Pressable>
-            <Pressable className="mb-5 rounded-xl bg-main1 p-4">
+
+            <Pressable className="mb-5 rounded-xl bg-main1 p-4" onPress={onClose}>
               <Text className="text-center text-base font-semibold text-white">
-                2명의 룸메이트 보기
+                {filterCount?.result}명의 룸메이트 보기
               </Text>
             </Pressable>
           </View>

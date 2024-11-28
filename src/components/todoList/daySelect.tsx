@@ -11,8 +11,8 @@ interface Items {
 }
 
 interface DaySelectProps {
-  repeatDayList: string[];
-  setRepeatDayList: React.Dispatch<React.SetStateAction<string[]>>;
+  repeatDayList: string[] | null;
+  setRepeatDayList: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
 const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }) => {
@@ -21,7 +21,7 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
     daysOfWeek.map((day, index) => ({
       id: index + 1,
       value: day,
-      selected: repeatDayList.includes(day),
+      selected: repeatDayList?.includes(day) || false,
     })),
   );
 
@@ -29,25 +29,28 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
     setItems((prevItems) =>
       prevItems.map((day) => (day.value === dayValue ? { ...day, selected: !day.selected } : day)),
     );
-    setRepeatDayList((prevList) =>
-      prevList.includes(dayValue)
-        ? prevList.filter((item) => item !== dayValue)
-        : [...prevList, dayValue],
-    );
+    setRepeatDayList((prevList) => {
+      const updatedList = prevList ? [...prevList] : [];
+      if (updatedList.includes(dayValue)) {
+        const newList = updatedList.filter((item) => item !== dayValue);
+        return newList.length === 0 ? null : newList;
+      } else {
+        return [...updatedList, dayValue];
+      }
+    });
   };
 
-  const toggleAllDays = () => {
-    const areAllDaysSelected = items.every((day) => day.selected);
-    if (areAllDaysSelected) {
+  const toggleUndefined = () => {
+    if (repeatDayList === null) {
+      // 선택된 상태라면 빈 배열로 설정
       setItems((prevItems) => prevItems.map((day) => ({ ...day, selected: false })));
       setRepeatDayList([]);
     } else {
-      setItems((prevItems) => prevItems.map((day) => ({ ...day, selected: true })));
-      setRepeatDayList(daysOfWeek);
+      // 다시 null로 설정
+      setItems((prevItems) => prevItems.map((day) => ({ ...day, selected: false })));
+      setRepeatDayList(null);
     }
   };
-
-  const isEveryDay = items.every((day) => day.selected);
 
   return (
     <View className="flex flex-col">
@@ -72,11 +75,17 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
         ))}
       </View>
       <View className="flex flex-row items-center">
-        <Pressable onPress={toggleAllDays}>{isEveryDay ? <Selected /> : <NotSelected />}</Pressable>
+        <Pressable onPress={toggleUndefined}>
+          {repeatDayList !== null && repeatDayList?.length === 0 ? <Selected /> : <NotSelected />}
+        </Pressable>
         <Text
-          className={`${isEveryDay ? 'text-basicFont' : 'text-disabledFont'} text-sm font-medium`}
+          className={`${
+            repeatDayList !== null && repeatDayList?.length === 0
+              ? 'text-basicFont'
+              : 'text-disabledFont'
+          } text-sm font-medium`}
         >
-          매일
+          미정
         </Text>
       </View>
     </View>

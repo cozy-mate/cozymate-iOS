@@ -3,7 +3,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
-import SettingModal from '@components/common/settingModal';
 import CustomCalendar from '@components/todoList/customCalendar';
 
 import { RuleItem } from '@zustand/rule/type';
@@ -116,28 +115,6 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
     });
   };
 
-  const [settingModalOpenId, setSettingModalOpenId] = useState<number | null>(null);
-  const items = [
-    {
-      text: '수정하기',
-      pressFunc: (item: TodoItem) => {
-        toEdit('todo', item.todoId);
-        handleTodoItem(item);
-      },
-    },
-    {
-      text: '삭제하기',
-      pressFunc: (item: TodoItem) => {
-        toEdit('todo', item.todoId);
-        handleTodoItem(item);
-      },
-    },
-  ];
-
-  const handleSettingModalToggle = (todoId: number) => {
-    setSettingModalOpenId((prevId) => (prevId === todoId ? null : todoId));
-  };
-
   return (
     <View className="flex-1 bg-sub1">
       <View className="px-5 pt-[76px]" style={{ position: 'relative' }}>
@@ -146,9 +123,15 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
       </View>
       <ScrollView className="rounded-tr-[48px] bg-[#F7FAFF] px-5 pt-[34px]">
         {type === 'todo' && (
-          <View className="space-y-12">
-            <View>
-              <View className="mb-4 flex flex-row justify-between px-1">
+          <View>
+            {/* 달력 */}
+            <View className="mb-8">
+              <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
+            </View>
+
+            <View className="mb-12 space-y-4">
+              {/* 나의 Todo */}
+              <View className="flex flex-row justify-between px-1">
                 <Text className="text-lg font-semibold leading-6 text-emphasizedFont">
                   <Text className="text-main1">{formatDate(tododata.result.timePoint)}, </Text>
                   {profile.nickname}님이
@@ -156,11 +139,8 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                 </Text>
               </View>
 
-              <View className="mb-3">
-                <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
-              </View>
-
-              <View className="rounded-xl border border-[#F1F1F1] bg-white p-2 pr-4">
+              {/* 나의 Todo */}
+              <View className="rounded-xl border border-[#F1F1F1] bg-white p-2">
                 {tododata.result.myTodoList.todoList.length !== 0 ? (
                   tododata.result.myTodoList.todoList.map((todo, index) => (
                     <View
@@ -173,7 +153,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         <Pressable onPress={() => changeTodo(todo)}>
                           {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
                         </Pressable>
-                        <Text>{todo.content}</Text>
+                        <Text className="text-sm font-medium text-basicFont">{todo.content}</Text>
                         <View
                           className={`ml-1.5 h-1.5 w-1.5 rounded-full ${
                             todo.todoType === 'group' && 'bg-main1'
@@ -183,15 +163,17 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         />
                       </View>
 
-                      <Pressable
-                        onPress={() => {
-                          toEdit('todo', todo.todoId);
-                          handleTodoItem(todo);
-                        }}
-                      >
-                        <SettingIcon />
-                        {/* {settingModalOpenId === todo.todoId && <SettingModal items={items} />} */}
-                      </Pressable>
+                      {todo.todoType !== 'role' && (
+                        <Pressable
+                          onPress={() => {
+                            toEdit('todo', todo.todoId);
+                            handleTodoItem(todo);
+                          }}
+                          className="px-2.5 py-[18px]"
+                        >
+                          <SettingIcon />
+                        </Pressable>
+                      )}
                     </View>
                   ))
                 ) : (
@@ -215,14 +197,14 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                 >
                   <View className="mb-2 flex flex-row items-center space-x-1.5 px-4">
                     <View>{getProfileImage(value.memberDetail.persona, 24, 24)}</View>
-                    <Text>{key}</Text>
+                    <Text className="text-sm font-semibold text-emphasizedFont">{key}</Text>
                   </View>
                   <View className="flex flex-col">
                     {value.todoList.length !== 0 ? (
                       value.todoList.map((todo) => (
                         <View className="flex flex-row items-center px-2" key={todo.todoId}>
                           {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
-                          <Text>{todo.content}</Text>
+                          <Text className="text-sm font-medium text-basicFont">{todo.content}</Text>
                         </View>
                       ))
                     ) : (
@@ -245,7 +227,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               <Text className="mb-4 px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해 알려드릴게요!
               </Text>
-              <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white px-4 py-2">
+              <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white p-2 pl-4">
                 {ruledata.result.map((rule, index) => (
                   <View key={rule.ruleId} className={`flex flex-row items-center justify-between`}>
                     <View className="flex flex-row items-center">
@@ -269,6 +251,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                         toEdit('rule', rule.ruleId);
                         handleRuleItem(rule);
                       }}
+                      className="px-2.5 py-[18px]"
                     >
                       <SettingIcon />
                     </Pressable>
@@ -285,44 +268,46 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                 roledata.result.roleList.map((role) => (
                   <View
                     key={role.roleId}
-                    className="rounded-xl border border-[#F1F1F1] bg-white p-4"
+                    className="flex flex-row justify-between rounded-xl border border-[#F1F1F1] bg-white p-4 pr-2"
                   >
-                    <View className="flex flex-row items-center justify-between">
-                      {role.repeatDayList.length === 7 ? (
-                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
+                    <View className="flex flex-col items-start">
+                      <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
+                        {role.repeatDayList.length === 7 ? (
                           <Text className="text-xs font-medium text-colorFont">매일</Text>
-                        </View>
-                      ) : role.repeatDayList.length === 0 ? (
-                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
+                        ) : role.repeatDayList.length === 0 ? (
                           <Text className="text-xs font-medium text-colorFont">미정</Text>
-                        </View>
-                      ) : (
-                        <View className="mb-1.5 rounded-sm bg-colorBox px-2 py-0.5">
+                        ) : (
                           <Text className="text-xs font-medium text-colorFont">
                             {role.repeatDayList.join(', ')}
                           </Text>
-                        </View>
-                      )}
+                        )}
+                      </View>
+                      <Text className="mb-2 text-sm font-semibold text-emphasizedFont">
+                        {role.content}
+                      </Text>
+                      <Text className="text-sm font-medium text-basicFont">
+                        {role.mateList.map((mate) => mate.nickname).join(', ')}
+                      </Text>
+                    </View>
+
+                    {role.mateList.some((mate) => mate.nickname === profile.nickname) && (
                       <Pressable
                         onPress={() => {
                           toEdit('role', role.roleId);
                           handleRoleItem(role);
                         }}
+                        className="p-2.5 pb-[26px]"
                       >
                         <SettingIcon />
                       </Pressable>
-                    </View>
-                    <Text className="mb-2 text-sm font-semibold text-emphasizedFont">
-                      {role.content}
-                    </Text>
-                    <Text className="text-sm font-medium text-basicFont">
-                      {role.mateList.map((mate) => mate.nickname).join(', ')}
-                    </Text>
+                    )}
                   </View>
                 ))
               ) : (
-                <View>
-                  <Text>등록된 역할이 없어요</Text>
+                <View className="flex h-36 items-center justify-center">
+                  <Text className="text-sm font-medium text-disabledFont">
+                    등록된 역할이 없어요!
+                  </Text>
                 </View>
               )}
             </View>

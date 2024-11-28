@@ -308,7 +308,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           leftButtonText="안할래요"
           leftButtonFunc={() => setIsNotVerifiedModalOpen(false)}
           rightButtonText="할래요"
-          righttButtonFunc={() => {
+          rightButtonFunc={() => {
             setIsNoLifeStyleModalOpen(false);
             setIsCreateRoomOpen(false);
             toSchoolAuthentication();
@@ -323,7 +323,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           leftButtonText="안할래요"
           leftButtonFunc={() => setIsNoLifeStyleModalOpen(false)}
           rightButtonText="할래요"
-          righttButtonFunc={() => {
+          rightButtonFunc={() => {
             setIsNoLifeStyleModalOpen(false);
             setIsCreateRoomOpen(false);
             toLifeStyleOnboarding();

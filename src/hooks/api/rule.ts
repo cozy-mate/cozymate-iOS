@@ -1,12 +1,25 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
-import { addRule, updateRule, getRuleData } from '@server/api/rule';
 import { AddRuleRequest, UpdateRuleRequest } from '@server/requestTypes/rule';
+import { addRule, updateRule, deleteRule, getRuleData } from '@server/api/rule';
 import {
   AddRuleResponse,
   UpdateRuleResponse,
+  DeleteRuleResponse,
   GetRuleDataResponse,
 } from '@server/responseTypes/rule';
+
+type DeleteRuleVariables = { roomId: number; ruleId: number };
+
+// Rule 삭제
+export const useDeleteRule = (
+  refetch: () => void,
+): UseMutationResult<DeleteRuleResponse, void, DeleteRuleVariables, unknown> => {
+  return useMutation({
+    mutationFn: ({ roomId, ruleId }) => deleteRule(roomId, ruleId),
+    onSuccess: () => refetch(),
+  });
+};
 
 // Rule 조회
 export const useGetRuleData = (

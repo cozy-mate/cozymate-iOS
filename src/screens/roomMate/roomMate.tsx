@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import UserComponent from '@components/roomMate/userComponent';
@@ -6,23 +6,27 @@ import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
-import { useSearchMembers, useGetRandomMember } from '@hooks/api/member-stat';
+import { useFilter, useGetRandomMember } from '@hooks/api/member-stat';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 import MagnifierIcon from '@assets/magnifier.svg';
 import FilterIcon from '@assets/roomMate/filter.svg';
+import SmallXButton from '@assets/roomMate/smallXButton.svg';
+import ColoredFilterIcon from '@assets/roomMate/coloredFilter.svg';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
+  const { initialValue, detailFilterList, setDetailFilterList, clearDetailFilterList } =
+    useDetailFilterListStore();
 
-  const [filterList, setFilterList] = useState<string[]>([]);
+  const [chipList, setChipList] = useState<string[]>([]);
 
-  // 라이프스타일이 있는 사용자
-  const { fetchNextPage, hasNextPage, ...result } = useSearchMembers(filterList);
+  const { fetchNextPage, hasNextPage, ...result } = useFilter(chipList, detailFilterList);
+
   // 무한 스크롤
   const loadMoreList = () => {
     if (hasNextPage) {
@@ -92,6 +96,20 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     setIsModalOpen(false);
   };
 
+  const allSelectedValues = Object.values(detailFilterList)
+    .flat()
+    .filter((value) => value !== undefined && value !== null && value !== '');
+
+  const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (detailFilterList === initialValue) {
+      setIsFilterSet(false);
+    } else {
+      setIsFilterSet(true);
+    }
+  }, [detailFilterList, initialValue]);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* 상단 이전 버튼 */}
@@ -107,14 +125,17 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         scrollEventThrottle={16}
         bounces={false}
       >
-        <View className="mb-4 mt-6 flex flex-row items-center justify-between pr-5">
+        <View className="my-4 flex flex-row items-center justify-between pr-5">
           <Text className="px-6 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
             원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
           </Text>
-          <Pressable onPress={() => setIsModalOpen(true)}>
-            <View className="rounded-lg border border-disabled px-3 py-[13px]">
-              <FilterIcon />
-            </View>
+          <Pressable
+            onPress={() => setIsModalOpen(true)}
+            className={`rounded-lg border-[1.5px] px-3 py-[13px] ${
+              isFilterSet ? 'border-main1' : 'border-disabled'
+            }`}
+          >
+            {isFilterSet ? <ColoredFilterIcon /> : <FilterIcon />}
           </Pressable>
         </View>
 
@@ -133,16 +154,38 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         </View>
 
         <CheckBoxContainer
-          value={filterList}
-          setValue={setFilterList}
+          value={chipList}
+          setValue={setChipList}
           items={items}
           setItems={setItems}
         />
 
+        {allSelectedValues.length > 0 && (
+          <View className="mb-8 flex flex-row items-center justify-between px-5">
+            <View className="flex flex-row space-x-2">
+              {allSelectedValues.map((value, index) => (
+                <Pressable
+                  key={index}
+                  className="flex flex-row items-center rounded-lg border border-colorFont py-1 pl-3.5 pr-1.5"
+                >
+                  <Text className="text-xs font-semibold text-colorFont">{value}</Text>
+                  <Pressable className="p-2">
+                    <SmallXButton />
+                  </Pressable>
+                </Pressable>
+              ))}
+            </View>
+
+            <Pressable onPress={clearDetailFilterList}>
+              <Text className="text-xs font-normal text-disabledFont underline">초기화</Text>
+            </Pressable>
+          </View>
+        )}
+
         {/* 라이프스타일이 없는 사용자 컴포넌트 (필터링 칩 클릭 시 데이터 안보임) */}
         <View className="px-5">
           {!hasLifeStyle &&
-            filterList.length === 0 &&
+            chipList.length === 0 &&
             userList?.result &&
             userList?.result.memberList.map((user) => (
               <UserComponent
@@ -151,17 +194,17 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                 toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
               />
             ))}
-          {!hasLifeStyle && filterList.length !== 0 && (
+          {!hasLifeStyle && chipList.length !== 0 && (
             <NoLifeStyleComponent
               pressFunc={toLifeStyleOnboarding}
-              isChipClicked={filterList.length !== 0}
+              isChipClicked={chipList.length !== 0}
             />
           )}
         </View>
 
         {/* 라이프스타일이 있는 사용자 컴포넌트 */}
         <View className="px-5">
-          {hasLifeStyle && result.data?.pages ? (
+          {hasLifeStyle && detailFilterList === initialValue && result.data?.pages ? (
             result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
               <Text className="text-center text-gray-500">검색된 사용자가 없습니다.</Text>
             ) : (
@@ -175,6 +218,16 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                   />
                 ))
             )
+          ) : detailFilterList !== initialValue && result.data?.pages ? (
+            result.data?.pages
+              .flatMap((page) => page.result.memberList)
+              .map((user) => (
+                <UserComponent
+                  key={user.memberDetail.memberId}
+                  user={user}
+                  toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
+                />
+              ))
           ) : null}
         </View>
       </ScrollView>

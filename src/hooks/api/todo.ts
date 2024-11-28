@@ -1,13 +1,26 @@
 import { useMutation, useSuspenseQuery, UseMutationResult } from '@tanstack/react-query';
 
 import { AddMyTodoRequest, UpdateTodoRequest } from '@server/requestTypes/todo';
-import { addMyTodo, updateTodo, getTodoData, changeTodoState } from '@server/api/todo';
+import { addMyTodo, updateTodo, deleteTodo, getTodoData, changeTodoState } from '@server/api/todo';
 import {
   AddMyTodoResponse,
   UpdateTodoResponse,
+  DeleteTodoResponse,
   GetTodoDataResponse,
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
+
+type DeleteTodoVariables = { roomId: number; todoId: number };
+
+// Todo 삭제
+export const useDeleteTodo = (
+  refetch: () => void,
+): UseMutationResult<DeleteTodoResponse, void, DeleteTodoVariables, unknown> => {
+  return useMutation({
+    mutationFn: ({ roomId, todoId }) => deleteTodo(roomId, todoId),
+    onSuccess: () => refetch(),
+  });
+};
 
 // Todo 생성
 export const useAddMyTodo = (

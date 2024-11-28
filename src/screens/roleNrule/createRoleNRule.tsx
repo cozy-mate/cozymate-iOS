@@ -31,10 +31,6 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
 
   const [type, setType] = useState<string>(route.params.type);
 
-  const changeType = (newType: string) => {
-    setType(newType);
-  };
-
   const toBack = () => {
     navigation.goBack();
   };
@@ -54,7 +50,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
   // Role
   const [roleMateIdNameList, setRoleMateIdNameList] = useState<RoleMateItem[]>([]);
   const [content, setContent] = useState<string>('');
-  const [repeatDayList, setRepeatDayList] = useState<string[]>([]);
+  const [repeatDayList, setRepeatDayList] = useState<string[] | null>(null);
 
   const { refetch: refetchRole } = useGetRoleData(roomInfo.roomId);
   const { mutateAsync: addRoleMutate } = useAddRole(roomInfo.roomId, refetchRole, refetchTodo);
@@ -70,12 +66,29 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
     setTimePoint(dateTime);
   };
 
+  const changeType = (newType: string) => {
+    setType(newType);
+    setTodoContent('');
+    setTodoMateIdList([]);
+    setTimePoint(moment().format('YYYY-MM-DD'));
+    setRoleMateIdNameList([]);
+    setContent('');
+    setRepeatDayList(null);
+    setRuleContent('');
+    setMemo('');
+  };
+
   // 생성 가능한 지 여부 확인
   const canSubmit = () => {
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return roleMateIdNameList.length > 0 && content.trim() !== '' && repeatDayList.length > 0;
+      return (
+        roleMateIdNameList.length > 0 &&
+        content.trim() !== '' &&
+        repeatDayList !== null &&
+        repeatDayList.length > 0
+      );
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -99,7 +112,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
         console.log(error.response.data.message);
       }
     } else if (type === 'role') {
-      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
+      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList !== null) {
         return;
       }
       try {

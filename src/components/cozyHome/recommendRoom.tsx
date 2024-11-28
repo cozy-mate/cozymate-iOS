@@ -50,8 +50,18 @@ const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc
               {isLifestyleOptionKey(key)
                 ? getRoomLifeStyleIcon(
                     key,
-                    value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                    value === room.numOfArrival ? '모두 일치' : `${value}명 일치`,
+                    value === null
+                      ? '??'
+                      : value === room.numOfArrival
+                      ? 'blue'
+                      : value === 0
+                      ? 'red'
+                      : 'white',
+                    value === null
+                      ? '??'
+                      : value === room.numOfArrival
+                      ? '모두 일치'
+                      : `${value}명 일치`,
                   )
                 : null}
             </View>
