@@ -72,3 +72,30 @@ export interface RegisterLifeStyle {
   mbti: string;
   selfIntroduction: string;
 }
+
+export interface DetailFilterList {
+  birthYear: number[];
+  admissionYear: string[];
+  majorName: string[];
+  acceptance: string[];
+  wakeUpTime: number[];
+  sleepingTime: number[];
+  turnOffTime: number[];
+  smoking: string[];
+  sleepingHabit: string[];
+  airConditioningIntensity: number[];
+  heatingIntensity: number[];
+  lifePattern: string[];
+  intimacy: number[];
+  canShare: string[];
+  isPlayGame: string[];
+  isPhoneCall: string[];
+  studying: string[];
+  intake: string[];
+  cleanSensitivity: number[];
+  noiseSensitivity: number[];
+  cleaningFrequency: string[];
+  drinkingFrequency: string[];
+  personality: string[];
+  mbti: string[];
+}

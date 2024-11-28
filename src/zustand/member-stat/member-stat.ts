@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { LifeStyle, RegisterLifeStyle } from './type';
+import { LifeStyle, DetailFilterList, RegisterLifeStyle } from './type';
 
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
@@ -111,4 +111,97 @@ export const usePreferencesStore = create<{
 }>((set) => ({
   preferenceList: [],
   setPreferenceList: (status) => set({ preferenceList: status }),
+}));
+
+export const useDetailFilterListStore = create<{
+  initialValue: DetailFilterList;
+  detailFilterList: DetailFilterList;
+  setDetailFilterList: (status: Partial<DetailFilterList>) => void;
+  clearDetailFilterList: () => void;
+}>((set) => ({
+  initialValue: {
+    birthYear: [],
+    admissionYear: [],
+    majorName: [],
+    acceptance: [],
+    wakeUpTime: [],
+    sleepingTime: [],
+    turnOffTime: [],
+    smoking: [],
+    sleepingHabit: [],
+    airConditioningIntensity: [],
+    heatingIntensity: [],
+    lifePattern: [],
+    intimacy: [],
+    canShare: [],
+    isPlayGame: [],
+    isPhoneCall: [],
+    studying: [],
+    intake: [],
+    cleanSensitivity: [],
+    noiseSensitivity: [],
+    cleaningFrequency: [],
+    drinkingFrequency: [],
+    personality: [],
+    mbti: [],
+  },
+  detailFilterList: {
+    birthYear: [],
+    admissionYear: [],
+    majorName: [],
+    acceptance: [],
+    wakeUpTime: [],
+    sleepingTime: [],
+    turnOffTime: [],
+    smoking: [],
+    sleepingHabit: [],
+    airConditioningIntensity: [],
+    heatingIntensity: [],
+    lifePattern: [],
+    intimacy: [],
+    canShare: [],
+    isPlayGame: [],
+    isPhoneCall: [],
+    studying: [],
+    intake: [],
+    cleanSensitivity: [],
+    noiseSensitivity: [],
+    cleaningFrequency: [],
+    drinkingFrequency: [],
+    personality: [],
+    mbti: [],
+  },
+  setDetailFilterList: (newFilter) =>
+    set((state) => ({
+      detailFilterList: { ...state.detailFilterList, ...newFilter },
+    })),
+  clearDetailFilterList: () =>
+    set(() => ({
+      detailFilterList: {
+        birthYear: [],
+        admissionYear: [],
+        majorName: [],
+        acceptance: [],
+        wakeUpTime: [],
+        sleepingTime: [],
+        turnOffTime: [],
+        smoking: [],
+        sleepingHabit: [],
+        airConditioningIntensity: [],
+        heatingIntensity: [],
+        lifePattern: [],
+        intimacy: [],
+        canShare: [],
+        isPlayGame: [],
+        isPhoneCall: [],
+        studying: [],
+        intake: [],
+        cleanSensitivity: [],
+        noiseSensitivity: [],
+        cleaningFrequency: [],
+        drinkingFrequency: [],
+        personality: [],
+        mbti: [],
+      },
+    })),
 }));
