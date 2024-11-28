@@ -108,7 +108,7 @@ export const getFilteredMemberList = async (
 export const getFilteredMemberListCount = async (
   data: GetFilteredMemberListCountRequest,
 ): Promise<GetFilteredMemberListCountResponse> => {
-  const response = await GetAxiosInstance<GetFilteredMemberListCountResponse>(
+  const response = await PostAxiosInstance<GetFilteredMemberListCountResponse>(
     `/members/stat/filter/search/count`,
     data,
   );

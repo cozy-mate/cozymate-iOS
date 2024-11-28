@@ -1,28 +1,31 @@
 import {
   useQuery,
-  useMutation,
   UseQueryResult,
   useSuspenseQuery,
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
-import { GetFilteredMemberListCountRequest } from '@server/requestTypes/member-stat';
 import {
-  searchMembers,
-  getRandomMember,
-  searchMemberByKeyword,
-  getOtherMemberStatData,
-  getFilteredMemberListCount,
-} from '@server/api/member-stat';
+  GetFilteredMemberListRequest,
+  GetFilteredMemberListCountRequest,
+} from '@server/requestTypes/member-stat';
 import {
   SearchMembersResponse,
   GetRandomMemberResponse,
   SearchMemberByKeywordResponse,
   GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
+import {
+  searchMembers,
+  getRandomMember,
+  searchMemberByKeyword,
+  getFilteredMemberList,
+  getOtherMemberStatData,
+  getFilteredMemberListCount,
+} from '@server/api/member-stat';
 
 // 사용자 상세정보 조회
 export const useGetMemberStatData = (
@@ -161,8 +164,51 @@ export const useSearchMembers = (filter: string[]) => {
   });
 };
 
-export const useGetFilteredMemberListCount = () => {
-  return useMutation({
-    mutationFn: (data: GetFilteredMemberListCountRequest) => getFilteredMemberListCount(data),
+export const useGetFilteredMemberList = (data: GetFilteredMemberListRequest) => {
+  return useInfiniteQuery({
+    queryKey: [`/members/stat/filter/search`],
+    queryFn: async ({ pageParam }) => {
+      const response = await getFilteredMemberList(data, pageParam);
+      console.log(response);
+      return response;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
+  });
+};
+
+export const useFilter = (chipData: string[], filterData: GetFilteredMemberListRequest) => {
+  const { initialValue, detailFilterList } = useDetailFilterListStore();
+
+  return useInfiniteQuery({
+    queryKey: ['filteringData', chipData, detailFilterList],
+    queryFn: async ({ pageParam }) => {
+      if (detailFilterList === initialValue) {
+        const response = await searchMembers(pageParam, chipData);
+        console.log(response);
+        return response;
+      } else {
+        const response = await getFilteredMemberList(filterData, pageParam);
+        console.log(response);
+        return response;
+      }
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
+  });
+};
+
+export const useGetFilteredMemberListCount = (data: GetFilteredMemberListCountRequest) => {
+  return useQuery({
+    queryKey: [`/members/stat/filter/search/count`, data],
+    queryFn: () => getFilteredMemberListCount(data),
   });
 };
