@@ -112,7 +112,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
         console.log(error.response.data.message);
       }
     } else if (type === 'role') {
-      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList !== null) {
+      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList === null) {
         return;
       }
       try {
