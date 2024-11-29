@@ -32,7 +32,7 @@ const RequestUsersComponent: React.FC<RequestUsersComponentProps> = ({ navigatio
           <Pressable
             key={user.memberId}
             onPress={() => toUserDetail(user.memberId)}
-            className={`flex flex-row justify-between border-b border-b-[#f6f6f6] py-[22px] ${
+            className={`flex flex-row justify-between border-b border-b-[#f6f6f6] py-[22px] pl-1 ${
               index === 0 && 'pt-2.5'
             } ${index === userList.length - 1 && 'border-b-0 pb-2.5'}`}
           >

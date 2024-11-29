@@ -5,6 +5,8 @@ import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { LifestyleOptionKey, getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
+import { FavoriteUserRoomScreenProps } from '@type/param/stack';
+
 interface FavoriteUserProps {
   userData: {
     favoriteId: number;
@@ -22,15 +24,19 @@ interface FavoriteUserProps {
       preferenceStats: Record<LifestyleOptionKey, string | number | null>;
     };
   };
-  pressFunc?: (memberId: number) => void;
+  navigation: FavoriteUserRoomScreenProps['navigation'];
 }
 
-const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, pressFunc }) => {
+const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   return (
     <Pressable
-      //   onPress={() => pressFunc(userData.memberStatPreferenceDetail.memberDetail.memberId)}
+      onPress={() =>
+        navigation.navigate('UserDetailScreen', {
+          memberId: userData.memberStatPreferenceDetail.memberDetail.memberId,
+        })
+      }
       className="flex flex-col rounded-xl border border-disabled px-4 py-5"
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">

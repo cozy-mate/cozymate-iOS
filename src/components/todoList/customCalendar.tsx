@@ -42,21 +42,21 @@ interface TodoItem {
   id: number;
   completed: boolean;
   content: string;
-  date: string; // 날짜 정보가 있어야 합니다. 형식은 'YYYY-MM-DD'
+  date: string;
 }
 
 interface CustomCalendarProps {
   canSelectPrev: boolean;
   onDateTimeSelect: (dateTime: string) => void;
-  todoData?: TodoItem[]; // 할 일 데이터를 선택적으로 받습니다.
-  useMarkedDates?: boolean; // markedDates를 사용할지 여부를 받습니다.
+  todoData?: TodoItem[];
+  useMarkedDates?: boolean;
 }
 
 const CustomCalendar: React.FC<CustomCalendarProps> = ({
   canSelectPrev,
   onDateTimeSelect,
-  todoData = [], // 기본값으로 빈 배열 설정
-  useMarkedDates = true, // 기본값으로 markedDates를 사용하도록 설정
+  todoData = [],
+  useMarkedDates = true,
 }) => {
   const today = moment().format('YYYY-MM-DD');
   const [selected, setSelected] = useState(today);
@@ -64,7 +64,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   const minDate = canSelectPrev ? undefined : today;
 
   const markedDates = useMemo(() => {
-    if (!useMarkedDates) return {}; // markedDates 사용하지 않는 경우 빈 객체 반환
+    if (!useMarkedDates) return {};
 
     const marks: { [key: string]: any } = {};
 
@@ -96,7 +96,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
         onDateTimeSelect(day.dateString);
         setSelected(day.dateString);
       }}
-      markedDates={useMarkedDates ? markedDates : {}} // useMarkedDates가 true일 때만 markedDates 적용
+      markedDates={useMarkedDates ? markedDates : {}}
       theme={{
         backgroundColor: '#ffffff',
         calendarBackground: '#ffffff',

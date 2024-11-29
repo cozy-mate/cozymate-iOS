@@ -1,5 +1,6 @@
 import {
   useQuery,
+  useMutation,
   UseQueryResult,
   useSuspenseQuery,
   useInfiniteQuery,
@@ -9,6 +10,7 @@ import {
 import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
 import {
+  RegisterMemberStatRequest,
   GetFilteredMemberListRequest,
   GetFilteredMemberListCountRequest,
 } from '@server/requestTypes/member-stat';
@@ -21,6 +23,7 @@ import {
 import {
   searchMembers,
   getRandomMember,
+  registerMemberStat,
   searchMemberByKeyword,
   getFilteredMemberList,
   getOtherMemberStatData,
@@ -187,13 +190,13 @@ export const useFilter = (chipData: string[], filterData: GetFilteredMemberListR
   return useInfiniteQuery({
     queryKey: ['filteringData', chipData, detailFilterList],
     queryFn: async ({ pageParam }) => {
-      if (detailFilterList === initialValue) {
+      if (JSON.stringify(detailFilterList) === JSON.stringify(initialValue)) {
         const response = await searchMembers(pageParam, chipData);
-        console.log(response);
+        console.log('칩 기반 출력', response);
         return response;
       } else {
         const response = await getFilteredMemberList(filterData, pageParam);
-        console.log(response);
+        console.log('필터 기반 출력', response);
         return response;
       }
     },
@@ -210,5 +213,11 @@ export const useGetFilteredMemberListCount = (data: GetFilteredMemberListCountRe
   return useQuery({
     queryKey: [`/members/stat/filter/search/count`, data],
     queryFn: () => getFilteredMemberListCount(data),
+  });
+};
+
+export const useRegisterLifeStyle = () => {
+  return useMutation({
+    mutationFn: (data: RegisterMemberStatRequest) => registerMemberStat(data),
   });
 };

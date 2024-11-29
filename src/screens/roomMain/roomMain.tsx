@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
-import { getRoomData } from '@server/api/room';
-
+import { useGetRoomData } from '@hooks/api/room';
 import { useGetRoomLog } from '@hooks/api/room-log';
 
 import { onCopyAddress } from '@utils/clipboard';
@@ -20,31 +19,19 @@ import ColorRightArrow from '@assets/roomMain/colorRightArrow.svg';
 
 const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const { myRoom } = useHasRoomStore();
-  const { roomInfo, setRoomInfo } = useRoomInfoStore();
+  const { roomInfo } = useRoomInfoStore();
 
   const { bottom } = useSafeAreaInsets();
 
-  const { data: roomlogdata } = useGetRoomLog(roomInfo.roomId);
+  const { data: roomData } = useGetRoomData(myRoom.roomId);
+  const { data: roomlogdata } = useGetRoomLog(myRoom.roomId);
 
   const toRoomDetail = () => {
-    navigation.navigate('RoomDetailScreen', { roomId: roomInfo.roomId });
+    navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const infoResponse = await getRoomData(myRoom.roomId);
-
-        setRoomInfo(infoResponse.result);
-      } catch (error: any) {
-        console.error('Error fetching room data:', error.reponse);
-      }
-    };
-    fetchData();
-  }, []);
-
   const toEdit = () => {
-    navigation.navigate('EditRoomScreen', { id: roomInfo.roomId, type: roomInfo.roomType });
+    navigation.navigate('EditRoomScreen', { id: myRoom.roomId, type: roomInfo.roomType });
   };
 
   return (
@@ -54,7 +41,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         {/* 헤더 */}
         <Pressable className="mb-2 flex flex-row items-center" onPress={toRoomDetail}>
           <View className="mr-2 flex flex-row">
-            {roomInfo.mateDetailList.map((icon, index) => (
+            {roomData.result.mateDetailList.map((icon, index) => (
               <View
                 key={index}
                 className="-ml-1 rounded-full"
@@ -77,15 +64,17 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
           <Text className="text-lg font-semibold text-basicFont">여기는</Text>
           <View className="flex flex-row">
             <Text className="mb-2 text-lg font-semibold text-main1">
-              {roomInfo.name}
+              {roomData.result.name}
               <Text className="text-basicFont">의 방이에요!</Text>
             </Text>
           </View>
 
           {roomInfo.inviteCode && (
-            <Pressable className="flex" onPress={() => onCopyAddress(roomInfo.inviteCode)}>
+            <Pressable className="flex" onPress={() => onCopyAddress(roomData.result.inviteCode)}>
               <View className="flex flex-row items-center justify-start rounded-xl bg-white px-4 py-2 opacity-60">
-                <Text className="text-xs font-medium text-colorFont">{roomInfo.inviteCode}</Text>
+                <Text className="text-xs font-medium text-colorFont">
+                  {roomData.result.inviteCode}
+                </Text>
                 <CopyIcon />
               </View>
             </Pressable>
@@ -96,7 +85,7 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
       <View className="relative flex-1 flex-col rounded-t-[40px] bg-white px-5 pb-5 pt-8">
         <View className="absolute right-2 top-[-120px]">
           <Pressable onPress={toEdit} disabled={!roomInfo.isRoomManager}>
-            {getProfileImage(roomInfo.persona, 140, 140)}
+            {getProfileImage(roomData.result.persona, 140, 140)}
           </Pressable>
         </View>
         <ScrollView contentContainerStyle={{ paddingBottom: bottom + 40 }}>

@@ -97,10 +97,11 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
   );
 
   const { refetch: refetchRoomRequest } = useGetRoomRequests();
-  const { mutateAsync: acceptRequest } = useAcceptRequestMember(memberId, refetchRoomRequest);
-
-  console.log(isInvited);
-  console.log(myRoom);
+  const { mutateAsync: acceptRequest } = useAcceptRequestMember(
+    memberId,
+    refetchMemberStatData,
+    refetchRoomRequest,
+  );
 
   return (
     <Fragment>
@@ -226,23 +227,54 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
           {/* 타인의 상세 페이지 */}
           {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
             <View className="fixed bottom-[42px] px-5">
-              {/* 방 인원이 다 찬 방의 방장이 타인을 볼 때 */}
-              {myRoom.hasRoom && myRoom.isRoomManager && myRoom.isFullRoom && (
-                <BottomButton
-                  color="bg-[#c4c4c4]"
-                  borderColor="border-[#c4c4c4]"
-                  textColor="text-white"
-                  text="내 방으로 초대하기"
-                  disabled={true}
-                  onPressFunc={undefined}
-                />
+              {/*  */}
+              {lifeStyleData.result.hasRequestedRoomEntry && (
+                <View className="flex flex-row justify-between space-x-2">
+                  <View className="flex-1">
+                    <BottomButton
+                      color="bg-white"
+                      borderColor="border-main1"
+                      textColor="text-main1"
+                      text="거절"
+                      disabled={false}
+                      onPressFunc={() => acceptRequest(false)}
+                    />
+                  </View>
+
+                  <View className="flex-1">
+                    <BottomButton
+                      color="bg-main1"
+                      borderColor="border-main1"
+                      textColor="text-white"
+                      text="수락"
+                      disabled={false}
+                      onPressFunc={() => acceptRequest(true)}
+                    />
+                  </View>
+                </View>
               )}
+
+              {/* 방 인원이 다 찬 방의 방장이 타인을 볼 때 */}
+              {myRoom.hasRoom &&
+                myRoom.isRoomManager &&
+                myRoom.isFullRoom &&
+                !lifeStyleData.result.hasRequestedRoomEntry && (
+                  <BottomButton
+                    color="bg-[#c4c4c4]"
+                    borderColor="border-[#c4c4c4]"
+                    textColor="text-white"
+                    text="내 방으로 초대하기"
+                    disabled={true}
+                    onPressFunc={undefined}
+                  />
+                )}
 
               {/* 방 인원이 다 차지 않은 방의 방장이 방이 존재하는 타인을 볼 때 */}
               {myRoom.hasRoom &&
                 myRoom.isRoomManager &&
                 !myRoom.isFullRoom &&
-                lifeStyleData.result.roomId !== 0 && (
+                lifeStyleData.result.roomId !== 0 &&
+                !lifeStyleData.result.hasRequestedRoomEntry && (
                   <BottomButton
                     color="bg-[#c4c4c4]"
                     borderColor="border-[#c4c4c4]"
@@ -258,7 +290,8 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                 myRoom.isRoomManager &&
                 !myRoom.isFullRoom &&
                 lifeStyleData.result.roomId === 0 &&
-                isInvited !== undefined && (
+                isInvited !== undefined &&
+                !lifeStyleData.result.hasRequestedRoomEntry && (
                   <BottomButton
                     color={isInvited.result ? 'bg-colorBox' : 'bg-main1'}
                     borderColor="border-main1"

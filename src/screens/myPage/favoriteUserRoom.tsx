@@ -13,13 +13,8 @@ import BackButton from '@assets/backButton.svg';
 const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenProps) => {
   const { type } = route.params;
 
-  console.log(type);
-
   const { data: userList } = useGetFavoriteUserList();
   const { data: roomList } = useGetFavoriteRoomList();
-
-  console.log(userList);
-  console.log(roomList);
 
   const changeUserType = () => {
     navigation.navigate('FavoriteUserRoomScreen', { type: 'user' });
@@ -79,7 +74,7 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
               userList.result.length !== 0 ? (
                 userList.result.map((user) => (
                   <View key={user.favoriteId}>
-                    <FavoriteUser userData={user} />
+                    <FavoriteUser userData={user} navigation={navigation} />
                   </View>
                 ))
               ) : (
@@ -93,7 +88,7 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
               roomList.result.length !== 0 ? (
                 roomList.result.map((room) => (
                   <View key={room.favoriteId}>
-                    <FavoriteRoom key={room.favoriteId} roomData={room} />
+                    <FavoriteRoom roomData={room} navigation={navigation} />
                   </View>
                 ))
               ) : (

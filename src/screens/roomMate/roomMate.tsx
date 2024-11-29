@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import UserComponent from '@components/roomMate/userComponent';
@@ -15,13 +15,11 @@ import { RoomMateScreenProps } from '@type/param/stack';
 import BackButton from '@assets/backButton.svg';
 import MagnifierIcon from '@assets/magnifier.svg';
 import FilterIcon from '@assets/roomMate/filter.svg';
-import SmallXButton from '@assets/roomMate/smallXButton.svg';
 import ColoredFilterIcon from '@assets/roomMate/coloredFilter.svg';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { initialValue, detailFilterList, setDetailFilterList, clearDetailFilterList } =
-    useDetailFilterListStore();
+  const { initialValue, detailFilterList, clearDetailFilterList } = useDetailFilterListStore();
 
   const [chipList, setChipList] = useState<string[]>([]);
 
@@ -100,16 +98,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     .flat()
     .filter((value) => value !== undefined && value !== null && value !== '');
 
-  const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (detailFilterList === initialValue) {
-      setIsFilterSet(false);
-    } else {
-      setIsFilterSet(true);
-    }
-  }, [detailFilterList, initialValue]);
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* 상단 이전 버튼 */}
@@ -132,10 +120,16 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           <Pressable
             onPress={() => setIsModalOpen(true)}
             className={`rounded-lg border-[1.5px] px-3 py-[13px] ${
-              isFilterSet ? 'border-main1' : 'border-disabled'
+              JSON.stringify(detailFilterList) !== JSON.stringify(initialValue)
+                ? 'border-main1'
+                : 'border-disabled'
             }`}
           >
-            {isFilterSet ? <ColoredFilterIcon /> : <FilterIcon />}
+            {JSON.stringify(detailFilterList) !== JSON.stringify(initialValue) ? (
+              <ColoredFilterIcon />
+            ) : (
+              <FilterIcon />
+            )}
           </Pressable>
         </View>
 
@@ -166,12 +160,12 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
               {allSelectedValues.map((value, index) => (
                 <Pressable
                   key={index}
-                  className="flex flex-row items-center rounded-lg border border-colorFont py-1 pl-3.5 pr-1.5"
+                  className="flex flex-row items-center rounded-lg border border-colorFont p-3.5 py-1.5"
                 >
                   <Text className="text-xs font-semibold text-colorFont">{value}</Text>
-                  <Pressable className="p-2">
+                  {/* <Pressable className="p-2">
                     <SmallXButton />
-                  </Pressable>
+                  </Pressable> */}
                 </Pressable>
               ))}
             </View>
@@ -204,21 +198,11 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
 
         {/* 라이프스타일이 있는 사용자 컴포넌트 */}
         <View className="px-5">
-          {hasLifeStyle && detailFilterList === initialValue && result.data?.pages ? (
-            result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
-              <Text className="text-center text-gray-500">검색된 사용자가 없습니다.</Text>
-            ) : (
-              result.data?.pages
-                .flatMap((page) => page.result.memberList)
-                .map((user) => (
-                  <UserComponent
-                    key={user.memberDetail.memberId}
-                    user={user}
-                    toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
-                  />
-                ))
-            )
-          ) : detailFilterList !== initialValue && result.data?.pages ? (
+          {hasLifeStyle &&
+          result.data?.pages &&
+          result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
+            <Text className="flex text-center text-disabledFont">사용자가 없습니다.</Text>
+          ) : (
             result.data?.pages
               .flatMap((page) => page.result.memberList)
               .map((user) => (
@@ -228,7 +212,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
                   toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
                 />
               ))
-          ) : null}
+          )}
         </View>
       </ScrollView>
 
