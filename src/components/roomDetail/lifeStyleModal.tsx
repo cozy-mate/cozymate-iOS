@@ -33,8 +33,14 @@ const LifeStyleModal: React.FC<LifeStyleModalProps> = ({
 
   return (
     <Modal transparent={true} animationType="fade">
-      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-modalBack2 px-5">
-        <View className="flex w-full flex-col justify-center rounded-xl bg-white p-4 pt-5">
+      <View
+        onTouchEnd={closeModal}
+        className="absolute left-0 top-0 flex h-screen w-screen flex-col items-center justify-center space-y-6 bg-modalBack2 px-5"
+      >
+        <View
+          onTouchEnd={(e) => e.stopPropagation()}
+          className="flex w-full flex-col justify-center rounded-xl bg-white p-4 pt-5"
+        >
           <Text className={`mb-4 text-center text-base font-semibold ${textColor}`}>{title}</Text>
 
           <View className="flex flex-col">
