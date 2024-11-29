@@ -7,7 +7,7 @@ import CustomTextarea from '@components/common/customTextarea';
 
 import { useHasLifeStyleStore, useRegisterLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { registerMemberStat } from '@server/api/member-stat';
+import { useRegisterLifeStyle } from '@hooks/api/member-stat';
 
 import { AdditionalLifeStyleScreenProps } from '@type/param/stack';
 
@@ -16,6 +16,8 @@ const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeSty
 
   const { registerLifeStyle, setRegisterLifeStyle } = useRegisterLifeStyleStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
+
+  const { mutateAsync: registerMyLifeStyle } = useRegisterLifeStyle();
 
   const [selfIntroduction, setSelfIntroduction] = useState<string>('');
 
@@ -29,7 +31,7 @@ const AdditionalInformationComponent = ({ navigation, route }: AdditionalLifeSty
     });
 
     try {
-      await registerMemberStat({
+      await registerMyLifeStyle({
         admissionYear: registerLifeStyle.admissionYear,
         numOfRoommate: registerLifeStyle.numOfRoommate,
         dormitoryName: registerLifeStyle.dormitoryName,
