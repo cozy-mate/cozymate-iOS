@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   Text,
   View,
@@ -9,6 +10,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import OneButtonModal from '@components/commonComponents/oneButtonModal';
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
 import {
@@ -41,13 +43,31 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const [hashtagList, setHashtagList] = useState<string[]>([]);
   const [isLongName, setIsLongName] = useState<boolean>(false);
 
+  const [isHashtagModalOpen, setIsHashtagModalOpen] = useState<boolean>(false);
+
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   useEffect(() => {
-    if (name !== '' && maxMateNum !== 0 && !isLongName) {
-      setIsComplete(true);
-    } else {
-      setIsComplete(false);
+    if (type === 'PUBLIC') {
+      if (
+        name !== '' &&
+        maxMateNum !== 0 &&
+        !isLongName &&
+        0 < hashtagList.length &&
+        hashtagList.length < 4
+      ) {
+        setIsComplete(true);
+      } else {
+        setIsComplete(false);
+      }
+    }
+
+    if (type === 'PRIVATE') {
+      if (name !== '' && maxMateNum !== 0 && !isLongName) {
+        setIsComplete(true);
+      } else {
+        setIsComplete(false);
+      }
     }
 
     if (
@@ -70,17 +90,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         maxMateNum: maxMateNum,
       });
     }
-  }, [
-    createPrivateRoomInfo,
-    createPublicRoomInfo,
-    hashtagList,
-    isLongName,
-    maxMateNum,
-    name,
-    setCreatePrivateRoomInfo,
-    setCreatePublicRoomInfo,
-    type,
-  ]);
+  }, []);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -103,6 +113,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
       setHashtagList([...hashtagList, hashTag.trim()]);
       setHashTag('');
+    } else if (hashtagList.length >= 3) {
+      setIsHashtagModalOpen(true);
     }
   };
 
@@ -138,6 +150,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         managerMemberId: response.result.managerMemberId,
         managerNickname: response.result.managerNickname,
         isRoomManager: response.result.isRoomManager,
+        favoriteId: response.result.favoriteId,
         maxMateNum: response.result.maxMateNum,
         arrivalMateNum: response.result.arrivalMateNum,
         dormitoryName: response.result.dormitoryName,
@@ -172,6 +185,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
         managerMemberId: response.result.managerMemberId,
         managerNickname: response.result.managerNickname,
         isRoomManager: response.result.isRoomManager,
+        favoriteId: response.result.favoriteId,
         maxMateNum: response.result.maxMateNum,
         arrivalMateNum: response.result.arrivalMateNum,
         dormitoryName: response.result.dormitoryName,
@@ -191,7 +205,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex flex-1 flex-col justify-between bg-white">
         <View className="flex flex-1 flex-col justify-between px-5">
-          <View>
+          <KeyboardAwareScrollView>
             {/* 상단 이전 버튼 */}
             <View className="mb-[33px] mt-2 flex flex-row items-center">
               <Pressable onPress={toMain}>
@@ -262,12 +276,12 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                     onSubmitEditing={handleHashTagSubmit}
                     placeholder="해시태그를 입력해주세요"
                   />
-                  <View className="flex flex-row">
+                  <View className="flex flex-row flex-wrap">
                     {hashtagList.length > 0 &&
                       hashtagList.map((hash, index) => (
                         <View
                           key={index}
-                          className="mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
+                          className="mb-2 mr-2 flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
                         >
                           <Text className="text-xs font-semibold text-main1">#{hash}</Text>
                           <Pressable onPress={() => removeHashTag(index)}>
@@ -279,7 +293,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                 </View>
               )}
             </View>
-          </View>
+          </KeyboardAwareScrollView>
 
           <View className="flex">
             <Pressable
@@ -289,6 +303,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
               <Text className="text-center text-base font-semibold text-white">방 생성하기</Text>
             </Pressable>
           </View>
+
+          <OneButtonModal
+            isVisible={isHashtagModalOpen}
+            title={`해시태그는 최대 3개까지만\n입력할 수 있어요!`}
+            closeFunc={() => setIsHashtagModalOpen(false)}
+            buttonText="확인"
+            buttonFunc={() => setIsHashtagModalOpen(false)}
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
