@@ -1,4 +1,6 @@
-import React, { Fragment, useState } from 'react';
+import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { Fragment, useState, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
@@ -71,11 +73,11 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
-  const { data: tododata, refetch: refetchTodo } = useGetTodoData(roomInfo.roomId, timePoint);
+  const { data: tododata, refetch: refetchTodoData } = useGetTodoData(roomInfo.roomId, timePoint);
 
   console.log(tododata.result.myTodoList);
 
-  const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodo);
+  const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodoData);
 
   const changeTodo = async (todo: TodoItem): Promise<void> => {
     changeTodoMutate({ todoId: todo.todoId, completed: !todo.completed });
@@ -88,12 +90,12 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
       todoId: todo.todoId,
       content: todo.content,
       type: todo.todoType,
-      timePoint: timePoint,
+      timePoint: timePoint === '' ? moment().format('YYYY-MM-DD') : timePoint,
       mateIdList: todo.mateIdList,
     });
   };
 
-  const { data: ruledata } = useGetRuleData(roomInfo.roomId);
+  const { data: ruledata, refetch: refetchRuleData } = useGetRuleData(roomInfo.roomId);
 
   const { setRuleItem } = useRuleItemStore();
 
@@ -101,7 +103,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
     setRuleItem(rule);
   };
 
-  const { data: roledata } = useGetRoleData(roomInfo.roomId);
+  const { data: roledata, refetch: refetchRoleData } = useGetRoleData(roomInfo.roomId);
 
   const { setRoleItem } = useRoleItemStore();
 
@@ -114,6 +116,14 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
       isAllDays: role.isAllDays,
     });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchTodoData();
+      refetchRuleData();
+      refetchRoleData();
+    }, []),
+  );
 
   return (
     <View className="flex-1 bg-sub1">
@@ -227,37 +237,49 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               <Text className="mb-4 px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}규칙에 대해 알려드릴게요!
               </Text>
-              <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white p-2 pl-4">
-                {ruledata.result.map((rule, index) => (
-                  <View key={rule.ruleId} className={`flex flex-row items-center justify-between`}>
-                    <View className="flex flex-row items-center">
-                      <View className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-colorBox">
-                        <Text className="text-center text-xs font-medium text-colorFont">
-                          {index + 1}
-                        </Text>
-                      </View>
-                      <View className="flex flex-col justify-center space-y-0.5">
-                        <Text className="text-sm font-medium text-basicFont">{rule.content}</Text>
-                        {rule.memo !== '' && (
-                          <Text className="text-[10px] font-medium text-disabledFont">
-                            {rule.memo}
-                          </Text>
-                        )}
-                      </View>
-                    </View>
 
-                    <Pressable
-                      onPress={() => {
-                        toEdit('rule', rule.ruleId);
-                        handleRuleItem(rule);
-                      }}
-                      className="px-2.5 py-[18px]"
+              {ruledata.result.length !== 0 ? (
+                <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white p-2 pl-4">
+                  {ruledata.result.map((rule, index) => (
+                    <View
+                      key={rule.ruleId}
+                      className={`flex flex-row items-center justify-between`}
                     >
-                      <SettingIcon />
-                    </Pressable>
-                  </View>
-                ))}
-              </View>
+                      <View className="flex flex-row items-center">
+                        <View className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-colorBox">
+                          <Text className="text-center text-xs font-medium text-colorFont">
+                            {index + 1}
+                          </Text>
+                        </View>
+                        <View className="flex flex-col justify-center space-y-0.5">
+                          <Text className="text-sm font-medium text-basicFont">{rule.content}</Text>
+                          {rule.memo !== '' && (
+                            <Text className="text-[10px] font-medium text-disabledFont">
+                              {rule.memo}
+                            </Text>
+                          )}
+                        </View>
+                      </View>
+
+                      <Pressable
+                        onPress={() => {
+                          toEdit('rule', rule.ruleId);
+                          handleRuleItem(rule);
+                        }}
+                        className="px-2.5 py-[18px]"
+                      >
+                        <SettingIcon />
+                      </Pressable>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View className="flex h-36 items-center justify-center rounded-xl border border-[#F1F1F1] bg-white">
+                  <Text className="text-sm font-medium text-disabledFont">
+                    등록된 규칙이 없어요!
+                  </Text>
+                </View>
+              )}
             </View>
 
             <View style={{ paddingBottom: bottom + 60 }} className="space-y-4">
@@ -304,7 +326,7 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
                   </View>
                 ))
               ) : (
-                <View className="flex h-36 items-center justify-center">
+                <View className="flex h-36 items-center justify-center rounded-xl border border-[#F1F1F1] bg-white">
                   <Text className="text-sm font-medium text-disabledFont">
                     등록된 역할이 없어요!
                   </Text>
