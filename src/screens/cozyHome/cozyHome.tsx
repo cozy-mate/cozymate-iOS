@@ -1,9 +1,7 @@
 import { ErrorBoundary } from 'react-error-boundary';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, Suspense, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React, {
-  useState,
-  Suspense, //useCallback
-} from 'react';
 import {
   Text,
   View,
@@ -27,13 +25,13 @@ import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 import RequestRoomsComponent from '@components/cozyHome/requestRoomComponent';
 import RequestUsersComponent from '@components/cozyHome/requestUserComponent';
 
-import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { useHasRoomStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
 
 import { useGetMemberList } from '@hooks/api/member-stat';
 import { useGetRandomRoom } from '@hooks/api/room-recommend';
-import { useGetRequestRooms, useGetRoomRequests } from '@hooks/api/room';
+import { useGetMyRoomData, useGetRequestRooms, useGetRoomRequests } from '@hooks/api/room';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
@@ -51,6 +49,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
   // const [refreshing, setRefreshing] = useState<boolean>(false);
+
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState(0);
 
@@ -67,13 +66,13 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
   const { profile } = useProfileStore();
   const { myRoom } = useHasRoomStore();
-  const { roomInfo } = useRoomInfoStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { isVerified } = useIsVerifiedStore();
 
-  const { data: requestRoomList } = useGetRequestRooms();
-  const { data: requestMemberList } = useGetRoomRequests();
-  const { data: userList } = useGetMemberList();
+  const { data: roomData, refetch: refetchMyRoom } = useGetMyRoomData();
+  const { data: requestRoomList, refetch: refetchRoomList } = useGetRequestRooms();
+  const { data: requestMemberList, refetch: refetchMemberList } = useGetRoomRequests();
+  const { data: userList, refetch: refetchUserList } = useGetMemberList();
   const { data: roomList } = useGetRandomRoom(5, 0);
 
   // const onRefresh = useCallback(() => {
@@ -119,7 +118,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
       // 학교 인증 X
       setIsCreateRoomOpen(false);
       setIsNotVerifiedModalOpen(true);
-    } else if (hasLifeStyle) {
+    } else if (!hasLifeStyle) {
       // 학교 인증 O & 라이프 스타일 입력 X
       setIsCreateRoomOpen(false);
       setIsNoLifeStyleModalOpen(true);
@@ -140,6 +139,15 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const toJoinRoom = () => {
     navigation.navigate('JoinRoomScreen');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchMyRoom();
+      refetchRoomList();
+      refetchMemberList();
+      refetchUserList();
+    }, []),
+  );
 
   return (
     <View className="flex-1 bg-sub1">
@@ -255,9 +263,9 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
             )}
 
           {/* 방이 있는 사용자에 대하여 본인 방 컴포넌트 */}
-          {myRoom.hasRoom && roomInfo && (
+          {myRoom.hasRoom && roomData && (
             <>
-              <MyRoomComponent navigation={navigation} roomData={roomInfo} />
+              <MyRoomComponent navigation={navigation} roomData={roomData.result} />
 
               <View className="my-6 h-2.5 bg-[#F7F9FA]" />
             </>
@@ -267,7 +275,8 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
           {myRoom.hasRoom &&
             requestMemberList !== undefined &&
             requestMemberList.result.length !== 0 &&
-            roomInfo.isRoomManager && (
+            roomData !== null &&
+            roomData.result.isRoomManager && (
               <>
                 <RequestUsersComponent
                   navigation={navigation}
