@@ -281,7 +281,13 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             <View className="relative z-10">
               <View className="flex rounded-xl border border-main1 bg-sub2 p-3">
                 <Text className="text-center text-sm font-semibold text-main1">
-                  방 평균일치율 {roomData.result.equality}%
+                  방 평균일치율{' '}
+                  {roomData.result.equality !== null
+                    ? roomData.result.equality
+                    : roomData.result.arrivalMateNum === 1
+                    ? '- '
+                    : '?? '}
+                  %
                 </Text>
               </View>
             </View>
