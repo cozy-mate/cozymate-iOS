@@ -1,39 +1,50 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import Selected from '@assets/todoList/selectedCheckBox.svg';
-import NotSelected from '@assets/todoList/notSelectedCheckBox.svg';
+import Selected from '@assets/roleNrule/selectedCheckBox.svg';
+import NotSelected from '@assets/roleNrule/notSelectedCheckBox.svg';
+
+interface RoleMateItem {
+  mateId: number;
+  nickname: string;
+}
 
 interface SelectMateComponentProps {
   title: string;
-  selectedValues: number[];
-  setSelectedValues: React.Dispatch<React.SetStateAction<number[]>>;
+  selectedValues: RoleMateItem[];
+  setSelectedValues: React.Dispatch<React.SetStateAction<RoleMateItem[]>>;
   items: { memberId: number; mateId: number; nickname: string }[];
 }
 
-const SelectMateComponent: React.FC<SelectMateComponentProps> = ({
+const RoleSelectMateComponent: React.FC<SelectMateComponentProps> = ({
   title,
   selectedValues,
   setSelectedValues,
   items,
 }) => {
-  const toggleSelection = (item: { mateId: number }) => {
-    const itemId = item.mateId;
-    const isSelected = selectedValues.includes(itemId);
+  const toggleSelection = (item: { mateId: number; nickname: string }) => {
+    const isSelected = selectedValues.some((value) => value.mateId === item.mateId);
 
     const updatedSelectedValues = isSelected
-      ? selectedValues.filter((value) => value !== itemId)
-      : [...selectedValues, itemId];
+      ? selectedValues.filter((value) => value.mateId !== item.mateId)
+      : [...selectedValues, { mateId: item.mateId, nickname: item.nickname }];
 
     setSelectedValues(updatedSelectedValues);
   };
 
   const toggleAllItems = () => {
-    const areAllSelected = items.every((item) => selectedValues.includes(item.mateId));
-    setSelectedValues(areAllSelected ? [] : items.map((item) => item.mateId));
+    const areAllSelected = items.every((item) =>
+      selectedValues.some((value) => value.mateId === item.mateId),
+    );
+
+    setSelectedValues(
+      areAllSelected ? [] : items.map((item) => ({ mateId: item.mateId, nickname: item.nickname })),
+    );
   };
 
-  const isEveryItemSelected = items.every((item) => selectedValues.includes(item.mateId));
+  const isEveryItemSelected = items.every((item) =>
+    selectedValues.some((value) => value.mateId === item.mateId),
+  );
 
   return (
     <View className="mb-10">
@@ -43,13 +54,15 @@ const SelectMateComponent: React.FC<SelectMateComponentProps> = ({
           <Pressable
             key={item.mateId}
             className={`mb-2 flex items-center justify-center rounded-md px-5 py-[10px] ${
-              selectedValues.includes(item.mateId) ? 'bg-sub1' : 'bg-colorBox'
-            } `}
+              selectedValues.some((value) => value.mateId === item.mateId)
+                ? 'bg-sub1'
+                : 'bg-colorBox'
+            }`}
             onPress={() => toggleSelection(item)}
           >
             <Text
               className={`text-sm tracking-tight ${
-                selectedValues.includes(item.mateId)
+                selectedValues.some((value) => value.mateId === item.mateId)
                   ? 'font-semibold text-main1'
                   : 'font-medium text-disabledFont'
               }`}
@@ -75,4 +88,4 @@ const SelectMateComponent: React.FC<SelectMateComponentProps> = ({
   );
 };
 
-export default SelectMateComponent;
+export default RoleSelectMateComponent;

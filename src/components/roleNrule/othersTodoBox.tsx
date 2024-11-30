@@ -3,8 +3,8 @@ import { Text, View } from 'react-native';
 
 import { getProfileImage } from '@utils/profileImage';
 
-import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
-import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
+import TodoBoxIcon from '@assets/roleNrule/todoBoxIcon.svg';
+import DoneTodoBoxIcon from '@assets/roleNrule/doneTodoBoxIcon.svg';
 
 interface TodoItem {
   id: number;

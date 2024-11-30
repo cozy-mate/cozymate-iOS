@@ -1,13 +1,13 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import ControlModal from '@components/feedView/controlModal';
+// import ControlModal from '@components/feedView/controlModal';
 
 import { useFeedModal } from '@hooks/useFeedModal';
 
-import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
-import SettingIcon from '@assets/todoList/settingIcon.svg';
-import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
+import TodoBoxIcon from '@assets/roleNrule/todoBoxIcon.svg';
+import SettingIcon from '@assets/roleNrule/settingIcon.svg';
+import DoneTodoBoxIcon from '@assets/roleNrule/doneTodoBoxIcon.svg';
 
 interface TodoItem {
   id: number;
@@ -47,13 +47,13 @@ const TodoBox: React.FC<TodoBoxProps> = ({ todoData, changeTodo }) => {
                 </Text>
               </View>
 
-              <ControlModal
+              {/* <ControlModal
                 isModalVisible={isModalVisible}
                 modalPosition={modalPosition}
                 onSubmit={onPressModalClose}
                 onEdit={toCreate}
                 onPressModalClose={onPressModalClose}
-              />
+              /> */}
 
               <Pressable onPress={onPressModalOpen} ref={dotIconRef}>
                 <SettingIcon />
