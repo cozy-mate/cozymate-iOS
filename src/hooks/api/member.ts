@@ -96,14 +96,24 @@ export const useKakaoLogin = (
 
             // 방이 존재하는 경우 방 정보 저장
             if (roomId !== 0) {
-              setMyRoom({ hasRoom: true, roomId: roomId });
-
               const roomInfoResponse = await getRoomData(roomId);
-              setRoomInfo(roomInfoResponse.result);
+
               setMyRoom({
+                hasRoom: true,
+                roomId,
                 isRoomManager: roomInfoResponse.result.isRoomManager,
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+              });
+
+              setRoomInfo(roomInfoResponse.result);
+              setMyRoom({});
+            } else {
+              setMyRoom({
+                hasRoom: false,
+                roomId,
+                isRoomManager: false,
+                isFullRoom: false,
               });
             }
 
@@ -161,7 +171,6 @@ export const useAppleLogin = (
   const { setProfile } = useProfileStore();
   const { setIsVerified } = useIsVerifiedStore();
   const { setPreferenceList } = usePreferencesStore();
-
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -203,14 +212,24 @@ export const useAppleLogin = (
 
           // 방이 존재하는 경우 방 정보 저장
           if (roomId !== 0) {
-            setMyRoom({ hasRoom: true, roomId: roomId });
-
             const roomInfoResponse = await getRoomData(roomId);
-            setRoomInfo(roomInfoResponse.result);
+
             setMyRoom({
+              hasRoom: true,
+              roomId,
               isRoomManager: roomInfoResponse.result.isRoomManager,
               isFullRoom:
                 roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+            });
+
+            setRoomInfo(roomInfoResponse.result);
+            setMyRoom({});
+          } else {
+            setMyRoom({
+              hasRoom: false,
+              roomId,
+              isRoomManager: false,
+              isFullRoom: false,
             });
           }
 
