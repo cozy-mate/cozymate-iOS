@@ -160,7 +160,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         bounces={false}
-        // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View className="bg-white">
           <View className="flex bg-sub1 pt-[18px]" onLayout={handleLayout}>
@@ -223,9 +223,8 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text
-                      className={`text-base font-semibold leading-[19px] ${
-                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
-                      }`}
+                      className={`text-base font-semibold leading-[19px] ${myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                        }`}
                     >
                       방 만들기
                     </Text>
@@ -237,9 +236,8 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text
-                      className={`text-base font-semibold leading-[19px] ${
-                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
-                      }`}
+                      className={`text-base font-semibold leading-[19px] ${myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                        }`}
                     >
                       방 참여하기
                     </Text>

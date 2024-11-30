@@ -53,6 +53,9 @@ module.exports = {
         kakaoyellow: '#FEE500',
         navergreen: '#00C73C',
         appleblack: '#121212',
+
+        //토스트용 색깔
+        toastBackground: "#4B4B4B"
       },
     },
   },
