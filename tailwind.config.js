@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       backgroundColor: {
         modalBack: 'rgba(0, 0, 0, 0.5)',
-        modalBack2: 'rgba(0, 0, 0, 0.75)',
+        modalBack2: 'rgba(0, 0, 0, 0.9)',
         updateButtonBack: 'rgba(62, 62, 62, 0.4)',
       },
       boxShadow: {

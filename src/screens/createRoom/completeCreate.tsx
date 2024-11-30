@@ -42,7 +42,7 @@ const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScree
             )}
           </View>
 
-          {type === 'PUBLIC' && roomInfo.inviteCode && (
+          {type === 'PRIVATE' && roomInfo.inviteCode && (
             <Pressable onPress={handleCopyInviteCode} className="mb-16 flex">
               <View className="flex flex-row items-center rounded-xl bg-colorBox px-6 py-3">
                 <Text className="mr-1 text-base font-semibold text-main1">

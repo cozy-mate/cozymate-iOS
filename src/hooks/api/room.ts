@@ -63,6 +63,20 @@ export const useCheckHasRoom = (): {
   return { data, refetch };
 };
 
+export const useGetMyRoomData = (): UseSuspenseQueryResult<GetRoomDataResponse | null, void> => {
+  const { myRoom } = useHasRoomStore();
+
+  return useSuspenseQuery({
+    queryKey: myRoom.hasRoom ? [`/rooms/${myRoom.roomId}`] : ['no-room'],
+    queryFn: () => {
+      if (!myRoom.hasRoom) {
+        return Promise.resolve(null); // hasRoom이 false일 때 기본값 반환
+      }
+      return getRoomData(myRoom.roomId); // 실제 쿼리 실행
+    },
+  });
+};
+
 // 코지홈
 // 1. 사용자 -> 참여 요청한 방 목록
 export const useGetRequestRooms = (): UseQueryResult<GetRequestRoomsResponse, void> => {
@@ -214,7 +228,6 @@ export const useInviteMember = (
   return useMutation({
     mutationFn: () => inviteMember(inviteeId),
     onSuccess: () => {
-      console.log('초대 성공');
       refetch();
     },
   });
@@ -228,7 +241,6 @@ export const useDeleteInviteMember = (
   return useMutation({
     mutationFn: () => deleteInviteMember(inviteeId),
     onSuccess: () => {
-      console.log('초대 취소 성공');
       refetch();
     },
   });
@@ -237,13 +249,14 @@ export const useDeleteInviteMember = (
 // 3. 초대 요청 수락/거절
 export const useAcceptRequestMember = (
   requesterId: number,
-  refetch: () => void,
+  refetchData: () => void,
+  refetchStatus: () => void,
 ): UseMutationResult<AcceptRequestMemberResponse, unknown, boolean, unknown> => {
   return useMutation({
     mutationFn: (accept: boolean) => acceptRequestMember(requesterId, accept),
     onSuccess: () => {
-      console.log('초대 요청 수락/거절 성공');
-      refetch();
+      refetchData();
+      refetchStatus();
     },
   });
 };

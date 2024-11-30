@@ -108,7 +108,7 @@ interface LifestyleOption {
   label: string;
 }
 
-export const lifestyleOptions: Record<LifestyleOptionKey, LifestyleOption> = {
+export const lifestyleOptions: Record<string, LifestyleOption> = {
   admissionYear: {
     blueIcon: <BlueAdmissionYear />,
     whiteIcon: <WhiteAdmissionYear />,
@@ -304,16 +304,13 @@ export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
 };
 
 // 룸메이트의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoommateLifeStyleIcon = (
-  option: LifestyleOptionKey,
-  answer: string | number | null,
-) => {
+export const getRoommateLifeStyleIcon = (option: string, answer: string | number | null) => {
   const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
   return <LifestyleIcon icon={blueIcon} label={label} answer={answer} isMine={false} />;
 };
 
 // 방 안의 룸메이트들의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoomLifeStyleIcon = (option: LifestyleOptionKey, color: string, answer: string) => {
+export const getRoomLifeStyleIcon = (option: string, color: string, answer: string) => {
   const { blueIcon, whiteIcon, redIcon, label } =
     lifestyleOptions[option] || lifestyleOptions.sleepingTime;
 

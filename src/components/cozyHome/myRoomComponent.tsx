@@ -84,7 +84,14 @@ const MyRoomComponent: React.FC<MyRoomComponentProps> = ({ navigation, roomData 
               <Text className="text-main1">{roomData.arrivalMateNum}명</Text>의 룸메이트가 있어요
             </Text>
 
-            <Text className="text-base font-medium text-colorFont">{roomData.equality}%</Text>
+            <Text className="text-base font-medium text-colorFont">
+              {roomData.equality !== null
+                ? roomData.equality
+                : roomData.arrivalMateNum === 1
+                ? '- '
+                : '?? '}
+              %
+            </Text>
           </View>
         </LinearGradient>
       </Pressable>
