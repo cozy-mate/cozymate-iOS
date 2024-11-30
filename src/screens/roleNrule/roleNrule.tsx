@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
-import CustomCalendar from '@components/todoList/customCalendar';
+import CustomCalendar from '@components/roleNrule/customCalendar';
 
 import { RuleItem } from '@zustand/rule/type';
 import { useRoomInfoStore } from '@zustand/room/room';
@@ -24,10 +24,10 @@ import { getProfileImage } from '@utils/profileImage';
 import { RoleNRuleScreenProps } from '@type/param/stack';
 
 import SettingIcon from '@assets/roleNrule/setting.svg';
-import Background from '@assets/todoList/background.svg';
-import PlusButton from '@assets/todoList/plusButton.svg';
-import TodoBoxIcon from '@assets/todoList/todoBoxIcon.svg';
-import DoneTodoBoxIcon from '@assets/todoList/doneTodoBoxIcon.svg';
+import Background from '@assets/roleNrule/background.svg';
+import PlusButton from '@assets/roleNrule/plusButton.svg';
+import TodoBoxIcon from '@assets/roleNrule/todoBoxIcon.svg';
+import DoneTodoBoxIcon from '@assets/roleNrule/doneTodoBoxIcon.svg';
 
 interface TodoItem {
   todoId: number;

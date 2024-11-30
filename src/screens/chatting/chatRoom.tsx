@@ -13,7 +13,7 @@ import { useDeleteChatRoom, useGetChatRoomList } from '@hooks/api/chat-room';
 import { ChatRoomScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
-import SettingIcon from '@assets/todoList/settingIcon.svg';
+import SettingIcon from '@assets/roleNrule/settingIcon.svg';
 
 interface ControlItem {
   index: number;
