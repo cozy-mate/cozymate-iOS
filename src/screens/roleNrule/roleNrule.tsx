@@ -241,17 +241,14 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
               {ruledata.result.length !== 0 ? (
                 <View className="space-y-1 rounded-xl border border-[#F1F1F1] bg-white p-2 pl-4">
                   {ruledata.result.map((rule, index) => (
-                    <View
-                      key={rule.ruleId}
-                      className={`flex flex-row items-center justify-between`}
-                    >
-                      <View className="flex flex-row items-center">
+                    <View key={rule.ruleId} className="flex flex-row items-center justify-between">
+                      <View className="flex flex-1 flex-row items-center">
                         <View className="mr-2 flex h-6 w-6 items-center justify-center rounded-full bg-colorBox">
                           <Text className="text-center text-xs font-medium text-colorFont">
                             {index + 1}
                           </Text>
                         </View>
-                        <View className="flex flex-col justify-center space-y-0.5">
+                        <View className="flex flex-1 flex-col justify-center space-y-0.5">
                           <Text className="text-sm font-medium text-basicFont">{rule.content}</Text>
                           {rule.memo !== '' && (
                             <Text className="text-[10px] font-medium text-disabledFont">
