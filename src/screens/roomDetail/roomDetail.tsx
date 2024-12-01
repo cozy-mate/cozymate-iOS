@@ -6,10 +6,9 @@ import BottomButton from '@components/common/bottomButton';
 import ControlModal from '@components/roomDetail/controlModal';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
-import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
+import { useHasRoomStore } from '@zustand/room/room';
 import { useIsVerifiedStore } from '@zustand/member/member';
-import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { getChipDetailData } from '@server/api/room-member-stat';
@@ -67,8 +66,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   // 내 방인지 여부 및 라이프스타일 존재 여부
-  const { myRoom, clearMyRoom } = useHasRoomStore();
-  const { clearRoomInfo } = useRoomInfoStore();
+  const { myRoom } = useHasRoomStore();
   const { isVerified } = useIsVerifiedStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
 
@@ -162,8 +160,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
-    clearMyRoom();
-    clearRoomInfo();
     navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
@@ -325,6 +321,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                         index={index}
                         memberData={member}
                         length={roomData.result.arrivalMateNum}
+                        managerMemberId={roomData.result.managerMemberId}
                         pressFunc={toUserDetail}
                       />
                     ))}

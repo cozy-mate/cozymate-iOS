@@ -144,9 +144,15 @@ export const useGetInvitedMembers = (
 export const useExitRoom = (
   roomId: number,
 ): UseMutationResult<ExitRoomResponse, void, unknown, unknown> => {
+  const { clearMyRoom } = useHasRoomStore();
+  const { clearRoomInfo } = useRoomInfoStore();
+
   return useMutation({
     mutationFn: () => exitRoom(roomId),
-    onSuccess: () => {},
+    onSuccess: () => {
+      clearMyRoom();
+      clearRoomInfo();
+    },
   });
 };
 
