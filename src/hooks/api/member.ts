@@ -16,6 +16,7 @@ import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
 import {
   signIn,
+  withdraw,
   getMyProfile,
   updatePersona,
   updateBirthday,
@@ -23,6 +24,7 @@ import {
   updateMajorName,
 } from '@server/api/member';
 import {
+  WithdrawResponse,
   AppleLoginResponse,
   KakaoLoginResponse,
   UpdatePersonaResponse,
@@ -31,7 +33,8 @@ import {
   UpdateMajorNameResponse,
 } from '@server/responseTypes/member';
 
-import { setAccessToken, setRefreshToken } from '@utils/token';
+import { deleteFcmToken } from '@utils/fcm/fcmTokenUtil';
+import { deleteToken, setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -293,5 +296,18 @@ export const useUpdateBirthday = (): UseMutationResult<
   return useMutation({
     mutationFn: (localDate: string) => updateBirthday(localDate),
     onSuccess: () => console.log('생일 변경 성공'),
+  });
+};
+
+export const useWithdraw = (): UseMutationResult<WithdrawResponse> => {
+  const { setLoggedIn } = useLoggedInStore();
+
+  return useMutation({
+    mutationFn: () => withdraw(),
+    onSuccess: async () => {
+      await deleteToken();
+      await deleteFcmToken();
+      setLoggedIn(false);
+    },
   });
 };
