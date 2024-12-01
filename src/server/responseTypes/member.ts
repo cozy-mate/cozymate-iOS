@@ -26,7 +26,7 @@ export interface AppleLoginResponse {
   nonce: string;
 }
 
-export interface DeleteMemberResponse {
+export interface WithdrawResponse {
   result: string;
 }
 
