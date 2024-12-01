@@ -1,5 +1,3 @@
-import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
-
 export interface DeleteFavoriteResponse {
   result: string;
 }
@@ -34,7 +32,11 @@ export interface GetFavoriteUserListResponse {
         persona: number;
       };
       equality: number;
-      preferenceStats: Record<LifestyleOptionKey, string | number | null>;
+      preferenceStats: {
+        stat: string;
+        value: string | number;
+        color: string;
+      }[];
     };
   }[];
 }

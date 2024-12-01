@@ -120,7 +120,11 @@ export interface GetRandomMemberResponse {
         persona: number;
       };
       equality: number | null;
-      preferenceStats: Record<string, string | number | null>;
+      preferenceStats: {
+        stat: string;
+        value: string | number;
+        color: string;
+      }[];
     }[];
   };
 }
@@ -144,7 +148,11 @@ export interface SearchMembersResponse {
         persona: number;
       };
       equality: number | null;
-      preferenceStats: Record<string, string | number | null>;
+      preferenceStats: {
+        stat: string;
+        value: string | number;
+        color: string;
+      }[];
     }[];
   };
 }
@@ -168,7 +176,11 @@ export interface GetFilteredMemberListResponse {
         persona: number;
       };
       equality: number;
-      preferenceStats: Record<string, string | number>;
+      preferenceStats: {
+        stat: string;
+        value: string | number;
+        color: string;
+      }[];
     }[];
   };
 }

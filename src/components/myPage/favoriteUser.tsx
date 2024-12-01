@@ -3,7 +3,7 @@ import { Text, View, Pressable } from 'react-native';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { LifestyleOptionKey, getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
+import { getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 import { FavoriteUserRoomScreenProps } from '@type/param/stack';
 
@@ -21,7 +21,11 @@ interface FavoriteUserProps {
         persona: number;
       };
       equality: number;
-      preferenceStats: Record<LifestyleOptionKey, string | number | null>;
+      preferenceStats: {
+        stat: string;
+        value: string | number;
+        color: string;
+      }[];
     };
   };
   navigation: FavoriteUserRoomScreenProps['navigation'];
@@ -43,27 +47,21 @@ const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => 
         <Text className="pl-2 text-base font-semibold text-basicFont">
           {userData.memberStatPreferenceDetail.memberDetail.nickname}
         </Text>
-        <View className="flex flex-row items-center">
-          <Text className="mr-1 text-xs font-medium text-disabledFont">
-            내 라이프스타일과 일치율
-          </Text>
-          <Text className="text-base font-medium text-main1">
-            {userData.memberStatPreferenceDetail.equality !== null && hasLifeStyle
-              ? userData.memberStatPreferenceDetail.equality
-              : '?? '}
-            %
-          </Text>
-        </View>
+
+        <Text className="text-base font-medium text-main1">
+          {userData.memberStatPreferenceDetail.equality !== null && hasLifeStyle
+            ? userData.memberStatPreferenceDetail.equality
+            : '?? '}
+          %
+        </Text>
       </View>
 
       <View className="flex flex-row items-center justify-between px-2 pt-3">
-        {Object.entries(userData.memberStatPreferenceDetail.preferenceStats).map(
-          ([key, value], index) => (
-            <View key={index} className="flex w-[60px] flex-col items-center">
-              {getRoommateLifeStyleIcon(key, value)}
-            </View>
-          ),
-        )}
+        {userData.memberStatPreferenceDetail.preferenceStats.map((preference, index) => (
+          <View key={index} className="flex w-[60px] flex-col items-center">
+            {getRoommateLifeStyleIcon(preference.stat, preference.color, preference.value)}
+          </View>
+        ))}
       </View>
     </Pressable>
   );

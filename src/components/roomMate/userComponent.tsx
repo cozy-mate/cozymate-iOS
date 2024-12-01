@@ -15,7 +15,11 @@ interface UserComponentProps {
       persona: number;
     };
     equality: number | null;
-    preferenceStats: Record<string, string | number | null>;
+    preferenceStats: {
+      stat: string;
+      value: string | number;
+      color: string;
+    }[];
   };
   toUserDetail: (id: number) => void;
 }
@@ -41,9 +45,9 @@ const UserComponent: React.FC<UserComponentProps> = ({ user, toUserDetail }) => 
       </View>
 
       <View className="flex flex-row items-center justify-between px-2 pt-3">
-        {Object.entries(user.preferenceStats).map(([key, value], index) => (
+        {user.preferenceStats.map((preference, index) => (
           <View key={index} className="flex w-[60px] flex-col items-center">
-            {getRoommateLifeStyleIcon(key, value)}
+            {getRoommateLifeStyleIcon(preference.stat, preference.color, preference.value)}
           </View>
         ))}
       </View>
