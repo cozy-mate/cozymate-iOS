@@ -34,14 +34,9 @@ const FavoriteRoom: React.FC<FavoriteRoomProps> = ({ roomData, navigation }) => 
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
         <Text className="pl-2 text-base font-semibold text-basicFont">{roomData.name}</Text>
-        <View className="flex flex-row items-center">
-          <Text className="mr-1 text-xs font-medium text-disabledFont">
-            내 라이프스타일과 일치율
-          </Text>
-          <Text className="text-base font-medium text-main1">
-            {roomData.equality !== null && hasLifeStyle ? roomData.equality : '?? '}%
-          </Text>
-        </View>
+        <Text className="text-base font-medium text-main1">
+          {roomData.equality !== null && hasLifeStyle ? roomData.equality : '?? '}%
+        </Text>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-3">
