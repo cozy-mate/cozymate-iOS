@@ -22,6 +22,10 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
     }
   };
 
+  const filteredNotifications = notificationlist?.result.filter((noti) =>
+    ['공지사항', '방', '초대요청', '방 참여요청'].includes(noti.category),
+  );
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="mb-6 mt-2 flex flex-row justify-start px-5">
@@ -32,8 +36,8 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
 
       <ScrollView bounces={false}>
         <View className="flex-1">
-          {notificationlist.result.length > 0 ? (
-            notificationlist.result.map((noti, index) => (
+          {filteredNotifications && filteredNotifications.length > 0 ? (
+            filteredNotifications.map((noti, index) => (
               <TouchableHighlight
                 key={index}
                 onPress={() => toScreen(noti.category)}
@@ -41,27 +45,20 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
               >
                 <View
                   className={`p-5 ${
-                    index !== notificationlist.result.length - 1
+                    index !== filteredNotifications.length - 1
                       ? 'border-b border-b-disabled'
                       : 'border-b-0'
                   } `}
                 >
-                  <View>
-                    <Text className="flex flex-row flex-nowrap">
-                      {noti.content.split(/{(.*?)}/).map((part, i) => (
-                        <Text
-                          key={i}
-                          className={`text-sm font-medium ${
-                            i % 2 === 1 ? 'font-semibold text-main1' : 'text-basicFont'
-                          }`}
-                        >
-                          {part}
-                        </Text>
-                      ))}
-                    </Text>
-                    <Text className="mt-[2px] text-xs font-medium text-disabledFont">
-                      {noti.createdAt}
-                    </Text>
+                  <View className="space-y-1.5">
+                    <View className="flex flex-row items-center justify-between">
+                      <Text className="text-xs font-semibold text-main1">{noti.category}</Text>
+                      <Text className="text-xs font-medium text-disabledFont">
+                        {noti.createdAt}
+                      </Text>
+                    </View>
+
+                    <Text className="text-sm font-medium text-emphasizedFont">{noti.content}</Text>
                   </View>
                 </View>
               </TouchableHighlight>
