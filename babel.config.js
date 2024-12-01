@@ -32,6 +32,7 @@ module.exports = {
           '@zustand': './src/zustand',
           '@server': './src/server',
           '@axios': './src/axios',
+          '@config': './src/config',
         },
       },
     ],
