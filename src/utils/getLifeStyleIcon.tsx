@@ -259,7 +259,7 @@ export const lifestyleOptions: Record<string, LifestyleOption> = {
 interface LifeStyleIconProps {
   icon: JSX.Element;
   label: string;
-  answer?: string | number | null;
+  answer?: string | number | string[] | null;
   isMine: boolean;
 }
 
@@ -303,16 +303,53 @@ export const getMyImportantLifeStyle = (option: LifestyleOptionKey) => {
   return <LifestyleIcon icon={blueIcon} label={label} isMine={true} />;
 };
 
-// 룸메이트의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
-export const getRoommateLifeStyleIcon = (option: string, answer: string | number | null) => {
-  const { blueIcon, label } = lifestyleOptions[option] || lifestyleOptions.sleepingTime;
-  return <LifestyleIcon icon={blueIcon} label={label} answer={answer} isMine={false} />;
-};
+const IntensityItems = ['안틀어요', '약하게 틀어요', '적당하게 틀어요', '강하게 틀어요'];
+
+const SensitivityItems = [
+  '매우 예민하지 않아요',
+  '예민하지 않아요',
+  '보통이에요',
+  '예민해요',
+  '매우 예민해요',
+];
 
 // 방 안의 룸메이트들의 라이프 스타일 비교를 위한 컴포넌트를 생성하는 메서드
+export const getRoommateLifeStyleIcon = (
+  option: string,
+  color: string,
+  answer: string | number | string[],
+) => {
+  const { blueIcon, whiteIcon, redIcon, label } = lifestyleOptions[option];
+
+  let icon;
+  if (color === 'blue') {
+    icon = blueIcon;
+  } else if (color === 'white') {
+    icon = whiteIcon;
+  } else {
+    icon = redIcon;
+  }
+
+  // answer 값 처리
+  if (option === 'numOfRoommate') {
+    answer = `${answer}명`;
+  } else if (option === 'wakeUpTime' || option === 'sleepingTime' || option === 'turnOffTime') {
+    answer = `${answer}시`;
+  } else if (option === 'sleepingHabit' || option === 'personality') {
+    if (Array.isArray(answer)) {
+      answer = answer.join(', ');
+    }
+  } else if (option === 'airConditioningIntensity' || option === 'heatingIntensity') {
+    answer = IntensityItems[Number(answer)];
+  } else if (option === 'cleanSensitivity' || option === 'noiseSensitivity') {
+    answer = SensitivityItems[Number(answer) - 1];
+  }
+
+  return <LifestyleIcon icon={icon} label={label} answer={answer} isMine={false} />;
+};
+
 export const getRoomLifeStyleIcon = (option: string, color: string, answer: string) => {
-  const { blueIcon, whiteIcon, redIcon, label } =
-    lifestyleOptions[option] || lifestyleOptions.sleepingTime;
+  const { blueIcon, whiteIcon, redIcon, label } = lifestyleOptions[option];
 
   let icon;
   if (color === 'blue') {
