@@ -43,7 +43,7 @@ const JoinRoomScreen = ({ navigation }: JoinRoomScreenProps) => {
         mateDetailList: response.result.mateDetailList,
         managerMemberId: response.result.managerMemberId,
         managerNickname: response.result.managerNickname,
-        isRoomManager: response.result.isRoomManager,
+        isRoomManager: false,
         favoriteId: response.result.favoriteId,
         maxMateNum: response.result.maxMateNum,
         arrivalMateNum: response.result.arrivalMateNum,

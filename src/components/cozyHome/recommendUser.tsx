@@ -3,11 +3,7 @@ import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-nati
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import {
-  lifestyleOptions,
-  LifestyleOptionKey,
-  getRoommateLifeStyleIcon,
-} from '@utils/getLifeStyleIcon';
+import { getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 interface RecommendUserComponentProps {
   user: {
@@ -21,7 +17,11 @@ interface RecommendUserComponentProps {
       persona: number;
     };
     equality: number | null;
-    preferenceStats: Record<string, string | number | null>;
+    preferenceStats: {
+      stat: string;
+      value: string | number;
+      color: string;
+    }[];
   };
   toUserDetail: (id: number) => void;
   onLayout: (event: LayoutChangeEvent) => void;
@@ -33,10 +33,6 @@ const RecommendUserComponent: React.FC<RecommendUserComponentProps> = ({
   onLayout,
 }) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
-
-  const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
-    return key in lifestyleOptions;
-  };
 
   const screenWidth = Dimensions.get('window').width;
   const calculatedWidth = screenWidth - 40;
@@ -58,9 +54,9 @@ const RecommendUserComponent: React.FC<RecommendUserComponentProps> = ({
       </View>
 
       <View className="flex flex-row items-center justify-between px-2 pt-3">
-        {Object.entries(user.preferenceStats).map(([key, value], index) => (
+        {user.preferenceStats.map((preference, index) => (
           <View key={index} className="flex w-[60px] flex-col items-center">
-            {isLifestyleOptionKey(key) ? getRoommateLifeStyleIcon(key, value) : null}
+            {getRoommateLifeStyleIcon(preference.stat, preference.color, preference.value)}
           </View>
         ))}
       </View>

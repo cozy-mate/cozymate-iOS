@@ -47,7 +47,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
     } else if (returnToRoom) {
       navigation.navigate('RoomDetailScreen', { roomId: returnToRoom });
     } else {
-      navigation.goBack();
+      navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
     }
   };
 

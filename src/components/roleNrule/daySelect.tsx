@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import Selected from '@assets/todoList/selectedCheckBox.svg';
-import NotSelected from '@assets/todoList/notSelectedCheckBox.svg';
+import Selected from '@assets/roleNrule/selectedCheckBox.svg';
+import NotSelected from '@assets/roleNrule/notSelectedCheckBox.svg';
 
 interface Items {
   id: number;

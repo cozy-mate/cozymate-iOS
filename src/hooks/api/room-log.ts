@@ -1,20 +1,21 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import { getRoomLog } from '@server/api/room-log';
-import { GetRoomLogResponse } from '@server/responseTypes/room-log';
 
 // Room Log 조회
-export const useGetRoomLog = (
-  roomId: number,
-): { data: GetRoomLogResponse; refetch: () => void } => {
-  const { data, refetch } = useSuspenseQuery({
-    queryKey: ['roomlogdata', roomId],
-    queryFn: () => getRoomLog(roomId),
-    select: (response: GetRoomLogResponse) => {
+export const useGetRoomLog = (roomId: number) => {
+  return useSuspenseInfiniteQuery({
+    queryKey: [`/roomlog/${roomId}`, roomId],
+    queryFn: async ({ pageParam }) => {
+      const response = await getRoomLog(roomId, pageParam);
+      console.log(response);
       return response;
     },
-    refetchInterval: 3000,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
   });
-
-  return { data, refetch };
 };

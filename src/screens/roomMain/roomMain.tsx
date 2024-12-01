@@ -24,7 +24,14 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const { bottom } = useSafeAreaInsets();
 
   const { data: roomData } = useGetRoomData(myRoom.roomId);
-  const { data: roomlogdata } = useGetRoomLog(myRoom.roomId);
+
+  const { fetchNextPage, hasNextPage, data: roomLogs } = useGetRoomLog(myRoom.roomId);
+  // 무한 스크롤
+  const loadMoreList = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const toRoomDetail = () => {
     navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
@@ -33,6 +40,8 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const toEdit = () => {
     navigation.navigate('EditRoomScreen', { id: myRoom.roomId, type: roomInfo.roomType });
   };
+
+  console.log(roomLogs.pages);
 
   return (
     <View className="flex-1 bg-sub1">
@@ -88,34 +97,39 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
             {getProfileImage(roomData.result.persona, 140, 140)}
           </Pressable>
         </View>
-        <ScrollView contentContainerStyle={{ paddingBottom: bottom + 40 }}>
-          {roomlogdata.result.result.map((data, index) => (
-            <View
-              key={index}
-              className={`border-b border-b-[#F2F1FA] px-1 py-5 ${
-                index === roomlogdata.result.result.length - 1 && 'border-b-0'
-              }`}
-            >
-              <CozyBotIcon />
-              <View className="mt-2">
-                <Text className="mb-[2px] flex flex-row flex-nowrap">
-                  {data.content.split(/{(.*?)}/).map((part, i) => (
-                    <Text
-                      key={i}
-                      className={`text-sm font-medium ${
-                        i % 2 === 1 ? 'font-semibold text-main1' : 'text-basicFont'
-                      }`}
-                    >
-                      {part}
-                    </Text>
-                  ))}
-                </Text>
-                <Text className="mt-[2px] text-xs font-medium text-disabledFont">
-                  {data.createdAt}
-                </Text>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: bottom + 40 }}
+          onScrollEndDrag={loadMoreList}
+        >
+          {roomLogs?.pages?.flatMap((page) =>
+            page.result.result.map((data, index) => (
+              <View
+                key={index} // `data.id`는 유니크한 값이어야 합니다.
+                className={`border-b border-b-[#F2F1FA] px-1 py-5 ${
+                  index === page.result.result.length - 1 && 'border-b-0'
+                }`}
+              >
+                <CozyBotIcon />
+                <View className="mt-2">
+                  <Text className="mb-[2px] flex flex-row flex-nowrap">
+                    {data.content.split(/{(.*?)}/).map((part, i) => (
+                      <Text
+                        key={i}
+                        className={`text-sm font-medium ${
+                          i % 2 === 1 ? 'font-semibold text-main1' : 'text-basicFont'
+                        }`}
+                      >
+                        {part}
+                      </Text>
+                    ))}
+                  </Text>
+                  <Text className="mt-[2px] text-xs font-medium text-disabledFont">
+                    {data.createdAt}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))}
+            )),
+          )}
         </ScrollView>
       </View>
     </View>

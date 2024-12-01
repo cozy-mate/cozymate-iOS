@@ -30,7 +30,11 @@ interface RecommendUserListProps {
       persona: number;
     };
     equality: number | null;
-    preferenceStats: Record<string, string | number | null>;
+    preferenceStats: {
+      stat: string;
+      value: string | number;
+      color: string;
+    }[];
   }[];
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import SettingIcon from '@assets/todoList/settingIcon.svg';
+import SettingIcon from '@assets/roleNrule/settingIcon.svg';
 
 interface RuleBoxProps {
   ruleData: {

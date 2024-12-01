@@ -75,13 +75,24 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
         // 방이 존재하는 경우 방 정보 저장
         if (roomId !== 0) {
-          setMyRoom({ hasRoom: true, roomId });
           const roomInfoResponse = await getRoomData(roomId);
-          setRoomInfo(roomInfoResponse.result);
+
           setMyRoom({
+            hasRoom: true,
+            roomId,
             isRoomManager: roomInfoResponse.result.isRoomManager,
             isFullRoom:
               roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+          });
+
+          setRoomInfo(roomInfoResponse.result);
+          setMyRoom({});
+        } else {
+          setMyRoom({
+            hasRoom: false,
+            roomId,
+            isRoomManager: false,
+            isFullRoom: false,
           });
         }
 

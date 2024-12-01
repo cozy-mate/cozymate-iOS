@@ -5,9 +5,9 @@ import { SignInRequest, SignUpRequest, TestSignUpRequest } from '@server/request
 import {
   SignInResponse,
   SignUpResponse,
+  WithdrawResponse,
   GetProfileResponse,
   TestSignUpResponse,
-  DeleteMemberResponse,
   CheckNicknameResponse,
   UpdatePersonaResponse,
   UpdateNicknameResponse,
@@ -16,8 +16,8 @@ import {
 } from '@server/responseTypes/member';
 
 // 회원 탈퇴
-export const deleteMember = async (): Promise<DeleteMemberResponse> => {
-  const response = await DeleteAxiosInstance<DeleteMemberResponse>(`/members/withdraw`);
+export const withdraw = async (): Promise<WithdrawResponse> => {
+  const response = await DeleteAxiosInstance<WithdrawResponse>(`/members/withdraw`);
 
   return response.data;
 };

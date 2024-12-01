@@ -16,6 +16,7 @@ import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
 import {
   signIn,
+  withdraw,
   getMyProfile,
   updatePersona,
   updateBirthday,
@@ -23,6 +24,7 @@ import {
   updateMajorName,
 } from '@server/api/member';
 import {
+  WithdrawResponse,
   AppleLoginResponse,
   KakaoLoginResponse,
   UpdatePersonaResponse,
@@ -31,7 +33,8 @@ import {
   UpdateMajorNameResponse,
 } from '@server/responseTypes/member';
 
-import { setAccessToken, setRefreshToken } from '@utils/token';
+import { deleteFcmToken } from '@utils/fcm/fcmTokenUtil';
+import { deleteToken, setAccessToken, setRefreshToken } from '@utils/token';
 
 // 카카오 로그인
 export const useKakaoLogin = (
@@ -96,14 +99,24 @@ export const useKakaoLogin = (
 
             // 방이 존재하는 경우 방 정보 저장
             if (roomId !== 0) {
-              setMyRoom({ hasRoom: true, roomId: roomId });
-
               const roomInfoResponse = await getRoomData(roomId);
-              setRoomInfo(roomInfoResponse.result);
+
               setMyRoom({
+                hasRoom: true,
+                roomId,
                 isRoomManager: roomInfoResponse.result.isRoomManager,
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+              });
+
+              setRoomInfo(roomInfoResponse.result);
+              setMyRoom({});
+            } else {
+              setMyRoom({
+                hasRoom: false,
+                roomId,
+                isRoomManager: false,
+                isFullRoom: false,
               });
             }
 
@@ -161,7 +174,6 @@ export const useAppleLogin = (
   const { setProfile } = useProfileStore();
   const { setIsVerified } = useIsVerifiedStore();
   const { setPreferenceList } = usePreferencesStore();
-
   // 방 여부 및 방 정보
   const { setMyRoom } = useHasRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
@@ -203,14 +215,24 @@ export const useAppleLogin = (
 
           // 방이 존재하는 경우 방 정보 저장
           if (roomId !== 0) {
-            setMyRoom({ hasRoom: true, roomId: roomId });
-
             const roomInfoResponse = await getRoomData(roomId);
-            setRoomInfo(roomInfoResponse.result);
+
             setMyRoom({
+              hasRoom: true,
+              roomId,
               isRoomManager: roomInfoResponse.result.isRoomManager,
               isFullRoom:
                 roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+            });
+
+            setRoomInfo(roomInfoResponse.result);
+            setMyRoom({});
+          } else {
+            setMyRoom({
+              hasRoom: false,
+              roomId,
+              isRoomManager: false,
+              isFullRoom: false,
             });
           }
 
@@ -274,5 +296,18 @@ export const useUpdateBirthday = (): UseMutationResult<
   return useMutation({
     mutationFn: (localDate: string) => updateBirthday(localDate),
     onSuccess: () => console.log('생일 변경 성공'),
+  });
+};
+
+export const useWithdraw = (): UseMutationResult<WithdrawResponse> => {
+  const { setLoggedIn } = useLoggedInStore();
+
+  return useMutation({
+    mutationFn: () => withdraw(),
+    onSuccess: async () => {
+      await deleteToken();
+      await deleteFcmToken();
+      setLoggedIn(false);
+    },
   });
 };

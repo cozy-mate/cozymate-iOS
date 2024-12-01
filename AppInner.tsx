@@ -48,11 +48,10 @@ import { useLoggedInStore } from '@zustand/member/member';
 
 import { useAutoLogin } from '@hooks/autoLogin';
 
-import { toastConfig } from '@config/toastConfig';
-
 import { StackParamList } from '@type/param/stack';
 import { RootStackParamList } from '@type/param/rootStack';
 
+import { toastConfig } from '@config/toastConfig';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();

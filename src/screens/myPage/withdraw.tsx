@@ -3,12 +3,9 @@ import { Text, View, Pressable, TextInput, ScrollView, SafeAreaView } from 'reac
 
 import BottomButton from '@components/common/bottomButton';
 
-import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useProfileStore } from '@zustand/member/member';
 
-import { deleteMember } from '@server/api/member';
-
-import { deleteToken } from '@utils/token';
-import { deleteFcmToken } from '@utils/fcm/fcmTokenUtil';
+import { useWithdraw } from '@hooks/api/member';
 
 import { WithdrawScreenProps } from '@type/param/stack';
 
@@ -19,7 +16,6 @@ import NotCheckedIcon from '@assets/myPage/notChecked.svg';
 
 const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
   const { profile } = useProfileStore();
-  const { setLoggedIn } = useLoggedInStore();
 
   const [content, setContent] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -32,16 +28,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
     navigation.goBack();
   };
 
-  const withdraw = async (): Promise<void> => {
-    try {
-      await deleteMember();
-      await deleteToken();
-      await deleteFcmToken();
-      setLoggedIn(false);
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
+  const { mutateAsync: mutateWithdraw } = useWithdraw();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -111,7 +98,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
             textColor="text-white"
             text="탈퇴하기"
             disabled={!isChecked}
-            onPressFunc={withdraw}
+            onPressFunc={mutateWithdraw}
           />
         </View>
       </View>

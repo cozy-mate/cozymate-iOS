@@ -13,7 +13,7 @@ export const useGetRandomRoom = (
   refetch: () => void;
 } => {
   const { data, refetch } = useSuspenseQuery({
-    queryKey: ['recommendrooms', size, page, sortType],
+    queryKey: ['/rooms/list', size, page, sortType],
     queryFn: () => getRandomRoom(size, page, sortType),
     select: (response: GetRandomRoomResponse) => {
       return response;

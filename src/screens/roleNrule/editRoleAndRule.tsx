@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import DaySelect from '@components/todoList/daySelect';
-import RoleNRuleNav from '@components/todoList/roleNruleNav';
+import DaySelect from '@components/roleNrule/daySelect';
+import RoleNRuleNav from '@components/roleNrule/roleNruleNav';
 import CustomTextarea from '@components/common/customTextarea';
-import CustomCalendar from '@components/todoList/customCalendar';
-import SelectMateComponent from '@components/todoList/selectMate';
+import CustomCalendar from '@components/roleNrule/customCalendar';
+import SelectMateComponent from '@components/roleNrule/selectMate';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import TwoButtonModal from '@components/commonComponents/twoButtonModal';
-import RoleSelectMateComponent from '@components/todoList/roleSelectMate';
+import RoleSelectMateComponent from '@components/roleNrule/roleSelectMate';
 
 import { useRoomInfoStore } from '@zustand/room/room';
 import { useTodoItemStore } from '@zustand/todo/todo';
