@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LottieView from 'lottie-react-native';
 import Animated from 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -47,8 +48,11 @@ import { useLoggedInStore } from '@zustand/member/member';
 
 import { useAutoLogin } from '@hooks/autoLogin';
 
+import { toastConfig } from '@config/toastConfig';
+
 import { StackParamList } from '@type/param/stack';
 import { RootStackParamList } from '@type/param/rootStack';
+
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
@@ -136,6 +140,7 @@ function AppInner() {
           <rootStack.Screen name="CompleteScreen" component={CompleteScreen} />
         </rootStack.Navigator>
       )}
+      <Toast config={toastConfig} />
     </GestureHandlerRootView>
   );
 }

@@ -46,6 +46,9 @@ import {
   CheckRequestedToJoinResponse,
 } from '@server/responseTypes/room';
 
+
+import { showSuccessToast, showRejectToast } from '@utils/toast';
+
 // 어플 시작 시 사용
 // 사용자가 참여한 방이 있는지 여부 조회
 export const useCheckHasRoom = (): {
@@ -199,10 +202,14 @@ export const useCheckRequested = (
 export const useSendRoomRequest = (
   roomId: number,
   refetch: () => void,
+  roomName : string
 ): UseMutationResult<SendRoomRequestResponse, void, unknown, unknown> => {
   return useMutation({
     mutationFn: () => sendRoomRequest(roomId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      showSuccessToast(`${roomName}에 방 참여 요청을 보냈어요`)
+      refetch();
+    },
   });
 };
 
@@ -230,10 +237,12 @@ export const useCheckRequestedToJoin = (
 export const useInviteMember = (
   inviteeId: number,
   refetch: () => void,
+  nickname : string,
 ): UseMutationResult<InviteMemberResponse> => {
   return useMutation({
     mutationFn: () => inviteMember(inviteeId),
     onSuccess: () => {
+      showSuccessToast(`${nickname}님에게 방 초대 요청을 보냈어요`)
       refetch();
     },
   });
@@ -257,10 +266,17 @@ export const useAcceptRequestMember = (
   requesterId: number,
   refetchData: () => void,
   refetchStatus: () => void,
+  nickname : string
 ): UseMutationResult<AcceptRequestMemberResponse, unknown, boolean, unknown> => {
   return useMutation({
     mutationFn: (accept: boolean) => acceptRequestMember(requesterId, accept),
-    onSuccess: () => {
+    onSuccess: ({result}: AcceptRequestMemberResponse) => {
+      if(result === "초대 요청 수락 완료"){
+         showSuccessToast(`${nickname}님의 방 초대 요청을 수락했어요`)
+      }
+      if(result === "초대 요청 거절 완료"){
+          showRejectToast(`${nickname}님의 방 초대 요청을 거절했어요`)
+      }
       refetchData();
       refetchStatus();
     },

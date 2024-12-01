@@ -73,7 +73,8 @@
           "custom-hooks",
           "custom-utils",
           "custom-type",
-          "custom-assets"
+          "custom-assets",
+          "custom-config"
         ],
         "custom-groups": {
           "value": {
@@ -87,7 +88,8 @@
             "custom-hooks": "@hooks/**",
             "custom-utils": "@utils/**",
             "custom-type": "@type/**",
-            "custom-assets": "@assets/**"
+            "custom-assets": "@assets/**",
+            "custom-config": "@config/**"
           }
         },
         "internal-pattern": ["src/**"]
