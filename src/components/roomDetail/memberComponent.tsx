@@ -19,6 +19,7 @@ interface MemberComponentProps {
   index: number;
   memberData: MemberItem;
   length: number;
+  managerMemberId: number;
   pressFunc: (member: MemberItem) => void;
 }
 
@@ -26,6 +27,7 @@ const MemberComponent: React.FC<MemberComponentProps> = ({
   index,
   memberData,
   length,
+  managerMemberId,
   pressFunc,
 }) => {
   const { profile } = useProfileStore();
@@ -41,10 +43,9 @@ const MemberComponent: React.FC<MemberComponentProps> = ({
         {getProfileImage(memberData.persona, 24, 24)}
         <Text className="ml-1.5 text-sm font-medium text-emphasizedFont">
           {memberData.nickname}
-          {memberData.nickname === profile.nickname && (
-            <Text className="text-colorFont"> (나)</Text>
+          {memberData.memberId === managerMemberId && (
+            <Text className="text-colorFont"> (방장)</Text>
           )}
-          {/* {memberData.isChief && <Text className="text-colorFont"> (방장)</Text>} */}
         </Text>
       </View>
 
