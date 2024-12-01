@@ -38,6 +38,8 @@ import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
 import FilledHeart from '@assets/userDetail/filledHeart.svg';
 
+
+
 interface MemberItem {
   memberId: number;
   mateId: number;
@@ -115,7 +117,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   };
 
   // 방 참여 요청
-  const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId, refetchCheckRequested);
+  const { mutateAsync: mutateSendRoomRequest } = useSendRoomRequest(roomId, refetchCheckRequested, roomData?.result.name);
   // 방 참여 요청 취소
   const { mutateAsync: mutateDeleteRoomRequest } = useDeleteRoomRequest(
     roomId,
