@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import BottomButton from '@components/common/bottomButton';
 import OneButtonModal from '@components/commonComponents/oneButtonModal';
 import CustomRadioBoxComponent from '@components/createRoom/customRadioBox';
 
@@ -19,7 +20,7 @@ import {
   useCreatePrivateRoomStore,
 } from '@zustand/room/room';
 
-import { createPublicRoom, createPrivateRoom } from '@server/api/room';
+import { useCreatePublicRoom, useCreatePrivateRoom } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -33,8 +34,8 @@ import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { type } = route.params;
 
-  const { createPublicRoomInfo, setCreatePublicRoomInfo } = useCreatePublicRoomStore();
-  const { createPrivateRoomInfo, setCreatePrivateRoomInfo } = useCreatePrivateRoomStore();
+  const { createPublicRoomInfo } = useCreatePublicRoomStore();
+  const { createPrivateRoomInfo } = useCreatePrivateRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
 
   const [name, setName] = useState<string>('');
@@ -49,48 +50,18 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   useEffect(() => {
     if (type === 'PUBLIC') {
-      if (
+      const isPublicComplete =
         name !== '' &&
-        maxMateNum !== 0 &&
         !isLongName &&
-        0 < hashtagList.length &&
-        hashtagList.length < 4
-      ) {
-        setIsComplete(true);
-      } else {
-        setIsComplete(false);
-      }
+        hashtagList.length >= 1 &&
+        hashtagList.length <= 3 &&
+        createPublicRoomInfo.persona !== 0;
+      setIsComplete(isPublicComplete);
+    } else if (type === 'PRIVATE') {
+      const isPrivateComplete = name !== '' && !isLongName && createPrivateRoomInfo.persona !== 0;
+      setIsComplete(isPrivateComplete);
     }
-
-    if (type === 'PRIVATE') {
-      if (name !== '' && maxMateNum !== 0 && !isLongName) {
-        setIsComplete(true);
-      } else {
-        setIsComplete(false);
-      }
-    }
-
-    if (
-      type === 'PUBLIC' &&
-      (name !== createPublicRoomInfo.name ||
-        maxMateNum !== createPublicRoomInfo.maxMateNum ||
-        hashtagList !== createPublicRoomInfo.hashtagList)
-    ) {
-      setCreatePublicRoomInfo({
-        name: name,
-        maxMateNum: maxMateNum,
-        hashtagList: hashtagList,
-      });
-    } else if (
-      type === 'PRIVATE' &&
-      (name !== createPrivateRoomInfo.name || maxMateNum !== createPrivateRoomInfo.maxMateNum)
-    ) {
-      setCreatePrivateRoomInfo({
-        name: name,
-        maxMateNum: maxMateNum,
-      });
-    }
-  }, []);
+  }, [name, isLongName, hashtagList, createPublicRoomInfo, createPrivateRoomInfo, type]);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -109,6 +80,10 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     }
   };
 
+  const handleHashTag = (text: string) => {
+    setHashTag(text);
+  };
+
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
       setHashtagList([...hashtagList, hashTag.trim()]);
@@ -123,82 +98,39 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   };
 
   const toMain = () => {
-    navigation.navigate('MainScreen');
+    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
   };
 
   const toSelectCharacter = () => {
     navigation.navigate('SelectCharacterScreen', { type: type });
   };
 
-  const toNextforPublic = async (): Promise<void> => {
-    try {
-      const response = await createPublicRoom({
-        name: createPublicRoomInfo.name,
-        persona: createPublicRoomInfo.persona,
-        maxMateNum: createPublicRoomInfo.maxMateNum,
-        hashtagList: createPublicRoomInfo.hashtagList,
-      });
+  const { mutateAsync: mutateCreatePublicRoom } = useCreatePublicRoom();
+  const { mutateAsync: mutateCreatPrivateRoom } = useCreatePrivateRoom();
 
-      console.log(response.result);
+  const toNextforPublic = async () => {
+    const response = await mutateCreatePublicRoom({
+      name: name,
+      persona: createPublicRoomInfo.persona,
+      maxMateNum: maxMateNum,
+      hashtagList: hashtagList,
+    });
 
-      setRoomInfo({
-        roomId: response.result.roomId,
-        name: response.result.name,
-        inviteCode: response.result.inviteCode,
-        persona: response.result.persona,
-        mateDetailList: response.result.mateDetailList,
-        managerMemberId: response.result.managerMemberId,
-        managerNickname: response.result.managerNickname,
-        isRoomManager: response.result.isRoomManager,
-        favoriteId: response.result.favoriteId,
-        maxMateNum: response.result.maxMateNum,
-        arrivalMateNum: response.result.arrivalMateNum,
-        dormitoryName: response.result.dormitoryName,
-        roomType: response.result.roomType,
-        hashtagList: response.result.hashtagList,
-        equality: response.result.equality,
-        difference: response.result.difference,
-      });
+    setRoomInfo(response.result);
 
-      navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
+    navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
   };
 
-  const toNextforPrivate = async (): Promise<void> => {
-    try {
-      const response = await createPrivateRoom({
-        name: createPrivateRoomInfo.name,
-        persona: createPrivateRoomInfo.persona,
-        maxMateNum: createPrivateRoomInfo.maxMateNum,
-      });
+  const toNextforPrivate = async () => {
+    const response = await mutateCreatPrivateRoom({
+      name: name,
+      persona: createPrivateRoomInfo.persona,
+      maxMateNum: maxMateNum,
+    });
 
-      console.log(response.result);
+    setRoomInfo(response.result);
 
-      setRoomInfo({
-        roomId: response.result.roomId,
-        name: response.result.name,
-        inviteCode: response.result.inviteCode,
-        persona: response.result.persona,
-        mateDetailList: response.result.mateDetailList,
-        managerMemberId: response.result.managerMemberId,
-        managerNickname: response.result.managerNickname,
-        isRoomManager: response.result.isRoomManager,
-        favoriteId: response.result.favoriteId,
-        maxMateNum: response.result.maxMateNum,
-        arrivalMateNum: response.result.arrivalMateNum,
-        dormitoryName: response.result.dormitoryName,
-        roomType: response.result.roomType,
-        hashtagList: response.result.hashtagList,
-        equality: response.result.equality,
-        difference: response.result.difference,
-      });
-
-      navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
+    navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
   };
 
   return (
@@ -272,7 +204,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                   <TextInput
                     className="mb-2 rounded-xl bg-colorBox p-4 text-sm font-medium leading-4 text-basicFont"
                     value={hashTag}
-                    onChangeText={setHashTag}
+                    onChangeText={handleHashTag}
                     onSubmitEditing={handleHashTagSubmit}
                     placeholder="해시태그를 입력해주세요"
                   />
@@ -296,12 +228,14 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
           </KeyboardAwareScrollView>
 
           <View className="flex">
-            <Pressable
-              onPress={type == 'PUBLIC' ? toNextforPublic : toNextforPrivate}
-              className={`${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'} rounded-xl p-4`}
-            >
-              <Text className="text-center text-base font-semibold text-white">방 생성하기</Text>
-            </Pressable>
+            <BottomButton
+              color="bg-main1"
+              borderColor="border-main1"
+              textColor="text-white"
+              text="방 생성하기"
+              disabled={!isComplete}
+              onPressFunc={type === 'PUBLIC' ? toNextforPublic : toNextforPrivate}
+            />
           </View>
 
           <OneButtonModal

@@ -59,8 +59,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const test = async () => {
     const response = await signIn({
-      clientId: 'TEST',
-      socialType: 'TEST',
+      clientId: 'MWM1NzlhZTAtNTBhZC00N2Y3LTk1ZWEtMjJmZTA3ZDEyZDEx',
+      socialType: 'KAKAO',
     });
 
     const { accessToken, refreshToken } = response.result.tokenResponseDTO;

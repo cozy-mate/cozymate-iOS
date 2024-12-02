@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-interface CustomRadioBoxComponentProps {
-  value: number;
-  setValue: React.Dispatch<React.SetStateAction<number>>;
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
-}
-
 type Item = {
   index: number;
   value: number;
   name: string;
   select: boolean;
 };
+
+interface CustomRadioBoxComponentProps {
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+}
 
 const CustomRadioBoxComponent: React.FC<CustomRadioBoxComponentProps> = ({
   value,

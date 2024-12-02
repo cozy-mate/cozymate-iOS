@@ -9,7 +9,7 @@ import {
   ScrollView,
   Dimensions,
   SafeAreaView,
-  // RefreshControl,
+  RefreshControl,
   LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -48,7 +48,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
   const { bottom } = useSafeAreaInsets();
 
-  // const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState(0);
@@ -73,15 +73,19 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   const { data: requestRoomList, refetch: refetchRoomList } = useGetRequestRooms();
   const { data: requestMemberList, refetch: refetchMemberList } = useGetRoomRequests();
   const { data: userList, refetch: refetchUserList } = useGetMemberList();
-  const { data: roomList } = useGetRandomRoom(5, 0);
+  const { data: roomList, refetch: refetchRandomRoomList } = useGetRandomRoom(5, 0);
 
-  // const onRefresh = useCallback(() => {
-  //   setRefreshing(true);
-  //   refetchMemberList();
-  //   setTimeout(() => {
-  //     setRefreshing(false);
-  //   }, 2000); // 예시로 2초 후 새로고침 완료
-  // }, []);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetchMyRoom();
+    refetchRoomList();
+    refetchMemberList();
+    refetchUserList();
+    refetchRandomRoomList();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // 예시로 2초 후 새로고침 완료
+  }, []);
 
   // 쪽지
   const toChat = () => {
@@ -146,6 +150,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
       refetchRoomList();
       refetchMemberList();
       refetchUserList();
+      refetchRandomRoomList();
     }, []),
   );
 
@@ -159,8 +164,8 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        bounces={false}
-      // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        // bounces={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View className="bg-white">
           <View className="flex bg-sub1 pt-[18px]" onLayout={handleLayout}>
@@ -223,8 +228,9 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text
-                      className={`text-base font-semibold leading-[19px] ${myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
-                        }`}
+                      className={`text-base font-semibold leading-[19px] ${
+                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                      }`}
                     >
                       방 만들기
                     </Text>
@@ -236,8 +242,9 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
                     className="flex-1 items-start rounded-xl bg-colorBox pl-4 pt-4"
                   >
                     <Text
-                      className={`text-base font-semibold leading-[19px] ${myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
-                        }`}
+                      className={`text-base font-semibold leading-[19px] ${
+                        myRoom.hasRoom ? 'text-disabledFont' : 'text-main1'
+                      }`}
                     >
                       방 참여하기
                     </Text>

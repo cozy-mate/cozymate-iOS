@@ -283,7 +283,7 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
     {!isMine ? (
       answer !== undefined && answer !== null ? (
         <Text className="text-xs font-semibold tracking-tighter text-basicFont">
-          {truncateAnswer(answer.toString(), 5)}
+          {truncateAnswer(answer.toString(), 6)}
         </Text>
       ) : (
         <Text className="text-xs font-semibold tracking-tighter text-basicFont">-</Text>
@@ -334,7 +334,10 @@ export const getRoommateLifeStyleIcon = (
   if (option === 'numOfRoommate') {
     answer = `${answer}명`;
   } else if (option === 'wakeUpTime' || option === 'sleepingTime' || option === 'turnOffTime') {
-    answer = `${answer}시`;
+    const time = Number(answer);
+    const period = time < 12 ? '오전' : '오후';
+    const formattedTime = time % 12 === 0 ? 12 : time % 12;
+    answer = `${period} ${String(formattedTime).padStart(2, '0')}시`;
   } else if (option === 'sleepingHabit' || option === 'personality') {
     if (Array.isArray(answer)) {
       answer = answer.join(', ');

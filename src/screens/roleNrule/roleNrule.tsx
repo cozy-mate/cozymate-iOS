@@ -1,10 +1,12 @@
 import moment from 'moment';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useFocusEffect } from '@react-navigation/native';
-import React, { Fragment, useState, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { Fragment, useState, Suspense, useCallback } from 'react';
 import { View, Text, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import NavBar from '@components/navBar';
+import LoadingComponent from '@components/loading/loading';
 import CustomCalendar from '@components/roleNrule/customCalendar';
 
 import { RuleItem } from '@zustand/rule/type';
@@ -45,7 +47,7 @@ interface RoleItem {
   isAllDays: boolean;
 }
 
-const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
+const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
   const width = Dimensions.get('screen').width;
   const { bottom } = useSafeAreaInsets();
 
@@ -340,6 +342,22 @@ const RoleNRuleScreen = ({ navigation }: RoleNRuleScreenProps) => {
         </Pressable>
       </View>
     </View>
+  );
+};
+
+const RoleNRuleScreen = ({ navigation, route }: RoleNRuleScreenProps) => {
+  return (
+    <ErrorBoundary
+      fallback={
+        <View className="h-full w-full flex-1 items-center justify-center">
+          <Text>Error loading CozyHome</Text>
+        </View>
+      }
+    >
+      <Suspense fallback={<LoadingComponent />}>
+        <RoleNRule navigation={navigation} route={route} />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

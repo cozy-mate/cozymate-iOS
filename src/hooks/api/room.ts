@@ -9,6 +9,7 @@ import {
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
+import { CreatePublicRoomRequest, CreatePrivateRoomRequest } from '@server/requestTypes/room';
 import {
   exitRoom,
   deleteRoom,
@@ -20,8 +21,10 @@ import {
   getRequestRooms,
   getRoomRequests,
   changeRoomPublic,
+  createPublicRoom,
   deleteRoomRequest,
   getInvitedMembers,
+  createPrivateRoom,
   deleteInviteMember,
   searchRoomByKeyword,
   acceptRequestMember,
@@ -38,16 +41,17 @@ import {
   GetRequestRoomsResponse,
   GetRoomRequestsResponse,
   ChangeRoomPublicResponse,
+  CreatePublicRoomResponse,
   DeleteRoomRequestResponse,
   GetInvitedMembersResponse,
+  CreatePrivateRoomResponse,
   DeleteInviteMemberResponse,
   SearchRoomByKeywordResponse,
   AcceptRequestMemberResponse,
   CheckRequestedToJoinResponse,
 } from '@server/responseTypes/room';
 
-
-import { showSuccessToast, showRejectToast } from '@utils/toast';
+import { showRejectToast, showSuccessToast } from '@utils/toast';
 
 // 어플 시작 시 사용
 // 사용자가 참여한 방이 있는지 여부 조회
@@ -73,10 +77,32 @@ export const useGetMyRoomData = (): UseSuspenseQueryResult<GetRoomDataResponse |
     queryKey: myRoom.hasRoom ? [`/rooms/${myRoom.roomId}`] : ['no-room'],
     queryFn: () => {
       if (!myRoom.hasRoom) {
-        return Promise.resolve(null); // hasRoom이 false일 때 기본값 반환
+        return Promise.resolve(null);
       }
-      return getRoomData(myRoom.roomId); // 실제 쿼리 실행
+      return getRoomData(myRoom.roomId);
     },
+  });
+};
+
+// 공개 방 생성
+export const useCreatePublicRoom = (): UseMutationResult<
+  CreatePublicRoomResponse,
+  void,
+  CreatePublicRoomRequest
+> => {
+  return useMutation({
+    mutationFn: (data: CreatePublicRoomRequest) => createPublicRoom(data),
+  });
+};
+
+// 비공개 방 생성
+export const useCreatePrivateRoom = (): UseMutationResult<
+  CreatePrivateRoomResponse,
+  void,
+  CreatePrivateRoomRequest
+> => {
+  return useMutation({
+    mutationFn: (data: CreatePrivateRoomRequest) => createPrivateRoom(data),
   });
 };
 
@@ -202,12 +228,12 @@ export const useCheckRequested = (
 export const useSendRoomRequest = (
   roomId: number,
   refetch: () => void,
-  roomName : string
+  roomName: string,
 ): UseMutationResult<SendRoomRequestResponse, void, unknown, unknown> => {
   return useMutation({
     mutationFn: () => sendRoomRequest(roomId),
     onSuccess: () => {
-      showSuccessToast(`${roomName}에 방 참여 요청을 보냈어요`)
+      showSuccessToast(`${roomName}에 방 참여 요청을 보냈어요`);
       refetch();
     },
   });
@@ -237,12 +263,12 @@ export const useCheckRequestedToJoin = (
 export const useInviteMember = (
   inviteeId: number,
   refetch: () => void,
-  nickname : string,
+  nickname: string,
 ): UseMutationResult<InviteMemberResponse> => {
   return useMutation({
     mutationFn: () => inviteMember(inviteeId),
     onSuccess: () => {
-      showSuccessToast(`${nickname}님에게 방 초대 요청을 보냈어요`)
+      showSuccessToast(`${nickname}님에게 방 초대 요청을 보냈어요`);
       refetch();
     },
   });
@@ -266,16 +292,16 @@ export const useAcceptRequestMember = (
   requesterId: number,
   refetchData: () => void,
   refetchStatus: () => void,
-  nickname : string
+  nickname: string,
 ): UseMutationResult<AcceptRequestMemberResponse, unknown, boolean, unknown> => {
   return useMutation({
     mutationFn: (accept: boolean) => acceptRequestMember(requesterId, accept),
-    onSuccess: ({result}: AcceptRequestMemberResponse) => {
-      if(result === "초대 요청 수락 완료"){
-         showSuccessToast(`${nickname}님의 방 초대 요청을 수락했어요`)
+    onSuccess: ({ result }: AcceptRequestMemberResponse) => {
+      if (result === '초대 요청 수락 완료') {
+        showSuccessToast(`${nickname}님의 방 초대 요청을 수락했어요`);
       }
-      if(result === "초대 요청 거절 완료"){
-          showRejectToast(`${nickname}님의 방 초대 요청을 거절했어요`)
+      if (result === '초대 요청 거절 완료') {
+        showRejectToast(`${nickname}님의 방 초대 요청을 거절했어요`);
       }
       refetchData();
       refetchStatus();

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Text, View, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import LoadingComponent from '@components/loading/loading';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 
@@ -17,7 +20,7 @@ import Background from '@assets/roomMain/background.svg';
 import CozyBotIcon from '@assets/roomMain/cozyBotIcon.svg';
 import ColorRightArrow from '@assets/roomMain/colorRightArrow.svg';
 
-const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
+const RoomMain = ({ navigation }: RoomMainScreenProps) => {
   const { myRoom } = useHasRoomStore();
   const { roomInfo } = useRoomInfoStore();
 
@@ -40,8 +43,6 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
   const toEdit = () => {
     navigation.navigate('EditRoomScreen', { id: myRoom.roomId, type: roomInfo.roomType });
   };
-
-  console.log(roomLogs.pages);
 
   return (
     <View className="flex-1 bg-sub1">
@@ -133,6 +134,22 @@ const RoomMainScreen = ({ navigation }: RoomMainScreenProps) => {
         </ScrollView>
       </View>
     </View>
+  );
+};
+
+const RoomMainScreen = ({ navigation, route }: RoomMainScreenProps) => {
+  return (
+    <ErrorBoundary
+      fallback={
+        <View className="h-full w-full flex-1 items-center justify-center">
+          <Text>Error loading CozyHome</Text>
+        </View>
+      }
+    >
+      <Suspense fallback={<LoadingComponent />}>
+        <RoomMain navigation={navigation} route={route} />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
