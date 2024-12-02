@@ -271,11 +271,11 @@ export const useAcceptRequestMember = (
   return useMutation({
     mutationFn: (accept: boolean) => acceptRequestMember(requesterId, accept),
     onSuccess: ({result}: AcceptRequestMemberResponse) => {
-      if(result === "초대 요청 수락 완료"){
-         showSuccessToast(`${nickname}님의 방 초대 요청을 수락했어요`)
+      if(result === "참여 요청 수락 완료"){
+        showSuccessToast(`${nickname}님의 방 초대 요청을 수락했어요`)
       }
-      if(result === "초대 요청 거절 완료"){
-          showRejectToast(`${nickname}님의 방 초대 요청을 거절했어요`)
+      if(result === "참여 요청 거절 완료"){
+        showRejectToast(`${nickname}님의 방 초대 요청을 거절했어요`)
       }
       refetchData();
       refetchStatus();
