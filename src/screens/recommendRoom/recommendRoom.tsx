@@ -129,11 +129,19 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
         <View className="px-5">
           <View className="flex flex-col space-y-6">
-            {roomList?.result.result.map((room, index) => (
-              <View key={index}>
-                <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
+            {roomList?.result.result.length !== 0 ? (
+              roomList?.result.result.map((room, index) => (
+                <View key={index}>
+                  <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
+                </View>
+              ))
+            ) : (
+              <View className="flex h-36 items-center justify-center">
+                <Text className="text-sm font-medium text-disabledFont">
+                  아직 등록된 방이 없어요
+                </Text>
               </View>
-            ))}
+            )}
           </View>
         </View>
       </ScrollView>

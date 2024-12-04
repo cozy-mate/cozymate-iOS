@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TouchableWithoutFeedback } from 'react-native';
 
 import DownArrow from '@assets/onBoard/downArrow.svg';
@@ -32,6 +32,12 @@ const UnivInfoSelect: React.FC<UnivInfoSelectProps> = ({ value, setValue, items,
   };
 
   const isActive = isFocused || value !== '';
+
+  useEffect(() => {
+    if (typeof value === 'string' && value !== '') {
+      setDisplaySchool(value);
+    }
+  }, [value]);
 
   return (
     <TouchableWithoutFeedback onPress={handleBlur}>

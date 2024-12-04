@@ -11,6 +11,8 @@ import {
 
 import SelectCharacterModal from './selectCharacterModal';
 
+import OneButtonModal from '@components/commonComponents/oneButtonModal';
+
 import { useRoomInfoStore } from '@zustand/room/room';
 
 import { updateRoom } from '@server/api/room';
@@ -43,6 +45,8 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
   const [persona, setPersona] = useState<number>(roomInfo.persona);
   const [isCharacterModalOpen, setIsCharacterModalOpen] = useState<boolean>(false);
 
+  const [isHashtagModalOpen, setIsHashtagModalOpen] = useState<boolean>(false);
+
   const handleCharacterModal = () => {
     setIsCharacterModalOpen(!isCharacterModalOpen);
   };
@@ -55,10 +59,12 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
     }
   }, [hashtagList, isLongName, name]);
 
+  const stringRegex = /^(?!_)[가-힣a-zA-Z0-9]+([가-힣a-zA-Z0-9]+)*(?<!_)$/;
+
   const valueHandleChange = (text: string) => {
-    setName(text);
-    if (text.length > 12) {
-      setIsLongName(true);
+    if (stringRegex.test(text)) {
+      setName(text);
+      setIsLongName(text.length > 12);
     } else {
       setIsLongName(false);
     }
@@ -66,8 +72,15 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
 
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
-      setHashtagList([...hashtagList, hashTag.trim()]);
-      setHashTag('');
+      if (stringRegex.test(hashTag.trim())) {
+        setHashtagList([...hashtagList, hashTag.trim()]);
+        setHashTag('');
+      } else {
+        setHashTag('');
+        setIsHashtagModalOpen(true);
+      }
+    } else if (hashtagList.length >= 3) {
+      setIsHashtagModalOpen(true);
     }
   };
 
@@ -233,6 +246,18 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
           pressFunc={null}
         />
       )}
+
+      <OneButtonModal
+        isVisible={isHashtagModalOpen}
+        title={
+          hashtagList.length >= 3
+            ? `해시태그는 최대 3개까지만\n입력할 수 있어요!`
+            : `해시태그는 한글, 영문, 숫자만\n사용할 수 있어요.`
+        }
+        closeFunc={() => setIsHashtagModalOpen(false)}
+        buttonText="확인"
+        buttonFunc={() => setIsHashtagModalOpen(false)}
+      />
     </>
   );
 };

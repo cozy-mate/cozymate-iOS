@@ -16,6 +16,7 @@ import {
   getRoomData,
   checkHasRoom,
   inviteMember,
+  checkInvited,
   checkRequested,
   sendRoomRequest,
   getRequestRooms,
@@ -25,6 +26,7 @@ import {
   deleteRoomRequest,
   getInvitedMembers,
   createPrivateRoom,
+  acceptRequestRoom,
   deleteInviteMember,
   searchRoomByKeyword,
   acceptRequestMember,
@@ -34,6 +36,7 @@ import {
   ExitRoomResponse,
   DeleteRoomResponse,
   GetRoomDataResponse,
+  CheckInvitedReponse,
   CheckHasRoomResponse,
   InviteMemberResponse,
   CheckRequestedResponse,
@@ -45,6 +48,7 @@ import {
   DeleteRoomRequestResponse,
   GetInvitedMembersResponse,
   CreatePrivateRoomResponse,
+  AcceptRequestRoomResponse,
   DeleteInviteMemberResponse,
   SearchRoomByKeywordResponse,
   AcceptRequestMemberResponse,
@@ -162,10 +166,17 @@ export const useGetRoomData = (
 // 우리 방으로 초대한 멤버 목록 조회
 export const useGetInvitedMembers = (
   roomId: number,
-): UseSuspenseQueryResult<GetInvitedMembersResponse> => {
+): UseSuspenseQueryResult<GetInvitedMembersResponse | null> => {
+  const { myRoom } = useHasRoomStore();
+
   return useSuspenseQuery({
     queryKey: [`/rooms/${roomId}/invited-members`, roomId],
-    queryFn: () => getInvitedMembers(roomId),
+    queryFn: () => {
+      if (myRoom.roomId !== roomId) {
+        return Promise.resolve(null);
+      }
+      return getInvitedMembers(roomId);
+    },
   });
 };
 
@@ -224,7 +235,39 @@ export const useCheckRequested = (
   });
 };
 
-// 3. 방 참여 요청
+// 3. 방 초대 요청 여부 조회
+export const useCheckInvited = (roomId: number): UseSuspenseQueryResult<CheckInvitedReponse> => {
+  return useSuspenseQuery({
+    queryKey: [`/rooms/${roomId}/invited-status`, roomId],
+    queryFn: () => checkInvited(roomId),
+  });
+};
+
+// 4. 방 초대 요청 수락/거절
+export const useAcceptInvited = (
+  roomId: number,
+  refetchData: () => void,
+  refetchStatus: () => void,
+): UseMutationResult<AcceptRequestRoomResponse, unknown, boolean, unknown> => {
+  const { setMyRoom } = useHasRoomStore();
+
+  return useMutation({
+    mutationFn: (accept: boolean) => acceptRequestRoom(roomId, accept),
+    onSuccess: () => {
+      // if (result === '참여 요청 수락 완료') {
+      //   showSuccessToast(`${nickname}님의 방 참여 요청을 수락했어요`);
+      // }
+      // if (result === '참여 요청 거절 완료') {
+      //   showRejectToast(`${nickname}님의 방 참여 요청을 거절했어요`);
+      // }
+      setMyRoom({ roomId: roomId, isRoomManager: false });
+      refetchData();
+      refetchStatus();
+    },
+  });
+};
+
+// 4. 방 참여 요청
 export const useSendRoomRequest = (
   roomId: number,
   refetch: () => void,

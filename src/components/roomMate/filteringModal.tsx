@@ -48,7 +48,7 @@ const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
     { index: 1, key: 'birthYear', title: '출생년도', selected: true },
     { index: 2, key: 'acceptance', title: '합격여부', selected: false },
     { index: 3, key: 'admissionYear', title: '학번', selected: false },
-    { index: 4, key: 'majorName', title: '학과', selected: false },
+    // { index: 4, key: 'majorName', title: '학과', selected: false },
     { index: 5, key: 'wakeUpTime', title: '기상시간', selected: false },
     { index: 6, key: 'sleepingTime', title: '취침시간', selected: false },
     { index: 7, key: 'turnOffTime', title: '소등시간', selected: false },
@@ -522,60 +522,177 @@ const FilteringModal: React.FC<FilteringModalProps> = ({ onClose }) => {
               ))}
             </ScrollView>
 
-            <FlatList
-              data={filterDetailItem[selectedFilter] || []}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <Pressable
-                  key={item.index}
-                  onPress={() => selectDetailItem(selectedFilter, item)}
-                  className={`flex flex-row items-center`}
-                >
-                  <View className="p-1.5">
-                    {item.select ? <SelectedBox /> : <NotSelectedBox />}
-                  </View>
-                  <Text
-                    className={`tracking-tight ${
-                      item.select ? 'font-medium text-basicFont' : 'font-normal text-disabledFont'
-                    }`}
+            {(selectedFilter === 'birthYear' ||
+              selectedFilter === 'admissionYear' ||
+              selectedFilter === 'mbti') && (
+              <FlatList
+                data={filterDetailItem[selectedFilter] || []}
+                keyExtractor={(item) => item.index.toString()}
+                renderItem={({ item }) => (
+                  <Pressable
+                    key={item.index}
+                    onPress={() => selectDetailItem(selectedFilter, item)}
+                    className={`flex w-[75px] flex-row items-center`}
                   >
-                    {item.name}
-                  </Text>
-                </Pressable>
+                    <View className="p-1.5">
+                      {item.select ? <SelectedBox /> : <NotSelectedBox />}
+                    </View>
+                    <Text
+                      className={`tracking-tight ${
+                        item.select ? 'font-medium text-basicFont' : 'font-normal text-disabledFont'
+                      }`}
+                    >
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                )}
+                showsVerticalScrollIndicator={false}
+                numColumns={4}
+                contentContainerStyle={{ columnGap: 8, rowGap: 8 }}
+                key={selectedFilter}
+              />
+            )}
+
+            {(selectedFilter === 'wakeUpTime' ||
+              selectedFilter === 'sleepingTime' ||
+              selectedFilter === 'turnOffTime') && (
+              <View className="space-y-8">
+                <View className="space-y-2">
+                  <Text className="text-lg font-medium text-basicFont">AM</Text>
+                  <FlatList
+                    data={(filterDetailItem[selectedFilter] || []).filter(
+                      (item) => item.meridian === 'AM',
+                    )}
+                    keyExtractor={(item) => `${selectedFilter}-${item.index}`}
+                    renderItem={({ item }) => (
+                      <Pressable
+                        key={`${selectedFilter}-${item.index}`}
+                        onPress={() => selectDetailItem(selectedFilter, item)}
+                        className={`flex w-[75px] flex-row items-center`}
+                      >
+                        <View className="p-1.5">
+                          {item.select ? <SelectedBox /> : <NotSelectedBox />}
+                        </View>
+                        <Text
+                          className={`tracking-tight ${
+                            item.select
+                              ? 'font-medium text-basicFont'
+                              : 'font-normal text-disabledFont'
+                          }`}
+                        >
+                          {item.name}
+                        </Text>
+                      </Pressable>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    numColumns={4}
+                    contentContainerStyle={{ columnGap: 8, rowGap: 8 }}
+                    key={`${selectedFilter}-AM`}
+                  />
+                </View>
+
+                <View className="space-y-2">
+                  <Text className="text-lg font-medium text-basicFont">PM</Text>
+                  <FlatList
+                    data={(filterDetailItem[selectedFilter] || []).filter(
+                      (item) => item.meridian === 'PM',
+                    )}
+                    keyExtractor={(item) => `${selectedFilter}-${item.index}`}
+                    renderItem={({ item }) => (
+                      <Pressable
+                        key={`${selectedFilter}-${item.index}`}
+                        onPress={() => selectDetailItem(selectedFilter, item)}
+                        className={`flex w-[75px] flex-row items-center`}
+                      >
+                        <View className="p-1.5">
+                          {item.select ? <SelectedBox /> : <NotSelectedBox />}
+                        </View>
+                        <Text
+                          className={`tracking-tight ${
+                            item.select
+                              ? 'font-medium text-basicFont'
+                              : 'font-normal text-disabledFont'
+                          }`}
+                        >
+                          {item.name}
+                        </Text>
+                      </Pressable>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    numColumns={4}
+                    contentContainerStyle={{ columnGap: 8, rowGap: 8 }}
+                    key={`${selectedFilter}-PM`}
+                  />
+                </View>
+              </View>
+            )}
+
+            {selectedFilter !== 'birthYear' &&
+              selectedFilter !== 'admissionYear' &&
+              selectedFilter !== 'MBTI' &&
+              selectedFilter !== 'wakeUpTime' &&
+              selectedFilter !== 'sleepingTime' &&
+              selectedFilter !== 'turnOffTime' &&
+              selectedFilter !== 'mbti' && (
+                <ScrollView
+                  contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}
+                >
+                  {(filterDetailItem[selectedFilter] || []).map((item) => (
+                    <Pressable
+                      key={item.index}
+                      onPress={() => selectDetailItem(selectedFilter, item)}
+                      className={`flex flex-row items-center`}
+                    >
+                      <View className="p-1.5">
+                        {item.select ? <SelectedBox /> : <NotSelectedBox />}
+                      </View>
+                      <Text
+                        className={`tracking-tight ${
+                          item.select
+                            ? 'font-medium text-basicFont'
+                            : 'font-normal text-disabledFont'
+                        }`}
+                      >
+                        {item.name}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
               )}
-              showsVerticalScrollIndicator={false}
-              numColumns={4}
-              contentContainerStyle={{ columnGap: 8, rowGap: 8 }}
-              key={selectedFilter}
-            />
           </View>
 
           <View className="space-y-4">
-            <View className="flex flex-row space-x-2">
-              {allSelectedValues.length > 0 &&
-                allSelectedValues.map((value, index) => (
-                  <Pressable
-                    key={index}
-                    className="flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
-                  >
-                    <Text className="text-xs font-semibold text-main1">{value}</Text>
+            <View className="flex flex-row items-center justify-between">
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="flex flex-row space-x-2"
+              >
+                {allSelectedValues.length > 0 &&
+                  allSelectedValues.map((value, index) => (
                     <Pressable
-                      onPress={() => {
-                        const key = Object.keys(detailFilterList).find((key) =>
-                          detailFilterList[key]?.includes(value),
-                        );
-                        if (key) removeSelectedValue(key, value);
-                      }}
-                      className="p-2"
+                      key={index}
+                      className="flex flex-row items-center rounded-full border border-main1 bg-sub2 py-1 pl-3.5 pr-1.5"
                     >
-                      <SmallXButton />
+                      <Text className="text-xs font-semibold text-main1">{value}</Text>
+                      <Pressable
+                        onPress={() => {
+                          const key = Object.keys(detailFilterList).find((key) =>
+                            detailFilterList[key]?.includes(value),
+                          );
+                          if (key) removeSelectedValue(key, value);
+                        }}
+                        className="p-2"
+                      >
+                        <SmallXButton />
+                      </Pressable>
                     </Pressable>
-                  </Pressable>
-                ))}
+                  ))}
+              </ScrollView>
+              <Pressable onPress={handleClearItems} className="flex flex-row justify-end pl-4">
+                <Text className="text-sm text-disabledFont underline">초기화</Text>
+              </Pressable>
             </View>
-            <Pressable onPress={handleClearItems} className="flex flex-row justify-end">
-              <Text className="text-sm text-disabledFont underline">초기화</Text>
-            </Pressable>
 
             <Pressable className="mb-5 rounded-xl bg-main1 p-4" onPress={onClose}>
               <Text className="text-center text-base font-semibold text-white">

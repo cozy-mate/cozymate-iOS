@@ -69,22 +69,28 @@ const RecommendRoomList: React.FC<RecommendRoomListProps> = ({ navigation, rooms
         </Pressable>
       </View>
 
-      <FlatList
-        data={rooms}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={roomComponentWidth}
-        onScroll={handleRecommendRoomScroll}
-        keyExtractor={(item) => item.roomId.toString()}
-        decelerationRate="fast"
-        pagingEnabled
-        disableIntervalMomentum
-        scrollEventThrottle={16}
-        bounces={false}
-        renderItem={({ item }) => (
-          <RecommendRoom room={item} onLayout={onLayoutRoom} pressFunc={toRoomDetail} />
-        )}
-      />
+      {rooms.length !== 0 ? (
+        <FlatList
+          data={rooms}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={roomComponentWidth}
+          onScroll={handleRecommendRoomScroll}
+          keyExtractor={(item) => item.roomId.toString()}
+          decelerationRate="fast"
+          pagingEnabled
+          disableIntervalMomentum
+          scrollEventThrottle={16}
+          bounces={false}
+          renderItem={({ item }) => (
+            <RecommendRoom room={item} onLayout={onLayoutRoom} pressFunc={toRoomDetail} />
+          )}
+        />
+      ) : (
+        <View className="flex h-36 items-center justify-center rounded-xl border border-disabled bg-white">
+          <Text className="text-sm font-medium text-disabledFont">아직 등록된 방이 없어요</Text>
+        </View>
+      )}
 
       <View className="mt-4 flex flex-row justify-center space-x-2">
         {Array.from({ length: rooms.length }).map((_, index) => (

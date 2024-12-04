@@ -15,7 +15,9 @@ import {
 
 // 특정 Rule 삭제
 export const deleteRule = async (roomId: number, ruleId: number): Promise<DeleteRuleResponse> => {
-  const response = await DeleteAxiosInstance<DeleteRuleResponse>(`/rooms/${roomId}/rule/${ruleId}`);
+  const response = await DeleteAxiosInstance<DeleteRuleResponse>(
+    `/rooms/${roomId}/rules/${ruleId}`,
+  );
 
   return response.data;
 };

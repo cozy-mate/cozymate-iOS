@@ -11,6 +11,8 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 
+import LoadingComponent from '@components/commonComponents/loading';
+
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import {
@@ -59,11 +61,13 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const test = async () => {
     const response = await signIn({
-      clientId: 'MWM1NzlhZTAtNTBhZC00N2Y3LTk1ZWEtMjJmZTA3ZDEyZDEx',
+      clientId: '3675026152',
       socialType: 'KAKAO',
     });
 
     const { accessToken, refreshToken } = response.result.tokenResponseDTO;
+
+    console.log(accessToken);
 
     // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
 
@@ -112,8 +116,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
     }
   };
 
-  const { mutateAsync: kakaoLogin } = useKakaoLogin(navigation);
-  const { mutateAsync: appleLogin } = useAppleLogin(navigation);
+  const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
+  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<FlatList>(null);
@@ -159,6 +163,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {(kakaoLoginPending || appleLoginPending) && <LoadingComponent />}
+
       <View className="flex flex-1 flex-col justify-between">
         <FlatList
           ref={flatListRef}

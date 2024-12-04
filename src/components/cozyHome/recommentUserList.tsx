@@ -77,22 +77,32 @@ const RecommendUserList: React.FC<RecommendUserListProps> = ({ navigation, users
         </Pressable>
       </View>
 
-      <FlatList
-        data={users}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={userComponentWidth}
-        onScroll={handleSameAnswerUserScroll}
-        keyExtractor={(item) => item.memberDetail.memberId.toString()}
-        decelerationRate="fast"
-        pagingEnabled
-        disableIntervalMomentum
-        scrollEventThrottle={16}
-        bounces={false}
-        renderItem={({ item }) => (
-          <RecommendUserComponent user={item} onLayout={onLayoutUser} toUserDetail={toUserDetail} />
-        )}
-      />
+      {users.length !== 0 ? (
+        <FlatList
+          data={users}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={userComponentWidth}
+          onScroll={handleSameAnswerUserScroll}
+          keyExtractor={(item) => item.memberDetail.memberId.toString()}
+          decelerationRate="fast"
+          pagingEnabled
+          disableIntervalMomentum
+          scrollEventThrottle={16}
+          bounces={false}
+          renderItem={({ item }) => (
+            <RecommendUserComponent
+              user={item}
+              onLayout={onLayoutUser}
+              toUserDetail={toUserDetail}
+            />
+          )}
+        />
+      ) : (
+        <View className="flex h-36 items-center justify-center rounded-xl border border-disabled bg-white">
+          <Text className="text-sm font-medium text-disabledFont">아직 등록된 사용자가 없어요</Text>
+        </View>
+      )}
 
       <View className="mt-4 flex flex-row justify-center space-x-2">
         {Array.from({ length: users.length }).map((_, index) => (

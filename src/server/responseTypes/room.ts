@@ -47,6 +47,10 @@ export interface CheckRequestedResponse {
   result: boolean;
 }
 
+export interface CheckInvitedReponse {
+  result: boolean;
+}
+
 export interface GetInvitedMembersResponse {
   result: {
     memberId: number;

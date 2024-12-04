@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import MajorSelect from '@components/myPage/majorSelect';
+import UnivInfoSelect from '@components/onBoard/univInfoSelect';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
 import BorderTextInputBox from '@components/common/borderTextInputBox';
 
@@ -135,7 +135,7 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
               )}
 
               {type === 'majorName' && (
-                <MajorSelect
+                <UnivInfoSelect
                   value={majorName}
                   setValue={setMajorName}
                   items={userSchoolInfo.result.departments}

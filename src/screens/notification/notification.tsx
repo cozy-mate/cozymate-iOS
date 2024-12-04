@@ -6,6 +6,7 @@ import { useGetNotificationList } from '@hooks/api/notification';
 import { NotificationScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
+import NoNotificationCharacter from '@assets/notification/noNotification.svg';
 
 const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
   const { data: notificationlist } = useGetNotificationList();
@@ -34,10 +35,10 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
         </Pressable>
       </View>
 
-      <ScrollView bounces={false}>
-        <View className="flex-1">
-          {filteredNotifications && filteredNotifications.length > 0 ? (
-            filteredNotifications.map((noti, index) => (
+      {filteredNotifications && filteredNotifications.length > 0 ? (
+        <ScrollView bounces={false} className="flex-1">
+          <View className="flex-1">
+            {filteredNotifications.map((noti, index) => (
               <TouchableHighlight
                 key={index}
                 onPress={() => toScreen(noti.category)}
@@ -48,7 +49,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                     index !== filteredNotifications.length - 1
                       ? 'border-b border-b-disabled'
                       : 'border-b-0'
-                  } `}
+                  }`}
                 >
                   <View className="space-y-1.5">
                     <View className="flex flex-row items-center justify-between">
@@ -62,16 +63,17 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
                   </View>
                 </View>
               </TouchableHighlight>
-            ))
-          ) : (
-            <View className="flex flex-1 flex-col items-center justify-center">
-              <Text className="text-sm font-medium text-disabledFont">
-                받은 알림이 존재하지 않아요!
-              </Text>
-            </View>
-          )}
+            ))}
+          </View>
+        </ScrollView>
+      ) : (
+        <View className="flex-1 items-center justify-center">
+          <NoNotificationCharacter />
+          <Text className="flex items-center justify-center text-sm font-medium text-disabledFont">
+            받은 알림이 존재하지 않아요!
+          </Text>
         </View>
-      </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

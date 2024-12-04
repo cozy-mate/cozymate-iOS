@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, View, Pressable, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 
@@ -6,6 +7,7 @@ import BottomButton from '@components/common/bottomButton';
 import ControlModal from '@components/roomDetail/controlModal';
 import LifeStyleModal from '@components/roomDetail/lifeStyleModal';
 import MemberComponent from '@components/roomDetail/memberComponent';
+import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
 import { useHasRoomStore } from '@zustand/room/room';
 import { useIsVerifiedStore } from '@zustand/member/member';
@@ -18,10 +20,13 @@ import { useDibsOnRoom, useDeleteFavorite } from '@hooks/api/favorite';
 import {
   useExitRoom,
   useGetRoomData,
+  useCheckInvited,
+  useAcceptInvited,
   useCheckRequested,
   useSendRoomRequest,
   useChangeRoomPublic,
   useDeleteRoomRequest,
+  useGetInvitedMembers,
 } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
@@ -32,6 +37,7 @@ import { RoomDetailScreenProps } from '@type/param/stack';
 import ExitButton from '@assets/exitButton.svg';
 import BackButton from '@assets/backButton.svg';
 import SettingIcon from '@assets/settingIcon.svg';
+import RightArrow from '@assets/smallRightArrow.svg';
 import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
@@ -65,13 +71,17 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
   const width = Dimensions.get('screen').width;
 
+  const [isNotVerifiedModalOpen, setIsNotVerifiedModalOpen] = useState<boolean>(false);
+
   // 내 방인지 여부 및 라이프스타일 존재 여부
-  const { myRoom } = useHasRoomStore();
+  const { myRoom, setMyRoom } = useHasRoomStore();
   const { isVerified } = useIsVerifiedStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   // 방 참여 요청 여부 확인
   const { data: isRequested, refetch: refetchCheckRequested } = useCheckRequested(roomId);
+  // 방 초대 요청 여부 확인
+  const { data: isInvited, refetch: refetchCheckInvited } = useCheckInvited(roomId);
   // 방 정보 조회
   const { data: roomData, refetch: refetchRoomData } = useGetRoomData(roomId);
   // 해당 방의 방장과의 쪽지방 조회
@@ -153,6 +163,12 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
+  const { mutateAsync: acceptInvited } = useAcceptInvited(
+    roomId,
+    refetchRoomData,
+    refetchCheckInvited,
+  );
+
   // 방 수정
   const toEditRoom = async () => {
     navigation.navigate('EditRoomScreen', {
@@ -181,6 +197,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     }
   };
 
+  const { data: invitedMemberList } = useGetInvitedMembers(roomId);
+
   // 방장 케밥 모달
   const [isControlModalOpen, setIsControlModalOpen] = useState<boolean>(false);
 
@@ -207,6 +225,14 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           : mutateChangeRoomPublic,
     },
   ];
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchRoomData();
+      refetchCheckRequested();
+      refetchCheckInvited();
+    }, []),
+  );
 
   return (
     <View className="flex-1 bg-white">
@@ -295,19 +321,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
           <View className="flex-1 rounded-t-[20px] bg-white pt-[32px]">
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ paddingBottom: bottom }}>
-              {/* <View className="mb-16 px-5">
-                <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
-                <Text className="text-main1">{roomData.requestList.length}</Text>개의
-                {'\n'}룸메이트 요청이 도착했어요
-              </Text>
-
-                <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
-                {roomData.requestList.map((request, index) => (
-                  <MemberComponent key={index} index={index} memberData={request} />
-                ))}
-              </View>
-              </View> */}
-
               <View className="mb-16 px-5">
                 <View className="mb-4 flex flex-row items-center justify-between px-1">
                   <Text className="text-base font-semibold text-emphasizedFont">방정보</Text>
@@ -332,6 +345,41 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 </View>
               </View>
 
+              {roomId === myRoom.roomId &&
+                invitedMemberList &&
+                invitedMemberList.result.length !== 0 && (
+                  <View className="mb-16 space-y-3 px-5">
+                    <Text className="text-base font-semibold text-emphasizedFont">
+                      우리방으로 초대한 사용자
+                    </Text>
+                    <View className="rounded-xl border border-[#F1F2F4] px-4 py-2">
+                      {invitedMemberList.result.map((user, index) => (
+                        <Pressable
+                          key={user.memberId}
+                          className={`flex flex-row justify-between border-b border-b-[#F1F2F4] py-3 ${
+                            index === 0 && 'pt-2'
+                          } ${index === invitedMemberList.result.length - 1 && 'border-b-0 pb-2'}`}
+                          onPress={() => toUserDetail(user)}
+                        >
+                          <View className="flex flex-row items-center space-x-2">
+                            {getProfileImage(user.persona, 24, 24)}
+                            <Text className="text-sm font-medium text-emphasizedFont">
+                              {user.nickname}
+                            </Text>
+                            <Text className="text-sm font-medium text-colorFont">(수락대기중)</Text>
+                          </View>
+                          <View className="flex flex-row items-center space-x-2">
+                            <Text className="text-sm font-medium text-colorFont">
+                              {user.mateEquality}%
+                            </Text>
+                            <RightArrow />
+                          </View>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+                )}
+
               <View className="mb-16 px-5">
                 <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                   기숙사 정보
@@ -353,7 +401,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 </View>
               </View>
 
-              <View className="mb-16 pl-5 pr-3">
+              <View className={`pl-5 pr-3 ${myRoom.roomId !== roomId && 'mb-16'}`}>
                 <Text className="mb-4 px-1 text-base font-semibold text-emphasizedFont">
                   룸메이트 라이프스타일 한 눈에 보기
                 </Text>
@@ -397,10 +445,48 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 </View>
               </View>
             </ScrollView>
+            {myRoom.roomId === roomId && <SafeAreaView className="bg-white" />}
           </View>
         </View>
 
         <View className="fixed bottom-[42px] px-5">
+          {isInvited.result && (
+            <View className="flex flex-row justify-between space-x-2">
+              <View className="flex-1">
+                <BottomButton
+                  color="bg-white"
+                  borderColor="border-main1"
+                  textColor="text-main1"
+                  text="거절"
+                  disabled={false}
+                  onPressFunc={() => acceptInvited(false)}
+                />
+              </View>
+
+              <View className="flex-1">
+                <BottomButton
+                  color="bg-main1"
+                  borderColor="border-main1"
+                  textColor="text-white"
+                  text="수락"
+                  disabled={false}
+                  onPressFunc={() => {
+                    if (isVerified) {
+                      acceptInvited(true);
+                      setMyRoom({
+                        hasRoom: true,
+                        roomId: roomId,
+                        isRoomManager: false,
+                      });
+                    } else {
+                      setIsNotVerifiedModalOpen(true);
+                    }
+                  }}
+                />
+              </View>
+            </View>
+          )}
+
           {/* 내 방이 아닌 다른 방을 조회하는 경우 */}
           {myRoom.roomId !== roomId && myRoom.roomId !== 0 && (
             <BottomButton
@@ -414,7 +500,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           )}
 
           {/* 방이 없는 사용자가 참여 요청을 보낸 경우 */}
-          {myRoom.roomId === 0 && isRequested.result && (
+          {myRoom.roomId === 0 && isRequested.result && !isInvited.result && (
             <BottomButton
               color="bg-colorBox"
               borderColor="border-main1"
@@ -426,19 +512,23 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           )}
 
           {/* 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 && !isRequested.result && hasLifeStyle && isVerified && (
-            <BottomButton
-              color="bg-main1"
-              borderColor="border-main1"
-              textColor="text-white"
-              text="방 참여 요청하기"
-              disabled={false}
-              onPressFunc={sendRequest}
-            />
-          )}
+          {myRoom.roomId === 0 &&
+            !isRequested.result &&
+            hasLifeStyle &&
+            isVerified &&
+            !isInvited.result && (
+              <BottomButton
+                color="bg-main1"
+                borderColor="border-main1"
+                textColor="text-white"
+                text="방 참여 요청하기"
+                disabled={false}
+                onPressFunc={sendRequest}
+              />
+            )}
 
           {/* 라이프스타일이 없고 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 && !isRequested.result && !hasLifeStyle && (
+          {myRoom.roomId === 0 && !isRequested.result && !hasLifeStyle && !isInvited.result && (
             <BottomButton
               color="bg-main1"
               borderColor="border-main1"
@@ -450,18 +540,32 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           )}
 
           {/* 라이프스타일은 있지만 학교인증이 되지 않은 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 && !isRequested.result && hasLifeStyle && !isVerified && (
-            <BottomButton
-              color="bg-main1"
-              borderColor="border-main1"
-              textColor="text-white"
-              text="학교 인증하고 방 참여하기"
-              disabled={false}
-              onPressFunc={toSchoolAuthentication}
-            />
-          )}
+          {myRoom.roomId === 0 &&
+            !isRequested.result &&
+            hasLifeStyle &&
+            !isVerified &&
+            !isInvited.result && (
+              <BottomButton
+                color="bg-main1"
+                borderColor="border-main1"
+                textColor="text-white"
+                text="학교 인증하고 방 참여하기"
+                disabled={false}
+                onPressFunc={toSchoolAuthentication}
+              />
+            )}
         </View>
       </View>
+
+      <TwoButtonModal
+        isVisible={isNotVerifiedModalOpen}
+        title={`방에 참여하려면\n먼저 학교인증을 해야해요!`}
+        closeFunc={() => setIsNotVerifiedModalOpen(false)}
+        leftButtonText="안할래요"
+        leftButtonFunc={() => setIsNotVerifiedModalOpen(false)}
+        rightButtonText="할래요"
+        rightButtonFunc={() => toSchoolAuthentication()}
+      />
 
       {isLifeStyleModalOpen && (
         <LifeStyleModal

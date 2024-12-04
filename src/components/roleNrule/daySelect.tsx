@@ -41,14 +41,14 @@ const DaySelect: React.FC<DaySelectProps> = ({ repeatDayList, setRepeatDayList }
   };
 
   const toggleUndefined = () => {
-    if (repeatDayList === null) {
-      // 선택된 상태라면 빈 배열로 설정
+    if (repeatDayList === null || repeatDayList.length > 0) {
+      // 미정 버튼 클릭 시 repeatDayList가 null이거나 길이가 1 이상이면 빈 배열로 설정
+      setRepeatDayList([]); // 빈 배열로 설정
       setItems((prevItems) => prevItems.map((day) => ({ ...day, selected: false })));
-      setRepeatDayList([]);
     } else {
-      // 다시 null로 설정
+      // 빈 배열일 때만 null로 설정
+      setRepeatDayList(null); // null로 설정
       setItems((prevItems) => prevItems.map((day) => ({ ...day, selected: false })));
-      setRepeatDayList(null);
     }
   };
 

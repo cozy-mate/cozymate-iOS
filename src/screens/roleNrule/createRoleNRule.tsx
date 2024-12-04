@@ -83,12 +83,7 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return (
-        roleMateIdNameList.length > 0 &&
-        content.trim() !== '' &&
-        repeatDayList !== null &&
-        repeatDayList.length > 0
-      );
+      return roleMateIdNameList.length > 0 && content.trim() !== '' && repeatDayList !== null;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }
@@ -137,6 +132,10 @@ const CreateRoleNRuleScreen = ({ navigation, route }: CreateRoleNRuleScreenProps
       }
     }
   };
+
+  console.log(roomInfo.mateDetailList);
+
+  console.log(todoMateIdList);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
