@@ -15,6 +15,7 @@ export const useHasLifeStyleStore = create<{
 export const useLifeStyleStore = create<{
   lifeStyle: LifeStyle;
   setLifeStyle: (newLifeStyle: Partial<LifeStyle>) => void;
+  clearLifeStyle: () => void;
 }>((set) => ({
   lifeStyle: {
     memberDetail: {
@@ -63,6 +64,52 @@ export const useLifeStyleStore = create<{
     set((state) => ({
       lifeStyle: { ...state.lifeStyle, ...newLifeStyle },
     })),
+  clearLifeStyle: () =>
+    set(() => ({
+      lifeStyle: {
+        memberDetail: {
+          memberId: 0,
+          nickname: '',
+          gender: '',
+          birthday: '',
+          universityName: '',
+          majorName: '',
+          persona: 0,
+        },
+        memberStatDetail: {
+          admissionYear: '',
+          numOfRoommate: 0,
+          dormitoryName: '',
+          acceptance: '',
+          wakeUpMeridian: '',
+          wakeUpTime: 0,
+          sleepingMeridian: '',
+          sleepingTime: 0,
+          turnOffMeridian: '',
+          turnOffTime: 0,
+          smoking: '',
+          sleepingHabit: [],
+          airConditioningIntensity: 0,
+          heatingIntensity: 0,
+          lifePattern: '',
+          intimacy: '',
+          canShare: '',
+          isPlayGame: '',
+          isPhoneCall: '',
+          studying: '',
+          intake: '',
+          cleanSensitivity: 0,
+          noiseSensitivity: 0,
+          cleaningFrequency: '',
+          drinkingFrequency: '',
+          personality: [],
+          mbti: '',
+          selfIntroduction: '',
+        },
+        equality: 0,
+        roomId: 0,
+      },
+    })),
 }));
 
 export const useRegisterLifeStyleStore = create<{
@@ -108,9 +155,14 @@ export const useRegisterLifeStyleStore = create<{
 export const usePreferencesStore = create<{
   preferenceList: LifestyleOptionKey[];
   setPreferenceList: (status: LifestyleOptionKey[]) => void;
+  clearPreferenceList: () => void;
 }>((set) => ({
   preferenceList: [],
   setPreferenceList: (status) => set({ preferenceList: status }),
+  clearPreferenceList: () =>
+    set(() => ({
+      preferenceList: [],
+    })),
 }));
 
 export const useDetailFilterListStore = create<{

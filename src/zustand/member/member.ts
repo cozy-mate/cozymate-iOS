@@ -44,6 +44,7 @@ export const useSignUpStore = create<{
 export const useProfileStore = create<{
   profile: Profile;
   setProfile: (newProfile: Partial<Profile>) => void;
+  clearProfile: () => void;
 }>((set) => ({
   profile: {
     memberId: 0,
@@ -56,6 +57,19 @@ export const useProfileStore = create<{
     persona: 0,
   },
   setProfile: (newProfile) => set((state) => ({ profile: { ...state.profile, ...newProfile } })),
+  clearProfile: () =>
+    set(() => ({
+      profile: {
+        memberId: 0,
+        nickname: '',
+        gender: '',
+        birthday: '',
+        universityId: 0,
+        universityName: '',
+        majorName: '',
+        persona: 0,
+      },
+    })),
 }));
 
 // 학교 인증 여부

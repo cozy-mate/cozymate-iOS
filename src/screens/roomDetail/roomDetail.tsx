@@ -167,6 +167,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     roomId,
     refetchRoomData,
     refetchCheckInvited,
+    roomData.result.name,
   );
 
   // 방 수정

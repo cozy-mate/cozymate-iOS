@@ -292,7 +292,7 @@ const LifestyleIcon: React.FC<LifeStyleIconProps> = ({ icon, label, answer, isMi
   </View>
 );
 
-export const getLifestyleLabel = (key: LifestyleOptionKey): string => {
+export const getLifestyleLabel = (key: string): string => {
   const option = lifestyleOptions[key];
   return option ? option.label : 'Unknown Option';
 };

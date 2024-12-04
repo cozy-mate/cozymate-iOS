@@ -4,8 +4,12 @@ import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 import LogoutModal from '@components/myPage/logoutModal';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
+import {
+  useLifeStyleStore,
+  usePreferencesStore,
+  useHasLifeStyleStore,
+} from '@zustand/member-stat/member-stat';
 
 import useFcm from '@hooks/useFcm';
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
@@ -23,12 +27,16 @@ import CertificationIcon from '@assets/myPage/certification.svg';
 const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
 
+  // 로그인 상태
   const { setLoggedIn } = useLoggedInStore();
-  const { myRoom } = useHasRoomStore();
-  const { profile } = useProfileStore();
-  const { isVerified } = useIsVerifiedStore();
-  const { roomInfo } = useRoomInfoStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { myRoom, clearMyRoom } = useHasRoomStore();
+  const { profile, clearProfile } = useProfileStore();
+  const { isVerified, setIsVerified } = useIsVerifiedStore();
+  const { clearPreferenceList } = usePreferencesStore();
+  const { roomInfo, clearRoomInfo } = useRoomInfoStore();
+  const { hasLifeStyle, setHasLifeStyle } = useHasLifeStyleStore();
+  const { clearLifeStyle } = useLifeStyleStore();
+
   const { deactivateFcmToken } = useFcm();
 
   const { data: hasInquiry } = useCheckHasInquiry();
@@ -76,6 +84,15 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
       setIsLogoutModalOpen(false);
       await deleteToken();
       await deactivateFcmToken();
+
+      clearMyRoom();
+      clearProfile();
+      setIsVerified('');
+      clearPreferenceList();
+      clearRoomInfo();
+      setHasLifeStyle(false);
+      clearLifeStyle();
+
       setLoggedIn(false);
     } catch (error: any) {
       console.log(error.response.data);
