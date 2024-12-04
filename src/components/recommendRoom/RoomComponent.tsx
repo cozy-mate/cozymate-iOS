@@ -40,7 +40,11 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, pressFunc }) =>
               {getRoomLifeStyleIcon(
                 key,
                 value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                value === roomData.numOfArrival ? '모두 일치' : `${value}명 일치`,
+                value === roomData.numOfArrival
+                  ? '모두 일치'
+                  : value !== null
+                  ? `${value}명 일치`
+                  : '??',
               )}
             </View>
           ))}

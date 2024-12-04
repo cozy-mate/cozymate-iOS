@@ -36,6 +36,7 @@ export const useHasRoomStore = create<{
 export const useCreatePublicRoomStore = create<{
   createPublicRoomInfo: CreatePublicRoomInfo;
   setCreatePublicRoomInfo: (newCreatePublicRoomInfo: Partial<CreatePublicRoomInfo>) => void;
+  clearCreatePublicRoom: () => void;
 }>((set) => ({
   createPublicRoomInfo: {
     name: '',
@@ -47,12 +48,22 @@ export const useCreatePublicRoomStore = create<{
     set((state) => ({
       createPublicRoomInfo: { ...state.createPublicRoomInfo, ...newCreatePublicRoomInfo },
     })),
+  clearCreatePublicRoom: () =>
+    set(() => ({
+      createPublicRoomInfo: {
+        name: '',
+        persona: 0,
+        maxMateNum: 0,
+        hashtagList: [],
+      },
+    })),
 }));
 
 // 비공개방 생성
 export const useCreatePrivateRoomStore = create<{
   createPrivateRoomInfo: CreatePrivateRoomInfo;
   setCreatePrivateRoomInfo: (newCreatePrivateRoomInfo: Partial<CreatePrivateRoomInfo>) => void;
+  clearCreatePrivateRoom: () => void;
 }>((set) => ({
   createPrivateRoomInfo: {
     name: '',
@@ -62,6 +73,14 @@ export const useCreatePrivateRoomStore = create<{
   setCreatePrivateRoomInfo: (newCreatePrivateRoomInfo) =>
     set((state) => ({
       createPrivateRoomInfo: { ...state.createPrivateRoomInfo, ...newCreatePrivateRoomInfo },
+    })),
+  clearCreatePrivateRoom: () =>
+    set(() => ({
+      createPrivateRoomInfo: {
+        name: '',
+        persona: 0,
+        maxMateNum: 0,
+      },
     })),
 }));
 

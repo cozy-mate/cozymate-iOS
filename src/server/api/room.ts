@@ -16,6 +16,7 @@ import {
   DeleteRoomResponse,
   UpdateRoomResponse,
   GetRoomDataResponse,
+  CheckInvitedReponse,
   CheckHasRoomResponse,
   InviteMemberResponse,
   CheckRoomNameResponse,
@@ -78,6 +79,13 @@ export const checkRequested = async (roomId: number): Promise<CheckRequestedResp
   const response = await GetAxiosInstance<CheckRequestedResponse>(
     `/rooms/${roomId}/pending-status`,
   );
+
+  return response.data;
+};
+
+// 사용자 -> 사용자가 초대받은 방인지 조회
+export const checkInvited = async (roomId: number): Promise<CheckInvitedReponse> => {
+  const response = await GetAxiosInstance<CheckInvitedReponse>(`/rooms/${roomId}/invited-status`);
 
   return response.data;
 };

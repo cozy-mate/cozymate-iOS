@@ -1,11 +1,7 @@
 import React from 'react';
 import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
-import {
-  lifestyleOptions,
-  LifestyleOptionKey,
-  getRoomLifeStyleIcon,
-} from '@utils/getLifeStyleIcon';
+import { getRoomLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 interface RecommendRoomProps {
   room: {
@@ -22,10 +18,6 @@ interface RecommendRoomProps {
 }
 
 const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc }) => {
-  const isLifestyleOptionKey = (key: string): key is LifestyleOptionKey => {
-    return key in lifestyleOptions;
-  };
-
   const screenWidth = Dimensions.get('window').width;
   const calculatedWidth = screenWidth - 40;
 
@@ -47,23 +39,15 @@ const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc
         {room.equalMemberStatNum !== null &&
           Object.entries(room.equalMemberStatNum).map(([key, value], index) => (
             <View key={index} className="flex w-[50px] flex-col items-center">
-              {isLifestyleOptionKey(key)
-                ? getRoomLifeStyleIcon(
-                    key,
-                    value === null
-                      ? '??'
-                      : value === room.numOfArrival
-                      ? 'blue'
-                      : value === 0
-                      ? 'red'
-                      : 'white',
-                    value === null
-                      ? '??'
-                      : value === room.numOfArrival
-                      ? '모두 일치'
-                      : `${value}명 일치`,
-                  )
-                : null}
+              {getRoomLifeStyleIcon(
+                key,
+                value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
+                value === room.numOfArrival
+                  ? '모두 일치'
+                  : value !== null
+                  ? `${value}명 일치`
+                  : '??',
+              )}
             </View>
           ))}
       </View>

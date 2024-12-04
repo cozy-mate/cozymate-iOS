@@ -55,7 +55,7 @@ module.exports = {
         appleblack: '#121212',
 
         //토스트용 색깔
-        toastBackground: "#4B4B4B"
+        toastBackground: '#4B4B4B',
       },
     },
   },

@@ -57,7 +57,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
   // Role
   const [roleMateIdNameList, setRoleMateIdNameList] = useState<RoleMateItem[]>(roleItem.mateList);
   const [content, setContent] = useState<string>(roleItem.content);
-  const [repeatDayList, setRepeatDayList] = useState<string[]>(roleItem.repeatDayList);
+  const [repeatDayList, setRepeatDayList] = useState<string[] | null>(roleItem.repeatDayList);
 
   const { ruleItem } = useRuleItemStore();
 
@@ -103,7 +103,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
         console.log(error.response.data);
       }
     } else if (type === 'role') {
-      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList.length === 0) {
+      if (roleMateIdNameList.length === 0 || content.trim() === '' || repeatDayList === null) {
         return;
       }
       try {
@@ -157,8 +157,8 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
           ruleId: ruleItem.ruleId,
         });
         toBack();
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        console.log(error.response);
       }
     }
   };
@@ -168,7 +168,7 @@ const EditRoleNRuleScreen = ({ navigation, route }: EditRoleNRuleScreenProps) =>
     if (type === 'todo') {
       return todoContent.trim() !== '' && todoMateIdList.length > 0 && !!timePoint;
     } else if (type === 'role') {
-      return content.trim() !== '' && roleMateIdNameList.length > 0 && repeatDayList.length > 0;
+      return content.trim() !== '' && roleMateIdNameList.length > 0 && repeatDayList !== null;
     } else if (type === 'rule') {
       return ruleContent.trim() !== '';
     }

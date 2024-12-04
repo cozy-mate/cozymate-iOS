@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, View, Modal } from 'react-native';
+import { Text, View, Modal, Pressable } from 'react-native';
 
 import BottomButton from '@components/common/bottomButton';
 import CharacterSelect from '@components/roomDetail/characterSelect';
+
+import BackButton from '@assets/backButton.svg';
 
 interface SelectCharacterModalProps {
   persona: number;
@@ -26,8 +28,15 @@ const SelectCharacterModal: React.FC<SelectCharacterModalProps> = ({
 
   return (
     <Modal transparent={true} animationType="fade">
-      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col justify-between bg-white px-5 pb-[56px] pt-[47px]">
-        <View className="flex flex-col bg-white pt-14">
+      <View className="absolute left-0 top-0 flex h-screen w-screen flex-col justify-between bg-white px-5 pb-8 pt-[47px]">
+        <View className="flex flex-col bg-white">
+          {/* 상단 이전 버튼 */}
+          <View className="my-3 flex flex-row items-center">
+            <Pressable onPress={closeModal}>
+              <BackButton />
+            </Pressable>
+          </View>
+
           <Text className={`mb-6 text-xl font-semibold text-emphasizedFont`}>
             cozymate와 함께할{'\n'}캐릭터를 선택해주세요!
           </Text>

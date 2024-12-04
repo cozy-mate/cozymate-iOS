@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 
 import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
@@ -91,7 +91,7 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
 
     return (
       <View className="mb-[7px] mt-4 flex rounded-xl border border-[#f1f2f4] p-4">
-        <View className="w-full leading-loose">
+        <View className="w-full">
           {keys.map((key, index) =>
             key in my && key in other ? (
               <View
@@ -103,18 +103,22 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
                 <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
                 <View className="flex w-[75%] flex-row items-center justify-center">
                   <View className="w-1/2">
-                    <Text
-                      className={`text-center font-medium tracking-tight text-basicFont ${
-                        key !== 'nickname' &&
-                        my[key] !== other[key] &&
-                        (key === 'sleepingHabit' || key === 'personality'
-                          ? !areArraysEqual(my[key], other[key])
-                          : my[key] !== other[key]) &&
-                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
-                      }`}
-                    >
-                      {truncateString(formatValue(key, my[key]))}
-                    </Text>
+                    {hasLifeStyle ? (
+                      <Text
+                        className={`text-center font-medium tracking-tight text-basicFont ${
+                          key !== 'nickname' &&
+                          my[key] !== other[key] &&
+                          (key === 'sleepingHabit' || key === 'personality'
+                            ? !areArraysEqual(my[key], other[key])
+                            : my[key] !== other[key]) &&
+                          (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
+                        }`}
+                      >
+                        {truncateString(formatValue(key, my[key]))}
+                      </Text>
+                    ) : (
+                      <View className="flex items-center justify-center"></View>
+                    )}
                   </View>
 
                   <View className="w-1/2">

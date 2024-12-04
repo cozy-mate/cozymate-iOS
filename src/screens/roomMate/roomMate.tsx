@@ -176,32 +176,32 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           </View>
         )}
 
-        {/* 라이프스타일이 없는 사용자 컴포넌트 (필터링 칩 클릭 시 데이터 안보임) */}
         <View className="px-5">
-          {!hasLifeStyle &&
-            chipList.length === 0 &&
-            userList?.result &&
-            userList?.result.memberList.map((user) => (
-              <UserComponent
-                key={user.memberDetail.memberId}
-                user={user}
-                toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
-              />
-            ))}
-          {!hasLifeStyle && chipList.length !== 0 && (
-            <NoLifeStyleComponent
-              pressFunc={toLifeStyleOnboarding}
-              isChipClicked={chipList.length !== 0}
-            />
-          )}
-        </View>
-
-        {/* 라이프스타일이 있는 사용자 컴포넌트 */}
-        <View className="px-5">
-          {hasLifeStyle &&
+          {/* 라이프스타일이 없는 사용자 */}
+          {!hasLifeStyle ? (
+            chipList.length === 0 && userList?.result && userList.result.memberList.length !== 0 ? (
+              userList.result.memberList.map((user) => (
+                <UserComponent
+                  key={user.memberDetail.memberId}
+                  user={user}
+                  toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
+                />
+              ))
+            ) : chipList.length !== 0 ? (
+              <NoLifeStyleComponent pressFunc={toLifeStyleOnboarding} isChipClicked={true} />
+            ) : (
+              <View className="flex h-36 items-center justify-center">
+                <Text className="text-sm font-medium text-disabledFont">
+                  아직 등록된 사용자가 없어요
+                </Text>
+              </View>
+            )
+          ) : /* 라이프스타일이 있는 사용자 */
           result.data?.pages &&
-          result.data?.pages.flatMap((page) => page.result.memberList).length === 0 ? (
-            <Text className="flex text-center text-disabledFont">사용자가 없습니다.</Text>
+            result.data.pages.flatMap((page) => page.result.memberList).length === 0 ? (
+            <View className="flex h-36 items-center justify-center">
+              <Text className="text-sm font-medium text-disabledFont">사용자가 없습니다.</Text>
+            </View>
           ) : (
             result.data?.pages
               .flatMap((page) => page.result.memberList)

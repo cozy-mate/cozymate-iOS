@@ -32,10 +32,14 @@ const CompleteCreateRoomScreen = ({ navigation, route }: CompleteCreateRoomScree
       <View className="mt-[81px] flex flex-1 flex-col justify-between px-5">
         <View className="flex items-center">
           <View className="mb-5 flex flex-col">
-            <Text className="mb-1 text-center text-xl font-semibold text-emphasizedFont">
+            <Text
+              className={`mb-1 text-center text-xl font-semibold text-emphasizedFont ${
+                type === 'PUBLIC' && 'mb-12'
+              }`}
+            >
               방 생성을 완료했어요!
             </Text>
-            {type === 'PUBLIC' && (
+            {type === 'PRIVATE' && (
               <Text className="text-center text-sm font-medium text-basicFont">
                 초대코드를 공유해 룸메이트를 모아보세요..
               </Text>

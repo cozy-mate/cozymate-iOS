@@ -2925,6 +2925,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/blur@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "@react-native-community/blur@npm:4.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 1e47144b0c00dce562e72ea9f6c3e93d3bb392ec0ea001ce37ff801d9a496c9801927033ee4800bf92ea2ece9de0abe596715add3b7afe3c5d1533e260f5e09e
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:13.6.8":
   version: 13.6.8
   resolution: "@react-native-community/cli-clean@npm:13.6.8"
@@ -5550,6 +5560,7 @@ __metadata:
     "@notifee/react-native": ^7.8.2
     "@react-native-async-storage/async-storage": ^1.24.0
     "@react-native-clipboard/clipboard": ^1.14.1
+    "@react-native-community/blur": ^4.4.1
     "@react-native-community/datetimepicker": ^8.2.0
     "@react-native-firebase/app": 20.5.0
     "@react-native-firebase/messaging": ^20.4.0
@@ -5583,6 +5594,7 @@ __metadata:
     react-error-boundary: ^4.0.13
     react-icons: ^5.2.1
     react-native: 0.74.2
+    react-native-blur: ^3.2.2
     react-native-calendars: ^1.1306.0
     react-native-config: ^1.5.3
     react-native-date-picker: ^5.0.4
@@ -10508,6 +10520,15 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-blur@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "react-native-blur@npm:3.2.2"
+  dependencies:
+    prop-types: ^15.5.10
+  checksum: 385c1f6e831d4ae0421fd339fdc75eabd1ce4fc217b8b9da92193bffbaa9a5b7a0d0d2afb6b58959803f6149b367a0bf7a6347b0d665cd46ff354d33c76559b2
   languageName: node
   linkType: hard
 

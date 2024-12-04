@@ -34,8 +34,8 @@ import SelectIcon from '@assets/createRoom/selectCharacter.svg';
 const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { type } = route.params;
 
-  const { createPublicRoomInfo } = useCreatePublicRoomStore();
-  const { createPrivateRoomInfo } = useCreatePrivateRoomStore();
+  const { createPublicRoomInfo, clearCreatePublicRoom } = useCreatePublicRoomStore();
+  const { createPrivateRoomInfo, clearCreatePrivateRoom } = useCreatePrivateRoomStore();
   const { setRoomInfo } = useRoomInfoStore();
 
   const [name, setName] = useState<string>('');
@@ -71,10 +71,12 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     { index: 5, value: 6, name: '6명', select: false },
   ]);
 
+  const stringRegex = /^(?!_)[가-힣a-zA-Z0-9]+([가-힣a-zA-Z0-9]+)*(?<!_)$/;
+
   const valueHandleChange = (text: string) => {
-    setName(text);
-    if (text.length > 12) {
-      setIsLongName(true);
+    if (stringRegex.test(text)) {
+      setName(text);
+      setIsLongName(text.length > 12);
     } else {
       setIsLongName(false);
     }
@@ -86,8 +88,13 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
-      setHashtagList([...hashtagList, hashTag.trim()]);
-      setHashTag('');
+      if (stringRegex.test(hashTag.trim())) {
+        setHashtagList([...hashtagList, hashTag.trim()]);
+        setHashTag('');
+      } else {
+        setHashTag('');
+        setIsHashtagModalOpen(true);
+      }
     } else if (hashtagList.length >= 3) {
       setIsHashtagModalOpen(true);
     }
@@ -99,6 +106,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   const toMain = () => {
     navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+    clearCreatePublicRoom();
+    clearCreatePrivateRoom();
   };
 
   const toSelectCharacter = () => {
@@ -118,6 +127,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
     setRoomInfo(response.result);
 
+    clearCreatePublicRoom();
+
     navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
   };
 
@@ -129,6 +140,8 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     });
 
     setRoomInfo(response.result);
+
+    clearCreatePrivateRoom();
 
     navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
   };
@@ -240,7 +253,11 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
           <OneButtonModal
             isVisible={isHashtagModalOpen}
-            title={`해시태그는 최대 3개까지만\n입력할 수 있어요!`}
+            title={
+              hashtagList.length >= 3
+                ? `해시태그는 최대 3개까지만\n입력할 수 있어요!`
+                : `해시태그는 한글, 영문, 숫자만\n사용할 수 있어요.`
+            }
             closeFunc={() => setIsHashtagModalOpen(false)}
             buttonText="확인"
             buttonFunc={() => setIsHashtagModalOpen(false)}
