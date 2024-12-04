@@ -22,6 +22,16 @@ interface LifeStyleModalProps {
   closeModal: () => void;
 }
 
+const IntensityItems = ['안틀어요', '약하게 틀어요', '적당하게 틀어요', '강하게 틀어요'];
+
+const SensitivityItems = [
+  '매우 예민하지 않아요',
+  '예민하지 않아요',
+  '보통이에요',
+  '예민해요',
+  '매우 예민해요',
+];
+
 const LifeStyleModal: React.FC<LifeStyleModalProps> = ({
   title,
   color,
@@ -30,6 +40,25 @@ const LifeStyleModal: React.FC<LifeStyleModalProps> = ({
 }) => {
   const textColor =
     color === 'red' ? 'text-[#FF6868]' : color === 'blue' ? 'text-main1' : 'text-disabledFont';
+
+  const truncateAnswer = (key: string, value: any) => {
+    if (key === 'birthYear') {
+      return `${value}년`;
+    } else if (key === 'admissionYear') {
+      return `${value}학번`;
+    } else if (key === 'wakeUpTime' || key === 'sleepingTime' || key === 'turnOffTime') {
+      const time = Number(value);
+      const period = time < 12 ? '오전' : '오후';
+      const formattedTime = time % 12 === 0 ? 12 : time % 12;
+      return `${period} ${String(formattedTime).padStart(2, '0')}시`;
+    } else if (key === 'airConditioningIntensity' || key === 'heatingIntensity') {
+      return IntensityItems[Number(value)];
+    } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
+      return SensitivityItems[Number(value) - 1];
+    } else {
+      return value;
+    }
+  };
 
   return (
     <Modal transparent={true} animationType="fade">
@@ -60,7 +89,7 @@ const LifeStyleModal: React.FC<LifeStyleModalProps> = ({
 
                 {Object.entries(user.memberStat).map(([key, value]) => (
                   <Text key={key} className="text-sm font-medium text-colorFont">
-                    {value !== null ? value : '-'}
+                    {value !== null ? truncateAnswer(key, value) : '-'}
                   </Text>
                 ))}
               </View>

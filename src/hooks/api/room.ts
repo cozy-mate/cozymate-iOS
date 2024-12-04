@@ -248,19 +248,20 @@ export const useAcceptInvited = (
   roomId: number,
   refetchData: () => void,
   refetchStatus: () => void,
+  roomName: string,
 ): UseMutationResult<AcceptRequestRoomResponse, unknown, boolean, unknown> => {
   const { setMyRoom } = useHasRoomStore();
 
   return useMutation({
     mutationFn: (accept: boolean) => acceptRequestRoom(roomId, accept),
-    onSuccess: () => {
-      // if (result === '참여 요청 수락 완료') {
-      //   showSuccessToast(`${nickname}님의 방 참여 요청을 수락했어요`);
-      // }
-      // if (result === '참여 요청 거절 완료') {
-      //   showRejectToast(`${nickname}님의 방 참여 요청을 거절했어요`);
-      // }
-      setMyRoom({ roomId: roomId, isRoomManager: false });
+    onSuccess: ({ result }) => {
+      if (result === '초대 요청 수락 완료') {
+        showSuccessToast(`${roomName}님의 방 초대 요청을 수락했어요`);
+        setMyRoom({ roomId: roomId, isRoomManager: false });
+      }
+      if (result === '초대 요청 거절 완료') {
+        showRejectToast(`${roomName}님의 방 초대 요청을 거절했어요`);
+      }
       refetchData();
       refetchStatus();
     },

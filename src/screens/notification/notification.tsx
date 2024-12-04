@@ -15,17 +15,15 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
     navigation.goBack();
   };
 
-  const toScreen = (category: string) => {
-    if (category === 'COZY_ROLE') {
-      navigation.navigate('MainScreen', { screen: 'RoleNRuleScreen' });
-    } else {
-      navigation.navigate('MainScreen');
-    }
-  };
-
   const filteredNotifications = notificationlist?.result.filter((noti) =>
     ['공지사항', '방', '초대요청', '방 참여요청'].includes(noti.category),
   );
+
+  const toScreen = (category: string, tragetId: number) => {
+    if (category === '초대요청') {
+      navigation.navigate('RoomDetailScreen', { roomId: tragetId });
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -41,7 +39,7 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
             {filteredNotifications.map((noti, index) => (
               <TouchableHighlight
                 key={index}
-                onPress={() => toScreen(noti.category)}
+                onPress={() => toScreen(noti.category, noti.targetId)}
                 underlayColor="#E5F0FF"
               >
                 <View

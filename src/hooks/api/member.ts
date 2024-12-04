@@ -140,7 +140,7 @@ export const useKakaoLogin = (
           console.log('로그인 에러', error);
         }
       } catch (error: any) {
-        console.error('Login error:', error.response.data.code);
+        console.error('Login error:', error);
       }
     },
   });
@@ -301,12 +301,27 @@ export const useUpdateBirthday = (): UseMutationResult<
 
 export const useWithdraw = (): UseMutationResult<WithdrawResponse> => {
   const { setLoggedIn } = useLoggedInStore();
+  const { clearMyRoom } = useHasRoomStore();
+  const { clearProfile } = useProfileStore();
+  const { setIsVerified } = useIsVerifiedStore();
+  const { clearPreferenceList } = usePreferencesStore();
+  const { clearRoomInfo } = useRoomInfoStore();
+  const { setHasLifeStyle } = useHasLifeStyleStore();
+  const { clearLifeStyle } = useLifeStyleStore();
 
   return useMutation({
     mutationFn: () => withdraw(),
     onSuccess: async () => {
       await deleteToken();
       await deleteFcmToken();
+
+      clearMyRoom();
+      clearProfile();
+      setIsVerified('');
+      clearPreferenceList();
+      clearRoomInfo();
+      setHasLifeStyle(false);
+      clearLifeStyle();
       setLoggedIn(false);
     },
   });
