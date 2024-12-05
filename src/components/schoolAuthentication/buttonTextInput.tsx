@@ -9,6 +9,7 @@ interface ButtonTextInputProps {
   buttonString: string;
   buttonFunc: () => void;
   pattern?: string;
+  isError?: boolean;
 }
 
 const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
@@ -19,6 +20,7 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
   buttonString,
   buttonFunc,
   pattern,
+  isError,
 }) => {
   const inputRef = React.useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -48,13 +50,13 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
     <Pressable
       onPress={handleFocus}
       className={`mb-4 box-border flex flex-row items-center justify-between rounded-xl border border-disabled bg-white px-5 py-4 ${
-        isActive ? 'border-sub1' : 'border-disabled'
+        isError ? 'mb-2 border-warning' : isActive ? 'border-sub1' : 'border-disabled'
       }`}
     >
       <View className="flex flex-col">
         <Text
           className={`text-xs font-semibold leading-[17px] tracking-tight ${
-            isFocused ? 'text-main1' : 'text-colorFont'
+            isError ? 'text-warning' : isFocused ? 'text-main1' : 'text-colorFont'
           }`}
         >
           {title}
@@ -64,7 +66,7 @@ const ButtonTextInput: React.FC<ButtonTextInputProps> = ({
           onBlur={handleBlur}
           value={value}
           onChangeText={setValue}
-          className="mt-1.5 pb-[3px] text-sm font-medium text-basicFont"
+          className="mt-1.5 pb-[3px] text-sm font-medium leading-4 text-basicFont"
         />
       </View>
 

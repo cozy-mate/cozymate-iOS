@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  TextInput,
-  ScrollView,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View, Text, Pressable, TextInput, ScrollView, SafeAreaView } from 'react-native';
 
 import BottomButton from '@components/common/bottomButton';
 
@@ -101,7 +94,7 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
         </View>
       ) : (
         <View className="flex-1 flex-col justify-between">
-          <KeyboardAvoidingView behavior="padding" className="flex-1">
+          <KeyboardAwareScrollView>
             <ScrollView bounces={false} className="flex-1" keyboardShouldPersistTaps="handled">
               <View>
                 <View className="mb-3 mt-2 flex flex-row justify-between px-5">
@@ -119,7 +112,7 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
                     value={content}
                     onChangeText={setContent}
                     multiline
-                    className="h-64 rounded-xl bg-colorBox p-4 text-basicFont"
+                    className="h-64 rounded-xl bg-colorBox p-4 leading-4 text-basicFont"
                     placeholder="내용을 입력해주세요"
                     placeholderTextColor="#ACADB4"
                   />
@@ -133,14 +126,14 @@ const InquiryScreen = ({ navigation, route }: InquiryScreenProps) => {
                   <TextInput
                     value={email}
                     onChangeText={setEmail}
-                    className="rounded-xl bg-colorBox p-4 text-basicFont"
+                    className="rounded-xl bg-colorBox p-4 leading-4 text-basicFont"
                     placeholder="이메일을 입력해주세요"
                     placeholderTextColor="#ACADB4"
                   />
                 </View>
               </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
 
           <View className="px-5">
             <BottomButton

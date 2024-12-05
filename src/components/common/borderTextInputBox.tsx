@@ -67,7 +67,7 @@ const BorderTextInputBox: React.FC<BorderTextInputBoxProps> = ({
             onChangeText={valueHandleChange}
             placeholder={placeholder}
             placeholderTextColor="#ACADB4"
-            className="text-sm font-medium leading-[17px] tracking-tight text-basicFont"
+            className="text-sm font-medium leading-4 tracking-tight text-basicFont"
           />
         </View>
       </View>

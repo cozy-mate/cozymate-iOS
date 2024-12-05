@@ -1,7 +1,6 @@
 import { Text, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { TextInput } from 'react-native-gesture-handler';
-import { View, ScrollView, SafeAreaView } from 'react-native';
+import { View, TextInput, ScrollView, SafeAreaView } from 'react-native';
 
 import { useSearchMemberByKeyword } from '@hooks/api/member-stat';
 
