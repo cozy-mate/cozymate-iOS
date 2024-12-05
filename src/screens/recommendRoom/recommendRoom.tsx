@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import RoomComponent from '@components/recommendRoom/roomComponent';
+import SortTypeBottomSheet from '@components/recommendRoom/sortTypeBottomSheet';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -41,6 +42,11 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
   const toRoomDetail = (roomId: number) => {
     navigation.navigate('RoomDetailScreen', { roomId: roomId });
+  };
+
+  const handleSortType = (type: string) => {
+    setSortType(type);
+    setIsSortTypeOpen(false);
   };
 
   return (
@@ -90,7 +96,7 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
             <DownArrow />
           </Pressable>
 
-          {isSortTypeOpen && (
+          {/* {isSortTypeOpen && (
             <View className="absolute right-4 top-6 z-50 flex flex-col items-center justify-center rounded-lg border border-[#EBEBEB] bg-white px-2 py-1">
               <Pressable
                 className="flex flex-row justify-end border-b border-b-[#F6f6f6] py-1.5"
@@ -124,7 +130,7 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
                 </Text>
               </Pressable>
             </View>
-          )}
+          )} */}
         </View>
 
         <View className="px-5">
@@ -145,6 +151,13 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
           </View>
         </View>
       </ScrollView>
+
+      <SortTypeBottomSheet
+        isVisible={isSortTypeOpen}
+        currentType={sortType}
+        setType={handleSortType}
+        closeModal={() => setIsSortTypeOpen(false)}
+      />
     </SafeAreaView>
   );
 };
