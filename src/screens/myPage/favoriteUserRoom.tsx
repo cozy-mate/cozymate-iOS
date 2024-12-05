@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import FavoriteUser from '@components/myPage/favoriteUser';
@@ -13,8 +14,8 @@ import BackButton from '@assets/backButton.svg';
 const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenProps) => {
   const { type } = route.params;
 
-  const { data: userList } = useGetFavoriteUserList();
-  const { data: roomList } = useGetFavoriteRoomList();
+  const { data: userList, refetch: refetchFavoriteUsers } = useGetFavoriteUserList();
+  const { data: roomList, refetch: refetchFavoriteRooms } = useGetFavoriteRoomList();
 
   const changeUserType = () => {
     navigation.navigate('FavoriteUserRoomScreen', { type: 'user' });
@@ -27,6 +28,13 @@ const FavoriteUserRoomScreen = ({ navigation, route }: FavoriteUserRoomScreenPro
   const toBack = () => {
     navigation.goBack();
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchFavoriteUsers();
+      refetchFavoriteRooms();
+    }, []),
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-white">
