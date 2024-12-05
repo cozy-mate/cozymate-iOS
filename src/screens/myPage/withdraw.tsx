@@ -72,7 +72,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
                 value={content}
                 onChangeText={setContent}
                 multiline
-                className="h-64 rounded-xl bg-colorBox p-4 leading-[21px] text-basicFont"
+                className="h-64 rounded-xl bg-colorBox p-4 leading-4 text-basicFont"
                 placeholder={`서비스 탈퇴 이유를 알려주신다면,\ncozymate가 더 나은 서비스가 되는 데에,\n큰 도움이 될 거에요.`}
                 placeholderTextColor="#ACADB4"
               />

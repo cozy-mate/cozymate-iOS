@@ -12,6 +12,7 @@ import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { CreatePublicRoomRequest, CreatePrivateRoomRequest } from '@server/requestTypes/room';
 import {
   exitRoom,
+  joinRoom,
   deleteRoom,
   getRoomData,
   checkHasRoom,
@@ -31,9 +32,11 @@ import {
   searchRoomByKeyword,
   acceptRequestMember,
   checkRequestedToJoin,
+  getRoomDataByInviteCode,
 } from '@server/api/room';
 import {
   ExitRoomResponse,
+  JoinRoomResponse,
   DeleteRoomResponse,
   GetRoomDataResponse,
   CheckInvitedReponse,
@@ -53,6 +56,7 @@ import {
   SearchRoomByKeywordResponse,
   AcceptRequestMemberResponse,
   CheckRequestedToJoinResponse,
+  GetRoomDataByInviteCodeResponse,
 } from '@server/responseTypes/room';
 
 import { showRejectToast, showSuccessToast } from '@utils/toast';
@@ -350,5 +354,23 @@ export const useAcceptRequestMember = (
       refetchData();
       refetchStatus();
     },
+  });
+};
+
+// 초대코드로 방 정보 조회
+export const useGetRoomDataByInviteCode = (): UseMutationResult<
+  GetRoomDataByInviteCodeResponse,
+  unknown,
+  string
+> => {
+  return useMutation({
+    mutationFn: (inviteCode: string) => getRoomDataByInviteCode(inviteCode),
+  });
+};
+
+// 방 입장
+export const useJoinRoom = (): UseMutationResult<JoinRoomResponse, unknown, number> => {
+  return useMutation({
+    mutationFn: (roomId: number) => joinRoom(roomId),
   });
 };

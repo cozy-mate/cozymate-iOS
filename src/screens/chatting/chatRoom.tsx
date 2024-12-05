@@ -1,11 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { Text, View, Modal, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import ReportModal from '@components/report/reportComponent';
-import ControlModal from '@components/chatting/controlModal';
-import WarningModal from '@components/chatting/warningModal';
-import CompleteModal from '@components/chatting/completeModal';
+import OneButtonModal from '@components/commonComponents/oneButtonModal';
+import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
 import { useGetChatDetailData } from '@hooks/api/chat';
 import { useDeleteChatRoom, useGetChatRoomList } from '@hooks/api/chat-room';
@@ -37,39 +36,6 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
 
-  const handleWarningModal = () => {
-    console.log('경고 모달 열림'); // Ensure the function is called
-    setIsWarningModalOpen(true); // Make sure this state change happens correctly
-  };
-
-  const handleReportModal = () => {
-    setIsControlModalOpen(false);
-    setIsReportModalOpen(true);
-  };
-
-  const handleControlModal = () => {
-    setIsControlModalOpen(!isControlModalOpen);
-  };
-
-  const controlItems: ControlItem[] = [
-    {
-      index: 1,
-      name: '삭제하기',
-      pressFunc: () => {
-        handleControlModal();
-        handleWarningModal();
-      },
-    },
-    {
-      index: 2,
-      name: '신고하기',
-      pressFunc: () => {
-        setIsControlModalOpen(false);
-        setIsReportModalOpen(true);
-      },
-    },
-  ];
-
   const deleteRoom = async (): Promise<void> => {
     try {
       await deleteChatRoom(chatRoomId);
@@ -78,11 +44,6 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
     } catch (error: any) {
       console.log(error.response.data);
     }
-  };
-
-  const close = () => {
-    setIsCompleteModalOpen(false);
-    navigation.goBack();
   };
 
   const toSend = () => {
@@ -96,6 +57,25 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
     navigation.goBack();
   };
 
+  const controlItems: ControlItem[] = [
+    {
+      index: 1,
+      name: '삭제하기',
+      pressFunc: () => {
+        setIsControlModalOpen(false);
+        setIsWarningModalOpen(true);
+      },
+    },
+    {
+      index: 2,
+      name: '신고하기',
+      pressFunc: () => {
+        setIsControlModalOpen(false);
+        setIsReportModalOpen(true);
+      },
+    },
+  ];
+
   return (
     <Fragment>
       <SafeAreaView className="flex-1 bg-white">
@@ -106,14 +86,33 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
               <BackButton />
             </Pressable>
 
-            <Pressable onPress={handleControlModal} className="relative">
+            <Pressable onPress={() => setIsControlModalOpen(true)} className="relative">
               <SettingIcon />
 
-              {isControlModalOpen && (
-                <View className="relative">
-                  <ControlModal items={controlItems} closeModal={handleControlModal} />
-                </View>
-              )}
+              <View className="relative">
+                <Modal transparent={true} visible={isControlModalOpen} animationType="fade">
+                  <View onTouchEnd={() => setIsControlModalOpen(false)} className="h-full w-full">
+                    <View
+                      onTouchEnd={(e) => e.stopPropagation()}
+                      className="absolute right-2 top-[90px] flex flex-col items-center rounded-lg border border-[#EBEBEB] bg-white px-2 py-1"
+                    >
+                      {controlItems.map((item) => (
+                        <Pressable
+                          key={item.index}
+                          onPress={() => item.pressFunc()}
+                          className={`border-b border-b-[#F6F6F6] ${
+                            item.index === controlItems.length && 'border-0'
+                          }`}
+                        >
+                          <Text className="py-1.5 text-[10px] font-medium tracking-tight text-basicFont">
+                            {item.name}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+                </Modal>
+              </View>
             </Pressable>
           </View>
 
@@ -162,23 +161,37 @@ const ChatRoomScreen = ({ navigation, route }: ChatRoomScreenProps) => {
         </Pressable>
       </SafeAreaView>
 
-      {isWarningModalOpen && (
-        <WarningModal
-          closeModal={handleWarningModal}
-          cancelFunc={handleWarningModal}
-          submitFunc={deleteRoom}
-        />
-      )}
+      <TwoButtonModal
+        isVisible={isWarningModalOpen}
+        title="쪽지를 삭제하시나요?"
+        subtitle={'삭제하면 해당 사용자와 나눴던\n모든 쪽지 내용이 사라져요'}
+        closeFunc={() => setIsWarningModalOpen(false)}
+        leftButtonText="취소"
+        leftButtonFunc={() => setIsWarningModalOpen(false)}
+        rightButtonText="삭제"
+        rightButtonFunc={deleteRoom}
+      />
 
-      {isCompleteModalOpen && <CompleteModal closeModal={close} submitFunc={close} />}
+      <OneButtonModal
+        isVisible={isCompleteModalOpen}
+        title="삭제가 완료되었습니다."
+        closeFunc={() => {
+          setIsCompleteModalOpen(false);
+          navigation.goBack();
+        }}
+        buttonText="확인"
+        buttonFunc={() => {
+          setIsCompleteModalOpen(false);
+          navigation.goBack();
+        }}
+      />
 
-      {isReportModalOpen && (
-        <ReportModal
-          memberId={chatlist.result.memberId}
-          source="CHAT"
-          closeModal={handleReportModal}
-        />
-      )}
+      <ReportModal
+        isVisible={isReportModalOpen}
+        memberId={chatlist.result.memberId}
+        source="CHAT"
+        closeModal={() => setIsReportModalOpen(false)}
+      />
     </Fragment>
   );
 };

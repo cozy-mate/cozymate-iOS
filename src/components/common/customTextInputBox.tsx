@@ -69,7 +69,7 @@ const CustomTextInputBox: React.FC<CustomTextInputBoxProps> = ({
           blurOnSubmit={false}
           className={`${
             isFocused ? 'border border-main1 bg-sub2' : 'border border-colorBox bg-colorBox'
-          } rounded-xl p-4 text-sm text-basicFont`}
+          } rounded-xl p-4 text-sm leading-4 text-basicFont`}
         />
       </Pressable>
     </View>

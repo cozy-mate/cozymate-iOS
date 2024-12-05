@@ -45,7 +45,11 @@ const FavoriteRoom: React.FC<FavoriteRoomProps> = ({ roomData, navigation }) => 
             {getRoomLifeStyleIcon(
               chip.preferenceName,
               chip.count === roomData.currentMateNum ? 'blue' : chip.count === 0 ? 'red' : 'white',
-              chip.count === roomData.currentMateNum ? '모두 일치' : `${chip.count}명 일치`,
+              chip.count === roomData.currentMateNum
+                ? '모두 일치'
+                : chip.count !== null
+                ? `${chip.count}명 일치`
+                : '??',
             )}
           </View>
         ))}

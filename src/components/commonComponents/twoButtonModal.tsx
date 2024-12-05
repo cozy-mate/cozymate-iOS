@@ -28,7 +28,10 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
         onTouchEnd={closeFunc}
         className="flex h-screen w-screen items-center justify-center bg-modalBack"
       >
-        <View className="min-w-[3/4] space-y-5 rounded-xl bg-white p-8">
+        <View
+          onTouchEnd={(e) => e.stopPropagation()}
+          className="min-w-[3/4] space-y-5 rounded-xl bg-white p-8"
+        >
           <View className={`flex flex-col ${subtitle ? 'space-y-1' : ''}`}>
             <Text className="text-center text-base font-semibold text-basicFont">{title}</Text>
             {subtitle && (

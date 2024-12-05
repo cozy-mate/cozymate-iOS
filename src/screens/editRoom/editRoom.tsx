@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   Text,
   View,
@@ -155,7 +156,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView className="flex flex-1 flex-col justify-between bg-white">
           <View className="flex flex-1 flex-col justify-between px-5">
-            <View>
+            <KeyboardAwareScrollView>
               {/* 상단 이전 버튼 */}
               <View className="mb-[33px] mt-2 flex flex-row items-center">
                 <Pressable onPress={toBack}>
@@ -224,7 +225,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
                   </View>
                 )}
               </View>
-            </View>
+            </KeyboardAwareScrollView>
 
             <View className="flex">
               <Pressable

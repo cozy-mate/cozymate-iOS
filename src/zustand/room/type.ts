@@ -51,32 +51,3 @@ export type RoomInfo = {
     white: LifestyleOptionKey[];
   };
 };
-
-export type InviteCodeRoomInfo = {
-  roomId: number;
-  name: string;
-  inviteCode: string;
-  persona: number;
-  mateDetailList: {
-    memberId: number;
-    mateId: number;
-    nickname: string;
-    persona: number;
-    mateEquality: number;
-  }[];
-  managerMemberId: number;
-  managerNickname: string;
-  isRoomManager: boolean;
-  favoriteId: number;
-  maxMateNum: number;
-  arrivalMateNum: number;
-  dormitoryName: string;
-  roomType: string;
-  hashtagList: string[];
-  equality: number;
-  difference: {
-    blue: LifestyleOptionKey[];
-    red: LifestyleOptionKey[];
-    white: LifestyleOptionKey[];
-  };
-};

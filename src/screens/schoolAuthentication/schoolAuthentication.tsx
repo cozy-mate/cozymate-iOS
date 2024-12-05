@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   Text,
   View,
   Keyboard,
-  Platform,
   Pressable,
   SafeAreaView,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
 
@@ -36,6 +35,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   const [authenticationCode, setAuthenticationCode] = useState<string>('');
 
   const [isSended, setIsSended] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const toReVerify = () => {
@@ -62,8 +62,10 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   const { mutateAsync: sendAuthenticationMail, isPending: sendMailPending } = useSendMail();
 
   // 인증번호 확인
-  const { mutateAsync: verifyAuthenticationCode, isPending: verifyMailPending } =
-    useVerifyMail(checkVerified);
+  const { mutateAsync: verifyAuthenticationCode, isPending: verifyMailPending } = useVerifyMail(
+    checkVerified,
+    setIsError,
+  );
 
   const handleMailSend = async (): Promise<void> => {
     await sendAuthenticationMail({
@@ -87,10 +89,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex flex-1 flex-col bg-white">
-        <KeyboardAvoidingView
-          behavior="padding"
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
-        >
+        <KeyboardAwareScrollView>
           <Pressable onPress={toBack} className="px-5">
             <BackButton />
           </Pressable>
@@ -166,14 +165,22 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
               />
 
               {isSended && (
-                <ButtonTextInput
-                  title="인증번호 확인"
-                  value={authenticationCode}
-                  setValue={setAuthenticationCode}
-                  placeholder="인증번호를 입력해주세요"
-                  buttonString="인증번호 확인"
-                  buttonFunc={handleVerifyCode}
-                />
+                <View>
+                  <ButtonTextInput
+                    title="인증번호 확인"
+                    value={authenticationCode}
+                    setValue={setAuthenticationCode}
+                    placeholder="인증번호를 입력해주세요"
+                    buttonString="인증번호 확인"
+                    buttonFunc={handleVerifyCode}
+                    isError={isError}
+                  />
+                  {isError && (
+                    <Text className="pl-2 text-xs font-medium text-warning">
+                      인증번호를 다시 확인해주세요!
+                    </Text>
+                  )}
+                </View>
               )}
 
               <OneButtonModal
@@ -187,7 +194,7 @@ const SchoolAuthenticationScreen = ({ navigation, route }: SchoolAuthenticationS
           )}
           {sendMailPending && <LoadingComponent />}
           {verifyMailPending && <LoadingComponent />}
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
