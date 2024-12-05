@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 
-import {
-  MyRoom,
-  RoomInfo,
-  InviteCodeRoomInfo,
-  CreatePublicRoomInfo,
-  CreatePrivateRoomInfo,
-} from './type';
+import { MyRoom, RoomInfo, CreatePublicRoomInfo, CreatePrivateRoomInfo } from './type';
 
 // 사용자의 방 존재 여부 및 방 아이디
 export const useHasRoomStore = create<{
@@ -155,43 +149,4 @@ export const useRoomInfoStore = create<{
         },
       },
     })),
-}));
-
-// 초대코드로 조회한 방 정보
-export const useInviteCodeRoomStore = create<{
-  inviteCodeRoomInfo: InviteCodeRoomInfo;
-  setInviteCodeRoomInfo: (info: InviteCodeRoomInfo) => void;
-}>((set) => ({
-  inviteCodeRoomInfo: {
-    roomId: 0,
-    name: '',
-    inviteCode: '',
-    persona: 0,
-    mateDetailList: [
-      {
-        memberId: 0,
-        mateId: 0,
-        nickname: '',
-        persona: 0,
-        mateEquality: 0,
-      },
-    ],
-    managerMemberId: 0,
-    managerNickname: '',
-    isRoomManager: false,
-    favoriteId: 0,
-    maxMateNum: 0,
-    arrivalMateNum: 0,
-    dormitoryName: '',
-    roomType: '',
-    hashtagList: [],
-    equality: 0,
-    difference: {
-      blue: [],
-      red: [],
-      white: [],
-    },
-  },
-  setInviteCodeRoomInfo: (newRoomInfo) =>
-    set((state) => ({ inviteCodeRoomInfo: { ...state.inviteCodeRoomInfo, ...newRoomInfo } })),
 }));

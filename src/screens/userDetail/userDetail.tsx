@@ -90,7 +90,11 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
   const { data: isInvited, refetch: refetchCheckRequestedToJoin } =
     useCheckRequestedToJoin(memberId);
-  const { mutateAsync: inviteMember } = useInviteMember(memberId, refetchCheckRequestedToJoin, lifeStyleData.result.memberDetail.nickname);
+  const { mutateAsync: inviteMember } = useInviteMember(
+    memberId,
+    refetchCheckRequestedToJoin,
+    lifeStyleData.result.memberDetail.nickname,
+  );
   const { mutateAsync: deleteInvite } = useDeleteInviteMember(
     memberId,
     refetchCheckRequestedToJoin,
@@ -101,9 +105,8 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
     memberId,
     refetchMemberStatData,
     refetchRoomRequest,
-    lifeStyleData.result.memberDetail.nickname
+    lifeStyleData.result.memberDetail.nickname,
   );
-
 
   return (
     <Fragment>
@@ -174,10 +177,11 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                       {type === 'list' ? <SelectedListIcon /> : <NotSelectedListIcon />}
                     </View>
                     <Text
-                      className={`ml-1.5 text-sm ${type === 'list'
-                        ? 'font-semibold text-main1'
-                        : 'font-medium text-disabledFont'
-                        }`}
+                      className={`ml-1.5 text-sm ${
+                        type === 'list'
+                          ? 'font-semibold text-main1'
+                          : 'font-medium text-disabledFont'
+                      }`}
                     >
                       리스트로 보기
                     </Text>
@@ -194,10 +198,11 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                       {type === 'table' ? <SelectedTableIcon /> : <NotSelectedTableIcon />}
                     </View>
                     <Text
-                      className={`ml-1.5 text-sm ${type === 'table'
-                        ? 'font-semibold text-main1'
-                        : 'font-medium text-disabledFont'
-                        }`}
+                      className={`ml-1.5 text-sm ${
+                        type === 'table'
+                          ? 'font-semibold text-main1'
+                          : 'font-medium text-disabledFont'
+                      }`}
                     >
                       표로 보기
                     </Text>
@@ -365,9 +370,12 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
         </View>
       </View>
 
-      {isReportModalOpen && (
-        <ReportModal memberId={memberId} source="MEMBER_STAT" closeModal={handleReportModal} />
-      )}
+      <ReportModal
+        isVisible={isReportModalOpen}
+        memberId={memberId}
+        source="MEMBER_STAT"
+        closeModal={handleReportModal}
+      />
     </Fragment>
   );
 };
