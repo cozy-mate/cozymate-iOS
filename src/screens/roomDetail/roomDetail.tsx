@@ -178,6 +178,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
     });
   };
 
+  const [isExitModalOpen, setIsExitModalOpen] = useState<boolean>(false);
+
   // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
@@ -277,7 +279,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                 <Pressable onPress={toChatRoom} className="py-[11px] pl-3.5 pr-2">
                   <MessageIcon />
                 </Pressable>
-                <Pressable onPress={exitRoom} className="p-2">
+                <Pressable onPress={() => setIsExitModalOpen(true)} className="p-2">
                   <ExitButton />
                 </Pressable>
               </View>
@@ -557,6 +559,16 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
             )}
         </View>
       </View>
+
+      <TwoButtonModal
+        isVisible={isExitModalOpen}
+        title={`정말 ${roomData.result.name}에서 나가시겠어요?`}
+        closeFunc={() => setIsExitModalOpen(false)}
+        leftButtonText="취소"
+        leftButtonFunc={() => setIsExitModalOpen(false)}
+        rightButtonText="확인"
+        rightButtonFunc={exitRoom}
+      />
 
       <TwoButtonModal
         isVisible={isNotVerifiedModalOpen}
