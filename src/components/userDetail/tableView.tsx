@@ -5,8 +5,19 @@ import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { TableViewProps } from '@type/userDetail/userDetail';
 
-const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModal }) => {
+const TableView: React.FC<TableViewProps> = ({
+  userData,
+  otherUserData,
+  openModal,
+  navigation,
+}) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
+
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen', {
+      returnToUser: otherUserData.memberDetail.memberId,
+    });
+  };
 
   const intensityMapping = [
     { index: 0, name: '안 틀어요' },
@@ -44,6 +55,8 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
     } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
       const sensitivity = sensitivityMapping.find((item) => item.index === value);
       return sensitivity ? sensitivity.name : value;
+    } else if (key === 'sleepingHabit' || key === 'personality') {
+      return value.join(', ');
     } else if (value === null) {
       return '-';
     }
@@ -92,53 +105,115 @@ const TableView: React.FC<TableViewProps> = ({ userData, otherUserData, openModa
     return (
       <View className="mb-[7px] mt-4 flex rounded-xl border border-[#f1f2f4] p-4">
         <View className="w-full">
-          {keys.map((key, index) =>
-            key in my && key in other ? (
-              <View
-                key={key}
-                className={`flex w-full flex-row items-center justify-between py-3 ${
-                  index === 0 ? 'pt-0' : ''
-                } ${index === keys.length - 1 ? 'border-b-0 pb-0' : 'border-b border-b-[#f1f2f4]'}`}
-              >
-                <Text className="flex items-center font-medium text-colorFont">{labels[key]}</Text>
-                <View className="flex w-[75%] flex-row items-center justify-center">
-                  <View className="w-1/2">
-                    {hasLifeStyle ? (
-                      <Text
-                        className={`text-center font-medium tracking-tight text-basicFont ${
-                          key !== 'nickname' &&
-                          my[key] !== other[key] &&
-                          (key === 'sleepingHabit' || key === 'personality'
-                            ? !areArraysEqual(my[key], other[key])
-                            : my[key] !== other[key]) &&
-                          (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
-                        }`}
-                      >
-                        {truncateString(formatValue(key, my[key]))}
-                      </Text>
-                    ) : (
-                      <View className="flex items-center justify-center"></View>
-                    )}
-                  </View>
+          {!hasLifeStyle &&
+            keys.map(
+              (key, index) =>
+                key in my &&
+                key in other && (
+                  <View
+                    key={key}
+                    className={`flex w-full flex-row items-center justify-between py-3 ${
+                      index === 0 ? 'pt-0' : ''
+                    } ${
+                      index === keys.length - 1 ? 'border-b-0 pb-0' : 'border-b border-b-[#f1f2f4]'
+                    }`}
+                  >
+                    <Text className="flex items-center font-medium text-colorFont">
+                      {labels[key]}
+                    </Text>
+                    <View className="flex w-[75%] flex-row items-center justify-center">
+                      <View className="w-1/2">
+                        {hasLifeStyle ? (
+                          <Text
+                            className={`text-center font-medium tracking-tight text-basicFont ${
+                              key !== 'nickname' &&
+                              my[key] !== other[key] &&
+                              (key === 'sleepingHabit' || key === 'personality'
+                                ? !areArraysEqual(my[key], other[key])
+                                : my[key] !== other[key]) &&
+                              'text-[#F7473B]'
+                            }`}
+                          >
+                            {truncateString(formatValue(key, my[key]))}
+                          </Text>
+                        ) : (
+                          <View className="flex items-center justify-center"></View>
+                        )}
+                      </View>
 
-                  <View className="w-1/2">
-                    <Text
-                      className={`text-center font-medium tracking-tight text-basicFont ${
-                        key !== 'nickname' &&
-                        my[key] !== other[key] &&
-                        (key === 'sleepingHabit' || key === 'personality'
-                          ? !areArraysEqual(my[key], other[key])
-                          : my[key] !== other[key]) &&
-                        (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
+                      <View className="w-1/2">
+                        <Text
+                          className={`text-center font-medium tracking-tight text-basicFont ${
+                            key !== 'nickname' &&
+                            my[key] !== other[key] &&
+                            (key === 'sleepingHabit' || key === 'personality'
+                              ? !areArraysEqual(my[key], other[key])
+                              : my[key] !== other[key]) &&
+                            'text-[#F7473B]'
+                          }`}
+                        >
+                          {truncateString(formatValue(key, other[key]))}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ),
+            )}
+
+          <View className="relative">
+            <View className="absolute left-[30%] z-50 flex h-full w-1/3 flex-col items-center justify-center rounded-xl bg-[#222222] opacity-80">
+              <Text className="text-center text-xs font-medium text-disabledFont">
+                라이프스타일을{'\n'}입력시,{'\n'}비교할 수 있어요
+              </Text>
+              <Pressable onPress={toLifeStyleOnboarding}>
+                <Text className="text-center text-sm font-semibold text-main1">
+                  라이프스타일{'\n'}입력하러가기
+                </Text>
+              </Pressable>
+            </View>
+
+            {hasLifeStyle &&
+              keys.map(
+                (key, index) =>
+                  key in my &&
+                  key in other && (
+                    <View
+                      key={key}
+                      className={`flex w-full flex-row items-center justify-between py-3 ${
+                        index === 0 ? 'pt-0' : ''
+                      } ${
+                        index === keys.length - 1
+                          ? 'border-b-0 pb-0'
+                          : 'border-b border-b-[#f1f2f4]'
                       }`}
                     >
-                      {truncateString(formatValue(key, other[key]))}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ) : null,
-          )}
+                      <Text className="flex items-center font-medium text-colorFont">
+                        {labels[key]}
+                      </Text>
+                      <View className=" flex w-[75%] flex-row items-center justify-center">
+                        <View className="w-1/2">
+                          <Text className="text-center font-medium tracking-tight text-basicFont" />
+                        </View>
+
+                        <View className="w-1/2">
+                          <Text
+                            className={`text-center font-medium tracking-tight text-basicFont ${
+                              key !== 'nickname' &&
+                              my[key] !== other[key] &&
+                              (key === 'sleepingHabit' || key === 'personality'
+                                ? !areArraysEqual(my[key], other[key])
+                                : my[key] !== other[key]) &&
+                              (hasLifeStyle ? 'text-[#F7473B]' : 'text-basicFont')
+                            }`}
+                          >
+                            {truncateString(formatValue(key, other[key]))}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  ),
+              )}
+          </View>
         </View>
       </View>
     );

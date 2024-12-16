@@ -26,7 +26,10 @@ interface RecommendRoomListProps {
     equality: number | undefined;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number | undefined>;
+    preferenceMatchCountList: {
+      preferenceName: string;
+      count: number;
+    }[];
   }[];
 }
 

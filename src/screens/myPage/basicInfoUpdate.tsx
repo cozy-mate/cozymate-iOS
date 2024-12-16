@@ -51,26 +51,30 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
   };
 
   const checkUserNickname = async (nickname: string) => {
-    if (nickname === profile.nickname) {
+    const trimmedNickname = nickname.trim();
+
+    if (trimmedNickname === profile.nickname || trimmedNickname === '') {
       setCheckDuplicate(true);
       return;
     }
 
-    if (nickname.trim() !== '') {
-      const response = await checkNickname(nickname);
-      setCheckDuplicate(response.result);
-      return;
-    }
+    const response = await checkNickname(trimmedNickname);
+    setCheckDuplicate(response.result);
   };
 
   useEffect(() => {
-    checkNicknameLength(nickname);
-    checkUserNickname(nickname);
+    const trimmedNickname = nickname.trim();
 
-    if (checkDuplicate) {
-      setCanUse(true);
+    if (trimmedNickname === '') {
+      setCheckDuplicate(false);
+      setCheckLength(false);
+      setCanUse(false);
+      return;
     }
-  }, [nickname, checkDuplicate]);
+
+    checkNicknameLength(trimmedNickname);
+    checkUserNickname(trimmedNickname);
+  }, [nickname]);
 
   const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
 
@@ -84,20 +88,18 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
       setProfile({
         nickname: nickname,
       });
-      toMyInfo();
     } else if (type === 'majorName') {
       changeMajorName(majorName);
       setProfile({
         majorName: majorName,
       });
-      toMyInfo();
     } else if (type === 'birthday') {
       changeBirthday(birthday);
       setProfile({
         birthday: birthday,
       });
-      toMyInfo();
     }
+    toMyInfo();
   };
 
   return (
@@ -154,7 +156,12 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
 
             <Pressable
               onPress={handleChangeProfile}
-              className="flex rounded-lg bg-main1 p-4 drop-shadow-buttonBack"
+              disabled={type === 'nickname' && !checkLength && !checkDuplicate && !canUse}
+              className={`flex rounded-lg  p-4 drop-shadow-buttonBack ${
+                type === 'nickname' && !checkLength && !checkDuplicate && !canUse
+                  ? 'bg-disabledFont'
+                  : 'bg-main1'
+              }`}
             >
               <Text className="text-center text-base font-semibold leading-5 text-white">확인</Text>
             </Pressable>

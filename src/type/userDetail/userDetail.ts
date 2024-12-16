@@ -1,3 +1,5 @@
+import { UserDetailScreenProps } from '@type/param/stack';
+
 export interface ListViewProps {
   memberDetail: {
     memberId: number;
@@ -54,19 +56,19 @@ export interface TableViewProps {
     };
     memberStatDetail: {
       admissionYear: string;
-      numOfRoommate: number;
+      numOfRoommate: number | undefined;
       dormitoryName: string;
       acceptance: string;
       wakeUpMeridian: string;
-      wakeUpTime: number;
+      wakeUpTime: number | undefined;
       sleepingMeridian: string;
-      sleepingTime: number;
+      sleepingTime: number | undefined;
       turnOffMeridian: string;
-      turnOffTime: number;
+      turnOffTime: number | undefined;
       smoking: string;
       sleepingHabit: string[];
-      airConditioningIntensity: number;
-      heatingIntensity: number;
+      airConditioningIntensity: number | undefined;
+      heatingIntensity: number | undefined;
       lifePattern: string;
       intimacy: string;
       canShare: string;
@@ -74,8 +76,8 @@ export interface TableViewProps {
       isPhoneCall: string;
       studying: string;
       intake: string;
-      cleanSensitivity: number;
-      noiseSensitivity: number;
+      cleanSensitivity: number | undefined;
+      noiseSensitivity: number | undefined;
       cleaningFrequency: string;
       drinkingFrequency: string;
       personality: string[];
@@ -125,4 +127,5 @@ export interface TableViewProps {
     };
   };
   openModal: () => void;
+  navigation: UserDetailScreenProps['navigation'];
 }

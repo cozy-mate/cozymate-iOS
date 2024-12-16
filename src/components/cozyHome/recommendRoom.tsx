@@ -11,7 +11,10 @@ interface RecommendRoomProps {
     equality: number | undefined;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number | undefined>;
+    preferenceMatchCountList: {
+      preferenceName: string;
+      count: number;
+    }[];
   };
   onLayout?: (event: LayoutChangeEvent) => void;
   pressFunc: (roomId: number) => void;
@@ -36,16 +39,20 @@ const RecommendRoom: React.FC<RecommendRoomProps> = ({ room, onLayout, pressFunc
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-4">
-        {room.equalMemberStatNum !== null &&
-          Object.entries(room.equalMemberStatNum).map(([key, value], index) => (
+        {room.preferenceMatchCountList !== null &&
+          room.preferenceMatchCountList.map((preference, index) => (
             <View key={index} className="flex w-[50px] flex-col items-center">
               {getRoomLifeStyleIcon(
-                key,
-                value === room.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                value === room.numOfArrival
+                preference.preferenceName,
+                preference.count === room.numOfArrival
+                  ? 'blue'
+                  : preference.count === 0
+                  ? 'red'
+                  : 'white',
+                preference.count === room.numOfArrival
                   ? '모두 일치'
-                  : value !== null
-                  ? `${value}명 일치`
+                  : preference.count !== null
+                  ? `${preference.count}명 일치`
                   : '??',
               )}
             </View>

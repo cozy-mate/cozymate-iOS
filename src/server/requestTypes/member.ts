@@ -1,3 +1,7 @@
+export interface WithdrawRequest {
+  withdrawReason: string;
+}
+
 export interface SignUpRequest {
   nickname: string;
   gender: string;

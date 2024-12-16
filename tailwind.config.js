@@ -12,6 +12,7 @@ module.exports = {
         modalBack: 'rgba(0, 0, 0, 0.5)',
         modalBack2: 'rgba(0, 0, 0, 0.9)',
         updateButtonBack: 'rgba(62, 62, 62, 0.4)',
+        lifeStyleButtonBack: 'rgba(34, 34, 34, 0.8)',
       },
       boxShadow: {
         chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',

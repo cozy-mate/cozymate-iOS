@@ -280,7 +280,7 @@ export const useTestLogin = (
   return useMutation({
     mutationFn: () =>
       signIn({
-        clientId: '',
+        clientId: '000961.f2bf80b2f03a48958ca16b9fd6cc6728.0826',
         socialType: 'APPLE',
       }),
     onSuccess: async (signInResponse: SignInResponse) => {
@@ -406,7 +406,7 @@ export const useUpdateBirthday = (): UseMutationResult<
   });
 };
 
-export const useWithdraw = (): UseMutationResult<WithdrawResponse> => {
+export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, string> => {
   const { setLoggedIn } = useLoggedInStore();
   const { clearMyRoom } = useHasRoomStore();
   const { clearProfile } = useProfileStore();
@@ -417,7 +417,7 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse> => {
   const { clearLifeStyle } = useLifeStyleStore();
 
   return useMutation({
-    mutationFn: () => withdraw(),
+    mutationFn: (withdrawReason: string) => withdraw({ withdrawReason }),
     onSuccess: async () => {
       await deleteToken();
       await deleteFcmToken();

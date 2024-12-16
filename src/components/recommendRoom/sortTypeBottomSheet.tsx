@@ -32,7 +32,13 @@ const SortTypeBottomSheet: React.FC<SortTypeBottomSheetProps> = ({
             }}
           >
             {currentType === 'LATEST' ? <ColorCheckIcon /> : <CheckIcon />}
-            <Text className="text-base font-medium text-basicFont">최신순</Text>
+            <Text
+              className={`text-sm  ${
+                currentType === 'LATEST' ? 'font-semibold text-main1' : 'font-medium text-basicFont'
+              }`}
+            >
+              최신순
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             className="flex flex-row items-center space-x-2 border-b border-b-[#F6f6f6] py-4"
@@ -41,7 +47,15 @@ const SortTypeBottomSheet: React.FC<SortTypeBottomSheetProps> = ({
             }}
           >
             {currentType === 'AVERAGE_RATE' ? <ColorCheckIcon /> : <CheckIcon />}
-            <Text className="text-base font-medium text-basicFont">평균일치율순</Text>
+            <Text
+              className={`text-sm  ${
+                currentType === 'AVERAGE_RATE'
+                  ? 'font-semibold text-main1'
+                  : 'font-medium text-basicFont'
+              }`}
+            >
+              평균일치율순
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             className="flex flex-row items-center space-x-2 py-4"
@@ -50,7 +64,15 @@ const SortTypeBottomSheet: React.FC<SortTypeBottomSheetProps> = ({
             }}
           >
             {currentType === 'CLOSING_SOON' ? <ColorCheckIcon /> : <CheckIcon />}
-            <Text className="text-base font-medium text-basicFont">마감임박순</Text>
+            <Text
+              className={`text-sm  ${
+                currentType === 'CLOSING_SOON'
+                  ? 'font-semibold text-main1'
+                  : 'font-medium text-basicFont'
+              }`}
+            >
+              마감임박순
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

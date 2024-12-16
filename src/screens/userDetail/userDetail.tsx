@@ -8,6 +8,7 @@ import TableView from '@components/userDetail/tableView';
 import BottomButton from '@components/common/bottomButton';
 import LoadingComponent from '@components/loading/loading';
 import ReportModal from '@components/report/reportComponent';
+import TableViewModal from '@components/userDetail/tableViewModal';
 
 import { useHasRoomStore } from '@zustand/room/room';
 import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
@@ -108,6 +109,14 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
     lifeStyleData.result.memberDetail.nickname,
   );
 
+  const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
+
+  const toLifeStyleOnboarding = () => {
+    navigation.navigate('LifeStyleOnboardingScreen', {
+      returnToUser: lifeStyleData.result.memberDetail.memberId,
+    });
+  };
+
   return (
     <Fragment>
       <View className="flex-1 bg-white">
@@ -191,7 +200,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
                   {/* 표로 보기 */}
                   <Pressable
-                    onPress={handleTable}
+                    onPress={hasLifeStyle ? handleTable : () => setIsLifeStyleModalOpen(true)}
                     className="flex flex-row items-center justify-center p-4"
                   >
                     <View className="flex">
@@ -223,6 +232,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                     userData={lifeStyle}
                     otherUserData={lifeStyleData.result}
                     openModal={handleReportModal}
+                    navigation={navigation}
                   />
                 )}
               </ScrollView>
@@ -369,6 +379,13 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
           )}
         </View>
       </View>
+
+      <TableViewModal
+        isVisible={isLifeStyleModalOpen}
+        closeFunc={() => setIsLifeStyleModalOpen(false)}
+        buttonText="라이프스타일 입력하러가기"
+        buttonFunc={toLifeStyleOnboarding}
+      />
 
       <ReportModal
         isVisible={isReportModalOpen}

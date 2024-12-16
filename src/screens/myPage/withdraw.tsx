@@ -98,7 +98,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
             textColor="text-white"
             text="탈퇴하기"
             disabled={!isChecked}
-            onPressFunc={mutateWithdraw}
+            onPressFunc={() => mutateWithdraw(content)}
           />
         </View>
       </View>

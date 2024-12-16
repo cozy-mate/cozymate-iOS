@@ -31,9 +31,10 @@ export const PatchAxiosInstance = async <T>(
 
 export const DeleteAxiosInstance = async <T>(
   url: string,
+  data?: any,
   config?: AxiosRequestConfig,
 ): Promise<AxiosResponse> => {
-  const response = await axiosInstance.delete(url, config);
+  const response = await axiosInstance.delete(url, data, config);
   return response;
 };
 
