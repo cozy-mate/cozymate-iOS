@@ -34,6 +34,8 @@ interface FavoriteUserProps {
 const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
+  console.log(userData.memberStatPreferenceDetail.preferenceStats);
+
   return (
     <Pressable
       onPress={() =>
@@ -59,7 +61,11 @@ const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => 
       <View className="flex flex-row items-center justify-between px-2 pt-3">
         {userData.memberStatPreferenceDetail.preferenceStats.map((preference, index) => (
           <View key={index} className="flex w-[60px] flex-col items-center">
-            {getRoommateLifeStyleIcon(preference.stat, preference.color, preference.value)}
+            {getRoommateLifeStyleIcon(
+              preference.stat,
+              preference.color !== null ? preference.color : 'white',
+              preference.value,
+            )}
           </View>
         ))}
       </View>

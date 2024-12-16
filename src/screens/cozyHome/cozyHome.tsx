@@ -84,7 +84,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
     refetchRandomRoomList();
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000); // 예시로 2초 후 새로고침 완료
+    }, 2000);
   }, []);
 
   // 쪽지

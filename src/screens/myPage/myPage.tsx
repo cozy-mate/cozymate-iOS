@@ -1,7 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import React, { Fragment, Suspense, useState } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import LogoutModal from '@components/myPage/logoutModal';
+import LoadingComponent from '@components/loading/loading';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
@@ -24,7 +26,7 @@ import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
 
-const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
+const MyPage = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   // 로그인 상태
@@ -218,6 +220,22 @@ const MyPageScreen = ({ navigation }: MyPageScreenProps) => {
         )}
       </ScrollView>
     </View>
+  );
+};
+
+const MyPageScreen = ({ navigation, route }: MyPageScreenProps) => {
+  return (
+    <ErrorBoundary
+      fallback={
+        <View className="h-full w-full flex-1 items-center justify-center">
+          <Text>Error loading CozyHome</Text>
+        </View>
+      }
+    >
+      <Suspense fallback={<LoadingComponent />}>
+        <MyPage navigation={navigation} route={route} />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

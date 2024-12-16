@@ -62,6 +62,8 @@ const ListView: React.FC<ListViewProps> = ({ memberDetail, memberStatDetail, ope
     } else if (key === 'cleanSensitivity' || key === 'noiseSensitivity') {
       const sensitivity = sensitivityMapping.find((item) => item.index === value);
       return sensitivity ? sensitivity.name : value;
+    } else if (key === 'sleepingHabit' || key === 'personality') {
+      return value.join(', ');
     } else if (value === null) {
       return '-';
     }

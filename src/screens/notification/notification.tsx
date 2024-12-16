@@ -22,6 +22,10 @@ const NotificationScreen = ({ navigation }: NotificationScreenProps) => {
   const toScreen = (category: string, tragetId: number) => {
     if (category === '초대요청') {
       navigation.navigate('RoomDetailScreen', { roomId: tragetId });
+    } else if (category === '방 참여요청') {
+      navigation.navigate('UserDetailScreen', { memberId: tragetId });
+    } else if (category === '방') {
+      navigation.navigate('MainScreen', { screen: 'RoomMainScreen' });
     }
   };
 

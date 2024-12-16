@@ -8,7 +8,6 @@ export const useGetRoomLog = (roomId: number) => {
     queryKey: [`/roomlog/${roomId}`, roomId],
     queryFn: async ({ pageParam }) => {
       const response = await getRoomLog(roomId, pageParam);
-      console.log(response);
       return response;
     },
     initialPageParam: 0,

@@ -77,8 +77,6 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
 
   const { data: tododata, refetch: refetchTodoData } = useGetTodoData(roomInfo.roomId, timePoint);
 
-  console.log(tododata.result.myTodoList);
-
   const { mutateAsync: changeTodoMutate } = useChangeTodo(roomInfo.roomId, refetchTodoData);
 
   const changeTodo = async (todo: TodoItem): Promise<void> => {

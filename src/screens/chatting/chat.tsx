@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import { useGetChatRoomList } from '@hooks/api/chat-room';
 
@@ -31,26 +31,28 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
         </View>
 
         {chatroomlist.result.length > 0 ? (
-          chatroomlist.result.map((room, index) => (
-            <Pressable key={index} onPress={() => toChatRoom(room.chatRoomId)}>
-              <View
-                className={`flex flex-row items-center justify-between border-b border-b-colorBox py-5 ${
-                  index === 0 && 'pt-3'
-                } ${index === chatroomlist.result.length - 1 && 'border-b-0'}`}
-              >
-                <View className="flex flex-col">
-                  <View className="mb-3 flex flex-row items-center">
-                    {getProfileImage(room.persona, 24, 24)}
-                    <Text className="ml-1.5 text-sm font-medium text-colorFont">
-                      {room.nickname}
-                    </Text>
+          <ScrollView>
+            {chatroomlist.result.map((room, index) => (
+              <Pressable key={index} onPress={() => toChatRoom(room.chatRoomId)}>
+                <View
+                  className={`flex flex-row items-center justify-between border-b border-b-colorBox py-5 ${
+                    index === 0 && 'pt-3'
+                  } ${index === chatroomlist.result.length - 1 && 'border-b-0'}`}
+                >
+                  <View className="flex flex-col">
+                    <View className="mb-3 flex flex-row items-center">
+                      {getProfileImage(room.persona, 24, 24)}
+                      <Text className="ml-1.5 text-sm font-medium text-colorFont">
+                        {room.nickname}
+                      </Text>
+                    </View>
+                    <Text className="text-sm font-medium text-basicFont">{room.lastContent}</Text>
                   </View>
-                  <Text className="text-sm font-medium text-basicFont">{room.lastContent}</Text>
+                  <RightArrow />
                 </View>
-                <RightArrow />
-              </View>
-            </Pressable>
-          ))
+              </Pressable>
+            ))}
+          </ScrollView>
         ) : (
           <View className="flex flex-1 flex-col items-center justify-center">
             <Text className="text-sm font-medium text-disabledFont">

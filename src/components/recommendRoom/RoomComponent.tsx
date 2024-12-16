@@ -13,7 +13,10 @@ interface RoomComponentProps {
     equality: number | undefined;
     numOfArrival: number;
     maxMateNum: number;
-    equalMemberStatNum: Record<string, number | undefined>;
+    preferenceMatchCountList: {
+      preferenceName: string;
+      count: number;
+    }[];
   };
   pressFunc: (roomId: number) => void;
 }
@@ -34,16 +37,20 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, pressFunc }) =>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-3">
-        {roomData.equalMemberStatNum !== null &&
-          Object.entries(roomData.equalMemberStatNum).map(([key, value], index) => (
+        {roomData.preferenceMatchCountList !== null &&
+          roomData.preferenceMatchCountList.map((preference, index) => (
             <View key={index} className="flex w-[60px] flex-col items-center">
               {getRoomLifeStyleIcon(
-                key,
-                value === roomData.numOfArrival ? 'blue' : value === 0 ? 'red' : 'white',
-                value === roomData.numOfArrival
+                preference.preferenceName,
+                preference.count === roomData.numOfArrival
+                  ? 'blue'
+                  : preference.count === 0
+                  ? 'red'
+                  : 'white',
+                preference.count === roomData.numOfArrival
                   ? '모두 일치'
-                  : value !== null
-                  ? `${value}명 일치`
+                  : preference.count !== null
+                  ? `${preference.count}명 일치`
                   : '??',
               )}
             </View>

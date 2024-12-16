@@ -1,7 +1,12 @@
 import { GuestPostAxiosInstance } from '@axios/guest.axios.method';
 import { GetAxiosInstance, PostAxiosInstance, DeleteAxiosInstance } from '@axios/axios.method';
 
-import { SignInRequest, SignUpRequest, TestSignUpRequest } from '@server/requestTypes/member';
+import {
+  SignInRequest,
+  SignUpRequest,
+  WithdrawRequest,
+  TestSignUpRequest,
+} from '@server/requestTypes/member';
 import {
   SignInResponse,
   SignUpResponse,
@@ -16,8 +21,8 @@ import {
 } from '@server/responseTypes/member';
 
 // 회원 탈퇴
-export const withdraw = async (): Promise<WithdrawResponse> => {
-  const response = await DeleteAxiosInstance<WithdrawResponse>(`/members/withdraw`);
+export const withdraw = async (data?: WithdrawRequest): Promise<WithdrawResponse> => {
+  const response = await DeleteAxiosInstance<WithdrawResponse>(`/members/withdraw`, data);
 
   return response.data;
 };

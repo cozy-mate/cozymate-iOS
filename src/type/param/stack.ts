@@ -83,10 +83,9 @@ export type StackParamList = {
 
 export type TabNavigatorParamList = {
   CozyHomeScreen: undefined;
-  RoomMainScreen: undefined;
   RoleNRuleScreen: undefined;
   // FeedMainScreen: undefined;
-  RoomMateScreen: undefined;
+  RoomMainScreen: undefined;
   MyPageScreen: undefined;
 };
 

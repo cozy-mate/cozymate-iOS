@@ -14,7 +14,7 @@ import {
 import LoadingComponent from '@components/commonComponents/loading';
 
 import useFcm from '@hooks/useFcm';
-import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
+import { useTestLogin, useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -34,6 +34,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
   const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
+  const { mutateAsync: testLogin, isPending: testLoginPending } = useTestLogin(navigation);
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<FlatList>(null);
@@ -79,7 +80,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {(kakaoLoginPending || appleLoginPending) && <LoadingComponent />}
+      {(kakaoLoginPending || appleLoginPending || testLoginPending) && <LoadingComponent />}
 
       <View className="flex flex-1 flex-col justify-between">
         <FlatList
@@ -126,6 +127,14 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           <Pressable
             className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
             onPress={() => appleLogin()}
+          >
+            <AppleLogo className="mr-4" />
+            <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
+          </Pressable>
+
+          <Pressable
+            className="flex-row items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
+            onPress={() => testLogin()}
           >
             <AppleLogo className="mr-4" />
             <Text className="text-center text-base font-semibold text-white">Apple로 계속하기</Text>
