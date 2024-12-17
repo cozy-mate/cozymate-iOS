@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AppInner from './AppInner';
+import { linking } from '@config/deepLinkConfig';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ function App(): React.JSX.Element {
         onStateChange={() => {
           Toast.hide();
         }}
+        linking={linking}
       >
         <QueryClientProvider client={queryClient}>
           <AppInner />

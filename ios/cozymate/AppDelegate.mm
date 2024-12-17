@@ -31,6 +31,8 @@
     return [RNKakaoLogins handleOpenUrl: url];
  }
 
+  return [RCTLinkingManager application:app openURL:url options:options];
+
  return NO;
 }
 
