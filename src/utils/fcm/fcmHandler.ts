@@ -1,4 +1,6 @@
 import notifee, { EventType } from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import messaging from '@react-native-firebase/messaging';
 
 /**
@@ -24,32 +26,32 @@ export async function displayNotification(remoteMessage : any) {
  * @param {Object} remoteMessage - The Firebase Cloud Message
  */
 export async function handleBackgroundMessage(remoteMessage : any) {
-  console.log('[Background Message]', remoteMessage);
-  await displayNotification(remoteMessage);
+  // console.log('[Background Message]', remoteMessage);
+  // await displayNotification(remoteMessage);
+  AsyncStorage.setItem('remoteMessage', JSON.stringify(remoteMessage));
 }
 
-/**
- * Notifee background event handler
- * @param {Object} event - The Notifee background event
- */
-export async function handleBackgroundEvent({ type , detail }:any) {
-  const { notification, pressAction } = detail;
+// /**
+//  * Notifee background event handler
+//  * @param {Object} event - The Notifee background event
+//  */
+// export async function handleBackgroundEvent({ type , detail }:any) {
+//   const { notification, pressAction } = detail;
 
-  console.log('Notification clicked in background');
+//   console.log('Notification clicked in background');
 
-  if (type === EventType.ACTION_PRESS && pressAction.id === 'default') {
-    // console.log('Notification clicked in background');
-  }
+//   if (type === EventType.ACTION_PRESS && pressAction.id === 'default') {
+//     // console.log('Notification clicked in background');
+//   }
 
-  if (notification?.id) {
-    await notifee.cancelNotification(notification.id);
-  }
-}
+//   if (notification?.id) {
+//     await notifee.cancelNotification(notification.id);
+//   }
+// }
 
 /**
  * Register background handlers for Firebase and Notifee
  */
 export function registerFcmHandlers() {
   messaging().setBackgroundMessageHandler(handleBackgroundMessage);
-  notifee.onBackgroundEvent(handleBackgroundEvent);
 }

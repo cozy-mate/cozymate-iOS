@@ -6,7 +6,7 @@ import { useLoggedInStore } from '@zustand/member/member';
 
 import { postFcmToken } from '@server/api/fcm';
 
-import { deleteFcmToken, getFcmToken, hasFcmToken, setFcmToken } from '@utils/fcm/fcmTokenUtil';
+import { deleteFcmToken, hasFcmToken, setFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 // 전역 상태 X
 //const processedMessageIds = new Set();
@@ -102,7 +102,7 @@ const useFcm = () => {
     try {
       //console.log('FCM 초기화 시작');
       await requestUserPermission();
-      foregroundNotificationListener();
+      //foregroundNotificationListener();
       //console.log('FCM 초기화 완료');
     } catch (error: any) {
       //console.error('FCM 초기화 중 오류:', error.message || error);
