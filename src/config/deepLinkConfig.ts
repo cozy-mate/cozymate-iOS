@@ -1,7 +1,7 @@
 import { Linking } from 'react-native';
 
 export const linking = {
-  prefixes: ['cozymate://'], // Deep link prefixes
+  prefixes: ['cozymate://'],
   config: {
     screens: {
       MainScreen: {
@@ -13,12 +13,9 @@ export const linking = {
           MyPageScreen: 'mypage',
         },
       },
-      CozyHomeScreen: 'cozyHome',
-      RoomMainScreen: 'roomMain',
       RoomDetailScreen: 'room/:roomId',
       RecommendRoomScreen: 'recommendRoom',
       RoomSearchScreen: 'roomSearch',
-      RoleNRuleScreen: 'roleNRule',
       CreateRoleNRuleScreen: 'createRoleNRule/:type',
       EditRoleNRuleScreen: 'editRoleNRule/:type/:id',
       LifeStyleOnboardingScreen: 'lifestyleOnboarding',
@@ -43,7 +40,6 @@ export const linking = {
       ChatRoomScreen: 'chatRoom/:chatRoomId',
       SendChatScreen: 'sendChat/:memberId/:chatRoomId',
       NotificationScreen: 'notification',
-      UserSearchScreen: 'userSearch',
     },
   },
   async getInitialURL() {

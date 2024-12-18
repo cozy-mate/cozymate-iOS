@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Linking, TouchableOpacityProps } from 'react-native';
+import { TouchableOpacityProps } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TouchableOpacity, GestureResponderEvent } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,12 +19,10 @@ import RoleNRuleScreen from './roleNrule/roleNrule';
 
 import { useHasRoomStore } from '@zustand/room/room';
 
-import useFcm from '@hooks/useFcm';
 import { useIsOldiPhone } from '@hooks/device';
 
 import { TabNavigatorParamList } from '@type/param/stack';
-import notifee, { EventType } from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
+import { useInitFcm } from '@hooks/fcm';
 
 const options = {
   enableVibrateFallback: true,
@@ -80,53 +78,7 @@ const MainScreen = () => {
 
   const isOldiPhone = useIsOldiPhone();
 
-  const { initFcm } = useFcm();
-
-  useEffect(() => {
-    initFcm();
-  }, []);
-
-  useEffect(() => {
-    notifee.onForegroundEvent(async ({ type, detail }) => {
-      console.log(detail)
-      if (type === EventType.PRESS) {
-        // {
-        //   notification:
-        //   {
-        //     body: '포비님, 12월 Best, Worst 코지메이트를 선정해주세요!',
-        //       remote: false,
-        //         title: 'cozymate',
-        //           id: 'XtMlhBOohlaCRx2BGaNa',
-        //             data:
-        //     {
-        //       body: '포비님, 12월 Best, Worst 코지메이트를 선정해주세요!',
-        //         actionType: 'SELECT_COZY_MATE',
-        //           title: 'cozymate'
-        //     },
-        //     ios:
-        //     {
-        //       foregroundPresentationOptions: { banner: true, badge: true, alert: true, list: true, sound: true },
-        //       sound: 'default'
-        //     }
-        //   }
-        // }
-        Linking.openURL('cozymate://main/role')
-      } else if (type === EventType.DISMISSED) {
-        console.log('dismissedForeground');
-      }
-    });
-
-
-    notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log(detail)
-      if (type === EventType.PRESS) {
-        Linking.openURL('cozymate://main/role');
-      } else if (type === EventType.DISMISSED) {
-        console.log('dismissedBackground');
-      }
-    });
-  }, []);
-
+  useInitFcm();
 
   return (
     <Tab.Navigator

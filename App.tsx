@@ -7,8 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AppInner from './AppInner';
 import { linking } from '@config/deepLinkConfig';
-import messaging from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,22 +21,6 @@ function App(): React.JSX.Element {
     SplashScreen.hide();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      notifee.displayNotification({
-        title: typeof remoteMessage?.notification?.title === 'string' ? remoteMessage.notification.title : '알림',
-        body: typeof remoteMessage?.notification?.body === 'string' ? remoteMessage.notification.body : '새로운 메시지가 도착했습니다.',
-        ios: {
-          sound: 'default',
-        },
-        data: remoteMessage?.data,
-
-      });
-    });
-
-    return unsubscribe;
-  }, []);
 
 
   return (
