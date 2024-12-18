@@ -280,7 +280,7 @@ export const useTestLogin = (
   return useMutation({
     mutationFn: () =>
       signIn({
-        clientId: '000961.f2bf80b2f03a48958ca16b9fd6cc6728.0826',
+        clientId: '',
         socialType: 'APPLE',
       }),
     onSuccess: async (signInResponse: SignInResponse) => {
