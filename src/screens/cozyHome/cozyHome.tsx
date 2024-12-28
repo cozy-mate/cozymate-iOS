@@ -155,7 +155,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
   );
 
   return (
-    <View className="flex-1 bg-sub1">
+    <View className="flex-1 bg-white">
       <SafeAreaView
         style={{
           backgroundColor: scrollY <= height ? '#CADFFF' : 'white',
@@ -164,11 +164,16 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        // bounces={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            style={{ backgroundColor: '#CADFFF' }}
+          />
+        }
       >
-        <View className="bg-white">
-          <View className="flex bg-sub1 pt-[18px]" onLayout={handleLayout}>
+        <View className="bg-sub1">
+          <View className="flex pt-[18px]" onLayout={handleLayout}>
             <HomeBack width={width} style={{ position: 'absolute' }} />
             <View style={{ position: 'relative', zIndex: 100 }}>
               <View className="mb-3 flex flex-row items-center justify-between px-5">
