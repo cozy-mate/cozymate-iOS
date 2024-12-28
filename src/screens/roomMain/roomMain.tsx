@@ -105,7 +105,7 @@ const RoomMain = ({ navigation }: RoomMainScreenProps) => {
           {roomLogs?.pages?.flatMap((page) =>
             page.result.result.map((data, index) => (
               <View
-                key={index}
+                key={`${page.result.page}-${index}`}
                 className={`border-b border-b-[#F2F1FA] px-1 py-5 ${
                   index === page.result.result.length - 1 && 'border-b-0'
                 }`}
