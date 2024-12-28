@@ -13,24 +13,18 @@ import {
 
 import LoadingComponent from '@components/commonComponents/loading';
 
-import useFcm from '@hooks/useFcm';
 import { useTestLogin, useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
+import { useResetFcmToken } from '@hooks/fcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const width = Dimensions.get('screen').width;
 
-  const { getDeviceId, resetFcmToken } = useFcm();
-
-  useEffect(() => {
-    // 같은 디바이스면 같은 값을 내는 순수 함수
-    getDeviceId();
-    resetFcmToken();
-  }, [getDeviceId, resetFcmToken]);
+  useResetFcmToken();
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
   const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
@@ -108,9 +102,8 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           {items.map((_, index) => (
             <View
               key={index}
-              className={`${
-                index === currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-              } h-2 rounded-full`}
+              className={`${index === currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+                } h-2 rounded-full`}
             />
           ))}
         </View>
