@@ -1,6 +1,5 @@
-import { Text, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { TextInput } from 'react-native-gesture-handler';
+import { Text, Pressable, TextInput } from 'react-native';
 import { View, ScrollView, SafeAreaView } from 'react-native';
 
 import { useSearchRoomByKeyword } from '@hooks/api/room';
