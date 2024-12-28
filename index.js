@@ -8,22 +8,27 @@ import { AppRegistry } from 'react-native';
 
 import App from './App';
 import { name as appName } from './app.json';
-
-import { registerFcmHandlers } from '@utils/fcm/fcmHandler';
+import messaging from '@react-native-firebase/messaging';
+import { onMessageReceivedBackground } from '@utils/fcm/fcmHandler';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
 
-registerFcmHandlers();
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+    onMessageReceivedBackground(remoteMessage)});
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
-    // App has been launched in the background by iOS, ignore
-    return null;
+    <AppFake />;
   }
-
-  // Render the app component on foreground launch
-  return <App />;
+  
+  return (
+    <App />
+  );
 }
+
+const AppFake = () => {
+    return null;
+};
 
 AppRegistry.registerComponent(appName, () => HeadlessCheck);

@@ -13,7 +13,6 @@ import {
   useHasLifeStyleStore,
 } from '@zustand/member-stat/member-stat';
 
-import useFcm from '@hooks/useFcm';
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
 
 import { deleteToken } from '@utils/token';
@@ -25,6 +24,7 @@ import HomeIcon from '@assets/myPage/home.svg';
 import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
 import CertificationIcon from '@assets/myPage/certification.svg';
+import { deactivateFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 const MyPage = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
@@ -38,8 +38,6 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
   const { roomInfo, clearRoomInfo } = useRoomInfoStore();
   const { hasLifeStyle, setHasLifeStyle } = useHasLifeStyleStore();
   const { clearLifeStyle } = useLifeStyleStore();
-
-  const { deactivateFcmToken } = useFcm();
 
   const { data: hasInquiry } = useCheckHasInquiry();
 

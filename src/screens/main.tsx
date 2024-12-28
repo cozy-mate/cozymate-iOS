@@ -19,10 +19,10 @@ import RoleNRuleScreen from './roleNrule/roleNrule';
 
 import { useHasRoomStore } from '@zustand/room/room';
 
-import useFcm from '@hooks/useFcm';
 import { useIsOldiPhone } from '@hooks/device';
 
 import { TabNavigatorParamList } from '@type/param/stack';
+import { useInitFcm } from '@hooks/fcm';
 
 const options = {
   enableVibrateFallback: true,
@@ -78,11 +78,7 @@ const MainScreen = () => {
 
   const isOldiPhone = useIsOldiPhone();
 
-  const { initFcm } = useFcm();
-
-  useEffect(() => {
-    initFcm();
-  }, []);
+  useInitFcm();
 
   return (
     <Tab.Navigator
