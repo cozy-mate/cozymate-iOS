@@ -281,7 +281,7 @@ export const useTestLogin = (
     mutationFn: () =>
       signIn({
         clientId: '',
-        socialType: 'APPLE',
+        socialType: '',
       }),
     onSuccess: async (signInResponse: SignInResponse) => {
       try {
