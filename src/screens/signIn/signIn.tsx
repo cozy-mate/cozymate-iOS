@@ -13,18 +13,13 @@ import {
 
 import LoadingComponent from '@components/commonComponents/loading';
 
-<<<<<<< HEAD
-import useFcm from '@hooks/useFcm';
+import { useResetFcmToken } from '@hooks/fcm';
 import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
-=======
-import { useTestLogin, useAppleLogin, useKakaoLogin } from '@hooks/api/member';
->>>>>>> 27abfadf8d7769d9c4273e7ef1406740e8c50768
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
 import KakaoLogo from '@assets/signIn/kakaoLogo.svg';
 import AppleLogo from '@assets/signIn/appleLogo.svg';
-import { useResetFcmToken } from '@hooks/fcm';
 
 const SignInScreen = ({ navigation }: SignInScreenProps) => {
   const width = Dimensions.get('screen').width;
@@ -106,8 +101,9 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
           {items.map((_, index) => (
             <View
               key={index}
-              className={`${index === currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
-                } h-2 rounded-full`}
+              className={`${
+                index === currentIndex ? 'w-4 bg-main1' : 'w-2 bg-disabled'
+              } h-2 rounded-full`}
             />
           ))}
         </View>
