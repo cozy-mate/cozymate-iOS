@@ -46,14 +46,14 @@ import SchoolAuthenticationScreen from 'src/screens/schoolAuthentication/schoolA
 
 import { useLoggedInStore } from '@zustand/member/member';
 
+import { useFcmMessage } from '@hooks/fcm';
 import { useAutoLogin } from '@hooks/autoLogin';
+import { useNotifee, useDeleteAllNotifee } from '@hooks/notifee';
 
 import { StackParamList } from '@type/param/stack';
 import { RootStackParamList } from '@type/param/rootStack';
 
 import { toastConfig } from '@config/toastConfig';
-import { useDeleteAllNotifee, useNotifee } from '@hooks/notifee';
-import { useFcmMessage } from '@hooks/fcm';
 
 const rootStack = createNativeStackNavigator<RootStackParamList>();
 const stack = createNativeStackNavigator<StackParamList>();
@@ -68,7 +68,6 @@ function AppInner() {
   useNotifee(appLoaded);
 
   if (!appLoaded) {
-
     return (
       <Animated.View className="flex-1">
         <LottieView

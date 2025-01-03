@@ -195,7 +195,7 @@ export const useAppleLogin = (
         // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
         await setAccessToken(accessToken);
 
-        if (signInResponse.result.tokenResponseDTO.refreshToken === null) {
+        if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
           navigation.navigate('PersonalInfoInputScreen');
         } else {
           await setRefreshToken(refreshToken);
