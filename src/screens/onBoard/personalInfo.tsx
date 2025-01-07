@@ -24,11 +24,18 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   const [birthday, setBirthday] = useState<string>('');
   const [universityId, setUniversityId] = useState<number>(0);
 
-  const isComplete = nickname !== '' && gender !== '' && birthday !== '' && universityId !== 0;
-
   const [checkDuplicate, setCheckDuplicate] = useState<boolean>(true);
   const [checkLength, setCheckLength] = useState<boolean>(true);
   const [canUse, setCanUse] = useState<boolean>(true);
+
+  const isComplete =
+    checkDuplicate &&
+    checkLength &&
+    canUse &&
+    nickname !== '' &&
+    gender !== '' &&
+    birthday !== '' &&
+    universityId !== 0;
 
   const checkNicknameLength = async (nickname: string) => {
     const trimmedNickname = nickname.trim();
@@ -45,9 +52,19 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
 
   const checkUserNickname = async (nickname: string) => {
     if (nickname.trim() !== '') {
-      const response = await checkNickname(nickname);
-      setCheckDuplicate(response.result);
-      return;
+      try {
+        const response = await checkNickname(nickname);
+        console.log(response.result);
+
+        setCheckDuplicate(response.result);
+        return;
+      } catch (error: any) {
+        const errorCode = error?.response?.data?.code;
+
+        if (errorCode === 'MEMBER404') {
+          setCheckDuplicate(false);
+        }
+      }
     }
   };
 
@@ -60,7 +77,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
     if (checkDuplicate) {
       setCanUse(true);
     }
-  }, [nickname, checkDuplicate]);
+  }, [nickname]);
 
   const toNext = async (): Promise<void> => {
     if (!isComplete || !canUse) return;
@@ -100,7 +117,6 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
                     canUse={checkLength && checkDuplicate && canUse}
                   />
                 </View>
-
                 {!checkDuplicate && nickname.trim() !== '' && (
                   <Text className="mb-4 mt-[-8px] px-2 text-xs font-medium text-warning">
                     다른 사람이 사용중인 닉네임이에요!
