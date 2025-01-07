@@ -3,12 +3,15 @@ import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 
+import { usePreferencesStore } from '@zustand/member-stat/member-stat';
+
 import { addPreferenceList } from '@server/api/member-stat-preference';
 
 import { ChipSelectScreenProps } from '@type/param/rootStack';
 
 const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
-  const [preferenceList, setPreferenceList] = useState<string[]>([]);
+  const { setPreferenceList } = usePreferencesStore();
+  const [preferences, setPreferences] = useState<string[]>([]);
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -37,11 +40,12 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
     { index: 24, id: 'mbti', name: 'MBTI', select: false },
   ]);
 
-  const isComplete = preferenceList.length === 4;
+  const isComplete = preferences.length === 4;
 
   const registerPreference = async () => {
     try {
-      await addPreferenceList({ preferenceList: preferenceList });
+      await addPreferenceList({ preferenceList: preferences });
+      setPreferenceList(preferences);
     } catch (error: any) {
       console.log(error.response);
     }
@@ -49,7 +53,6 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
 
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
-
     await registerPreference();
 
     navigation.navigate('CompleteScreen');
@@ -69,8 +72,8 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
           </View>
 
           <CheckBoxContainer
-            value={preferenceList}
-            setValue={setPreferenceList}
+            value={preferences}
+            setValue={setPreferences}
             items={items}
             setItems={setItems}
           />
