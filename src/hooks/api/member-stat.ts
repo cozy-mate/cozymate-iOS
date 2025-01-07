@@ -10,19 +10,21 @@ import {
 import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
 import {
-  RegisterMemberStatRequest,
-  GetFilteredMemberListRequest,
-  GetFilteredMemberListCountRequest,
-} from '@server/requestTypes/member-stat';
-import {
   SearchMembersResponse,
   GetRandomMemberResponse,
   SearchMemberByKeywordResponse,
   GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
 import {
+  UpdateMemberStatRequest,
+  RegisterMemberStatRequest,
+  GetFilteredMemberListRequest,
+  GetFilteredMemberListCountRequest,
+} from '@server/requestTypes/member-stat';
+import {
   searchMembers,
   getRandomMember,
+  updateMemberStat,
   registerMemberStat,
   searchMemberByKeyword,
   getFilteredMemberList,
@@ -219,5 +221,11 @@ export const useGetFilteredMemberListCount = (data: GetFilteredMemberListCountRe
 export const useRegisterLifeStyle = () => {
   return useMutation({
     mutationFn: (data: RegisterMemberStatRequest) => registerMemberStat(data),
+  });
+};
+
+export const useUpdateMemberStat = () => {
+  return useMutation({
+    mutationFn: (data: UpdateMemberStatRequest) => updateMemberStat(data),
   });
 };
