@@ -111,7 +111,6 @@ export const useKakaoLogin = (
               });
 
               setRoomInfo(roomInfoResponse.result);
-              setMyRoom({});
             } else {
               setMyRoom({
                 hasRoom: false,
@@ -188,70 +187,76 @@ export const useAppleLogin = (
       try {
         const clientId = response.user;
 
-        const signInResponse = await signIn({ clientId: clientId, socialType: 'APPLE' });
+        try {
+          const signInResponse = await signIn({
+            clientId: clientId,
+            socialType: 'APPLE',
+          });
 
-        const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
+          const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
 
-        // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
-        await setAccessToken(accessToken);
+          // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
+          await setAccessToken(accessToken);
 
-        if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
-          navigation.navigate('PersonalInfoInputScreen');
-        } else {
-          await setRefreshToken(refreshToken);
-
-          // 프로필 정보 저장
-          const getProfileResponse = await getMyProfile();
-          setProfile(getProfileResponse.result);
-
-          const checkVerifiedResponse = await checkVerified();
-          setIsVerified(checkVerifiedResponse.result);
-
-          const preferenceResponse = await getPreferenceList();
-          setPreferenceList(preferenceResponse.result.preferenceList);
-
-          // 방 존재 여부 저장
-          const roomCheckResponse = await checkHasRoom();
-          const roomId = roomCheckResponse.result.roomId;
-
-          // 방이 존재하는 경우 방 정보 저장
-          if (roomId !== 0) {
-            const roomInfoResponse = await getRoomData(roomId);
-
-            setMyRoom({
-              hasRoom: true,
-              roomId,
-              isRoomManager: roomInfoResponse.result.isRoomManager,
-              isFullRoom:
-                roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
-            });
-
-            setRoomInfo(roomInfoResponse.result);
-            setMyRoom({});
+          if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
+            navigation.navigate('PersonalInfoInputScreen');
           } else {
-            setMyRoom({
-              hasRoom: false,
-              roomId,
-              isRoomManager: false,
-              isFullRoom: false,
-            });
-          }
+            await setRefreshToken(refreshToken);
 
-          // getUserDetailData 호출 및 라이프스타일 정보 처리
-          try {
-            const userDetailResponse = await getMemberStatData();
-            setHasLifeStyle(true);
-            setLifeStyle(userDetailResponse.result);
-          } catch (error: any) {
-            const errorCode = error?.response?.data?.code;
-            if (errorCode === 'MEMBERSTAT402') {
-              setHasLifeStyle(false);
+            // 프로필 정보 저장
+            const getProfileResponse = await getMyProfile();
+            setProfile(getProfileResponse.result);
+
+            const checkVerifiedResponse = await checkVerified();
+            setIsVerified(checkVerifiedResponse.result);
+
+            const preferenceResponse = await getPreferenceList();
+            setPreferenceList(preferenceResponse.result.preferenceList);
+
+            // 방 존재 여부 저장
+            const roomCheckResponse = await checkHasRoom();
+            const roomId = roomCheckResponse.result.roomId;
+
+            // 방이 존재하는 경우 방 정보 저장
+            if (roomId !== 0) {
+              const roomInfoResponse = await getRoomData(roomId);
+
+              setMyRoom({
+                hasRoom: true,
+                roomId,
+                isRoomManager: roomInfoResponse.result.isRoomManager,
+                isFullRoom:
+                  roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
+              });
+
+              setRoomInfo(roomInfoResponse.result);
             } else {
-              // 예상하지 못한 에러 처리
-              console.error(error);
+              setMyRoom({
+                hasRoom: false,
+                roomId,
+                isRoomManager: false,
+                isFullRoom: false,
+              });
             }
+
+            // getUserDetailData 호출 및 라이프스타일 정보 처리
+            try {
+              const userDetailResponse = await getMemberStatData();
+              setHasLifeStyle(true);
+              setLifeStyle(userDetailResponse.result);
+            } catch (error: any) {
+              const errorCode = error?.response?.data?.code;
+              if (errorCode === 'MEMBERSTAT402') {
+                setHasLifeStyle(false);
+              } else {
+                // 예상하지 못한 에러 처리
+                console.error(error);
+              }
+            }
+            setLoggedIn(true);
           }
-          setLoggedIn(true);
+        } catch (error) {
+          console.log('로그인 에러', error);
         }
       } catch (error) {
         console.error('Login error:', error);
