@@ -283,8 +283,8 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
               <Text className="px-1 text-lg font-semibold leading-5 text-basicFont">
                 <Text className="text-main1">{roomInfo.name}</Text>의{'\n'}역할에 대해 알려드릴게요!
               </Text>
-              {roledata.result.roleList.length !== 0 ? (
-                roledata.result.roleList.map((role) => (
+              {roledata.result.length !== 0 ? (
+                roledata.result.map((role) => (
                   <View
                     key={role.roleId}
                     className="flex flex-row justify-between rounded-xl border border-[#F1F1F1] bg-white p-4 pr-2"
@@ -348,7 +348,7 @@ const RoleNRuleScreen = ({ navigation, route }: RoleNRuleScreenProps) => {
     <ErrorBoundary
       fallback={
         <View className="h-full w-full flex-1 items-center justify-center">
-          <Text>Error loading CozyHome</Text>
+          <Text>Error loading RoleNRule</Text>
         </View>
       }
     >

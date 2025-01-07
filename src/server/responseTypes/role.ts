@@ -11,9 +11,7 @@ export interface RoleItem {
 }
 
 export interface GetRoleDataResponse {
-  result: {
-    roleList: RoleItem[];
-  };
+  result: RoleItem[];
 }
 
 export interface AddRoleResponse {
