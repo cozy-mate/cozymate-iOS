@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, Pressable, TextInput, ScrollView, SafeAreaView } from 'react-native';
 
 import BottomButton from '@components/common/bottomButton';
+import LoadingComponent from '@components/commonComponents/loading';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -28,7 +29,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
     navigation.goBack();
   };
 
-  const { mutateAsync: mutateWithdraw } = useWithdraw();
+  const { mutateAsync: mutateWithdraw, isPending } = useWithdraw();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -70,7 +71,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
 
               <TextInput
                 value={content}
-                onChangeText={setContent}
+                onChangeText={(text: string) => setContent(text)}
                 multiline
                 className="h-64 rounded-xl bg-colorBox p-4 leading-4 text-basicFont"
                 placeholder={`서비스 탈퇴 이유를 알려주신다면,\ncozymate가 더 나은 서비스가 되는 데에,\n큰 도움이 될 거에요.`}
@@ -102,6 +103,7 @@ const WithdrawScreen = ({ navigation }: WithdrawScreenProps) => {
           />
         </View>
       </View>
+      {isPending && <LoadingComponent />}
     </SafeAreaView>
   );
 };
