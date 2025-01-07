@@ -1,5 +1,3 @@
-import { UserDetailScreenProps } from '@type/param/stack';
-
 export interface ListViewProps {
   memberDetail: {
     memberId: number;
@@ -127,5 +125,4 @@ export interface TableViewProps {
     };
   };
   openModal: () => void;
-  navigation: UserDetailScreenProps['navigation'];
 }

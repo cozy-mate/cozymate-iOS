@@ -112,6 +112,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
 
   const toLifeStyleOnboarding = () => {
+    setIsLifeStyleModalOpen(false);
     navigation.navigate('LifeStyleOnboardingScreen', {
       returnToUser: lifeStyleData.result.memberDetail.memberId,
     });
@@ -232,7 +233,6 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                     userData={lifeStyle}
                     otherUserData={lifeStyleData.result}
                     openModal={handleReportModal}
-                    navigation={navigation}
                   />
                 )}
               </ScrollView>
@@ -402,7 +402,7 @@ const UserDetailScreen = ({ navigation, route }: UserDetailScreenProps) => {
     <ErrorBoundary
       fallback={
         <View className="h-full w-full flex-1 items-center justify-center">
-          <Text>Error loading CozyHome</Text>
+          <Text>Error loading UserDetail</Text>
         </View>
       }
     >
