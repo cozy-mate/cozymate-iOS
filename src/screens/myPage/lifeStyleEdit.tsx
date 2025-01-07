@@ -3,15 +3,14 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import CustomTextarea from '@components/common/customTextarea';
+import LoadingComponent from '@components/commonComponents/loading';
 import CustomTextInputBox from '@components/common/customTextInputBox';
 import CustomRadioInputBox from '@components/common/customRadioInputBox';
 import CustomCheckBoxInput from '@components/lifeStyle/customCheckBoxInput';
 
 import { useProfileStore } from '@zustand/member/member';
 
-import { updateMemberStat } from '@server/api/member-stat';
-
-import { useGetMemberStatData } from '@hooks/api/member-stat';
+import { useUpdateMemberStat, useGetMemberStatData } from '@hooks/api/member-stat';
 
 import { LifeStyleEditScreenProps } from '@type/param/stack';
 
@@ -555,9 +554,11 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     }
   }, [data]);
 
-  const updateInfo = async () => {
+  const { mutateAsync: updateInfo, isPending } = useUpdateMemberStat();
+
+  const handleUpdate = async () => {
     try {
-      await updateMemberStat({
+      await updateInfo({
         admissionYear: admissionYear,
         numOfRoommate: numOfRoommate,
         dormitoryName: dormitoryName,
@@ -604,6 +605,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
 
   return (
     <View className="flex-1 bg-white">
+      {isPending && <LoadingComponent />}
       <SafeAreaView className="bg-white" />
       <ScrollView className="flex-1 bg-white px-5" ref={scrollViewRef}>
         <View className="mb-10 mt-2 flex flex-row justify-between">
@@ -613,7 +615,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
 
           <Pressable
             className="flex flex-row items-center rounded-md bg-sub1 px-5 py-2.5"
-            onPress={updateInfo}
+            onPress={handleUpdate}
           >
             <Text className="text-xs font-semibold text-main1">수정</Text>
           </Pressable>
@@ -695,7 +697,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
           isTime={false}
         />
 
-        <CustomRadioInputBox
+        <CustomCheckBoxInput
           title="잠버릇을 선택해주세요 (중복선택 가능)"
           value={sleepingHabit}
           setValue={setSleepingHabit}
