@@ -45,55 +45,58 @@ const RequestRoomsComponent: React.FC<RequestRoomsComponentProps> = ({ navigatio
   const { profile } = useProfileStore();
 
   return (
-    <View className="px-5">
-      <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
-        {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
-      </Text>
+    roomList !== undefined &&
+    roomList.length !== 0 && (
+      <View className="px-5">
+        <Text className="mb-4 px-1 text-lg font-semibold leading-6 text-emphasizedFont">
+          {profile.nickname}님이{'\n'}참여요청한 방 목록이에요
+        </Text>
 
-      <View className="flex flex-col">
-        {roomList.map((room, index) => (
-          <Pressable
-            key={room.roomId}
-            onPress={() => toRoomDetail(room.roomId)}
-            className={`border-b border-b-[#F6F6F6] px-1 py-[18px] ${index === 0 && 'pt-2.5'} ${
-              index === roomList.length - 1 && 'border-b-0 pb-2.5'
-            }`}
-          >
-            <View className="flex flex-row">
-              {room.hashtagList.length !== 0 ? (
-                room.hashtagList.map((hash, index) => (
-                  <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
-                    <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
+        <View className="flex flex-col">
+          {roomList.map((room, index) => (
+            <Pressable
+              key={room.roomId}
+              onPress={() => toRoomDetail(room.roomId)}
+              className={`border-b border-b-[#F6F6F6] px-1 py-[18px] ${index === 0 && 'pt-2.5'} ${
+                index === roomList.length - 1 && 'border-b-0 pb-2.5'
+              }`}
+            >
+              <View className="flex flex-row">
+                {room.hashtagList.length !== 0 ? (
+                  room.hashtagList.map((hash, index) => (
+                    <View key={index} className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
+                      <Text className="text-xs font-medium text-colorFont">#{hash} </Text>
+                    </View>
+                  ))
+                ) : (
+                  <View className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
+                    <Text className="text-xs font-medium text-colorFont">비공개방이에요</Text>
                   </View>
-                ))
-              ) : (
-                <View className="mr-1.5 rounded bg-colorBox px-2 py-[2px]">
-                  <Text className="text-xs font-medium text-colorFont">비공개방이에요</Text>
-                </View>
-              )}
-            </View>
+                )}
+              </View>
 
-            <View className="my-2">
-              <Text className="text-base font-semibold text-emphasizedFont">{room.name}</Text>
-            </View>
+              <View className="my-2">
+                <Text className="text-base font-semibold text-emphasizedFont">{room.name}</Text>
+              </View>
 
-            <View className="flex flex-row items-center justify-between">
-              <Text className="text-xs font-medium text-disabledFont">
-                <Text className="text-main1">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
-              </Text>
+              <View className="flex flex-row items-center justify-between">
+                <Text className="text-xs font-medium text-disabledFont">
+                  <Text className="text-main1">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
+                </Text>
 
-              <Text
-                className={`text-base font-medium ${
-                  room.equality < 50 ? 'text-colorFont' : 'text-main1'
-                }`}
-              >
-                {room.equality}%
-              </Text>
-            </View>
-          </Pressable>
-        ))}
+                <Text
+                  className={`text-base font-medium ${
+                    room.equality < 50 ? 'text-colorFont' : 'text-main1'
+                  }`}
+                >
+                  {room.equality}%
+                </Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
       </View>
-    </View>
+    )
   );
 };
 

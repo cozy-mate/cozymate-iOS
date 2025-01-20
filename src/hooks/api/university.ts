@@ -33,7 +33,7 @@ export const useGetUniversityInfo = (
   universityId: number,
 ): UseSuspenseQueryResult<GetUniversityDataResponse> => {
   return useSuspenseQuery({
-    queryKey: [`/`],
+    queryKey: [`/university/get-info`],
     queryFn: () => getUniversityData(universityId),
   });
 };

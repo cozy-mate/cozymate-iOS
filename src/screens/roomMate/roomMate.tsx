@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import UserComponent from '@components/roomMate/userComponent';
-import FilteringModal from '@components/roomMate/filteringModal';
+// import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
 import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
@@ -14,12 +14,12 @@ import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 import MagnifierIcon from '@assets/magnifier.svg';
-import FilterIcon from '@assets/roomMate/filter.svg';
-import ColoredFilterIcon from '@assets/roomMate/coloredFilter.svg';
+// import FilterIcon from '@assets/roomMate/filter.svg';
+// import ColoredFilterIcon from '@assets/roomMate/coloredFilter.svg';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { initialValue, detailFilterList, clearDetailFilterList } = useDetailFilterListStore();
+  const { detailFilterList, clearDetailFilterList } = useDetailFilterListStore();
 
   const [chipList, setChipList] = useState<string[]>([]);
 
@@ -88,11 +88,11 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     }
   };
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const handleModal = () => {
-    setIsModalOpen(false);
-  };
+  // const handleModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
   const allSelectedValues = Object.values(detailFilterList)
     .flat()
@@ -117,7 +117,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           <Text className="px-6 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
             원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
           </Text>
-          <Pressable
+          {/* <Pressable
             onPress={() => setIsModalOpen(true)}
             className={`rounded-lg border-[1.5px] px-3 py-[13px] ${
               JSON.stringify(detailFilterList) !== JSON.stringify(initialValue)
@@ -130,7 +130,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
             ) : (
               <FilterIcon />
             )}
-          </Pressable>
+          </Pressable> */}
         </View>
 
         <View className="mb-5 px-5">
@@ -216,7 +216,7 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         </View>
       </ScrollView>
 
-      {isModalOpen && <FilteringModal onClose={handleModal} />}
+      {/* {isModalOpen && <FilteringModal onClose={handleModal} />} */}
     </SafeAreaView>
   );
 };

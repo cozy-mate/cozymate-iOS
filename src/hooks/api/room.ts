@@ -22,6 +22,7 @@ import {
   sendRoomRequest,
   getRequestRooms,
   getRoomRequests,
+  getInvitedRooms,
   changeRoomPublic,
   createPublicRoom,
   deleteRoomRequest,
@@ -46,6 +47,7 @@ import {
   SendRoomRequestResponse,
   GetRequestRoomsResponse,
   GetRoomRequestsResponse,
+  GetInvitedRoomsResponse,
   ChangeRoomPublicResponse,
   CreatePublicRoomResponse,
   DeleteRoomRequestResponse,
@@ -135,6 +137,14 @@ export const useGetRoomRequests = (): UseQueryResult<GetRoomRequestsResponse, vo
     queryKey: [`/rooms/pending-members`],
     queryFn: () => getRoomRequests(),
     enabled: myRoom.hasRoom && roomInfo.isRoomManager,
+  });
+};
+
+// 3. 사용자 -> 참여 요청받은 방 목록
+export const useGetInvitedRooms = (): UseQueryResult<GetInvitedRoomsResponse, void> => {
+  return useQuery({
+    queryKey: [`/rooms/invited`],
+    queryFn: () => getInvitedRooms(),
   });
 };
 

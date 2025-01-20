@@ -7,11 +7,13 @@ import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 
 import { addPreferenceList } from '@server/api/member-stat-preference';
 
+import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
+
 import { ChipSelectScreenProps } from '@type/param/rootStack';
 
 const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
   const { setPreferenceList } = usePreferencesStore();
-  const [preferences, setPreferences] = useState<string[]>([]);
+  const [preferences, setPreferences] = useState<LifestyleOptionKey[]>([]);
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },

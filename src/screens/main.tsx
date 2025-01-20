@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TouchableOpacityProps } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TouchableOpacity, GestureResponderEvent } from 'react-native';
@@ -19,10 +19,12 @@ import RoleNRuleScreen from './roleNrule/roleNrule';
 
 import { useHasRoomStore } from '@zustand/room/room';
 
+import { useInitFcm } from '@hooks/fcm';
 import { useIsOldiPhone } from '@hooks/device';
 
+import { showRejectToast } from '@utils/toast';
+
 import { TabNavigatorParamList } from '@type/param/stack';
-import { useInitFcm } from '@hooks/fcm';
 
 const options = {
   enableVibrateFallback: true,
@@ -37,6 +39,7 @@ const DisabledTabButton: React.FC<TouchableOpacityProps> = (props) => {
       {...props}
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onPress={() => {
+        showRejectToast('방에 참여해야 사용할 수 있어요!');
         ReactNativeHapticFeedback.trigger('impactLight', options);
       }}
     />
@@ -86,35 +89,35 @@ const MainScreen = () => {
         headerShown: false,
         tabBarStyle: isOldiPhone
           ? {
-            backgroundColor: '#FFFFFF',
-            height: 60,
-            paddingTop: 8,
-            paddingBottom: 16,
-            borderTopWidth: 0,
-            borderRadius: 20,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            position: 'absolute',
-            shadowColor: 'rgba(160,160,160, 0.25)',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 1,
-            shadowRadius: 8,
-          }
+              backgroundColor: '#FFFFFF',
+              height: 60,
+              paddingTop: 8,
+              paddingBottom: 16,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            }
           : {
-            backgroundColor: '#FFFFFF',
-            height: 94,
-            paddingTop: 12,
-            paddingBottom: 40,
-            borderTopWidth: 0,
-            borderRadius: 20,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            position: 'absolute',
-            shadowColor: 'rgba(160,160,160, 0.25)',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 1,
-            shadowRadius: 8,
-          },
+              backgroundColor: '#FFFFFF',
+              height: 94,
+              paddingTop: 12,
+              paddingBottom: 40,
+              borderTopWidth: 0,
+              borderRadius: 20,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              position: 'absolute',
+              shadowColor: 'rgba(160,160,160, 0.25)',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 1,
+              shadowRadius: 8,
+            },
       }}
     >
       <Tab.Screen

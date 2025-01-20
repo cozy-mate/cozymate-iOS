@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View, SafeAreaView } from 'react-native';
 
 import BottomButton from '@components/common/bottomButton';
-import CharacterSelect from '@components/onBoard/characterSelect';
+import CharacterSelect from '@components/onBoard/new/character';
 
 import { useHasRoomStore } from '@zustand/room/room';
 import { useSignUpStore, useProfileStore } from '@zustand/member/member';
@@ -14,23 +14,15 @@ import { setAccessToken, setRefreshToken } from '@utils/token';
 import { CharacterInputScreenProps } from '@type/param/rootStack';
 
 const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
-  const { signUpState, setSignUpState } = useSignUpStore();
+  const { signUpState } = useSignUpStore();
   const { setProfile } = useProfileStore();
   const { setMyRoom } = useHasRoomStore();
 
-  const [persona, setPersona] = useState<number>(0);
-
-  const isComplete = persona !== 0;
+  const isComplete = signUpState.persona !== 0;
 
   const doSignUp = async () => {
     try {
-      const response = await signUp({
-        nickname: signUpState.nickname,
-        gender: signUpState.gender,
-        birthday: signUpState.birthday,
-        persona: persona,
-        universityId: signUpState.universityId,
-      });
+      const response = await signUp(signUpState);
 
       await setAccessToken(response.result.tokenResponseDTO.accessToken);
       await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
@@ -46,10 +38,6 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
 
   const toNext = async (): Promise<void> => {
     if (!isComplete) return;
-
-    setSignUpState({
-      persona: persona,
-    });
 
     await doSignUp();
 
@@ -69,7 +57,7 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
           </View>
 
           {/* 캐릭터 선택 Input */}
-          <CharacterSelect setValue={setPersona} />
+          <CharacterSelect />
         </View>
 
         {/* 하단 View */}

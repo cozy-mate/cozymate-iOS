@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, Pressable, SafeAreaView } from 'react-native';
+
+import ChatRoomComponent from '@components/chatting/chatRoom';
 
 import { useGetChatRoomList } from '@hooks/api/chat-room';
 
-import { getProfileImage } from '@utils/profileImage';
-
 import { ChatScreenProps } from '@type/param/stack';
 
-import XButton from '@assets/xButton.svg';
-import RightArrow from '@assets/chatting/grayRightArrow.svg';
+import BackButton from '@assets/backButton.svg';
 
 const ChatScreen = ({ navigation }: ChatScreenProps) => {
   const { data: chatroomlist } = useGetChatRoomList();
@@ -17,50 +16,40 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
     navigation.goBack();
   };
 
-  const toChatRoom = (chatRoomId: number) => {
-    navigation.navigate('ChatRoomScreen', { chatRoomId: chatRoomId });
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex flex-1 flex-col px-5">
-        <View className="mb-8 mt-2 flex flex-row justify-end">
-          <Pressable onPress={toBack}>
-            <XButton />
-          </Pressable>
-        </View>
-
-        {chatroomlist.result.length > 0 ? (
-          <ScrollView>
-            {chatroomlist.result.map((room, index) => (
-              <Pressable key={index} onPress={() => toChatRoom(room.chatRoomId)}>
-                <View
-                  className={`flex flex-row items-center justify-between border-b border-b-colorBox py-5 ${
-                    index === 0 && 'pt-3'
-                  } ${index === chatroomlist.result.length - 1 && 'border-b-0'}`}
-                >
-                  <View className="flex flex-col">
-                    <View className="mb-3 flex flex-row items-center">
-                      {getProfileImage(room.persona, 24, 24)}
-                      <Text className="ml-1.5 text-sm font-medium text-colorFont">
-                        {room.nickname}
-                      </Text>
-                    </View>
-                    <Text className="text-sm font-medium text-basicFont">{room.lastContent}</Text>
-                  </View>
-                  <RightArrow />
-                </View>
-              </Pressable>
-            ))}
-          </ScrollView>
-        ) : (
-          <View className="flex flex-1 flex-col items-center justify-center">
+      <FlatList
+        className="px-5"
+        // 채팅 목록 데이터
+        data={chatroomlist.result}
+        // 각 item의 key 값 지정
+        keyExtractor={(item) => item.chatRoomId.toString()}
+        // item들을 렌더링하는 메서드
+        renderItem={({ item }) => <ChatRoomComponent chatRoomData={item} navigation={navigation} />}
+        // Header Component를 sticky하도록 설정
+        stickyHeaderIndices={[0]}
+        // FlatList의 최하단에 렌더링되는 Header 아이템
+        ListHeaderComponent={
+          <View className="bg-white">
+            <Pressable onPress={toBack} className="mb-8 mt-2 flex flex-row self-start">
+              <BackButton />
+            </Pressable>
+          </View>
+        }
+        // FlatList의 최하단에 렌더링되는 Footer 아이템
+        ListFooterComponent={<View className="h-8" />}
+        // 렌더링 되는 아이템들 사이의 간격
+        ItemSeparatorComponent={() => <View className="my-2 h-[1px] bg-colorBox" />}
+        ListEmptyComponent={
+          <View className="mb-20 flex-1 items-center justify-center">
             <Text className="text-sm font-medium text-disabledFont">
               아직 주고 받은 쪽지가 없어요!
             </Text>
           </View>
-        )}
-      </View>
+        }
+        bounces={false}
+        contentContainerStyle={chatroomlist.result.length === 0 ? { flex: 1 } : {}}
+      />
     </SafeAreaView>
   );
 };

@@ -183,7 +183,11 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
-    navigation.navigate('MainScreen', { screen: 'CozyHomeScreen' });
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainScreen', params: { screen: 'CozyHomeScreen' } }],
+    });
   };
 
   // 방 인원 라이프스타일 칩 클릭 메서드

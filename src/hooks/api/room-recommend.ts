@@ -1,10 +1,9 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import { getRandomRoom } from '@server/api/room-recommend';
 import { GetRandomRoomResponse } from '@server/responseTypes/room-recommend';
 
-// 방 추천 리스트 조회
-export const useGetRandomRoom = (
+export const useGetFiveRandomRoom = (
   size: number,
   page: number,
   sortType?: string,
@@ -21,4 +20,18 @@ export const useGetRandomRoom = (
   });
 
   return { data, refetch };
+};
+
+// 방 추천 리스트 조회
+export const useGetRandomRoom = (size: number, sortType?: string) => {
+  return useSuspenseInfiniteQuery({
+    queryKey: ['/rooms/list', size, sortType],
+    queryFn: ({ pageParam }) => {
+      return getRandomRoom(size, pageParam, sortType);
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.result.hasNext ? lastPage.result.page + 1 : undefined;
+    },
+  });
 };

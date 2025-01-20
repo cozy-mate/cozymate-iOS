@@ -4,6 +4,7 @@ export interface SignUp {
   birthday: string;
   universityId: number;
   persona: number;
+  department: string;
 }
 
 export interface Profile {

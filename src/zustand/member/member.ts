@@ -23,6 +23,7 @@ export const useSignUpStore = create<{
     birthday: '',
     persona: 0,
     universityId: 0,
+    department: '',
   },
   setSignUpState: (newSignUpState) =>
     set((state) => ({
@@ -36,6 +37,7 @@ export const useSignUpStore = create<{
         birthday: '',
         persona: 0,
         universityId: 0,
+        department: '',
       },
     })),
 }));

@@ -1,5 +1,5 @@
+import React, { Suspense, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import React, { Fragment, Suspense, useState } from 'react';
 import { Text, View, Pressable, ScrollView, Dimensions } from 'react-native';
 
 import LogoutModal from '@components/myPage/logoutModal';
@@ -17,14 +17,14 @@ import { useCheckHasInquiry } from '@hooks/api/inquiry';
 
 import { deleteToken } from '@utils/token';
 import { getProfileImage } from '@utils/profileImage';
+// import CertificationIcon from '@assets/myPage/certification.svg';
+import { deactivateFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 import { MyPageScreenProps } from '@type/param/stack';
 
 import HomeIcon from '@assets/myPage/home.svg';
 import Background from '@assets/myPage/background.svg';
 import RightArrow from '@assets/myPage/rightArrow.svg';
-import CertificationIcon from '@assets/myPage/certification.svg';
-import { deactivateFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 const MyPage = ({ navigation }: MyPageScreenProps) => {
   const width = Dimensions.get('screen').width;
@@ -55,9 +55,9 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
   };
 
-  const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', { verified: Boolean(isVerified) });
-  };
+  // const toSchoolAuthentication = () => {
+  //   navigation.navigate('SchoolAuthenticationScreen', { verified: Boolean(isVerified) });
+  // };
 
   const toLifeStyle = () => {
     if (hasLifeStyle) {
@@ -143,7 +143,7 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
               </View>
             </Pressable>
 
-            <Pressable
+            {/* <Pressable
               className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
               onPress={toSchoolAuthentication}
             >
@@ -169,7 +169,7 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
                   </Pressable>
                 )}
               </View>
-            </Pressable>
+            </Pressable> */}
 
             <Pressable
               className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"

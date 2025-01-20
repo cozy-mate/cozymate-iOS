@@ -42,7 +42,6 @@ import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
 import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
 import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
 import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
-import SchoolAuthenticationScreen from 'src/screens/schoolAuthentication/schoolAuthentication';
 
 import { useLoggedInStore } from '@zustand/member/member';
 
@@ -111,7 +110,7 @@ function AppInner() {
 
           <stack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
 
-          <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} />
+          {/* <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} /> */}
 
           <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
           <stack.Screen name="UserSearchScreen" component={UserSearchScreen} />

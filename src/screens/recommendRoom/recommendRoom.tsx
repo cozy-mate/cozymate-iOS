@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import RoomComponent from '@components/recommendRoom/roomComponent';
 import SortTypeBottomSheet from '@components/recommendRoom/sortTypeBottomSheet';
@@ -30,7 +30,23 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
   const [isSortTypeOpen, setIsSortTypeOpen] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>('AVERAGE_RATE');
 
-  const { data: roomList } = useGetRandomRoom(5, 0, sortType);
+  const { fetchNextPage, hasNextPage, ...result } = useGetRandomRoom(5, sortType);
+
+  const loadMoreList = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const handleScroll = (event: any) => {
+    const contentHeight = event.nativeEvent.contentSize.height;
+    const contentOffsetY = event.nativeEvent.contentOffset.y;
+    const layoutHeight = event.nativeEvent.layoutMeasurement.height;
+
+    if (contentHeight - contentOffsetY - layoutHeight < 100) {
+      loadMoreList();
+    }
+  };
 
   const toHome = () => {
     navigation.goBack();
@@ -60,8 +76,8 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
       <ScrollView
         className="flex-1"
-        //onScroll={handleScroll}
-        //scrollEventThrottle={16}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         bounces={false}
       >
         <View className="mb-4 mt-6 flex flex-row">
@@ -95,52 +111,18 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
 
             <DownArrow />
           </Pressable>
-
-          {/* {isSortTypeOpen && (
-            <View className="absolute right-4 top-6 z-50 flex flex-col items-center justify-center rounded-lg border border-[#EBEBEB] bg-white px-2 py-1">
-              <Pressable
-                className="flex flex-row justify-end border-b border-b-[#F6f6f6] py-1.5"
-                onPress={() => {
-                  setSortType('LATEST');
-                  setIsSortTypeOpen(false);
-                }}
-              >
-                <Text className="text-center text-[10px] font-medium text-basicFont">최신순</Text>
-              </Pressable>
-              <Pressable
-                className="flex flex-row justify-end border-b border-b-[#F6f6f6] py-1.5"
-                onPress={() => {
-                  setSortType('AVERAGE_RATE');
-                  setIsSortTypeOpen(false);
-                }}
-              >
-                <Text className="text-center text-[10px] font-medium text-basicFont ">
-                  평균일치율순
-                </Text>
-              </Pressable>
-              <Pressable
-                className="flex flex-row justify-end py-1.5"
-                onPress={() => {
-                  setSortType('CLOSING_SOON');
-                  setIsSortTypeOpen(false);
-                }}
-              >
-                <Text className="text-center text-[10px] font-medium text-basicFont">
-                  마감임박순
-                </Text>
-              </Pressable>
-            </View>
-          )} */}
         </View>
 
         <View className="px-5">
           <View className="flex flex-col space-y-6">
-            {roomList?.result.result.length !== 0 ? (
-              roomList?.result.result.map((room, index) => (
-                <View key={index}>
-                  <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
-                </View>
-              ))
+            {result.data.pages[0].result.result ? (
+              result.data.pages.flatMap((page) =>
+                page.result.result.map((room) => (
+                  <View key={room.roomId}>
+                    <RoomComponent roomData={room} pressFunc={() => toRoomDetail(room.roomId)} />
+                  </View>
+                )),
+              )
             ) : (
               <View className="flex h-36 items-center justify-center">
                 <Text className="text-sm font-medium text-disabledFont">
