@@ -30,17 +30,17 @@ const Department: React.FC = () => {
         <View className="flex flex-col justify-center space-y-1.5">
           <Text
             className={`text-xs font-semibold leading-[17px] tracking-tight
-            ${signUpState.department !== '' ? 'text-main1' : 'text-colorFont'}`}
+            ${signUpState.majorName !== '' ? 'text-main1' : 'text-colorFont'}`}
           >
             학과
           </Text>
           <View className="flex w-full flex-row items-center justify-between pb-[3px]">
             <Text
               className={`${
-                signUpState.department !== '' ? 'text-basicFont' : 'text-disabledFont'
+                signUpState.majorName !== '' ? 'text-basicFont' : 'text-disabledFont'
               } text-sm font-medium`}
             >
-              {signUpState.department !== '' ? signUpState.department : '학과를 선택해주세요'}
+              {signUpState.majorName !== '' ? signUpState.majorName : '학과를 선택해주세요'}
             </Text>
             <DownArrow className={`${isListOpen && 'rotate-180'}`} />
           </View>
@@ -54,7 +54,7 @@ const Department: React.FC = () => {
           renderItem={({ item }) => (
             <Pressable
               onPress={() => {
-                setSignUpState({ department: item });
+                setSignUpState({ majorName: item });
                 setIsListOpen(false);
               }}
             >

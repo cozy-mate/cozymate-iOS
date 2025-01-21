@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
 import { getRoomLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 import { FavoriteUserRoomScreenProps } from '@type/param/stack';
@@ -25,8 +23,6 @@ interface FavoriteRoomProps {
 }
 
 const FavoriteRoom: React.FC<FavoriteRoomProps> = ({ roomData, navigation }) => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
   return (
     <Pressable
       onPress={() => navigation.navigate('RoomDetailScreen', { roomId: roomData.roomId })}
@@ -34,9 +30,7 @@ const FavoriteRoom: React.FC<FavoriteRoomProps> = ({ roomData, navigation }) => 
     >
       <View className="flex flex-row items-center justify-between border-b border-b-[#F6F6F6] pb-3">
         <Text className="pl-2 text-base font-semibold text-basicFont">{roomData.name}</Text>
-        <Text className="text-base font-medium text-main1">
-          {roomData.equality !== null && hasLifeStyle ? roomData.equality : '?? '}%
-        </Text>
+        <Text className="text-base font-medium text-main1">{roomData.equality}%</Text>
       </View>
 
       <View className="mb-6 flex flex-row items-center justify-between px-2 pt-3">

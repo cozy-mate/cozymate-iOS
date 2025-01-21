@@ -6,6 +6,7 @@ export interface GetMemberStatDataResponse {
       gender: string;
       birthday: string;
       universityName: string;
+      universityId: number;
       majorName: string;
       persona: number;
     };
@@ -39,8 +40,6 @@ export interface GetMemberStatDataResponse {
       mbti: string;
       selfIntroduction: string;
     };
-    equality: number | null;
-    roomId: number;
   };
 }
 

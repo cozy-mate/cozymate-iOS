@@ -1,30 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View, Keyboard, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 
-import Gender from '@components/onBoard/new/gender';
-import BirthDay from '@components/onBoard/new/birthday';
+import University from '@components/onBoard/new/school';
 import BottomButton from '@components/common/bottomButton';
-import NickNameInput from '@components/onBoard/new/nickNameInput';
+import Department from '@components/onBoard/new/department';
 
 import { useSignUpStore } from '@zustand/member/member';
 
-import { PersonalInfoInputScreenProps } from '@type/param/rootStack';
+import { UniversityInputScreenProps } from '@type/param/rootStack';
 
-const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) => {
+const UniversityInputScreen = ({ navigation }: UniversityInputScreenProps) => {
   const { signUpState } = useSignUpStore();
 
-  const [canUse, setCanUse] = useState<boolean>(true);
-
-  const isComplete =
-    canUse &&
-    signUpState.nickname !== '' &&
-    signUpState.gender !== '' &&
-    signUpState.birthday !== '';
+  const isComplete = signUpState.universityId !== 0 && signUpState.majorName !== '';
 
   const toNext = async (): Promise<void> => {
-    if (!isComplete || !canUse) return;
+    if (!isComplete) return;
 
-    navigation.navigate('UniversityInputScreen');
+    navigation.navigate('CharacterInputScreen');
   };
 
   return (
@@ -36,24 +29,19 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
             {/* 설명 Text */}
             <View className="mb-6 px-2">
               <Text className="text-xl font-semibold leading-[21px] tracking-tight text-emphasizedFont">
-                원활한 서비스 이용을 위해{'\n'}개인정보를 입력해주세요!
+                룸메이트 매칭을 위해,{'\n'}학교 및 학과를 입력해주세요!
               </Text>
             </View>
 
             <View className="space-y-4">
-              {/* 닉네임 입력 Input */}
+              {/* 학교 입력 Input */}
               <View>
-                <NickNameInput setCanUse={setCanUse} />
+                <University />
               </View>
 
-              {/* 성별 입력 Input */}
+              {/* 학과 입력 Input */}
               <View>
-                <Gender />
-              </View>
-
-              {/* 생년월일 입력 Input */}
-              <View>
-                <BirthDay />
+                <Department />
               </View>
             </View>
           </View>
@@ -65,7 +53,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               borderColor={'border-main1'}
               textColor={'text-white'}
               text={'다음'}
-              disabled={!isComplete || !canUse}
+              disabled={!isComplete}
               onPressFunc={toNext}
             />
           </View>
@@ -75,4 +63,4 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
   );
 };
 
-export default PersonalInfoInputScreen;
+export default UniversityInputScreen;

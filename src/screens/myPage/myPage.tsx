@@ -6,18 +6,13 @@ import LogoutModal from '@components/myPage/logoutModal';
 import LoadingComponent from '@components/loading/loading';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
-import {
-  useLifeStyleStore,
-  usePreferencesStore,
-  useHasLifeStyleStore,
-} from '@zustand/member-stat/member-stat';
+import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { useLifeStyleStore, usePreferencesStore } from '@zustand/member-stat/member-stat';
 
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
 
 import { deleteToken } from '@utils/token';
 import { getProfileImage } from '@utils/profileImage';
-// import CertificationIcon from '@assets/myPage/certification.svg';
 import { deactivateFcmToken } from '@utils/fcm/fcmTokenUtil';
 
 import { MyPageScreenProps } from '@type/param/stack';
@@ -33,10 +28,8 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
   const { setLoggedIn } = useLoggedInStore();
   const { myRoom, clearMyRoom } = useHasRoomStore();
   const { profile, clearProfile } = useProfileStore();
-  const { isVerified, setIsVerified } = useIsVerifiedStore();
   const { clearPreferenceList } = usePreferencesStore();
   const { roomInfo, clearRoomInfo } = useRoomInfoStore();
-  const { hasLifeStyle, setHasLifeStyle } = useHasLifeStyleStore();
   const { clearLifeStyle } = useLifeStyleStore();
 
   const { data: hasInquiry } = useCheckHasInquiry();
@@ -55,16 +48,8 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
     navigation.navigate('RoomDetailScreen', { roomId: myRoom.roomId });
   };
 
-  // const toSchoolAuthentication = () => {
-  //   navigation.navigate('SchoolAuthenticationScreen', { verified: Boolean(isVerified) });
-  // };
-
   const toLifeStyle = () => {
-    if (hasLifeStyle) {
-      navigation.navigate('LifeStyleEditScreen');
-    } else {
-      navigation.navigate('LifeStyleOnboardingScreen');
-    }
+    navigation.navigate('LifeStyleEditScreen');
   };
 
   const toFavorite = () => {
@@ -87,10 +72,8 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
 
       clearMyRoom();
       clearProfile();
-      setIsVerified('');
       clearPreferenceList();
       clearRoomInfo();
-      setHasLifeStyle(false);
       clearLifeStyle();
 
       setLoggedIn(false);
@@ -142,34 +125,6 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
                 )}
               </View>
             </Pressable>
-
-            {/* <Pressable
-              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
-              onPress={toSchoolAuthentication}
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">학교 인증</Text>
-              <View className="flex flex-row items-center">
-                {isVerified ? (
-                  <Fragment>
-                    <CertificationIcon />
-                    <Text className="mx-1 text-sm font-medium text-main1">
-                      {profile.universityName}
-                    </Text>
-                    <RightArrow />
-                  </Fragment>
-                ) : (
-                  <Pressable
-                    onPress={toSchoolAuthentication}
-                    className="flex flex-row items-center"
-                  >
-                    <Text className="mr-1 text-sm font-medium text-disabledFont">
-                      아직 학교인증이 되어있지 않아요
-                    </Text>
-                    <RightArrow />
-                  </Pressable>
-                )}
-              </View>
-            </Pressable> */}
 
             <Pressable
               className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"

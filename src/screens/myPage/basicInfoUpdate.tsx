@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, Keyboard, Pressable, TextInput, ScrollView, SafeAreaView } from 'react-native';
 
 import UnivInfoSelect from '@components/onBoard/univInfoSelect';
 import DateSelectModal from '@components/onBoard/dateSelectModal';
-import BorderTextInputBox from '@components/common/borderTextInputBox';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -11,6 +10,8 @@ import { checkNickname } from '@server/api/member';
 
 import { useGetUniversityInfo } from '@hooks/api/university';
 import { useUpdateBirthday, useUpdateNickname, useUpdatMajorName } from '@hooks/api/member';
+
+import { showRejectToast } from '@utils/toast';
 
 import { BasicInfoUpdateScreenProps } from '@type/param/stack';
 
@@ -20,14 +21,24 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
   const { type } = route.params;
   const { profile, setProfile } = useProfileStore();
 
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const inputRef = useRef<TextInput>(null);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    Keyboard.dismiss();
+  };
+
   const [nickname, setNickname] = useState<string>(profile.nickname);
   const [majorName, setMajorName] = useState<string>(profile.majorName);
   const [birthday, setBirthday] = useState<string>(profile.birthday);
-
-  // const handleDate = (date: string) => {
-  //   const [year, month, day] = date.split('-');
-  //   return `${year}년 ${month}월 ${day}일`;
-  // };
 
   const toMyInfo = () => {
     navigation.goBack();
@@ -51,29 +62,29 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
   };
 
   const checkUserNickname = async (nickname: string) => {
-    const trimmedNickname = nickname.trim();
+    if (nickname.trim() !== '') {
+      try {
+        const response = await checkNickname(nickname);
 
-    if (trimmedNickname === profile.nickname || trimmedNickname === '') {
-      setCheckDuplicate(true);
-      return;
+        setCheckDuplicate(response.result);
+        return;
+      } catch (error: any) {
+        const errorCode = error?.response?.data?.code;
+
+        if (errorCode === 'MEMBER404') {
+          setCheckDuplicate(false);
+        }
+      }
     }
-
-    const response = await checkNickname(trimmedNickname);
-    setCheckDuplicate(response.result);
   };
 
   useEffect(() => {
-    const trimmedNickname = nickname.trim();
+    checkNicknameLength(nickname);
+    checkUserNickname(nickname);
 
-    if (trimmedNickname === '') {
-      setCheckDuplicate(false);
-      setCheckLength(false);
-      setCanUse(false);
-      return;
+    if (checkDuplicate) {
+      setCanUse(true);
     }
-
-    checkNicknameLength(trimmedNickname);
-    checkUserNickname(trimmedNickname);
   }, [nickname]);
 
   const { data: userSchoolInfo } = useGetUniversityInfo(profile.universityId);
@@ -83,23 +94,27 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
   const { mutateAsync: changeBirthday } = useUpdateBirthday();
 
   const handleChangeProfile = async (): Promise<void> => {
-    if (type === 'nickname') {
-      changeNickname(nickname);
-      setProfile({
-        nickname: nickname,
-      });
-    } else if (type === 'majorName') {
-      changeMajorName(majorName);
-      setProfile({
-        majorName: majorName,
-      });
-    } else if (type === 'birthday') {
-      changeBirthday(birthday);
-      setProfile({
-        birthday: birthday,
-      });
+    try {
+      if (type === 'nickname') {
+        changeNickname(nickname);
+        setProfile({
+          nickname: nickname,
+        });
+      } else if (type === 'majorName') {
+        changeMajorName(majorName);
+        setProfile({
+          majorName: majorName,
+        });
+      } else if (type === 'birthday') {
+        changeBirthday(birthday);
+        setProfile({
+          birthday: birthday,
+        });
+      }
+      toMyInfo();
+    } catch (error: any) {
+      showRejectToast(error.response.data);
     }
-    toMyInfo();
   };
 
   return (
@@ -113,27 +128,56 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
               </Pressable>
 
               {type === 'nickname' && (
-                <>
-                  <BorderTextInputBox
-                    title="닉네임"
-                    value={nickname}
-                    setValue={setNickname}
-                    placeholder="닉네임을 입력해주세요"
-                    hasButton={false}
-                    canUse={checkLength && checkDuplicate && canUse}
-                  />
+                <View>
+                  <Pressable
+                    onPress={handleFocus}
+                    className={`flex flex-row items-center justify-between rounded-xl border bg-white p-5
+                ${
+                  (!checkDuplicate || !checkLength) && nickname.trim() !== ''
+                    ? 'border-warning'
+                    : isFocused
+                    ? 'border-sub1'
+                    : 'border-disabled'
+                }`}
+                  >
+                    <View className="flex flex-col justify-center space-y-1.5">
+                      <Text
+                        className={`text-xs font-semibold leading-4 tracking-tight
+                    ${
+                      (!checkDuplicate || !checkLength) && nickname.trim() !== ''
+                        ? 'text-warning'
+                        : isFocused || nickname
+                        ? 'text-main1'
+                        : 'text-colorFont'
+                    }`}
+                      >
+                        닉네임
+                      </Text>
+                      <TextInput
+                        ref={inputRef}
+                        value={nickname}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        onChangeText={(text: string) => setNickname(text)}
+                        placeholder="닉네임을 입력해주세요"
+                        placeholderTextColor="#ACADB4"
+                        className="text-sm font-medium leading-4 tracking-tight text-basicFont"
+                      />
+                    </View>
+                  </Pressable>
 
-                  {!checkDuplicate && nickname.trim() !== '' && (
-                    <Text className="mb-4 mt-[-8px] px-2 text-xs font-medium text-warning">
-                      다른 사람이 사용중인 닉네임이에요!
-                    </Text>
-                  )}
                   {!checkLength && nickname.trim() !== '' && (
-                    <Text className="mb-4 mt-[-8px] px-2 text-xs font-medium text-warning">
+                    <Text className="mt-2 px-2 text-xs font-medium text-warning">
                       닉네임은 2~8자인 한글, 영어, 숫자만 가능해요!
                     </Text>
                   )}
-                </>
+
+                  {!checkDuplicate && checkLength && nickname.trim() !== '' && (
+                    <Text className="mt-2 px-2 text-xs font-medium text-warning">
+                      다른 사람이 사용중인 닉네임이에요!
+                    </Text>
+                  )}
+                </View>
               )}
 
               {type === 'majorName' && (

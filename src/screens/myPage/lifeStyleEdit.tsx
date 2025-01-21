@@ -1,599 +1,47 @@
-import { Text } from 'react-native';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
+import { Text, TextInput } from 'react-native';
 import { View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
-import CustomTextarea from '@components/common/customTextarea';
+import { dormitoryItems, acceptanceItems, numOfRoommateItems } from '../onBoardLifeStyle/basicData';
+import {
+  timeItems,
+  mbtiItems,
+  intakeItems,
+  smokingItems,
+  intimacyItems,
+  canShareItems,
+  studyingItems,
+  isPlayGameItems,
+  lifePatternItems,
+  isPhoneCallItems,
+  personalityItems,
+  sleepingHabitItems,
+  heatingIntensityItems,
+  cleanSensitivityItems,
+  noiseSensitivityItems,
+  cleaningFrequencyItems,
+  drinkingFrequencyItems,
+  airConditioningIntensityItems,
+} from '../onBoardLifeStyle/essentialData';
+
 import LoadingComponent from '@components/commonComponents/loading';
-import CustomTextInputBox from '@components/common/customTextInputBox';
-import CustomRadioInputBox from '@components/common/customRadioInputBox';
-import CustomCheckBoxInput from '@components/lifeStyle/customCheckBoxInput';
+import TextInputComponent from '@components/onBoardLifeStyle/textInput';
+import TimeRadioComponent from '@components/onBoardLifeStyle/timeRadio';
+import LifeStyleHeaderComponent from '@components/onBoardLifeStyle/header';
+import StringRadioComponent from '@components/onBoardLifeStyle/stringRadio';
+import NumberRadioComponent from '@components/onBoardLifeStyle/numberRadio';
+import StringCheckComponent from '@components/onBoardLifeStyle/stringCheck';
 
-import { useProfileStore } from '@zustand/member/member';
+import { useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
-import { useUpdateMemberStat, useGetMemberStatData } from '@hooks/api/member-stat';
+import { useUpdateMemberStat } from '@hooks/api/member-stat';
 
 import { LifeStyleEditScreenProps } from '@type/param/stack';
 
-import BackButton from '@assets/backButton.svg';
 import TopButton from '@assets/lifeStyle/topButton.svg';
 
-type Item = {
-  index: number;
-  value: string | number;
-  name: string;
-  select: boolean;
-};
-
 const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
-  const { profile } = useProfileStore();
-
-  const toMyPage = () => {
-    navigation.goBack();
-  };
-
-  const [admissionYear, setAdmissionYear] = useState<string>('');
-  const [numOfRoommate, setNumOfRoommate] = useState<number>(0);
-  const [dormitoryName, setDormitoryName] = useState<string>('123');
-  const [acceptance, setAcceptance] = useState<string>('');
-  const [wakeUpMeridian, setWakeUpMeridian] = useState<string>('');
-  const [wakeUpTime, setWakeUpTime] = useState<number>(0);
-  const [sleepingMeridian, setSleepingMeridian] = useState<string>('');
-  const [sleepingTime, setSleepingTime] = useState<number>(0);
-  const [turnOffMeridian, setTurnOffMeridian] = useState<string>('');
-  const [turnOffTime, setTurnOffTime] = useState<number>(0);
-  const [smoking, setSmoking] = useState<string>('');
-  const [sleepingHabit, setSleepingHabit] = useState<string[]>([]);
-  const [airConditioningIntensity, setAirConditioningIntensity] = useState<number>(0);
-  const [heatingIntensity, setHeatingIntensity] = useState<number>(0);
-  const [lifePattern, setLifePattern] = useState<string>('');
-  const [intimacy, setIntimacy] = useState<string>('');
-  const [canShare, setCanShare] = useState<string>('');
-  const [isPlayGame, setIsPlayGame] = useState<string>('');
-  const [isPhoneCall, setIsPhoneCall] = useState<string>('');
-  const [studying, setStudying] = useState<string>('');
-  const [intake, setIntake] = useState<string>('');
-  const [cleanSensitivity, setCleanSensitivity] = useState<number>(0);
-  const [noiseSensitivity, setNoiseSensitivity] = useState<number>(0);
-  const [cleaningFrequency, setCleaningFrequency] = useState<string>('');
-  const [drinkingFrequency, setDrinkingFrequency] = useState<string>('');
-  const [personality, setPersonality] = useState<string[]>([]);
-  const [mbti, setMbti] = useState<string>('');
-  const [selfIntroduction, setSelfIntroduction] = useState<string>('');
-
-  const [numOfRoommateItems, setNumOfRoommateItems] = useState<Item[]>([
-    { index: 1, value: 0, name: '미정', select: false },
-    { index: 2, value: 2, name: '2인', select: false },
-    { index: 3, value: 3, name: '3인', select: false },
-    { index: 4, value: 4, name: '4인', select: false },
-    { index: 5, value: 5, name: '5인', select: false },
-    { index: 6, value: 6, name: '6인', select: false },
-  ]);
-
-  const [acceptanceItems, setAcceptanceItems] = useState<Item[]>([
-    { index: 1, value: '합격', name: '합격', select: false },
-    { index: 2, value: '결과 대기중', name: '결과 대기중', select: false },
-    { index: 3, value: '예비번호를 받았어요!', name: '예비번호를 받았어요!', select: false },
-  ]);
-
-  const [wakeUpTimeItems, setWakeUpTimeItems] = useState<Item[]>([
-    { index: 1, value: 1, name: '1', select: false },
-    { index: 2, value: 2, name: '2', select: false },
-    { index: 3, value: 3, name: '3', select: false },
-    { index: 4, value: 4, name: '4', select: false },
-    { index: 5, value: 5, name: '5', select: false },
-    { index: 6, value: 6, name: '6', select: false },
-    { index: 7, value: 7, name: '7', select: false },
-    { index: 8, value: 8, name: '8', select: false },
-    { index: 9, value: 9, name: '9', select: false },
-    { index: 10, value: 10, name: '10', select: false },
-    { index: 11, value: 11, name: '11', select: false },
-    { index: 12, value: 12, name: '12', select: false },
-  ]);
-
-  const [sleepingTimeItems, setSleepingTimeItems] = useState<Item[]>([
-    { index: 1, value: 1, name: '1', select: false },
-    { index: 2, value: 2, name: '2', select: false },
-    { index: 3, value: 3, name: '3', select: false },
-    { index: 4, value: 4, name: '4', select: false },
-    { index: 5, value: 5, name: '5', select: false },
-    { index: 6, value: 6, name: '6', select: false },
-    { index: 7, value: 7, name: '7', select: false },
-    { index: 8, value: 8, name: '8', select: false },
-    { index: 9, value: 9, name: '9', select: false },
-    { index: 10, value: 10, name: '10', select: false },
-    { index: 11, value: 11, name: '11', select: false },
-    { index: 12, value: 12, name: '12', select: false },
-  ]);
-
-  const [turnOffTimeItems, setTurnOffTimeItems] = useState<Item[]>([
-    { index: 1, value: 1, name: '1', select: false },
-    { index: 2, value: 2, name: '2', select: false },
-    { index: 3, value: 3, name: '3', select: false },
-    { index: 4, value: 4, name: '4', select: false },
-    { index: 5, value: 5, name: '5', select: false },
-    { index: 6, value: 6, name: '6', select: false },
-    { index: 7, value: 7, name: '7', select: false },
-    { index: 8, value: 8, name: '8', select: false },
-    { index: 9, value: 9, name: '9', select: false },
-    { index: 10, value: 10, name: '10', select: false },
-    { index: 11, value: 11, name: '11', select: false },
-    { index: 12, value: 12, name: '12', select: false },
-  ]);
-
-  const [smokingItems, setSmokingItems] = useState<Item[]>([
-    { index: 1, value: '비흡연자', name: '비흡연자', select: false },
-    { index: 2, value: '연초', name: '연초', select: false },
-    { index: 3, value: '궐련형 전자담배', name: '궐련형 전자담배', select: false },
-    { index: 4, value: '액상형 전자담배', name: '액상형 전자담배', select: false },
-  ]);
-
-  const [sleepingHabitItems, setSleepingHabitItems] = useState<Item[]>([
-    { index: 1, value: '잠버릇이 없어요', name: '잠버릇이 없어요', select: false },
-    { index: 2, value: '코골이', name: '코골이', select: false },
-    { index: 3, value: '이갈이', name: '이갈이', select: false },
-    { index: 4, value: '몽유병', name: '몽유병', select: false },
-    { index: 5, value: '잠꼬대', name: '잠꼬대', select: false },
-    { index: 6, value: '뒤척임', name: '뒤척임', select: false },
-  ]);
-
-  const [airConditioningIntensityItems, setAirConditioningIntensityItems] = useState<Item[]>([
-    { index: 1, value: 0, name: '안 틀어요', select: false },
-    { index: 2, value: 1, name: '약하게 틀어요', select: false },
-    { index: 3, value: 2, name: '적당하게 틀어요', select: false },
-    { index: 4, value: 3, name: '강하게 틀어요', select: false },
-  ]);
-
-  const [heatingIntensityItems, setHeatingIntensityItems] = useState<Item[]>([
-    { index: 1, value: 0, name: '안 틀어요', select: false },
-    { index: 2, value: 1, name: '약하게 틀어요', select: false },
-    { index: 3, value: 2, name: '적당하게 틀어요', select: false },
-    { index: 4, value: 3, name: '강하게 틀어요', select: false },
-  ]);
-
-  const [lifePatternItems, setLifePatternItems] = useState<Item[]>([
-    { index: 1, value: '아침형 인간', name: '아침형 인간', select: false },
-    { index: 2, value: '새벽형 인간', name: '새벽형 인간', select: false },
-  ]);
-
-  const [intimacyItems, setIntimacyItems] = useState<Item[]>([
-    {
-      index: 1,
-      value: '필요한 말만 했으면 좋겠어요',
-      name: '필요한 말만 했으면 좋겠어요',
-      select: false,
-    },
-    { index: 2, value: '어느정도 친하게 지내요', name: '어느정도 친하게 지내요', select: false },
-    { index: 3, value: '완전 친하게 지내요', name: '완전 친하게 지내요', select: false },
-  ]);
-
-  const [canShareItems, setCanShareItems] = useState<Item[]>([
-    {
-      index: 1,
-      value: '아무것도 공유하고싶지 않아요',
-      name: '아무것도 공유하고싶지 않아요',
-      select: false,
-    },
-    {
-      index: 2,
-      value: '휴지정도는 빌려줄 수 있어요',
-      name: '휴지정도는 빌려줄 수 있어요',
-      select: false,
-    },
-    {
-      index: 3,
-      value: '옷정도는 빌려줄 수 있어요',
-      name: '옷정도는 빌려줄 수 있어요',
-      select: false,
-    },
-    {
-      index: 4,
-      value: '칫솔만 아니면 돼요',
-      name: '칫솔만 아니면 돼요',
-      select: false,
-    },
-  ]);
-
-  const [isPlayGameItems, setIsPlayGameItems] = useState<Item[]>([
-    { index: 1, value: '아예 하지 않아요', name: '아예 하지 않아요', select: false },
-    { index: 2, value: '키보드 채팅정도만 쳐요', name: '키보드 채팅정도만 쳐요', select: false },
-    { index: 3, value: '보이스 채팅도 해요', name: '보이스 채팅도 해요', select: false },
-  ]);
-
-  const [isPhoneCallItems, setIsPhoneCallItems] = useState<Item[]>([
-    { index: 1, value: '아예 하지 않아요', name: '아예 하지 않아요', select: false },
-    { index: 2, value: '급한 전화만 해요', name: '급한 전화만 해요', select: false },
-    { index: 3, value: '자주 해요', name: '자주 해요', select: false },
-  ]);
-
-  const [studyingItems, setStudyingItems] = useState<Item[]>([
-    { index: 1, value: '아예 하지 않아요', name: '아예 하지 않아요', select: false },
-    { index: 2, value: '시험기간 때만 해요', name: '시험기간 때만 해요', select: false },
-    { index: 3, value: '매일 해요', name: '매일 해요', select: false },
-  ]);
-
-  const [intakeItems, setIntakeItems] = useState<Item[]>([
-    {
-      index: 1,
-      value: '아예 안 먹어요',
-      name: '아예 안 먹어요',
-      select: false,
-    },
-    { index: 2, value: '음료만 마셔요', name: '음료만 마셔요', select: false },
-    {
-      index: 3,
-      value: '간단한 간식정도만 먹어요',
-      name: '간단한 간식정도만 먹어요',
-      select: false,
-    },
-    {
-      index: 4,
-      value: '배달음식도 먹어요',
-      name: '배달음식도 먹어요',
-      select: false,
-    },
-  ]);
-
-  const [cleanSensitivityItems, setCleanSensitivityItems] = useState<Item[]>([
-    { index: 1, value: 1, name: '매우 예민하지 않아요', select: false },
-    { index: 2, value: 2, name: '예민하지 않아요', select: false },
-    { index: 3, value: 3, name: '보통이에요', select: false },
-    { index: 4, value: 4, name: '예민해요', select: false },
-    { index: 5, value: 5, name: '매우 예민해요', select: false },
-  ]);
-
-  const [noiseSensitivityItems, setNoiseSensitivityItems] = useState<Item[]>([
-    { index: 1, value: 1, name: '매우 예민하지 않아요', select: false },
-    { index: 2, value: 2, name: '예민하지 않아요', select: false },
-    { index: 3, value: 3, name: '보통이에요', select: false },
-    { index: 4, value: 4, name: '예민해요', select: false },
-    { index: 5, value: 5, name: '매우 예민해요', select: false },
-  ]);
-
-  const [cleaningFrequencyItems, setCleaningFrequencyItems] = useState<Item[]>([
-    { index: 1, value: '한 달에 한 번 해요', name: '한 달에 한 번 해요', select: false },
-    {
-      index: 2,
-      value: '2주에 한 번 해요',
-      name: '2주에 한 번 해요',
-      select: false,
-    },
-    {
-      index: 3,
-      value: '일주일에 한 번 해요',
-      name: '일주일에 한 번 해요',
-      select: false,
-    },
-    {
-      index: 4,
-      value: '이틀에 한 번 해요',
-      name: '이틀에 한 번 해요',
-      select: false,
-    },
-    {
-      index: 5,
-      value: '매일매일 해요',
-      name: '매일매일 해요',
-      select: false,
-    },
-  ]);
-
-  const [drinkingFrequencyItems, setDrinkingFrequencyItems] = useState<Item[]>([
-    { index: 1, value: '아예 안 마셔요', name: '아예 안 마셔요', select: false },
-    {
-      index: 2,
-      value: '한 달에 한 두번 마셔요',
-      name: '한 달에 한 두번 마셔요',
-      select: false,
-    },
-    {
-      index: 3,
-      value: '일주일에 한 두번 마셔요',
-      name: '일주일에 한 두번 마셔요',
-      select: false,
-    },
-    {
-      index: 4,
-      value: '일주일에 네 번이상 마셔요',
-      name: '일주일에 네 번이상 마셔요',
-      select: false,
-    },
-    {
-      index: 5,
-      value: '거의 매일 마셔요',
-      name: '거의 매일 마셔요',
-      select: false,
-    },
-  ]);
-
-  const [personalityItems, setPersonalityItems] = useState<Item[]>([
-    { index: 1, value: '조용해요', name: '조용해요', select: false },
-    {
-      index: 2,
-      value: '활발해요',
-      name: '활발해요',
-      select: false,
-    },
-    {
-      index: 3,
-      value: '말이 많아요',
-      name: '말이 많아요',
-      select: false,
-    },
-    {
-      index: 4,
-      value: '깔끔해요',
-      name: '깔끔해요',
-      select: false,
-    },
-    {
-      index: 5,
-      value: '부끄러움이 많아요',
-      name: '부끄러움이 많아요',
-      select: false,
-    },
-    { index: 6, value: '집이 좋아요', name: '집이 좋아요', select: false },
-    { index: 7, value: '바깥이 좋아요', name: '바깥이 좋아요', select: false },
-    { index: 8, value: '급해요', name: '급해요', select: false },
-    { index: 9, value: '느긋해요', name: '느긋해요', select: false },
-    { index: 10, value: '낯을 가려요', name: '낯을 가려요', select: false },
-    { index: 11, value: '귀차니즘이 있어요', name: '귀차니즘이 있어요', select: false },
-    { index: 12, value: '부지런해요', name: '부지런해요', select: false },
-  ]);
-
-  const [mbtiItems, setMbtiItems] = useState<Item[]>([
-    { index: 1, value: 'ISTJ', name: 'ISTJ', select: false },
-    { index: 2, value: 'ISFJ', name: 'ISFJ', select: false },
-    { index: 3, value: 'INFJ', name: 'INFJ', select: false },
-    { index: 4, value: 'INTJ', name: 'INTJ', select: false },
-    { index: 5, value: 'ISTP', name: 'ISTP', select: false },
-    { index: 6, value: 'ISFP', name: 'ISFP', select: false },
-    { index: 7, value: 'INFP', name: 'INFP', select: false },
-    { index: 8, value: 'INTP', name: 'INTP', select: false },
-    { index: 9, value: 'ESTP', name: 'ESTP', select: false },
-    { index: 10, value: 'ESFP', name: 'ESFP', select: false },
-    { index: 11, value: 'ENFP', name: 'ENFP', select: false },
-    { index: 12, value: 'ENTP', name: 'ENTP', select: false },
-    { index: 13, value: 'ESTJ', name: 'ESTJ', select: false },
-    { index: 14, value: 'ESFJ', name: 'ESFJ', select: false },
-    { index: 15, value: 'ENFJ', name: 'ENFJ', select: false },
-    { index: 16, value: 'ENTJ', name: 'ENTJ', select: false },
-  ]);
-
-  const { data } = useGetMemberStatData(profile.memberId);
-
-  useEffect(() => {
-    if (data && data.result) {
-      const result = data.result;
-
-      setAdmissionYear(result.memberStatDetail.admissionYear.toString());
-      setNumOfRoommate(result.memberStatDetail.numOfRoommate);
-      setDormitoryName(result.memberStatDetail.dormitoryName);
-      setAcceptance(result.memberStatDetail.acceptance);
-      setWakeUpMeridian(result.memberStatDetail.wakeUpMeridian);
-      setWakeUpTime(result.memberStatDetail.wakeUpTime);
-      setSleepingMeridian(result.memberStatDetail.sleepingMeridian);
-      setSleepingTime(result.memberStatDetail.sleepingTime);
-      setTurnOffMeridian(result.memberStatDetail.turnOffMeridian);
-      setTurnOffTime(result.memberStatDetail.turnOffTime);
-      setSmoking(result.memberStatDetail.smoking);
-      setSleepingHabit(result.memberStatDetail.sleepingHabit);
-      setAirConditioningIntensity(result.memberStatDetail.airConditioningIntensity);
-      setHeatingIntensity(result.memberStatDetail.heatingIntensity);
-      setLifePattern(result.memberStatDetail.lifePattern);
-      setIntimacy(result.memberStatDetail.intimacy);
-      setCanShare(result.memberStatDetail.canShare);
-      setIsPlayGame(result.memberStatDetail.isPlayGame);
-      setIsPhoneCall(result.memberStatDetail.isPhoneCall);
-      setStudying(result.memberStatDetail.studying);
-      setIntake(result.memberStatDetail.intake);
-      setCleanSensitivity(result.memberStatDetail.cleanSensitivity);
-      setNoiseSensitivity(result.memberStatDetail.noiseSensitivity);
-      setCleaningFrequency(result.memberStatDetail.cleaningFrequency);
-      setDrinkingFrequency(result.memberStatDetail.drinkingFrequency);
-      setPersonality(result.memberStatDetail.personality);
-      setMbti(result.memberStatDetail.mbti);
-      setSelfIntroduction(result.memberStatDetail.selfIntroduction);
-
-      setNumOfRoommateItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.numOfRoommate,
-        })),
-      );
-
-      setAcceptanceItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.acceptance,
-        })),
-      );
-
-      setWakeUpTimeItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.wakeUpTime,
-        })),
-      );
-
-      setSleepingTimeItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.sleepingTime,
-        })),
-      );
-
-      setTurnOffTimeItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.turnOffTime,
-        })),
-      );
-
-      setSmokingItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.smoking,
-        })),
-      );
-
-      setSleepingHabitItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select:
-            typeof item.value === 'string' &&
-            result.memberStatDetail.sleepingHabit.includes(item.value),
-        })),
-      );
-
-      setAirConditioningIntensityItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.airConditioningIntensity,
-        })),
-      );
-
-      setHeatingIntensityItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.heatingIntensity,
-        })),
-      );
-
-      setLifePatternItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.lifePattern,
-        })),
-      );
-
-      setIntimacyItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.intimacy,
-        })),
-      );
-
-      setCanShareItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.canShare,
-        })),
-      );
-
-      setIsPlayGameItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.isPlayGame,
-        })),
-      );
-
-      setIsPhoneCallItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.isPhoneCall,
-        })),
-      );
-
-      setStudyingItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.studying,
-        })),
-      );
-
-      setIntakeItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.intake,
-        })),
-      );
-
-      setCleanSensitivityItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.cleanSensitivity,
-        })),
-      );
-
-      setNoiseSensitivityItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.noiseSensitivity,
-        })),
-      );
-
-      setCleaningFrequencyItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.cleaningFrequency,
-        })),
-      );
-
-      setDrinkingFrequencyItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.drinkingFrequency,
-        })),
-      );
-
-      setPersonalityItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select:
-            typeof item.value === 'string' &&
-            result.memberStatDetail.personality.includes(item.value),
-        })),
-      );
-
-      setMbtiItems((prevItems) =>
-        prevItems.map((item) => ({
-          ...item,
-          select: item.value === result.memberStatDetail.mbti,
-        })),
-      );
-    }
-  }, [data]);
-
-  const { mutateAsync: updateInfo, isPending } = useUpdateMemberStat();
-
-  const handleUpdate = async () => {
-    try {
-      await updateInfo({
-        admissionYear: admissionYear,
-        numOfRoommate: numOfRoommate,
-        dormitoryName: dormitoryName,
-        acceptance: acceptance,
-        wakeUpMeridian: wakeUpMeridian,
-        wakeUpTime: wakeUpTime,
-        sleepingMeridian: sleepingMeridian,
-        sleepingTime: sleepingTime,
-        turnOffMeridian: turnOffMeridian,
-        turnOffTime: turnOffTime,
-        smoking: smoking,
-        sleepingHabit: sleepingHabit,
-        airConditioningIntensity: airConditioningIntensity,
-        heatingIntensity: heatingIntensity,
-        lifePattern: lifePattern,
-        intimacy: intimacy,
-        canShare: canShare,
-        isPlayGame: isPlayGame,
-        isPhoneCall: isPhoneCall,
-        studying: studying,
-        intake: intake,
-        cleanSensitivity: cleanSensitivity,
-        noiseSensitivity: noiseSensitivity,
-        cleaningFrequency: cleaningFrequency,
-        drinkingFrequency: drinkingFrequency,
-        personality: personality,
-        mbti: mbti,
-        selfIntroduction: selfIntroduction,
-      });
-
-      navigation.goBack();
-    } catch (error: any) {
-      console.log(error.response.data);
-    }
-  };
+  const { lifeStyle, setNewLifeStyle } = useNewLifeStyleStore();
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -603,254 +51,216 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
     }
   };
 
+  const toBack = () => {
+    navigation.goBack();
+  };
+
+  const { mutateAsync: updateInfo, isPending } = useUpdateMemberStat();
+
+  const handleUpdate = async () => {
+    try {
+      await updateInfo({
+        admissionYear: lifeStyle.admissionYear,
+        dormitoryName: lifeStyle.dormitoryName,
+        numOfRoommate: lifeStyle.numOfRoommate,
+        acceptance: lifeStyle.acceptance,
+        wakeUpMeridian: lifeStyle.wakeUpMeridian,
+        wakeUpTime: lifeStyle.wakeUpTime,
+        sleepingMeridian: lifeStyle.sleepingMeridian,
+        sleepingTime: lifeStyle.sleepingTime,
+        turnOffMeridian: lifeStyle.turnOffMeridian,
+        turnOffTime: lifeStyle.turnOffTime,
+        smoking: lifeStyle.smoking,
+        sleepingHabit: lifeStyle.sleepingHabit,
+        airConditioningIntensity: lifeStyle.airConditioningIntensity,
+        heatingIntensity: lifeStyle.heatingIntensity,
+        lifePattern: lifeStyle.lifePattern,
+        intimacy: lifeStyle.intimacy,
+        canShare: lifeStyle.canShare,
+        isPlayGame: lifeStyle.isPlayGame,
+        isPhoneCall: lifeStyle.isPhoneCall,
+        studying: lifeStyle.studying,
+        intake: lifeStyle.intake,
+        cleanSensitivity: lifeStyle.cleanSensitivity,
+        noiseSensitivity: lifeStyle.noiseSensitivity,
+        cleaningFrequency: lifeStyle.cleaningFrequency,
+        drinkingFrequency: lifeStyle.drinkingFrequency,
+        personality: lifeStyle.personality,
+        mbti: lifeStyle.mbti,
+        selfIntroduction: lifeStyle.selfIntroduction,
+      });
+
+      navigation.goBack();
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
+  };
+
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       {isPending && <LoadingComponent />}
-      <SafeAreaView className="bg-white" />
-      <ScrollView className="flex-1 bg-white px-5" ref={scrollViewRef}>
-        <View className="mb-10 mt-2 flex flex-row justify-between">
-          <Pressable onPress={toMyPage}>
-            <BackButton />
-          </Pressable>
+      <LifeStyleHeaderComponent
+        title=""
+        toBack={toBack}
+        isComplete={true}
+        buttonText="수정"
+        buttonFunc={handleUpdate}
+      />
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={{ paddingHorizontal: 20, rowGap: 56, paddingBottom: 34 }}
+      >
+        <TextInputComponent title="학번을 입력해주세요" isNumber={true} value="admissionYear" />
 
-          <Pressable
-            className="flex flex-row items-center rounded-md bg-sub1 px-5 py-2.5"
-            onPress={handleUpdate}
-          >
-            <Text className="text-xs font-semibold text-main1">수정</Text>
-          </Pressable>
-        </View>
-
-        <CustomTextInputBox
-          title="학번을 입력해주세요"
-          value={admissionYear}
-          setValue={setAdmissionYear}
-          placeholder="ex. 23"
+        <StringRadioComponent
+          title="신청한 기숙사를 선택해주세요"
+          items={dormitoryItems}
+          value="dormitoryName"
         />
 
-        <CustomRadioInputBox
+        <NumberRadioComponent
           title="신청실의 인원을 선택해주세요"
-          value={numOfRoommate}
-          setValue={setNumOfRoommate}
           items={numOfRoommateItems}
-          setItems={setNumOfRoommateItems}
-          isTime={false}
+          value="numOfRoommate"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="기숙사 합격여부를 선택해주세요"
-          value={acceptance}
-          setValue={setAcceptance}
           items={acceptanceItems}
-          setItems={setAcceptanceItems}
-          isTime={false}
+          value="acceptance"
         />
 
-        <CustomRadioInputBox
+        <TimeRadioComponent
           title="기상시간을 선택해주세요"
-          value={wakeUpTime}
-          setValue={setWakeUpTime}
-          meridian={wakeUpMeridian}
-          setMeridian={setWakeUpMeridian}
-          items={wakeUpTimeItems}
-          setItems={setWakeUpTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
+          items={timeItems}
+          value="wakeUpTime"
+          meridian="wakeUpMeridian"
         />
 
-        <CustomRadioInputBox
+        <TimeRadioComponent
           title="취침시간을 선택해주세요"
-          value={sleepingTime}
-          setValue={setSleepingTime}
-          meridian={sleepingMeridian}
-          setMeridian={setSleepingMeridian}
-          items={sleepingTimeItems}
-          setItems={setSleepingTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
+          items={timeItems}
+          value="sleepingTime"
+          meridian="sleepingMeridian"
         />
 
-        <CustomRadioInputBox
+        <TimeRadioComponent
           title="소등시간을 선택해주세요"
-          value={turnOffTime}
-          setValue={setTurnOffTime}
-          meridian={turnOffMeridian}
-          setMeridian={setTurnOffMeridian}
-          items={turnOffTimeItems}
-          setItems={setTurnOffTimeItems}
-          isTime={true}
-          isWide={true}
-          width={48}
-          count={6}
+          items={timeItems}
+          value="turnOffTime"
+          meridian="turnOffMeridian"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="흡연여부를 선택해주세요"
-          value={smoking}
-          setValue={setSmoking}
           items={smokingItems}
-          setItems={setSmokingItems}
-          isTime={false}
+          value="smoking"
         />
 
-        <CustomCheckBoxInput
+        <StringCheckComponent
           title="잠버릇을 선택해주세요 (중복선택 가능)"
-          value={sleepingHabit}
-          setValue={setSleepingHabit}
           items={sleepingHabitItems}
-          setItems={setSleepingHabitItems}
-          isTime={false}
+          value="sleepingHabit"
         />
 
-        <CustomRadioInputBox
+        <NumberRadioComponent
           title="에어컨 강도를 선택해주세요"
-          value={airConditioningIntensity}
-          setValue={setAirConditioningIntensity}
           items={airConditioningIntensityItems}
-          setItems={setAirConditioningIntensityItems}
-          isTime={false}
+          value="airConditioningIntensity"
         />
 
-        <CustomRadioInputBox
+        <NumberRadioComponent
           title="히터 강도를 선택해주세요"
-          value={heatingIntensity}
-          setValue={setHeatingIntensity}
           items={heatingIntensityItems}
-          setItems={setHeatingIntensityItems}
-          isTime={false}
+          value="heatingIntensity"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="생활 패턴을 선택해주세요"
-          value={lifePattern}
-          setValue={setLifePattern}
           items={lifePatternItems}
-          setItems={setLifePatternItems}
-          isTime={false}
+          value="lifePattern"
         />
 
-        <CustomRadioInputBox
-          title="룸메이트와의 원하는 친밀도를 선택해주세요"
-          value={intimacy}
-          setValue={setIntimacy}
+        <StringRadioComponent
+          title="룸메이트와 원하는 친밀도를 선택해주세요"
           items={intimacyItems}
-          setItems={setIntimacyItems}
-          isTime={false}
+          value="intimacy"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
-          value={canShare}
-          setValue={setCanShare}
           items={canShareItems}
-          setItems={setCanShareItems}
-          isTime={false}
+          value="canShare"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="방 안에서의 게임 여부를 선택해주세요"
-          value={isPlayGame}
-          setValue={setIsPlayGame}
           items={isPlayGameItems}
-          setItems={setIsPlayGameItems}
-          isTime={false}
+          value="isPlayGame"
         />
 
-        <CustomRadioInputBox
-          title="방 안에서 전화 여부를 선택해주세요"
-          value={isPhoneCall}
-          setValue={setIsPhoneCall}
+        <StringRadioComponent
+          title="방 안에서의 전화 여부를 선택해주세요"
           items={isPhoneCallItems}
-          setItems={setIsPhoneCallItems}
-          isTime={false}
+          value="isPhoneCall"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="방 안에서의 공부 여부를 선택해주세요"
-          value={studying}
-          setValue={setStudying}
           items={studyingItems}
-          setItems={setStudyingItems}
-          isTime={false}
+          value="studying"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="방 안에서의 섭취여부를 선택해주세요"
-          value={intake}
-          setValue={setIntake}
           items={intakeItems}
-          setItems={setIntakeItems}
-          isTime={false}
+          value="intake"
         />
 
-        <CustomRadioInputBox
+        <NumberRadioComponent
           title="청결 예민도를 선택해주세요"
-          value={cleanSensitivity}
-          setValue={setCleanSensitivity}
           items={cleanSensitivityItems}
-          setItems={setCleanSensitivityItems}
-          isTime={false}
+          value="cleanSensitivity"
         />
 
-        <CustomRadioInputBox
+        <NumberRadioComponent
           title="소음 예민도를 선택해주세요"
-          value={noiseSensitivity}
-          setValue={setNoiseSensitivity}
           items={noiseSensitivityItems}
-          setItems={setNoiseSensitivityItems}
-          isTime={false}
+          value="noiseSensitivity"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="청소 빈도를 선택해주세요"
-          value={cleaningFrequency}
-          setValue={setCleaningFrequency}
           items={cleaningFrequencyItems}
-          setItems={setCleaningFrequencyItems}
-          isTime={false}
+          value="cleaningFrequency"
         />
 
-        <CustomRadioInputBox
+        <StringRadioComponent
           title="음주 빈도를 선택해주세요"
-          value={drinkingFrequency}
-          setValue={setDrinkingFrequency}
           items={drinkingFrequencyItems}
-          setItems={setDrinkingFrequencyItems}
-          isTime={false}
+          value="drinkingFrequency"
         />
 
-        <CustomCheckBoxInput
+        <StringCheckComponent
           title="성격을 선택해주세요 (중복선택 가능)"
-          value={personality}
-          setValue={setPersonality}
           items={personalityItems}
-          setItems={setPersonalityItems}
-          isTime={false}
+          value="personality"
         />
 
-        <CustomRadioInputBox
-          title="MBTI를 선택해주세요"
-          value={mbti}
-          setValue={setMbti}
-          items={mbtiItems}
-          setItems={setMbtiItems}
-          isTime={false}
-          isWide={true}
-          width={70}
-        />
+        <StringRadioComponent title="MBTI를 선택해주세요" items={mbtiItems} value="mbti" />
 
-        <CustomTextarea
-          title="하고싶은 말을 적어주세요 (선택)"
-          value={selfIntroduction}
-          setValue={setSelfIntroduction}
-          placeholder="내용을 입력해주세요"
-          height={270}
-          maxLength={200}
-        />
+        <View className="space-y-3">
+          <Text className="text-base font-semibold text-emphasizedFont">
+            하고싶은 말을 적어주세요 (선택)
+          </Text>
+          <TextInput
+            value={lifeStyle.selfIntroduction}
+            onChangeText={(text: string) => setNewLifeStyle({ selfIntroduction: text })}
+            placeholder="내용을 입력해주세요"
+            multiline
+            className="h-[270px] rounded-xl bg-colorBox p-4 pb-20"
+          />
+        </View>
       </ScrollView>
 
       <View className="fixed bottom-28 right-5 flex w-fit items-end">
@@ -858,7 +268,7 @@ const LifeStyleEditScreen = ({ navigation }: LifeStyleEditScreenProps) => {
           <TopButton />
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

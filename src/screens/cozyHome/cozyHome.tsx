@@ -75,8 +75,6 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
     }, 2000);
   }, []);
 
-  console.log(requestedRoomList);
-
   return (
     <SafeAreaView
       className="flex-1"
@@ -92,7 +90,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
 
         <View className="bg-white pt-6" style={{ paddingBottom: bottom + 80 }}>
           {/* 방이 없는 사용자에 대하여 참여 요청한 방 목록 컴포넌트 */}
-          {myRoom.hasRoom &&
+          {!myRoom.hasRoom &&
             requestRoomList !== undefined &&
             requestRoomList?.result.length !== 0 && (
               <>

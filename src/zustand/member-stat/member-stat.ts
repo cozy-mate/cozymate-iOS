@@ -257,3 +257,77 @@ export const useDetailFilterListStore = create<{
       },
     })),
 }));
+
+export const useNewLifeStyleStore = create<{
+  lifeStyle: RegisterLifeStyle;
+  setNewLifeStyle: (newLifeStyle: Partial<RegisterLifeStyle>) => void;
+  clearNewLifeStyle: () => void;
+}>((set) => ({
+  lifeStyle: {
+    admissionYear: '',
+    numOfRoommate: undefined,
+    dormitoryName: '',
+    acceptance: '',
+    wakeUpMeridian: '',
+    wakeUpTime: undefined,
+    sleepingMeridian: '',
+    sleepingTime: undefined,
+    turnOffMeridian: '',
+    turnOffTime: undefined,
+    smoking: '',
+    sleepingHabit: [],
+    airConditioningIntensity: undefined,
+    heatingIntensity: undefined,
+    lifePattern: '',
+    intimacy: '',
+    canShare: '',
+    isPlayGame: '',
+    isPhoneCall: '',
+    studying: '',
+    intake: '',
+    cleanSensitivity: undefined,
+    noiseSensitivity: undefined,
+    cleaningFrequency: '',
+    drinkingFrequency: '',
+    personality: [],
+    mbti: '',
+    selfIntroduction: '',
+  },
+  setNewLifeStyle: (newLifeStyle) =>
+    set((state) => ({
+      lifeStyle: { ...state.lifeStyle, ...newLifeStyle },
+    })),
+  clearNewLifeStyle: () =>
+    set(() => ({
+      lifeStyle: {
+        admissionYear: '',
+        numOfRoommate: undefined,
+        dormitoryName: '',
+        acceptance: '',
+        wakeUpMeridian: '',
+        wakeUpTime: undefined,
+        sleepingMeridian: '',
+        sleepingTime: undefined,
+        turnOffMeridian: '',
+        turnOffTime: undefined,
+        smoking: '',
+        sleepingHabit: [],
+        airConditioningIntensity: undefined,
+        heatingIntensity: undefined,
+        lifePattern: '',
+        intimacy: '',
+        canShare: '',
+        isPlayGame: '',
+        isPhoneCall: '',
+        studying: '',
+        intake: '',
+        cleanSensitivity: undefined,
+        noiseSensitivity: undefined,
+        cleaningFrequency: '',
+        drinkingFrequency: '',
+        personality: [],
+        mbti: '',
+        selfIntroduction: '',
+      },
+    })),
+}));

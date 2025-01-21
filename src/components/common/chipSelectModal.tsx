@@ -6,7 +6,7 @@ import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 import { updatePreferenceList } from '@server/api/member-stat-preference';
 
 import { useGetMemberList } from '@hooks/api/member-stat';
-import { useGetRandomRoom } from '@hooks/api/room-recommend';
+import { useGetFiveRandomRoom } from '@hooks/api/room-recommend';
 
 import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
@@ -24,7 +24,7 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
   const { preferenceList, setPreferenceList } = usePreferencesStore();
 
   const { refetch: refetchRecommendMembers } = useGetMemberList();
-  const { refetch: refetchRecommendRooms } = useGetRandomRoom(5, 0);
+  const { refetch: refetchRecommendRooms } = useGetFiveRandomRoom(5, 0);
 
   const items: Item[] = [
     { index: 1, id: 'birthYear', name: '출생년도' },
@@ -100,7 +100,10 @@ const ChipSelectModal: React.FC<ChipSelectModalProps> = ({ closeModal }) => {
               <View className="px-5">
                 <Pressable
                   onPress={updatePreferences}
-                  className="mb-[54px] rounded-lg bg-main1 p-4"
+                  disabled={preferenceList.length !== 4}
+                  className={`mb-[54px] rounded-lg p-4 ${
+                    preferenceList.length !== 4 ? 'bg-[#C4C4C4]' : 'bg-main1'
+                  }`}
                 >
                   <Text className="text-center text-white">확인</Text>
                 </Pressable>

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 interface FieldValues {
-  [key: string]: string | number | string[] | undefined;
+  [key: string]: string | number | undefined | string[];
 }
 
 interface UseCompletionPercentageParams {
@@ -11,7 +11,7 @@ interface UseCompletionPercentageParams {
 
 const useCompletionPercentage = ({ fields, totalFields }: UseCompletionPercentageParams) => {
   return useMemo(() => {
-    const filledFields = Object.values(fields).filter((value) => {
+    const filledFields = Object.entries(fields).filter(([_, value]) => {
       if (Array.isArray(value)) {
         return value.length > 0;
       }

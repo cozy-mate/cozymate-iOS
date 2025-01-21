@@ -8,6 +8,7 @@ export interface SignUpRequest {
   birthday: string;
   persona: number;
   universityId: number;
+  majorName: string;
 }
 
 export interface SignInRequest {

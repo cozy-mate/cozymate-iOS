@@ -10,8 +10,6 @@ import MemberComponent from '@components/roomDetail/memberComponent';
 import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useIsVerifiedStore } from '@zustand/member/member';
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { getChipDetailData } from '@server/api/room-member-stat';
 
@@ -71,12 +69,10 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { bottom } = useSafeAreaInsets();
   const width = Dimensions.get('screen').width;
 
-  const [isNotVerifiedModalOpen, setIsNotVerifiedModalOpen] = useState<boolean>(false);
+  // const [isNotVerifiedModalOpen, setIsNotVerifiedModalOpen] = useState<boolean>(false);
 
   // 내 방인지 여부 및 라이프스타일 존재 여부
   const { myRoom, setMyRoom } = useHasRoomStore();
-  const { isVerified } = useIsVerifiedStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
 
   // 방 참여 요청 여부 확인
   const { data: isRequested, refetch: refetchCheckRequested } = useCheckRequested(roomId);
@@ -148,19 +144,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 참여 요청 취소
   const deleteRequest = async () => {
     await mutateDeleteRoomRequest(roomId);
-  };
-
-  // 라이프스타일 없는 인원 이동
-  const toLifeStyleOnboarding = () => {
-    navigation.navigate('LifeStyleOnboardingScreen', { returnToRoom: roomId });
-  };
-
-  // 학교 인증하지 않은 인원 이동
-  const toSchoolAuthentication = () => {
-    navigation.navigate('SchoolAuthenticationScreen', {
-      verified: Boolean(isVerified),
-      returnToRoom: roomId,
-    });
   };
 
   const { mutateAsync: acceptInvited } = useAcceptInvited(
@@ -478,16 +461,12 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
                   text="수락"
                   disabled={false}
                   onPressFunc={() => {
-                    if (isVerified) {
-                      acceptInvited(true);
-                      setMyRoom({
-                        hasRoom: true,
-                        roomId: roomId,
-                        isRoomManager: false,
-                      });
-                    } else {
-                      setIsNotVerifiedModalOpen(true);
-                    }
+                    acceptInvited(true);
+                    setMyRoom({
+                      hasRoom: true,
+                      roomId: roomId,
+                      isRoomManager: false,
+                    });
                   }}
                 />
               </View>
@@ -519,48 +498,16 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
           )}
 
           {/* 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 &&
-            !isRequested.result &&
-            hasLifeStyle &&
-            isVerified &&
-            !isInvited.result && (
-              <BottomButton
-                color="bg-main1"
-                borderColor="border-main1"
-                textColor="text-white"
-                text="방 참여 요청하기"
-                disabled={false}
-                onPressFunc={sendRequest}
-              />
-            )}
-
-          {/* 라이프스타일이 없고 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 && !isRequested.result && !hasLifeStyle && !isInvited.result && (
+          {myRoom.roomId === 0 && !isRequested.result && !isInvited.result && (
             <BottomButton
               color="bg-main1"
               borderColor="border-main1"
               textColor="text-white"
-              text="라이프스타일 입력하고 방 참여하기"
+              text="방 참여 요청하기"
               disabled={false}
-              onPressFunc={toLifeStyleOnboarding}
+              onPressFunc={sendRequest}
             />
           )}
-
-          {/* 라이프스타일은 있지만 학교인증이 되지 않은 방이 없는 사용자가 참여 요청을 보내지 않은 경우 */}
-          {myRoom.roomId === 0 &&
-            !isRequested.result &&
-            hasLifeStyle &&
-            !isVerified &&
-            !isInvited.result && (
-              <BottomButton
-                color="bg-main1"
-                borderColor="border-main1"
-                textColor="text-white"
-                text="학교 인증하고 방 참여하기"
-                disabled={false}
-                onPressFunc={toSchoolAuthentication}
-              />
-            )}
         </View>
       </View>
 
@@ -572,16 +519,6 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
         leftButtonFunc={() => setIsExitModalOpen(false)}
         rightButtonText="확인"
         rightButtonFunc={exitRoom}
-      />
-
-      <TwoButtonModal
-        isVisible={isNotVerifiedModalOpen}
-        title={`방에 참여하려면\n먼저 학교인증을 해야해요!`}
-        closeFunc={() => setIsNotVerifiedModalOpen(false)}
-        leftButtonText="안할래요"
-        leftButtonFunc={() => setIsNotVerifiedModalOpen(false)}
-        rightButtonText="할래요"
-        rightButtonFunc={() => toSchoolAuthentication()}
       />
 
       {isLifeStyleModalOpen && (

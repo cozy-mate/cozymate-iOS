@@ -2,23 +2,18 @@ import React, { useState } from 'react';
 import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import UserComponent from '@components/roomMate/userComponent';
-// import FilteringModal from '@components/roomMate/filteringModal';
 import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
-import NoLifeStyleComponent from '@components/roomMate/noLifeStyleComponent';
 
-import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-stat/member-stat';
+import { useDetailFilterListStore } from '@zustand/member-stat/member-stat';
 
-import { useFilter, useGetRandomMember } from '@hooks/api/member-stat';
+import { useFilter } from '@hooks/api/member-stat';
 
 import { RoomMateScreenProps } from '@type/param/stack';
 
 import BackButton from '@assets/backButton.svg';
 import MagnifierIcon from '@assets/magnifier.svg';
-// import FilterIcon from '@assets/roomMate/filter.svg';
-// import ColoredFilterIcon from '@assets/roomMate/coloredFilter.svg';
 
 const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
   const { detailFilterList, clearDetailFilterList } = useDetailFilterListStore();
 
   const [chipList, setChipList] = useState<string[]>([]);
@@ -31,9 +26,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
       fetchNextPage();
     }
   };
-
-  // 라이프스타일이 없는 사용자
-  const { data: userList } = useGetRandomMember();
 
   const [items, setItems] = useState([
     { index: 1, id: 'birthYear', name: '출생년도', select: false },
@@ -74,10 +66,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
     navigation.navigate('UserDetailScreen', { memberId: memberId });
   };
 
-  const toLifeStyleOnboarding = () => {
-    navigation.navigate('LifeStyleOnboardingScreen');
-  };
-
   const handleScroll = (event: any) => {
     const contentHeight = event.nativeEvent.contentSize.height;
     const contentOffsetY = event.nativeEvent.contentOffset.y;
@@ -87,12 +75,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
       loadMoreList();
     }
   };
-
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  // const handleModal = () => {
-  //   setIsModalOpen(false);
-  // };
 
   const allSelectedValues = Object.values(detailFilterList)
     .flat()
@@ -117,20 +99,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           <Text className="px-6 text-lg font-semibold leading-5 tracking-tight text-emphasizedFont">
             원하는 칩을 선택하면{'\n'}나와 똑같은 답변을 한 사용자만 떠요!
           </Text>
-          {/* <Pressable
-            onPress={() => setIsModalOpen(true)}
-            className={`rounded-lg border-[1.5px] px-3 py-[13px] ${
-              JSON.stringify(detailFilterList) !== JSON.stringify(initialValue)
-                ? 'border-main1'
-                : 'border-disabled'
-            }`}
-          >
-            {JSON.stringify(detailFilterList) !== JSON.stringify(initialValue) ? (
-              <ColoredFilterIcon />
-            ) : (
-              <FilterIcon />
-            )}
-          </Pressable> */}
         </View>
 
         <View className="mb-5 px-5">
@@ -177,28 +145,8 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
         )}
 
         <View className="px-5">
-          {/* 라이프스타일이 없는 사용자 */}
-          {!hasLifeStyle ? (
-            chipList.length === 0 && userList?.result && userList.result.memberList.length !== 0 ? (
-              userList.result.memberList.map((user) => (
-                <UserComponent
-                  key={user.memberDetail.memberId}
-                  user={user}
-                  toUserDetail={() => toOtherDetail(user.memberDetail.memberId)}
-                />
-              ))
-            ) : chipList.length !== 0 ? (
-              <NoLifeStyleComponent pressFunc={toLifeStyleOnboarding} isChipClicked={true} />
-            ) : (
-              <View className="flex h-36 items-center justify-center">
-                <Text className="text-sm font-medium text-disabledFont">
-                  아직 등록된 사용자가 없어요
-                </Text>
-              </View>
-            )
-          ) : /* 라이프스타일이 있는 사용자 */
-          result.data?.pages &&
-            result.data.pages.flatMap((page) => page.result.memberList).length === 0 ? (
+          {result.data?.pages &&
+          result.data.pages.flatMap((page) => page.result.memberList).length === 0 ? (
             <View className="flex h-36 items-center justify-center">
               <Text className="text-sm font-medium text-disabledFont">사용자가 없습니다.</Text>
             </View>
@@ -215,8 +163,6 @@ const RoomMateScreen = ({ navigation }: RoomMateScreenProps) => {
           )}
         </View>
       </ScrollView>
-
-      {/* {isModalOpen && <FilteringModal onClose={handleModal} />} */}
     </SafeAreaView>
   );
 };

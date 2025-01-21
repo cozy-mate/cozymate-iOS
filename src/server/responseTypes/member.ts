@@ -75,6 +75,7 @@ export interface SignUpResponse {
       nickname: string;
       gender: string;
       birthday: string;
+      universityId: number;
       universityName: string;
       majorName: string;
       persona: number;

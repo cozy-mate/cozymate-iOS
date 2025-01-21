@@ -11,7 +11,7 @@ import { useHasLifeStyleStore, useDetailFilterListStore } from '@zustand/member-
 
 import {
   SearchMembersResponse,
-  GetRandomMemberResponse,
+  // GetRandomMemberResponse,
   SearchMemberByKeywordResponse,
   GetOtherMemberStatDataResponse,
 } from '@server/responseTypes/member-stat';
@@ -23,7 +23,7 @@ import {
 } from '@server/requestTypes/member-stat';
 import {
   searchMembers,
-  getRandomMember,
+  // getRandomMember,
   updateMemberStat,
   registerMemberStat,
   searchMemberByKeyword,
@@ -51,23 +51,23 @@ export const useGetMemberStatData = (
 };
 
 // 사용자 랜덤 추천
-export const useGetRandomMember = (): {
-  data: GetRandomMemberResponse | undefined;
-  refetch: () => void;
-} => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+// export const useGetRandomMember = (): {
+//   data: GetRandomMemberResponse | undefined;
+//   refetch: () => void;
+// } => {
+//   const { hasLifeStyle } = useHasLifeStyleStore();
 
-  const { data, refetch } = useQuery({
-    queryKey: ['randomMemberList'],
-    queryFn: () => getRandomMember(),
-    select: (reseponse: GetRandomMemberResponse) => {
-      return reseponse;
-    },
-    enabled: !hasLifeStyle,
-  });
+//   const { data, refetch } = useQuery({
+//     queryKey: ['randomMemberList'],
+//     queryFn: () => getRandomMember(),
+//     select: (reseponse: GetRandomMemberResponse) => {
+//       return reseponse;
+//     },
+//     enabled: !hasLifeStyle,
+//   });
 
-  return { data, refetch };
-};
+//   return { data, refetch };
+// };
 
 // 사용자 상세정보 필터링 완전 일치 필터링 및 일치율 조회
 export const useSearchMembersByFilter = (
@@ -108,12 +108,10 @@ export const useSearchMembersByFilter = (
 // };
 
 export const useGetMemberList = () => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
   const { data, refetch } = useSuspenseQuery({
-    queryKey: ['/members/stat/random'],
-    queryFn: () => (hasLifeStyle ? searchMembers() : getRandomMember()),
-    select: (response: GetRandomMemberResponse | SearchMembersResponse) => {
+    queryKey: [`/members/stat/filter`],
+    queryFn: () => searchMembers(),
+    select: (response: SearchMembersResponse) => {
       return response;
     },
   });

@@ -6,14 +6,12 @@ import CreateRoomModal from '@components/cozyHome/createRoomModal';
 import TwoButtonModal from '@components/commonComponents/twoButtonModal';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useIsVerifiedStore } from '@zustand/member/member';
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
 import HomeBack from '@assets/cozyHome/homeBack.svg';
 import ChatIcon from '@assets/cozyHome/chatIcon.svg';
-import MegaPhoneIcon from '@assets/cozyHome/megaPhone.svg';
+// import MegaPhoneIcon from '@assets/cozyHome/megaPhone.svg';
 import BlueSchool from '@assets/cozyHome/blueSchoolIcon.svg';
 import NotificationIcon from '@assets/cozyHome/notificationIcon.svg';
 
@@ -24,8 +22,6 @@ interface HeaderComponentProps {
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({ navigation, handleLayout }) => {
   const { myRoom } = useHasRoomStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { isVerified } = useIsVerifiedStore();
 
   const width = Dimensions.get('screen').width;
 
@@ -57,19 +53,19 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ navigation, handleLay
 
   // 공개방 생성 이동 로직
   const toCreatePublicRoom = () => {
-    if (!isVerified) {
-      // 학교 인증 X
-      setIsCreateRoomOpen(false);
-      setIsNotVerifiedModalOpen(true);
-    } else if (!hasLifeStyle) {
-      // 학교 인증 O & 라이프 스타일 입력 X
-      setIsCreateRoomOpen(false);
-      setIsNoLifeStyleModalOpen(true);
-    } else {
-      // 학교 인증 O & 라이프 스타일 입력 O
-      setIsCreateRoomOpen(false);
-      navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
-    }
+    // if (!isVerified) {
+    //   // 학교 인증 X
+    //   setIsCreateRoomOpen(false);
+    //   setIsNotVerifiedModalOpen(true);
+    // } else if (!hasLifeStyle) {
+    //   // 학교 인증 O & 라이프 스타일 입력 X
+    //   setIsCreateRoomOpen(false);
+    //   setIsNoLifeStyleModalOpen(true);
+    // } else {
+    // 학교 인증 O & 라이프 스타일 입력 O
+    setIsCreateRoomOpen(false);
+    navigation.navigate('CreateRoomScreen', { type: 'PUBLIC' });
+    // }
   };
 
   // 비공개방 생성 이동 로직
@@ -106,14 +102,14 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ navigation, handleLay
             </View>
           </View>
           <View className="flex flex-col items-start px-5">
-            <View className="mb-3 flex w-full flex-row space-x-2 rounded-lg bg-colorBox px-2 py-1.5">
+            {/* <View className="mb-3 flex w-full flex-row space-x-2 rounded-lg bg-colorBox px-2 py-1.5">
               <View className="p-[1.6px]">
                 <MegaPhoneIcon />
               </View>
               <Text className="text-xs font-medium text-emphasizedFont">
                 [공지] 시험기간으로 인한 기숙사 통금시간 변경
               </Text>
-            </View>
+            </View> */}
 
             {/* 초대코드로 방 만들기 & 방 참여하기 버튼 */}
             <View className="mb-6 flex h-[100px] flex-row space-x-3">

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
 import { getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 import { FavoriteUserRoomScreenProps } from '@type/param/stack';
@@ -32,10 +30,6 @@ interface FavoriteUserProps {
 }
 
 const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
-  console.log(userData.memberStatPreferenceDetail.preferenceStats);
-
   return (
     <Pressable
       onPress={() =>
@@ -51,10 +45,7 @@ const FavoriteUser: React.FC<FavoriteUserProps> = ({ userData, navigation }) => 
         </Text>
 
         <Text className="text-base font-medium text-main1">
-          {userData.memberStatPreferenceDetail.equality !== null && hasLifeStyle
-            ? userData.memberStatPreferenceDetail.equality
-            : '?? '}
-          %
+          {userData.memberStatPreferenceDetail.equality}%
         </Text>
       </View>
 

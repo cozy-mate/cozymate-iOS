@@ -3,9 +3,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   SignInScreen: undefined;
   PersonalInfoInputScreen: undefined;
+  UniversityInputScreen: undefined;
   CharacterInputScreen: undefined;
   ChipSelectScreen: undefined;
   CompleteScreen: undefined;
+
+  BasicLifeStyleScreen: undefined;
+  EssentialLifyStyleScreen: undefined;
+  AdditionalLifeStyleScreen: undefined;
 };
 
 // 시작 스크린
@@ -15,6 +20,11 @@ export type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'Sign
 export type PersonalInfoInputScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'PersonalInfoInputScreen'
+>;
+
+export type UniversityInputScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'UniversityInputScreen'
 >;
 
 // 온보딩 2 스크린
@@ -28,3 +38,18 @@ export type ChipSelectScreenProps = NativeStackScreenProps<RootStackParamList, '
 
 // 온보딩 완료 스크린
 export type CompleteScreenProps = NativeStackScreenProps<RootStackParamList, 'CompleteScreen'>;
+
+export type BasicLifeStyleScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'BasicLifeStyleScreen'
+>;
+
+export type EssentialLifyStyleScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'EssentialLifyStyleScreen'
+>;
+
+export type AdditionalLifyStyleScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'AdditionalLifeStyleScreen'
+>;

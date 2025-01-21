@@ -1,15 +1,10 @@
 import { useEffect } from 'react';
 
-import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
-import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
-import {
-  useLifeStyleStore,
-  usePreferencesStore,
-  useHasLifeStyleStore,
-} from '@zustand/member-stat/member-stat';
+import { useHasRoomStore } from '@zustand/room/room';
+import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
+import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { reissueToken } from '@server/api/auth';
-import { checkVerified } from '@server/api/mail';
 import { getMyProfile } from '@server/api/member';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
@@ -18,16 +13,16 @@ import { getPreferenceList } from '@server/api/member-stat-preference';
 import { deleteToken, setAccessToken, setRefreshToken, getRefreshToken } from '@utils/token';
 
 export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>) => {
+  // 로그인 정보
   const { setLoggedIn } = useLoggedInStore();
-
   // 프로필 정보
   const { setProfile } = useProfileStore();
-  const { setIsVerified } = useIsVerifiedStore();
+  // 선호 칩
   const { setPreferenceList } = usePreferencesStore();
+  // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
-  const { setRoomInfo } = useRoomInfoStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setLifeStyle } = useLifeStyleStore();
+  // 라이프스타일 여부 및 라이프스타일 정보
+  const { setNewLifeStyle } = useNewLifeStyleStore();
 
   const start = Date.now();
 
@@ -60,12 +55,11 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           console.log(error.response);
         }
 
+        // 프로필 정보 저장
         const profileResponse = await getMyProfile();
         setProfile(profileResponse.result);
 
-        const checkVerifiedResponse = await checkVerified();
-        setIsVerified(checkVerifiedResponse.result);
-
+        // 선호 칩 항목 저장
         const preferenceResponse = await getPreferenceList();
         setPreferenceList(preferenceResponse.result.preferenceList);
 
@@ -84,32 +78,11 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
             isFullRoom:
               roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
           });
-
-          setRoomInfo(roomInfoResponse.result);
-          setMyRoom({});
-        } else {
-          setMyRoom({
-            hasRoom: false,
-            roomId,
-            isRoomManager: false,
-            isFullRoom: false,
-          });
         }
 
-        // 라이프스타일 정보 처리
-        try {
-          const userDetailResponse = await getMemberStatData();
-          setHasLifeStyle(true);
-          setLifeStyle(userDetailResponse.result);
-        } catch (error: any) {
-          const errorCode = error?.response?.data?.code;
-          if (errorCode === 'MEMBERSTAT402') {
-            setHasLifeStyle(false);
-            console.log('MEMBERSTAT402: No LifeStyle data available');
-          } else {
-            console.error('Unexpected error in getUserDetailData:', error);
-          }
-        }
+        // 유저 라이프스타일 정보 저장
+        const userLifeStyle = await getMemberStatData();
+        setNewLifeStyle(userLifeStyle.result.memberStatDetail);
 
         setLoggedIn(true);
 
@@ -136,5 +109,4 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
     // 비동기 함수 호출
     checkLogin();
   }, []);
-  
 };

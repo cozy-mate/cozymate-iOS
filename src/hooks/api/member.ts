@@ -7,10 +7,9 @@ import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/
 import {
   useLifeStyleStore,
   usePreferencesStore,
-  useHasLifeStyleStore,
+  useNewLifeStyleStore,
 } from '@zustand/member-stat/member-stat';
 
-import { checkVerified } from '@server/api/mail';
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
@@ -45,14 +44,12 @@ export const useKakaoLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
-  const { setIsVerified } = useIsVerifiedStore();
+  // 선호 칩
   const { setPreferenceList } = usePreferencesStore();
-  // 방 여부 및 방 정보
+  // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
-  const { setRoomInfo } = useRoomInfoStore();
   // 라이프스타일 여부 및 라이프스타일 정보
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setLifeStyle } = useLifeStyleStore();
+  const { setNewLifeStyle } = useNewLifeStyleStore();
 
   return useMutation({
     mutationFn: () => login(),
@@ -88,13 +85,11 @@ export const useKakaoLogin = (
             const getProfileResponse = await getMyProfile();
             setProfile(getProfileResponse.result);
 
-            const checkVerifiedResponse = await checkVerified();
-            setIsVerified(checkVerifiedResponse.result);
-
+            // 선호 칩 항목 저장
             const preferenceResponse = await getPreferenceList();
             setPreferenceList(preferenceResponse.result.preferenceList);
 
-            // 방 존재 여부 저장
+            // 방 존재 여부 확인
             const roomCheckResponse = await checkHasRoom();
             const roomId = roomCheckResponse.result.roomId;
 
@@ -109,31 +104,12 @@ export const useKakaoLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
-
-              setRoomInfo(roomInfoResponse.result);
-            } else {
-              setMyRoom({
-                hasRoom: false,
-                roomId,
-                isRoomManager: false,
-                isFullRoom: false,
-              });
             }
 
-            // getUserDetailData 호출 및 라이프스타일 정보 처리
-            try {
-              const userDetailResponse = await getMemberStatData();
-              setHasLifeStyle(true);
-              setLifeStyle(userDetailResponse.result);
-            } catch (error: any) {
-              const errorCode = error?.response?.data?.code;
-              if (errorCode === 'MEMBERSTAT402') {
-                setHasLifeStyle(false);
-              } else {
-                // 예상하지 못한 에러 처리
-                console.error(error);
-              }
-            }
+            // 유저 라이프스타일 정보 저장
+            const userLifeStyle = await getMemberStatData();
+            setNewLifeStyle(userLifeStyle.result.memberStatDetail);
+
             setLoggedIn(true);
           }
         } catch (error: any) {
@@ -172,14 +148,12 @@ export const useAppleLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
-  const { setIsVerified } = useIsVerifiedStore();
+  // 선호 칩
   const { setPreferenceList } = usePreferencesStore();
-  // 방 여부 및 방 정보
+  // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
-  const { setRoomInfo } = useRoomInfoStore();
   // 라이프스타일 여부 및 라이프스타일 정보
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setLifeStyle } = useLifeStyleStore();
+  const { setNewLifeStyle } = useNewLifeStyleStore();
 
   return useMutation({
     mutationFn: () => appleLoginAuth(),
@@ -201,19 +175,18 @@ export const useAppleLogin = (
           if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
             navigation.navigate('PersonalInfoInputScreen');
           } else {
+            console.log('리프레쉬 있음');
             await setRefreshToken(refreshToken);
 
             // 프로필 정보 저장
             const getProfileResponse = await getMyProfile();
             setProfile(getProfileResponse.result);
 
-            const checkVerifiedResponse = await checkVerified();
-            setIsVerified(checkVerifiedResponse.result);
-
+            // 선호 칩 항목 저장
             const preferenceResponse = await getPreferenceList();
             setPreferenceList(preferenceResponse.result.preferenceList);
 
-            // 방 존재 여부 저장
+            // 방 존재 여부 확인
             const roomCheckResponse = await checkHasRoom();
             const roomId = roomCheckResponse.result.roomId;
 
@@ -228,31 +201,12 @@ export const useAppleLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
-
-              setRoomInfo(roomInfoResponse.result);
-            } else {
-              setMyRoom({
-                hasRoom: false,
-                roomId,
-                isRoomManager: false,
-                isFullRoom: false,
-              });
             }
 
-            // getUserDetailData 호출 및 라이프스타일 정보 처리
-            try {
-              const userDetailResponse = await getMemberStatData();
-              setHasLifeStyle(true);
-              setLifeStyle(userDetailResponse.result);
-            } catch (error: any) {
-              const errorCode = error?.response?.data?.code;
-              if (errorCode === 'MEMBERSTAT402') {
-                setHasLifeStyle(false);
-              } else {
-                // 예상하지 못한 에러 처리
-                console.error(error);
-              }
-            }
+            // 유저 라이프스타일 정보 저장
+            const userLifeStyle = await getMemberStatData();
+            setNewLifeStyle(userLifeStyle.result.memberStatDetail);
+
             setLoggedIn(true);
           }
         } catch (error) {
@@ -273,19 +227,17 @@ export const useTestLogin = (
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
   const { setProfile } = useProfileStore();
-  const { setIsVerified } = useIsVerifiedStore();
+  // 선호 칩
   const { setPreferenceList } = usePreferencesStore();
-  // 방 여부 및 방 정보
+  // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
-  const { setRoomInfo } = useRoomInfoStore();
   // 라이프스타일 여부 및 라이프스타일 정보
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setLifeStyle } = useLifeStyleStore();
+  const { setNewLifeStyle } = useNewLifeStyleStore();
 
   return useMutation({
     mutationFn: () =>
       signIn({
-        clientId: '213123213321321',
+        clientId: 'TEST',
         socialType: 'TEST',
       }),
     onSuccess: async (signInResponse: SignInResponse) => {
@@ -312,13 +264,11 @@ export const useTestLogin = (
             const getProfileResponse = await getMyProfile();
             setProfile(getProfileResponse.result);
 
-            const checkVerifiedResponse = await checkVerified();
-            setIsVerified(checkVerifiedResponse.result);
-
+            // 선호 칩 항목 저장
             const preferenceResponse = await getPreferenceList();
             setPreferenceList(preferenceResponse.result.preferenceList);
 
-            // 방 존재 여부 저장
+            // 방 존재 여부 확인
             const roomCheckResponse = await checkHasRoom();
             const roomId = roomCheckResponse.result.roomId;
 
@@ -333,32 +283,12 @@ export const useTestLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
-
-              setRoomInfo(roomInfoResponse.result);
-              setMyRoom({});
-            } else {
-              setMyRoom({
-                hasRoom: false,
-                roomId,
-                isRoomManager: false,
-                isFullRoom: false,
-              });
             }
 
-            // getUserDetailData 호출 및 라이프스타일 정보 처리
-            try {
-              const userDetailResponse = await getMemberStatData();
-              setHasLifeStyle(true);
-              setLifeStyle(userDetailResponse.result);
-            } catch (error: any) {
-              const errorCode = error?.response?.data?.code;
-              if (errorCode === 'MEMBERSTAT402') {
-                setHasLifeStyle(false);
-              } else {
-                // 예상하지 못한 에러 처리
-                console.error(error);
-              }
-            }
+            // 유저 라이프스타일 정보 저장
+            const userLifeStyle = await getMemberStatData();
+            setNewLifeStyle(userLifeStyle.result.memberStatDetail);
+
             setLoggedIn(true);
           }
         } catch (error: any) {
@@ -418,7 +348,6 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, st
   const { setIsVerified } = useIsVerifiedStore();
   const { clearPreferenceList } = usePreferencesStore();
   const { clearRoomInfo } = useRoomInfoStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
   const { clearLifeStyle } = useLifeStyleStore();
 
   return useMutation({
@@ -432,7 +361,6 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, st
       setIsVerified('');
       clearPreferenceList();
       clearRoomInfo();
-      setHasLifeStyle(false);
       clearLifeStyle();
       setLoggedIn(false);
     },

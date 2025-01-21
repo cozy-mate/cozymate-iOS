@@ -11,8 +11,8 @@ import ReportModal from '@components/report/reportComponent';
 import TableViewModal from '@components/userDetail/tableViewModal';
 
 import { useHasRoomStore } from '@zustand/room/room';
-import { useProfileStore, useIsVerifiedStore } from '@zustand/member/member';
-import { useLifeStyleStore, useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
+import { useProfileStore } from '@zustand/member/member';
+import { useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useGetChatRoomId } from '@hooks/api/chat-room';
 import { useGetMemberStatData } from '@hooks/api/member-stat';
@@ -47,9 +47,12 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
   const { myRoom } = useHasRoomStore();
   const { profile } = useProfileStore();
-  const { isVerified } = useIsVerifiedStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { lifeStyle } = useLifeStyleStore();
+  const { lifeStyle } = useNewLifeStyleStore();
+
+  const userData = {
+    memberDetail: profile,
+    memberStatDetail: lifeStyle,
+  };
 
   const [type, setType] = useState<string>('list');
 
@@ -157,11 +160,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                   </Text>
                   {lifeStyleData.result.memberDetail.memberId !== profile.memberId && (
                     <Text className="text-sm font-medium text-basicFont">
-                      나와의 일치율{' '}
-                      {lifeStyleData.result.equality !== null && hasLifeStyle
-                        ? lifeStyleData.result.equality
-                        : '?? '}
-                      %
+                      나와의 일치율 {lifeStyleData.result.equality}%
                     </Text>
                   )}
                 </View>
@@ -201,7 +200,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
                   {/* 표로 보기 */}
                   <Pressable
-                    onPress={hasLifeStyle ? handleTable : () => setIsLifeStyleModalOpen(true)}
+                    onPress={handleTable}
                     className="flex flex-row items-center justify-center p-4"
                   >
                     <View className="flex">
@@ -230,7 +229,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                 )}
                 {type === 'table' && (
                   <TableView
-                    userData={lifeStyle}
+                    userData={userData}
                     otherUserData={lifeStyleData.result}
                     openModal={handleReportModal}
                   />
@@ -330,42 +329,12 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
               )}
 
               {/* 라이프스타일을 입력했고 학교 인증을 한, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
-              {!myRoom.hasRoom &&
-                lifeStyleData.result.roomId === 0 &&
-                hasLifeStyle &&
-                isVerified && (
-                  <BottomButton
-                    color="bg-main1"
-                    borderColor="border-main1"
-                    textColor="text-white"
-                    text="내 방으로 초대하기"
-                    disabled={true}
-                    onPressFunc={undefined}
-                  />
-                )}
-
-              {/* 학교인증을 하지 않은, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
-              {!myRoom.hasRoom &&
-                lifeStyleData.result.roomId === 0 &&
-                hasLifeStyle &&
-                !isVerified && (
-                  <BottomButton
-                    color="bg-main1"
-                    borderColor="border-main1"
-                    textColor="text-white"
-                    text="학교 인증하고 초대하기"
-                    disabled={true}
-                    onPressFunc={undefined}
-                  />
-                )}
-
-              {/* 라이프스타일을 입력하지 않은, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
-              {!myRoom.hasRoom && lifeStyleData.result.roomId === 0 && !hasLifeStyle && (
+              {!myRoom.hasRoom && lifeStyleData.result.roomId === 0 && (
                 <BottomButton
                   color="bg-main1"
                   borderColor="border-main1"
                   textColor="text-white"
-                  text="라이프 스타일 입력하고 초대하기"
+                  text="내 방으로 초대하기"
                   disabled={true}
                   onPressFunc={undefined}
                 />

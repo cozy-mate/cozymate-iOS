@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, Pressable, Dimensions, LayoutChangeEvent } from 'react-native';
 
-import { useHasLifeStyleStore } from '@zustand/member-stat/member-stat';
-
 import { getRoommateLifeStyleIcon } from '@utils/getLifeStyleIcon';
 
 interface RecommendUserComponentProps {
@@ -32,8 +30,6 @@ const RecommendUserComponent: React.FC<RecommendUserComponentProps> = ({
   toUserDetail,
   onLayout,
 }) => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
   const screenWidth = Dimensions.get('window').width;
   const calculatedWidth = screenWidth - 40;
 
@@ -48,9 +44,7 @@ const RecommendUserComponent: React.FC<RecommendUserComponentProps> = ({
         <Text className="pl-2 text-base font-semibold text-basicFont">
           {user.memberDetail.nickname}
         </Text>
-        <Text className="text-base font-medium text-main1">
-          {user.equality !== null && hasLifeStyle ? user.equality : '?? '}%
-        </Text>
+        <Text className="text-base font-medium text-main1">{user.equality}%</Text>
       </View>
 
       <View className="flex flex-row items-center justify-between px-2 pt-3">

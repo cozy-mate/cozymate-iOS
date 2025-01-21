@@ -24,6 +24,7 @@ import RoomSearchScreen from 'src/screens/search/roomSearch';
 import UserSearchScreen from 'src/screens/search/userSearch';
 import ChipSelectScreen from 'src/screens/onBoard/chipSelect';
 import RoleNRuleScreen from 'src/screens/roleNrule/roleNrule';
+import BasicLifyStyle from 'src/screens/onBoardLifeStyle/basic';
 import CreateRoomScreen from 'src/screens/createRoom/createRoom';
 import UserDetailScreen from 'src/screens/userDetail/userDetail';
 import CharacterInputScreen from 'src/screens/onBoard/character';
@@ -33,15 +34,19 @@ import NotificationScreen from 'src/screens/notification/notification';
 import PersonalInfoInputScreen from 'src/screens/onBoard/personalInfo';
 import BasicInfoUpdateScreen from 'src/screens/myPage/basicInfoUpdate';
 import EditRoleNRuleScreen from 'src/screens/roleNrule/editRoleAndRule';
-import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
+import EssentialLifyStyle from 'src/screens/onBoardLifeStyle/essential';
+// import LifeStyleOnboardingScreen from 'src/screens/lifeStyle/onBoarding';
 import FavoriteUserRoomScreen from 'src/screens/myPage/favoriteUserRoom';
-import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
+// import BasicLifeStyleScreen from 'src/screens/lifeStyle/basicInformation';
 import RecommendRoomScreen from 'src/screens/recommendRoom/recommendRoom';
 import CreateRoleNRuleScreen from 'src/screens/roleNrule/createRoleNRule';
+import AdditionalLifeStyle from 'src/screens/onBoardLifeStyle/additional';
 import SelectCharacterScreen from 'src/screens/createRoom/selectCharacter';
 import CompleteCreateRoomScreen from 'src/screens/createRoom/completeCreate';
-import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
-import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
+// import EssentialLifeStyleScreen from 'src/screens/lifeStyle/essentialInformation';
+// import AdditionalLifeStyleScreen from 'src/screens/lifeStyle/additionalInformation';
+
+import UniversityInputScreen from 'src/screens/onBoard/university';
 
 import { useLoggedInStore } from '@zustand/member/member';
 
@@ -96,10 +101,6 @@ function AppInner() {
           <stack.Screen name="CreateRoleNRuleScreen" component={CreateRoleNRuleScreen} />
           <stack.Screen name="EditRoleNRuleScreen" component={EditRoleNRuleScreen} />
 
-          <stack.Screen name="LifeStyleOnboardingScreen" component={LifeStyleOnboardingScreen} />
-          <stack.Screen name="BasicLifeStyleScreen" component={BasicLifeStyleScreen} />
-          <stack.Screen name="EssentialLifeStyleScreen" component={EssentialLifeStyleScreen} />
-          <stack.Screen name="AdditionalLifeStyleScreen" component={AdditionalLifeStyleScreen} />
           <stack.Screen name="LifeStyleEditScreen" component={LifeStyleEditScreen} />
 
           <stack.Screen name="CreateRoomScreen" component={CreateRoomScreen} />
@@ -110,16 +111,9 @@ function AppInner() {
 
           <stack.Screen name="JoinRoomScreen" component={JoinRoomScreen} />
 
-          {/* <stack.Screen name="SchoolAuthenticationScreen" component={SchoolAuthenticationScreen} /> */}
-
           <stack.Screen name="RoomMateScreen" component={RoomMateScreen} />
           <stack.Screen name="UserSearchScreen" component={UserSearchScreen} />
           <stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
-
-          {/* <stack.Screen name="FeedMainScreen" component={FeedMainScreen} />
-          <stack.Screen name="FeedEditScreen" component={FeedEditScreen} />
-          <stack.Screen name="FeedViewScreen" component={FeedViewScreen} />
-          <stack.Screen name="FeedCreateScreen" component={FeedCreateScreen} /> */}
 
           <stack.Screen name="MyPageScreen" component={MyPageScreen} />
           <stack.Screen name="MyInfoScreen" component={MyInfoScreen} />
@@ -138,8 +132,15 @@ function AppInner() {
         <rootStack.Navigator screenOptions={{ headerShown: false }}>
           <rootStack.Screen name="SignInScreen" component={SignInScreen} />
           <rootStack.Screen name="PersonalInfoInputScreen" component={PersonalInfoInputScreen} />
+          <rootStack.Screen name="UniversityInputScreen" component={UniversityInputScreen} />
           <rootStack.Screen name="CharacterInputScreen" component={CharacterInputScreen} />
+
+          <rootStack.Screen name="BasicLifeStyleScreen" component={BasicLifyStyle} />
+          <rootStack.Screen name="EssentialLifyStyleScreen" component={EssentialLifyStyle} />
+          <rootStack.Screen name="AdditionalLifeStyleScreen" component={AdditionalLifeStyle} />
+
           <rootStack.Screen name="ChipSelectScreen" component={ChipSelectScreen} />
+
           <rootStack.Screen name="CompleteScreen" component={CompleteScreen} />
         </rootStack.Navigator>
       )}

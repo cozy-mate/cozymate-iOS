@@ -20,7 +20,9 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
 
   const isComplete = signUpState.persona !== 0;
 
-  const doSignUp = async () => {
+  const toNext = async () => {
+    if (!isComplete) return;
+
     try {
       const response = await signUp(signUpState);
 
@@ -31,17 +33,11 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
       setProfile(getProfileResponse.result);
 
       setMyRoom({ roomId: 0, hasRoom: false });
+
+      navigation.navigate('BasicLifeStyleScreen');
     } catch (error: any) {
       console.log(error.response);
     }
-  };
-
-  const toNext = async (): Promise<void> => {
-    if (!isComplete) return;
-
-    await doSignUp();
-
-    navigation.navigate('ChipSelectScreen');
   };
 
   return (
