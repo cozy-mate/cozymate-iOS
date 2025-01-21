@@ -7,7 +7,7 @@ import LoadingComponent from '@components/loading/loading';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
-import { useLifeStyleStore, usePreferencesStore } from '@zustand/member-stat/member-stat';
+import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useCheckHasInquiry } from '@hooks/api/inquiry';
 
@@ -30,7 +30,8 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
   const { profile, clearProfile } = useProfileStore();
   const { clearPreferenceList } = usePreferencesStore();
   const { roomInfo, clearRoomInfo } = useRoomInfoStore();
-  const { clearLifeStyle } = useLifeStyleStore();
+
+  const { clearNewLifeStyle } = useNewLifeStyleStore();
 
   const { data: hasInquiry } = useCheckHasInquiry();
 
@@ -74,7 +75,7 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
       clearProfile();
       clearPreferenceList();
       clearRoomInfo();
-      clearLifeStyle();
+      clearNewLifeStyle();
 
       setLoggedIn(false);
     } catch (error: any) {

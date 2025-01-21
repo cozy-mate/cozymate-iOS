@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View, Keyboard, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
+import {
+  Text,
+  View,
+  Keyboard,
+  ScrollView,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import Gender from '@components/onBoard/new/gender';
 import BirthDay from '@components/onBoard/new/birthday';
@@ -32,7 +39,7 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
       <SafeAreaView className="flex-1 bg-white">
         <View className="flex flex-1 flex-col justify-between px-5">
           {/* 상단 View */}
-          <View className="mt-14 flex">
+          <View className="mt-14 flex-1">
             {/* 설명 Text */}
             <View className="mb-6 px-2">
               <Text className="text-xl font-semibold leading-[21px] tracking-tight text-emphasizedFont">
@@ -40,35 +47,28 @@ const PersonalInfoInputScreen = ({ navigation }: PersonalInfoInputScreenProps) =
               </Text>
             </View>
 
-            <View className="space-y-4">
+            <ScrollView contentContainerStyle={{ flex: 1, rowGap: 16 }} bounces={false}>
               {/* 닉네임 입력 Input */}
-              <View>
-                <NickNameInput setCanUse={setCanUse} />
-              </View>
+              <NickNameInput setCanUse={setCanUse} />
 
               {/* 성별 입력 Input */}
-              <View>
-                <Gender />
-              </View>
+              <Gender />
 
               {/* 생년월일 입력 Input */}
-              <View>
-                <BirthDay />
-              </View>
-            </View>
+              <BirthDay />
+            </ScrollView>
           </View>
+        </View>
 
-          {/* 하단 View */}
-          <View className="flex">
-            <BottomButton
-              color={'bg-main1'}
-              borderColor={'border-main1'}
-              textColor={'text-white'}
-              text={'다음'}
-              disabled={!isComplete || !canUse}
-              onPressFunc={toNext}
-            />
-          </View>
+        <View className="fixed bottom-0 px-5">
+          <BottomButton
+            color={'bg-main1'}
+            borderColor={'border-main1'}
+            textColor={'text-white'}
+            text={'다음'}
+            disabled={!isComplete || !canUse}
+            onPressFunc={toNext}
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

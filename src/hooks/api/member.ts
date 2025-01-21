@@ -3,12 +3,8 @@ import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
+import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
-import {
-  useLifeStyleStore,
-  usePreferencesStore,
-  useNewLifeStyleStore,
-} from '@zustand/member-stat/member-stat';
 
 import { getMemberStatData } from '@server/api/member-stat';
 import { getRoomData, checkHasRoom } from '@server/api/room';
@@ -48,6 +44,7 @@ export const useKakaoLogin = (
   const { setPreferenceList } = usePreferencesStore();
   // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
+  const { setRoomInfo } = useRoomInfoStore();
   // 라이프스타일 여부 및 라이프스타일 정보
   const { setNewLifeStyle } = useNewLifeStyleStore();
 
@@ -104,6 +101,8 @@ export const useKakaoLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
+
+              setRoomInfo(roomInfoResponse.result);
             }
 
             // 유저 라이프스타일 정보 저장
@@ -152,6 +151,7 @@ export const useAppleLogin = (
   const { setPreferenceList } = usePreferencesStore();
   // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
+  const { setRoomInfo } = useRoomInfoStore();
   // 라이프스타일 여부 및 라이프스타일 정보
   const { setNewLifeStyle } = useNewLifeStyleStore();
 
@@ -201,6 +201,8 @@ export const useAppleLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
+
+              setRoomInfo(roomInfoResponse.result);
             }
 
             // 유저 라이프스타일 정보 저장
@@ -231,6 +233,8 @@ export const useTestLogin = (
   const { setPreferenceList } = usePreferencesStore();
   // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
+  const { setRoomInfo } = useRoomInfoStore();
+
   // 라이프스타일 여부 및 라이프스타일 정보
   const { setNewLifeStyle } = useNewLifeStyleStore();
 
@@ -283,6 +287,8 @@ export const useTestLogin = (
                 isFullRoom:
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
+
+              setRoomInfo(roomInfoResponse.result);
             }
 
             // 유저 라이프스타일 정보 저장
@@ -348,7 +354,7 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, st
   const { setIsVerified } = useIsVerifiedStore();
   const { clearPreferenceList } = usePreferencesStore();
   const { clearRoomInfo } = useRoomInfoStore();
-  const { clearLifeStyle } = useLifeStyleStore();
+  const { clearNewLifeStyle } = useNewLifeStyleStore();
 
   return useMutation({
     mutationFn: (withdrawReason: string) => withdraw({ withdrawReason }),
@@ -361,7 +367,7 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, st
       setIsVerified('');
       clearPreferenceList();
       clearRoomInfo();
-      clearLifeStyle();
+      clearNewLifeStyle();
       setLoggedIn(false);
     },
   });

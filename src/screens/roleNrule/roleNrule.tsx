@@ -72,6 +72,10 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
     navigation.navigate('EditRoleNRuleScreen', { type: type, id: id });
   };
 
+  const toRoomMate = () => {
+    navigation.navigate('RoomMateScreen');
+  };
+
   const { profile } = useProfileStore();
   const { roomInfo } = useRoomInfoStore();
 
@@ -200,33 +204,46 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
               <Text className="px-1 text-lg font-semibold leading-6 text-emphasizedFont">
                 다른 메이트들은{'\n'}오늘 어떤 일들을 할까요?
               </Text>
-              {Object.entries(tododata.result.mateTodoList).map(([key, value]) => (
-                <View
-                  key={key}
-                  className="flex flex-col rounded-xl border border-[#F1F1F1] bg-white pb-2 pt-4"
-                >
-                  <View className="mb-2 flex flex-row items-center space-x-1.5 px-4">
-                    <View>{getProfileImage(value.memberDetail.persona, 24, 24)}</View>
-                    <Text className="text-sm font-semibold text-emphasizedFont">{key}</Text>
-                  </View>
-                  <View className="flex flex-col">
-                    {value.todoList.length !== 0 ? (
-                      value.todoList.map((todo) => (
-                        <View className="flex flex-row items-center px-2" key={todo.todoId}>
-                          {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
-                          <Text className="text-sm font-medium text-basicFont">{todo.content}</Text>
+              {Object.keys(tododata.result.mateTodoList).length !== 0 ? (
+                Object.entries(tododata.result.mateTodoList).map(([key, value]) => (
+                  <View
+                    key={key}
+                    className="flex flex-col rounded-xl border border-[#F1F1F1] bg-white pb-2 pt-4"
+                  >
+                    <View className="mb-2 flex flex-row items-center space-x-1.5 px-4">
+                      <View>{getProfileImage(value.memberDetail.persona, 24, 24)}</View>
+                      <Text className="text-sm font-semibold text-emphasizedFont">{key}</Text>
+                    </View>
+                    <View className="flex flex-col">
+                      {value.todoList.length !== 0 ? (
+                        value.todoList.map((todo) => (
+                          <View className="flex flex-row items-center px-2" key={todo.todoId}>
+                            {todo.completed ? <DoneTodoBoxIcon /> : <TodoBoxIcon />}
+                            <Text className="text-sm font-medium text-basicFont">
+                              {todo.content}
+                            </Text>
+                          </View>
+                        ))
+                      ) : (
+                        <View className="flex h-10 flex-row items-center px-4">
+                          <Text className="text-sm font-medium text-disabledFont">
+                            오늘 등록된 할 일이 없어요!
+                          </Text>
                         </View>
-                      ))
-                    ) : (
-                      <View className="flex h-10 flex-row items-center px-4">
-                        <Text className="text-sm font-medium text-disabledFont">
-                          오늘 등록된 할 일이 없어요!
-                        </Text>
-                      </View>
-                    )}
+                      )}
+                    </View>
                   </View>
+                ))
+              ) : (
+                <View className="flex h-36 items-center justify-center rounded-xl border border-[#F1F1F1] bg-white p-2">
+                  <Text className="text-sm font-medium text-disabledFont">
+                    아직 방에 룸메이트가 없어요!
+                  </Text>
+                  <Pressable onPress={toRoomMate}>
+                    <Text className="text-base font-semibold text-main1">룸메이트 찾으러 가기</Text>
+                  </Pressable>
                 </View>
-              ))}
+              )}
             </View>
           </View>
         )}

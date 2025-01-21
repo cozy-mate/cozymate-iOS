@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { useSignUpStore } from '@zustand/member/member';
 
@@ -49,25 +49,23 @@ const University: React.FC = () => {
       </Pressable>
 
       {isListOpen && (
-        <ScrollView className="mt-1 rounded-xl border border-sub1 px-5 py-3">
-          <View>
-            {universityList.map((item) => (
-              <Pressable
-                key={item.id}
-                onPress={() => {
-                  setSignUpState({ universityId: item.id });
-                  setDisplaySchool(item.name);
-                  handleFocus();
-                }}
-                className={`border-b border-b-[#F6F6F6] py-2 ${item.id === 1 && 'pt-0'} ${
-                  item.id === universityList.length && 'border-b-0 pb-0'
-                }`}
-              >
-                <Text className="text-sm font-medium text-basicFont">{item.name}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </ScrollView>
+        <View className="-mb-1 -mt-3 rounded-xl border border-sub1 px-5 py-3">
+          {universityList.map((item) => (
+            <Pressable
+              key={item.id}
+              onPress={() => {
+                setSignUpState({ universityId: item.id });
+                setDisplaySchool(item.name);
+                handleFocus();
+              }}
+              className={`border-b border-b-[#F6F6F6] py-2 ${item.id === 1 && 'pt-0'} ${
+                item.id === universityList.length && 'border-b-0 pb-0'
+              }`}
+            >
+              <Text className="text-sm font-medium text-basicFont">{item.name}</Text>
+            </Pressable>
+          ))}
+        </View>
       )}
     </>
   );

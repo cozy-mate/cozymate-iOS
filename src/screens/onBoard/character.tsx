@@ -55,18 +55,16 @@ const CharacterInputScreen = ({ navigation }: CharacterInputScreenProps) => {
           {/* 캐릭터 선택 Input */}
           <CharacterSelect />
         </View>
-
-        {/* 하단 View */}
-        <View className="flex">
-          <BottomButton
-            color={'bg-main1'}
-            borderColor={'border-main1'}
-            textColor={'text-white'}
-            text={'다음'}
-            disabled={!isComplete}
-            onPressFunc={toNext}
-          />
-        </View>
+      </View>
+      <View className="fixed bottom-0 px-5">
+        <BottomButton
+          color={'bg-main1'}
+          borderColor={'border-main1'}
+          textColor={'text-white'}
+          text={'다음'}
+          disabled={!isComplete}
+          onPressFunc={toNext}
+        />
       </View>
     </SafeAreaView>
   );

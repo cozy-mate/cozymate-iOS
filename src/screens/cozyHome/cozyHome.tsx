@@ -101,7 +101,7 @@ const CozyHome = ({ navigation }: CozyHomeScreenProps) => {
             )}
 
           {/* 방이 없는 사용자에 대하여 참여 요청 받은 방 목록 컴포넌트 */}
-          {myRoom.hasRoom && requestedRoomList !== undefined && (
+          {!myRoom.hasRoom && requestedRoomList !== undefined && (
             <>
               <InvitedRoomsComponent
                 navigation={navigation}

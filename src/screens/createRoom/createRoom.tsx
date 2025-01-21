@@ -39,10 +39,13 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { setRoomInfo } = useRoomInfoStore();
 
   const [name, setName] = useState<string>('');
+
+  const [isLongName, setIsLongName] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   const [maxMateNum, setMaxMateNum] = useState<number>(0);
   const [hashTag, setHashTag] = useState<string>('');
   const [hashtagList, setHashtagList] = useState<string[]>([]);
-  const [isLongName, setIsLongName] = useState<boolean>(false);
 
   const [isHashtagModalOpen, setIsHashtagModalOpen] = useState<boolean>(false);
 
@@ -53,6 +56,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       const isPublicComplete =
         name !== '' &&
         !isLongName &&
+        errorMessage === '' &&
         hashtagList.length >= 1 &&
         hashtagList.length <= 3 &&
         createPublicRoomInfo.persona !== 0;
@@ -61,7 +65,15 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       const isPrivateComplete = name !== '' && !isLongName && createPrivateRoomInfo.persona !== 0;
       setIsComplete(isPrivateComplete);
     }
-  }, [name, isLongName, hashtagList, createPublicRoomInfo, createPrivateRoomInfo, type]);
+  }, [
+    name,
+    isLongName,
+    errorMessage,
+    hashtagList,
+    createPublicRoomInfo,
+    createPrivateRoomInfo,
+    type,
+  ]);
 
   const [items, setItems] = useState([
     { index: 1, value: 2, name: '2명', select: false },
@@ -71,15 +83,27 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
     { index: 5, value: 6, name: '6명', select: false },
   ]);
 
-  const stringRegex = /^(?!_)[가-힣a-zA-Z0-9]+([가-힣a-zA-Z0-9]+)*(?<!_)$/;
+  const validRegex = /^(?! )[가-힣a-zA-Z0-9 ]+(?<! )$/;
 
-  const valueHandleChange = (text: string) => {
-    if (stringRegex.test(text)) {
-      setName(text);
-      setIsLongName(text.length > 12);
-    } else {
-      setIsLongName(false);
+  useEffect(() => {
+    if (name.trim() !== '') {
+      if (name.length > 12) {
+        setIsLongName(true);
+        setErrorMessage('방이름은 최대 12글자만 가능합니다.');
+      } else if (!validRegex.test(name)) {
+        setIsLongName(false);
+        setErrorMessage(
+          '한글, 영어, 숫자 및 공백만 입력 가능합니다. 공백은 처음이나 끝에 올 수 없습니다.',
+        );
+      } else {
+        setIsLongName(false);
+        setErrorMessage(''); // 에러 메시지 초기화
+      }
     }
+  }, [name]);
+
+  const handleChangeText = (text: string) => {
+    setName(text); // 입력값 업데이트
   };
 
   const handleHashTag = (text: string) => {
@@ -88,7 +112,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
-      if (stringRegex.test(hashTag.trim())) {
+      if (validRegex.test(hashTag.trim())) {
         setHashtagList([...hashtagList, hashTag.trim()]);
         setHashTag('');
       } else {
@@ -118,32 +142,40 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { mutateAsync: mutateCreatPrivateRoom } = useCreatePrivateRoom();
 
   const toNextforPublic = async () => {
-    const response = await mutateCreatePublicRoom({
-      name: name,
-      persona: createPublicRoomInfo.persona,
-      maxMateNum: maxMateNum,
-      hashtagList: hashtagList,
-    });
+    try {
+      const response = await mutateCreatePublicRoom({
+        name: name,
+        persona: createPublicRoomInfo.persona,
+        maxMateNum: maxMateNum,
+        hashtagList: hashtagList,
+      });
 
-    setRoomInfo(response.result);
+      setRoomInfo(response.result);
 
-    clearCreatePublicRoom();
+      clearCreatePublicRoom();
 
-    navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
+      navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   const toNextforPrivate = async () => {
-    const response = await mutateCreatPrivateRoom({
-      name: name,
-      persona: createPrivateRoomInfo.persona,
-      maxMateNum: maxMateNum,
-    });
+    try {
+      const response = await mutateCreatPrivateRoom({
+        name: name,
+        persona: createPrivateRoomInfo.persona,
+        maxMateNum: maxMateNum,
+      });
 
-    setRoomInfo(response.result);
+      setRoomInfo(response.result);
 
-    clearCreatePrivateRoom();
+      clearCreatePrivateRoom();
 
-    navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
+      navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
+    } catch (error: any) {
+      console.log(error.response.data);
+    }
   };
 
   return (
@@ -185,13 +217,11 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
                 <TextInput
                   className="rounded-xl bg-colorBox p-4 text-sm font-medium leading-4 text-basicFont"
                   value={name}
-                  onChangeText={valueHandleChange}
+                  onChangeText={handleChangeText}
                   placeholder="방이름을 입력해주세요"
                 />
-                {isLongName && (
-                  <Text className="mt-2 pl-2 text-xs font-medium text-warning">
-                    방이름은 최대 12글자만 가능해요!
-                  </Text>
+                {errorMessage !== '' && (
+                  <Text className="mt-2 pl-2 text-xs font-medium text-warning">{errorMessage}</Text>
                 )}
               </View>
 

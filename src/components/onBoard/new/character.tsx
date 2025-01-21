@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NumberProp } from 'react-native-svg';
 import { View, FlatList, Pressable } from 'react-native';
 
@@ -30,65 +30,50 @@ type IconProps = {
 type Item = {
   index: number;
   value: number;
-  select: boolean;
   icon: React.FC<IconProps>;
 };
 
 const CharacterSelect: React.FC = () => {
   const { signUpState, setSignUpState } = useSignUpStore();
 
-  const [items, setItems] = useState<Item[]>([
-    { index: 1, value: 1, select: false, icon: First },
-    { index: 2, value: 2, select: false, icon: Second },
-    { index: 3, value: 3, select: false, icon: Third },
-    { index: 4, value: 4, select: false, icon: Fourth },
-    { index: 5, value: 5, select: false, icon: Fifth },
-    { index: 6, value: 6, select: false, icon: Sixth },
-    { index: 7, value: 7, select: false, icon: Seventh },
-    { index: 8, value: 8, select: false, icon: Eighth },
-    { index: 9, value: 9, select: false, icon: Ninth },
-    { index: 10, value: 10, select: false, icon: Tenth },
-    { index: 11, value: 11, select: false, icon: Eleventh },
-    { index: 12, value: 12, select: false, icon: Twelfth },
-    { index: 13, value: 13, select: false, icon: Thirteenth },
-    { index: 14, value: 14, select: false, icon: Fourteenth },
-    { index: 15, value: 15, select: false, icon: Fifteenth },
-    { index: 16, value: 16, select: false, icon: Sixteenth },
-  ]);
-
-  const select = (item: Item) => {
-    const updatedItems = items.map((i) => ({
-      ...i,
-      select: i.index === item.index ? true : false,
-    }));
-
-    setItems(updatedItems);
-    setSignUpState({ persona: item.value });
-  };
-
-  const renderItem = (item: Item) => {
-    return (
-      <Pressable onPress={() => select(item)}>
-        <View className="relative h-[70px] w-[70px]">
-          <item.icon width={70} height={70} />
-          {item.select && (
-            <View className="absolute">
-              <Check />
-            </View>
-          )}
-        </View>
-      </Pressable>
-    );
-  };
+  const characterItems: Item[] = [
+    { index: 1, value: 1, icon: First },
+    { index: 2, value: 2, icon: Second },
+    { index: 3, value: 3, icon: Third },
+    { index: 4, value: 4, icon: Fourth },
+    { index: 5, value: 5, icon: Fifth },
+    { index: 6, value: 6, icon: Sixth },
+    { index: 7, value: 7, icon: Seventh },
+    { index: 8, value: 8, icon: Eighth },
+    { index: 9, value: 9, icon: Ninth },
+    { index: 10, value: 10, icon: Tenth },
+    { index: 11, value: 11, icon: Eleventh },
+    { index: 12, value: 12, icon: Twelfth },
+    { index: 13, value: 13, icon: Thirteenth },
+    { index: 14, value: 14, icon: Fourteenth },
+    { index: 15, value: 15, icon: Fifteenth },
+    { index: 16, value: 16, icon: Sixteenth },
+  ];
 
   return (
     <FlatList
-      data={items}
-      renderItem={({ item }) => renderItem(item)}
-      horizontal={false}
+      data={characterItems}
+      renderItem={({ item }) => (
+        <Pressable onPress={() => setSignUpState({ persona: item.value })}>
+          <View className="relative h-[70px] w-[70px]">
+            <item.icon width={70} height={70} />
+            {signUpState.persona === item.value && (
+              <View className="absolute">
+                <Check />
+              </View>
+            )}
+          </View>
+        </Pressable>
+      )}
       numColumns={4}
       contentContainerStyle={{ rowGap: 32 }}
       columnWrapperStyle={{ columnGap: 16 }}
+      bounces={false}
     />
   );
 };

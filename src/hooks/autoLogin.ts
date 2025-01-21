@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useHasRoomStore } from '@zustand/room/room';
+import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { useProfileStore, useLoggedInStore } from '@zustand/member/member';
 import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
@@ -21,6 +21,8 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
   const { setPreferenceList } = usePreferencesStore();
   // 방 존재 여부
   const { setMyRoom } = useHasRoomStore();
+  const { setRoomInfo } = useRoomInfoStore();
+
   // 라이프스타일 여부 및 라이프스타일 정보
   const { setNewLifeStyle } = useNewLifeStyleStore();
 
@@ -78,6 +80,8 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
             isFullRoom:
               roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
           });
+
+          setRoomInfo(roomInfoResponse.result);
         }
 
         // 유저 라이프스타일 정보 저장
