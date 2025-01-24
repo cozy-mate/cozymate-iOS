@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, Pressable, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 
 import RoomComponent from '@components/recommendRoom/roomComponent';
-import SortTypeBottomSheet from '@components/recommendRoom/sortTypeBottomSheet';
+import SortTypeBottomSheet from '@components/recommendRoom/sortType';
+import BottomSheetComponent from '@components/commonComponents/bottomSheet';
 
 import { useProfileStore } from '@zustand/member/member';
 
@@ -134,12 +135,9 @@ const RecommendRoomScreen = ({ navigation }: RecommendRoomScreenProps) => {
         </View>
       </ScrollView>
 
-      <SortTypeBottomSheet
-        isVisible={isSortTypeOpen}
-        currentType={sortType}
-        setType={handleSortType}
-        closeModal={() => setIsSortTypeOpen(false)}
-      />
+      <BottomSheetComponent isVisible={isSortTypeOpen} onClose={() => setIsSortTypeOpen(false)}>
+        <SortTypeBottomSheet currentType={sortType} setType={handleSortType} />
+      </BottomSheetComponent>
     </SafeAreaView>
   );
 };

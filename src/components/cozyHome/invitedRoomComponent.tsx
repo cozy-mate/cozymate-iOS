@@ -5,6 +5,8 @@ import { LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
 import { CozyHomeScreenProps } from '@type/param/stack';
 
+import BlueArrow from '@assets/roomMate/blueRightArrow.svg';
+
 interface InvitedRoomsComponentProps {
   navigation: CozyHomeScreenProps['navigation'];
   requestCount: number | undefined;
@@ -43,6 +45,10 @@ const InvitedRoomsComponent: React.FC<InvitedRoomsComponentProps> = ({
 }) => {
   const toRoomDetail = (roomId: number) => {
     navigation.navigate('RoomDetailScreen', { roomId: roomId });
+  };
+
+  const toRoomMate = () => {
+    navigation.navigate('RoomMateScreen');
   };
 
   return (
@@ -98,10 +104,11 @@ const InvitedRoomsComponent: React.FC<InvitedRoomsComponentProps> = ({
         ) : (
           <View className="flex h-36 items-center justify-center rounded-xl p-2">
             <Text className="text-sm font-medium text-disabledFont">
-              직접 방을 찾으러 가볼까요?
+              직접 룸메이트를 찾으러 가볼까요?
             </Text>
-            <Pressable>
-              <Text className="text-base font-semibold text-main1">방 찾으러 가기</Text>
+            <Pressable onPress={toRoomMate} className="flex flex-row items-center space-x-2">
+              <Text className="text-base font-semibold text-main1">룸메이트 찾으러 가기</Text>
+              <BlueArrow />
             </Pressable>
           </View>
         )}

@@ -28,6 +28,7 @@ import { RoleNRuleScreenProps } from '@type/param/stack';
 import SettingIcon from '@assets/roleNrule/setting.svg';
 import Background from '@assets/roleNrule/background.svg';
 import PlusButton from '@assets/roleNrule/plusButton.svg';
+import BlueArrow from '@assets/roomMate/blueRightArrow.svg';
 import TodoBoxIcon from '@assets/roleNrule/todoBoxIcon.svg';
 import DoneTodoBoxIcon from '@assets/roleNrule/doneTodoBoxIcon.svg';
 
@@ -239,8 +240,9 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
                   <Text className="text-sm font-medium text-disabledFont">
                     아직 방에 룸메이트가 없어요!
                   </Text>
-                  <Pressable onPress={toRoomMate}>
+                  <Pressable onPress={toRoomMate} className="flex flex-row items-center space-x-2">
                     <Text className="text-base font-semibold text-main1">룸메이트 찾으러 가기</Text>
+                    <BlueArrow />
                   </Pressable>
                 </View>
               )}

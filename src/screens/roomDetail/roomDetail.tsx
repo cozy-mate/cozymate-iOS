@@ -22,7 +22,6 @@ import {
   useAcceptInvited,
   useCheckRequested,
   useSendRoomRequest,
-  useChangeRoomPublic,
   useDeleteRoomRequest,
   useGetInvitedMembers,
 } from '@hooks/api/room';
@@ -134,7 +133,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const { mutateAsync: mutateExitRoom } = useExitRoom(roomId);
 
   // 방 공개방으로 전환
-  const { mutateAsync: mutateChangeRoomPublic } = useChangeRoomPublic(roomId);
+  // const { mutateAsync: mutateChangeRoomPublic } = useChangeRoomPublic(roomId);
 
   // 방 참여 요청
   const sendRequest = async () => {
@@ -166,6 +165,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   // 방 나가기
   const exitRoom = async () => {
     await mutateExitRoom(roomId);
+
+    setIsExitModalOpen(false);
 
     navigation.reset({
       index: 0,
@@ -199,21 +200,8 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
 
   // 케밥 모달 아이템
   const items = [
-    {
-      index: 1,
-      name: '수정하기',
-      pressFunc: toEditRoom,
-    },
-    { index: 2, name: '방 나가기', pressFunc: exitRoom },
-
-    {
-      index: 3,
-      name: roomData.result.roomType === 'PUBLIC' ? '비공개방 전환' : '공개방 전환',
-      pressFunc:
-        roomData.result.roomType === 'PUBLIC'
-          ? () => console.log('성공') //mutateChangeRoomPublic
-          : mutateChangeRoomPublic,
-    },
+    { index: 1, name: '수정하기', pressFunc: toEditRoom },
+    { index: 2, name: '방 나가기', pressFunc: () => setIsExitModalOpen(true) },
   ];
 
   useFocusEffect(
