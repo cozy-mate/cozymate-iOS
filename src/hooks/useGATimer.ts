@@ -6,8 +6,12 @@ import { initTimer } from '@utils/ga/sendTimerEvent';
 
 const useGATimer = () => {
   useEffect(() => {
-    sendScreenEvent('온보딩 시작');
-    initTimer();
+    try {
+      sendScreenEvent('온보딩 시작');
+      initTimer();
+    } catch (e) {
+      //console.error('useGATimer error: ', e);
+    }
   }, []);
 };
 

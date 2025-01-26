@@ -30,8 +30,12 @@ const AdditionalLifeStyle = ({ navigation }: AdditionalLifyStyleScreenProps) => 
   const addLifeStyle = async () => {
     try {
       await registerMyLifeStyle(lifeStyle);
-      sendTimerEvent();
-      sendScreenEvent('온보딩 완료');
+      try {
+        sendTimerEvent();
+        sendScreenEvent('온보딩 완료');
+      } catch (e) {
+        console.error(e);
+      }
       navigation.navigate('ChipSelectScreen');
     } catch (error: any) {
       console.log(error.response?.data);

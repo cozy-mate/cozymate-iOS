@@ -18,7 +18,8 @@ export const sendTimerEvent = async (): Promise<void> => {
   console.log('duration', duration);
   if (duration) {
     await analytics().logEvent('온보딩 시간', {
-      time,
+      duration_ms: duration,
+      duration_seconds: Math.floor(duration / 1000),
     });
     duration = null;
   }

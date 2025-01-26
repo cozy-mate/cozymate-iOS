@@ -173,7 +173,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       setRoomInfo(response.result);
 
       clearCreatePrivateRoom();
-      sendButtonEvent(ButtonEvent.CreatePublicRoom);
+      sendButtonEvent(ButtonEvent.CreatePrivateRoom);
       navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
     } catch (error: any) {
       console.log(error.response.data);

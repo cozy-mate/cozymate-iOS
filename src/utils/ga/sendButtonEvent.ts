@@ -6,8 +6,12 @@ export const sendButtonEvent = async (
   eventType: ButtonEvent,
   preferenceType?: string,
 ): Promise<void> => {
-  await analytics().logEvent('버튼 클릭', {
-    eventType: eventType,
-    preferenceType: preferenceType,
-  });
+  try {
+    await analytics().logEvent('버튼 클릭', {
+      eventType: eventType,
+      preferenceType: preferenceType,
+    });
+  } catch (e) {
+    //console.error('sendButtonEvent error: ', e);
+  }
 };

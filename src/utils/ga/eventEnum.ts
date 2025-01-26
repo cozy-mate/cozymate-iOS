@@ -11,5 +11,5 @@ export enum ButtonEvent {
   FilterChip = '완전 일치 필터 칩 선택',
   InviteToMyRoom = '내 방으로 초대하기 버튼',
   CreatePrivateRoom = '비공개방 만들기 버튼',
-  CreatePublicRoom = '공개방 만들기 버큰',
+  CreatePublicRoom = '공개방 만들기 버튼',
 }
