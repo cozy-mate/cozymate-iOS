@@ -1,3 +1,5 @@
+import { ButtonEvent } from '@utils/ga/eventEnum';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
 
@@ -22,6 +24,7 @@ const CheckBoxContainer: React.FC<CheckBoxContainerProps> = ({
   setItems,
 }) => {
   const select = (selectedItem: Item) => {
+    sendButtonEvent(ButtonEvent.FilterChip, selectedItem.name);
     // 'select' 상태를 반전시킴
     const updatedItems = items.map((item) =>
       item.index === selectedItem.index ? { ...item, select: !item.select } : item,

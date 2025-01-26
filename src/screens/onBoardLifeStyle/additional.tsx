@@ -17,6 +17,8 @@ import { useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 import { useRegisterLifeStyle } from '@hooks/api/member-stat';
 
 import { AdditionalLifyStyleScreenProps } from '@type/param/rootStack';
+import { sendTimerEvent } from '@utils/ga/sendTimerEvent';
+import { sendScreenEvent } from '@utils/ga/sendScreenEvent';
 
 const AdditionalLifeStyle = ({ navigation }: AdditionalLifyStyleScreenProps) => {
   const width = Dimensions.get('screen').width;
@@ -28,7 +30,8 @@ const AdditionalLifeStyle = ({ navigation }: AdditionalLifyStyleScreenProps) => 
   const addLifeStyle = async () => {
     try {
       await registerMyLifeStyle(lifeStyle);
-
+      sendTimerEvent();
+      sendScreenEvent('온보딩 완료');
       navigation.navigate('ChipSelectScreen');
     } catch (error: any) {
       console.log(error.response?.data);

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, ScrollView, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 
 import { dormitoryItems, acceptanceItems, numOfRoommateItems } from './basicData';
+
+import { initTimer } from '@utils/ga/sendTimerEvent';
 
 import AnimationView from '@components/onBoardLifeStyle/animationView';
 import TextInputComponent from '@components/onBoardLifeStyle/textInput';
@@ -15,6 +17,7 @@ import { useInputAnimation } from '@hooks/inputAnimation';
 import useCompletionPercentage from '@hooks/useCompletionPercentage';
 
 import { BasicLifeStyleScreenProps } from '@type/param/rootStack';
+import useGATimer from '@hooks/useGATimer';
 
 const BasicLifyStyle = ({ navigation }: BasicLifeStyleScreenProps) => {
   const { lifeStyle, clearNewLifeStyle } = useNewLifeStyleStore();
@@ -26,6 +29,8 @@ const BasicLifyStyle = ({ navigation }: BasicLifeStyleScreenProps) => {
   const dormitoryNameAnimation = useInputAnimation(showDormitoryName, 400);
   const roommateInputAnimation = useInputAnimation(showRoommateInput, 400);
   const acceptanceInputAnimation = useInputAnimation(showAcceptance, 400);
+
+  useGATimer();
 
   const toBack = () => {
     clearNewLifeStyle();

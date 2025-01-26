@@ -19,6 +19,7 @@ target 'cozymate' do
   
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true
+  $RNFirebaseAnalyticsEnableAdSupport = true
   
   use_react_native!(
     :path => config[:reactNativePath],

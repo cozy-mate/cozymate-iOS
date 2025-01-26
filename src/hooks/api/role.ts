@@ -8,6 +8,8 @@ import {
   DeleteRoleResponse,
   GetRoleDataResponse,
 } from '@server/responseTypes/role';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 type DeleteRoleVariables = { roomId: number; roleId: number };
 
@@ -30,6 +32,7 @@ export const useAddRole = (
   return useMutation({
     mutationFn: (addRoleRequest: AddRoleRequest) => addRole(roomId, addRoleRequest),
     onSuccess: () => {
+      sendButtonEvent(ButtonEvent.ConfirmRole);
       refetchRuleData();
       refetchTodoData();
     },
