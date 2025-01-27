@@ -1,0 +1,15 @@
+export enum ButtonEvent {
+  TableView = '표로 보기 버튼',
+  ConfirmTodo = '투두 확인 버튼 버튼',
+  ConfirmRole = 'Role 만드는 페이지에서 확인 버튼',
+  ConfirmRule = 'Rule 만드는 페이지에서 확인 버튼',
+  LeaveRoom = '방 나가기 버튼',
+  ShortcutToCozymate = 'cozymate 바로가기 버튼',
+  JoinRoom = '방 참여하기 버튼',
+  NavBar = '네비게이션 바 버튼',
+  RoomMemberChip = '방 멤버 칩 선택',
+  FilterChip = '완전 일치 필터 칩 선택',
+  InviteToMyRoom = '내 방으로 초대하기 버튼',
+  CreatePrivateRoom = '비공개방 만들기 버튼',
+  CreatePublicRoom = '공개방 만들기 버튼',
+}

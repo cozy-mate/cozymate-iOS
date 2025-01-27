@@ -27,6 +27,8 @@ import {
 
 import { showRejectToast } from '@utils/toast';
 import { getProfileImage } from '@utils/profileImage';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 import { UserDetailScreenProps } from '@type/param/stack';
 
@@ -87,6 +89,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
 
   const handleTable = useCallback(() => {
     setType('table');
+    sendButtonEvent(ButtonEvent.TableView);
   }, []);
 
   const toEditMyLifeStyle = () => {

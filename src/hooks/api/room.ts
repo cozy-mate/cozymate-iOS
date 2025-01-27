@@ -62,6 +62,8 @@ import {
 } from '@server/responseTypes/room';
 
 import { showRejectToast, showSuccessToast } from '@utils/toast';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 // 어플 시작 시 사용
 // 사용자가 참여한 방이 있는지 여부 조회
@@ -204,6 +206,7 @@ export const useExitRoom = (
   return useMutation({
     mutationFn: () => exitRoom(roomId),
     onSuccess: () => {
+      sendButtonEvent(ButtonEvent.LeaveRoom);
       clearMyRoom();
       clearRoomInfo();
     },
@@ -327,6 +330,7 @@ export const useInviteMember = (
     mutationFn: () => inviteMember(inviteeId),
     onSuccess: () => {
       showSuccessToast(`${nickname}님에게 방 초대 요청을 보냈어요`);
+      sendButtonEvent(ButtonEvent.InviteToMyRoom);
       refetch();
     },
   });
@@ -382,5 +386,8 @@ export const useGetRoomDataByInviteCode = (): UseMutationResult<
 export const useJoinRoom = (): UseMutationResult<JoinRoomResponse, unknown, number> => {
   return useMutation({
     mutationFn: (roomId: number) => joinRoom(roomId),
+    onSuccess: () => {
+      sendButtonEvent(ButtonEvent.JoinRoom);
+    },
   });
 };
