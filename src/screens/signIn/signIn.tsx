@@ -27,7 +27,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   useResetFcmToken();
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
-  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useTestLogin(navigation);
+  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<FlatList>(null);

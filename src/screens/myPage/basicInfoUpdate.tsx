@@ -44,46 +44,71 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
     navigation.goBack();
   };
 
+  const [checkValid, setCheckValid] = useState<boolean>(true);
   const [checkDuplicate, setCheckDuplicate] = useState<boolean>(true);
   const [checkLength, setCheckLength] = useState<boolean>(true);
   const [canUse, setCanUse] = useState<boolean>(true);
 
-  const checkNicknameLength = async (nickname: string) => {
+  const checkValidation = (nickname: string) => {
+    const validNickNameRegex = /^[가-힣a-zA-Z0-9]+$/;
+
+    if (!validNickNameRegex.test(nickname)) {
+      setCheckValid(false);
+      setCanUse(false);
+      return; // 중복 메시지 방지를 위해 return 추가
+    }
+
+    // 유효할 경우 상태를 초기화
+    setCheckValid(true);
+    setCanUse(true);
+  };
+
+  const checkNicknameLength = (nickname: string) => {
     const trimmedNickname = nickname.trim();
 
-    if (trimmedNickname.length == 0) {
+    if (trimmedNickname.length === 0) {
+      setCheckLength(true); // 공백 입력 시에도 초기화
       return;
-    } else if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
+    }
+
+    if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
       setCheckLength(false);
       setCanUse(false);
       return;
     }
+
+    // 길이가 적절하면 오류 상태 해제
     setCheckLength(true);
   };
 
   const checkUserNickname = async (nickname: string) => {
-    if (nickname.trim() !== '') {
-      try {
-        const response = await checkNickname(nickname);
+    if (nickname.trim() !== profile.nickname) {
+      if (nickname.trim() !== '') {
+        try {
+          const response = await checkNickname(nickname);
 
-        setCheckDuplicate(response.result);
-        return;
-      } catch (error: any) {
-        const errorCode = error?.response?.data?.code;
+          setCheckDuplicate(response.result);
+          return;
+        } catch (error: any) {
+          const errorCode = error?.response?.data?.code;
 
-        if (errorCode === 'MEMBER404') {
-          setCheckDuplicate(false);
+          if (errorCode === 'MEMBER404') {
+            setCheckDuplicate(false);
+          }
         }
       }
     }
   };
 
   useEffect(() => {
-    checkNicknameLength(nickname);
-    checkUserNickname(nickname);
+    if (nickname !== profile.nickname) {
+      if (nickname.trim() !== '') {
+        checkUserNickname(nickname);
+        checkValidation(nickname);
+        checkNicknameLength(nickname);
 
-    if (checkDuplicate) {
-      setCanUse(true);
+        setCanUse(checkValid && checkLength && checkDuplicate);
+      }
     }
   }, [nickname]);
 
@@ -96,10 +121,12 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
   const handleChangeProfile = async (): Promise<void> => {
     try {
       if (type === 'nickname') {
-        changeNickname(nickname);
-        setProfile({
-          nickname: nickname,
-        });
+        if (nickname !== profile.nickname) {
+          changeNickname(nickname);
+          setProfile({
+            nickname: nickname,
+          });
+        }
       } else if (type === 'majorName') {
         changeMajorName(majorName);
         setProfile({
@@ -133,7 +160,9 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
                     onPress={handleFocus}
                     className={`flex flex-row items-center justify-between rounded-xl border bg-white p-5
                 ${
-                  (!checkDuplicate || !checkLength) && nickname.trim() !== ''
+                  (!checkDuplicate || !checkLength || !checkValid) &&
+                  nickname.trim() !== '' &&
+                  nickname !== profile.nickname
                     ? 'border-warning'
                     : isFocused
                     ? 'border-sub1'
@@ -144,7 +173,9 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
                       <Text
                         className={`text-xs font-semibold leading-4 tracking-tight
                     ${
-                      (!checkDuplicate || !checkLength) && nickname.trim() !== ''
+                      (!checkDuplicate || !checkLength || !checkValid) &&
+                      nickname.trim() !== '' &&
+                      nickname !== profile.nickname
                         ? 'text-warning'
                         : isFocused || nickname
                         ? 'text-main1'
@@ -166,17 +197,22 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
                     </View>
                   </Pressable>
 
-                  {!checkLength && nickname.trim() !== '' && (
-                    <Text className="mt-2 px-2 text-xs font-medium text-warning">
-                      닉네임은 2~8자인 한글, 영어, 숫자만 가능해요!
-                    </Text>
-                  )}
+                  {(!checkLength || !checkValid) &&
+                    nickname.trim() !== '' &&
+                    nickname !== profile.nickname && (
+                      <Text className="mt-2 px-2 text-xs font-medium text-warning">
+                        닉네임은 2~8자인 한글, 영어, 숫자만 가능해요!
+                      </Text>
+                    )}
 
-                  {!checkDuplicate && checkLength && nickname.trim() !== '' && (
-                    <Text className="mt-2 px-2 text-xs font-medium text-warning">
-                      다른 사람이 사용중인 닉네임이에요!
-                    </Text>
-                  )}
+                  {!checkDuplicate &&
+                    checkLength &&
+                    nickname !== profile.nickname &&
+                    nickname.trim() !== '' && (
+                      <Text className="mt-2 px-2 text-xs font-medium text-warning">
+                        다른 사람이 사용중인 닉네임이에요!
+                      </Text>
+                    )}
                 </View>
               )}
 
@@ -200,9 +236,11 @@ const BasicInfoUpdateScreen = ({ navigation, route }: BasicInfoUpdateScreenProps
 
             <Pressable
               onPress={handleChangeProfile}
-              disabled={type === 'nickname' && !checkLength && !checkDuplicate && !canUse}
+              disabled={
+                (type === 'nickname' && !checkLength) || !checkDuplicate || !checkValid || !canUse
+              }
               className={`flex rounded-lg  p-4 drop-shadow-buttonBack ${
-                type === 'nickname' && !checkLength && !checkDuplicate && !canUse
+                (type === 'nickname' && !checkLength) || !checkDuplicate || !checkValid || !canUse
                   ? 'bg-disabledFont'
                   : 'bg-main1'
               }`}

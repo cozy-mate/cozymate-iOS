@@ -266,10 +266,12 @@ export const useTestLogin = (
 
             // 프로필 정보 저장
             const getProfileResponse = await getMyProfile();
+            console.log(getProfileResponse.result);
             setProfile(getProfileResponse.result);
 
             // 선호 칩 항목 저장
             const preferenceResponse = await getPreferenceList();
+            console.log(preferenceResponse.result.preferenceList);
             setPreferenceList(preferenceResponse.result.preferenceList);
 
             // 방 존재 여부 확인
@@ -298,7 +300,7 @@ export const useTestLogin = (
             setLoggedIn(true);
           }
         } catch (error: any) {
-          console.log('로그인 에러', error);
+          console.log('로그인 에러', error.response);
         }
       } catch (error: any) {
         console.error('Login error:', error);

@@ -84,6 +84,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   ]);
 
   const validRegex = /^(?! )[가-힣a-zA-Z0-9 ]+(?<! )$/;
+  const validHashTagRegex = /^[가-힣a-zA-Z0-9]+$/;
 
   useEffect(() => {
     if (name.trim() !== '') {
@@ -112,7 +113,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
 
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
-      if (validRegex.test(hashTag.trim())) {
+      if (validHashTagRegex.test(hashTag.trim())) {
         setHashtagList([...hashtagList, hashTag.trim()]);
         setHashTag('');
       } else {

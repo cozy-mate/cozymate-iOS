@@ -18,7 +18,7 @@ import { useRoomInfoStore } from '@zustand/room/room';
 
 import { updateRoom } from '@server/api/room';
 
-import { useGetRoomData } from '@hooks/api/room';
+import { useGetRoomData, useGetMyRoomData } from '@hooks/api/room';
 
 import { getProfileImage } from '@utils/profileImage';
 
@@ -34,12 +34,14 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
   const { roomInfo, setRoomInfo } = useRoomInfoStore();
 
   const { refetch: roomInfoRefetch } = useGetRoomData(id);
+  const { refetch: refetchMyRoom } = useGetMyRoomData();
 
   const [name, setName] = useState<string>(roomInfo.name);
   const [hashTag, setHashTag] = useState<string>('');
   const [hashtagList, setHashtagList] = useState<string[]>(roomInfo.hashtagList);
 
   const [isLongName, setIsLongName] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
@@ -53,27 +55,48 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
   };
 
   useEffect(() => {
-    if (name !== '' && !isLongName) {
-      setIsComplete(true);
-    } else {
-      setIsComplete(false);
+    if (type === 'PUBLIC') {
+      const isPublicComplete =
+        name !== '' &&
+        !isLongName &&
+        errorMessage === '' &&
+        hashtagList.length >= 1 &&
+        hashtagList.length <= 3 &&
+        persona !== 0;
+      setIsComplete(isPublicComplete);
+    } else if (type === 'PRIVATE') {
+      const isPrivateComplete = name !== '' && !isLongName && persona !== 0;
+      setIsComplete(isPrivateComplete);
     }
-  }, [hashtagList, isLongName, name]);
+  }, [name, isLongName, errorMessage, hashtagList, persona, type]);
 
-  const stringRegex = /^(?!_)[가-힣a-zA-Z0-9]+([가-힣a-zA-Z0-9]+)*(?<!_)$/;
+  const validRegex = /^(?! )[가-힣a-zA-Z0-9 ]+(?<! )$/;
+  const validHashTagRegex = /^[가-힣a-zA-Z0-9]+$/;
 
-  const valueHandleChange = (text: string) => {
-    if (stringRegex.test(text)) {
-      setName(text);
-      setIsLongName(text.length > 12);
-    } else {
-      setIsLongName(false);
+  useEffect(() => {
+    if (name.trim() !== '') {
+      if (name.length > 12) {
+        setIsLongName(true);
+        setErrorMessage('방이름은 최대 12글자만 가능합니다.');
+      } else if (!validRegex.test(name)) {
+        setIsLongName(false);
+        setErrorMessage(
+          '한글, 영어, 숫자 및 공백만 입력 가능합니다. 공백은 처음이나 끝에 올 수 없습니다.',
+        );
+      } else {
+        setIsLongName(false);
+        setErrorMessage(''); // 에러 메시지 초기화
+      }
     }
+  }, [name]);
+
+  const handleChangeText = (text: string) => {
+    setName(text); // 입력값 업데이트
   };
 
   const handleHashTagSubmit = () => {
     if (hashTag.trim() !== '' && hashtagList.length < 3) {
-      if (stringRegex.test(hashTag.trim())) {
+      if (validHashTagRegex.test(hashTag.trim())) {
         setHashtagList([...hashtagList, hashTag.trim()]);
         setHashTag('');
       } else {
@@ -143,6 +166,7 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
         });
       }
 
+      refetchMyRoom();
       roomInfoRefetch();
 
       navigation.navigate('MainScreen', { screen: 'RoomMainScreen' });
@@ -185,12 +209,12 @@ const EditRoomScreen = ({ navigation, route }: EditRoomScreenProps) => {
                   <TextInput
                     className="rounded-xl bg-colorBox p-4 text-sm font-medium leading-4 text-basicFont"
                     value={name}
-                    onChangeText={valueHandleChange}
+                    onChangeText={handleChangeText}
                     placeholder="방이름을 입력해주세요"
                   />
-                  {isLongName && (
+                  {errorMessage !== '' && (
                     <Text className="mt-2 pl-2 text-xs font-medium text-warning">
-                      방이름은 최대 12글자만 가능해요!
+                      {errorMessage}
                     </Text>
                   )}
                 </View>
