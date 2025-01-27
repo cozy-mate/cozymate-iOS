@@ -8,6 +8,8 @@ import {
   DeleteRuleResponse,
   GetRuleDataResponse,
 } from '@server/responseTypes/rule';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 type DeleteRuleVariables = { roomId: number; ruleId: number };
 
@@ -45,6 +47,7 @@ export const useAddRule = (
   return useMutation({
     mutationFn: (addRuleRequest: AddRuleRequest) => addRule(roomId, addRuleRequest),
     onSuccess: () => {
+      sendButtonEvent(ButtonEvent.ConfirmRule);
       refetchRuleData();
     },
   });

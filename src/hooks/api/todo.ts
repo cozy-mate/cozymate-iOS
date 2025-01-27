@@ -10,6 +10,9 @@ import {
   ChangeTodoStateResponse,
 } from '@server/responseTypes/todo';
 
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
+
 type DeleteTodoVariables = { roomId: number; todoId: number };
 
 // Todo 삭제
@@ -30,6 +33,7 @@ export const useAddMyTodo = (
   return useMutation({
     mutationFn: (addMyTodoRequest: AddMyTodoRequest) => addMyTodo(roomId, addMyTodoRequest),
     onSuccess: () => {
+      sendButtonEvent(ButtonEvent.ConfirmTodo);
       refetchTodoData();
     },
   });

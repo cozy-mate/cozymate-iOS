@@ -39,6 +39,8 @@ import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
 import FilledHeart from '@assets/userDetail/filledHeart.svg';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 interface MemberItem {
   memberId: number;
@@ -178,7 +180,7 @@ const RoomDetailScreen = ({ navigation, route }: RoomDetailScreenProps) => {
   const handleChipClick = async (chip: LifestyleOptionKey): Promise<void> => {
     try {
       const response = await getChipDetailData(roomId, chip);
-
+      sendButtonEvent(ButtonEvent.RoomMemberChip, getLifestyleLabel(chip));
       setIsLifeStyleModalOpen(true);
       setTitle(getLifestyleLabel(chip));
       setColor(response.result.color);

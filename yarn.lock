@@ -3135,6 +3135,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-firebase/analytics@npm:^21.7.1":
+  version: 21.7.1
+  resolution: "@react-native-firebase/analytics@npm:21.7.1"
+  dependencies:
+    superstruct: ^2.0.2
+  peerDependencies:
+    "@react-native-firebase/app": 21.7.1
+  checksum: 3d77e86eb342e77ecc0a49f6480012238b4919eedf2a45c832b0ceb4199919b8b095c3b8b717be10864ecb7fe52bce4a6fe1d6d5e5cdfba43855220a05307a13
+  languageName: node
+  linkType: hard
+
 "@react-native-firebase/app@npm:20.5.0":
   version: 20.5.0
   resolution: "@react-native-firebase/app@npm:20.5.0"
@@ -5562,6 +5573,7 @@ __metadata:
     "@react-native-clipboard/clipboard": ^1.14.1
     "@react-native-community/blur": ^4.4.1
     "@react-native-community/datetimepicker": ^8.2.0
+    "@react-native-firebase/analytics": ^21.7.1
     "@react-native-firebase/app": 20.5.0
     "@react-native-firebase/messaging": ^20.4.0
     "@react-native-masked-view/masked-view": ^0.3.1
@@ -11891,6 +11903,13 @@ __metadata:
     clone-deep: ^2.0.1
     kind-of: ^6.0.1
   checksum: f95e4049becb928baa531fe56256a74b050a2e4da0bee09ccd0031e08fffd521defeb1d37881b93e6861fa1a7c17c48f3834a99af83cb3ad60c9e6079e840a65
+  languageName: node
+  linkType: hard
+
+"superstruct@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "superstruct@npm:2.0.2"
+  checksum: a5f75b72cb8b14b86f4f7f750dae8c5ab0e4e1d92414b55e7625bae07bbcafad81c92486e7e32ccacd6ae1f553caff2b92a50ff42ad5093fd35b9cb7f4e5ec86
   languageName: node
   linkType: hard
 

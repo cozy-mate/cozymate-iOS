@@ -30,6 +30,8 @@ import BackButton from '@assets/backButton.svg';
 import CharacterBox from '@assets/characterBox.svg';
 import XButton from '@assets/createRoom/smallXButton.svg';
 import SelectIcon from '@assets/createRoom/selectCharacter.svg';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
+import { ButtonEvent } from '@utils/ga/eventEnum';
 
 const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
   const { type } = route.params;
@@ -153,7 +155,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       setRoomInfo(response.result);
 
       clearCreatePublicRoom();
-
+      sendButtonEvent(ButtonEvent.CreatePublicRoom);
       navigation.navigate('CompleteCreateRoomScreen', { type: 'PUBLIC' });
     } catch (error: any) {
       console.log(error.response.data);
@@ -171,7 +173,7 @@ const CreateRoomScreen = ({ navigation, route }: CreateRoomScreenProps) => {
       setRoomInfo(response.result);
 
       clearCreatePrivateRoom();
-
+      sendButtonEvent(ButtonEvent.CreatePrivateRoom);
       navigation.navigate('CompleteCreateRoomScreen', { type: 'PRIVATE' });
     } catch (error: any) {
       console.log(error.response.data);
