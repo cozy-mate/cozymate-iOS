@@ -25,8 +25,7 @@ import { useIsOldiPhone } from '@hooks/device';
 import { showRejectToast } from '@utils/toast';
 
 import { TabNavigatorParamList } from '@type/param/stack';
-import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
-import { ButtonEvent } from '@utils/ga/eventEnum';
+import { sendNavBarEvent } from '@utils/ga/sendButtonEvent';
 
 const options = {
   enableVibrateFallback: true,
@@ -67,7 +66,7 @@ const HapticTabButton: React.FC<TouchableOpacityProps & { screenName: string }> 
       {...props}
       onPress={(event: GestureResponderEvent) => {
         ReactNativeHapticFeedback.trigger('impactLight', options);
-        sendButtonEvent(ButtonEvent.NavBar, screenName);
+        sendNavBarEvent(screenName);
         scale.value = withTiming(1.05, { duration: 150, easing: Easing.ease }, () => {
           scale.value = withTiming(1, { duration: 150 });
         });
