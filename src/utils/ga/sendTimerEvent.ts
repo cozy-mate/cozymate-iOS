@@ -15,9 +15,9 @@ export const endTime = (): void => {
 
 export const sendTimerEvent = async (): Promise<void> => {
   endTime();
-  console.log('duration', duration);
+  //console.log('duration', duration);
   if (duration) {
-    await analytics().logEvent('온보딩 시간', {
+    await analytics().logEvent('Onboarding_Time', {
       duration_ms: duration,
       duration_seconds: Math.floor(duration / 1000),
     });

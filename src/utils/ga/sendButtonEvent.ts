@@ -7,7 +7,7 @@ export const sendButtonEvent = async (
   preferenceType?: string,
 ): Promise<void> => {
   try {
-    await analytics().logEvent('버튼 클릭', {
+    await analytics().logEvent('Button_Click', {
       eventType: eventType,
       preferenceType: preferenceType,
     });
@@ -15,3 +15,17 @@ export const sendButtonEvent = async (
     //console.error('sendButtonEvent error: ', e);
   }
 };
+
+export const sendNavBarEvent = async (
+  eventType: ButtonEvent,
+  screenName : string,
+): Promise<void> => {
+  try{
+    await analytics().logEvent('NavBar_Click', {
+      eventType:`${screenName} 클릭`
+    });
+    
+  }catch(e){
+    //console.error('sendNavBarEvent error: ', e);
+  }
+}

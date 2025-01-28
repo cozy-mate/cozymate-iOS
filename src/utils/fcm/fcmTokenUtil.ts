@@ -6,7 +6,6 @@ import { getDeviceId } from 'react-native-device-info';
 export const hasFcmToken = async (): Promise<boolean> => {
   try {
     const fcmToken = await AsyncStorage.getItem('fcmToken');
-    console.log('FCM Token:', fcmToken);
     return fcmToken !== null;
   } catch (e) {
     console.error('Error checking FCM Token:', e);
@@ -37,7 +36,6 @@ export const getFcmToken = async (): Promise<string | null> => {
 export const deleteFcmToken = async (): Promise<boolean> => {
   try {
     await AsyncStorage.removeItem('fcmToken');
-    console.log('FCM Token deleted');
     return true; // 성공적으로 삭제되었음을 반환
   } catch (e) {
     console.error('Error deleting FCM Token:', e);
