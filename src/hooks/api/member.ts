@@ -252,34 +252,37 @@ export const useTestLogin = (
           const { accessToken, refreshToken } = signInResponse.result.tokenResponseDTO;
 
           // 로그인 시도 후 기존 회원이면 accessToken / 신규 회원이면 임시 accessToken
+          console.log(accessToken);
           await setAccessToken(accessToken);
           console.log('토큰 저장 완료');
 
-          console.log(accessToken);
-
           if (signInResponse.result.tokenResponseDTO.refreshToken === '') {
-            console.log('리프레쉬 없음');
+            console.log('리프레쉬 없는 사용자');
             navigation.navigate('PersonalInfoInputScreen');
           } else {
-            console.log('리프레쉬 있음');
+            console.log('리프레쉬 있는 사용자');
             await setRefreshToken(refreshToken);
 
             // 프로필 정보 저장
+            console.log('프로필 조회');
             const getProfileResponse = await getMyProfile();
             console.log(getProfileResponse.result);
             setProfile(getProfileResponse.result);
 
             // 선호 칩 항목 저장
+            console.log('선호 칩 조회');
             const preferenceResponse = await getPreferenceList();
             console.log(preferenceResponse.result.preferenceList);
             setPreferenceList(preferenceResponse.result.preferenceList);
 
             // 방 존재 여부 확인
+            console.log('방 존재 여부 조회');
             const roomCheckResponse = await checkHasRoom();
             const roomId = roomCheckResponse.result.roomId;
 
             // 방이 존재하는 경우 방 정보 저장
             if (roomId !== 0) {
+              console.log('방 정보 조회');
               const roomInfoResponse = await getRoomData(roomId);
 
               setMyRoom({
@@ -290,17 +293,20 @@ export const useTestLogin = (
                   roomInfoResponse.result.arrivalMateNum === roomInfoResponse.result.maxMateNum,
               });
 
+              console.log(roomInfoResponse.result);
               setRoomInfo(roomInfoResponse.result);
             }
 
             // 유저 라이프스타일 정보 저장
+            console.log('라이프스타일 조회');
             const userLifeStyle = await getMemberStatData();
             setNewLifeStyle(userLifeStyle.result.memberStatDetail);
+            console.log(userLifeStyle.result.memberStatDetail);
 
             setLoggedIn(true);
           }
         } catch (error: any) {
-          console.log('로그인 에러', error.response);
+          console.log('로그인 에러', error.response.data.code);
         }
       } catch (error: any) {
         console.error('Login error:', error);

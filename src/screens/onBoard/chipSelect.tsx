@@ -26,10 +26,9 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
   };
 
   const registerPreference = async () => {
-    if (!isComplete) return;
-
     try {
-      await addPreferenceList({ preferenceList: preferences });
+      const response = await addPreferenceList({ preferenceList: preferences });
+      console.log(response.result);
       setPreferenceList(preferences);
 
       navigation.navigate('CompleteScreen');
@@ -37,8 +36,6 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
       console.log(error.response);
     }
   };
-
-  console.log(preferences);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
