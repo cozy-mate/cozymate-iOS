@@ -25,6 +25,7 @@ import {
   useCheckRequestedToJoin,
 } from '@hooks/api/room';
 
+import { showRejectToast } from '@utils/toast';
 import { getProfileImage } from '@utils/profileImage';
 import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
 import { ButtonEvent } from '@utils/ga/eventEnum';
@@ -281,8 +282,8 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                     borderColor="border-[#c4c4c4]"
                     textColor="text-white"
                     text="내 방으로 초대하기"
-                    disabled={true}
-                    onPressFunc={undefined}
+                    disabled={false}
+                    onPressFunc={() => showRejectToast('방의 인원이 모두 찼어요!')}
                   />
                 )}
 
@@ -298,7 +299,7 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                     textColor="text-white"
                     text="내 방으로 초대하기"
                     disabled={false}
-                    onPressFunc={undefined}
+                    onPressFunc={() => showRejectToast('메이트가 이미 다른 방에 속해있어요!')}
                   />
                 )}
 
@@ -326,20 +327,20 @@ const UserDetail = ({ navigation, route }: UserDetailScreenProps) => {
                   borderColor="border-[#c4c4c4]"
                   textColor="text-white"
                   text="내 방으로 초대하기"
-                  disabled={true}
-                  onPressFunc={undefined}
+                  disabled={false}
+                  onPressFunc={() => showRejectToast('메이트가 이미 다른 방에 속해있어요!')}
                 />
               )}
 
               {/* 라이프스타일을 입력했고 학교 인증을 한, 방이 존재하지 않는 유저가 방이 존재하지 않는 유저를 볼 때 */}
               {!myRoom.hasRoom && lifeStyleData.result.roomId === 0 && (
                 <BottomButton
-                  color="bg-main1"
-                  borderColor="border-main1"
+                  color="bg-[#c4c4c4]"
+                  borderColor="border-[#c4c4c4]"
                   textColor="text-white"
                   text="내 방으로 초대하기"
-                  disabled={true}
-                  onPressFunc={undefined}
+                  disabled={false}
+                  onPressFunc={() => showRejectToast('메이트를 초대할 방이 없어요!')}
                 />
               )}
             </View>

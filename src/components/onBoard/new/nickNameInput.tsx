@@ -18,6 +18,7 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
 
   const [checkDuplicate, setCheckDuplicate] = useState<boolean>(true);
   const [checkLength, setCheckLength] = useState<boolean>(true);
+  const [isValidFormat, setIsValidFormat] = useState<boolean>(true);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -31,16 +32,35 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
     Keyboard.dismiss();
   };
 
-  const checkNicknameLength = async (nickname: string) => {
+  const checkValidation = (nickname: string) => {
+    const validNickNameRegex = /^[가-힣a-zA-Z0-9]+$/;
+
+    if (!validNickNameRegex.test(nickname)) {
+      setIsValidFormat(false);
+      setCanUse(false);
+      return; // 중복 메시지 방지를 위해 return 추가
+    }
+
+    // 유효할 경우 상태를 초기화
+    setIsValidFormat(true);
+    setCanUse(true);
+  };
+
+  const checkNicknameLength = (nickname: string) => {
     const trimmedNickname = nickname.trim();
 
-    if (trimmedNickname.length == 0) {
+    if (trimmedNickname.length === 0) {
+      setCheckLength(true); // 공백 입력 시에도 초기화
       return;
-    } else if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
+    }
+
+    if (trimmedNickname.length < 2 || trimmedNickname.length > 8) {
       setCheckLength(false);
       setCanUse(false);
       return;
     }
+
+    // 길이가 적절하면 오류 상태 해제
     setCheckLength(true);
   };
 
@@ -62,11 +82,12 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
   };
 
   useEffect(() => {
-    checkNicknameLength(signUpState.nickname);
-    checkUserNickname(signUpState.nickname);
+    if (signUpState.nickname.trim() !== '') {
+      checkUserNickname(signUpState.nickname);
+      checkValidation(signUpState.nickname);
+      checkNicknameLength(signUpState.nickname);
 
-    if (checkDuplicate) {
-      setCanUse(true);
+      setCanUse(isValidFormat && checkLength && checkDuplicate);
     }
   }, [signUpState.nickname]);
 
@@ -76,7 +97,8 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
         onPress={handleFocus}
         className={`flex flex-row items-center justify-between rounded-xl border bg-white p-5
                 ${
-                  (!checkDuplicate || !checkLength) && signUpState.nickname.trim() !== ''
+                  (!checkDuplicate || !checkLength || !isValidFormat) &&
+                  signUpState.nickname.trim() !== ''
                     ? 'border-warning'
                     : isFocused
                     ? 'border-sub1'
@@ -87,7 +109,8 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
           <Text
             className={`text-xs font-semibold leading-4 tracking-tight
                     ${
-                      (!checkDuplicate || !checkLength) && signUpState.nickname.trim() !== ''
+                      (!checkDuplicate || !checkLength || !isValidFormat) &&
+                      signUpState.nickname.trim() !== ''
                         ? 'text-warning'
                         : isFocused || signUpState.nickname
                         ? 'text-main1'
@@ -108,6 +131,12 @@ const NickNameInput: React.FC<NickNameInputProps> = ({ setCanUse }) => {
           />
         </View>
       </Pressable>
+
+      {!isValidFormat && signUpState.nickname.trim() !== '' && (
+        <Text className="mt-2 px-2 text-xs font-medium text-warning">
+          닉네임은 한글, 영어, 숫자만 입력할 수 있어요!
+        </Text>
+      )}
 
       {!checkLength && signUpState.nickname.trim() !== '' && (
         <Text className="mt-2 px-2 text-xs font-medium text-warning">

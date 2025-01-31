@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Pressable, SafeAreaView } from 'react-native';
 
-import CheckBoxContainer from '@components/roomMate/checkBoxContainer';
+import ChipSelectComponent from '@components/onBoard/new/chipSelect';
 
 import { usePreferencesStore } from '@zustand/member-stat/member-stat';
 
@@ -15,49 +15,26 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
   const { setPreferenceList } = usePreferencesStore();
   const [preferences, setPreferences] = useState<LifestyleOptionKey[]>([]);
 
-  const [items, setItems] = useState([
-    { index: 1, id: 'birthYear', name: '출생년도', select: false },
-    { index: 2, id: 'admissionYear', name: '학번', select: false },
-    { index: 3, id: 'major', name: '학과', select: false },
-    { index: 4, id: 'acceptance', name: '합격여부', select: false },
-    { index: 5, id: 'wakeUpTime', name: '기상시간', select: false },
-    { index: 6, id: 'sleepingTime', name: '취침시간', select: false },
-    { index: 7, id: 'turnOffTime', name: '소등시간', select: false },
-    { index: 8, id: 'smoking', name: '흡연여부', select: false },
-    { index: 9, id: 'sleepingHabit', name: '잠버릇', select: false },
-    { index: 10, id: 'airConditioningIntensity', name: '에어컨', select: false },
-    { index: 11, id: 'heatingIntensity', name: '히터', select: false },
-    { index: 12, id: 'lifePattern', name: '생활패턴', select: false },
-    { index: 13, id: 'intimacy', name: '친밀도', select: false },
-    { index: 14, id: 'canShare', name: '물건공유', select: false },
-    { index: 15, id: 'isPlayGame', name: '게임여부', select: false },
-    { index: 16, id: 'isPhoneCall', name: '전화여부', select: false },
-    { index: 17, id: 'studying', name: '공부여부', select: false },
-    { index: 18, id: 'intake', name: '섭취여부', select: false },
-    { index: 19, id: 'cleanSensitivity', name: '청결예민도', select: false },
-    { index: 20, id: 'noiseSensitivity', name: '소음예민도', select: false },
-    { index: 21, id: 'cleaningFrequency', name: '청소빈도', select: false },
-    { index: 22, id: 'drinkingFrequency', name: '음주빈도', select: false },
-    { index: 23, id: 'personality', name: '성격', select: false },
-    { index: 24, id: 'mbti', name: 'MBTI', select: false },
-  ]);
-
   const isComplete = preferences.length === 4;
+
+  const handlePreference = (value: LifestyleOptionKey) => {
+    setPreferences((prevPreferences) =>
+      prevPreferences.includes(value)
+        ? prevPreferences.filter((preference) => preference !== value)
+        : [...prevPreferences, value],
+    );
+  };
 
   const registerPreference = async () => {
     try {
-      await addPreferenceList({ preferenceList: preferences });
+      const response = await addPreferenceList({ preferenceList: preferences });
+      console.log(response.result);
       setPreferenceList(preferences);
+
+      navigation.navigate('CompleteScreen');
     } catch (error: any) {
       console.log(error.response);
     }
-  };
-
-  const toNext = async (): Promise<void> => {
-    if (!isComplete) return;
-    await registerPreference();
-
-    navigation.navigate('CompleteScreen');
   };
 
   return (
@@ -73,17 +50,12 @@ const ChipSelectScreen = ({ navigation }: ChipSelectScreenProps) => {
             </Text>
           </View>
 
-          <CheckBoxContainer
-            value={preferences}
-            setValue={setPreferences}
-            items={items}
-            setItems={setItems}
-          />
+          <ChipSelectComponent preference={preferences} handlePreference={handlePreference} />
         </View>
 
         {/* 하단 View */}
         <View className="flex px-5">
-          <Pressable onPress={toNext}>
+          <Pressable onPress={registerPreference} disabled={preferences.length !== 4}>
             <View className={`rounded-xl p-4 ${isComplete ? 'bg-main1' : 'bg-[#C4C4C4]'}`}>
               <Text className="text-center text-base font-semibold text-white">확인</Text>
             </View>
