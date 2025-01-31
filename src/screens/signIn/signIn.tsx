@@ -14,7 +14,7 @@ import {
 import LoadingComponent from '@components/commonComponents/loading';
 
 import { useResetFcmToken } from '@hooks/fcm';
-import { useTestLogin, useAppleLogin, useKakaoLogin } from '@hooks/api/member';
+import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 

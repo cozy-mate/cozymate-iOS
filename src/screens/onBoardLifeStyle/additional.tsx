@@ -10,22 +10,24 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
+import LoadingComponent from '@components/commonComponents/loading';
 import LifeStyleHeaderComponent from '@components/onBoardLifeStyle/header';
 
 import { useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
 
 import { useRegisterLifeStyle } from '@hooks/api/member-stat';
 
-import { AdditionalLifyStyleScreenProps } from '@type/param/rootStack';
 import { sendTimerEvent } from '@utils/ga/sendTimerEvent';
 import { sendScreenEvent } from '@utils/ga/sendScreenEvent';
+
+import { AdditionalLifyStyleScreenProps } from '@type/param/rootStack';
 
 const AdditionalLifeStyle = ({ navigation }: AdditionalLifyStyleScreenProps) => {
   const width = Dimensions.get('screen').width;
 
   const { lifeStyle, setNewLifeStyle } = useNewLifeStyleStore();
 
-  const { mutateAsync: registerMyLifeStyle } = useRegisterLifeStyle();
+  const { mutateAsync: registerMyLifeStyle, isPending } = useRegisterLifeStyle();
 
   const addLifeStyle = async () => {
     try {
@@ -49,6 +51,7 @@ const AdditionalLifeStyle = ({ navigation }: AdditionalLifyStyleScreenProps) => 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-white">
+        {isPending && <LoadingComponent />}
         <LifeStyleHeaderComponent
           title="선택정보"
           toBack={toBack}

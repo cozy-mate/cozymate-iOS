@@ -7,10 +7,12 @@ import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/
 import { useProfileStore, useLoggedInStore, useIsVerifiedStore } from '@zustand/member/member';
 
 import { getMemberStatData } from '@server/api/member-stat';
+import { SignUpRequest } from '@server/requestTypes/member';
 import { getRoomData, checkHasRoom } from '@server/api/room';
 import { getPreferenceList } from '@server/api/member-stat-preference';
 import {
   signIn,
+  signUp,
   withdraw,
   getMyProfile,
   updatePersona,
@@ -20,6 +22,7 @@ import {
 } from '@server/api/member';
 import {
   SignInResponse,
+  SignUpResponse,
   WithdrawResponse,
   AppleLoginResponse,
   KakaoLoginResponse,
@@ -311,6 +314,28 @@ export const useTestLogin = (
       } catch (error: any) {
         console.error('Login error:', error);
       }
+    },
+  });
+};
+
+export const useSignUp = (navigation: any) => {
+  const { setProfile } = useProfileStore();
+  const { setMyRoom } = useHasRoomStore();
+
+  return useMutation({
+    mutationFn: (data: SignUpRequest) => signUp(data),
+    onSuccess: async (response: SignUpResponse) => {
+      await Promise.all([
+        setAccessToken(response.result.tokenResponseDTO.accessToken),
+        setRefreshToken(response.result.tokenResponseDTO.refreshToken),
+      ]);
+
+      const getProfileResponse = await getMyProfile();
+      setProfile(getProfileResponse.result);
+
+      setMyRoom({ roomId: 0, hasRoom: false });
+
+      navigation.navigate('BasicLifeStyleScreen');
     },
   });
 };
