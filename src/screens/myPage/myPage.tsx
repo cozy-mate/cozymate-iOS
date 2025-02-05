@@ -84,101 +84,98 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
   };
 
   return (
-    <View className="flex-1 bg-white">
-      <ScrollView
-        className="bg-white"
-        style={{ position: 'relative' }}
-        bounces={false}
-        contentContainerStyle={{ paddingBottom: 120 }}
-      >
-        <Background width={width} style={{ position: 'absolute' }} />
-        <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
-          {getProfileImage(profile.persona, 120, 120)}
-          <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
-            {profile.nickname}
-          </Text>
+    <ScrollView
+      className="bg-white"
+      style={{ flex: 1, position: 'relative' }}
+      contentContainerStyle={{ paddingBottom: 120 }}
+    >
+      <Background width={width} style={{ position: 'absolute' }} />
+      <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
+        {getProfileImage(profile.persona, 120, 120)}
+        <Text className="mb-10 mt-3 text-lg font-semibold text-emphasizedFont">
+          {profile.nickname}
+        </Text>
 
-          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
-            <Pressable
-              onPress={toMyInfo}
-              className="flex flex-row justify-between border-b border-b-[#f1f2f4] pb-3"
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">내 정보</Text>
-              <View className="flex flex-row items-center">
-                <RightArrow />
-              </View>
-            </Pressable>
-
-            <Pressable
-              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
-              onPress={myRoom.hasRoom ? toRoomDetail : null}
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">나의 코지룸</Text>
-              <View className="flex flex-row items-center">
-                {myRoom.hasRoom ? (
-                  <View className="flex flex-row items-center">
-                    <HomeIcon />
-                    <Text className="mx-1 text-sm font-medium text-main1">{roomInfo.name}</Text>
-                    <RightArrow />
-                  </View>
-                ) : (
-                  <View className="flex flex-row items-center">
-                    <Text className="mr-1 text-sm font-medium text-disabledFont">
-                      아직 방이 존재하지 않아요
-                    </Text>
-                    <RightArrow />
-                  </View>
-                )}
-              </View>
-            </Pressable>
-
-            <Pressable
-              className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
-              onPress={toLifeStyle}
-            >
-              <Text className="text-sm font-medium text-emphasizedFont">나의 라이프스타일</Text>
-              <View className="flex flex-row items-center">
-                <RightArrow />
-              </View>
-            </Pressable>
-
-            <Pressable className="flex flex-row justify-between pt-3" onPress={toFavorite}>
-              <Text className="text-sm font-medium text-emphasizedFont">내가 찜한 룸메이트</Text>
-              <View className="flex flex-row items-center">
-                <RightArrow />
-              </View>
-            </Pressable>
-          </View>
-
-          <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
-            <Pressable className="flex flex-row justify-between" onPress={toInquiry}>
-              <Text className="text-sm font-medium text-emphasizedFont">문의하기</Text>
+        <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
+          <Pressable
+            onPress={toMyInfo}
+            className="flex flex-row justify-between border-b border-b-[#f1f2f4] pb-3"
+          >
+            <Text className="text-sm font-medium text-emphasizedFont">내 정보</Text>
+            <View className="flex flex-row items-center">
               <RightArrow />
-            </Pressable>
-          </View>
+            </View>
+          </Pressable>
 
-          <View className="flex flex-row items-center justify-center">
-            <Pressable onPress={() => setIsLogoutModalOpen(true)}>
-              <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
-            </Pressable>
+          <Pressable
+            className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+            onPress={myRoom.hasRoom ? toRoomDetail : null}
+          >
+            <Text className="text-sm font-medium text-emphasizedFont">나의 코지룸</Text>
+            <View className="flex flex-row items-center">
+              {myRoom.hasRoom ? (
+                <View className="flex flex-row items-center">
+                  <HomeIcon />
+                  <Text className="mx-1 text-sm font-medium text-main1">{roomInfo.name}</Text>
+                  <RightArrow />
+                </View>
+              ) : (
+                <View className="flex flex-row items-center">
+                  <Text className="mr-1 text-sm font-medium text-disabledFont">
+                    아직 방이 존재하지 않아요
+                  </Text>
+                  <RightArrow />
+                </View>
+              )}
+            </View>
+          </Pressable>
 
-            <View className="mx-4 h-[18px] w-px bg-[#d9d9d9]" />
+          <Pressable
+            className="flex flex-row justify-between border-b border-b-[#f1f2f4] py-3"
+            onPress={toLifeStyle}
+          >
+            <Text className="text-sm font-medium text-emphasizedFont">나의 라이프스타일</Text>
+            <View className="flex flex-row items-center">
+              <RightArrow />
+            </View>
+          </Pressable>
 
-            <Pressable onPress={toWithdraw}>
-              <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
-            </Pressable>
-          </View>
+          <Pressable className="flex flex-row justify-between pt-3" onPress={toFavorite}>
+            <Text className="text-sm font-medium text-emphasizedFont">내가 찜한 룸메이트</Text>
+            <View className="flex flex-row items-center">
+              <RightArrow />
+            </View>
+          </Pressable>
         </View>
 
-        {isLogoutModalOpen && (
-          <LogoutModal
-            closeModal={handleLogoutModal}
-            cancelFunc={handleLogoutModal}
-            submitFunc={logout}
-          />
-        )}
-      </ScrollView>
-    </View>
+        <View className="mb-4 flex w-full flex-col rounded-xl border border-[#f1f2f4] p-4">
+          <Pressable className="flex flex-row justify-between" onPress={toInquiry}>
+            <Text className="text-sm font-medium text-emphasizedFont">문의하기</Text>
+            <RightArrow />
+          </Pressable>
+        </View>
+
+        <View className="flex flex-row items-center justify-center">
+          <Pressable onPress={() => setIsLogoutModalOpen(true)}>
+            <Text className="px-1 py-3 text-xs font-medium text-disabledFont">로그아웃</Text>
+          </Pressable>
+
+          <View className="mx-4 h-[18px] w-px bg-[#d9d9d9]" />
+
+          <Pressable onPress={toWithdraw}>
+            <Text className="px-1 py-3 text-xs font-medium text-disabledFont">회원탈퇴</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {isLogoutModalOpen && (
+        <LogoutModal
+          closeModal={handleLogoutModal}
+          cancelFunc={handleLogoutModal}
+          submitFunc={logout}
+        />
+      )}
+    </ScrollView>
   );
 };
 
