@@ -136,7 +136,10 @@ const RoleNRule = ({ navigation }: RoleNRuleScreenProps) => {
         <Background width={width} style={{ position: 'absolute', top: 0 }} />
         <NavBar type={type} handleNav={handleNav} />
       </View>
-      <ScrollView className="rounded-tr-[48px] bg-[#F7FAFF] px-5 pt-[34px]">
+      <ScrollView
+        className="rounded-tr-[48px] bg-[#F7FAFF] px-5 pt-[34px]"
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {type === 'todo' && (
           <View>
             {/* 달력 */}

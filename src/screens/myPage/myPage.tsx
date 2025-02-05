@@ -85,7 +85,12 @@ const MyPage = ({ navigation }: MyPageScreenProps) => {
 
   return (
     <View className="flex-1 bg-white">
-      <ScrollView className="bg-white" style={{ position: 'relative' }} bounces={false}>
+      <ScrollView
+        className="bg-white"
+        style={{ position: 'relative' }}
+        bounces={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <Background width={width} style={{ position: 'absolute' }} />
         <View className="flex flex-1 flex-col items-center px-5 pt-[100px]">
           {getProfileImage(profile.persona, 120, 120)}
