@@ -1,6 +1,7 @@
+import React from 'react';
 import appleAuth from '@invertase/react-native-apple-authentication';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { login, getProfile, KakaoProfile, KakaoOAuthToken } from '@react-native-seoul/kakao-login';
+import { me, login, KakaoUser, KakaoLoginToken } from '@react-native-kakao/user';
 
 import { useHasRoomStore, useRoomInfoStore } from '@zustand/room/room';
 import { usePreferencesStore, useNewLifeStyleStore } from '@zustand/member-stat/member-stat';
@@ -16,6 +17,7 @@ import {
   withdraw,
   getMyProfile,
   updatePersona,
+  checkNickname,
   updateBirthday,
   updateNickname,
   updateMajorName,
@@ -25,8 +27,8 @@ import {
   SignUpResponse,
   WithdrawResponse,
   AppleLoginResponse,
-  KakaoLoginResponse,
   UpdatePersonaResponse,
+  CheckNicknameResponse,
   UpdateBirthdayResponse,
   UpdateNicknameResponse,
   UpdateMajorNameResponse,
@@ -38,7 +40,7 @@ import { deleteToken, setAccessToken, setRefreshToken } from '@utils/token';
 // 카카오 로그인
 export const useKakaoLogin = (
   navigation: any,
-): UseMutationResult<KakaoLoginResponse, Error, void, unknown> => {
+): UseMutationResult<KakaoLoginToken, Error, void, unknown> => {
   // 로그인 정보
   const { setLoggedIn } = useLoggedInStore();
   // 프로필 정보
@@ -53,14 +55,13 @@ export const useKakaoLogin = (
 
   return useMutation({
     mutationFn: () => login(),
-    onSuccess: async (response: KakaoOAuthToken) => {
+    onSuccess: async () => {
       try {
-        const profile: KakaoProfile = await getProfile();
-        console.log('카카오 프로필 조회 성공', profile);
+        const response: KakaoUser = await me();
 
         try {
           const signInResponse = await signIn({
-            clientId: profile.id.toString(),
+            clientId: response.id.toString(),
             socialType: 'KAKAO',
           });
 
@@ -120,6 +121,10 @@ export const useKakaoLogin = (
       } catch (error: any) {
         console.error('Login error:', error);
       }
+    },
+    onError: (error) => {
+      console.log(error);
+      console.log(error.message);
     },
   });
 };
@@ -244,8 +249,8 @@ export const useTestLogin = (
   return useMutation({
     mutationFn: () =>
       signIn({
-        clientId: 'TEST',
-        socialType: 'TEST',
+        clientId: '3670421055',
+        socialType: 'KAKAO',
       }),
     onSuccess: async (signInResponse: SignInResponse) => {
       try {
@@ -402,6 +407,20 @@ export const useWithdraw = (): UseMutationResult<WithdrawResponse, undefined, st
       clearRoomInfo();
       clearNewLifeStyle();
       setLoggedIn(false);
+    },
+  });
+};
+
+export const useCheckNickname = (handleError: React.Dispatch<React.SetStateAction<boolean>>) => {
+  return useMutation({
+    mutationFn: (nickname: string) => checkNickname(nickname),
+    onSuccess: (response: CheckNicknameResponse) => {
+      console.log(response);
+    },
+    onError: (error: any) => {
+      handleError(true);
+      console.log(error);
+      console.log(error.config);
     },
   });
 };

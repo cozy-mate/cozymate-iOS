@@ -67,7 +67,7 @@ export const intimacyItems: StringItem[] = [
 ];
 
 export const canShareItems: StringItem[] = [
-  { index: 1, value: '아무것도 공유하고싶지 않아요', name: '아무것도 공유하고싶지 않아요' },
+  { index: 1, value: '아무것도 공유하고 싶지 않아요', name: '아무것도 공유하고 싶지 않아요' },
   { index: 2, value: '휴지정도는 빌려줄 수 있어요', name: '휴지정도는 빌려줄 수 있어요' },
   { index: 3, value: '옷정도는 빌려줄 수 있어요', name: '옷정도는 빌려줄 수 있어요' },
   { index: 4, value: '칫솔만 아니면 돼요', name: '칫솔만 아니면 돼요' },

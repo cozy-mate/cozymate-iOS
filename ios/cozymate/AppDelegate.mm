@@ -2,7 +2,8 @@
 #import "AppDelegate.h"
 #import "RNSplashScreen.h"
 #import <Firebase.h>
-#import <RNKakaoLogins.h>
+#import <React/RCTLinkingManager.h>
+#import <RNCKakaoUser/RNCKakaoUserUtil.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
@@ -25,16 +26,16 @@
   return didFinishLaunchingWithOptions;
 }
 
-- (BOOL)application:(UIApplication *)app
-     openURL:(NSURL *)url
-     options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
- if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
-    return [RNKakaoLogins handleOpenUrl: url];
- }
 
-  return [RCTLinkingManager application:app openURL:url options:options];
+// Linking API
+-  (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
- return NO;
+  // Handling logic in this app if the URL scheme is from KakaoTalk.
+  if([RNCKakaoUserUtil isKakaoTalkLoginUrl:url]) {
+    return [RNCKakaoUserUtil handleOpenUrl:url];
+  }
+
+  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
 }
 
 

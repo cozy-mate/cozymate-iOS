@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUniqueId } from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const generateDeviceId = () => {
   return `${new Date().getTime()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -25,6 +25,6 @@ export const getDeviceId = async (): Promise<string | null> => {
 };
 
 const getDeviceIdWithPrefix = async (): Promise<string> => {
-    const deviceId = await getUniqueId();
-    return `ios-${deviceId}`;
+  const deviceId = await getUniqueId();
+  return `ios-${deviceId}`;
 };

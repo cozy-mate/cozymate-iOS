@@ -14,7 +14,7 @@ import {
 import LoadingComponent from '@components/commonComponents/loading';
 
 import { useResetFcmToken } from '@hooks/fcm';
-import { useAppleLogin, useKakaoLogin } from '@hooks/api/member';
+import { useTestLogin, useAppleLogin, useKakaoLogin } from '@hooks/api/member';
 
 import { SignInScreenProps } from '@type/param/rootStack';
 
@@ -27,7 +27,7 @@ const SignInScreen = ({ navigation }: SignInScreenProps) => {
   useResetFcmToken();
 
   const { mutateAsync: kakaoLogin, isPending: kakaoLoginPending } = useKakaoLogin(navigation);
-  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useAppleLogin(navigation);
+  const { mutateAsync: appleLogin, isPending: appleLoginPending } = useTestLogin(navigation);
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<FlatList>(null);

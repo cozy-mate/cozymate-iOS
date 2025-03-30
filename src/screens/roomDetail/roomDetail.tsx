@@ -26,7 +26,9 @@ import {
   useGetInvitedMembers,
 } from '@hooks/api/room';
 
+import { ButtonEvent } from '@utils/ga/eventEnum';
 import { getProfileImage } from '@utils/profileImage';
+import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
 import { getLifestyleLabel, LifestyleOptionKey } from '@utils/getLifeStyleIcon';
 
 import { RoomDetailScreenProps } from '@type/param/stack';
@@ -39,8 +41,6 @@ import HeartIcon from '@assets/userDetail/heart.svg';
 import MessageIcon from '@assets/userDetail/message.svg';
 import Background from '@assets/userDetail/background.svg';
 import FilledHeart from '@assets/userDetail/filledHeart.svg';
-import { sendButtonEvent } from '@utils/ga/sendButtonEvent';
-import { ButtonEvent } from '@utils/ga/eventEnum';
 
 interface MemberItem {
   memberId: number;

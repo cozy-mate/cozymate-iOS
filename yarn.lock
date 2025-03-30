@@ -2755,6 +2755,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mj-studio/js-util@npm:1.1.3":
+  version: 1.1.3
+  resolution: "@mj-studio/js-util@npm:1.1.3"
+  checksum: 6f444aa83ebe2c4254ab2e87066ceb0bd40b412fb5b618126dfeb30032c2df1358cfee5229f42f9f3fc6822889d2cd46c5ebd3713723b236639650ae5516d4a4
+  languageName: node
+  linkType: hard
+
 "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1":
   version: 5.1.1-v1
   resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
@@ -3176,6 +3183,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-kakao/core@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "@react-native-kakao/core@npm:2.2.6"
+  dependencies:
+    crypto-js: ^4.2.0
+    query-string: ^9.0.0
+    return-fetch: ^0.4.5
+  peerDependencies:
+    expo: ">=47.0.0"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 1b457dd2336cfc3bba5396af1b7cd8ed9c8ee252f7a0b8e9aa4cb7096b45ac0949dfe50a5b670e0c43f1f99115d951eda1acec7f141c4293d37d4f661b4250bc
+  languageName: node
+  linkType: hard
+
+"@react-native-kakao/user@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "@react-native-kakao/user@npm:2.2.6"
+  dependencies:
+    "@mj-studio/js-util": 1.1.3
+  peerDependencies:
+    "@react-native-kakao/core": 2.2.6
+    react: "*"
+    react-native: "*"
+  checksum: ec5a1161651e23721aeedda16542209fd531824e192da912dcd4ff4f4773ebd38e69e9d0563ec16698d846c585a6779c71da33744e637d449e254714236feab7
+  languageName: node
+  linkType: hard
+
 "@react-native-masked-view/masked-view@npm:^0.3.1":
   version: 0.3.1
   resolution: "@react-native-masked-view/masked-view@npm:0.3.1"
@@ -3183,18 +3221,6 @@ __metadata:
     react: ">=16"
     react-native: ">=0.57"
   checksum: 880059020709ce856c448657c2d67a905f2ebcd3f42c1c4d344d732761cb2de98efb600172df5591d943f562393dbca42802e8a903b974aa2b038b441c5718fb
-  languageName: node
-  linkType: hard
-
-"@react-native-seoul/kakao-login@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@react-native-seoul/kakao-login@npm:5.4.1"
-  dependencies:
-    dooboolab-welcome: ^1.3.2
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 09bdaad24ebc4d1fc39b2a7c08f8f133c1a8190216628684329e5068c8a1910091a834ca4ed36ba7c0cbc648fbfd7ffaae0ad22be43d21dffb63e9ce989eb5ca
   languageName: node
   linkType: hard
 
@@ -5576,8 +5602,9 @@ __metadata:
     "@react-native-firebase/analytics": ^21.7.1
     "@react-native-firebase/app": 20.5.0
     "@react-native-firebase/messaging": ^20.4.0
+    "@react-native-kakao/core": ^2.2.6
+    "@react-native-kakao/user": ^2.2.6
     "@react-native-masked-view/masked-view": ^0.3.1
-    "@react-native-seoul/kakao-login": ^5.4.1
     "@react-native/babel-preset": 0.74.84
     "@react-native/eslint-config": 0.74.84
     "@react-native/metro-config": 0.74.84
@@ -5660,6 +5687,13 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: f051666dbc077c8324777f44fbd3aaea2986f198fe85092535130d17026c7c2ccf2d23ee5b29b36f7a4a07312db2fae23c9094b644cc35f7858b1b4fcaf27774
   languageName: node
   linkType: hard
 
@@ -5835,6 +5869,13 @@ __metadata:
   version: 0.2.2
   resolution: "decode-uri-component@npm:0.2.2"
   checksum: 95476a7d28f267292ce745eac3524a9079058bbb35767b76e3ee87d42e34cd0275d2eb19d9d08c3e167f97556e8a2872747f5e65cbebcac8b0c98d83e285f139
+  languageName: node
+  linkType: hard
+
+"decode-uri-component@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "decode-uri-component@npm:0.4.1"
+  checksum: 0473924860986fb6ca19ee65a2af13e08801b4f3660475b058500ea8479ed715c919884a026b6bf4296dbb640d3cea74fadf45490b2439152fc548271d0201ec
   languageName: node
   linkType: hard
 
@@ -6020,15 +6061,6 @@ __metadata:
     domelementtype: ^2.3.0
     domhandler: ^5.0.3
   checksum: e5757456ddd173caa411cfc02c2bb64133c65546d2c4081381a3bafc8a57411a41eed70494551aa58030be9e58574fcc489828bebd673863d39924fb4878f416
-  languageName: node
-  linkType: hard
-
-"dooboolab-welcome@npm:^1.3.2":
-  version: 1.3.2
-  resolution: "dooboolab-welcome@npm:1.3.2"
-  bin:
-    dooboolab-welcome: bin/hello.js
-  checksum: 9a4e5c17a16b5cf874bdc1482ee7a2a221a8f269d8bfe6ba1425f678e764d256e265e30ca6169635ce9fa77af53b2e5a0b810a5c4b48b01c13d906613f799c96
   languageName: node
   linkType: hard
 
@@ -6804,6 +6836,13 @@ __metadata:
   version: 1.1.0
   resolution: "filter-obj@npm:1.1.0"
   checksum: cf2104a7c45ff48e7f505b78a3991c8f7f30f28bd8106ef582721f321f1c6277f7751aacd5d83026cb079d9d5091082f588d14a72e7c5d720ece79118fa61e10
+  languageName: node
+  linkType: hard
+
+"filter-obj@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "filter-obj@npm:5.1.0"
+  checksum: ba7c24d9b2c0552ee87d268e07eca74483af61fb740545ffa809f7e9e5294de38cf163ecc55af0e8a40020af9a49512c32f4022de2a858b110420fc8bffa7c9c
   languageName: node
   linkType: hard
 
@@ -10445,6 +10484,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"query-string@npm:^9.0.0":
+  version: 9.1.1
+  resolution: "query-string@npm:9.1.1"
+  dependencies:
+    decode-uri-component: ^0.4.1
+    filter-obj: ^5.1.0
+    split-on-first: ^3.0.0
+  checksum: cc9c89c61f41eca2eccc67d85667708a29e517ccc93ae62753c4a1207c64ea04bf9cdb3c4006dc6c9693407aacdefad7a6e54e47158914f4efcf1c4c88371a6c
+  languageName: node
+  linkType: hard
+
 "querystring@npm:^0.2.1":
   version: 0.2.1
   resolution: "querystring@npm:0.2.1"
@@ -11216,6 +11266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"return-fetch@npm:^0.4.5":
+  version: 0.4.8
+  resolution: "return-fetch@npm:0.4.8"
+  checksum: eb5ede77f24bdc1d5740267647e7731af5a1e958fb456d8760c3dc9d57130fd9d865bff414a75ad744f32ddef110e82dd3025ea2782dcd61e00456e015f72524
+  languageName: node
+  linkType: hard
+
 "reusify@npm:^1.0.4":
   version: 1.0.4
   resolution: "reusify@npm:1.0.4"
@@ -11633,6 +11690,13 @@ __metadata:
   version: 1.1.0
   resolution: "split-on-first@npm:1.1.0"
   checksum: 16ff85b54ddcf17f9147210a4022529b343edbcbea4ce977c8f30e38408b8d6e0f25f92cd35b86a524d4797f455e29ab89eb8db787f3c10708e0b47ebf528d30
+  languageName: node
+  linkType: hard
+
+"split-on-first@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "split-on-first@npm:3.0.0"
+  checksum: 75dc27ecbac65cfbeab9a3b90cf046307220192d3d7a30e46aa0f19571cc9b4802aac813f3de2cc9b16f2e46aae72f275659b5d2614bb5369c77724d739e5f73
   languageName: node
   linkType: hard
 
