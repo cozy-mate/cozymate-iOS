@@ -1,31 +1,19 @@
-const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+// Learn more https://docs.expo.io/guides/customizing-metro
+const { getDefaultConfig } = require('expo/metro-config');
+const { withNativeWind } = require('nativewind/metro');
 
-const {
-  createSentryMetroSerializer,
-} = require('@sentry/react-native/dist/js/tools/sentryMetroSerializer');
+const config = getDefaultConfig(__dirname);
 
-const defaultConfig = getDefaultConfig(__dirname);
-const { assetExts, sourceExts } = defaultConfig.resolver;
-
-/**
- * Metro configuration
- * https://reactnative.dev/docs/metro
- *
- * @type {import('metro-config').MetroConfig}
- */
-const config = {
-  transformer: {
-    babelTransformerPath: require.resolve('react-native-svg-transformer'),
-  },
-
-  resolver: {
-    assetExts: assetExts.filter((ext) => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'svg'],
-  },
-
-  serializer: {
-    customSerializer: createSentryMetroSerializer(),
-  },
+// SVG 설정 추가
+config.transformer = {
+  ...config.transformer,
+  babelTransformerPath: require.resolve('react-native-svg-transformer'),
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+config.resolver = {
+  ...config.resolver,
+  assetExts: config.resolver.assetExts.filter((ext) => ext !== 'svg'),
+  sourceExts: [...config.resolver.sourceExts, 'svg'],
+};
+
+module.exports = withNativeWind(config, { input: './global.css' });

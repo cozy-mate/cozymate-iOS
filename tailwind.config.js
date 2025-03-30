@@ -1,13 +1,42 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // NOTE: Update this to include the paths to all of your component files.
   content: [
-    './App.{js,jsx,ts,tsx}',
-    './AppInner.{js,jsx,ts,tsx}',
-    './src/*.{js,jsx,ts,tsx}',
-    './src/**/*.{js,jsx,ts,tsx}',
+    './app/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './utils/**/*.{js,jsx,ts,tsx}',
   ],
+  presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      fontSize: {
+        20: '20px',
+        18: '18px',
+        16: '16px',
+        14: '14px',
+        12: '12px',
+        10: '10px',
+      },
+      fontFamily: {
+        700: ['Pretendard-Bold', 'System'],
+        600: ['Pretendard-SemiBold', 'System'],
+        500: ['Pretendard-Medium', 'System'],
+        400: ['Pretendard-Regular', 'System'],
+      },
+      lineHeight: {
+        20: '23.9px',
+        18: '21.5px',
+        16: '19.1px',
+        '16Regular': '26.6px',
+        14: '16.7px',
+        '14Regular': '18.2px',
+        12: '16.8px',
+        10: '12px',
+      },
+      letterSpacing: {
+        space: '-2px',
+      },
+
       backgroundColor: {
         modalBack: 'rgba(0, 0, 0, 0.5)',
         modalBack2: 'rgba(0, 0, 0, 0.9)',
@@ -15,7 +44,7 @@ module.exports = {
         lifeStyleButtonBack: 'rgba(34, 34, 34, 0.8)',
       },
       boxShadow: {
-        chipback: '0px 0px 2px rgba(107, 107, 107, 0.25)',
+        chipback: '0px 0px 1px rgba(107, 107, 107, 0.25)',
         custom: '0px 0px 1px rgba(107, 107, 107, 0.25)',
       },
       dropShadow: {
@@ -24,35 +53,45 @@ module.exports = {
         buttonBack2: '0px 0px 2px rgba(107, 107, 107, 0.45)',
       },
       colors: {
-        DEFAULT: 'black',
-        main1: '#68A4FF',
-        main2: '#FFCE3D',
-        // 피드 배경색
-        main3: '#F7F8FA',
+        // 메인컬러
+        mainColor: '#68A4FF',
+        // 서브컬러
+        subColor: '#FFCE3D',
 
-        sub1: '#CADFFF',
-        sub2: '#E5F0FF',
-        sub3: '#B5D3FF',
+        // 비활성화
+        disabledColor: '#E6E6E6',
 
-        // 폰트 색깔
-        basicFont: '#5D5D6A',
-        colorFont: '#808997',
-        disabledFont: '#ACADB4',
-        emphasizedFont: '#444955',
-
-        disabled: '#E6E6E6',
-
-        // 박스 색깔
-        box: '#F1F1F1',
+        // 박스컬러
+        boxColor: '#F1F1F1',
+        // 색박스
         colorBox: '#F3F6FA',
 
-        warning: '#FF6868',
+        // 기본폰트
+        basicFont: '#6C6C77',
+        // 색폰트
+        colorFont: '#808997',
+        // 강조폰트
+        emphasizedFont: '#51555C',
+        // 비활성화폰트
+        disabledFont: '#ACADB4',
 
-        disabledButton: '#C4C4C4',
+        // subcolor
+        subColor1: '#CADFFF',
+        // subcolor2
+        subColor2: '#E5F0FF',
+        // subcolor3
+        subColor3: '#B5D3FF',
+
+        // stroke
+        strokeColor: '#F6F6F6',
+
+        // warning
+        warningColor: '#FF6868',
+        // warning_sub
+        warningSubColor: '#FFCACA',
 
         // 소셜 로그인용 색깔
         kakaoyellow: '#FEE500',
-        navergreen: '#00C73C',
         appleblack: '#121212',
 
         //토스트용 색깔
