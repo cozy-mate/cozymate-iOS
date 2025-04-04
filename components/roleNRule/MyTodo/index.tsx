@@ -14,13 +14,13 @@ interface MyTodoComponentProps {
 }
 
 const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomSheetRef }) => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
-  const { data, refetch } = useGetTodoList(roomId, timePoint);
+  const { data, refetch } = useGetTodoList(roomInfo.roomId, timePoint);
 
   const { setSelectedItem } = useSelectedItemStore();
 
-  const { mutateAsync: toggleTodo } = useToggleTodoDone(roomId, refetch);
+  const { mutateAsync: toggleTodo } = useToggleTodoDone(roomInfo.roomId, refetch);
 
   const formatDateToKorean = (dateString: string): string => {
     const date = new Date(dateString);
@@ -39,7 +39,9 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomShee
     <View className="gap-y-[12px]">
       <View className="gap-y-0.5 mx-1">
         <Text className="text-18 font-600 text-basicFont">
-          <Text className="text-mainColor">{formatDateToKorean(data.result.timePoint)},</Text>{' '}
+          <Text className="text-mainColor">
+            {data !== undefined && formatDateToKorean(data.result.timePoint)},
+          </Text>{' '}
           눈꽃님이
         </Text>
         <Text className="text-18 font-600 leading-18 text-basicFont">
@@ -47,7 +49,7 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomShee
         </Text>
       </View>
 
-      {data.result.myTodoList.todoList.length !== 0 ? (
+      {data !== undefined && data.result.myTodoList.todoList.length !== 0 ? (
         <View className="p-[8px] rounded-xl bg-white shadow-chipback">
           {data.result.myTodoList.todoList.map((todo) => (
             <View key={todo.todoId} className="flex flex-row items-center justify-between">

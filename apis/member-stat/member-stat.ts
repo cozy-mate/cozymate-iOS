@@ -1,11 +1,12 @@
-import { GetAxiosInstance, PostAxiosInstance } from '@/axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@/axios/axios.method';
 
-import { CreateMemberDetailRequest } from './request';
+import { CreateMemberDetailRequest, UpdatememberDetailRequest } from './request';
 import {
   CreateMemberDetailResponse,
   GetMemberDetailResponse,
   GetMemberListResponse,
   GetRandomMemberListResponse,
+  UpdateMemberDetailResponse,
 } from './response';
 
 // 내 상세정보 조회
@@ -56,4 +57,12 @@ export const createMemberDetail = async (
 
 // 사용자 상세정보를 키-값으로 필터링하고, 사용자 목록받아오기(일치율 포함)
 // 사용자 상세정보를 키-값으로 필터링하고, 필터링에 맞는 인원 수를 리턴합니다
+
 // 사용자 상세정보 수정
+export const updateMemberDetail = async (
+  data: UpdatememberDetailRequest,
+): Promise<UpdateMemberDetailResponse> => {
+  const response = await PutAxiosInstance<UpdateMemberDetailResponse>(`/members/stat`, data);
+
+  return response.data;
+};

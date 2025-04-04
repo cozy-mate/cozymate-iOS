@@ -16,7 +16,7 @@ export const useKakaoLogin = () => {
 
   const { setMemberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomId } = useHasRoomStore();
+  const { setRoomInfo } = useHasRoomStore();
 
   return useMutation({
     mutationFn: () => login(),
@@ -37,8 +37,7 @@ export const useKakaoLogin = () => {
           await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
 
           console.log('가입된 회원이 아님');
-          // router.push('/onBoard/schoolAuthentication');
-          router.push('/onBoard/personalInfo');
+          router.push('/(onBoard)/schoolAuthentication');
         }
 
         // 기존 멤버
@@ -61,7 +60,7 @@ export const useKakaoLogin = () => {
           }
 
           const hasRoomResponse = await checkHasRoom();
-          setRoomId(hasRoomResponse.result.roomId);
+          setRoomInfo(hasRoomResponse.result);
 
           router.replace('/(tabs)/home');
         }
@@ -100,7 +99,7 @@ export const useAppleLogin = () => {
 
   const { setMemberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomId } = useHasRoomStore();
+  const { setRoomInfo } = useHasRoomStore();
 
   return useMutation({
     mutationFn: () => appleLoginAuth(),
@@ -119,8 +118,7 @@ export const useAppleLogin = () => {
           await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
 
           console.log('가입된 회원이 아님');
-          // router.push('/onBoard/schoolAuthentication');
-          router.push('/onBoard/personalInfo');
+          router.push('/(onBoard)/schoolAuthentication');
         }
 
         // 기존 멤버
@@ -141,7 +139,7 @@ export const useAppleLogin = () => {
           }
 
           const hasRoomResponse = await checkHasRoom();
-          setRoomId(hasRoomResponse.result.roomId);
+          setRoomInfo(hasRoomResponse.result);
 
           router.replace('/(tabs)/home');
         }

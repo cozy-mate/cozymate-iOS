@@ -13,14 +13,11 @@ import RoleNRuleSelected from '@/assets/images/bottomTab/roleNRuleSelected.svg';
 import RoomMateNotSelected from '@/assets/images/bottomTab/roomMateNotSelected.svg';
 import RoomMateSelected from '@/assets/images/bottomTab/roomMateSelected.svg';
 import { HapticTab } from '@/components/HapticTab';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { showRejectToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   return (
     <Tabs
@@ -85,7 +82,7 @@ export default function TabLayout() {
             </Text>
           ),
           tabBarIcon: ({ focused }) =>
-            roomId !== 0 ? (
+            roomInfo.roomId !== 0 ? (
               <View className="w-10 h-10 flex justify-center items-center mt-2">
                 {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
               </View>
@@ -110,7 +107,7 @@ export default function TabLayout() {
             </Text>
           ),
           tabBarIcon: ({ focused }) =>
-            roomId !== 0 ? (
+            roomInfo.roomId !== 0 ? (
               <View className="w-10 h-10 flex justify-center items-center mt-2">
                 {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
               </View>
@@ -135,7 +132,7 @@ export default function TabLayout() {
             </Text>
           ),
           tabBarIcon: ({ focused }) =>
-            roomId !== 0 ? (
+            roomInfo.roomId !== 0 ? (
               <View className="w-10 h-10 flex justify-center items-center mt-2">
                 {focused ? <FeedSelected /> : <FeedNotSelected />}
               </View>

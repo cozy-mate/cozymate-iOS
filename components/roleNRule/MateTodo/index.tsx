@@ -13,11 +13,11 @@ interface MateTodoComponentProps {
 }
 
 const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ timePoint }) => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const router = useRouter();
 
-  const { data } = useGetTodoList(roomId, timePoint);
+  const { data } = useGetTodoList(roomInfo.roomId, timePoint);
 
   return (
     <View className="gap-y-[12px]">
@@ -27,7 +27,7 @@ const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ timePoint }) => {
       </View>
 
       <View className="gap-y-[16px]">
-        {Object.entries(data.result.mateTodoList).length !== 0 ? (
+        {data !== undefined && Object.entries(data.result.mateTodoList).length !== 0 ? (
           Object.entries(data.result.mateTodoList).map(([key, mate]) => (
             <View key={key} className="p-2 rounded-xl bg-white shadow-chipback">
               <View className="flex flex-row items-center gap-x-1.5 p-2">

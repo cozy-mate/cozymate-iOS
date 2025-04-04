@@ -12,10 +12,10 @@ interface RoleComponentProps {
 }
 
 const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
   const { memberState } = useMemberStore();
 
-  const { data } = useGetRoleList(roomId);
+  const { data } = useGetRoleList(roomInfo.roomId);
 
   const { setSelectedItem } = useSelectedItemStore();
 
@@ -30,7 +30,7 @@ const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
         </Text>
       </View>
 
-      {data.result.length !== 0 ? (
+      {data !== undefined && data.result.length !== 0 ? (
         <View className="gap-y-[16px]">
           {data.result.map((role) => (
             <View

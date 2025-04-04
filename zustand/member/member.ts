@@ -11,8 +11,6 @@ export const useSignUpStore = create<{
     gender: '',
     birthday: '',
     persona: 0,
-    universityId: 1,
-    majorName: '컴퓨터공학과',
   },
   setSignUpState: (newState) =>
     set((state) => ({

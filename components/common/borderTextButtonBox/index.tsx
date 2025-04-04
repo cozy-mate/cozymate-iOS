@@ -59,6 +59,7 @@ const BorderTextButtonBox: React.FC<BorderTextButtonBoxProps> = ({
             placeholder={placeholder}
             placeholderTextColor={'#ACADB4'}
             className="text-14 font-500 text-basicFont"
+            autoCapitalize="none"
           />
         </View>
 

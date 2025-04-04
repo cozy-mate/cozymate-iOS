@@ -7,6 +7,8 @@ import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
+import LoadingComponent from '@/components/common/loading';
+import { useWithdraw } from '@/hooks/member/member';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function Withdraw() {
@@ -15,8 +17,11 @@ export default function Withdraw() {
   const [withdrawReason, setWithdrawReason] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
+  const { mutateAsync: withdraw, isPending } = useWithdraw();
+
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {isPending && <LoadingComponent />}
       <View className="px-[20px] gap-y-[19px]">
         <BackHeaderComponent />
 
@@ -80,7 +85,11 @@ export default function Withdraw() {
             회원 탈퇴 유의사항을 확인하였으며, 이에 동의합니다.
           </Text>
         </View>
-        <BottomButton buttonText="탈퇴하기" disabled={!isChecked} onPress={() => console.log('')} />
+        <BottomButton
+          buttonText="탈퇴하기"
+          disabled={!isChecked}
+          onPress={() => withdraw({ withdrawReason })}
+        />
       </View>
     </SafeAreaView>
   );

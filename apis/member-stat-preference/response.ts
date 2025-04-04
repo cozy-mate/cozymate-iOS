@@ -4,10 +4,6 @@ export interface GetPreferenceListResponse {
   };
 }
 
-export interface CreatePreferenceListResponse {
-  result: number;
-}
-
 export interface UpdatePreferenceListResponse {
   result: number;
 }

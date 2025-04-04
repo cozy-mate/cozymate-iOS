@@ -1,8 +1,9 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
 import { CreateTodoRequest, UpdateTodoRequest } from '@/apis/todo/request';
 import { createTodo, deleteTodo, getTodoList, toggleTodoDone, updateTodo } from '@/apis/todo/todo';
+import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteTodo = (roomId: number, todoId: number) => {
   return useMutation({
@@ -17,9 +18,12 @@ export const useUpdateTodo = (roomId: number, todoId: number) => {
 };
 
 export const useGetTodoList = (roomId: number, timePoint?: string) => {
-  return useSuspenseQuery({
+  const { roomInfo } = useHasRoomStore();
+
+  return useQuery({
     queryKey: [`/rooms/${roomId}/todos`, roomId, timePoint],
     queryFn: () => getTodoList(roomId, timePoint),
+    enabled: roomInfo.roomId !== 0,
   });
 };
 

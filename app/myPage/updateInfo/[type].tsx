@@ -58,6 +58,7 @@ export default function UpdateInfo() {
               placeholder="학과를 선택해주세요"
               onPress={() => setIsMajorSelectModalOpen(true)}
             />
+
             <MajorSelectModalComponent
               isVisible={isMajorSelectModalOpen}
               universityId={data.result.universityId}

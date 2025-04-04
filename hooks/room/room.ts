@@ -1,11 +1,18 @@
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
+import { StackActions } from '@react-navigation/native';
+import {
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import { useRouter, useNavigationContainerRef } from 'expo-router';
 
 import { CreatePublicRoomRequest } from '@/apis/room/request';
 import { CreatePublicRoomResponse } from '@/apis/room/response';
 import {
   checkIsRequestedRoom,
   createPublicRoom,
+  exitRoom,
   getReceivedRequestList,
   getRoomDetail,
   getSentRequestRoomList,
@@ -16,12 +23,12 @@ import { showRejectToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useGetMyRoomDetail = () => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   return useQuery({
-    queryKey: [`/rooms/${roomId}/myRoom`],
-    queryFn: () => getRoomDetail(roomId),
-    enabled: roomId !== 0,
+    queryKey: [`/rooms/${roomInfo.roomId}/myRoom`],
+    queryFn: () => getRoomDetail(roomInfo.roomId),
+    enabled: roomInfo.roomId !== 0,
   });
 };
 
@@ -40,9 +47,15 @@ export const useCheckIsRequestedRoom = (roomId: number) => {
 };
 
 export const useGetSentRequestRoomList = () => {
-  return useSuspenseQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: [`/rooms/requested`],
-    queryFn: () => getSentRequestRoomList(),
+    queryFn: ({ pageParam }) => getSentRequestRoomList(pageParam, 3),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
   });
 };
 
@@ -90,11 +103,29 @@ export const useInviteMember = (inviteeId: number) => {
 
 export const useCreatePublicRoom = () => {
   const router = useRouter();
+  const { setRoomInfo } = useHasRoomStore();
 
   return useMutation({
     mutationFn: (data: CreatePublicRoomRequest) => createPublicRoom(data),
     onSuccess: (response: CreatePublicRoomResponse) => {
+      setRoomInfo(response.result);
       router.replace(`/room/${response.result.roomId}`);
+    },
+  });
+};
+
+export const useExitRoom = (roomId: number) => {
+  const router = useRouter();
+
+  const { setRoomInfo } = useHasRoomStore();
+  const rootNavigation = useNavigationContainerRef();
+
+  return useMutation({
+    mutationFn: () => exitRoom(roomId),
+    onSuccess: () => {
+      setRoomInfo({ roomId: 0, isRoomManager: false });
+      rootNavigation.dispatch(StackActions.popToTop());
+      router.replace('/(tabs)/home');
     },
   });
 };

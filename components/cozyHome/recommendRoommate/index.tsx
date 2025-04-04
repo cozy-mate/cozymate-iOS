@@ -6,8 +6,8 @@ import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
+import UserComponent from '@/components/user';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
-import { getLifeStyleIcon, getLifeStyleLabel, getLifeStyleValue } from '@/utils/lifeStyle';
 import { useMemberStore } from '@/zustand/member/member';
 
 const RecommendRoommateComponent: React.FC = () => {
@@ -54,43 +54,7 @@ const RecommendRoommateComponent: React.FC = () => {
           pagingEnabled={true}
           autoPlay={false}
           onProgressChange={progress}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => router.push(`/user/${item.memberDetail.memberId}`)}>
-              <View className="border border-disabledColor px-4 pt-5 pb-[18px] rounded-xl mx-5">
-                <View className="flex flex-row items-center justify-between">
-                  <Text className="text-16 font-600 leading-16 text-basicFont mx-2">
-                    {item.memberDetail.nickname}
-                  </Text>
-                  <Text className="text-16 font-500 leading-16 text-mainColor">
-                    {item.equality ?? '??'}%
-                  </Text>
-                </View>
-
-                <View className="h-[1px] bg-[#F6F6F6] my-4" />
-
-                <View className="gap-y-[20px]">
-                  <View className="flex flex-row justify-between">
-                    {item.preferenceStats.map((chip, index) => (
-                      <View
-                        key={index}
-                        className="flex flex-col items-center w-[66px] mx-2 gap-y-1.5"
-                      >
-                        {getLifeStyleIcon(chip.stat, chip.color as 'blue' | 'white' | 'red')}
-                        <View>
-                          <Text className="text-12 font-500 leading-12 text-disabledFont text-center">
-                            {getLifeStyleLabel(chip.stat)}
-                          </Text>
-                          <Text className="text-12 font-600 leading-12 text-basicFont text-center">
-                            {getLifeStyleValue(chip.stat, chip.value)}
-                          </Text>
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-          )}
+          renderItem={({ item }) => <UserComponent userData={item} />}
         />
 
         <Pagination.Custom

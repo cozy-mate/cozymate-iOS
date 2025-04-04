@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Alert, Text, View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomButton from '@/components/common/bottomButton';
 import ChipList from '@/components/common/chipList';
+import LoadingComponent from '@/components/common/loading';
 import TermsAgreeComponent from '@/components/onBoard/termModal';
 import { useSignUp } from '@/hooks/member/member';
 import { useSignUpStore } from '@/zustand/member/member';
@@ -33,16 +35,36 @@ export default function ChipSelect() {
     });
   };
 
+  console.log(signUpState, preferenceList);
+
   const [isTermsModalOpen, setIsTermsModalOpen] = useState<boolean>(false);
 
-  const handleCloseModal = () => {
-    setIsTermsModalOpen(false);
-  };
+  const { mutateAsync: signUp, isPending } = useSignUp();
 
-  const { mutateAsync: signUp } = useSignUp(preferenceList, handleCloseModal);
+  const handleConfirm = async () => {
+    try {
+      setIsTermsModalOpen(false);
+      await signUp({
+        nickname: signUpState.nickname,
+        gender: signUpState.gender,
+        birthday: signUpState.birthday,
+        persona: signUpState.persona,
+        memberStatPreferenceDto: {
+          preferenceList: preferenceList,
+        },
+      });
+    } catch (error: any) {
+      console.log(error.config);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {isPending && (
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      )}
       <View className="mt-14 gap-y-[24px] px-[20px]">
         <View className="gap-y-0.5 mx-1">
           <Text className="text-20 text-emphasizedFont font-700 leading-20">
@@ -67,7 +89,7 @@ export default function ChipSelect() {
       <TermsAgreeComponent
         isVisible={isTermsModalOpen}
         closeModal={() => setIsTermsModalOpen(false)}
-        confirmFunc={() => signUp(signUpState)}
+        confirmFunc={handleConfirm}
       />
     </SafeAreaView>
   );

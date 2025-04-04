@@ -29,27 +29,29 @@ const SentRequestComponent: React.FC = () => {
         </Pressable>
       </View>
 
-      {data.result.map((room) => (
-        <Pressable key={room.roomId} className="px-[4px] py-[10px] gap-y-[8px]">
-          <View className="flex flex-row gap-x-[8px]">
-            {room.hashtagList.map((hash, index) => (
-              <View key={index} className="bg-colorBox rounded px-[8px] py-[2px]">
-                <Text className="text-12 font-500 leading-12 text-colorFont">#{hash}</Text>
-              </View>
-            ))}
-          </View>
+      {data.pages
+        ?.flatMap((page) => page.result.result)
+        .map((room) => (
+          <Pressable key={room.roomId} className="px-[4px] py-[10px] gap-y-[8px]">
+            <View className="flex flex-row gap-x-[8px]">
+              {room.hashtagList.map((hash, index) => (
+                <View key={index} className="bg-colorBox rounded px-[8px] py-[2px]">
+                  <Text className="text-12 font-500 leading-12 text-colorFont">#{hash}</Text>
+                </View>
+              ))}
+            </View>
 
-          <Text className="text-16 font-600 leading-16 text-emphasizedFont">{room.name}</Text>
+            <Text className="text-16 font-600 leading-16 text-emphasizedFont">{room.name}</Text>
 
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-12 font-500 leading-12 text-disabledFont">
-              <Text className="text-mainColor">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
-            </Text>
+            <View className="flex flex-row justify-between items-center">
+              <Text className="text-12 font-500 leading-12 text-disabledFont">
+                <Text className="text-mainColor">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
+              </Text>
 
-            <Text className="text-16 font-500 leading-16 text-mainColor">{room.equality}%</Text>
-          </View>
-        </Pressable>
-      ))}
+              <Text className="text-16 font-500 leading-16 text-mainColor">{room.equality}%</Text>
+            </View>
+          </Pressable>
+        ))}
     </View>
   );
 };

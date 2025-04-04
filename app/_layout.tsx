@@ -59,11 +59,8 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <Host>
             <Stack>
-              {/* 초기화면 */}
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-
               {/* 온보딩 화면 */}
-              <Stack.Screen name="onBoard" options={{ headerShown: false }} />
+              <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
 
               {/* 메인 화면 */}
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

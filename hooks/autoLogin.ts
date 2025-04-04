@@ -15,7 +15,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
 
   const { setMemberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomId } = useHasRoomStore();
+  const { setRoomInfo } = useHasRoomStore();
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -35,8 +35,8 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           console.log(newTokens);
 
           await Promise.all([
-            setAccessToken(newTokens.result.accessToken),
-            setRefreshToken(newTokens.result.refreshToken),
+            setAccessToken(newTokens.result.tokenResponseDTO.accessToken),
+            setRefreshToken(newTokens.result.tokenResponseDTO.refreshToken),
           ]);
 
           const response = await getMemberProfile();
@@ -52,7 +52,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           }
 
           const hasRoomResponse = await checkHasRoom();
-          setRoomId(hasRoomResponse.result.roomId);
+          setRoomInfo(hasRoomResponse.result);
 
           router.replace('/(tabs)/home');
         } catch (error: any) {

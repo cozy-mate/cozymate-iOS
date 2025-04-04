@@ -9,7 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import { getUnivesityInfo } from '@/apis/university/university';
+import { useGetUniversityInfo } from '@/hooks/university/university';
 
 interface MajorSelectModalComponentProps {
   isVisible: boolean;
@@ -29,16 +29,14 @@ const MajorSelectModalComponent: React.FC<MajorSelectModalComponentProps> = ({
 
   const [keyword, setkeyword] = useState<string>('');
 
+  const { data } = useGetUniversityInfo(universityId);
+
   useEffect(() => {
-    const getMajorList = async () => {
-      const response = await getUnivesityInfo(universityId);
-
-      setMajorList(response.result.departments);
-      setFilteredList(response.result.departments);
-    };
-
-    getMajorList();
-  }, []);
+    if (data !== undefined) {
+      setMajorList(data?.result.departments);
+      setFilteredList(data?.result.departments);
+    }
+  }, [data]);
 
   useEffect(() => {
     const filtered = majorList.filter((univ) => univ.toLowerCase().includes(keyword.toLowerCase()));

@@ -23,7 +23,7 @@ export const getUniversityList = async (): Promise<GetUniversityListResponse> =>
 };
 
 // 대학교 조회
-export const getUnivesityInfo = async (
+export const getUniversityInfo = async (
   universityId: number,
 ): Promise<GetUniversityInfoResponse> => {
   const response = await GetAxiosInstance<GetUniversityInfoResponse>(`/university/get-info`, {

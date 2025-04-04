@@ -15,9 +15,9 @@ export interface GetRoomLikeListResponse {
         preferenceName: string;
         count: number;
       }[];
-      hashtagList: string[];
+      hashtags: string[];
       maxMateNum: number;
-      currentMateNum: number;
+      numOfArrival: number;
     }[];
   };
 }

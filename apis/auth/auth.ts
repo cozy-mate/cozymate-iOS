@@ -14,6 +14,8 @@ export const reissueToken = async (refreshToken: string): Promise<ReissueTokenRe
   return response.data;
 };
 
+// 로그아웃
+
 // 로그인
 export const socialLogin = async (data: SocialLoginRequest): Promise<SocialLoginResponse> => {
   const response = await GuestPostAxiosInstance<SocialLoginResponse>(`/auth/sign-in`, data);

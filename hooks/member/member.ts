@@ -1,16 +1,40 @@
+import { StackActions } from '@react-navigation/native';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
+import { useNavigationContainerRef, useRouter } from 'expo-router';
 
-import { checkNickname, signUp, updateMemberInfo, getMemberProfile } from '@/apis/member/member';
-import { SignUpRequest, UpdateMemberInfoRequest } from '@/apis/member/request';
+import {
+  checkNickname,
+  signUp,
+  updateMemberInfo,
+  getMemberProfile,
+  withdraw,
+} from '@/apis/member/member';
+import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/apis/member/request';
 import { SignUpResponse } from '@/apis/member/response';
-import { createPreferenceList } from '@/apis/member-stat-preference/member-stat-preference';
-import { setAccessToken, setRefreshToken } from '@/utils/token';
+import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
+
+export const useWithdraw = () => {
+  const router = useRouter();
+  const rootNavigation = useNavigationContainerRef();
+
+  return useMutation({
+    mutationFn: (data?: WithdrawRequest) => withdraw(data),
+    onSuccess: async () => {
+      await deleteToken();
+
+      rootNavigation.dispatch(StackActions.popToTop());
+      router.replace('/');
+    },
+  });
+};
 
 export const useCheckNickname = () => {
   return useMutation({
     mutationFn: (nickname: string) => checkNickname(nickname),
+    onSuccess: () => {
+      console.log('닉네임 확인 성공');
+    },
   });
 };
 
@@ -34,7 +58,7 @@ export const useUpdateMemberInfo = () => {
   });
 };
 
-export const useSignUp = (preferenceList: string[], closeTermModal: () => void) => {
+export const useSignUp = () => {
   const router = useRouter();
 
   const { setMemberState } = useMemberStore();
@@ -48,10 +72,7 @@ export const useSignUp = (preferenceList: string[], closeTermModal: () => void) 
         setMemberState(response.result.memberDetailResponseDTO),
       ]);
 
-      await createPreferenceList({ preferenceList });
-
-      closeTermModal();
-      router.push('/onBoard/complete');
+      router.push('/(onBoard)/complete');
     },
   });
 };

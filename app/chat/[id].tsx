@@ -23,7 +23,7 @@ export default function ChatRoom() {
   const { mutateAsync: exitChatRoom } = useExitChatRoom(Number(id), refetch);
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-[20px] pt-2">
+    <SafeAreaView className="flex-1 bg-white px-[20px] pt-[8px]">
       <View className="gap-y-[49px]">
         <BackHeaderComponent>
           <Pressable
@@ -39,9 +39,9 @@ export default function ChatRoom() {
       <View className="absolute bottom-[62px] left-1/2 -translate-x-1/2">
         <Pressable
           onPress={() => router.push(`/chat/send/${data?.pages[0]?.result.result.memberId}`)}
-          className="bg-mainColor rounded-full px-[60px] py-3.5"
+          className="bg-mainColor rounded-full px-[60px] py-[14px]"
         >
-          <Text className="text-14 font-600 text-white">쪽지쓰기</Text>
+          <Text className="text-14 font-600 leading-14 text-white">쪽지쓰기</Text>
         </Pressable>
       </View>
 

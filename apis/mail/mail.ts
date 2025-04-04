@@ -5,7 +5,7 @@ import { VerifyMailResponse } from './response';
 
 // 메일 인증 여부 반환
 
-// 메일 인증
+// 메일 보내기
 export const sendMail = async (data: SendMailRequest) => {
   const response = await PostAxiosInstance(`/members/mail`, data);
 
@@ -18,3 +18,5 @@ export const verifyMail = async (data: VerifyMailRequest): Promise<VerifyMailRes
 
   return response.data;
 };
+
+// 관리자 메일 테스트

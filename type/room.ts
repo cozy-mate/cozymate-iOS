@@ -1,3 +1,19 @@
+import { MemberDetail } from './member';
+
+export type RecommendRoomItem = {
+  roomId: number;
+  name: string;
+  hashtags: string[];
+  equality: number | null;
+  numOfArrival: number;
+  maxMateNum: number;
+  preferenceMatchCountList: {
+    preferenceName: string;
+    count: number | null;
+  }[];
+  roomFavoriteId?: number;
+};
+
 export type RoomItem = {
   roomId: number;
   name: string;
@@ -25,4 +41,13 @@ export type RoomItem = {
     red: string[];
     white: string[];
   };
+};
+
+export type ChipItem = {
+  title: string;
+  memberList: {
+    memberDetail: MemberDetail;
+    memberStat: Record<string, string>;
+  }[];
+  color: string;
 };

@@ -85,3 +85,7 @@ export interface GetMemberListResponse {
 export interface CreateMemberDetailResponse {
   result: number;
 }
+
+export interface UpdateMemberDetailResponse {
+  result: number;
+}

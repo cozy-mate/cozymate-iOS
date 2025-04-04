@@ -2,25 +2,15 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { Alert } from 'react-native';
 
 import {
-  createPreferenceList,
   getPreferenceList,
   updatePreferenceList,
 } from '@/apis/member-stat-preference/member-stat-preference';
-import {
-  CreatePreferenceListRequest,
-  UpdatePreferenceListRequest,
-} from '@/apis/member-stat-preference/request';
+import { UpdatePreferenceListRequest } from '@/apis/member-stat-preference/request';
 
 export const useGetPreferenceList = () => {
   return useSuspenseQuery({
     queryKey: [`/members/stat/preference`],
     queryFn: () => getPreferenceList(),
-  });
-};
-
-export const useCreatePreferenceList = () => {
-  return useMutation({
-    mutationFn: (data: CreatePreferenceListRequest) => createPreferenceList(data),
   });
 };
 

@@ -1,40 +1,71 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useRef, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
-import RecommendRoomComponent from '@/components/recommendRoom';
+import RoomComponent from '@/components/room';
 import { sortTypeItem } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function RecommendRoom() {
-  const { memberState } = useMemberStore();
-
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [sortType, setSortType] = useState<string>('AVERAGE_RATE');
   const [selectedSortType, setSelectedSortType] = useState<string>('AVERAGE_RATE');
 
-  const { refetch } = useGetRecommendRoomList(sortType);
+  const { memberState } = useMemberStore();
+
+  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(sortType);
+
+  const loadMoreList = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="gap-y-[16px]">
+      <View className="gap-y-[16px] flex-1">
         <View className="px-[20px]">
           <BackHeaderComponent />
         </View>
 
-        <View className="gap-y-[4px] ml-[4px] px-[20px]">
-          <Text className="text-18 font-600 text-emphasizedFont">{memberState.nickname}님과</Text>
-          <Text className="text-18 font-600 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
-        </View>
+        <FlatList
+          data={data?.pages?.flatMap((page) => page.result.result)}
+          renderItem={({ item }) => <RoomComponent roomData={item} />}
+          ListHeaderComponent={() => (
+            <View>
+              <View className="gap-y-[4px] ml-[4px] px-[20px]">
+                <Text className="text-18 font-600 text-emphasizedFont">
+                  {memberState.nickname}님과
+                </Text>
+                <Text className="text-18 font-600 text-emphasizedFont">
+                  꼭 맞는 방을 추천해드릴게요
+                </Text>
+              </View>
+              <Pressable
+                onPress={() => bottomSheetRef.current?.expand()}
+                className="py-[11.5px] self-end mx-[20px] mb-[8px] flex flex-row gap-x-[4px]"
+              >
+                <Text className="text-14 font-500 leading-14 text-basicFont">
+                  {sortTypeItem.find((item) => item.value === sortType)?.title}
+                </Text>
 
-        <RecommendRoomComponent sortType={sortType} bottomSheetRef={bottomSheetRef} />
+                <View className="rotate-90">
+                  <GrayArrowIcon />
+                </View>
+              </Pressable>
+            </View>
+          )}
+          onEndReached={loadMoreList}
+          onEndReachedThreshold={0.5}
+        />
       </View>
 
       <BottomSheet

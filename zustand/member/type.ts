@@ -3,8 +3,6 @@ export interface SignUpState {
   gender: string;
   birthday: string;
   persona: number;
-  universityId: number;
-  majorName: string;
 }
 
 export interface MemberState {

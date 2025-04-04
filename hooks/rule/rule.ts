@@ -1,8 +1,10 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { CreateRuleRequest, UpdateRuleRequest } from '@/apis/rule/request';
 import { createRule, deleteRule, getRuleList, updateRule } from '@/apis/rule/rule';
+import { useHasRoomStore } from '@/zustand/room/room';
+
+import { CreateRuleRequest, UpdateRuleRequest } from '@/apis/rule/request';
 
 export const useDeleteRule = (roomId: number, ruleId: number) => {
   return useMutation({
@@ -17,9 +19,12 @@ export const useUpdateRule = (roomId: number, ruleId: number) => {
 };
 
 export const useGetRuleList = (roomId: number) => {
-  return useSuspenseQuery({
+  const { roomInfo } = useHasRoomStore();
+
+  return useQuery({
     queryKey: [`/rooms/${roomId}/rules`, roomId],
     queryFn: () => getRuleList(roomId),
+    enabled: roomInfo.roomId !== 0,
   });
 };
 

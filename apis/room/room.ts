@@ -1,10 +1,12 @@
-import { GetAxiosInstance, PostAxiosInstance } from '@/axios/axios.method';
+import { GetAxiosInstance, PatchAxiosInstance, PostAxiosInstance } from '@/axios/axios.method';
 
 import { CreatePublicRoomRequest } from './request';
 import {
   CheckHasRoomResponse,
   CheckIsRequestedRoomResponse,
+  CheckRoomNameResponse,
   CreatePublicRoomResponse,
+  ExitRoomResponse,
   GetReceivedRequestListResponse,
   GetRoomDetailResponse,
   GetSentRequestRoomListResponse,
@@ -39,8 +41,16 @@ export const checkIsRequestedRoom = async (
 // 방 검색
 
 // 사용자가 참여 요청한 방 목록 조회
-export const getSentRequestRoomList = async (): Promise<GetSentRequestRoomListResponse> => {
-  const response = await GetAxiosInstance<GetSentRequestRoomListResponse>(`/rooms/requested`);
+export const getSentRequestRoomList = async (
+  page?: number,
+  size?: number,
+): Promise<GetSentRequestRoomListResponse> => {
+  const response = await GetAxiosInstance<GetSentRequestRoomListResponse>(`/rooms/requested`, {
+    params: {
+      page,
+      size,
+    },
+  });
 
   return response.data;
 };
@@ -66,11 +76,29 @@ export const checkHasRoom = async (): Promise<CheckHasRoomResponse> => {
 };
 
 // 다른 사용자가 참여한 방이 있는지 여부 조회
+
 // 방 이름 중복 검증
+export const checkRoomName = async (roomName: string): Promise<CheckRoomNameResponse> => {
+  const response = await GetAxiosInstance<CheckRoomNameResponse>(`/rooms/check-roomname`, {
+    params: {
+      roomName,
+    },
+  });
+
+  return response.data;
+};
+
 // 방 정보 수정
 // 공개방으로 전환
 // 비공개방으로 전환
+
 // 방 나가기 기능
+export const exitRoom = async (roomId: number): Promise<ExitRoomResponse> => {
+  const response = await PatchAxiosInstance<ExitRoomResponse>(`/rooms/${roomId}/quit`);
+
+  return response.data;
+};
+
 // 방에서 강제 퇴장 시키기
 // 방장 -> 방 참여 요청 수락/거절
 

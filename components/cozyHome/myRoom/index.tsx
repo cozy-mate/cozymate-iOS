@@ -10,7 +10,7 @@ const MyRoomComponent: React.FC = () => {
   const router = useRouter();
 
   const { memberState } = useMemberStore();
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const { data } = useGetMyRoomDetail();
 
@@ -25,7 +25,7 @@ const MyRoomComponent: React.FC = () => {
         </Text>
       </View>
 
-      {roomId !== 0 ? (
+      {roomInfo.roomId !== 0 ? (
         <LinearGradient
           colors={['#B5D3FF', '#68A4FF']}
           start={{ x: 0.02, y: 0 }}
@@ -42,7 +42,7 @@ const MyRoomComponent: React.FC = () => {
             style={{ borderRadius: 12 }}
           >
             <Pressable
-              onPress={() => router.push(`/room/${roomId}`)}
+              onPress={() => router.push(`/room/${roomInfo.roomId}`)}
               className="rounded-xl p-[16px] gap-y-[8px]"
             >
               <View className="flex flex-row gap-x-[8px]">
@@ -61,7 +61,7 @@ const MyRoomComponent: React.FC = () => {
                   룸메이트가 있어요
                 </Text>
                 <Text className="text-16 font-500 text-colorFont">
-                  {data?.result.equality ?? '??'}%
+                  {data?.result.equality ?? '?? '}%
                 </Text>
               </View>
             </Pressable>

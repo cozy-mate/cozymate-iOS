@@ -14,7 +14,7 @@ const ReceivedRequestComponent: React.FC = () => {
     <View className="gap-y-[16px] px-[20px]">
       <View className="flex flex-row justify-between items-center">
         <View className="gap-y-[4px] ml-[4px]">
-          <Text className="text-18 font-600 text-colorFont">{data?.result.length}개의</Text>
+          <Text className="text-18 font-600 text-emphasizedFont">{data?.result.length}개의</Text>
           <Text className="text-18 font-600 text-emphasizedFont">방 참여 요청이 도착했어요</Text>
         </View>
 

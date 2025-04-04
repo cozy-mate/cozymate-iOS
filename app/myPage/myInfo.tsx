@@ -22,6 +22,10 @@ export default function MyInfo() {
 
   const [preferenceList, setPreferenceList] = useState<string[]>(data.result.preferenceList);
 
+  const resetPreferenceList = () => {
+    setPreferenceList(data.result.preferenceList);
+  };
+
   const handleValue = (value: string) => {
     setPreferenceList((prev) => {
       if (prev.includes(value)) {
@@ -58,7 +62,13 @@ export default function MyInfo() {
         index={-1}
         enablePanDownToClose={true}
         backdropComponent={(props) => (
-          <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
+          <BottomSheetBackdrop
+            {...props}
+            opacity={0.7}
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}
+            onPress={resetPreferenceList}
+          />
         )}
       >
         <BottomSheetView className="px-[20px] flex-1 relative pt-5">
@@ -67,7 +77,7 @@ export default function MyInfo() {
           <View className="absolute bottom-[54px] left-5 w-full">
             <BottomButton
               buttonText="확인"
-              disabled={false}
+              disabled={preferenceList.length !== 4}
               onPress={() => {
                 updatePreferenceList({ preferenceList });
                 bottomSheetRef.current?.close();

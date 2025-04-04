@@ -28,7 +28,7 @@ import { useHasRoomStore } from '@/zustand/room/room';
 export default function Create() {
   const [type, setType] = useState<string>('To-do');
 
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const { data: memberList } = useGetMyRoomDetail();
 
@@ -47,14 +47,14 @@ export default function Create() {
     setTimePoint(dateTime);
   };
 
-  const { refetch: refetchTodo } = useGetTodoList(roomId);
-  const { mutateAsync: createTodo } = useCreateTodo(roomId, refetchTodo);
+  const { refetch: refetchTodo } = useGetTodoList(roomInfo.roomId);
+  const { mutateAsync: createTodo } = useCreateTodo(roomInfo.roomId, refetchTodo);
 
-  const { refetch: refetchRole } = useGetRoleList(roomId);
-  const { mutateAsync: createRole } = useCreateRole(roomId, refetchRole);
+  const { refetch: refetchRole } = useGetRoleList(roomInfo.roomId);
+  const { mutateAsync: createRole } = useCreateRole(roomInfo.roomId, refetchRole);
 
-  const { refetch: refetchRule } = useGetRuleList(roomId);
-  const { mutateAsync: createRule } = useCreateRule(roomId, refetchRule);
+  const { refetch: refetchRule } = useGetRuleList(roomInfo.roomId);
+  const { mutateAsync: createRule } = useCreateRule(roomInfo.roomId, refetchRule);
 
   const handleCreate = () => {
     if (type === 'To-do') {

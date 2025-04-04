@@ -3,6 +3,9 @@ import { Stack } from 'expo-router';
 export default function OnBoardLayout() {
   return (
     <Stack>
+      {/* 로그인 화면 */}
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+
       {/* 학교 인증 */}
       <Stack.Screen name="schoolAuthentication" options={{ headerShown: false }} />
 

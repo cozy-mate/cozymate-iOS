@@ -11,6 +11,9 @@ export default function UserLayout() {
 
       {/* 룸메이트 스크린 */}
       <Stack.Screen name="roomMate" options={{ headerShown: false }} />
+
+      {/* 유저 검색 스크린 */}
+      <Stack.Screen name="search" options={{ headerShown: false }} />
     </Stack>
   );
 }

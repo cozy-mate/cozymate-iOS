@@ -5,10 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BorderDateBox from '@/components/common/borderDateBox';
 import BorderRadioBox from '@/components/common/borderRadioBox';
-import BorderTextButtonBox from '@/components/common/borderTextButtonBox';
 import BottomButton from '@/components/common/bottomButton';
+import NicknameInputComponent from '@/components/onBoard/nicknameInput';
 import { GenderItems } from '@/constants/items/genderItem';
-import { useCheckNickname } from '@/hooks/member/member';
 import { useSignUpStore } from '@/zustand/member/member';
 
 export default function PersonalInfo() {
@@ -16,11 +15,11 @@ export default function PersonalInfo() {
 
   const { setSignUpState } = useSignUpStore();
 
-  const { mutateAsync: checkNickname } = useCheckNickname();
-
   const [nickname, setNickname] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
+
+  const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -33,15 +32,12 @@ export default function PersonalInfo() {
 
           <View className="gap-y-[16px]">
             {/* 닉네임 입력 */}
-            <BorderTextButtonBox
+            <NicknameInputComponent
               title="닉네임"
               value={nickname}
               handleValue={(e: string) => setNickname(e)}
               placeholder="닉네임을 입력해주세요"
-              buttonText="중복 확인"
-              buttonPress={() => checkNickname(nickname)}
-              canPress={nickname !== ''}
-              errorMessage="다른 사용자가 이미 사용 중인 닉네임이에요!"
+              handleNicknameChecked={(e: boolean) => setNicknameChecked(e)}
             />
 
             {/* 성별 입력 */}
@@ -65,9 +61,9 @@ export default function PersonalInfo() {
       <View className="absolute bottom-[42px] w-full px-[22px]">
         <BottomButton
           buttonText="다음"
-          disabled={nickname === '' || gender === '' || birthday === ''}
+          disabled={!nicknameChecked || nickname === '' || gender === '' || birthday === ''}
           onPress={() => {
-            router.push('/onBoard/character');
+            router.push('/(onBoard)/character');
             setSignUpState({
               nickname,
               gender,

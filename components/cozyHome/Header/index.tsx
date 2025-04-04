@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
+import { Dimensions, LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 
 import ChatIcon from '@/assets/images/common/chat.svg';
 import GrayArrow from '@/assets/images/common/grayArrow.svg';
@@ -18,11 +18,13 @@ interface HeaderComponentProps {
 }
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
+  const width = Dimensions.get('screen').width;
+
   const router = useRouter();
 
   const { memberState } = useMemberStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const [showNoLifeStyleCreateModal, setShowNoLifeStyleCreateModal] = useState<boolean>(false);
   const [showNoLifeStyleJoinModal, setShowNoLifeStyleJoinModal] = useState<boolean>(false);
@@ -48,10 +50,10 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
       className="gap-y-[12px] pt-[18px] pb-[25px] bg-subColor1 px-[20px] relative"
       onLayout={handleLayout}
     >
-      <Background style={{ position: 'absolute' }} />
+      <Background style={{ position: 'absolute', top: -47 }} width={width} />
       <View className="flex flex-row justify-between items-center">
         <Pressable
-          onPress={() => router.push('/onBoard/schoolAuthentication')}
+          // onPress={() => router.push('/onBoard/chipSelect')}
           className="flex flex-row items-center gap-x-[6px]"
         >
           <SchoolIcon />
@@ -88,14 +90,14 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
         </Pressable>
       )}
 
-      <View className="flex flex-row items-center gap-x-[11px] z-50">
+      <View className="flex flex-row items-center gap-x-[11px]">
         <Pressable
-          disabled={roomId !== 0}
+          disabled={roomInfo.roomId !== 0}
           onPress={handleCreateRoom}
           className="bg-colorBox p-[16px] rounded-xl flex-1 h-[80px]"
         >
           <Text
-            className={`text-16 font-600 leading-16 ${roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
+            className={`text-16 font-600 leading-16 ${roomInfo.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
           >
             방 만들기
           </Text>
@@ -112,12 +114,12 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
         />
 
         <Pressable
-          disabled={roomId !== 0}
+          disabled={roomInfo.roomId !== 0}
           onPress={handleJoinRoom}
           className="bg-colorBox p-[16px] rounded-xl flex-1 h-[80px]"
         >
           <Text
-            className={`text-16 font-600 leading-16 ${roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
+            className={`text-16 font-600 leading-16 ${roomInfo.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
           >
             방 참여하기
           </Text>

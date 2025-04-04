@@ -12,9 +12,17 @@ import CopyIcon from '@/assets/images/room/copy.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
 import TwoButtonModal from '@/components/common/twoButtonModal';
+import MemberStatModalComponent from '@/components/roomDetail/memberStatModal';
 import { getPersona } from '@/constants/items/characterItem';
-import { useCheckIsRequestedRoom, useGetRoomDetail, useSendRoomRequest } from '@/hooks/room/room';
+import {
+  useCheckIsRequestedRoom,
+  useExitRoom,
+  useGetRoomDetail,
+  useSendRoomRequest,
+} from '@/hooks/room/room';
 import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room-favorite';
+import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat';
+import { ChipItem } from '@/type/room';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
 import { showRejectToast } from '@/utils/toast';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
@@ -26,7 +34,7 @@ export default function RoomDetail() {
   const router = useRouter();
 
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const { data, refetch } = useGetRoomDetail(Number(id));
   const { data: isRequested } = useCheckIsRequestedRoom(Number(id));
@@ -37,14 +45,38 @@ export default function RoomDetail() {
   const { mutateAsync: sendRequest } = useSendRoomRequest(Number(id));
 
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
+  const [isMemberStatModalOpen, setIsMemberStatModalOpen] = useState<boolean>(false);
+
+  const [statItem, setStatItem] = useState<ChipItem>({
+    title: '',
+    memberList: [],
+    color: '',
+  });
+  const { mutateAsync: getStats } = useGetRoomMemberStats();
+
+  const handleStat = async (memberStatKey: string) => {
+    const response = await getStats({ roomId: Number(id), memberStatKey });
+
+    console.log(memberStatKey);
+    setStatItem({
+      title: getLifeStyleLabel(memberStatKey),
+      memberList: response.result.memberList,
+      color: response.result.color,
+    });
+
+    setIsMemberStatModalOpen(true);
+  };
+
+  const { mutateAsync: exitRoom } = useExitRoom(Number(id));
+  const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
 
   const buttonItems = [
     {
       // 본인이 해당 방의 방장인 경우
       type: 'warning',
-      isVisible: data.result.isRoomManager,
+      isVisible: roomInfo.roomId === data.result.roomId,
       title: '방 나가기',
-      onPress: () => console.log('삭제'),
+      onPress: () => setIsExitModalOpen(true),
     },
     {
       // 방이 없고, 라이프스타일이 없는 경우
@@ -56,7 +88,7 @@ export default function RoomDetail() {
     {
       // 참여 요청을 보낸 경우
       type: 'requested',
-      isVisible: hasLifeStyle && roomId === 0 && isRequested.result,
+      isVisible: hasLifeStyle && roomInfo.roomId === 0 && isRequested.result,
       title: '방 참여 취소하기',
       onPress: () => showRejectToast('이미 다른 방에 참여하고 있어서 초대할 수 없어요'),
     },
@@ -119,7 +151,7 @@ export default function RoomDetail() {
               </View>
             </View>
 
-            {roomId === data.result.roomId ? (
+            {roomInfo.roomId === data.result.roomId ? (
               <Pressable
                 onPress={async () => {
                   await Clipboard.setStringAsync(data.result.inviteCode);
@@ -201,6 +233,7 @@ export default function RoomDetail() {
                 {data.result.difference.blue.map((chip, index) => (
                   <Pressable
                     key={index}
+                    onPress={() => handleStat(chip)}
                     className="px-[14px] py-[8px] rounded-full border border-mainColor bg-subColor1"
                   >
                     <Text className="text-12 font-600 text-mainColor">
@@ -212,6 +245,7 @@ export default function RoomDetail() {
                 {data.result.difference.red.map((chip, index) => (
                   <Pressable
                     key={index}
+                    onPress={() => handleStat(chip)}
                     className="px-[14px] py-[8px] rounded-full border border-warningColor bg-warningSubColor"
                   >
                     <Text className="text-12 font-600 text-warningColor">
@@ -223,6 +257,7 @@ export default function RoomDetail() {
                 {data.result.difference.white.map((chip, index) => (
                   <Pressable
                     key={index}
+                    onPress={() => handleStat(chip)}
                     className="px-[14px] py-[8px] rounded-full border border-transparent bg-white shadow-chipback"
                   >
                     <Text className="text-12 font-500 text-disabledFont">
@@ -290,6 +325,25 @@ export default function RoomDetail() {
             </View>
           )}
         </View>
+
+        <MemberStatModalComponent
+          isVisible={isMemberStatModalOpen}
+          closeModal={() => setIsMemberStatModalOpen(false)}
+          item={statItem}
+        />
+
+        <TwoButtonModal
+          isVisible={isExitRoomModalOpen}
+          title="방을 나가시겠습니까?"
+          closeFunc={() => setIsExitModalOpen(false)}
+          leftButtonText="취소"
+          leftButtonFunc={() => setIsExitModalOpen(false)}
+          rightButtonText="나가기"
+          rightButtonFunc={() => {
+            setIsExitModalOpen(false);
+            exitRoom();
+          }}
+        />
       </SafeAreaView>
     </View>
   );

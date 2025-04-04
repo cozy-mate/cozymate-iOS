@@ -239,12 +239,15 @@ export const getLifeStyleLabel = (key: string) => {
   return lifestyleOptions[key].label;
 };
 
-export const getLifeStyleIcon = (key: string, color: 'blue' | 'white' | 'red') => {
+export const getLifeStyleIcon = (key: string, color: 'blue' | 'white' | 'red' | null) => {
+  if (color === null) {
+    return lifestyleOptions[key]?.['white'];
+  }
   return lifestyleOptions[key]?.[color];
 };
 
 export const getLifeStyleValue = (key: string, value: string | number | string[]) => {
-  let formattedValue: string;
+  let formattedValue: string = '';
 
   switch (key) {
     case 'numOfRoommate':
@@ -261,25 +264,12 @@ export const getLifeStyleValue = (key: string, value: string | number | string[]
       break;
     }
 
-    case 'sleepingHabit':
-    case 'personality':
-      formattedValue = Array.isArray(value) ? value.join(', ') : String(value);
-      break;
-
-    case 'airConditioningIntensity':
-    case 'heatingIntensity':
-      formattedValue = intensityItems[Number(value)];
-      break;
-
-    case 'cleanSensitivity':
-    case 'noiseSensitivity':
-      formattedValue = sensitivityItems[Number(value) - 1];
-      break;
-
     default:
       formattedValue = String(value);
   }
 
   // 6글자 이상이면 `...`으로 축약
-  return formattedValue.length > 6 ? `${formattedValue.slice(0, 6)}...` : formattedValue;
+  return formattedValue !== undefined && formattedValue.length > 6
+    ? `${formattedValue.slice(0, 6)}...`
+    : formattedValue;
 };

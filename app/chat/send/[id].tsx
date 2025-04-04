@@ -29,7 +29,7 @@ export default function SendChat() {
               value={content}
               onChangeText={(e: string) => setContent(e)}
               multiline={true}
-              className="min-h-80 bg-colorBox rounded-xl p-5"
+              className="min-h-[320px] bg-colorBox rounded-xl p-[20px]"
               placeholder="내용을 입력해주세요"
             />
           </View>

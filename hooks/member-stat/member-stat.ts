@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
 import {
@@ -7,11 +13,22 @@ import {
   getMemberList,
   getMyDetail,
   getRandomMemberList,
+  updateMemberDetail,
 } from '@/apis/member-stat/member-stat';
-import { CreateMemberDetailRequest } from '@/apis/member-stat/request';
+import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/apis/member-stat/request';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 export const useGetMyDetail = () => {
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
+  return useQuery({
+    queryKey: [`/members/stat`],
+    queryFn: () => getMyDetail(),
+    enabled: hasLifeStyle,
+  });
+};
+
+export const useSuspenseGetMyDetail = () => {
   return useSuspenseQuery({
     queryKey: [`/members/stat`],
     queryFn: () => getMyDetail(),
@@ -74,6 +91,22 @@ export const useCreateMemberDetail = () => {
     onSuccess: () => {
       setHasLifeStyle(true);
       router.dismiss(5);
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useUpdateMemberDetail = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: UpdatememberDetailRequest) => updateMemberDetail(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/member/stat`] });
+      router.back();
     },
     onError: (error: any) => {
       console.log(error);

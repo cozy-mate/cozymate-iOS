@@ -31,7 +31,7 @@ export default function UserDetail() {
 
   const router = useRouter();
 
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   const { data, refetch } = useGetMemberDetail(Number(id));
   const { data: roomData } = useGetMyRoomDetail();
@@ -52,14 +52,15 @@ export default function UserDetail() {
     {
       // 본인이 방이 없는 경우
       type: 'default',
-      isVisible: roomId === 0,
+      isVisible: roomInfo.roomId === 0,
       title: '내 방으로 초대하기',
       onPress: () => setIsCreateRoomModalOpen(true),
     },
     {
       // 상대방이 이미 방이 있는 경우
       type: 'default',
-      isVisible: roomId !== 0 && roomData?.result.isRoomManager && data.result.roomId !== 0,
+      isVisible:
+        roomInfo.roomId !== 0 && roomData?.result.isRoomManager && data.result.roomId !== 0,
       title: '내 방으로 초대하기',
       onPress: () => inviteMember(),
     },
@@ -67,7 +68,7 @@ export default function UserDetail() {
       // 방에 인원이 다 찬 경우
       type: 'default',
       isVisible:
-        roomId !== 0 &&
+        roomInfo.roomId !== 0 &&
         roomData?.result.isRoomManager &&
         roomData.result.arrivalMateNum === roomData.result.maxMateNum,
       title: '내 방으로 초대하기',
@@ -77,7 +78,7 @@ export default function UserDetail() {
       // 초대 가능 상태
       type: 'default',
       isVisible:
-        roomId !== 0 &&
+        roomInfo.roomId !== 0 &&
         roomData?.result.isRoomManager &&
         roomData.result.arrivalMateNum < roomData.result.maxMateNum &&
         data.result.roomId === 0 &&
@@ -90,7 +91,7 @@ export default function UserDetail() {
       // 상대방이 내 방으로 참여 요청을 보낸 경우
       type: 'accept',
       isVisible:
-        roomId !== 0 &&
+        roomInfo.roomId !== 0 &&
         roomData?.result.isRoomManager &&
         roomData.result.arrivalMateNum < roomData.result.maxMateNum &&
         data.result.roomId === 0 &&

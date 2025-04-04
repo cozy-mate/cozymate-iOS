@@ -20,7 +20,7 @@ const BorderRadioBox: React.FC<BorderRadioBoxProps> = ({ title, items, value, ha
     >
       <Text className="text-12 font-600 text-colorFont">{title}</Text>
 
-      <View className="flex flex-row items-center gap-x-[8px].5">
+      <View className="flex flex-row items-center gap-x-[8px]">
         {items.map((item, index) => (
           <Pressable
             key={index}
@@ -30,7 +30,7 @@ const BorderRadioBox: React.FC<BorderRadioBoxProps> = ({ title, items, value, ha
             }}
             className="flex flex-row items-center py-[3px]"
           >
-            <View className="pr-2 py-1">
+            <View className="pr-[8px] py-[4px]">
               {value === item.value ? <SelectRadioIcon /> : <RadioIcon />}
             </View>
             <Text

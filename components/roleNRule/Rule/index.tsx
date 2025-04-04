@@ -11,9 +11,9 @@ interface RuleComponentProps {
 }
 
 const RuleComponent: React.FC<RuleComponentProps> = ({ bottomSheetRef }) => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
-  const { data } = useGetRuleList(roomId);
+  const { data } = useGetRuleList(roomInfo.roomId);
 
   const { setSelectedItem } = useSelectedItemStore();
 
@@ -28,7 +28,7 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ bottomSheetRef }) => {
         </Text>
       </View>
 
-      {data.result.length !== 0 ? (
+      {data !== undefined && data.result.length !== 0 ? (
         <View className="p-2 pl-4 rounded-xl bg-white shadow-chipback gap-y-[4px]">
           {data.result.map((rule, index) => (
             <View key={rule.ruleId} className="flex flex-row items-center justify-between">

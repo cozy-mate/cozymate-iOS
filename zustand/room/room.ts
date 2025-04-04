@@ -1,9 +1,14 @@
 import { create } from 'zustand';
 
+import { RoomInfo } from './type';
+
 export const useHasRoomStore = create<{
-  roomId: number;
-  setRoomId: (newRoomId: number) => void;
+  roomInfo: RoomInfo;
+  setRoomInfo: (newRoomId: RoomInfo) => void;
 }>((set) => ({
-  roomId: 0,
-  setRoomId: (newState: number) => set({ roomId: newState }),
+  roomInfo: {
+    roomId: 0,
+    isRoomManager: false,
+  },
+  setRoomInfo: (newState: RoomInfo) => set({ roomInfo: newState }),
 }));

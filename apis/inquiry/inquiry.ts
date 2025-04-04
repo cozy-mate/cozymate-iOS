@@ -17,7 +17,7 @@ export const checkHasInquiry = async (): Promise<CheckHasInquiryResponse> => {
   return response.data;
 };
 
-// 답변 완료로 변경
+// 답변 완료로 변경 (관리자용)
 
 // 문의하기
 export const createInquiry = async (data: CreateInquiryRequest): Promise<CreateInquiryResponse> => {

@@ -36,35 +36,35 @@ export default function RoleNRule() {
       <SafeAreaView className="flex-1 bg-subColor1 relative">
         <Background style={{ position: 'absolute', width: width }} />
 
-        <View className="flex flex-row gap-x-[24px] px-[20px] mt-7">
-          <Pressable onPress={() => setType('todo')} className="w-[90px] gap-y-2">
+        <View className="flex flex-row gap-x-[24px] px-[20px] mt-[28px]">
+          <Pressable onPress={() => setType('todo')} className="w-[90px] gap-y-[8px]">
             <Text
-              className={`text-center text-16 font-600 leading-16 p-1 ${type === 'todo' ? 'text-mainColor' : 'text-disabledFont'}`}
+              className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'todo' ? 'text-mainColor' : 'text-disabledFont'}`}
             >
               To - do
             </Text>
 
             <View
-              className={`h-1 rounded-[32px] ${type === 'todo' ? 'bg-mainColor' : 'bg-subColor1'}`}
+              className={`h-[4px] rounded-[32px] ${type === 'todo' ? 'bg-mainColor' : 'bg-subColor1'}`}
             />
           </Pressable>
 
           <Pressable onPress={() => setType('role')} className="w-[90px] gap-y-2">
             <Text
-              className={`text-center text-16 font-600 leading-16 p-1 ${type === 'role' ? 'text-mainColor' : 'text-disabledFont'}`}
+              className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'role' ? 'text-mainColor' : 'text-disabledFont'}`}
             >
               Role & Rule
             </Text>
 
             <View
-              className={`h-1 rounded-[32px] ${type === 'role' ? 'bg-mainColor' : 'bg-subColor1'}`}
+              className={`h-[4px] rounded-[32px] ${type === 'role' ? 'bg-mainColor' : 'bg-subColor1'}`}
             />
           </Pressable>
         </View>
 
         <ScrollView className="bg-[#F7FAFF] px-[20px] flex-1 rounded-tr-[48px]">
           {type === 'todo' && (
-            <View className="pt-[34px] gap-y-8 flex-1 pb-28">
+            <View className="pt-[34px] gap-y-[32px] flex-1 pb-[112px]">
               <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
               <MyTodoComponent timePoint={timePoint} bottomSheetRef={bottomSheetRef} />
               <MateTodoComponent timePoint={timePoint} />
@@ -72,7 +72,7 @@ export default function RoleNRule() {
           )}
 
           {type === 'role' && (
-            <View className="pt-[34px] gap-y-8 flex-1 pb-28">
+            <View className="pt-[34px] gap-y-[32px] flex-1 pb-[112px]">
               <RuleComponent bottomSheetRef={bottomSheetRef} />
               <RoleComponent bottomSheetRef={bottomSheetRef} />
             </View>

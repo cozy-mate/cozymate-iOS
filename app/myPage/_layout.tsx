@@ -9,9 +9,6 @@ export default function MyPageLayout() {
       {/* 내 정보 수정 */}
       <Stack.Screen name="updateInfo/[type]" options={{ headerShown: false }} />
 
-      {/* 나의 코지룸 */}
-      <Stack.Screen name="myCozyRoom" options={{ headerShown: false }} />
-
       {/* 학교 인증 */}
       <Stack.Screen name="schoolAuthentication" options={{ headerShown: false }} />
 

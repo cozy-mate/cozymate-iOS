@@ -1,6 +1,7 @@
 import { Fragment, Suspense, useState } from 'react';
 import {
   LayoutChangeEvent,
+  Modal,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -8,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import LoadingComponent from '@/components/common/loading';
 import HeaderComponent from '@/components/cozyHome/Header';
 import MyRoomComponent from '@/components/cozyHome/myRoom';
 import ReceivedRequestComponent from '@/components/cozyHome/receivedRequest';
@@ -20,8 +22,7 @@ import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function HomeScreen() {
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { roomId } = useHasRoomStore();
-  const isRoomManager = true;
+  const { roomInfo } = useHasRoomStore();
 
   // 참여요청을 보낸 목록
   const { data } = useGetSentRequestRoomList();
@@ -41,39 +42,49 @@ export default function HomeScreen() {
   };
 
   return (
-    <Suspense>
+    <Suspense
+      fallback={
+        <Modal transparent={true}>
+          <LoadingComponent />
+        </Modal>
+      }
+    >
       <SafeAreaView className={`flex-1 ${scrollY <= height ? 'bg-subColor1' : 'bg-white'}`}>
-        <ScrollView onScroll={handleScroll} contentContainerStyle={{ paddingBottom: 80 }}>
+        <ScrollView
+          onScroll={handleScroll}
+          contentContainerStyle={{ paddingBottom: 120, backgroundColor: '#FFFFFF' }}
+        >
           <HeaderComponent handleLayout={handleLayout} />
 
-          <View className="bg-white pt-6 gap-y-[24px]">
+          <View className="bg-white pt-[24px] gap-y-[24px]">
             {/* 라이프스타일이 있을 때만 출력 */}
             {hasLifeStyle && (
               <Fragment>
                 <MyRoomComponent />
-                <View className="bg-[#F7F9FA] w-full h-2.5" />
+                <View className="bg-[#F7F9FA] w-full h-[10px]" />
               </Fragment>
             )}
 
             {/* 방장인 사용자에게만 보이는 방 참여 요청 목록 (타인 -> 방) */}
-            {roomId !== 0 && isRoomManager && (
+            {roomInfo.roomId !== 0 && roomInfo.isRoomManager && (
               <Fragment>
                 <ReceivedRequestComponent />
-                <View className="bg-[#F7F9FA] w-full h-2.5" />
+                <View className="bg-[#F7F9FA] w-full h-[10px]" />
               </Fragment>
             )}
 
             {/* 방장이 아닌 사용자에게만 보이는 방 참여 요청 목록 (본인 -> 방) : 참여 요청 있을때만 보임 */}
-            {roomId === 0 && data.result.length !== 0 && (
-              <Fragment>
-                <SentRequestComponent />
-                <View className="bg-[#F7F9FA] w-full h-2.5" />
-              </Fragment>
-            )}
+            {roomInfo.roomId === 0 &&
+              data.pages?.flatMap((page) => page.result.result).length !== 0 && (
+                <Fragment>
+                  <SentRequestComponent />
+                  <View className="bg-[#F7F9FA] w-full h-[10px]" />
+                </Fragment>
+              )}
 
             <RecommendRoommateComponent />
 
-            <View className="bg-[#F7F9FA] w-full h-2.5" />
+            <View className="bg-[#F7F9FA] w-full h-[10px]" />
 
             <RecommendRoomComponent />
           </View>

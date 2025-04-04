@@ -5,12 +5,17 @@ export interface GetRoomDetailResponse {
 }
 
 export interface GetSentRequestRoomListResponse {
-  result: RoomItem[];
+  result: {
+    page: number;
+    hasNext: boolean;
+    result: RoomItem[];
+  };
 }
 
 export interface CheckHasRoomResponse {
   result: {
     roomId: number;
+    isRoomManager: boolean;
   };
 }
 
@@ -65,4 +70,12 @@ export interface CreatePublicRoomResponse {
       white: string[];
     };
   };
+}
+
+export interface ExitRoomResponse {
+  result: string;
+}
+
+export interface CheckRoomNameResponse {
+  result: boolean;
 }

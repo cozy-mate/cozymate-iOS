@@ -2,17 +2,35 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
-import { useGetMemberList } from '@/hooks/member-stat/member-stat';
+import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
+import StarImage from '@/assets/images/roomMate/star.svg';
+import { useGetMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
 import { getLifeStyleIcon, getLifeStyleLabel, getLifeStyleValue } from '@/utils/lifeStyle';
+import { useMemberStore } from '@/zustand/member/member';
 
 import ChipList from '../common/chipList';
+import UserComponent from '../user';
 
 const RoomMateComponent: React.FC = () => {
   const router = useRouter();
 
+  const { memberState } = useMemberStore();
+
   const [filterList, setFilterList] = useState<string[]>([]);
 
+  const { data: randomMemberList } = useGetRandomMemberList();
   const { data, hasNextPage, fetchNextPage } = useGetMemberList(filterList);
+
+  const memberList =
+    // 라이프스타일이 있는 사용자
+    data !== undefined
+      ? // 추천 룸메이트 데이터 사용
+        data?.pages?.flatMap((page) => page.result.memberList)
+      : // 필터링을 선택하지 않은 경우
+        filterList.length === 0
+        ? // 랜덤 룸메이트 데이터 사용
+          randomMemberList?.result.memberList
+        : [];
 
   const handleValue = (value: string) => {
     setFilterList((prev) => {
@@ -32,7 +50,8 @@ const RoomMateComponent: React.FC = () => {
 
   return (
     <FlatList
-      contentContainerStyle={{ paddingBottom: 60 }}
+      data={memberList}
+      renderItem={({ item }) => <UserComponent userData={item} />}
       ListHeaderComponent={() => (
         <View className="px-[20px] mb-[32px] gap-y-[16px]">
           <View className="gap-y-[4px] mx-[4px]">
@@ -47,44 +66,37 @@ const RoomMateComponent: React.FC = () => {
           <ChipList value={filterList} handleValue={handleValue} />
         </View>
       )}
-      ItemSeparatorComponent={() => <View className="h-[24px]" />}
-      data={data?.pages?.flatMap((page) => page.result.memberList)}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => router.push(`/user/${item.memberDetail.memberId}`)}>
-          <View className="border border-disabledColor px-4 pt-5 pb-[18px] rounded-xl mx-5">
-            <View className="flex flex-row items-center justify-between">
-              <Text className="text-16 font-600 leading-16 text-basicFont mx-2">
-                {item.memberDetail.nickname}
-              </Text>
-              <Text className="text-16 font-500 leading-16 text-mainColor">
-                {item.equality ?? '??'}%
-              </Text>
-            </View>
-
-            <View className="h-[1px] bg-[#F6F6F6] my-4" />
-
-            <View className="gap-y-[20px]">
-              <View className="flex flex-row justify-between">
-                {item.preferenceStats.map((chip, index) => (
-                  <View key={index} className="flex flex-col items-center w-[66px] mx-2 gap-y-1.5">
-                    {getLifeStyleIcon(chip.stat, chip.color as 'blue' | 'white' | 'red')}
-                    <View>
-                      <Text className="text-12 font-500 leading-12 text-disabledFont text-center">
-                        {getLifeStyleLabel(chip.stat)}
-                      </Text>
-                      <Text className="text-12 font-600 leading-12 text-basicFont text-center">
-                        {getLifeStyleValue(chip.stat, chip.value)}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
+      ListEmptyComponent={() =>
+        data !== undefined ? (
+          <View>
+            <Text>없음</Text>
+          </View>
+        ) : (
+          <View className="pt-[32px] pb-[16px] flex items-center mt-[16px]">
+            <StarImage />
+            <View className="p-[16px] flex items-center">
+              <View>
+                <Text className="text-12 font-500 leading-12 text-disabledFont text-center">
+                  {memberState.nickname}님, 라이프스타일을 입력하면
+                </Text>
+                <Text className="text-12 font-500 leading-12 text-disabledFont text-center">
+                  나와 똑같은 답변을 한 사용자를 확인할 수 있어요!
+                </Text>
               </View>
+              <Pressable className="p-[8px] flex flex-row items-center gap-x-[8px]">
+                <Text className="text-16 font-600 leading-16 text-mainColor text-center">
+                  라이프스타일 입력하러가기
+                </Text>
+                <BlueRightArrowIcon />
+              </Pressable>
             </View>
           </View>
-        </Pressable>
-      )}
-      onEndReached={loadMoreList}
-      onEndReachedThreshold={0.5}
+        )
+      }
+      ItemSeparatorComponent={() => <View className="h-[24px]" />}
+      contentContainerStyle={{ paddingBottom: 60 }}
+      onEndReached={randomMemberList ? undefined : loadMoreList}
+      onEndReachedThreshold={randomMemberList ? 0 : 0.5}
     />
   );
 };

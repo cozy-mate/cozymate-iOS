@@ -17,18 +17,18 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
   handleValue,
 }) => {
   return (
-    <View className="gap-y-2">
-      <Text className="text-16 font-600 text-basicFont px-1">{title}</Text>
+    <View className="gap-y-[8px]">
+      <Text className="text-16 font-600 leading-16 text-basicFont px-[4px]">{title}</Text>
 
-      <View className="flex flex-row flex-wrap gap-x-[8px]">
+      <View className="flex flex-row flex-wrap gap-[8px]">
         {items.map((item, index) => (
           <Pressable
             key={index}
             onPress={() => handleValue(item.value)}
-            className={`px-[20px] py-2.5 rounded-md ${value === item.value ? 'bg-subColor1' : 'bg-colorBox'}`}
+            className={`px-[19.8px] py-[10px] rounded-md ${value === item.value ? 'bg-subColor1' : 'bg-colorBox'}`}
           >
             <Text
-              className={`text-14 ${value === item.value ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`text-14 leading-14 ${value === item.value ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
             >
               {item.title}
             </Text>

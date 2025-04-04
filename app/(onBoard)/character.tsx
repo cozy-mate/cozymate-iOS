@@ -30,7 +30,7 @@ export default function Character() {
           buttonText="다음"
           disabled={persona === 0}
           onPress={() => {
-            router.push('/onBoard/chipSelect');
+            router.push('/(onBoard)/chipSelect');
             setSignUpState({ persona });
           }}
         />

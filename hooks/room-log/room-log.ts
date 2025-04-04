@@ -4,16 +4,17 @@ import { getRoomLog } from '@/apis/room-log/room-log';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useGetRoomLog = () => {
-  const { roomId } = useHasRoomStore();
+  const { roomInfo } = useHasRoomStore();
 
   return useInfiniteQuery({
-    queryKey: [`/roomlog/${roomId}`, roomId],
-    queryFn: ({ pageParam }) => getRoomLog(roomId, pageParam, 5),
+    queryKey: [`/roomlog/${roomInfo.roomId}`, roomInfo.roomId],
+    queryFn: ({ pageParam }) => getRoomLog(roomInfo.roomId, pageParam, 5),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
     },
+    enabled: roomInfo.roomId !== 0,
   });
 };

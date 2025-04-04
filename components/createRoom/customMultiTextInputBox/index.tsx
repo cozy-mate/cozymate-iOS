@@ -22,15 +22,15 @@ const CustomMultiTextInputComponent: React.FC<CustomMultiTextInputComponentProps
   placeholder,
 }) => {
   return (
-    <View className="gap-y-2">
-      <Text className="text-16 font-600 text-basicFont px-1">{title}</Text>
+    <View className="gap-y-[8px]">
+      <Text className="text-16 font-600 leading-16 text-basicFont px-[4px]">{title}</Text>
       <TextInput
         value={value}
         onChangeText={handleValue}
         placeholder={placeholder}
-        onSubmitEditing={handleSubmit} // 엔터 입력 시 실행
-        onBlur={handleSubmit} // 포커스 해제 시 실행
-        className="rounded-xl bg-colorBox p-4"
+        onSubmitEditing={handleSubmit}
+        onBlur={handleSubmit}
+        className="rounded-xl bg-colorBox p-[16px] text-14 font-500 text-basicFont"
       />
 
       <View className="flex flex-row flex-wrap mt-[8px]">

@@ -22,7 +22,7 @@ export interface GetMemberLikeListResponse {
         equality: number | null;
         preferenceStats: {
           stat: string;
-          value: string | number | string[];
+          value: string | number;
           color: string;
         }[];
       };

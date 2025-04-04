@@ -14,6 +14,7 @@ export interface SignUpRequest {
   gender: string;
   birthday: string;
   persona: number;
-  universityId: number;
-  majorName: string;
+  memberStatPreferenceDto: {
+    preferenceList: string[];
+  };
 }
