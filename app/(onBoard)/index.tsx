@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -10,6 +11,8 @@ import LoadingComponent from '@/components/common/loading';
 import { useAppleLogin, useKakaoLogin } from '@/hooks/auth/auth';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   const { mutateAsync: kakaoLogin, isPending: kakaoPending } = useKakaoLogin();
   const { mutateAsync: appleLogin, isPending: applePending } = useAppleLogin();
 
@@ -106,7 +109,7 @@ export default function HomeScreen() {
 
         <Pressable
           className="flex-row gap-x-[8px] items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-          onPress={() => appleLogin()}
+          onPress={() => router.push('/(onBoard)/personalInfo')}
         >
           <AppleLogo />
           <Text className="text-center text-16 font-semibold text-white">Apple로 계속하기</Text>

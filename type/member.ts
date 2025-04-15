@@ -1,3 +1,14 @@
+export type MemberData = {
+  memberId: number;
+  nickname: string;
+  gender: string;
+  birthday: string;
+  universityName: string;
+  universityId: number;
+  majorName: string;
+  persona: number;
+};
+
 export type MemberDetail = {
   memberId: number;
   nickname: string;

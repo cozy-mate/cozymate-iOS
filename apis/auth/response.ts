@@ -1,39 +1,16 @@
+import { MemberData } from '@/type/member';
+import { Tokens } from '@/type/token';
+
 export interface ReissueTokenResponse {
   result: {
-    tokenResponseDTO: {
-      message: string;
-      accessToken: string;
-      refreshToken: string;
-    };
-    memberDetailResponseDTO: {
-      memberId: number;
-      nickname: string;
-      gender: string;
-      birthday: string;
-      universityName: string;
-      universityId: number;
-      majorName: string;
-      persona: number;
-    };
+    tokenResponseDTO: Tokens;
+    memberDetailResponseDTO: MemberData;
   };
 }
 
 export interface SocialLoginResponse {
   result: {
-    tokenResponseDTO: {
-      message: string;
-      accessToken: string;
-      refreshToken: string;
-    };
-    memberDetailResponseDTO: {
-      memberId: number;
-      nickname: string;
-      gender: string;
-      birthday: string;
-      universityName: string;
-      universityId: number;
-      majorName: string;
-      persona: number;
-    };
+    tokenResponseDTO: Tokens;
+    memberDetailResponseDTO: MemberData;
   };
 }

@@ -1,18 +1,12 @@
+import { MemberData } from '@/type/member';
+import { Tokens } from '@/type/token';
+
 export interface WithdrawResponse {
   result: string;
 }
 
 export interface GetMemberProfileResponse {
-  result: {
-    memberId: number;
-    nickname: string;
-    gender: string;
-    birthday: string;
-    universityName: string;
-    universityId: number;
-    majorName: string;
-    persona: number;
-  };
+  result: MemberData;
 }
 
 export interface CheckNicknameResponse {
@@ -25,20 +19,7 @@ export interface UpdateMemberInfoResponse {
 
 export interface SignUpResponse {
   result: {
-    tokenResponseDTO: {
-      message: string;
-      accessToken: string;
-      refreshToken: string;
-    };
-    memberDetailResponseDTO: {
-      memberId: number;
-      nickname: string;
-      gender: string;
-      birthday: string;
-      universityName: string;
-      universityId: number;
-      majorName: string;
-      persona: number;
-    };
+    tokenResponseDTO: Tokens;
+    memberDetailResponseDTO: MemberData;
   };
 }

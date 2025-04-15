@@ -10,19 +10,17 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { CreateRoleRequest } from '@/apis/role/request';
+import { CreateRuleRequest } from '@/apis/rule/request';
+import { CreateTodoRequest } from '@/apis/todo/request';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
-import CustomTextareaComponent from '@/components/common/customTextAreaBox';
-import CustomTextInputComponent from '@/components/common/customTextInput';
-import CustomCalendar from '@/components/roleNRule/Calendar';
-import DaySelectComponent from '@/components/roleNRule/daySelect';
-import RoleMateSelectComponent from '@/components/roleNRule/roleMateSelect';
-import TodoMateSelectComponent from '@/components/roleNRule/todoMateSelect';
-import { useCreateRole, useGetRoleList } from '@/hooks/role/role';
-import { useGetMyRoomDetail } from '@/hooks/room/room';
-import { useCreateRule, useGetRuleList } from '@/hooks/rule/rule';
-import { useCreateTodo, useGetTodoList } from '@/hooks/todo/todo';
-import { MateIdNameListItem } from '@/type/role';
+import RoleFormComponent from '@/components/roleNRule/roleForm';
+import RuleFormComponent from '@/components/roleNRule/ruleForm';
+import TodoFormComponent from '@/components/roleNRule/todoForm';
+import { useCreateRole } from '@/hooks/role/role';
+import { useCreateRule } from '@/hooks/rule/rule';
+import { useCreateTodo } from '@/hooks/todo/todo';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function Create() {
@@ -30,53 +28,49 @@ export default function Create() {
 
   const { roomInfo } = useHasRoomStore();
 
-  const { data: memberList } = useGetMyRoomDetail();
+  const { mutateAsync: createTodo } = useCreateTodo(roomInfo.roomId);
+  const [todoForm, setTodoForm] = useState<CreateTodoRequest>({
+    content: '',
+    mateIdList: [],
+    timePoint: moment().format('YYYY-MM-DD'),
+  });
 
-  const [todoContent, setTodoContent] = useState<string>('');
-  const [mateIdList, setMateIdList] = useState<number[]>([]);
-  const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
+  const { mutateAsync: createRole } = useCreateRole(roomInfo.roomId);
+  const [roleForm, setRoleForm] = useState<CreateRoleRequest>({
+    content: '',
+    mateIdNameList: [],
+    repeatDayList: null,
+  });
 
-  const [mateIdNameList, setMateIdNameList] = useState<MateIdNameListItem[]>([]);
-  const [roleContent, setRoleContent] = useState<string>('');
-  const [repeatDayList, setRepeatDayList] = useState<string[] | null>(null);
-
-  const [ruleContent, setRuleContent] = useState<string>('');
-  const [memo, setMemo] = useState<string>('');
-
-  const handleDateTimeSelect = (dateTime: string) => {
-    setTimePoint(dateTime);
-  };
-
-  const { refetch: refetchTodo } = useGetTodoList(roomInfo.roomId);
-  const { mutateAsync: createTodo } = useCreateTodo(roomInfo.roomId, refetchTodo);
-
-  const { refetch: refetchRole } = useGetRoleList(roomInfo.roomId);
-  const { mutateAsync: createRole } = useCreateRole(roomInfo.roomId, refetchRole);
-
-  const { refetch: refetchRule } = useGetRuleList(roomInfo.roomId);
-  const { mutateAsync: createRule } = useCreateRule(roomInfo.roomId, refetchRule);
+  const { mutateAsync: createRule } = useCreateRule(roomInfo.roomId);
+  const [ruleForm, setRuleForm] = useState<CreateRuleRequest>({
+    content: '',
+    memo: '',
+  });
 
   const handleCreate = () => {
-    if (type === 'To-do') {
-      createTodo({ mateIdList, content: todoContent, timePoint });
-    } else if (type === 'Role') {
-      createRole({ mateIdNameList, content: roleContent, repeatDayList });
-    } else {
-      createRule({ content: ruleContent, memo });
-    }
+    if (type === 'To-do') createTodo(todoForm);
+    else if (type === 'Role') createRole(roleForm);
+    else createRule(ruleForm);
   };
 
   useEffect(() => {
-    setTodoContent('');
-    setMateIdList([]);
-    setTimePoint(moment().format('YYYY-MM-DD'));
+    setTodoForm({
+      content: '',
+      mateIdList: [],
+      timePoint: moment().format('YYYY-MM-DD'),
+    });
 
-    setMateIdNameList([]);
-    setRoleContent('');
-    setRepeatDayList(null);
+    setRoleForm({
+      content: '',
+      mateIdNameList: [],
+      repeatDayList: null,
+    });
 
-    setRuleContent('');
-    setMemo('');
+    setRuleForm({
+      content: '',
+      memo: '',
+    });
   }, [type]);
 
   return (
@@ -109,75 +103,10 @@ export default function Create() {
             </View>
 
             {type === 'To-do' && (
-              <View className="gap-y-[48px]">
-                <CustomTextInputComponent
-                  title="할 일을 입력해주세요"
-                  value={todoContent}
-                  handleValue={(e: string) => setTodoContent(e)}
-                  placeholder="할 일을 입력해주세요"
-                />
-
-                {memberList?.result.mateDetailList !== undefined && (
-                  <TodoMateSelectComponent
-                    title="담당자를 선택해주세요"
-                    value={mateIdList}
-                    items={memberList?.result.mateDetailList}
-                    handleValue={setMateIdList}
-                  />
-                )}
-
-                <View className="gap-y-[8px]">
-                  <Text className="text-16 font-600 leading-16 text-basicFont mx-[4px]">
-                    날짜를 선택해주세요
-                  </Text>
-                  <CustomCalendar canSelectPrev={false} onDateTimeSelect={handleDateTimeSelect} />
-                </View>
-              </View>
+              <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />
             )}
-
-            {type === 'Role' && (
-              <View className="gap-y-[48px]">
-                <CustomTextInputComponent
-                  title="역할을 입력해주세요"
-                  value={roleContent}
-                  handleValue={(e: string) => setRoleContent(e)}
-                  placeholder="역할을 입력해주세요"
-                />
-
-                {memberList?.result.mateDetailList !== undefined && (
-                  <RoleMateSelectComponent
-                    title="담당자를 선택해주세요"
-                    value={mateIdNameList}
-                    items={memberList?.result.mateDetailList}
-                    handleValue={setMateIdNameList}
-                  />
-                )}
-
-                <DaySelectComponent
-                  title="정해진 요일을 선택해주세요"
-                  value={repeatDayList}
-                  handleValue={setRepeatDayList}
-                />
-              </View>
-            )}
-
-            {type === 'Rule' && (
-              <View className="gap-y-[48px]">
-                <CustomTextInputComponent
-                  title="규칙을 입력해주세요"
-                  value={ruleContent}
-                  handleValue={(e: string) => setRuleContent(e)}
-                  placeholder="규칙을 입력해주세요"
-                />
-
-                <CustomTextareaComponent
-                  title="메모를 추가해주세요!"
-                  value={memo}
-                  handleValue={(e: string) => setMemo(e)}
-                  placeholder="내용을 입력해주세요"
-                />
-              </View>
-            )}
+            {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
+            {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
@@ -187,12 +116,14 @@ export default function Create() {
           buttonText="확인"
           disabled={
             (type === 'To-do' &&
-              (todoContent.trim() === '' || mateIdList.length === 0 || timePoint.trim() === '')) ||
+              (todoForm.content.trim() === '' ||
+                todoForm.mateIdList.length === 0 ||
+                todoForm.timePoint.trim() === '')) ||
             (type === 'Role' &&
-              (mateIdNameList.length === 0 ||
-                roleContent.trim() === '' ||
-                repeatDayList === null)) ||
-            (type === 'Rule' && ruleContent.trim() === '')
+              (roleForm.mateIdNameList.length === 0 ||
+                roleForm.content.trim() === '' ||
+                roleForm.repeatDayList === null)) ||
+            (type === 'Rule' && ruleForm.content.trim() === '')
           }
           onPress={handleCreate}
         />

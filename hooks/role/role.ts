@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
 import { CreateRoleRequest, UpdateRoleRequest } from '@/apis/role/request';
@@ -6,14 +6,32 @@ import { createRole, deleteRole, getRoleList, updateRole } from '@/apis/role/rol
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteRole = (roomId: number, roleId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => deleteRole(roomId, roleId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
   });
 };
 
 export const useUpdateRole = (roomId: number, roleId: number) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: UpdateRoleRequest) => updateRole(roomId, roleId, data),
+    onSuccess: () => {
+      router.back();
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
   });
 };
 
@@ -27,14 +45,15 @@ export const useGetRoleList = (roomId: number) => {
   });
 };
 
-export const useCreateRole = (roomId: number, refetch: () => void) => {
+export const useCreateRole = (roomId: number) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreateRoleRequest) => createRole(roomId, data),
     onSuccess: () => {
       router.back();
-      refetch();
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
     },
     onError: (error: any) => {
       console.log(error);

@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  TextInput,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -16,26 +17,25 @@ import CustomSelectComponent from '@/components/lifeStyle/customSelect';
 import CustomTextInputComponent from '@/components/lifeStyle/customTextInput';
 import CustomTimeSelectComponent from '@/components/lifeStyle/customTimeSelect';
 import {
-  acceptanceItems,
   numOfRoommateItems,
-  airConditioningIntensityItems,
-  canShareItems,
   cleaningFrequencyItems,
-  cleanSensitivityItems,
   drinkingFrequencyItems,
   heatingIntensityItems,
-  intakeItems,
   intimacyItems,
-  isPhoneCallItems,
-  isPlayGameItems,
   lifePatternItems,
   mbtiItems,
   noiseSensitivityItems,
-  personalityItems,
-  sleepingHabitItems,
-  smokingItems,
-  studyingItems,
-  timeItems,
+  dormJoiningStatusItems,
+  smokingStatusItems,
+  sleepingHabitsItems,
+  coolingIntensityItems,
+  sharingStatusItems,
+  gamingStatusItems,
+  callingStatusItems,
+  studyingStatusItems,
+  eatingStatusItems,
+  cleannessSensitivityItems,
+  personalitiesItems,
 } from '@/constants/items/lifeStyleItem';
 import { useSuspenseGetMyDetail, useUpdateMemberDetail } from '@/hooks/member-stat/member-stat';
 import { useGetMyUniversityInfo } from '@/hooks/university/university';
@@ -86,10 +86,10 @@ export default function MyLifeStyle() {
 
               <CustomRadioComponent
                 title="신청한 기숙사를 선택해주세요"
-                value={lifeStyle.dormitoryName}
+                value={lifeStyle.dormName}
                 items={dormitoryItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, dormitoryName: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, dormName: String(e) }));
                 }}
               />
 
@@ -98,82 +98,67 @@ export default function MyLifeStyle() {
                 value={lifeStyle.numOfRoommate}
                 items={numOfRoommateItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, numOfRoommate: Number(e) }));
+                  setLifeStyle((prev) => ({ ...prev, numOfRoommate: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="기숙사 합격여부를 선택해주세요"
-                value={lifeStyle.acceptance}
-                items={acceptanceItems}
+                value={lifeStyle.dormJoiningStatus}
+                items={dormJoiningStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, acceptance: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, dormJoiningStatus: String(e) }));
                 }}
               />
 
               <CustomTimeSelectComponent
                 title="기상시간을 선택해주세요"
-                timeValue={lifeStyle.wakeUpTime}
-                meridianValue={lifeStyle.wakeUpMeridian}
-                items={timeItems}
-                handleTime={(e) => {
+                value={lifeStyle.wakeUpTime}
+                onChange={(e: number) => {
                   setLifeStyle((prev) => ({ ...prev, wakeUpTime: Number(e) }));
-                }}
-                handleMeridian={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, wakeUpMeridian: String(e) }));
                 }}
               />
 
               <CustomTimeSelectComponent
                 title="취침시간을 선택해주세요"
-                timeValue={lifeStyle.sleepingTime}
-                meridianValue={lifeStyle.sleepingMeridian}
-                items={timeItems}
-                handleTime={(e) => {
+                value={lifeStyle.sleepingTime}
+                onChange={(e: number) => {
                   setLifeStyle((prev) => ({ ...prev, sleepingTime: Number(e) }));
-                }}
-                handleMeridian={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, sleepingMeridian: String(e) }));
                 }}
               />
 
               <CustomTimeSelectComponent
                 title="소등시간을 선택해주세요"
-                timeValue={lifeStyle.turnOffTime}
-                meridianValue={lifeStyle.turnOffMeridian}
-                items={timeItems}
-                handleTime={(e) => {
+                value={lifeStyle.turnOffTime}
+                onChange={(e: number) => {
                   setLifeStyle((prev) => ({ ...prev, turnOffTime: Number(e) }));
-                }}
-                handleMeridian={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, turnOffMeridian: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="흡연여부를 선택해주세요"
-                value={lifeStyle.smoking}
-                items={smokingItems}
+                value={lifeStyle.smokingStatus}
+                items={smokingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, smoking: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, smokingStatus: String(e) }));
                 }}
               />
 
               <CustomSelectComponent
                 title="잠버릇을 선택해주세요 (중복선택 가능)"
-                value={lifeStyle.sleepingHabit}
-                items={sleepingHabitItems}
+                value={lifeStyle.sleepingHabits}
+                items={sleepingHabitsItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, sleepingHabit: e }));
+                  setLifeStyle((prev) => ({ ...prev, sleepingHabits: e }));
                 }}
               />
 
               <CustomRadioComponent
                 title="에어컨 강도를 선택해주세요"
-                value={lifeStyle.airConditioningIntensity}
-                items={airConditioningIntensityItems}
+                value={lifeStyle.coolingIntensity}
+                items={coolingIntensityItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, airConditioningIntensity: Number(e) }));
+                  setLifeStyle((prev) => ({ ...prev, coolingIntensity: String(e) }));
                 }}
               />
 
@@ -182,7 +167,7 @@ export default function MyLifeStyle() {
                 value={lifeStyle.heatingIntensity}
                 items={heatingIntensityItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, heatingIntensity: Number(e) }));
+                  setLifeStyle((prev) => ({ ...prev, heatingIntensity: String(e) }));
                 }}
               />
 
@@ -206,55 +191,55 @@ export default function MyLifeStyle() {
 
               <CustomRadioComponent
                 title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
-                value={lifeStyle.canShare}
-                items={canShareItems}
+                value={lifeStyle.sharingStatus}
+                items={sharingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, canShare: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, sharingStatus: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="방 안에서의 게임 여부를 선택해주세요"
-                value={lifeStyle.isPlayGame}
-                items={isPlayGameItems}
+                value={lifeStyle.gamingStatus}
+                items={gamingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, isPlayGame: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, gamingStatus: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="방 안에서의 전화 여부를 선택해주세요"
-                value={lifeStyle.isPhoneCall}
-                items={isPhoneCallItems}
+                value={lifeStyle.callingStatus}
+                items={callingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, isPhoneCall: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, callingStatus: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="방 안에서의 공부 여부를 선택해주세요"
-                value={lifeStyle.studying}
-                items={studyingItems}
+                value={lifeStyle.studyingStatus}
+                items={studyingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, studying: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, studyingStatus: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="방 안에서의 섭취여부를 선택해주세요"
-                value={lifeStyle.intake}
-                items={intakeItems}
+                value={lifeStyle.eatingStatus}
+                items={eatingStatusItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, intake: String(e) }));
+                  setLifeStyle((prev) => ({ ...prev, eatingStatus: String(e) }));
                 }}
               />
 
               <CustomRadioComponent
                 title="청결 예민도를 선택해주세요"
-                value={lifeStyle.cleanSensitivity}
-                items={cleanSensitivityItems}
+                value={lifeStyle.cleannessSensitivity}
+                items={cleannessSensitivityItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, cleanSensitivity: Number(e) }));
+                  setLifeStyle((prev) => ({ ...prev, cleannessSensitivity: String(e) }));
                 }}
               />
 
@@ -263,7 +248,7 @@ export default function MyLifeStyle() {
                 value={lifeStyle.noiseSensitivity}
                 items={noiseSensitivityItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, noiseSensitivity: Number(e) }));
+                  setLifeStyle((prev) => ({ ...prev, noiseSensitivity: String(e) }));
                 }}
               />
 
@@ -287,10 +272,10 @@ export default function MyLifeStyle() {
 
               <CustomSelectComponent
                 title="성격을 선택해주세요 (중복선택 가능)"
-                value={lifeStyle.personality}
-                items={personalityItems}
+                value={lifeStyle.personalities}
+                items={personalitiesItems}
                 handleValue={(e) => {
-                  setLifeStyle((prev) => ({ ...prev, personality: e }));
+                  setLifeStyle((prev) => ({ ...prev, personalities: e }));
                 }}
               />
 
@@ -302,6 +287,22 @@ export default function MyLifeStyle() {
                   setLifeStyle((prev) => ({ ...prev, mbti: String(e) }));
                 }}
               />
+
+              <View className="gap-y-[12px]">
+                <Text className="text-16 font-600 leading-16 text-emphasizedFont mx-[4px]">
+                  하고싶은 말을 적어주세요 (선택)
+                </Text>
+                <TextInput
+                  value={lifeStyle.selfIntroduction}
+                  onChangeText={(e: string) =>
+                    setLifeStyle((prev) => ({ ...prev, selfIntroduction: e }))
+                  }
+                  className="bg-colorBox h-[270px] rounded-xl p-[16px] text-14 font-500 leading-14 text-basicFont"
+                  placeholder="내용을 입력해주세요"
+                  placeholderTextColor={'#ACADB4'}
+                  multiline
+                />
+              </View>
             </View>
           )}
         </ScrollView>

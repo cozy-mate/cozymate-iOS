@@ -81,19 +81,24 @@ export default function TabLayout() {
               롤앤룰
             </Text>
           ),
-          tabBarIcon: ({ focused }) =>
-            roomInfo.roomId !== 0 ? (
-              <View className="w-10 h-10 flex justify-center items-center mt-2">
-                {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
-              </View>
-            ) : (
-              <Pressable
-                onPress={() => showRejectToast('방에 참여해야 사용할 수 있어요!')}
-                className="w-10 h-10 flex justify-center items-center mt-2"
-              >
-                {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
-              </Pressable>
-            ),
+          tabBarIcon: ({ focused }) => (
+            <View className="w-10 h-10 flex justify-center items-center mt-2">
+              {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
+            </View>
+          ),
+          tabBarButton: (props) => (
+            <Pressable
+              {...props}
+              onPress={(e) => {
+                if (roomInfo.roomId === 0) {
+                  e.preventDefault();
+                  showRejectToast('방에 참여해야 사용할 수 있어요!');
+                } else {
+                  props.onPress?.(e);
+                }
+              }}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -106,19 +111,24 @@ export default function TabLayout() {
               코지봇
             </Text>
           ),
-          tabBarIcon: ({ focused }) =>
-            roomInfo.roomId !== 0 ? (
-              <View className="w-10 h-10 flex justify-center items-center mt-2">
-                {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
-              </View>
-            ) : (
-              <Pressable
-                onPress={() => showRejectToast('방에 참여해야 사용할 수 있어요!')}
-                className="w-10 h-10 flex justify-center items-center mt-2"
-              >
-                {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
-              </Pressable>
-            ),
+          tabBarIcon: ({ focused }) => (
+            <View className="w-10 h-10 flex justify-center items-center mt-2">
+              {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
+            </View>
+          ),
+          tabBarButton: (props) => (
+            <Pressable
+              {...props}
+              onPress={(e) => {
+                if (roomInfo.roomId === 0) {
+                  e.preventDefault();
+                  showRejectToast('방에 참여해야 사용할 수 있어요!');
+                } else {
+                  props.onPress?.(e);
+                }
+              }}
+            />
+          ),
         }}
       />
       <Tabs.Screen

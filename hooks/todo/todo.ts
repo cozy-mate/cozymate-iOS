@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
 import { CreateTodoRequest, UpdateTodoRequest } from '@/apis/todo/request';
@@ -6,14 +6,32 @@ import { createTodo, deleteTodo, getTodoList, toggleTodoDone, updateTodo } from 
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteTodo = (roomId: number, todoId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => deleteTodo(roomId, todoId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/todos`] });
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
   });
 };
 
 export const useUpdateTodo = (roomId: number, todoId: number) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: UpdateTodoRequest) => updateTodo(roomId, todoId, data),
+    onSuccess: () => {
+      router.back();
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/todos`] });
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
   });
 };
 
@@ -40,14 +58,15 @@ export const useToggleTodoDone = (roomId: number, refetch: () => void) => {
   });
 };
 
-export const useCreateTodo = (roomId: number, refetch: () => void) => {
+export const useCreateTodo = (roomId: number) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreateTodoRequest) => createTodo(roomId, data),
     onSuccess: () => {
       router.back();
-      refetch();
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/todos`] });
     },
     onError: (error: any) => {
       console.log(error);

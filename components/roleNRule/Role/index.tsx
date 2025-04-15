@@ -3,6 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 
 import SettingIcon from '@/assets/images/roleNRule/setting.svg';
 import { useGetRoleList } from '@/hooks/role/role';
+import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { useMemberStore } from '@/zustand/member/member';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -13,6 +14,8 @@ interface RoleComponentProps {
 
 const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
   const { roomInfo } = useHasRoomStore();
+  const { data: roomData } = useGetMyRoomDetail();
+
   const { memberState } = useMemberStore();
 
   const { data } = useGetRoleList(roomInfo.roomId);
@@ -23,7 +26,7 @@ const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
     <View className="gap-y-[12px]">
       <View className="gap-y-0.5 mx-1">
         <Text className="text-18 font-600 leading-18 text-basicFont">
-          <Text className="text-mainColor">{'피그말리온'}</Text>의
+          <Text className="text-mainColor">{roomData?.result.name}</Text>의
         </Text>
         <Text className="text-18 font-600 leading-18 text-basicFont">
           역할에 대해 알려드릴게요!
@@ -42,7 +45,11 @@ const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
                   <View className="gap-y-1.5">
                     <View className="bg-colorBox px-2 py-0.5 rounded-sm self-start">
                       <Text className="text-12 font-500 leading-12 text-colorFont text-center">
-                        {role.isAllDays ? '매일' : role.repeatDayList.join(', ')}
+                        {role.isAllDays
+                          ? '매일'
+                          : role.repeatDayList.length !== 0
+                            ? role.repeatDayList.join(', ')
+                            : '미정'}
                       </Text>
                     </View>
 
@@ -59,7 +66,15 @@ const RoleComponent: React.FC<RoleComponentProps> = ({ bottomSheetRef }) => {
                 {role.mateList.some((mate) => mate.nickname === memberState.nickname) && (
                   <Pressable
                     onPress={() => {
-                      setSelectedItem({ id: role.roleId, type: 'role', content: role.content });
+                      setSelectedItem({
+                        id: role.roleId,
+                        type: 'Role',
+                        content: role.content,
+                        roleItem: {
+                          ...role,
+                          mateIdNameList: role.mateList,
+                        },
+                      });
                       bottomSheetRef.current?.expand();
                     }}
                     className="px-[8px] pb-[16px]"

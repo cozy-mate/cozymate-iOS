@@ -26,7 +26,7 @@ const DormitoryInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">합격여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.acceptance}
+            {data.result.memberStatDetail.dormJoiningStatus}
           </Text>
         </View>
       </View>

@@ -10,6 +10,23 @@ export const useSelectedItemStore = create<{
     id: 0,
     type: '',
     content: '',
+
+    todoItem: {
+      mateIdList: [],
+      content: '',
+      timePoint: '',
+    },
+
+    ruleItem: {
+      content: '',
+      memo: '',
+    },
+
+    roleItem: {
+      mateIdNameList: [],
+      content: '',
+      repeatDayList: [],
+    },
   },
   setSelectedItem: (newState: SelectedItem) => set({ selectedItem: newState }),
 }));

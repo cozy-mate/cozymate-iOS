@@ -1,14 +1,12 @@
+import { ChatData } from '@/type/chat';
+
 export interface GetChatRoomDetailResponse {
   result: {
     page: number;
     hasNext: boolean;
     result: {
       memberId: number;
-      content: {
-        nickname: string;
-        content: string;
-        datetime: string;
-      }[];
+      content: ChatData[];
     };
   };
 }

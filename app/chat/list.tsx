@@ -7,7 +7,7 @@ import BackHeaderComponent from '@/components/common/backHeader';
 export default function ChatList() {
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="px-[20px] gap-y-[32px]">
+      <View className="px-[20px] gap-y-[32px] flex-1">
         <BackHeaderComponent />
         <ChatListComponent />
       </View>

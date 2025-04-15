@@ -30,7 +30,7 @@ export const useGetMyDetail = () => {
 
 export const useSuspenseGetMyDetail = () => {
   return useSuspenseQuery({
-    queryKey: [`/members/stat`],
+    queryKey: [`/members/stat/suspense`],
     queryFn: () => getMyDetail(),
   });
 };
@@ -90,10 +90,12 @@ export const useCreateMemberDetail = () => {
     mutationFn: (data: CreateMemberDetailRequest) => createMemberDetail(data),
     onSuccess: () => {
       setHasLifeStyle(true);
-      router.dismiss(5);
+      router.dismissAll();
+      router.back();
     },
     onError: (error: any) => {
       console.log(error);
+      console.log(error.response?.data?.message);
     },
   });
 };
@@ -105,7 +107,7 @@ export const useUpdateMemberDetail = () => {
   return useMutation({
     mutationFn: (data: UpdatememberDetailRequest) => updateMemberDetail(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/member/stat`] });
+      queryClient.invalidateQueries({ queryKey: [`/member/stat/suspense`] });
       router.back();
     },
     onError: (error: any) => {

@@ -1,48 +1,10 @@
-import { BaseResponse } from '@/type/baseResponse';
-import { MemberItem } from '@/type/member';
+import { MemberData, MemberItem } from '@/type/member';
+import { MemberStatItem } from '@/type/member-stat';
 
-export interface GetMemberDetailResponse extends BaseResponse {
+export interface GetMemberDetailResponse {
   result: {
-    memberDetail: {
-      memberId: number;
-      nickname: string;
-      gender: string;
-      birthday: string;
-      universityName: string;
-      universityId: number;
-      majorName: string;
-      persona: number;
-    };
-    memberStatDetail: {
-      admissionYear: string;
-      numOfRoommate: number;
-      dormitoryName: string;
-      acceptance: string;
-      wakeUpMeridian: string;
-      wakeUpTime: number;
-      sleepingMeridian: string;
-      sleepingTime: number;
-      turnOffMeridian: string;
-      turnOffTime: number;
-      smoking: string;
-      sleepingHabit: string[];
-      airConditioningIntensity: number;
-      heatingIntensity: number;
-      lifePattern: string;
-      intimacy: string;
-      canShare: string;
-      isPlayGame: string;
-      isPhoneCall: string;
-      studying: string;
-      intake: string;
-      cleanSensitivity: number;
-      noiseSensitivity: number;
-      cleaningFrequency: string;
-      drinkingFrequency: string;
-      personality: string[];
-      mbti: string;
-      selfIntroduction: string;
-    };
+    memberDetail: MemberData;
+    memberStatDetail: MemberStatItem;
     equality: number | null;
     roomId: number;
     isRoomPublic: boolean;
@@ -62,16 +24,7 @@ export interface GetMemberListResponse {
     page: number;
     hasNext: boolean;
     memberList: {
-      memberDetail: {
-        memberId: number;
-        nickname: string;
-        gender: string;
-        birthday: string;
-        universityName: string;
-        universityId: number;
-        majorName: string;
-        persona: number;
-      };
+      memberDetail: MemberData[];
       equality: number;
       preferenceStats: {
         stat: string;

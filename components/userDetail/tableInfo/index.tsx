@@ -3,7 +3,6 @@ import { Pressable, Text, View } from 'react-native';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import MagnifierIcon from '@/assets/images/userDetail/magnifier.svg';
-import { intensityItems, sensitivityItems } from '@/constants/items/lifeStyle';
 import { sampleLifeStyleData } from '@/constants/sampleLifeStyle';
 import { useGetMemberDetail, useGetMyDetail } from '@/hooks/member-stat/member-stat';
 import { useMemberStore } from '@/zustand/member/member';
@@ -68,6 +67,13 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
   const { data: myData } = useGetMyDetail();
   const { data } = useGetMemberDetail(Number(id));
 
+  const translateTime = (value: number) => {
+    if (value === 0) return '오전 0시';
+    if (value === 12) return '오후 12시';
+    if (value < 12) return `오전 ${value}시`;
+    return `오후 ${value - 12}시`;
+  };
+
   const items: InfoItem[] = [
     {
       index: 1,
@@ -107,61 +113,63 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
       label: '기상시간',
       myValue:
         myData !== undefined
-          ? `${myData.result.memberStatDetail.wakeUpMeridian} ${myData.result.memberStatDetail.wakeUpTime}시`
-          : `${sampleLifeStyleData.wakeUpMeridian} ${sampleLifeStyleData.wakeUpTime}시`,
-      otherValue: `${data.result.memberStatDetail.wakeUpMeridian} ${data.result.memberStatDetail.wakeUpTime}시`,
+          ? translateTime(myData.result.memberStatDetail.wakeUpTime as number)
+          : translateTime(sampleLifeStyleData.wakeUpTime as number),
+      otherValue: translateTime(data.result.memberStatDetail.wakeUpTime as number),
     },
     {
       index: 7,
       label: '취침시간',
       myValue:
         myData !== undefined
-          ? `${myData.result.memberStatDetail.sleepingMeridian} ${myData.result.memberStatDetail.sleepingTime}시`
-          : `${sampleLifeStyleData.sleepingMeridian} ${sampleLifeStyleData.sleepingTime}시`,
-      otherValue: `${data.result.memberStatDetail.sleepingMeridian} ${data.result.memberStatDetail.sleepingTime}시`,
+          ? translateTime(myData.result.memberStatDetail.sleepingTime as number)
+          : translateTime(sampleLifeStyleData.sleepingTime as number),
+      otherValue: translateTime(data.result.memberStatDetail.sleepingTime as number),
     },
     {
       index: 8,
       label: '소등시간',
       myValue:
         myData !== undefined
-          ? `${myData.result.memberStatDetail.turnOffMeridian} ${myData.result.memberStatDetail.turnOffTime}시`
-          : `${sampleLifeStyleData.turnOffMeridian} ${sampleLifeStyleData.turnOffTime}시`,
-      otherValue: `${data.result.memberStatDetail.turnOffMeridian} ${data.result.memberStatDetail.turnOffTime}시`,
+          ? translateTime(myData.result.memberStatDetail.turnOffTime as number)
+          : translateTime(sampleLifeStyleData.turnOffTime as number),
+      otherValue: translateTime(data.result.memberStatDetail.turnOffTime as number),
     },
     {
       index: 9,
       label: '흡연여부',
       myValue:
-        myData !== undefined ? myData.result.memberStatDetail.smoking : sampleLifeStyleData.smoking,
-      otherValue: data.result.memberStatDetail.smoking,
+        myData !== undefined
+          ? myData.result.memberStatDetail.smokingStatus
+          : sampleLifeStyleData.smokingStatus,
+      otherValue: data.result.memberStatDetail.smokingStatus,
     },
     {
       index: 10,
       label: '잠버릇',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.sleepingHabit
-          : sampleLifeStyleData.sleepingHabit,
-      otherValue: data.result.memberStatDetail.sleepingHabit,
+          ? myData.result.memberStatDetail.sleepingHabits
+          : sampleLifeStyleData.sleepingHabits,
+      otherValue: data.result.memberStatDetail.sleepingHabits,
     },
     {
       index: 11,
       label: '에어컨',
       myValue:
         myData !== undefined
-          ? intensityItems[myData.result.memberStatDetail.airConditioningIntensity]
-          : intensityItems[sampleLifeStyleData.airConditioningIntensity],
-      otherValue: intensityItems[data.result.memberStatDetail.airConditioningIntensity],
+          ? myData.result.memberStatDetail.coolingIntensity
+          : sampleLifeStyleData.coolingIntensity,
+      otherValue: data.result.memberStatDetail.coolingIntensity,
     },
     {
       index: 12,
       label: '히터',
       myValue:
         myData !== undefined
-          ? intensityItems[myData.result.memberStatDetail.heatingIntensity]
-          : intensityItems[sampleLifeStyleData.heatingIntensity],
-      otherValue: intensityItems[data.result.memberStatDetail.heatingIntensity],
+          ? myData.result.memberStatDetail.heatingIntensity
+          : sampleLifeStyleData.heatingIntensity,
+      otherValue: data.result.memberStatDetail.heatingIntensity,
     },
     {
       index: 13,
@@ -186,61 +194,63 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
       label: '물건공유',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.canShare
-          : sampleLifeStyleData.canShare,
-      otherValue: data.result.memberStatDetail.canShare,
+          ? myData.result.memberStatDetail.sharingStatus
+          : sampleLifeStyleData.sharingStatus,
+      otherValue: data.result.memberStatDetail.sharingStatus,
     },
     {
       index: 16,
       label: '공부여부',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.studying
-          : sampleLifeStyleData.studying,
-      otherValue: data.result.memberStatDetail.studying,
+          ? myData.result.memberStatDetail.studyingStatus
+          : sampleLifeStyleData.studyingStatus,
+      otherValue: data.result.memberStatDetail.studyingStatus,
     },
     {
       index: 17,
       label: '섭취여부',
       myValue:
-        myData !== undefined ? myData.result.memberStatDetail.intake : sampleLifeStyleData.intake,
-      otherValue: data.result.memberStatDetail.intake,
+        myData !== undefined
+          ? myData.result.memberStatDetail.eatingStatus
+          : sampleLifeStyleData.eatingStatus,
+      otherValue: data.result.memberStatDetail.eatingStatus,
     },
     {
       index: 18,
       label: '게임여부',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.isPlayGame
-          : sampleLifeStyleData.isPlayGame,
-      otherValue: data.result.memberStatDetail.isPlayGame,
+          ? myData.result.memberStatDetail.gamingStatus
+          : sampleLifeStyleData.gamingStatus,
+      otherValue: data.result.memberStatDetail.gamingStatus,
     },
     {
       index: 19,
       label: '전화여부',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.isPhoneCall
-          : sampleLifeStyleData.isPhoneCall,
-      otherValue: data.result.memberStatDetail.isPhoneCall,
+          ? myData.result.memberStatDetail.callingStatus
+          : sampleLifeStyleData.callingStatus,
+      otherValue: data.result.memberStatDetail.callingStatus,
     },
     {
       index: 20,
       label: '청결 예민도',
       myValue:
         myData !== undefined
-          ? sensitivityItems[myData.result.memberStatDetail.cleanSensitivity - 1]
-          : sensitivityItems[sampleLifeStyleData.cleanSensitivity - 1],
-      otherValue: sensitivityItems[data.result.memberStatDetail.cleanSensitivity - 1],
+          ? myData.result.memberStatDetail.cleannessSensitivity
+          : sampleLifeStyleData.cleannessSensitivity,
+      otherValue: data.result.memberStatDetail.cleannessSensitivity,
     },
     {
       index: 21,
       label: '소음 예민도',
       myValue:
         myData !== undefined
-          ? sensitivityItems[myData.result.memberStatDetail.noiseSensitivity - 1]
-          : sensitivityItems[sampleLifeStyleData.noiseSensitivity - 1],
-      otherValue: sensitivityItems[data.result.memberStatDetail.noiseSensitivity - 1],
+          ? myData.result.memberStatDetail.noiseSensitivity
+          : sampleLifeStyleData.noiseSensitivity,
+      otherValue: data.result.memberStatDetail.noiseSensitivity,
     },
     {
       index: 22,
@@ -265,9 +275,9 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
       label: '성격',
       myValue:
         myData !== undefined
-          ? myData.result.memberStatDetail.personality
-          : sampleLifeStyleData.personality,
-      otherValue: data.result.memberStatDetail.personality,
+          ? myData.result.memberStatDetail.personalities
+          : sampleLifeStyleData.personalities,
+      otherValue: data.result.memberStatDetail.personalities,
     },
     {
       index: 25,

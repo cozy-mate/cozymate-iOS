@@ -18,6 +18,9 @@ const ChatListComponent: React.FC = () => {
 
   return (
     <FlatList
+      contentContainerStyle={
+        data.pages.flatMap((page) => page.result.result).length === 0 ? { flexGrow: 1 } : undefined
+      }
       data={data?.pages?.flatMap((page) => page.result.result)}
       renderItem={({ item }) => (
         <Pressable
@@ -39,6 +42,13 @@ const ChatListComponent: React.FC = () => {
         </Pressable>
       )}
       ItemSeparatorComponent={() => <View className="bg-[#F6F6F6] h-[1px] my-2" />}
+      ListEmptyComponent={() => (
+        <View className="flex-1 justify-center items-center mb-20">
+          <Text className="text-14 font-500 leading-14 text-disabledFont">
+            아직 주고 받은 쪽지가 없어요!
+          </Text>
+        </View>
+      )}
       onEndReached={loadMoreList}
       onEndReachedThreshold={0.5}
     />

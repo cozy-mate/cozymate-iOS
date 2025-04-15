@@ -8,12 +8,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AddButton from '@/assets/images/roleNRule/addButton.svg';
 import Background from '@/assets/images/roleNRule/background.svg';
+import TwoButtonModal from '@/components/common/twoButtonModal';
 import CustomCalendar from '@/components/roleNRule/Calendar';
 import MateTodoComponent from '@/components/roleNRule/MateTodo';
 import MyTodoComponent from '@/components/roleNRule/MyTodo';
 import RoleComponent from '@/components/roleNRule/Role';
 import RuleComponent from '@/components/roleNRule/Rule';
+import { useDeleteRole } from '@/hooks/role/role';
+import { useDeleteRule } from '@/hooks/rule/rule';
+import { useDeleteTodo } from '@/hooks/todo/todo';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
+import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function RoleNRule() {
   const router = useRouter();
@@ -21,6 +26,8 @@ export default function RoleNRule() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const width = Dimensions.get('screen').width;
+
+  const { roomInfo } = useHasRoomStore();
 
   const [type, setType] = useState<string>('todo');
   const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
@@ -31,13 +38,27 @@ export default function RoleNRule() {
 
   const { selectedItem } = useSelectedItemStore();
 
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
+
+  const { mutateAsync: deleteTodo } = useDeleteTodo(roomInfo.roomId, selectedItem.id);
+  const { mutateAsync: deleteRole } = useDeleteRole(roomInfo.roomId, selectedItem.id);
+  const { mutateAsync: deleteRule } = useDeleteRule(roomInfo.roomId, selectedItem.id);
+
+  const handleDelete = () => {
+    if (selectedItem.type === 'To-do') deleteTodo();
+    else if (selectedItem.type === 'Role') deleteRole();
+    else deleteRule();
+
+    setIsDeleteModalVisible(false);
+  };
+
   return (
     <Suspense>
       <SafeAreaView className="flex-1 bg-subColor1 relative">
         <Background style={{ position: 'absolute', width: width }} />
 
         <View className="flex flex-row gap-x-[24px] px-[20px] mt-[28px]">
-          <Pressable onPress={() => setType('todo')} className="w-[90px] gap-y-[8px]">
+          <Pressable onPress={() => setType('todo')} className="w-[92px] gap-y-[8px]">
             <Text
               className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'todo' ? 'text-mainColor' : 'text-disabledFont'}`}
             >
@@ -49,7 +70,7 @@ export default function RoleNRule() {
             />
           </Pressable>
 
-          <Pressable onPress={() => setType('role')} className="w-[90px] gap-y-2">
+          <Pressable onPress={() => setType('role')} className="w-[92px] gap-y-2">
             <Text
               className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'role' ? 'text-mainColor' : 'text-disabledFont'}`}
             >
@@ -107,7 +128,13 @@ export default function RoleNRule() {
               </Text>
 
               <View>
-                <Pressable className="py-[11.5px]">
+                <Pressable
+                  onPress={() => {
+                    bottomSheetRef.current?.close();
+                    router.push(`/roleNRule/update/${selectedItem.type}`);
+                  }}
+                  className="py-[11.5px]"
+                >
                   <Text className="text-16 font-500 leading-16 text-basicFont mx-[4px]">
                     수정하기
                   </Text>
@@ -115,7 +142,13 @@ export default function RoleNRule() {
 
                 <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
 
-                <Pressable className="py-[11.5px]">
+                <Pressable
+                  onPress={() => {
+                    bottomSheetRef.current?.close();
+                    setIsDeleteModalVisible(true);
+                  }}
+                  className="py-[11.5px]"
+                >
                   <Text className="text-16 font-500 leading-16 text-basicFont mx-[4px]">
                     삭제하기
                   </Text>
@@ -124,6 +157,16 @@ export default function RoleNRule() {
             </BottomSheetView>
           </BottomSheet>
         </Portal>
+
+        <TwoButtonModal
+          isVisible={isDeleteModalVisible}
+          title="삭제하시겠습니까?"
+          closeFunc={() => setIsDeleteModalVisible(false)}
+          leftButtonText="취소"
+          leftButtonFunc={() => setIsDeleteModalVisible(false)}
+          rightButtonText="삭제"
+          rightButtonFunc={handleDelete}
+        />
       </SafeAreaView>
     </Suspense>
   );

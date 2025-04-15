@@ -1,76 +1,75 @@
-import BlueAcceptance from '@/assets/images/lifeStyleIcon/blue/blueAcceptance.svg';
 import BlueAdmissionYear from '@/assets/images/lifeStyleIcon/blue/blueAdmissionYear.svg';
-import BlueAirConditioningIntensity from '@/assets/images/lifeStyleIcon/blue/blueAirConditioningIntensity.svg';
 import BlueBirthYear from '@/assets/images/lifeStyleIcon/blue/blueBirthYear.svg';
-import BlueCanShare from '@/assets/images/lifeStyleIcon/blue/blueCanShare.svg';
+import BlueCallingStatus from '@/assets/images/lifeStyleIcon/blue/blueCallingStatus.svg';
 import BlueCleaningFrequency from '@/assets/images/lifeStyleIcon/blue/blueCleaningFrequency.svg';
-import BlueCleanSensitivity from '@/assets/images/lifeStyleIcon/blue/blueCleanSensitivity.svg';
+import BlueCleannessSensitivity from '@/assets/images/lifeStyleIcon/blue/blueCleannessSensitivity.svg';
+import BlueCoolingIntensity from '@/assets/images/lifeStyleIcon/blue/blueCoolingIntensity.svg';
+import BlueDormJoiningStatus from '@/assets/images/lifeStyleIcon/blue/blueDormJoiningStatus.svg';
 import BlueDrink from '@/assets/images/lifeStyleIcon/blue/blueDrink.svg';
+import BlueEatingStatus from '@/assets/images/lifeStyleIcon/blue/blueEatingStatus.svg';
+import BlueGamingStatus from '@/assets/images/lifeStyleIcon/blue/blueGamingStatus.svg';
 import BlueHeatingIntensity from '@/assets/images/lifeStyleIcon/blue/blueHeatingIntensity.svg';
-import BlueIntake from '@/assets/images/lifeStyleIcon/blue/blueIntake.svg';
 import BlueIntimacy from '@/assets/images/lifeStyleIcon/blue/blueIntimacy.svg';
-import BlueIsPhoneCall from '@/assets/images/lifeStyleIcon/blue/blueIsPhoneCall.svg';
-import BlueIsPlayGame from '@/assets/images/lifeStyleIcon/blue/blueIsPlayGame.svg';
 import BlueLifePattern from '@/assets/images/lifeStyleIcon/blue/blueLifePattern.svg';
 import BlueMajor from '@/assets/images/lifeStyleIcon/blue/blueMajor.svg';
 import BlueMbti from '@/assets/images/lifeStyleIcon/blue/blueMbti.svg';
 import BlueNoiseSensitivity from '@/assets/images/lifeStyleIcon/blue/blueNoiseSensitivity.svg';
-import BluePersonality from '@/assets/images/lifeStyleIcon/blue/bluePersonality.svg';
-import BlueSleepingHabit from '@/assets/images/lifeStyleIcon/blue/blueSleepingHabit.svg';
+import BluePersonalities from '@/assets/images/lifeStyleIcon/blue/bluePersonalities.svg';
+import BlueSharingStatus from '@/assets/images/lifeStyleIcon/blue/blueSharingStatus.svg';
+import BlueSleepingHabits from '@/assets/images/lifeStyleIcon/blue/blueSleepingHabits.svg';
 import BlueSleepingTime from '@/assets/images/lifeStyleIcon/blue/blueSleepingTime.svg';
-import BlueSmoking from '@/assets/images/lifeStyleIcon/blue/blueSmoking.svg';
-import BlueStudying from '@/assets/images/lifeStyleIcon/blue/blueStudying.svg';
+import BlueSmokingStatus from '@/assets/images/lifeStyleIcon/blue/blueSmokingStatus.svg';
+import BlueStudyingStatus from '@/assets/images/lifeStyleIcon/blue/blueStudyingStatus.svg';
 import BlueTurnOffTime from '@/assets/images/lifeStyleIcon/blue/blueTurnOffTime.svg';
 import BlueWakeUpTime from '@/assets/images/lifeStyleIcon/blue/blueWakeUpTime.svg';
-import RedAcceptance from '@/assets/images/lifeStyleIcon/red/redAcceptance.svg';
 import RedAdmissionYear from '@/assets/images/lifeStyleIcon/red/redAdmissionYear.svg';
-import RedAirConditioningIntensity from '@/assets/images/lifeStyleIcon/red/redAirConditioningIntensity.svg';
 import RedBirthYear from '@/assets/images/lifeStyleIcon/red/redBirthYear.svg';
-import RedCanShare from '@/assets/images/lifeStyleIcon/red/redCanShare.svg';
+import RedCallingStatus from '@/assets/images/lifeStyleIcon/red/redCallingStatus.svg';
 import RedCleaningFrequency from '@/assets/images/lifeStyleIcon/red/redCleaningFrequency.svg';
-import RedCleanSensitivity from '@/assets/images/lifeStyleIcon/red/redCleanSensitivity.svg';
+import RedCleannessSensitivity from '@/assets/images/lifeStyleIcon/red/redCleannessSensitivity.svg';
+import RedCoolingIntensity from '@/assets/images/lifeStyleIcon/red/redCoolingIntensity.svg';
+import RedDormJoiningStatus from '@/assets/images/lifeStyleIcon/red/redDormJoiningStatus.svg';
 import RedDrink from '@/assets/images/lifeStyleIcon/red/redDrink.svg';
+import RedEatingStatus from '@/assets/images/lifeStyleIcon/red/redEatingStatus.svg';
+import RedGamingStatus from '@/assets/images/lifeStyleIcon/red/redGamingStatus.svg';
 import RedHeatingIntensity from '@/assets/images/lifeStyleIcon/red/redHeatingIntensity.svg';
-import RedIntake from '@/assets/images/lifeStyleIcon/red/redIntake.svg';
 import RedIntimacy from '@/assets/images/lifeStyleIcon/red/redIntimacy.svg';
-import RedIsPhoneCall from '@/assets/images/lifeStyleIcon/red/redIsPhoneCall.svg';
-import RedIsPlayGame from '@/assets/images/lifeStyleIcon/red/redIsPlayGame.svg';
 import RedLifePattern from '@/assets/images/lifeStyleIcon/red/redLifePattern.svg';
 import RedMajor from '@/assets/images/lifeStyleIcon/red/redMajor.svg';
 import RedMbti from '@/assets/images/lifeStyleIcon/red/redMbti.svg';
 import RedNoiseSensitivity from '@/assets/images/lifeStyleIcon/red/redNoiseSensitivity.svg';
-import RedPersonality from '@/assets/images/lifeStyleIcon/red/redPersonality.svg';
-import RedSleepingHabit from '@/assets/images/lifeStyleIcon/red/redSleepingHabit.svg';
+import RedPersonalities from '@/assets/images/lifeStyleIcon/red/redPersonalities.svg';
+import RedSharingStatus from '@/assets/images/lifeStyleIcon/red/redSharingStatus.svg';
+import RedSleepingHabits from '@/assets/images/lifeStyleIcon/red/redSleepingHabits.svg';
 import RedSleepingTime from '@/assets/images/lifeStyleIcon/red/redSleepingTime.svg';
-import RedSmoking from '@/assets/images/lifeStyleIcon/red/redSmoking.svg';
-import RedStudying from '@/assets/images/lifeStyleIcon/red/redStudying.svg';
+import RedSmokingStatus from '@/assets/images/lifeStyleIcon/red/redSmokingStatus.svg';
+import RedStudyingStatus from '@/assets/images/lifeStyleIcon/red/redStudyingStatus.svg';
 import RedTurnOffTime from '@/assets/images/lifeStyleIcon/red/redTurnOffTime.svg';
 import RedWakeUpTime from '@/assets/images/lifeStyleIcon/red/redWakeUpTime.svg';
-import WhiteAcceptance from '@/assets/images/lifeStyleIcon/white/whiteAcceptance.svg';
 import WhiteAdmissionYear from '@/assets/images/lifeStyleIcon/white/whiteAdmissionYear.svg';
-import WhiteAirConditioningIntensity from '@/assets/images/lifeStyleIcon/white/whiteAirConditioningIntensity.svg';
 import WhiteBirthYear from '@/assets/images/lifeStyleIcon/white/whiteBirthYear.svg';
-import WhiteCanShare from '@/assets/images/lifeStyleIcon/white/whiteCanShare.svg';
+import WhiteCallingStatus from '@/assets/images/lifeStyleIcon/white/whiteCallingStatus.svg';
 import WhiteCleaningFrequency from '@/assets/images/lifeStyleIcon/white/whiteCleaningFrequency.svg';
-import WhiteCleanSensitivity from '@/assets/images/lifeStyleIcon/white/whiteCleanSensitivity.svg';
+import WhiteCleannessSensitivity from '@/assets/images/lifeStyleIcon/white/whiteCleannessSensitivity.svg';
+import WhiteCoolingIntensity from '@/assets/images/lifeStyleIcon/white/whiteCoolingIntensity.svg';
+import WhiteDormJoiningStatus from '@/assets/images/lifeStyleIcon/white/whiteDormJoiningStatus.svg';
 import WhiteDrink from '@/assets/images/lifeStyleIcon/white/whiteDrink.svg';
+import WhiteEatingStatus from '@/assets/images/lifeStyleIcon/white/whiteEatingStatus.svg';
+import WhiteGamingStatus from '@/assets/images/lifeStyleIcon/white/whiteGamingStatus.svg';
 import WhiteHeatingIntensity from '@/assets/images/lifeStyleIcon/white/whiteHeatingIntensity.svg';
-import WhiteIntake from '@/assets/images/lifeStyleIcon/white/whiteIntake.svg';
 import WhiteIntimacy from '@/assets/images/lifeStyleIcon/white/whiteIntimacy.svg';
-import WhiteIsPhoneCall from '@/assets/images/lifeStyleIcon/white/whiteIsPhoneCall.svg';
-import WhiteIsPlayGame from '@/assets/images/lifeStyleIcon/white/whiteIsPlayGame.svg';
 import WhiteLifePattern from '@/assets/images/lifeStyleIcon/white/whiteLifePattern.svg';
 import WhiteMajor from '@/assets/images/lifeStyleIcon/white/whiteMajor.svg';
 import WhiteMbti from '@/assets/images/lifeStyleIcon/white/whiteMbti.svg';
 import WhiteNoiseSensitivity from '@/assets/images/lifeStyleIcon/white/whiteNoiseSensitivity.svg';
-import WhitePersonality from '@/assets/images/lifeStyleIcon/white/whitePersonality.svg';
-import WhiteSleepingHabit from '@/assets/images/lifeStyleIcon/white/whiteSleepingHabit.svg';
+import WhitePersonalities from '@/assets/images/lifeStyleIcon/white/whitePersonalities.svg';
+import WhiteSharingStatus from '@/assets/images/lifeStyleIcon/white/whiteSharingStatus.svg';
+import WhiteSleepingHabits from '@/assets/images/lifeStyleIcon/white/whiteSleepingHabits.svg';
 import WhiteSleepingTime from '@/assets/images/lifeStyleIcon/white/whiteSleepingTime.svg';
-import WhiteSmoking from '@/assets/images/lifeStyleIcon/white/whiteSmoking.svg';
-import WhiteStudying from '@/assets/images/lifeStyleIcon/white/whiteStudying.svg';
+import WhiteSmokingStatus from '@/assets/images/lifeStyleIcon/white/whiteSmokingStatus.svg';
+import WhiteStudyingStatus from '@/assets/images/lifeStyleIcon/white/whiteStudyingStatus.svg';
 import WhiteTurnOffTime from '@/assets/images/lifeStyleIcon/white/whiteTurnOffTime.svg';
 import WhiteWakeUpTime from '@/assets/images/lifeStyleIcon/white/whiteWakeUpTime.svg';
-import { intensityItems, sensitivityItems } from '@/constants/items/lifeStyle';
 
 interface LifestyleOption {
   blue?: JSX.Element;
@@ -80,7 +79,7 @@ interface LifestyleOption {
 }
 
 export const lifestyleOptions: Record<string, LifestyleOption> = {
-  dormitoryName: {
+  dormName: {
     label: '기숙사',
   },
   admissionYear: {
@@ -107,10 +106,10 @@ export const lifestyleOptions: Record<string, LifestyleOption> = {
     red: <RedMajor />,
     label: '학과',
   },
-  acceptance: {
-    blue: <BlueAcceptance />,
-    white: <WhiteAcceptance />,
-    red: <RedAcceptance />,
+  dormJoiningStatus: {
+    blue: <BlueDormJoiningStatus />,
+    white: <WhiteDormJoiningStatus />,
+    red: <RedDormJoiningStatus />,
     label: '합격여부',
   },
   wakeUpTime: {
@@ -131,22 +130,22 @@ export const lifestyleOptions: Record<string, LifestyleOption> = {
     red: <RedTurnOffTime />,
     label: '소등시간',
   },
-  smoking: {
-    blue: <BlueSmoking />,
-    white: <WhiteSmoking />,
-    red: <RedSmoking />,
+  smokingStatus: {
+    blue: <BlueSmokingStatus />,
+    white: <WhiteSmokingStatus />,
+    red: <RedSmokingStatus />,
     label: '흡연여부',
   },
-  sleepingHabit: {
-    blue: <BlueSleepingHabit />,
-    white: <WhiteSleepingHabit />,
-    red: <RedSleepingHabit />,
+  sleepingHabits: {
+    blue: <BlueSleepingHabits />,
+    white: <WhiteSleepingHabits />,
+    red: <RedSleepingHabits />,
     label: '잠버릇',
   },
-  airConditioningIntensity: {
-    blue: <BlueAirConditioningIntensity />,
-    white: <WhiteAirConditioningIntensity />,
-    red: <RedAirConditioningIntensity />,
+  coolingIntensity: {
+    blue: <BlueCoolingIntensity />,
+    white: <WhiteCoolingIntensity />,
+    red: <RedCoolingIntensity />,
     label: '에어컨',
   },
   heatingIntensity: {
@@ -167,40 +166,40 @@ export const lifestyleOptions: Record<string, LifestyleOption> = {
     red: <RedIntimacy />,
     label: '친밀도',
   },
-  canShare: {
-    blue: <BlueCanShare />,
-    white: <WhiteCanShare />,
-    red: <RedCanShare />,
+  sharingStatus: {
+    blue: <BlueSharingStatus />,
+    white: <WhiteSharingStatus />,
+    red: <RedSharingStatus />,
     label: '물건공유',
   },
-  isPlayGame: {
-    blue: <BlueIsPlayGame />,
-    white: <WhiteIsPlayGame />,
-    red: <RedIsPlayGame />,
+  gamingStatus: {
+    blue: <BlueGamingStatus />,
+    white: <WhiteGamingStatus />,
+    red: <RedGamingStatus />,
     label: '게임여부',
   },
-  isPhoneCall: {
-    blue: <BlueIsPhoneCall />,
-    white: <WhiteIsPhoneCall />,
-    red: <RedIsPhoneCall />,
+  callingStatus: {
+    blue: <BlueCallingStatus />,
+    white: <WhiteCallingStatus />,
+    red: <RedCallingStatus />,
     label: '전화여부',
   },
-  studying: {
-    blue: <BlueStudying />,
-    white: <WhiteStudying />,
-    red: <RedStudying />,
+  studyingStatus: {
+    blue: <BlueStudyingStatus />,
+    white: <WhiteStudyingStatus />,
+    red: <RedStudyingStatus />,
     label: '공부여부',
   },
-  intake: {
-    blue: <BlueIntake />,
-    white: <WhiteIntake />,
-    red: <RedIntake />,
+  eatingStatus: {
+    blue: <BlueEatingStatus />,
+    white: <WhiteEatingStatus />,
+    red: <RedEatingStatus />,
     label: '섭취여부',
   },
-  cleanSensitivity: {
-    blue: <BlueCleanSensitivity />,
-    white: <WhiteCleanSensitivity />,
-    red: <RedCleanSensitivity />,
+  cleannessSensitivity: {
+    blue: <BlueCleannessSensitivity />,
+    white: <WhiteCleannessSensitivity />,
+    red: <RedCleannessSensitivity />,
     label: '청결예민도',
   },
   noiseSensitivity: {
@@ -221,10 +220,10 @@ export const lifestyleOptions: Record<string, LifestyleOption> = {
     red: <RedDrink />,
     label: '음주빈도',
   },
-  personality: {
-    blue: <BluePersonality />,
-    white: <WhitePersonality />,
-    red: <RedPersonality />,
+  personalities: {
+    blue: <BluePersonalities />,
+    white: <WhitePersonalities />,
+    red: <RedPersonalities />,
     label: '성격',
   },
   mbti: {

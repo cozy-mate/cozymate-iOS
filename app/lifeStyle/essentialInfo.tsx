@@ -17,24 +17,23 @@ import CustomRadioComponent from '@/components/lifeStyle/customRadio';
 import CustomSelectComponent from '@/components/lifeStyle/customSelect';
 import CustomTimeSelectComponent from '@/components/lifeStyle/customTimeSelect';
 import {
-  airConditioningIntensityItems,
-  canShareItems,
+  coolingIntensityItems,
+  sharingStatusItems,
   cleaningFrequencyItems,
-  cleanSensitivityItems,
+  cleannessSensitivityItems,
   drinkingFrequencyItems,
   heatingIntensityItems,
-  intakeItems,
+  eatingStatusItems,
   intimacyItems,
-  isPhoneCallItems,
-  isPlayGameItems,
+  callingStatusItems,
+  gamingStatusItems,
   lifePatternItems,
   mbtiItems,
   noiseSensitivityItems,
-  personalityItems,
-  sleepingHabitItems,
-  smokingItems,
-  studyingItems,
-  timeItems,
+  personalitiesItems,
+  sleepingHabitsItems,
+  smokingStatusItems,
+  studyingStatusItems,
 } from '@/constants/items/lifeStyleItem';
 import { useInputAnimation } from '@/hooks/useInputAnimation';
 import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
@@ -46,72 +45,67 @@ export default function LifeStyleEssentialInfo() {
 
   const [showSleepingTime, setShowSleepingTime] = useState<boolean>(false);
   const [showTurnOffTime, setShowTurnOffTime] = useState<boolean>(false);
-  const [showSmoking, setShowSmoking] = useState<boolean>(false);
-  const [showSleepingHabit, setShowSleepingHabit] = useState<boolean>(false);
-  const [showAirConditioningIntensity, setShowAirConditioningIntensity] = useState<boolean>(false);
+  const [showSmokingStatus, setShowSmokingStatus] = useState<boolean>(false);
+  const [showSleepingHabits, setShowSleepingHabits] = useState<boolean>(false);
+  const [showCoolingIntensity, setShowCoolingIntensity] = useState<boolean>(false);
   const [showHeatingIntensity, setShowHeatingIntensity] = useState<boolean>(false);
   const [showLifePattern, setShowLifePattern] = useState<boolean>(false);
   const [showIntimacy, setShowIntimacy] = useState<boolean>(false);
-  const [showCanShare, setShowCanShare] = useState<boolean>(false);
-  const [showIsPlayGame, setShowIsPlayGame] = useState<boolean>(false);
-  const [showIsPhoneCall, setShowIsPhoneCall] = useState<boolean>(false);
-  const [showStudying, setShowStudying] = useState<boolean>(false);
-  const [showIntake, setShowIntake] = useState<boolean>(false);
-  const [showCleanSensitivity, setShowCleanSensitivity] = useState<boolean>(false);
+  const [showSharingStatus, setShowSharingStatus] = useState<boolean>(false);
+  const [showGamingStatus, setShowGamingStatus] = useState<boolean>(false);
+  const [showCallingStatus, setShowCallingStatus] = useState<boolean>(false);
+  const [showStudyingStatus, setShowStudyingStatus] = useState<boolean>(false);
+  const [showEatingStatus, setShowEatingStatus] = useState<boolean>(false);
+  const [showCleannessSensitivity, setShowCleannessSensitivity] = useState<boolean>(false);
   const [showNoiseSensitivity, setShowNoiseSensitivity] = useState<boolean>(false);
   const [showCleaningFrequency, setShowCleaningFrequency] = useState<boolean>(false);
   const [showDrinkingFrequency, setShowDrinkingFrequency] = useState<boolean>(false);
-  const [showPersonality, setShowPersonality] = useState<boolean>(false);
+  const [showPersonalities, setShowPersonalities] = useState<boolean>(false);
   const [showMbti, setShowMbti] = useState<boolean>(false);
 
   const sleepingTimeAnimation = useInputAnimation(showSleepingTime, 400);
   const turnOffTimeAnimation = useInputAnimation(showTurnOffTime, 400);
-  const smokingAnimation = useInputAnimation(showSmoking, 400);
-  const sleepingHabitAnimation = useInputAnimation(showSleepingHabit, 400);
-  const airConditioningIntensityAnimation = useInputAnimation(showAirConditioningIntensity, 400);
+  const smokingStatusAnimation = useInputAnimation(showSmokingStatus, 400);
+  const sleepingHabitsAnimation = useInputAnimation(showSleepingHabits, 400);
+  const coolingIntensityAnimation = useInputAnimation(showCoolingIntensity, 400);
   const heatingIntensityAnimation = useInputAnimation(showHeatingIntensity, 400);
   const lifePatternAnimation = useInputAnimation(showLifePattern, 400);
   const intimacyAnimation = useInputAnimation(showIntimacy, 400);
-  const canShareAnimation = useInputAnimation(showCanShare, 400);
-  const isPlayGameAnimation = useInputAnimation(showIsPlayGame, 400);
-  const isPhoneCallAnimation = useInputAnimation(showIsPhoneCall, 400);
-  const studyingAnimation = useInputAnimation(showStudying, 400);
-  const intakeAnimation = useInputAnimation(showIntake, 400);
-  const cleanSensitivityAnimation = useInputAnimation(showCleanSensitivity, 400);
+  const sharingStatusAnimation = useInputAnimation(showSharingStatus, 400);
+  const gamingStatusAnimation = useInputAnimation(showGamingStatus, 400);
+  const callingStatusAnimation = useInputAnimation(showCallingStatus, 400);
+  const studyingStatusAnimation = useInputAnimation(showStudyingStatus, 400);
+  const eatingStatusAnimation = useInputAnimation(showEatingStatus, 400);
+  const cleannessSensitivityAnimation = useInputAnimation(showCleannessSensitivity, 400);
   const noiseSensitivityAnimation = useInputAnimation(showNoiseSensitivity, 400);
   const cleaningFrequencyAnimation = useInputAnimation(showCleaningFrequency, 400);
   const drinkingFrequencyAnimation = useInputAnimation(showDrinkingFrequency, 400);
-  const personalityAnimation = useInputAnimation(showPersonality, 400);
+  const personalitiesAnimation = useInputAnimation(showPersonalities, 400);
   const mbtiAnimation = useInputAnimation(showMbti, 400);
-
-  console.log(lifeStyle);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-[20px]">
         <BackHeaderComponent title="필수정보">
-          {lifeStyle.wakeUpMeridian !== '' &&
-            lifeStyle.wakeUpTime !== undefined &&
-            lifeStyle.sleepingMeridian !== '' &&
+          {lifeStyle.wakeUpTime !== undefined &&
             lifeStyle.sleepingTime !== undefined &&
-            lifeStyle.turnOffMeridian !== '' &&
             lifeStyle.turnOffTime !== undefined &&
-            lifeStyle.smoking !== '' &&
-            lifeStyle.sleepingHabit.length !== 0 &&
-            lifeStyle.airConditioningIntensity !== undefined &&
-            lifeStyle.heatingIntensity !== undefined &&
+            lifeStyle.smokingStatus !== '' &&
+            lifeStyle.sleepingHabits.length !== 0 &&
+            lifeStyle.coolingIntensity !== '' &&
+            lifeStyle.heatingIntensity !== '' &&
             lifeStyle.intimacy !== '' &&
             lifeStyle.lifePattern !== '' &&
-            lifeStyle.canShare !== '' &&
-            lifeStyle.isPlayGame !== '' &&
-            lifeStyle.isPhoneCall !== '' &&
-            lifeStyle.studying !== '' &&
-            lifeStyle.intake !== '' &&
-            lifeStyle.cleanSensitivity !== undefined &&
-            lifeStyle.noiseSensitivity !== undefined &&
+            lifeStyle.sharingStatus !== '' &&
+            lifeStyle.gamingStatus !== '' &&
+            lifeStyle.callingStatus !== '' &&
+            lifeStyle.studyingStatus !== '' &&
+            lifeStyle.eatingStatus !== '' &&
+            lifeStyle.cleannessSensitivity !== '' &&
+            lifeStyle.noiseSensitivity !== '' &&
             lifeStyle.cleaningFrequency !== '' &&
             lifeStyle.drinkingFrequency !== '' &&
-            lifeStyle.personality.length !== 0 &&
+            lifeStyle.personalities.length !== 0 &&
             lifeStyle.mbti !== '' && (
               <Pressable
                 onPress={(event) => {
@@ -147,24 +141,27 @@ export default function LifeStyleEssentialInfo() {
               </Animated.View>
             )}
 
-            {(showPersonality || lifeStyle.personality.length !== 0) && (
+            {(showPersonalities || lifeStyle.personalities.length !== 0) && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.personality.length !== 0 ? 1 : personalityAnimation.opacity,
+                  opacity:
+                    lifeStyle.personalities.length !== 0 ? 1 : personalitiesAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.personality.length !== 0 ? 0 : personalityAnimation.translateY,
+                        lifeStyle.personalities.length !== 0
+                          ? 0
+                          : personalitiesAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomSelectComponent
                   title="성격을 선택해주세요 (중복선택 가능)"
-                  value={lifeStyle.personality}
-                  items={personalityItems}
+                  value={lifeStyle.personalities}
+                  items={personalitiesItems}
                   handleValue={(e) => {
-                    setLifeStyle({ personality: e });
+                    setLifeStyle({ personalities: e });
                     setShowMbti(true);
                   }}
                 />
@@ -192,7 +189,7 @@ export default function LifeStyleEssentialInfo() {
                   items={drinkingFrequencyItems}
                   handleValue={(e) => {
                     setLifeStyle({ drinkingFrequency: String(e) });
-                    setShowPersonality(true);
+                    setShowPersonalities(true);
                   }}
                 />
               </Animated.View>
@@ -225,17 +222,15 @@ export default function LifeStyleEssentialInfo() {
               </Animated.View>
             )}
 
-            {(showNoiseSensitivity || lifeStyle.noiseSensitivity !== undefined) && (
+            {(showNoiseSensitivity || lifeStyle.noiseSensitivity !== '') && (
               <Animated.View
                 style={{
                   opacity:
-                    lifeStyle.noiseSensitivity !== undefined
-                      ? 1
-                      : noiseSensitivityAnimation.opacity,
+                    lifeStyle.noiseSensitivity !== '' ? 1 : noiseSensitivityAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.noiseSensitivity !== undefined
+                        lifeStyle.noiseSensitivity !== ''
                           ? 0
                           : noiseSensitivityAnimation.translateY,
                     },
@@ -247,147 +242,157 @@ export default function LifeStyleEssentialInfo() {
                   value={lifeStyle.noiseSensitivity}
                   items={noiseSensitivityItems}
                   handleValue={(e) => {
-                    setLifeStyle({ noiseSensitivity: Number(e) });
+                    setLifeStyle({ noiseSensitivity: String(e) });
                     setShowCleaningFrequency(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showCleanSensitivity || lifeStyle.cleanSensitivity !== undefined) && (
+            {(showCleannessSensitivity || lifeStyle.cleannessSensitivity !== '') && (
               <Animated.View
                 style={{
                   opacity:
-                    lifeStyle.cleanSensitivity !== undefined
+                    lifeStyle.cleannessSensitivity !== ''
                       ? 1
-                      : cleanSensitivityAnimation.opacity,
+                      : cleannessSensitivityAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.cleanSensitivity !== undefined
+                        lifeStyle.cleannessSensitivity !== ''
                           ? 0
-                          : cleanSensitivityAnimation.translateY,
+                          : cleannessSensitivityAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="청결 예민도를 선택해주세요"
-                  value={lifeStyle.cleanSensitivity}
-                  items={cleanSensitivityItems}
+                  value={lifeStyle.cleannessSensitivity}
+                  items={cleannessSensitivityItems}
                   handleValue={(e) => {
-                    setLifeStyle({ cleanSensitivity: Number(e) });
+                    setLifeStyle({ cleannessSensitivity: String(e) });
                     setShowNoiseSensitivity(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showIntake || lifeStyle.intake !== '') && (
+            {(showEatingStatus || lifeStyle.eatingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.intake !== '' ? 1 : intakeAnimation.opacity,
+                  opacity: lifeStyle.eatingStatus !== '' ? 1 : eatingStatusAnimation.opacity,
                   transform: [
-                    { translateY: lifeStyle.intake !== '' ? 0 : intakeAnimation.translateY },
+                    {
+                      translateY:
+                        lifeStyle.eatingStatus !== '' ? 0 : eatingStatusAnimation.translateY,
+                    },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="방 안에서의 섭취여부를 선택해주세요"
-                  value={lifeStyle.intake}
-                  items={intakeItems}
+                  value={lifeStyle.eatingStatus}
+                  items={eatingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ intake: String(e) });
-                    setShowCleanSensitivity(true);
+                    setLifeStyle({ eatingStatus: String(e) });
+                    setShowCleannessSensitivity(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showStudying || lifeStyle.studying !== '') && (
+            {(showStudyingStatus || lifeStyle.studyingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.studying !== '' ? 1 : studyingAnimation.opacity,
+                  opacity: lifeStyle.studyingStatus !== '' ? 1 : studyingStatusAnimation.opacity,
                   transform: [
-                    { translateY: lifeStyle.studying !== '' ? 0 : studyingAnimation.translateY },
+                    {
+                      translateY:
+                        lifeStyle.studyingStatus !== '' ? 0 : studyingStatusAnimation.translateY,
+                    },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="방 안에서의 공부 여부를 선택해주세요"
-                  value={lifeStyle.studying}
-                  items={studyingItems}
+                  value={lifeStyle.studyingStatus}
+                  items={studyingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ studying: String(e) });
-                    setShowIntake(true);
+                    setLifeStyle({ studyingStatus: String(e) });
+                    setShowEatingStatus(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showIsPhoneCall || lifeStyle.isPhoneCall !== '') && (
+            {(showCallingStatus || lifeStyle.callingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.isPhoneCall !== '' ? 1 : isPhoneCallAnimation.opacity,
+                  opacity: lifeStyle.callingStatus !== '' ? 1 : callingStatusAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.isPhoneCall !== '' ? 0 : isPhoneCallAnimation.translateY,
+                        lifeStyle.callingStatus !== '' ? 0 : callingStatusAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="방 안에서의 전화 여부를 선택해주세요"
-                  value={lifeStyle.isPhoneCall}
-                  items={isPhoneCallItems}
+                  value={lifeStyle.callingStatus}
+                  items={callingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ isPhoneCall: String(e) });
-                    setShowStudying(true);
+                    setLifeStyle({ callingStatus: String(e) });
+                    setShowStudyingStatus(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showIsPlayGame || lifeStyle.isPlayGame !== '') && (
+            {(showGamingStatus || lifeStyle.gamingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.isPlayGame !== '' ? 1 : isPlayGameAnimation.opacity,
+                  opacity: lifeStyle.gamingStatus !== '' ? 1 : gamingStatusAnimation.opacity,
                   transform: [
                     {
-                      translateY: lifeStyle.isPlayGame !== '' ? 0 : isPlayGameAnimation.translateY,
+                      translateY:
+                        lifeStyle.gamingStatus !== '' ? 0 : gamingStatusAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="방 안에서의 게임 여부를 선택해주세요"
-                  value={lifeStyle.isPlayGame}
-                  items={isPlayGameItems}
+                  value={lifeStyle.gamingStatus}
+                  items={gamingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ isPlayGame: String(e) });
-                    setShowIsPhoneCall(true);
+                    setLifeStyle({ gamingStatus: String(e) });
+                    setShowCallingStatus(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showCanShare || lifeStyle.canShare !== '') && (
+            {(showSharingStatus || lifeStyle.sharingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.canShare !== '' ? 1 : canShareAnimation.opacity,
+                  opacity: lifeStyle.sharingStatus !== '' ? 1 : sharingStatusAnimation.opacity,
                   transform: [
-                    { translateY: lifeStyle.canShare !== '' ? 0 : canShareAnimation.translateY },
+                    {
+                      translateY:
+                        lifeStyle.sharingStatus !== '' ? 0 : sharingStatusAnimation.translateY,
+                    },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="룸메이트끼리의 물건 공유 여부를 선택해주세요"
-                  value={lifeStyle.canShare}
-                  items={canShareItems}
+                  value={lifeStyle.sharingStatus}
+                  items={sharingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ canShare: String(e) });
-                    setShowIsPlayGame(true);
+                    setLifeStyle({ sharingStatus: String(e) });
+                    setShowGamingStatus(true);
                   }}
                 />
               </Animated.View>
@@ -408,7 +413,7 @@ export default function LifeStyleEssentialInfo() {
                   items={intimacyItems}
                   handleValue={(e) => {
                     setLifeStyle({ intimacy: String(e) });
-                    setShowCanShare(true);
+                    setShowSharingStatus(true);
                   }}
                 />
               </Animated.View>
@@ -438,17 +443,15 @@ export default function LifeStyleEssentialInfo() {
               </Animated.View>
             )}
 
-            {(showHeatingIntensity || lifeStyle.heatingIntensity !== undefined) && (
+            {(showHeatingIntensity || lifeStyle.heatingIntensity !== '') && (
               <Animated.View
                 style={{
                   opacity:
-                    lifeStyle.heatingIntensity !== undefined
-                      ? 1
-                      : heatingIntensityAnimation.opacity,
+                    lifeStyle.heatingIntensity !== '' ? 1 : heatingIntensityAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.heatingIntensity !== undefined
+                        lifeStyle.heatingIntensity !== ''
                           ? 0
                           : heatingIntensityAnimation.translateY,
                     },
@@ -460,184 +463,143 @@ export default function LifeStyleEssentialInfo() {
                   value={lifeStyle.heatingIntensity}
                   items={heatingIntensityItems}
                   handleValue={(e) => {
-                    setLifeStyle({ heatingIntensity: Number(e) });
+                    setLifeStyle({ heatingIntensity: String(e) });
                     setShowLifePattern(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showAirConditioningIntensity || lifeStyle.airConditioningIntensity !== undefined) && (
+            {(showCoolingIntensity || lifeStyle.coolingIntensity !== '') && (
               <Animated.View
                 style={{
                   opacity:
-                    lifeStyle.airConditioningIntensity !== undefined
-                      ? 1
-                      : airConditioningIntensityAnimation.opacity,
+                    lifeStyle.coolingIntensity !== '' ? 1 : coolingIntensityAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.airConditioningIntensity !== undefined
+                        lifeStyle.coolingIntensity !== ''
                           ? 0
-                          : airConditioningIntensityAnimation.translateY,
+                          : coolingIntensityAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="에어컨 강도를 선택해주세요"
-                  value={lifeStyle.airConditioningIntensity}
-                  items={airConditioningIntensityItems}
+                  value={lifeStyle.coolingIntensity}
+                  items={coolingIntensityItems}
                   handleValue={(e) => {
-                    setLifeStyle({ airConditioningIntensity: Number(e) });
+                    setLifeStyle({ coolingIntensity: String(e) });
                     setShowHeatingIntensity(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showSleepingHabit || lifeStyle.sleepingHabit.length !== 0) && (
+            {(showSleepingHabits || lifeStyle.sleepingHabits.length !== 0) && (
               <Animated.View
                 style={{
                   opacity:
-                    lifeStyle.sleepingHabit.length !== 0 ? 1 : sleepingHabitAnimation.opacity,
+                    lifeStyle.sleepingHabits.length !== 0 ? 1 : sleepingHabitsAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.sleepingHabit.length !== 0
+                        lifeStyle.sleepingHabits.length !== 0
                           ? 0
-                          : sleepingHabitAnimation.translateY,
+                          : sleepingHabitsAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomSelectComponent
                   title="잠버릇을 선택해주세요 (중복선택 가능)"
-                  value={lifeStyle.sleepingHabit}
-                  items={sleepingHabitItems}
+                  value={lifeStyle.sleepingHabits}
+                  items={sleepingHabitsItems}
                   handleValue={(e) => {
-                    setLifeStyle({ sleepingHabit: e });
-                    setShowAirConditioningIntensity(true);
+                    setLifeStyle({ sleepingHabits: e });
+                    setShowCoolingIntensity(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showSmoking || lifeStyle.smoking !== '') && (
+            {(showSmokingStatus || lifeStyle.smokingStatus !== '') && (
               <Animated.View
                 style={{
-                  opacity: lifeStyle.smoking !== '' ? 1 : smokingAnimation.opacity,
+                  opacity: lifeStyle.smokingStatus !== '' ? 1 : smokingStatusAnimation.opacity,
                   transform: [
-                    { translateY: lifeStyle.smoking !== '' ? 0 : smokingAnimation.translateY },
+                    {
+                      translateY:
+                        lifeStyle.smokingStatus !== '' ? 0 : smokingStatusAnimation.translateY,
+                    },
                   ],
                 }}
               >
                 <CustomRadioComponent
                   title="흡연여부를 선택해주세요"
-                  value={lifeStyle.smoking}
-                  items={smokingItems}
+                  value={lifeStyle.smokingStatus}
+                  items={smokingStatusItems}
                   handleValue={(e) => {
-                    setLifeStyle({ smoking: String(e) });
-                    setShowSleepingHabit(true);
+                    setLifeStyle({ smokingStatus: String(e) });
+                    setShowSleepingHabits(true);
                   }}
                 />
               </Animated.View>
             )}
 
-            {(showTurnOffTime ||
-              (lifeStyle.turnOffTime !== undefined && lifeStyle.turnOffMeridian !== '')) && (
+            {showTurnOffTime || lifeStyle.turnOffTime !== undefined ? (
               <Animated.View
                 style={{
-                  opacity:
-                    lifeStyle.turnOffTime !== undefined && lifeStyle.turnOffMeridian !== ''
-                      ? 1
-                      : turnOffTimeAnimation.opacity,
+                  opacity: lifeStyle.turnOffTime !== undefined ? 1 : turnOffTimeAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.turnOffTime !== undefined && lifeStyle.turnOffMeridian !== ''
-                          ? 0
-                          : turnOffTimeAnimation.translateY,
+                        lifeStyle.turnOffTime !== undefined ? 0 : turnOffTimeAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomTimeSelectComponent
                   title="소등시간을 선택해주세요"
-                  timeValue={lifeStyle.turnOffTime}
-                  meridianValue={lifeStyle.turnOffMeridian}
-                  items={timeItems}
-                  handleTime={(e) => {
+                  value={lifeStyle.turnOffTime}
+                  onChange={(e) => {
                     setLifeStyle({ turnOffTime: Number(e) });
-                    if (e && lifeStyle.turnOffMeridian) {
-                      setShowSmoking(true);
-                    }
-                  }}
-                  handleMeridian={(e) => {
-                    setLifeStyle({ turnOffMeridian: String(e) });
-                    if (e && lifeStyle.turnOffTime) {
-                      setShowSmoking(true);
-                    }
+                    setShowSmokingStatus(true);
                   }}
                 />
               </Animated.View>
-            )}
+            ) : null}
 
-            {(showSleepingTime ||
-              (lifeStyle.sleepingTime !== undefined && lifeStyle.sleepingMeridian !== '')) && (
+            {showSleepingTime || lifeStyle.sleepingTime !== undefined ? (
               <Animated.View
                 style={{
-                  opacity:
-                    lifeStyle.sleepingTime !== undefined && lifeStyle.sleepingMeridian !== ''
-                      ? 1
-                      : sleepingTimeAnimation.opacity,
+                  opacity: lifeStyle.sleepingTime !== undefined ? 1 : sleepingTimeAnimation.opacity,
                   transform: [
                     {
                       translateY:
-                        lifeStyle.sleepingTime !== undefined && lifeStyle.sleepingMeridian !== ''
-                          ? 0
-                          : sleepingTimeAnimation.translateY,
+                        lifeStyle.sleepingTime !== undefined ? 0 : sleepingTimeAnimation.translateY,
                     },
                   ],
                 }}
               >
                 <CustomTimeSelectComponent
                   title="취침시간을 선택해주세요"
-                  timeValue={lifeStyle.sleepingTime}
-                  meridianValue={lifeStyle.sleepingMeridian}
-                  items={timeItems}
-                  handleTime={(e) => {
+                  value={lifeStyle.sleepingTime}
+                  onChange={(e) => {
                     setLifeStyle({ sleepingTime: Number(e) });
-                    if (e && lifeStyle.sleepingMeridian) {
-                      setShowTurnOffTime(true);
-                    }
-                  }}
-                  handleMeridian={(e) => {
-                    setLifeStyle({ sleepingMeridian: String(e) });
-                    if (e && lifeStyle.sleepingTime) {
-                      setShowTurnOffTime(true);
-                    }
+                    setShowTurnOffTime(true);
                   }}
                 />
               </Animated.View>
-            )}
+            ) : null}
 
             <CustomTimeSelectComponent
               title="기상시간을 선택해주세요"
-              timeValue={lifeStyle.wakeUpTime}
-              meridianValue={lifeStyle.wakeUpMeridian}
-              items={timeItems}
-              handleTime={(e) => {
+              value={lifeStyle.wakeUpTime}
+              onChange={(e) => {
                 setLifeStyle({ wakeUpTime: Number(e) });
-                if (e && lifeStyle.wakeUpMeridian) {
-                  setShowSleepingTime(true);
-                }
-              }}
-              handleMeridian={(e) => {
-                setLifeStyle({ wakeUpMeridian: String(e) });
-                if (e && lifeStyle.wakeUpTime) {
-                  setShowSleepingTime(true);
-                }
+                setShowSleepingTime(true);
               }}
             />
           </View>

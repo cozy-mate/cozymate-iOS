@@ -1,9 +1,7 @@
+import { Tokens } from '@/type/token';
+
 export interface VerifyMailResponse {
   result: {
-    tokenResponseDTO: {
-      message: string;
-      accessToken: string;
-      refreshToken: string;
-    };
+    tokenResponseDTO: Tokens;
   };
 }

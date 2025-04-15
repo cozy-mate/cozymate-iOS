@@ -1,5 +1,5 @@
-import { MemberDetailItem } from '@/type/member-stat';
+import { MemberStatItem } from '@/type/member-stat';
 
-export type CreateMemberDetailRequest = MemberDetailItem;
+export type CreateMemberDetailRequest = MemberStatItem;
 
-export type UpdatememberDetailRequest = MemberDetailItem;
+export type UpdatememberDetailRequest = MemberStatItem;

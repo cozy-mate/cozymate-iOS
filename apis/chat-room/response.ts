@@ -1,3 +1,5 @@
+import { ChatRoomData } from '@/type/chat';
+
 export interface ExitChatRoomResponse {
   result: string;
 }
@@ -6,14 +8,7 @@ export interface GetChatRoomListResponse {
   result: {
     page: number;
     hasNext: boolean;
-    result: {
-      persona: number;
-      nickname: string;
-      lastContent: string;
-      chatRoomId: number;
-      memberId: number;
-      hasNewChat: boolean;
-    }[];
+    result: ChatRoomData[];
   };
 }
 

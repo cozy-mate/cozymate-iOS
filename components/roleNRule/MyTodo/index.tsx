@@ -5,6 +5,7 @@ import DoneIcon from '@/assets/images/roleNRule/done.svg';
 import NotDoneIcon from '@/assets/images/roleNRule/notDone.svg';
 import SettingIcon from '@/assets/images/roleNRule/setting.svg';
 import { useGetTodoList, useToggleTodoDone } from '@/hooks/todo/todo';
+import { useMemberStore } from '@/zustand/member/member';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useHasRoomStore } from '@/zustand/room/room';
 
@@ -14,6 +15,7 @@ interface MyTodoComponentProps {
 }
 
 const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomSheetRef }) => {
+  const { memberState } = useMemberStore();
   const { roomInfo } = useHasRoomStore();
 
   const { data, refetch } = useGetTodoList(roomInfo.roomId, timePoint);
@@ -42,7 +44,7 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomShee
           <Text className="text-mainColor">
             {data !== undefined && formatDateToKorean(data.result.timePoint)},
           </Text>{' '}
-          눈꽃님이
+          {memberState.nickname}님이
         </Text>
         <Text className="text-18 font-600 leading-18 text-basicFont">
           해야할 일들을 알려드릴게요!
@@ -65,7 +67,15 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, bottomShee
 
               <Pressable
                 onPress={() => {
-                  setSelectedItem({ id: todo.todoId, type: 'todo', content: todo.content });
+                  setSelectedItem({
+                    id: todo.todoId,
+                    type: 'To-do',
+                    content: todo.content,
+                    todoItem: {
+                      ...todo,
+                      timePoint: data.result.timePoint,
+                    },
+                  });
                   bottomSheetRef.current?.expand();
                 }}
                 className="p-[8px]"

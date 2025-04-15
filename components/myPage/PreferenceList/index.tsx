@@ -15,9 +15,9 @@ const PreferenceListComponent: React.FC<PreferenceListComponentProps> = ({ botto
     <View className="border border-[#F1F2F4] rounded-xl px-4 py-5 gap-y-[12px]">
       <View className="flex flex-row justify-between">
         {data.result.preferenceList.map((chip, index) => (
-          <View key={index} className="flex flex-col items-center w-[50px] mx-2 gap-y-0.5">
+          <View key={index} className="flex flex-col items-center mx-2 gap-y-0.5">
             {getLifeStyleIcon(chip, 'blue')}
-            <Text className="text-12 font-600 text-emphasizedFont text-center">
+            <Text className="text-12 font-600 leading-12 text-emphasizedFont text-center">
               {getLifeStyleLabel(chip)}
             </Text>
           </View>

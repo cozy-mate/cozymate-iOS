@@ -13,5 +13,5 @@ export interface UpdateRoleRequest {
     nickname: string;
   }[];
   content: string;
-  repeatDayList: string[];
+  repeatDayList: string[] | null;
 }

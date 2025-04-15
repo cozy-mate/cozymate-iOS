@@ -1,6 +1,5 @@
 import { Text, View } from 'react-native';
 
-import { intensityItems, sensitivityItems } from '@/constants/items/lifeStyle';
 import { useGetMemberDetail } from '@/hooks/member-stat/member-stat';
 
 interface UserDetailComponentProps {
@@ -18,8 +17,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">기상시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.wakeUpMeridian} {data.result.memberStatDetail.wakeUpTime}
-            시
+            {data.result.memberStatDetail.wakeUpTime}시
           </Text>
         </View>
 
@@ -28,7 +26,6 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">취침시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.sleepingMeridian}{' '}
             {data.result.memberStatDetail.sleepingTime}시
           </Text>
         </View>
@@ -38,7 +35,6 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">소등시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.turnOffMeridian}{' '}
             {data.result.memberStatDetail.turnOffTime}시
           </Text>
         </View>
@@ -48,7 +44,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">흡연여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.smoking}
+            {data.result.memberStatDetail.smokingStatus}
           </Text>
         </View>
 
@@ -57,7 +53,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">잠버릇</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.sleepingHabit}
+            {data.result.memberStatDetail.sleepingHabits}
           </Text>
         </View>
 
@@ -66,7 +62,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">에어컨</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {intensityItems[data.result.memberStatDetail.airConditioningIntensity]}
+            {data.result.memberStatDetail.coolingIntensity}
           </Text>
         </View>
 
@@ -75,7 +71,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">히터</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {intensityItems[data.result.memberStatDetail.heatingIntensity]}
+            {data.result.memberStatDetail.heatingIntensity}
           </Text>
         </View>
 
@@ -102,7 +98,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">물건공유</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.canShare}
+            {data.result.memberStatDetail.sharingStatus}
           </Text>
         </View>
 
@@ -111,7 +107,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">공부여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.studying}
+            {data.result.memberStatDetail.studyingStatus}
           </Text>
         </View>
 
@@ -120,7 +116,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">섭취여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.intake}
+            {data.result.memberStatDetail.eatingStatus}
           </Text>
         </View>
 
@@ -129,7 +125,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">게임여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.isPlayGame}
+            {data.result.memberStatDetail.gamingStatus}
           </Text>
         </View>
 
@@ -138,7 +134,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">전화여부</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.isPhoneCall}
+            {data.result.memberStatDetail.callingStatus}
           </Text>
         </View>
 
@@ -147,7 +143,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">청결 예민도</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {sensitivityItems[data.result.memberStatDetail.cleanSensitivity - 1]}
+            {data.result.memberStatDetail.cleannessSensitivity}
           </Text>
         </View>
 
@@ -156,7 +152,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">소음 예민도</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {sensitivityItems[data.result.memberStatDetail.noiseSensitivity - 1]}
+            {data.result.memberStatDetail.noiseSensitivity}
           </Text>
         </View>
 
@@ -183,7 +179,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">성격</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.personality}
+            {data.result.memberStatDetail.personalities}
           </Text>
         </View>
 

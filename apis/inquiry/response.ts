@@ -1,12 +1,7 @@
+import { InquiryData } from '@/type/inquiry';
+
 export interface GetInquiryListResponse {
-  result: {
-    inquiryId: number;
-    persona: number;
-    nickname: string;
-    content: string;
-    datetime: string;
-    status: string;
-  }[];
+  result: InquiryData[];
 }
 
 export interface CheckHasInquiryResponse {

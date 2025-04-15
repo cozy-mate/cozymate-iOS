@@ -2,6 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { Pressable, Text, View } from 'react-native';
 
 import SettingIcon from '@/assets/images/roleNRule/setting.svg';
+import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { useGetRuleList } from '@/hooks/rule/rule';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -12,6 +13,7 @@ interface RuleComponentProps {
 
 const RuleComponent: React.FC<RuleComponentProps> = ({ bottomSheetRef }) => {
   const { roomInfo } = useHasRoomStore();
+  const { data: roomData } = useGetMyRoomDetail();
 
   const { data } = useGetRuleList(roomInfo.roomId);
 
@@ -21,7 +23,7 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ bottomSheetRef }) => {
     <View className="gap-y-[12px]">
       <View className="gap-y-0.5 mx-1">
         <Text className="text-18 font-600 leading-18 text-basicFont">
-          <Text className="text-mainColor">{'피그말리온'}</Text>의
+          <Text className="text-mainColor">{roomData?.result.name}</Text>의
         </Text>
         <Text className="text-18 font-600 leading-18 text-basicFont">
           규칙에 대해 알려드릴게요!
@@ -38,12 +40,25 @@ const RuleComponent: React.FC<RuleComponentProps> = ({ bottomSheetRef }) => {
                     {index + 1}
                   </Text>
                 </View>
-                <Text className="text-14 font-500 leading-12 text-basicFont">{rule.content}</Text>
+                <View>
+                  <Text className="text-14 font-500 leading-12 text-basicFont">{rule.content}</Text>
+
+                  {rule.memo !== '' && (
+                    <Text className="text-10 font-500 leading-10 text-disabledFont mt-0.5">
+                      {rule.memo}
+                    </Text>
+                  )}
+                </View>
               </View>
 
               <Pressable
                 onPress={() => {
-                  setSelectedItem({ id: rule.ruleId, type: 'rule', content: rule.content });
+                  setSelectedItem({
+                    id: rule.ruleId,
+                    type: 'Rule',
+                    content: rule.content,
+                    ruleItem: rule,
+                  });
                   bottomSheetRef.current?.expand();
                 }}
                 className="p-[8px]"

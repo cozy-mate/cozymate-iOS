@@ -24,7 +24,13 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
     }
   };
 
-  console.log(item.color);
+  const translateAnswer = (value: string | number) => {
+    if (item.title === '기상시간' || item.title === '취침시간' || item.title === '소등시간')
+      return (value as number) < 12 ? `오전 ${value}시` : `오후 ${value}시`;
+    else if (item.title === '신청실') return `${value}인 1실`;
+    else if (item.title === '출생년도') return `${value}년`;
+    else return value;
+  };
 
   return (
     <Modal visible={isVisible} transparent={true}>
@@ -56,7 +62,7 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
 
                 {Object.entries(member.memberStat).map(([key, value]) => (
                   <Text key={key} className="text-14 font-500 leading-14 text-colorFont">
-                    {value}
+                    {translateAnswer(value)}
                   </Text>
                 ))}
               </View>

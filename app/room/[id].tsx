@@ -8,6 +8,7 @@ import Background from '@/assets/images/common/background.svg';
 import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
+import GrayArrowIcon from '@/assets/images/common/smaillGrayArrow.svg';
 import CopyIcon from '@/assets/images/room/copy.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
@@ -25,6 +26,7 @@ import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat
 import { ChipItem } from '@/type/room';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
 import { showRejectToast } from '@/utils/toast';
+import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
 
@@ -33,6 +35,7 @@ export default function RoomDetail() {
 
   const router = useRouter();
 
+  const { memberState } = useMemberStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { roomInfo } = useHasRoomStore();
 
@@ -194,9 +197,15 @@ export default function RoomDetail() {
                       {getPersona(mate.persona, 24, 24)}
                       <Text className="text-14 font-500 text-emphasizedFont">{mate.nickname}</Text>
                     </View>
-                    <Text className="text-14 font-500 text-colorFont">
-                      {mate.mateEquality ?? '??'}%
-                    </Text>
+
+                    <View className="flex flex-row items-center gap-x-2">
+                      {memberState.memberId !== mate.memberId && (
+                        <Text className="text-14 font-500 text-colorFont">
+                          {mate.mateEquality ?? '?? '}%
+                        </Text>
+                      )}
+                      <GrayArrowIcon />
+                    </View>
                   </Pressable>
                 ))}
               </View>
