@@ -10,6 +10,8 @@ import { setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
+import { AxiosError } from 'axios';
+import { errorRefiner } from '@/error/refiner';
 
 export const useKakaoLogin = () => {
   const router = useRouter();
@@ -20,8 +22,9 @@ export const useKakaoLogin = () => {
 
   return useMutation({
     mutationFn: () => login(),
-    onSuccess: async (response: KakaoLoginToken) => {
+    onSuccess: async () => {
       try {
+
         const profile: KakaoUser = await me();
 
         const loginResponse = await socialLogin({
@@ -39,11 +42,16 @@ export const useKakaoLogin = () => {
           console.log('가입된 회원이 아님');
           router.push('/(onBoard)/schoolAuthentication');
         }
-
+        
+        // 준회원 (학교 인증 완료)
+        else if(loginResponse.result.memberDetailResponseDTO !== null 
+            && loginResponse.result.tokenResponseDTO.refreshToken === ""){
+              console.log('준회원');
+              await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+              router.push('/(onBoard)/personalInfo');
+        }
         // 기존 멤버
         else {
-          console.log(loginResponse.result.tokenResponseDTO.accessToken);
-
           await Promise.all([
             setAccessToken(loginResponse.result.tokenResponseDTO.accessToken),
             setRefreshToken(loginResponse.result.tokenResponseDTO.refreshToken),
@@ -65,11 +73,17 @@ export const useKakaoLogin = () => {
           router.replace('/(tabs)/home');
         }
       } catch (error: any) {
-        console.log(error);
+        // error 처리 추상화
+        // axiosError일 경우 정제해서 throw
+        throw errorRefiner(error);
       }
     },
     onError: (error) => {
-      console.log('로그인 실패:', error);
+      // onSuccess에서 throw한 에러를 여기서 잡음.
+      if (__DEV__) {
+        console.log('에러:', error);
+      }
+      // TODO : Prod에서 잡지 못한다면 최상단 Error Boundary를 하나 놓는게 좋을 거 같습니다!
     },
   });
 };
