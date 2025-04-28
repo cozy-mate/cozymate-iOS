@@ -10,7 +10,7 @@ export const actionTypeToPath: Record<ActionType, string> = {
   ROOM_IN: prefix.concat('(tabs)/home'),
   ROOM_OUT: prefix.concat('(tabs)/home'),
   ACCEPT_ROOM_INVITE: prefix.concat('(tabs)/home'),
-  ARRIVE_ROOM_INVITE: prefix.concat('room/'),
+  ARRIVE_ROOM_INVITE: prefix.concat('(tabs)/home'),
   ACCEPT_ROOM_JOIN: prefix.concat('(tabs)/home'),
-  ARRIVE_ROOM_JOIN_REQUEST: prefix.concat('user/'),
+  ARRIVE_ROOM_JOIN_REQUEST: prefix.concat('(tabs)/home'),
 } as const;

@@ -20,7 +20,6 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
     const { isLoggedIn, isReady } = useAuthProvider();
     const { token, register, unregister } = useFcm(setNotificationList);
 
-
     useEffect(() => ensureNotificationHandler(), []);
 
     useEffect(() => {
@@ -29,10 +28,8 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
             try {
                 if (isLoggedIn) {
                     await register();
-                    console.log('[FCM] FCM 등록 완료');
                 } else {
                     await unregister();
-                    console.log('[FCM] FCM 등록 해제 완료');
                 }
             } catch (e) {
                 console.error('[FCM]', e);

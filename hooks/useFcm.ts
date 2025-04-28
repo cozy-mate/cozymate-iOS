@@ -75,14 +75,14 @@ export default function useFcm(
     if(!listener.current) {
       listener.current = null;
       listener.current = Notifications.addNotificationReceivedListener(n =>
-        withDedup(n.request.identifier, () => console.log('FCM 알림 수신:', n)),
+        withDedup(n.request.identifier, ()=>{}),
       );
     }
 
     if(!clicker.current) {
       clicker.current = null;
       clicker.current = Notifications.addNotificationResponseReceivedListener(r => {
-        const url = convertAction(r)
+        const url = convertAction(r);
         if (url && url !== 'NO_ACTION') {
               setNotificationList(prev => 
                    [...prev, () => router.push(url)]);

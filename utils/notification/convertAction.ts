@@ -4,7 +4,7 @@ import { actionTypeToPath } from '@/constants/notification';
 
 const NO_ACTION = 'NO_ACTION';
 
-export const convertAction = (response: Notifications.NotificationResponse): string => {
+export const convertAction = (response: Notifications.NotificationResponse) => {
   const actionType = response.notification.request.content.data?.actionType as ActionType | undefined;
 
   if (!actionType) {
