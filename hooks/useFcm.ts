@@ -1,8 +1,9 @@
 // src/hooks/useFcm.ts
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
 import { getDeviceId } from 'react-native-device-info';
+import { useRouter,  } from 'expo-router';
 
 import {
   requestUserPermission,
@@ -10,6 +11,7 @@ import {
   getFcmToken,
 } from '@/utils/notification/fcmTokenUtil';
 import { postFcmToken } from '@/apis/fcm/fcm';
+import { convertAction } from '@/utils/notification/convertAction';
 
 const DEDUP_WINDOW = 10_000;
 const processed = new Set<string>();
@@ -20,11 +22,15 @@ export interface UseFcmReturn {
   unregister: () => Promise<void>;
 }
 
-export default function useFcm(): UseFcmReturn {
+export default function useFcm(
+  setNotificationList: React.Dispatch<React.SetStateAction<(() => void)[]>>
+): UseFcmReturn {
   const listener = useRef<Notifications.Subscription | null>(null);
   const clicker  = useRef<Notifications.Subscription | null>(null);
   const fgSub    = useRef<() => void>();
   const tokenRef = useRef<string | null>(null);
+
+  const router = useRouter();
 
   const withDedup = (id: string | undefined, cb: () => void) => {
     if (!id || processed.has(id)) return;
@@ -34,6 +40,14 @@ export default function useFcm(): UseFcmReturn {
   };
 
   const register = async () => {
+      listener.current?.remove();
+      clicker.current?.remove();
+      fgSub.current?.();
+      
+      listener.current = null;
+      clicker.current = null;
+      fgSub.current = undefined;
+
     await requestUserPermission();
     const token = await getFcmToken();
     if (!token) throw new Error('FCM 토큰 획득 실패');
@@ -58,15 +72,23 @@ export default function useFcm(): UseFcmReturn {
         });
       });
     });
+    if(!listener.current) {
+      listener.current = null;
+      listener.current = Notifications.addNotificationReceivedListener(n =>
+        withDedup(n.request.identifier, () => console.log('FCM 알림 수신:', n)),
+      );
+    }
 
-    listener.current = Notifications.addNotificationReceivedListener(n =>
-      withDedup(n.request.identifier, () => console.log('FCM 알림 수신:', n.request.content.data)),
-    );
-
-    clicker.current = Notifications.addNotificationResponseReceivedListener(r => {
-      console.log('🖱 알림 탭:', r);
-      // TODO: 딥링크·네비게이션 처리
-    });
+    if(!clicker.current) {
+      clicker.current = null;
+      clicker.current = Notifications.addNotificationResponseReceivedListener(r => {
+        const url = convertAction(r)
+        if (url && url !== 'NO_ACTION') {
+              setNotificationList(prev => 
+                   [...prev, () => router.push(url)]);
+            }
+      });
+    }
   };
 
   const unregister = async () => {

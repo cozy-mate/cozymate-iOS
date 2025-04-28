@@ -2,20 +2,23 @@ import { getRefreshToken } from '@/utils/token'
 import React, { createContext, ReactNode, useContext, useEffect } from 'react'
 
 type AuthContextType = {
-    isLoggedIn: boolean;
+    isLoggedIn: boolean | null;
     broadcastLogin: () => void;
     broadcastLogout: () => void;
+    isReady: boolean;
 }
 
 type AuthProviderProps = {
     children: ReactNode;
+    appLoaded: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
-    isLoggedIn: false,
+    isLoggedIn: null,
     broadcastLogin: () => { },
-    broadcastLogout: () => { }
-});
+    broadcastLogout: () => { },
+    isReady: false
+})
 
 export const useAuthProvider: () => AuthContextType = () => {
     const authContext = useContext(AuthContext);
@@ -23,30 +26,35 @@ export const useAuthProvider: () => AuthContextType = () => {
 }
 
 
-const AuthProvider = ({ children }: AuthProviderProps) => {
+const AuthProvider = ({ children, appLoaded }: AuthProviderProps) => {
 
-    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean | null>(null);
+
+    const [isReady, setIsReady] = React.useState(false);
 
     const checkLoginStatus = async () => {
         const refreshToken = await getRefreshToken();
-        setIsLoggedIn(refreshToken !== null);
         return refreshToken !== null;
     }
 
     useEffect(() => {
-        checkLoginStatus();
-    }, []);
+        if (appLoaded) {
+            checkLoginStatus().then(res => {
+                res ? broadcastLogin() : broadcastLogout();
+            }).finally(() => setIsReady(true));
+        }
+    }, [appLoaded]);
 
     const broadcastLogin = () => {
-        setIsLoggedIn(true);
+        setIsLoggedIn(prev => prev ? prev : true);
     }
 
     const broadcastLogout = () => {
-        setIsLoggedIn(false);
+        setIsLoggedIn(prev => prev ? false : prev);
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, broadcastLogin, broadcastLogout }}>
+        <AuthContext.Provider value={{ isLoggedIn, broadcastLogin, broadcastLogout, isReady }}>
             {children}
         </AuthContext.Provider>
     );

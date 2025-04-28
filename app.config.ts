@@ -16,7 +16,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  scheme: 'myapp',
+  scheme: 'cozymate',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   extra: {

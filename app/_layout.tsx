@@ -64,8 +64,8 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <FCMProvider>
+          <AuthProvider appLoaded={appLoaded}>
+            <FCMProvider appLoaded={appLoaded}>
               <Host>
                 <Stack>
                   {/* 온보딩 화면 */}
