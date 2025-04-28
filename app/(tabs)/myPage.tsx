@@ -11,6 +11,7 @@ import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken } from '@/utils/token';
 import { useHasRoomStore } from '@/zustand/room/room';
+import { useAuthProvider } from '@/providers/AuthProvider';
 
 export default function MyPage() {
   const width = Dimensions.get('screen').width;
@@ -22,6 +23,8 @@ export default function MyPage() {
   const { data } = useGetMemberProfile();
 
   const { data: roomData } = useGetMyRoomDetail();
+
+  const { broadcastLogout } = useAuthProvider();
 
   const TopMenuItems = [
     { title: '내 정보', subTitle: null, onPress: () => router.push('/myPage/myInfo') },
@@ -55,7 +58,7 @@ export default function MyPage() {
   ];
 
   const handleLogout = async () => {
-    await deleteToken();
+    await deleteToken().then(() => broadcastLogout());
     router.replace('/');
   };
 

@@ -13,6 +13,7 @@ import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/apis/
 import { SignUpResponse } from '@/apis/member/response';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
+import { useAuthProvider } from '@/providers/AuthProvider';
 
 export const useWithdraw = () => {
   const router = useRouter();
@@ -62,7 +63,7 @@ export const useSignUp = () => {
   const router = useRouter();
 
   const { setMemberState } = useMemberStore();
-
+  const { broadcastLogin } = useAuthProvider();
   return useMutation({
     mutationFn: (data: SignUpRequest) => signUp(data),
     onSuccess: async (response: SignUpResponse) => {
@@ -70,7 +71,8 @@ export const useSignUp = () => {
         setAccessToken(response.result.tokenResponseDTO.accessToken),
         setRefreshToken(response.result.tokenResponseDTO.refreshToken),
         setMemberState(response.result.memberDetailResponseDTO),
-      ]);
+      ]).then(()=> // Auth 전역 상태 업데이트
+        broadcastLogin());
 
       router.push('/(onBoard)/complete');
     },
