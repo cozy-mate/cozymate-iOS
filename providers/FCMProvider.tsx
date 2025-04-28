@@ -32,7 +32,7 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
                     await unregister();
                 }
             } catch (e) {
-                console.error('[FCM]', e);
+                console.error('[FCM Provider Error] : ', e);
             }
         };
 

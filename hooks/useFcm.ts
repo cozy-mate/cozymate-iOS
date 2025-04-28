@@ -1,4 +1,3 @@
-// src/hooks/useFcm.ts
 import React, { useRef } from 'react';
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
@@ -86,7 +85,7 @@ export default function useFcm(
         if (url && url !== 'NO_ACTION') {
               setNotificationList(prev => 
                    [...prev, () => router.push(url)]);
-            }
+        }
       });
     }
   };

@@ -8,7 +8,7 @@ export const convertAction = (response: Notifications.NotificationResponse) => {
   const actionType = response.notification.request.content.data?.actionType as ActionType | undefined;
 
   if (!actionType) {
-    return actionTypeToPath["SELECT_COZY_MATE"];
+    return NO_ACTION;
   }
 
   const basePath = actionTypeToPath[actionType];
