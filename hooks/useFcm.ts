@@ -84,7 +84,8 @@ export default function useFcm(
         const url = convertAction(r);
         if (url && url !== 'NO_ACTION') {
               setNotificationList(prev => 
-                   [...prev, () => router.push(url)]);
+                // TODO : 적절한 타입으로 변환하기
+                   [...prev, () => router.push(url as any)]);
         }
       });
     }
