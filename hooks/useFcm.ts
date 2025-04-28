@@ -26,10 +26,10 @@ export default function useFcm(): UseFcmReturn {
   const fgSub    = useRef<() => void>();
   const tokenRef = useRef<string | null>(null);
 
-  const withDedup = (id: string | undefined, fn: () => void) => {
+  const withDedup = (id: string | undefined, cb: () => void) => {
     if (!id || processed.has(id)) return;
     processed.add(id);
-    fn();
+    cb();
     setTimeout(() => processed.delete(id), DEDUP_WINDOW);
   };
 
@@ -60,7 +60,7 @@ export default function useFcm(): UseFcmReturn {
     });
 
     listener.current = Notifications.addNotificationReceivedListener(n =>
-      withDedup(n.request.identifier, () => console.log('FCM 알림 수신:', n)),
+      withDedup(n.request.identifier, () => console.log('FCM 알림 수신:', n.request.content.data)),
     );
 
     clicker.current = Notifications.addNotificationResponseReceivedListener(r => {

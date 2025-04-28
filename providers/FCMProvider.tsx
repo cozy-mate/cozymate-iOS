@@ -16,7 +16,6 @@ export default function FCMProvider({ children }: { children: ReactNode }) {
     useEffect(() => ensureNotificationHandler(), []);
 
     useEffect(() => {
-        console.log('[FCM] isLoggedIn', isLoggedIn);
         (isLoggedIn ? register : unregister)()
             .catch(e => console.error('[FCM]', e))
             .finally(() => setReady(true));

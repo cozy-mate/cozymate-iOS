@@ -28,7 +28,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
 
     const checkLoginStatus = async () => {
-
         const refreshToken = await getRefreshToken();
         setIsLoggedIn(refreshToken !== null);
         return refreshToken !== null;
@@ -37,11 +36,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     useEffect(() => {
         checkLoginStatus();
     }, []);
-
-    useEffect(() => {
-        console.log('isLoggedIn', isLoggedIn)
-    }
-        , [isLoggedIn])
 
     const broadcastLogin = () => {
         setIsLoggedIn(true);

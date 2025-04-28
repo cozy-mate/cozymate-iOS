@@ -1,3 +1,7 @@
+import { initGlobalThis } from '@/lib/initGlobalThis';
+
+initGlobalThis();
+
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
