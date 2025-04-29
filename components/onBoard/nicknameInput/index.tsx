@@ -58,6 +58,7 @@ const NicknameInputComponent: React.FC<NicknameInputComponentProps> = ({
         setIsError(false);
         setErrorText('');
         handleNicknameChecked(false);
+        setSuccessText('');
       }
     } else {
       setIsError(false);
