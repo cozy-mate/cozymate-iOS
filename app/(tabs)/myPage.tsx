@@ -10,6 +10,7 @@ import { useGetMemberProfile } from '@/hooks/member/member';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken } from '@/utils/token';
+import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function MyPage() {
@@ -20,6 +21,7 @@ export default function MyPage() {
   const { roomInfo } = useHasRoomStore();
 
   const { data } = useGetMemberProfile();
+  const { hasLifeStyle } = useHasLifeStyleStore();
 
   const { data: roomData } = useGetMyRoomDetail();
 
@@ -29,19 +31,17 @@ export default function MyPage() {
       title: '나의 코지룸',
       subTitle: roomData !== undefined ? roomData?.result.name : undefined,
       undefinedText: '아직 방이 존재하지 않아요',
-      onPress: () => {
-        if (roomData !== undefined) {
-          router.push(`/room/${roomInfo.roomId}`);
-        } else {
-          showRejectToast('참여한 방이 아직 없어요');
-        }
-      },
+      onPress: () =>
+        roomData !== undefined
+          ? router.push(`/room/${roomInfo.roomId}`)
+          : showRejectToast('참여한 방이 아직 없어요'),
     },
     // { title: '학교 인증', onPress: () => router.push('/myPage/schoolAuthentication') },
     {
       title: '나의 라이프스타일',
       subTitle: null,
-      onPress: () => router.push('/myPage/myLifeStyle'),
+      onPress: () =>
+        hasLifeStyle ? router.push('/myPage/myLifeStyle') : router.push('/lifeStyle/onboarding'),
     },
     {
       title: '내가 찜한 룸메이트',
