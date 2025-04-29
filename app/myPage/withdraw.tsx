@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import WarningIcon from '@/assets/images/myPage/warning.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -25,8 +24,8 @@ export default function Withdraw() {
       <View className="px-[20px] gap-y-[19px]">
         <BackHeaderComponent />
 
-        <View className="gap-y-[74px]">
-          <View className="gap-y-[16px]">
+        <View className="gap-y-[117px]">
+          <View className="gap-y-[4px]">
             <View className="gap-y-[2px] mx-[4px]">
               <Text className="text-20 font-600 leading-20 text-emphasizedFont">
                 {memberState.nickname}님,
@@ -36,20 +35,9 @@ export default function Withdraw() {
               </Text>
             </View>
 
-            <View className="gap-y-[8px]">
-              <View className="flex flex-row items-center gap-x-[8px] mx-[2px]">
-                <WarningIcon />
-                <Text className="text-12 font-500 leading-12 text-basicFont">
-                  탈퇴하시면 모든 정보가 사라지며, 모든 데이터는 복구가 불가능해요
-                </Text>
-              </View>
-              <View className="flex flex-row items-center gap-x-[8px] mx-[2px]">
-                <WarningIcon />
-                <Text className="text-12 font-500 leading-12 text-basicFont">
-                  코지봇 데이터는 지워지지 않아요
-                </Text>
-              </View>
-            </View>
+            <Text className="text-12 font-500 leading-12 text-basicFont">
+              * 탈퇴하시면 모든 정보가 사라지며, 모든 데이터는 복구가 불가능해요
+            </Text>
           </View>
 
           <View className="gap-y-[16px]">
