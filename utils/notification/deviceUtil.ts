@@ -14,8 +14,6 @@ const hasDeviceId = async () => {
   return deviceId !== null;
 };
 
-// 첫번째 호출 때 deviceId를 생성하고 저장한다.
-// 이후 호출 때는 저장된 deviceId를 반환한다.
 export const getDeviceId = async (): Promise<string | null> => {
   const hasdeviceId = await hasDeviceId();
   if (hasdeviceId === false) {

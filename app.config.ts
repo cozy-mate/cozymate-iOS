@@ -16,7 +16,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
-  scheme: 'myapp',
+  scheme: 'cozymate',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   extra: {
@@ -40,7 +40,18 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
     infoPlist: {
       NSPhotoLibraryUsageDescription: '사진을 업로드하기 위해 갤러리 접근 권한이 필요합니다.',
       NSCameraUsageDescription: '사진을 찍기 위해 카메라 접근 권한이 필요합니다.',
+      NSUserNotificationUsageDescription: '푸시 알림을 통해 중요한 알림을 받을 수 있습니다.',
+      NSAppTransportSecurity: {
+        NSAllowsArbitraryLoads: true,
+      },
+      UIBackgroundModes: ['remote-notification'],
+      aps: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
     },
+    googleServicesFile: 'GoogleService-Info.plist',
   },
   android: {
     adaptiveIcon: {
@@ -61,6 +72,12 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
         android: {
           extraMavenRepos: ['https://devrepo.kakao.com/nexus/content/groups/public/'],
         },
+        ios: {
+          useFrameworks: 'static',
+          podfileProperties: {
+            use_modular_headers: true,
+          },
+        },
       },
     ],
     [
@@ -70,6 +87,30 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
         ios: {
           handleKakaoOpenUrl: true,
         },
+      },
+    ],
+    [
+      '@react-native-firebase/app',
+      {
+        ios: {
+          googleServicesFile: './GoogleService-Info.plist',
+        },
+      },
+    ],
+    [
+      '@react-native-firebase/messaging',
+      {
+        ios: {
+          capabilities: ['remote-notification'],
+          backgroundModes: ['remote-notification'],
+        },
+      },
+    ],
+    [
+      'expo-notifications',
+      {
+        ios: { skipNativeNotificationListener: true },
+        android: { skipNativeNotificationListener: true },
       },
     ],
   ],

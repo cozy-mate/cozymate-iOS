@@ -1,6 +1,5 @@
-import { KakaoLoginToken, KakaoUser, login, me } from '@react-native-kakao/user';
+import { KakaoUser, login, me } from '@react-native-kakao/user';
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 
@@ -13,12 +12,16 @@ import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
 
+import { useAuthProvider } from '../../providers/AuthProvider';
+
 export const useKakaoLogin = () => {
   const router = useRouter();
 
   const { setMemberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
   const { setRoomInfo } = useHasRoomStore();
+
+  const { broadcastLogin } = useAuthProvider();
 
   return useMutation({
     mutationFn: () => login(),
@@ -71,6 +74,7 @@ export const useKakaoLogin = () => {
 
           const hasRoomResponse = await checkHasRoom();
           setRoomInfo(hasRoomResponse.result);
+          broadcastLogin();
 
           router.replace('/(tabs)/home');
         }
@@ -116,6 +120,8 @@ export const useAppleLogin = () => {
   const { setMemberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
   const { setRoomInfo } = useHasRoomStore();
+
+  const { broadcastLogin } = useAuthProvider();
 
   return useMutation({
     mutationFn: () => appleLoginAuth(),
@@ -166,6 +172,7 @@ export const useAppleLogin = () => {
 
           const hasRoomResponse = await checkHasRoom();
           setRoomInfo(hasRoomResponse.result);
+          broadcastLogin();
 
           router.replace('/(tabs)/home');
         }

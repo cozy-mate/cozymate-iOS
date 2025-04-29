@@ -37,13 +37,13 @@ export const getFcmToken = async (): Promise<string | null> => {
 export const deleteFcmToken = async (): Promise<boolean> => {
   try {
     await AsyncStorage.removeItem('fcmToken');
-    return true; // 성공적으로 삭제되었음을 반환
+    return true;
   } catch (e) {
     console.error('Error deleting FCM Token:', e);
-    return false; // 삭제 실패
+    return false;
   }
 };
-// FCM 토큰 요청 및 등록
+
 export const requestUserPermission = async (): Promise<void> => {
   try {
     const hasToken = await hasFcmToken();
@@ -61,10 +61,8 @@ export const requestUserPermission = async (): Promise<void> => {
 export const deactivateFcmToken = async (): Promise<void> => {
   try {
     await messaging().deleteToken();
-    //console.log('Firebase Messaging에서 FCM 토큰 삭제 성공.');
 
     await deleteFcmToken();
-    //console.log('AsyncStorage에서 FCM 토큰 삭제 성공.');
   } catch (error: any) {
     console.error('FCM 토큰 비활성화 중 오류 발생:', error.message || error);
   }
