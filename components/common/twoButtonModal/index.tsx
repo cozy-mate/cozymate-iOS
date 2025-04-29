@@ -30,7 +30,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
       >
         <View
           onTouchEnd={(e) => e.stopPropagation()}
-          className="min-w-[3/4] gap-y-[20px] rounded-xl bg-white p-[32px]"
+          className="w-11/12 gap-y-[20px] rounded-xl bg-white p-[32px]"
         >
           <View className={`flex flex-col ${subtitle ? 'space-y-1' : ''}`}>
             <Text className="text-center text-16 font-600 leading-16 text-emphasizedFont">
@@ -44,7 +44,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
           <View className="flex flex-row justify-center gap-x-[12px]">
             <Pressable
               onPress={leftButtonFunc}
-              className="rounded-lg bg-disabledColor px-[28px] py-[14px]"
+              className="rounded-lg bg-disabledColor px-[28px] py-[14px] flex-1"
             >
               <Text className="px-[14px] text-center text-14 font-600 leading-14 text-disabledFont">
                 {leftButtonText}
@@ -56,7 +56,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
                 rightButtonFunc();
                 closeFunc();
               }}
-              className="rounded-lg bg-mainColor px-[28px] py-[14px]"
+              className="rounded-lg bg-mainColor px-[28px] py-[14px] flex-1"
             >
               <Text className="px-[14px] text-center text-14 font-600 leading-14 text-white">
                 {rightButtonText}
