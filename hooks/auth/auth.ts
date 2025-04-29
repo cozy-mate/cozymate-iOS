@@ -1,17 +1,17 @@
 import { KakaoLoginToken, KakaoUser, login, me } from '@react-native-kakao/user';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 
 import { socialLogin } from '@/apis/auth/auth';
 import { getMyDetail } from '@/apis/member-stat/member-stat';
 import { checkHasRoom } from '@/apis/room/room';
+import { errorRefiner } from '@/error/refiner';
 import { setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
-import { AxiosError } from 'axios';
-import { errorRefiner } from '@/error/refiner';
 
 export const useKakaoLogin = () => {
   const router = useRouter();
@@ -24,7 +24,6 @@ export const useKakaoLogin = () => {
     mutationFn: () => login(),
     onSuccess: async () => {
       try {
-
         const profile: KakaoUser = await me();
 
         const loginResponse = await socialLogin({
@@ -44,13 +43,15 @@ export const useKakaoLogin = () => {
         }
 
         // 준회원 (학교 인증 완료)
-        else if(loginResponse.result.memberDetailResponseDTO !== null 
-            && loginResponse.result.tokenResponseDTO.refreshToken === ""){
-              console.log('준회원');
-              await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
-              router.push('/(onBoard)/personalInfo');
+        else if (
+          loginResponse.result.memberDetailResponseDTO !== null &&
+          loginResponse.result.tokenResponseDTO.refreshToken === ''
+        ) {
+          console.log('준회원');
+          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+          router.push('/(onBoard)/personalInfo');
         }
-        
+
         // 기존 멤버
         else {
           await Promise.all([
@@ -137,11 +138,13 @@ export const useAppleLogin = () => {
         }
 
         // 준회원 (학교 인증 완료)
-        else if(loginResponse.result.memberDetailResponseDTO !== null 
-            && loginResponse.result.tokenResponseDTO.refreshToken === ""){
-              console.log('준회원');
-              await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
-              router.push('/(onBoard)/personalInfo');
+        else if (
+          loginResponse.result.memberDetailResponseDTO !== null &&
+          loginResponse.result.tokenResponseDTO.refreshToken === ''
+        ) {
+          console.log('준회원');
+          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+          router.push('/(onBoard)/personalInfo');
         }
 
         // 기존 멤버
