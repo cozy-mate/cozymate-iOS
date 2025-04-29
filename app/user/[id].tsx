@@ -98,9 +98,11 @@ export default function UserDetail() {
                 <Text className="text-16 font-600 text-emphasizedFont">
                   {data.result.memberDetail.nickname}
                 </Text>
-                <Text className="text-14 font-500 text-basicFont">
-                  나와의 일치율 {data.result.equality ?? '??'}%
-                </Text>
+                {Number(id) !== memberState.memberId && (
+                  <Text className="text-14 font-500 text-basicFont">
+                    나와의 일치율 {data.result.equality ?? '??'}%
+                  </Text>
+                )}
               </View>
             </View>
 
