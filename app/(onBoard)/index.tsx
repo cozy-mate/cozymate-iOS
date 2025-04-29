@@ -109,7 +109,7 @@ export default function HomeScreen() {
 
         <Pressable
           className="flex-row gap-x-[8px] items-center justify-center rounded-[33px] bg-appleblack px-6 py-4"
-          onPress={() => router.push('/(onBoard)/personalInfo')}
+          onPress={() => appleLogin()}
         >
           <AppleLogo />
           <Text className="text-center text-16 font-semibold text-white">Apple로 계속하기</Text>
