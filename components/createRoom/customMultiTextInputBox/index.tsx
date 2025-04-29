@@ -33,7 +33,7 @@ const CustomMultiTextInputComponent: React.FC<CustomMultiTextInputComponentProps
         className="rounded-xl bg-colorBox p-[16px] text-14 font-500 text-basicFont"
       />
 
-      <View className="flex flex-row flex-wrap mt-[8px]">
+      <View className="flex flex-row flex-wrap mt-[8px] gap-[8px]">
         {valueList.map((item, index) => (
           <Pressable
             key={index}
