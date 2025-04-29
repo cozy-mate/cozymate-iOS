@@ -17,6 +17,9 @@ export default function RoomLayout() {
 
       {/* 추천 방 스크린 */}
       <Stack.Screen name="recommendRoom" options={{ headerShown: false }} />
+
+      {/* 방 검색 스크린 */}
+      <Stack.Screen name="search" options={{ headerShown: false }} />
     </Stack>
   );
 }
