@@ -79,3 +79,32 @@ export interface ExitRoomResponse {
 export interface CheckRoomNameResponse {
   result: boolean;
 }
+
+export interface CheckIsInvitedMemberResponse {
+  result: boolean;
+}
+
+export interface CheckIsRequestedMemberResponse {
+  result: boolean;
+}
+
+export interface CancelInviteMemberResponse {
+  result: string;
+}
+
+export interface CancelRequestRoomResponse {
+  result: string;
+}
+
+export interface CheckIsInvitedRoomResponse {
+  result: boolean;
+}
+
+export interface SearchRoomResponse {
+  result: {
+    roomId: number;
+    name: string;
+    arrivalMateNum: number;
+    equality: number;
+  }[];
+}
