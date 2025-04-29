@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
 import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
+import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import StarImage from '@/assets/images/roomMate/star.svg';
 import { useGetMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
-import { getLifeStyleIcon, getLifeStyleLabel, getLifeStyleValue } from '@/utils/lifeStyle';
 import { useMemberStore } from '@/zustand/member/member';
 
 import ChipList from '../common/chipList';
@@ -62,6 +62,18 @@ const RoomMateComponent: React.FC = () => {
               나와 똑같은 답변을 한 사용자만 떠요!
             </Text>
           </View>
+
+          <Pressable
+            onPress={() => router.push('/user/search')}
+            className="bg-colorBox rounded-xl px-[4px] py-[8px] flex flex-row items-center"
+          >
+            <View className="p-[8px]">
+              <MagnifierIcon />
+            </View>
+            <Text className="text-14 font-500 leading-14 text-disabledFont">
+              룸메이트 닉네임을 검색해보세요
+            </Text>
+          </Pressable>
 
           <ChipList value={filterList} handleValue={handleValue} />
         </View>

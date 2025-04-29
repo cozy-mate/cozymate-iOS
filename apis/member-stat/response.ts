@@ -42,3 +42,19 @@ export interface CreateMemberDetailResponse {
 export interface UpdateMemberDetailResponse {
   result: number;
 }
+
+export interface SearchUserResponse {
+  result: {
+    memberDetail: {
+      memberId: number;
+      nickname: string;
+      gender: string;
+      birthday: string;
+      universityName: string;
+      universityId: number;
+      majorName: string;
+      persona: number;
+    };
+    equality: number;
+  }[];
+}

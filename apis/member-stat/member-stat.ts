@@ -6,6 +6,7 @@ import {
   GetMemberDetailResponse,
   GetMemberListResponse,
   GetRandomMemberListResponse,
+  SearchUserResponse,
   UpdateMemberDetailResponse,
 } from './response';
 
@@ -24,6 +25,15 @@ export const getMemberDetail = async (memberId: number): Promise<GetMemberDetail
 };
 
 // 사용자 검색
+export const searchUser = async (keyword: string): Promise<SearchUserResponse> => {
+  const response = await GetAxiosInstance<SearchUserResponse>(`/members/stat/search`, {
+    params: {
+      keyword,
+    },
+  });
+
+  return response.data;
+};
 
 // 사용자 랜덤 추천
 export const getRandomMemberList = async (): Promise<GetRandomMemberListResponse> => {

@@ -37,7 +37,9 @@ export default function CreateRoom() {
   const handleHashtagSubmit = () => {
     if (hashtag.length !== 0) {
       if (!hashtagRegex.test(hashtag)) {
-        Alert.alert('알림', '해시태그 형식이 올바르지 않습니다.');
+        Alert.alert('해시태그 형식이 올바르지 않습니다.');
+      } else if (hashtag.length > 5) {
+        Alert.alert('해시태그는 최대 5글자 입력 가능해요!');
       } else if (hashtag.length !== 0 && hashtagList.length < 3) {
         setHashtagList([...hashtagList, hashtag.trim()]);
       }

@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Suspense, useState } from 'react';
+import { Fragment, Suspense, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,19 +22,24 @@ import TableInfoComponent from '@/components/userDetail/tableInfo';
 import { getPersona } from '@/constants/items/characterItem';
 import { useCreateMemberLike, useDeleteMemberLike } from '@/hooks/member-favorite/member-favorite';
 import { useGetMemberDetail } from '@/hooks/member-stat/member-stat';
-import { useGetMyRoomDetail, useInviteMember } from '@/hooks/room/room';
-import { showRejectToast } from '@/utils/toast';
-import { useHasRoomStore } from '@/zustand/room/room';
+import {
+  useCancelInviteMember,
+  useCheckIsInvitedMember,
+  useCheckIsRequestedMember,
+  useInviteMember,
+} from '@/hooks/room/room';
+import { useMemberStore } from '@/zustand/member/member';
 
 export default function UserDetail() {
   const { id } = useLocalSearchParams();
 
+  const { memberState } = useMemberStore();
+
   const router = useRouter();
 
-  const { roomInfo } = useHasRoomStore();
-
   const { data, refetch } = useGetMemberDetail(Number(id));
-  const { data: roomData } = useGetMyRoomDetail();
+  const { data: isInvited } = useCheckIsInvitedMember(Number(id));
+  const { data: isRequested } = useCheckIsRequestedMember(Number(id));
 
   const [type, setType] = useState<string>('LIST');
 
@@ -44,68 +49,18 @@ export default function UserDetail() {
     refetch,
   );
 
-  const { mutateAsync: inviteMember } = useInviteMember(Number(id));
-
   const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false);
 
-  const buttonItems = [
-    {
-      // 본인이 방이 없는 경우
-      type: 'default',
-      isVisible: roomInfo.roomId === 0,
-      title: '내 방으로 초대하기',
-      onPress: () => setIsCreateRoomModalOpen(true),
-    },
-    {
-      // 상대방이 이미 방이 있는 경우
-      type: 'default',
-      isVisible:
-        roomInfo.roomId !== 0 && roomData?.result.isRoomManager && data.result.roomId !== 0,
-      title: '내 방으로 초대하기',
-      onPress: () => inviteMember(),
-    },
-    {
-      // 방에 인원이 다 찬 경우
-      type: 'default',
-      isVisible:
-        roomInfo.roomId !== 0 &&
-        roomData?.result.isRoomManager &&
-        roomData.result.arrivalMateNum === roomData.result.maxMateNum,
-      title: '내 방으로 초대하기',
-      onPress: () => showRejectToast('방 인원이 꽉차서 초대할 수 없어요'),
-    },
-    {
-      // 초대 가능 상태
-      type: 'default',
-      isVisible:
-        roomInfo.roomId !== 0 &&
-        roomData?.result.isRoomManager &&
-        roomData.result.arrivalMateNum < roomData.result.maxMateNum &&
-        data.result.roomId === 0 &&
-        !data.result.hasRequestedRoomEntry,
-
-      title: '내 방으로 초대하기',
-      onPress: () => showRejectToast('방 인원이 꽉차서 초대할 수 없어요'),
-    },
-    {
-      // 상대방이 내 방으로 참여 요청을 보낸 경우
-      type: 'accept',
-      isVisible:
-        roomInfo.roomId !== 0 &&
-        roomData?.result.isRoomManager &&
-        roomData.result.arrivalMateNum < roomData.result.maxMateNum &&
-        data.result.roomId === 0 &&
-        data.result.hasRequestedRoomEntry,
-      title: '수락거절',
-      onPress: () => console.log('수락거절'),
-    },
-  ];
-
-  const visibleButton = buttonItems.find((item) => item.isVisible);
+  const { mutateAsync: inviteMember } = useInviteMember(
+    Number(id),
+    data.result.memberDetail.nickname,
+    setIsCreateRoomModalOpen,
+  );
+  const { mutateAsync: cancelInvite } = useCancelInviteMember(Number(id));
 
   return (
     <Suspense>
-      <SafeAreaView className="flex-1 bg-subColor1">
+      <SafeAreaView edges={['top', 'left', 'right']} className="flex-1 bg-subColor1">
         <ScrollView
           contentContainerStyle={{ flexGrow: 1, rowGap: 20, paddingBottom: 60 }}
           bounces={false}
@@ -143,9 +98,11 @@ export default function UserDetail() {
                 <Text className="text-16 font-600 text-emphasizedFont">
                   {data.result.memberDetail.nickname}
                 </Text>
-                <Text className="text-14 font-500 text-basicFont">
-                  나와의 일치율 {data.result.equality ?? '??'}%
-                </Text>
+                {Number(id) !== memberState.memberId && (
+                  <Text className="text-14 font-500 text-basicFont">
+                    나와의 일치율 {data.result.equality ?? '??'}%
+                  </Text>
+                )}
               </View>
             </View>
 
@@ -198,11 +155,11 @@ export default function UserDetail() {
 
             <View className="gap-y-14">
               {type === 'LIST' ? (
-                <>
+                <Fragment>
                   <BasicInfoComponent id={Number(id)} />
                   <DormitoryInfoComponent id={Number(id)} />
                   <EssentialInfoComponent id={Number(id)} />
-                </>
+                </Fragment>
               ) : (
                 <TableInfoComponent id={Number(id)} />
               )}
@@ -224,26 +181,43 @@ export default function UserDetail() {
           }}
         />
 
-        <View className="absolute bottom-0 w-full px-[22px] pb-[42px] bg-white">
-          {visibleButton && visibleButton.type === 'default' && (
-            <BottomButton
-              buttonText={visibleButton.title}
-              disabled={false}
-              onPress={visibleButton.onPress}
-            />
-          )}
+        {Number(id) !== memberState.memberId && (
+          <View className="absolute bottom-0 w-full px-[22px] pb-[42px] bg-white">
+            {/* 해당 사용자를 초대함 => 초대 취소하기 */}
+            {isInvited?.result && (
+              <BottomButton
+                buttonText="초대 취소하기"
+                disabled={false}
+                onPress={() => cancelInvite()}
+                backColor="bg-colorBox"
+                borderColor="border-mainColor"
+                textColor="text-mainColor"
+              />
+            )}
 
-          {visibleButton && visibleButton.type === 'accept' && (
-            <View className="gap-x-[8px] flex flex-row items-center">
-              <Pressable className="bg-white border border-mainColor rounded-xl p-[16px] flex-1">
-                <Text className="text-16 font-600 leading-16 text-mainColor text-center">거절</Text>
-              </Pressable>
-              <Pressable className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1">
-                <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
-              </Pressable>
-            </View>
-          )}
-        </View>
+            {/* 해당 사용자가 방 참여 요청을 보냄 => 수락/거절 */}
+            {isRequested?.result && (
+              <View className="gap-x-[8px] flex flex-row items-center">
+                <Pressable className="bg-white border border-mainColor rounded-xl p-[16px] flex-1">
+                  <Text className="text-16 font-600 leading-16 text-mainColor text-center">
+                    거절
+                  </Text>
+                </Pressable>
+                <Pressable className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1">
+                  <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
+                </Pressable>
+              </View>
+            )}
+
+            {!isRequested?.result && !isInvited?.result && (
+              <BottomButton
+                buttonText="내 방으로 초대하기"
+                disabled={false}
+                onPress={() => inviteMember()}
+              />
+            )}
+          </View>
+        )}
       </SafeAreaView>
     </Suspense>
   );

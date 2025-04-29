@@ -16,6 +16,8 @@ import TwoButtonModal from '@/components/common/twoButtonModal';
 import MemberStatModalComponent from '@/components/roomDetail/memberStatModal';
 import { getPersona } from '@/constants/items/characterItem';
 import {
+  useCancelRequestRoom,
+  useCheckIsInvitedRoom,
   useCheckIsRequestedRoom,
   useExitRoom,
   useGetRoomDetail,
@@ -25,7 +27,6 @@ import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room
 import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat';
 import { ChipItem } from '@/type/room';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
-import { showRejectToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -36,19 +37,24 @@ export default function RoomDetail() {
   const router = useRouter();
 
   const { memberState } = useMemberStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
   const { roomInfo } = useHasRoomStore();
 
   const { data, refetch } = useGetRoomDetail(Number(id));
   const { data: isRequested } = useCheckIsRequestedRoom(Number(id));
+  const { data: isInvited } = useCheckIsInvitedRoom(Number(id));
 
   const { mutateAsync: deleteLike } = useDeleteRoomLike(data.result.favoriteId, refetch);
   const { mutateAsync: createLike } = useCreateRoomLike(data.result.roomId, refetch);
 
-  const { mutateAsync: sendRequest } = useSendRoomRequest(Number(id));
-
   const [isLifeStyleModalOpen, setIsLifeStyleModalOpen] = useState<boolean>(false);
   const [isMemberStatModalOpen, setIsMemberStatModalOpen] = useState<boolean>(false);
+
+  const { mutateAsync: sendRequest } = useSendRoomRequest(
+    Number(id),
+    data.result.name,
+    setIsLifeStyleModalOpen,
+  );
+  const { mutateAsync: cancelRequest } = useCancelRequestRoom(Number(id));
 
   const [statItem, setStatItem] = useState<ChipItem>({
     title: '',
@@ -60,7 +66,6 @@ export default function RoomDetail() {
   const handleStat = async (memberStatKey: string) => {
     const response = await getStats({ roomId: Number(id), memberStatKey });
 
-    console.log(memberStatKey);
     setStatItem({
       title: getLifeStyleLabel(memberStatKey),
       memberList: response.result.memberList,
@@ -72,50 +77,6 @@ export default function RoomDetail() {
 
   const { mutateAsync: exitRoom } = useExitRoom(Number(id));
   const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
-
-  const buttonItems = [
-    {
-      // 본인이 해당 방의 방장인 경우
-      type: 'warning',
-      isVisible: roomInfo.roomId === data.result.roomId,
-      title: '방 나가기',
-      onPress: () => setIsExitModalOpen(true),
-    },
-    {
-      // 방이 없고, 라이프스타일이 없는 경우
-      type: 'default',
-      isVisible: !hasLifeStyle,
-      title: '방 참여하기',
-      onPress: () => setIsLifeStyleModalOpen(true),
-    },
-    {
-      // 참여 요청을 보낸 경우
-      type: 'requested',
-      isVisible: hasLifeStyle && roomInfo.roomId === 0 && isRequested.result,
-      title: '방 참여 취소하기',
-      onPress: () => showRejectToast('이미 다른 방에 참여하고 있어서 초대할 수 없어요'),
-    },
-    {
-      type: 'default',
-      isVisible: hasLifeStyle && !isRequested.result,
-      title: '방 참여하기',
-      onPress: () => sendRequest(),
-    },
-    // {
-    //   // 상대방이 내 방으로 참여 요청을 보낸 경우
-    //   type: 'accept',
-    //   isVisible:
-    //     roomId !== 0 &&
-    //     roomData?.result.isRoomManager &&
-    //     roomData.result.arrivalMateNum < roomData.result.maxMateNum &&
-    //     data.result.roomId === 0 &&
-    //     data.result.hasRequestedRoomEntry,
-    //   title: '수락거절',
-    //   onPress: () => console.log('수락거절'),
-    // },
-  ];
-
-  const visibleButton = buttonItems.find((item) => item.isVisible);
 
   return (
     <View className="flex-1 bg-white">
@@ -293,37 +254,22 @@ export default function RoomDetail() {
         />
 
         <View className="absolute bottom-0 w-full px-[22px] pb-[42px] bg-white">
-          {visibleButton && visibleButton.type === 'warning' && (
+          {roomInfo.roomId === data.result.roomId && (
             <BottomButton
-              buttonText={visibleButton.title}
+              buttonText="방 나가기"
               disabled={false}
-              onPress={visibleButton.onPress}
+              onPress={() => setIsExitModalOpen(true)}
               borderColor="border-warningColor"
               backColor="bg-[#FFDDDD]"
               textColor="text-warningColor"
             />
           )}
 
-          {visibleButton && visibleButton.type === 'default' && (
-            <BottomButton
-              buttonText={visibleButton.title}
-              disabled={false}
-              onPress={visibleButton.onPress}
-            />
+          {roomInfo.roomId !== data.result.roomId && !isRequested.result && !isInvited.result && (
+            <BottomButton buttonText="방 참여하기" disabled={false} onPress={() => sendRequest()} />
           )}
 
-          {visibleButton && visibleButton.type === 'requested' && (
-            <BottomButton
-              buttonText={visibleButton.title}
-              disabled={false}
-              onPress={visibleButton.onPress}
-              borderColor="border-mainColor"
-              backColor="bg-colorBox"
-              textColor="text-mainColor"
-            />
-          )}
-
-          {visibleButton && visibleButton.type === 'accept' && (
+          {roomInfo.roomId !== data.result.roomId && isInvited.result && (
             <View className="gap-x-[8px] flex flex-row items-center">
               <Pressable className="bg-white border border-mainColor rounded-xl p-[16px] flex-1">
                 <Text className="text-16 font-600 leading-16 text-mainColor text-center">거절</Text>
@@ -332,6 +278,17 @@ export default function RoomDetail() {
                 <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
               </Pressable>
             </View>
+          )}
+
+          {roomInfo.roomId !== data.result.roomId && isRequested.result && (
+            <BottomButton
+              buttonText="방 참여 취소하기"
+              disabled={false}
+              onPress={() => cancelRequest()}
+              borderColor="border-mainColor"
+              backColor="bg-colorBox"
+              textColor="text-mainColor"
+            />
           )}
         </View>
 

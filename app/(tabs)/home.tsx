@@ -1,9 +1,10 @@
-import { Fragment, Suspense, useState } from 'react';
+import { Fragment, Suspense, useCallback, useState } from 'react';
 import {
   LayoutChangeEvent,
   Modal,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  RefreshControl,
   ScrollView,
   View,
 } from 'react-native';
@@ -24,6 +25,8 @@ export default function HomeScreen() {
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { roomInfo } = useHasRoomStore();
 
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   // 참여요청을 보낸 목록
   const { data } = useGetSentRequestRoomList();
 
@@ -41,6 +44,13 @@ export default function HomeScreen() {
     setHeight(height);
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
     <Suspense
       fallback={
@@ -53,6 +63,7 @@ export default function HomeScreen() {
         <ScrollView
           onScroll={handleScroll}
           contentContainerStyle={{ paddingBottom: 120, backgroundColor: '#FFFFFF' }}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           <HeaderComponent handleLayout={handleLayout} />
 

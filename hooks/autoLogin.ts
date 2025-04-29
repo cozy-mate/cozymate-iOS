@@ -9,7 +9,6 @@ import { deleteToken, getRefreshToken, setAccessToken, setRefreshToken } from '@
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
-import { useAuthProvider } from '@/providers/AuthProvider';
 
 export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>) => {
   const router = useRouter();
@@ -38,7 +37,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           await Promise.all([
             setAccessToken(newTokens.result.tokenResponseDTO.accessToken),
             setRefreshToken(newTokens.result.tokenResponseDTO.refreshToken),
-          ])
+          ]);
 
           const response = await getMemberProfile();
           setMemberState(response.result);
@@ -73,6 +72,6 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
         return;
       }
     };
-    checkLoggedIn()
+    checkLoggedIn();
   }, []);
 };

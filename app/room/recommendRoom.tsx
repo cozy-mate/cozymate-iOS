@@ -1,9 +1,11 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
+import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -14,6 +16,8 @@ import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function RecommendRoom() {
+  const router = useRouter();
+
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [sortType, setSortType] = useState<string>('AVERAGE_RATE');
@@ -40,8 +44,8 @@ export default function RecommendRoom() {
           data={data?.pages?.flatMap((page) => page.result.result)}
           renderItem={({ item }) => <RoomComponent roomData={item} />}
           ListHeaderComponent={() => (
-            <View>
-              <View className="gap-y-[4px] ml-[4px] px-[20px]">
+            <View className="px-[20px]">
+              <View className="gap-y-[4px] ml-[4px]">
                 <Text className="text-18 font-600 text-emphasizedFont">
                   {memberState.nickname}님과
                 </Text>
@@ -49,9 +53,22 @@ export default function RecommendRoom() {
                   꼭 맞는 방을 추천해드릴게요
                 </Text>
               </View>
+
+              <Pressable
+                onPress={() => router.push('/room/search')}
+                className="bg-colorBox rounded-xl px-[4px] py-[8px] flex flex-row items-center mt-[16px] mb-[20px]"
+              >
+                <View className="p-[8px]">
+                  <MagnifierIcon />
+                </View>
+                <Text className="text-14 font-500 leading-14 text-disabledFont">
+                  방 이름을 검색해보세요
+                </Text>
+              </Pressable>
+
               <Pressable
                 onPress={() => bottomSheetRef.current?.expand()}
-                className="py-[11.5px] self-end mx-[20px] mb-[8px] flex flex-row gap-x-[4px]"
+                className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
               >
                 <Text className="text-14 font-500 leading-14 text-basicFont">
                   {sortTypeItem.find((item) => item.value === sortType)?.title}

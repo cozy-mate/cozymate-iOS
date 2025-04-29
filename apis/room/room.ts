@@ -1,8 +1,18 @@
-import { GetAxiosInstance, PatchAxiosInstance, PostAxiosInstance } from '@/axios/axios.method';
+import {
+  DeleteAxiosInstance,
+  GetAxiosInstance,
+  PatchAxiosInstance,
+  PostAxiosInstance,
+} from '@/axios/axios.method';
 
 import { CreatePublicRoomRequest } from './request';
 import {
+  CancelInviteMemberResponse,
+  CancelRequestRoomResponse,
   CheckHasRoomResponse,
+  CheckIsInvitedMemberResponse,
+  CheckIsInvitedRoomResponse,
+  CheckIsRequestedMemberResponse,
   CheckIsRequestedRoomResponse,
   CheckRoomNameResponse,
   CreatePublicRoomResponse,
@@ -11,12 +21,31 @@ import {
   GetRoomDetailResponse,
   GetSentRequestRoomListResponse,
   InviteMemberResponse,
+  SearchRoomResponse,
   SendRoomRequestRequest,
 } from './response';
 
 // 사용자 -> 방 참여 요청 취소
+export const cancelRequestRoom = async (roomId: number): Promise<CancelRequestRoomResponse> => {
+  const response = await DeleteAxiosInstance<CancelRequestRoomResponse>(
+    `/rooms/${roomId}/request-join`,
+  );
+
+  return response.data;
+};
+
 // 방 삭제 기능 (방장 권한)
+
 // 방장 -> 내방으로 초대 취소 기능
+export const cancelInviteMember = async (
+  inviteeId: number,
+): Promise<CancelInviteMemberResponse> => {
+  const response = await DeleteAxiosInstance<CancelInviteMemberResponse>(
+    `/rooms/invitee/${inviteeId}`,
+  );
+
+  return response.data;
+};
 
 // 방 정보 조회 기능
 export const getRoomDetail = async (roomId: number): Promise<GetRoomDetailResponse> => {
@@ -37,8 +66,24 @@ export const checkIsRequestedRoom = async (
 };
 
 // 사용자 -> 사용자가 초대받은 방인지 조회
+export const checkIsInvitedRoom = async (roomId: number): Promise<CheckIsInvitedRoomResponse> => {
+  const response = await GetAxiosInstance<CheckIsInvitedRoomResponse>(
+    `/rooms/${roomId}/invited-status`,
+  );
+
+  return response.data;
+};
+
 // 우리방으로 초대한 멤버 목록 조회
+
 // 방 검색
+export const searchRoom = async (keyword: string): Promise<SearchRoomResponse> => {
+  const response = await GetAxiosInstance<SearchRoomResponse>(`/rooms/search`, {
+    params: { keyword },
+  });
+
+  return response.data;
+};
 
 // 사용자가 참여 요청한 방 목록 조회
 export const getSentRequestRoomList = async (
@@ -56,6 +101,15 @@ export const getSentRequestRoomList = async (
 };
 
 // 방장 -> 방에 참여 요청한 사용자인지 조회
+export const checkIsRequestedMember = async (
+  memberId: number,
+): Promise<CheckIsRequestedMemberResponse> => {
+  const response = await GetAxiosInstance<CheckIsRequestedMemberResponse>(
+    `/rooms/pending-status/${memberId}`,
+  );
+
+  return response.data;
+};
 
 // 방장에게 보이는 방 참여 요청 목록 조회
 export const getReceivedRequestList = async (): Promise<GetReceivedRequestListResponse> => {
@@ -66,7 +120,17 @@ export const getReceivedRequestList = async (): Promise<GetReceivedRequestListRe
 
 // 초대코드로 방 정보 조회 기능
 // 사용자가 초대 요청받은 방 목록 조회
+
 // 방장 -> 방장이 초대한 사용자인지 조회
+export const checkIsInvitedMember = async (
+  memberId: number,
+): Promise<CheckIsInvitedMemberResponse> => {
+  const response = await GetAxiosInstance<CheckIsInvitedMemberResponse>(
+    `/rooms/invited-status/${memberId}`,
+  );
+
+  return response.data;
+};
 
 // 로그인한 사용자가 참여한 방이 있는지 여부 조회
 export const checkHasRoom = async (): Promise<CheckHasRoomResponse> => {

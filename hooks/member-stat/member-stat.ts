@@ -13,6 +13,7 @@ import {
   getMemberList,
   getMyDetail,
   getRandomMemberList,
+  searchUser,
   updateMemberDetail,
 } from '@/apis/member-stat/member-stat';
 import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/apis/member-stat/request';
@@ -82,6 +83,8 @@ export const useGetMemberList = (filterList: string[]) => {
 };
 
 export const useCreateMemberDetail = () => {
+  const queryClient = useQueryClient();
+
   const router = useRouter();
 
   const { setHasLifeStyle } = useHasLifeStyleStore();
@@ -89,6 +92,13 @@ export const useCreateMemberDetail = () => {
   return useMutation({
     mutationFn: (data: CreateMemberDetailRequest) => createMemberDetail(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
+
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/filter/home`] });
+
+      queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
+
       setHasLifeStyle(true);
       router.dismissAll();
       router.back();
@@ -113,5 +123,13 @@ export const useUpdateMemberDetail = () => {
     onError: (error: any) => {
       console.log(error);
     },
+  });
+};
+
+export const useSearchUser = (keyword: string) => {
+  return useQuery({
+    queryKey: [`/members/stat/search`, keyword],
+    queryFn: () => searchUser(keyword),
+    enabled: keyword !== '',
   });
 };

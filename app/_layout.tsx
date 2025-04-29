@@ -1,7 +1,3 @@
-import { initGlobalThis } from '@/lib/initGlobalThis';
-
-initGlobalThis();
-
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -20,11 +16,13 @@ import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/config/toastConfig';
 import { useAutoLogin } from '@/hooks/autoLogin';
 import { useColorScheme } from '@/hooks/useColorScheme';
-
+import { initGlobalThis } from '@/lib/initGlobalThis';
 import AuthProvider from '@/providers/AuthProvider';
 import FCMProvider from '@/providers/FCMProvider';
 
 import '../global.css';
+
+initGlobalThis();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 // SplashScreen.preventAutoHideAsync();

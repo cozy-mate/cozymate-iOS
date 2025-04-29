@@ -4,17 +4,16 @@ import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XButton from '@/assets/images/common/roundX.svg';
-import { getPersona } from '@/constants/items/characterItem';
-import { useSearchUser } from '@/hooks/member-stat/member-stat';
+import { useSearchRoom } from '@/hooks/room/room';
 import { useDebounce } from '@/hooks/useDebounce';
 
-export default function SearchUser() {
+export default function SearchRoom() {
   const router = useRouter();
 
   const [keyword, setKeyword] = useState<string>('');
   const debouncedKeyword = useDebounce(keyword, 500);
 
-  const { data } = useSearchUser(debouncedKeyword);
+  const { data } = useSearchRoom(debouncedKeyword);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -24,7 +23,7 @@ export default function SearchUser() {
             <TextInput
               value={keyword}
               onChangeText={(e: string) => setKeyword(e)}
-              placeholder="닉네임을 입력해주세요"
+              placeholder="방 이름을 입력해주세요"
               className="bg-colorBox rounded-xl p-[16px] text-14 font-500 text-basicFont pr-[40px]"
             />
             {keyword !== '' && (
@@ -47,22 +46,21 @@ export default function SearchUser() {
             data={data?.result}
             renderItem={({ item }) => (
               <Pressable
-                key={item.memberDetail.memberId}
-                onPress={() => router.push(`/user/${item.memberDetail.memberId}`)}
+                key={item.roomId}
+                onPress={() => router.push(`/room/${item.roomId}`)}
                 className="flex flex-row justify-between items-center px-[8px] py-[10px]"
               >
-                <View className="flex flex-row items-center gap-x-[8px]">
-                  {getPersona(item.memberDetail.persona, 28, 28)}
-                  <Text className="text-16 font-500 leading-16 text-emphasizedFont">
-                    {item.memberDetail.nickname}
+                <View>
+                  <Text className="text-16 font-600 leading-16 text-emphasizedFont">
+                    {item.name}
+                  </Text>
+                  <Text className="text-12 font-500 leading-12 text-disabledFont">
+                    <Text className="text-mainColor">{item.arrivalMateNum}명</Text>의 룸메이트가
+                    있어요
                   </Text>
                 </View>
 
-                <Text
-                  className={`text-16 font-500 leading-16 ${item.equality !== null ? 'text-mainColor' : 'text-colorFont'} `}
-                >
-                  {item.equality ?? '?? '}%
-                </Text>
+                <Text className="text-16 font-500 leading-16 text-mainColor">{item.equality}%</Text>
               </Pressable>
             )}
             ItemSeparatorComponent={() => <View className="h-[1px] bg-[#F6F6F6] my-[12px]" />}

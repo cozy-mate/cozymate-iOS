@@ -51,7 +51,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
         sound: true,
       },
     },
-    googleServicesFile: 'GoogleService-Info.plist',
+    googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './GoogleService-Info.plist',
   },
   android: {
     adaptiveIcon: {
@@ -93,7 +93,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
       '@react-native-firebase/app',
       {
         ios: {
-          googleServicesFile: './GoogleService-Info.plist',
+          googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './GoogleService-Info.plist',
         },
       },
     ],
