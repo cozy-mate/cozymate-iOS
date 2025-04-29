@@ -9,6 +9,13 @@ interface UserDetailComponentProps {
 const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
   const { data } = useGetMemberDetail(Number(id));
 
+  const translateTime = (value: number) => {
+    if (value === 0) return '오전 0시';
+    if (value === 12) return '오후 12시';
+    if (value < 12) return `오전 ${value}시`;
+    return `오후 ${value - 12}시`;
+  };
+
   return (
     <View className="px-[20px] gap-y-[12px]">
       <Text className="text-16 font-600 text-emphasizedFont ml-1">필수 정보</Text>
@@ -17,7 +24,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">기상시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.wakeUpTime}시
+            {translateTime(data.result.memberStatDetail.wakeUpTime as number)}
           </Text>
         </View>
 
@@ -26,7 +33,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">취침시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.sleepingTime}시
+            {translateTime(data.result.memberStatDetail.sleepingTime as number)}
           </Text>
         </View>
 
@@ -35,7 +42,7 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="text-14 font-500 text-colorFont">소등시간</Text>
           <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.turnOffTime}시
+            {translateTime(data.result.memberStatDetail.turnOffTime as number)}
           </Text>
         </View>
 
@@ -50,10 +57,10 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
 
         <View className="bg-[#F1F2F4] h-[1px] my-[12px]" />
 
-        <View className="flex flex-row items-center gap-x-[12px]">
+        <View className="flex flex-row items-center gap-x-[12px] flex-1">
           <Text className="text-14 font-500 text-colorFont">잠버릇</Text>
-          <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.sleepingHabits}
+          <Text className="text-14 font-500 leading-6 text-basicFont flex-1">
+            {data.result.memberStatDetail.sleepingHabits.join(', ')}
           </Text>
         </View>
 
@@ -176,10 +183,10 @@ const EssentialInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => {
 
         <View className="bg-[#F1F2F4] h-[1px] my-[12px]" />
 
-        <View className="flex flex-row items-center gap-x-[12px]">
+        <View className="flex flex-row items-center gap-x-[12px] flex-1">
           <Text className="text-14 font-500 text-colorFont">성격</Text>
-          <Text className="text-14 font-500 text-basicFont">
-            {data.result.memberStatDetail.personalities}
+          <Text className="text-14 font-500 leading-6 text-basicFont flex-1">
+            {data.result.memberStatDetail.personalities.join(', ')}
           </Text>
         </View>
 
