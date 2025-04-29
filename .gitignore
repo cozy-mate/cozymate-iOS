@@ -39,3 +39,6 @@ app-example
 
 .env
 ios/
+
+# Google Service Info plist
+GoogleService-Info.plist

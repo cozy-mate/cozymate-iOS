@@ -1,3 +1,7 @@
+import { initGlobalThis } from '@/lib/initGlobalThis';
+
+initGlobalThis();
+
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,6 +20,9 @@ import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/config/toastConfig';
 import { useAutoLogin } from '@/hooks/autoLogin';
 import { useColorScheme } from '@/hooks/useColorScheme';
+
+import AuthProvider from '@/providers/AuthProvider';
+import FCMProvider from '@/providers/FCMProvider';
 
 import '../global.css';
 
@@ -57,53 +64,57 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <QueryClientProvider client={queryClient}>
-          <Host>
-            <Stack>
-              {/* 온보딩 화면 */}
-              <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
+          <AuthProvider appLoaded={appLoaded}>
+            <FCMProvider appLoaded={appLoaded}>
+              <Host>
+                <Stack>
+                  {/* 온보딩 화면 */}
+                  <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
 
-              {/* 메인 화면 */}
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  {/* 메인 화면 */}
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-              {/* 라이프스타일 화면 */}
-              <Stack.Screen name="lifeStyle" options={{ headerShown: false }} />
+                  {/* 라이프스타일 화면 */}
+                  <Stack.Screen name="lifeStyle" options={{ headerShown: false }} />
 
-              {/* 알림 화면 */}
-              <Stack.Screen name="notification" options={{ headerShown: false }} />
+                  {/* 알림 화면 */}
+                  <Stack.Screen name="notification" options={{ headerShown: false }} />
 
-              {/* 쪽지방 화면 */}
-              <Stack.Screen name="chat" options={{ headerShown: false }} />
+                  {/* 쪽지방 화면 */}
+                  <Stack.Screen name="chat" options={{ headerShown: false }} />
 
-              {/* 유저 관련 화면 */}
-              <Stack.Screen name="user" options={{ headerShown: false }} />
+                  {/* 유저 관련 화면 */}
+                  <Stack.Screen name="user" options={{ headerShown: false }} />
 
-              {/* 방 관련 화면 */}
-              <Stack.Screen name="room" options={{ headerShown: false }} />
+                  {/* 방 관련 화면 */}
+                  <Stack.Screen name="room" options={{ headerShown: false }} />
 
-              {/* 롤앤룰 화면 */}
-              <Stack.Screen name="roleNRule" options={{ headerShown: false }} />
+                  {/* 롤앤룰 화면 */}
+                  <Stack.Screen name="roleNRule" options={{ headerShown: false }} />
 
-              {/* 마이페이지 화면 */}
-              <Stack.Screen name="myPage" options={{ headerShown: false }} />
+                  {/* 마이페이지 화면 */}
+                  <Stack.Screen name="myPage" options={{ headerShown: false }} />
 
-              <Stack.Screen name="+not-found" />
-            </Stack>
+                  <Stack.Screen name="+not-found" />
+                </Stack>
 
-            {!isAnimationFinished && (
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-                <LottieView
-                  source={require('@/assets/lotties/splash.json')}
-                  style={{ flex: 1 }}
-                  autoPlay={true}
-                  loop={false}
-                  onAnimationFinish={() => {
-                    setTimeout(() => setIsAnimationFinished(true), 2000);
-                  }}
-                />
-              </View>
-            )}
-            <StatusBar style="auto" />
-          </Host>
+                {!isAnimationFinished && (
+                  <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <LottieView
+                      source={require('@/assets/lotties/splash.json')}
+                      style={{ flex: 1 }}
+                      autoPlay={true}
+                      loop={false}
+                      onAnimationFinish={() => {
+                        setTimeout(() => setIsAnimationFinished(true), 2000);
+                      }}
+                    />
+                  </View>
+                )}
+                <StatusBar style="auto" />
+              </Host>
+            </FCMProvider>
+          </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>
 
