@@ -21,7 +21,7 @@ const SentRequestComponent: React.FC = () => {
         </View>
 
         <Pressable
-          onPress={() => router.push('/room/sendRequest')}
+          onPress={() => router.push('/room/sentRequest')}
           className="flex flex-row items-center gap-x-[4px]"
         >
           <Text className="text-12 font-600 leading-12 text-disabledFont">더보기</Text>
@@ -31,8 +31,13 @@ const SentRequestComponent: React.FC = () => {
 
       {data.pages
         ?.flatMap((page) => page.result.result)
+        .slice(0, 3)
         .map((room) => (
-          <Pressable key={room.roomId} className="px-[4px] py-[10px] gap-y-[8px]">
+          <Pressable
+            key={room.roomId}
+            onPress={() => router.push(`/room/${room.roomId}`)}
+            className="p-[16px] gap-y-[8px] border border-disabledColor rounded-xl"
+          >
             <View className="flex flex-row gap-x-[8px]">
               {room.hashtagList.map((hash, index) => (
                 <View key={index} className="bg-colorBox rounded px-[8px] py-[2px]">
@@ -48,7 +53,11 @@ const SentRequestComponent: React.FC = () => {
                 <Text className="text-mainColor">{room.arrivalMateNum}명</Text>의 룸메이트가 있어요
               </Text>
 
-              <Text className="text-16 font-500 leading-16 text-mainColor">{room.equality}%</Text>
+              <Text
+                className={`text-16 font-500 leading-16 ${room.equality !== null && room.equality > 50 ? 'text-mainColor' : 'text-colorFont'} `}
+              >
+                {room.equality ?? '?? '}%
+              </Text>
             </View>
           </Pressable>
         ))}
