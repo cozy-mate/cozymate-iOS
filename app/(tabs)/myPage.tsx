@@ -8,11 +8,11 @@ import MenuComponent from '@/components/myPage/Menu';
 import { getPersona } from '@/constants/items/characterItem';
 import { useGetMemberProfile } from '@/hooks/member/member';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
+import { useAuthProvider } from '@/providers/AuthProvider';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken } from '@/utils/token';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
-import { useAuthProvider } from '@/providers/AuthProvider';
 
 export default function MyPage() {
   const width = Dimensions.get('screen').width;
