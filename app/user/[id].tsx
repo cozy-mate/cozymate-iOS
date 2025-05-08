@@ -23,6 +23,7 @@ import { getPersona } from '@/constants/items/characterItem';
 import { useCreateMemberLike, useDeleteMemberLike } from '@/hooks/member-favorite/member-favorite';
 import { useGetMemberDetail } from '@/hooks/member-stat/member-stat';
 import {
+  useAcceptRoomRequest,
   useCancelInviteMember,
   useCheckIsInvitedMember,
   useCheckIsRequestedMember,
@@ -57,6 +58,8 @@ export default function UserDetail() {
     setIsCreateRoomModalOpen,
   );
   const { mutateAsync: cancelInvite } = useCancelInviteMember(Number(id));
+
+  const { mutateAsync: acceptRoomRequest } = useAcceptRoomRequest(Number(id));
 
   return (
     <Suspense>
@@ -198,12 +201,18 @@ export default function UserDetail() {
             {/* 해당 사용자가 방 참여 요청을 보냄 => 수락/거절 */}
             {isRequested?.result && (
               <View className="gap-x-[8px] flex flex-row items-center">
-                <Pressable className="bg-white border border-mainColor rounded-xl p-[16px] flex-1">
+                <Pressable
+                  onPress={() => acceptRoomRequest(false)}
+                  className="bg-white border border-mainColor rounded-xl p-[16px] flex-1"
+                >
                   <Text className="text-16 font-600 leading-16 text-mainColor text-center">
                     거절
                   </Text>
                 </Pressable>
-                <Pressable className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1">
+                <Pressable
+                  onPress={() => acceptRoomRequest(true)}
+                  className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1"
+                >
                   <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
                 </Pressable>
               </View>
