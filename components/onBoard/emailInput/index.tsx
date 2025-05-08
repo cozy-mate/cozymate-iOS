@@ -50,7 +50,7 @@ const EmailInputBox: React.FC = () => {
           onPress={() => inputRef.current?.focus()}
           className={`border ${isError ? 'border-warningColor' : isFocused || mailState.mailAddress !== '' ? 'border-subColor1' : 'border-disabledColor'} rounded-xl p-5 h-[80px] flex flex-row justify-between items-center`}
         >
-          <View className="gap-y-[6px]">
+          <View className="flex-1 flex flex-col gap-y-[6px] mr-[4px]">
             <Text
               className={`text-12 font-600 leading-12 ${isError ? 'text-warningColor' : 'text-colorFont'}`}
             >
