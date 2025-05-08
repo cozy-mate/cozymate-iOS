@@ -23,15 +23,7 @@ export interface GetMemberListResponse {
   result: {
     page: number;
     hasNext: boolean;
-    memberList: {
-      memberDetail: MemberData[];
-      equality: number;
-      preferenceStats: {
-        stat: string;
-        value: string;
-        color: string;
-      }[];
-    }[];
+    memberList: MemberItem[];
   };
 }
 
