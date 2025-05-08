@@ -80,6 +80,7 @@ export default function RecommendRoom() {
               </Pressable>
             </View>
           )}
+          ItemSeparatorComponent={() => <View className="h-[24px]" />}
           onEndReached={loadMoreList}
           onEndReachedThreshold={0.5}
         />

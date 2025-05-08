@@ -10,7 +10,7 @@ const SentRequestComponent: React.FC = () => {
 
   const { memberState } = useMemberStore();
 
-  const { data } = useGetSentRequestRoomList();
+  const { data } = useGetSentRequestRoomList(3);
 
   return (
     <View className="gap-y-[16px] px-[20px]">

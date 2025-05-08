@@ -1,6 +1,6 @@
 import * as Clipboard from 'expo-clipboard';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,6 +9,7 @@ import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
 import GrayArrowIcon from '@/assets/images/common/smaillGrayArrow.svg';
+import WhiteXIcon from '@/assets/images/common/whiteX.svg';
 import CopyIcon from '@/assets/images/room/copy.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
@@ -27,10 +28,9 @@ import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room
 import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat';
 import { ChipItem } from '@/type/room';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
+import { closeTooltip, getTooltip } from '@/utils/tooltip';
 import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
-
 export default function RoomDetail() {
   const { id } = useLocalSearchParams();
 
@@ -78,6 +78,21 @@ export default function RoomDetail() {
   const { mutateAsync: exitRoom } = useExitRoom(Number(id));
   const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
 
+  const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleToolTip = async () => {
+      const tooltip = await getTooltip();
+      if (tooltip === 'TRUE' || tooltip === null) {
+        setIsTooltipOpen(true);
+      } else {
+        setIsTooltipOpen(false);
+      }
+    };
+
+    handleToolTip();
+  }, []);
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex-1 bg-subColor1">
@@ -90,7 +105,14 @@ export default function RoomDetail() {
 
             <BackHeaderComponent>
               <View className="flex flex-row items-center gap-x-[4px]">
-                <Pressable className="pl-[14px] pr-[8px] py-[11px]">
+                <Pressable
+                  onPress={() =>
+                    router.push(
+                      `/chat/send/${Number(data.result.managerMemberId)}?nickname=${encodeURIComponent(data.result.managerNickname)}`,
+                    )
+                  }
+                  className="pl-[14px] pr-[8px] py-[11px]"
+                >
                   <ChatIcon />
                 </Pressable>
                 {data.result.favoriteId !== 0 ? (
@@ -109,9 +131,13 @@ export default function RoomDetail() {
               {getPersona(data.result.persona, 40, 40)}
               <View className="gap-y-1">
                 <Text className="text-16 font-600 text-emphasizedFont">{data.result.name}</Text>
-                <Text className="text-14 font-500 text-basicFont">
-                  {data.result.hashtagList.join(' ')}
-                </Text>
+                <View className="flex flex-row gap-x-[4px]">
+                  {data.result.hashtagList.map((hashtag) => (
+                    <Text key={hashtag} className="text-14 font-500 leading-14 text-basicFont">
+                      #{hashtag}
+                    </Text>
+                  ))}
+                </View>
               </View>
             </View>
 
@@ -199,7 +225,7 @@ export default function RoomDetail() {
                 룸메이트 라이프스타일 한 눈에 보기
               </Text>
 
-              <View className="flex flex-row flex-wrap gap-2">
+              <View className="flex flex-row flex-wrap gap-[8px]">
                 {data.result.difference.blue.map((chip, index) => (
                   <Pressable
                     key={index}
@@ -235,6 +261,43 @@ export default function RoomDetail() {
                     </Text>
                   </Pressable>
                 ))}
+
+                {/* 툴팁 */}
+                {isTooltipOpen && (
+                  <Pressable
+                    onPress={async () => {
+                      setIsTooltipOpen(false);
+                      await closeTooltip();
+                    }}
+                    className="absolute left-[40px] top-[40px]"
+                  >
+                    <View
+                      style={{
+                        width: 0,
+                        height: 0,
+                        backgroundColor: 'transparent',
+                        borderStyle: 'solid',
+                        borderLeftWidth: 6,
+                        borderRightWidth: 6,
+                        borderBottomWidth: 8,
+                        borderLeftColor: 'transparent',
+                        borderRightColor: 'transparent',
+                        borderBottomColor: '#51555C',
+                        position: 'absolute',
+                        top: -6,
+                        left: 16,
+                      }}
+                    />
+                    <View className="bg-[#51555C] w-fit h-fit p-[8px] pl-[16px] rounded-[20px] flex flex-row items-center">
+                      <Text className="text-12 font-500 leading-12 text-white">
+                        칩을 선택하면 룸메이트 간의{'\n'}라이프스타일 답변을 비교할 수 있어요!
+                      </Text>
+                      <View className="p-[11px]">
+                        <WhiteXIcon />
+                      </View>
+                    </View>
+                  </Pressable>
+                )}
               </View>
             </View>
           </View>

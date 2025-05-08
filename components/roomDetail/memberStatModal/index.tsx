@@ -24,9 +24,16 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
     }
   };
 
+  const translateTime = (value: number) => {
+    if (value === 0) return '오전 0시';
+    if (value === 12) return '오후 12시';
+    if (value < 12) return `오전 ${value}시`;
+    return `오후 ${value - 12}시`;
+  };
+
   const translateAnswer = (value: string | number) => {
     if (item.title === '기상시간' || item.title === '취침시간' || item.title === '소등시간')
-      return (value as number) < 12 ? `오전 ${value}시` : `오후 ${value}시`;
+      return translateTime(value as number);
     else if (item.title === '신청실') return `${value}인 1실`;
     else if (item.title === '출생년도') return `${value}년`;
     else return value;

@@ -71,7 +71,7 @@ export const useGetMemberList = (filterList: string[]) => {
 
   return useInfiniteQuery({
     queryKey: [`/members/stat/filter`, filterList],
-    queryFn: () => getMemberList(0, filterList),
+    queryFn: ({ pageParam }) => getMemberList(pageParam, filterList),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage.result.hasNext) {

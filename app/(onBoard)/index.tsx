@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -11,8 +10,6 @@ import LoadingComponent from '@/components/common/loading';
 import { useAppleLogin, useKakaoLogin } from '@/hooks/auth/auth';
 
 export default function HomeScreen() {
-  const router = useRouter();
-
   const { mutateAsync: kakaoLogin, isPending: kakaoPending } = useKakaoLogin();
   const { mutateAsync: appleLogin, isPending: applePending } = useAppleLogin();
 

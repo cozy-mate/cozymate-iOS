@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import { Dimensions, Modal, Pressable, ScrollView, Text, View } from 'react-native';
 
 import Background from '@/assets/images/myPage/background.svg';
+import HomeIcon from '@/assets/images/myPage/home.svg';
+import VerifiedIcon from '@/assets/images/myPage/verified.svg';
 import LoadingComponent from '@/components/common/loading';
 import MenuComponent from '@/components/myPage/Menu';
 import { getPersona } from '@/constants/items/characterItem';
@@ -32,14 +34,36 @@ export default function MyPage() {
     { title: '내 정보', subTitle: null, onPress: () => router.push('/myPage/myInfo') },
     {
       title: '나의 코지룸',
-      subTitle: roomData !== undefined ? roomData?.result.name : undefined,
-      undefinedText: '아직 방이 존재하지 않아요',
+      subTitle:
+        roomData !== undefined ? (
+          <View className="flex flex-row items-center gap-x-[4px]">
+            <HomeIcon />
+            <Text className="text-14 font-500 leading-14 text-mainColor">
+              {roomData?.result.name}
+            </Text>
+          </View>
+        ) : (
+          <Text className="text-14 font-500 leading-14 text-disabledFont">
+            아직 방이 존재하지 않아요
+          </Text>
+        ),
       onPress: () =>
         roomData !== undefined
           ? router.push(`/room/${roomInfo.roomId}`)
           : showRejectToast('참여한 방이 아직 없어요'),
     },
-    // { title: '학교 인증', onPress: () => router.push('/myPage/schoolAuthentication') },
+    {
+      title: '학교 인증',
+      subTitle: (
+        <View className="flex flex-row items-center gap-x-[4px]">
+          <VerifiedIcon />
+          <Text className="text-14 font-500 leading-14 text-mainColor">
+            {data.result.universityName}
+          </Text>
+        </View>
+      ),
+      onPress: () => router.push('/myPage/schoolAuthentication'),
+    },
     {
       title: '나의 라이프스타일',
       subTitle: null,

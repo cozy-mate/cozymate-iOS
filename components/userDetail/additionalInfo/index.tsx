@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import ReportModalComponent from '@/components/common/reportModal';
@@ -14,7 +14,7 @@ const AdditionalInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => 
   const [isReportModalVisible, setIsReportModalVisible] = useState<boolean>(false);
 
   return (
-    <>
+    <Fragment>
       <View className="px-[20px] gap-y-[12px]">
         <View className="flex flex-row justify-between items-center">
           <Text className="text-16 font-600 leading-16 text-emphasizedFont ml-[4px]">
@@ -41,7 +41,7 @@ const AdditionalInfoComponent: React.FC<UserDetailComponentProps> = ({ id }) => 
         source="MEMBER_STAT"
         closeModal={() => setIsReportModalVisible(false)}
       />
-    </>
+    </Fragment>
   );
 };
 

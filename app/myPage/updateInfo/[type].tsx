@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -51,7 +51,7 @@ export default function UpdateInfo() {
         )}
 
         {type === 'majorName' && (
-          <>
+          <Fragment>
             <BorderPressBox
               title="학과"
               value={majorName}
@@ -65,7 +65,7 @@ export default function UpdateInfo() {
               handleValue={handleMajor}
               closeModal={() => setIsMajorSelectModalOpen(false)}
             />
-          </>
+          </Fragment>
         )}
 
         {type === 'birthday' && (

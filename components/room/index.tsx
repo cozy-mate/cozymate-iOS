@@ -56,7 +56,7 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData }) => {
           </View>
 
           <View className="flex flex-row items-center justify-between">
-            <View className="flex flex-row">
+            <View className="flex flex-row gap-x-[6px]">
               {roomData.hashtags.map((hash, index) => (
                 <View key={index} className="py-0.5 px-2 rounded bg-colorBox">
                   <Text className="text-12 font-500 leading-12 text-colorFont">#{hash}</Text>

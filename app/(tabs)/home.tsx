@@ -28,7 +28,7 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   // 참여요청을 보낸 목록
-  const { data } = useGetSentRequestRoomList();
+  const { data } = useGetSentRequestRoomList(3);
 
   // 스크롤 시 SafeAreaView 색상 관련
   const [scrollY, setScrollY] = useState<number>(0);

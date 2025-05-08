@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Keyboard, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, Text, TextInput, View } from 'react-native';
 
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
+import { useCreateReport } from '@/hooks/report/report';
+
+import LoadingComponent from '../loading';
 
 interface ReasonItem {
   index: number;
@@ -27,23 +30,6 @@ const ReportModalComponent: React.FC<ReportModalProps> = ({
   const [reason, setReason] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-    });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   const [reasonItems, setReasonItems] = useState<ReasonItem[]>([
     { index: 1, title: '음란성/선정성', value: 'OBSCENITY', selected: false },
     { index: 2, title: '욕설/인신공격', value: 'INSULT', selected: false },
@@ -64,15 +50,18 @@ const ReportModalComponent: React.FC<ReportModalProps> = ({
 
   const canSubmit = reason !== '' && (reason !== 'OTHER' || content !== '');
 
+  const { mutateAsync: createReport, isPending } = useCreateReport(closeModal);
+
   return (
     <Modal transparent={true} visible={isVisible} animationType="fade">
+      {isPending && <LoadingComponent />}
       <View
         onTouchEnd={closeModal}
         className="absolute left-0 top-0 flex h-screen w-screen items-center justify-center bg-black/60 px-5"
       >
         <View
           onTouchEnd={(e) => e.stopPropagation()}
-          className={`flex flex-col justify-between rounded-xl bg-white px-[16px] pb-[20px] pt-[24px] gap-x-[8px] ${isKeyboardVisible && 'mb-[120px]'}`}
+          className={`flex flex-col justify-between rounded-xl bg-white px-[16px] pb-[20px] pt-[24px] gap-x-[8px]`}
         >
           <Text className="px-2 text-lg font-semibold text-emphasizedFont">신고사유</Text>
           <View className="flex flex-row flex-wrap gap-x-[7px] gap-y-[4px]">
@@ -109,7 +98,9 @@ const ReportModalComponent: React.FC<ReportModalProps> = ({
 
           <Pressable
             disabled={!canSubmit}
-            onPress={() => {}}
+            onPress={() =>
+              createReport({ memberId: memberId, source: source, reason: reason, content: content })
+            }
             className={`${canSubmit ? 'bg-mainColor' : 'bg-[#C4C4C4]'} rounded-xl py-[17.5px] mt-[20px]`}
           >
             <Text className="text-16 font-600 leading-16 text-white text-center">신고하기</Text>
