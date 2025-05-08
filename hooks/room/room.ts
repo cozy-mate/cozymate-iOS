@@ -10,8 +10,9 @@ import { useRouter, useNavigationContainerRef } from 'expo-router';
 import React from 'react';
 
 import { CreatePublicRoomRequest } from '@/apis/room/request';
-import { CreatePublicRoomResponse } from '@/apis/room/response';
+import { CreatePublicRoomResponse, GetRoomByInviteCodeResponse } from '@/apis/room/response';
 import {
+  acceptRoomRequest,
   cancelInviteMember,
   cancelRequestRoom,
   checkIsInvitedMember,
@@ -21,12 +22,15 @@ import {
   createPublicRoom,
   exitRoom,
   getReceivedRequestList,
+  getRoomByInviteCode,
   getRoomDetail,
   getSentRequestRoomList,
   inviteMember,
+  joinRoom,
   searchRoom,
   sendRoomRequest,
 } from '@/apis/room/room';
+import { RoomItem } from '@/type/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
 
@@ -54,10 +58,10 @@ export const useCheckIsRequestedRoom = (roomId: number) => {
   });
 };
 
-export const useGetSentRequestRoomList = () => {
+export const useGetSentRequestRoomList = (size: number) => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/rooms/requested`],
-    queryFn: ({ pageParam }) => getSentRequestRoomList(pageParam, 3),
+    queryKey: [`/rooms/requested`, size],
+    queryFn: ({ pageParam }) => getSentRequestRoomList(pageParam, size),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage.result.hasNext) {
@@ -227,5 +231,55 @@ export const useSearchRoom = (keyword: string) => {
     queryKey: [`/rooms/search`, keyword],
     queryFn: () => searchRoom(keyword),
     enabled: keyword !== '',
+  });
+};
+
+export const useAcceptRoomRequest = (requesterId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (accept: boolean) => acceptRoomRequest(requesterId, accept),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/pending-status/${requesterId}`] });
+    },
+  });
+};
+
+export const useGetRoomByInviteCode = (
+  setRoomInfo: React.Dispatch<React.SetStateAction<RoomItem | null>>,
+  setIsRoomInfoModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsWrongInviteCodeModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  return useMutation({
+    mutationFn: (inviteCode: string) => getRoomByInviteCode(inviteCode),
+    onSuccess: (response: GetRoomByInviteCodeResponse) => {
+      setRoomInfo(response.result);
+      setIsRoomInfoModalOpen(true);
+    },
+    onError: (error: any) => {
+      console.log(error.response?.data);
+      const message = error.response?.data?.message;
+
+      if (message === '존재하지 않는 방입니다.') {
+        setIsWrongInviteCodeModalOpen(true);
+      } else if (message === '일치하지 않는 성별입니다.') {
+        showRejectToast('성별이 다르면 방에 참여할 수 없어요');
+      } else {
+        setIsWrongInviteCodeModalOpen(true);
+      }
+    },
+  });
+};
+
+export const useJoinRoom = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (roomId: number) => joinRoom(roomId),
+    onSuccess: () => {
+      router.back();
+    },
   });
 };
