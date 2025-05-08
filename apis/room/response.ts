@@ -108,3 +108,23 @@ export interface SearchRoomResponse {
     equality: number;
   }[];
 }
+
+export interface AcceptRoomRequestResponse {
+  result: string;
+}
+
+export interface AcceptRoomInviteResponse {
+  result: string;
+}
+
+export interface JoinRoomResponse {
+  result: string;
+}
+
+export interface GetRoomByInviteCodeResponse {
+  result: RoomItem;
+}
+
+export interface UpdateRoomInfoResponse {
+  result: RoomItem;
+}
