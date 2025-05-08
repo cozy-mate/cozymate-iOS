@@ -5,8 +5,10 @@ import {
   PostAxiosInstance,
 } from '@/axios/axios.method';
 
-import { CreatePublicRoomRequest } from './request';
+import { CreatePublicRoomRequest, UpdateRoomInfoRequest } from './request';
 import {
+  AcceptRoomInviteResponse,
+  AcceptRoomRequestResponse,
   CancelInviteMemberResponse,
   CancelRequestRoomResponse,
   CheckHasRoomResponse,
@@ -18,11 +20,14 @@ import {
   CreatePublicRoomResponse,
   ExitRoomResponse,
   GetReceivedRequestListResponse,
+  GetRoomByInviteCodeResponse,
   GetRoomDetailResponse,
   GetSentRequestRoomListResponse,
   InviteMemberResponse,
+  JoinRoomResponse,
   SearchRoomResponse,
   SendRoomRequestRequest,
+  UpdateRoomInfoResponse,
 } from './response';
 
 // 사용자 -> 방 참여 요청 취소
@@ -119,6 +124,18 @@ export const getReceivedRequestList = async (): Promise<GetReceivedRequestListRe
 };
 
 // 초대코드로 방 정보 조회 기능
+export const getRoomByInviteCode = async (
+  inviteCode: string,
+): Promise<GetRoomByInviteCodeResponse> => {
+  const response = await GetAxiosInstance<GetRoomByInviteCodeResponse>(`/rooms/join`, {
+    params: {
+      inviteCode,
+    },
+  });
+
+  return response.data;
+};
+
 // 사용자가 초대 요청받은 방 목록 조회
 
 // 방장 -> 방장이 초대한 사용자인지 조회
@@ -153,6 +170,15 @@ export const checkRoomName = async (roomName: string): Promise<CheckRoomNameResp
 };
 
 // 방 정보 수정
+export const updateRoomInfo = async (
+  roomId: number,
+  data: UpdateRoomInfoRequest,
+): Promise<UpdateRoomInfoResponse> => {
+  const response = await PatchAxiosInstance<UpdateRoomInfoResponse>(`/rooms/${roomId}`, data);
+
+  return response.data;
+};
+
 // 공개방으로 전환
 // 비공개방으로 전환
 
@@ -164,7 +190,24 @@ export const exitRoom = async (roomId: number): Promise<ExitRoomResponse> => {
 };
 
 // 방에서 강제 퇴장 시키기
+
 // 방장 -> 방 참여 요청 수락/거절
+export const acceptRoomRequest = async (
+  requesterId: number,
+  accept: boolean,
+): Promise<AcceptRoomRequestResponse> => {
+  const response = await PatchAxiosInstance<AcceptRoomRequestResponse>(
+    `/rooms/request-join/${requesterId}`,
+    null,
+    {
+      params: {
+        accept,
+      },
+    },
+  );
+
+  return response.data;
+};
 
 // 사용자 -> 방 참여 요청
 export const sendRoomRequest = async (roomId: number): Promise<SendRoomRequestRequest> => {
@@ -174,7 +217,20 @@ export const sendRoomRequest = async (roomId: number): Promise<SendRoomRequestRe
 };
 
 // 방 입장 기능
+export const joinRoom = async (roomId: number): Promise<JoinRoomResponse> => {
+  const response = await PostAxiosInstance<JoinRoomResponse>(`/rooms/${roomId}/join`);
+
+  return response.data;
+};
+
 // 사용자 -> 방 참여 요청/수락
+export const acceptRoomInvite = async (roomId: number): Promise<AcceptRoomInviteResponse> => {
+  const response = await PostAxiosInstance<AcceptRoomInviteResponse>(
+    `/rooms/${roomId}/invite-request`,
+  );
+
+  return response.data;
+};
 
 // 방장 -> 내방으로 초대하기
 export const inviteMember = async (inviteeId: number): Promise<InviteMemberResponse> => {
