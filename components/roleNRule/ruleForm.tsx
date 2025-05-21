@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import { CreateRuleRequest } from '@/apis/rule/request';
+import { CreateRuleRequest } from '@/server/rule/request';
 
 import CustomTextareaComponent from '../common/customTextAreaBox';
 import CustomTextInputComponent from '../common/customTextInput';

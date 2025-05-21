@@ -18,8 +18,8 @@ export default function SearchUser() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 px-[20px] mt-[16px]">
-        <View className="flex flex-row items-center gap-x-[8px] mb-[24px]">
+      <View className="flex-1 mt-[16px]">
+        <View className="flex flex-row items-center gap-x-[8px] mb-[24px] px-[20px]">
           <View className="flex-1 relative">
             <TextInput
               value={keyword}
@@ -46,26 +46,29 @@ export default function SearchUser() {
           <FlatList
             data={data?.result}
             renderItem={({ item }) => (
-              <Pressable
-                key={item.memberDetail.memberId}
-                onPress={() => router.push(`/user/${item.memberDetail.memberId}`)}
-                className="flex flex-row justify-between items-center px-[8px] py-[10px]"
-              >
-                <View className="flex flex-row items-center gap-x-[8px]">
-                  {getPersona(item.memberDetail.persona, 28, 28)}
-                  <Text className="text-16 font-500 leading-16 text-emphasizedFont">
-                    {item.memberDetail.nickname}
-                  </Text>
-                </View>
-
-                <Text
-                  className={`text-16 font-500 leading-16 ${item.equality !== null ? 'text-mainColor' : 'text-colorFont'} `}
+              <View key={item.memberDetail.memberId} className="px-[20px]">
+                <Pressable
+                  onPress={() => router.push(`/user/${item.memberDetail.memberId}`)}
+                  className="flex flex-row justify-between items-center px-[8px] py-[10px]"
                 >
-                  {item.equality ?? '?? '}%
-                </Text>
-              </Pressable>
+                  <View className="flex flex-row items-center gap-x-[8px]">
+                    {getPersona(item.memberDetail.persona, 28, 28)}
+                    <Text className="text-16 font-500 leading-16 text-emphasizedFont">
+                      {item.memberDetail.nickname}
+                    </Text>
+                  </View>
+
+                  <Text
+                    className={`text-16 font-500 leading-16 ${item.equality !== null ? 'text-mainColor' : 'text-colorFont'} `}
+                  >
+                    {item.equality ?? '?? '}%
+                  </Text>
+                </Pressable>
+              </View>
             )}
-            ItemSeparatorComponent={() => <View className="h-[1px] bg-[#F6F6F6] my-[12px]" />}
+            ItemSeparatorComponent={() => (
+              <View className="h-[1px] bg-[#F6F6F6] my-[12px] mx-[20px]" />
+            )}
             contentContainerStyle={data.result.length === 0 ? { flexGrow: 1 } : undefined}
             ListEmptyComponent={() => (
               <View className="flex-1 justify-center items-center">

@@ -34,37 +34,27 @@ const MyInfoComponent: React.FC = () => {
         </Pressable>
       </View>
 
-      <View className="border border-[#F1F2F4] rounded-xl p-4 w-full">
+      <View className="border border-[#F1F2F4] rounded-xl p-[16px] w-full">
         <Pressable
           onPress={() => router.push('/myPage/updateInfo/nickname')}
-          className="flex flex-row justify-between items-center pb-3 border-b border-b-[#F1F2F4]"
+          className="flex flex-row justify-between items-center pb-[12px] border-b border-b-[#F1F2F4]"
         >
           <View className="flex flex-row gap-x-[8px] items-center">
-            <Text className="text-14 font-500 text-disabledFont ml-1">닉네임</Text>
-            <Text className="text-14 font-500 text-emphasizedFont">{data.result.nickname}</Text>
+            <Text className="text-14 font-500 leading-14 text-disabledFont ml-1">닉네임</Text>
+            <Text className="text-14 font-500 leading-14 text-emphasizedFont">
+              {data.result.nickname}
+            </Text>
           </View>
-          <GrayArrow />
-        </Pressable>
-
-        <Pressable
-          onPress={() => router.push('/myPage/updateInfo/majorName')}
-          className="flex flex-row justify-between items-center py-3 border-b border-b-[#F1F2F4]"
-        >
-          <View className="flex flex-row gap-x-[8px] items-center">
-            <Text className="text-14 font-500 text-disabledFont ml-1">학과</Text>
-            <Text className="text-14 font-500 text-emphasizedFont">{data.result.majorName}</Text>
-          </View>
-
           <GrayArrow />
         </Pressable>
 
         <Pressable
           onPress={() => router.push('/myPage/updateInfo/birthday')}
-          className="flex flex-row justify-between items-center pt-3"
+          className="flex flex-row justify-between items-center pt-[12px]"
         >
           <View className="flex flex-row gap-x-[8px] items-center">
-            <Text className="text-14 font-500 text-disabledFont ml-1">생년월일</Text>
-            <Text className="text-14 font-500 text-emphasizedFont">
+            <Text className="text-14 font-500 leading-14 text-disabledFont ml-1">생년월일</Text>
+            <Text className="text-14 font-500 leading-14 text-emphasizedFont">
               {formatDate(data.result.birthday)}
             </Text>
           </View>

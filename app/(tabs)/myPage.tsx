@@ -8,6 +8,7 @@ import VerifiedIcon from '@/assets/images/myPage/verified.svg';
 import LoadingComponent from '@/components/common/loading';
 import MenuComponent from '@/components/myPage/Menu';
 import { getPersona } from '@/constants/items/characterItem';
+import { useCheckHasInquiry } from '@/hooks/inquiry/inquiry';
 import { useGetMemberProfile } from '@/hooks/member/member';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { useAuthProvider } from '@/providers/AuthProvider';
@@ -27,6 +28,7 @@ export default function MyPage() {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   const { data: roomData } = useGetMyRoomDetail();
+  const { data: hasInquiry } = useCheckHasInquiry();
 
   const { broadcastLogout } = useAuthProvider();
 
@@ -78,7 +80,14 @@ export default function MyPage() {
   ];
 
   const BottomMenuItems = [
-    { title: '문의하기', subTitle: null, onPress: () => router.push('/myPage/inquiry') },
+    {
+      title: '문의하기',
+      subTitle: null,
+      onPress: () =>
+        hasInquiry.result
+          ? router.push('/myPage/inquiry/list')
+          : router.push('/myPage/inquiry/register'),
+    },
   ];
 
   const handleLogout = async () => {

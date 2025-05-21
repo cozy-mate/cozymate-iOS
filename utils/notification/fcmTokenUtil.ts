@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import { getDeviceId } from 'react-native-device-info';
 
-import { postFcmToken } from '@/apis/fcm/fcm';
+import { postFcmToken } from '@/server/fcm/fcm';
 
 export const hasFcmToken = async (): Promise<boolean> => {
   try {

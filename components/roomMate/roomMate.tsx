@@ -95,7 +95,10 @@ const RoomMateComponent: React.FC = () => {
                   나와 똑같은 답변을 한 사용자를 확인할 수 있어요!
                 </Text>
               </View>
-              <Pressable className="p-[8px] flex flex-row items-center gap-x-[8px]">
+              <Pressable
+                onPress={() => router.push('/lifeStyle/onboarding')}
+                className="p-[8px] flex flex-row items-center gap-x-[8px]"
+              >
                 <Text className="text-16 font-600 leading-16 text-mainColor text-center">
                   라이프스타일 입력하러가기
                 </Text>

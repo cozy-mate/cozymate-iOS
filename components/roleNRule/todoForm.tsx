@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 
-import { CreateTodoRequest } from '@/apis/todo/request';
+import { CreateTodoRequest } from '@/server/todo/request';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 
 import CustomTextInputComponent from '../common/customTextInput';

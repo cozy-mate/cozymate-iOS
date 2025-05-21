@@ -1,6 +1,6 @@
-import { UpdateRoleRequest } from '@/apis/role/request';
-import { UpdateRuleRequest } from '@/apis/rule/request';
-import { UpdateTodoRequest } from '@/apis/todo/request';
+import { UpdateRoleRequest } from '@/server/role/request';
+import { UpdateRuleRequest } from '@/server/rule/request';
+import { UpdateTodoRequest } from '@/server/todo/request';
 
 export interface SelectedItem {
   id: number;

@@ -10,9 +10,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CreateRoleRequest } from '@/apis/role/request';
-import { CreateRuleRequest } from '@/apis/rule/request';
-import { CreateTodoRequest } from '@/apis/todo/request';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
 import RoleFormComponent from '@/components/roleNRule/roleForm';
@@ -21,6 +18,10 @@ import TodoFormComponent from '@/components/roleNRule/todoForm';
 import { useCreateRole } from '@/hooks/role/role';
 import { useCreateRule } from '@/hooks/rule/rule';
 import { useCreateTodo } from '@/hooks/todo/todo';
+import BottomButtonComponent from '@/newComponents/common/bottomButton';
+import { CreateRoleRequest } from '@/server/role/request';
+import { CreateRuleRequest } from '@/server/rule/request';
+import { CreateTodoRequest } from '@/server/todo/request';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function Create() {
@@ -111,23 +112,34 @@ export default function Create() {
         </TouchableWithoutFeedback>
       </ScrollView>
 
-      <View className="absolute bottom-0 pb-[42px] w-full px-[22px] bg-white">
-        <BottomButton
-          buttonText="확인"
-          disabled={
-            (type === 'To-do' &&
-              (todoForm.content.trim() === '' ||
-                todoForm.mateIdList.length === 0 ||
-                todoForm.timePoint.trim() === '')) ||
-            (type === 'Role' &&
-              (roleForm.mateIdNameList.length === 0 ||
-                roleForm.content.trim() === '' ||
-                roleForm.repeatDayList === null)) ||
-            (type === 'Rule' && ruleForm.content.trim() === '')
-          }
-          onPress={handleCreate}
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="확인"
+        onPress={handleCreate}
+        disabled={
+          (type === 'To-do' &&
+            (todoForm.content.trim() === '' ||
+              todoForm.mateIdList.length === 0 ||
+              todoForm.timePoint.trim() === '')) ||
+          (type === 'Role' &&
+            (roleForm.mateIdNameList.length === 0 ||
+              roleForm.content.trim() === '' ||
+              roleForm.repeatDayList === null)) ||
+          (type === 'Rule' && ruleForm.content.trim() === '')
+        }
+        color={
+          (type === 'To-do' &&
+            (todoForm.content.trim() === '' ||
+              todoForm.mateIdList.length === 0 ||
+              todoForm.timePoint.trim() === '')) ||
+          (type === 'Role' &&
+            (roleForm.mateIdNameList.length === 0 ||
+              roleForm.content.trim() === '' ||
+              roleForm.repeatDayList === null)) ||
+          (type === 'Rule' && ruleForm.content.trim() === '')
+            ? 'GRAY'
+            : 'BLUE'
+        }
+      />
     </SafeAreaView>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
 
-import { checkRoomName } from '@/apis/room/room';
+import { checkRoomName } from '@/server/room/room';
 
 interface RoomNameInputComponentProps {
   title: string;

@@ -5,7 +5,7 @@ type StringItem = {
 };
 
 export const numOfRoommateItems: StringItem[] = [
-  { index: 1, title: '미정', value: '미정' },
+  { index: 1, title: '미정', value: '0' },
   { index: 2, title: '2인', value: '2' },
   { index: 3, title: '3인', value: '3' },
   { index: 4, title: '4인', value: '4' },
