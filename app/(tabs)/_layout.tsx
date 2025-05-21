@@ -4,14 +4,14 @@ import { Platform, Pressable, Text, View } from 'react-native';
 
 import CozyHomeNotSelected from '@/assets/images/bottomTab/cozyHomeNotSelected.svg';
 import CozyHomeSelected from '@/assets/images/bottomTab/cozyHomeSelected.svg';
-import FeedNotSelected from '@/assets/images/bottomTab/feedNotSelected.svg';
-import FeedSelected from '@/assets/images/bottomTab/feedSelected.svg';
+// import FeedNotSelected from '@/assets/images/bottomTab/feedNotSelected.svg';
+// import FeedSelected from '@/assets/images/bottomTab/feedSelected.svg';
 import MyPageNotSelected from '@/assets/images/bottomTab/myPageNotSelected.svg';
 import MyPageSelected from '@/assets/images/bottomTab/myPageSelected.svg';
 import RoleNRuleNotSelected from '@/assets/images/bottomTab/roleNRuleNotSelected.svg';
 import RoleNRuleSelected from '@/assets/images/bottomTab/roleNRuleSelected.svg';
-import RoomMateNotSelected from '@/assets/images/bottomTab/roomMateNotSelected.svg';
-import RoomMateSelected from '@/assets/images/bottomTab/roomMateSelected.svg';
+// import RoomMateNotSelected from '@/assets/images/bottomTab/roomMateNotSelected.svg';
+// import RoomMateSelected from '@/assets/images/bottomTab/roomMateSelected.svg';
 import { HapticTab } from '@/components/HapticTab';
 import { showRejectToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -101,7 +101,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="cozyBot"
         options={{
           tabBarLabel: ({ focused }) => (
@@ -130,8 +130,8 @@ export default function TabLayout() {
             />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="feed"
         options={{
           tabBarLabel: ({ focused }) => (
@@ -155,7 +155,7 @@ export default function TabLayout() {
               </Pressable>
             ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="myPage"
         options={{
