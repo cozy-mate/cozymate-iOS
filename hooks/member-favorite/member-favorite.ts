@@ -4,7 +4,7 @@ import {
   createMemberLike,
   deleteMemberLike,
   getMemberLikeList,
-} from '@/apis/member-favorite/member-favorite';
+} from '@/server/member-favorite/member-favorite';
 
 export const useDeleteMemberLike = (memberFavoriteId: number, refetch: () => void) => {
   return useMutation({

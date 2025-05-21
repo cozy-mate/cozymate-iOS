@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { sendMail, verifyMail } from '@/apis/mail/mail';
-import { SendMailRequest, VerifyMailRequest } from '@/apis/mail/request';
-import { VerifyMailResponse } from '@/apis/mail/response';
+import { sendMail, verifyMail } from '@/server/mail/mail';
+import { SendMailRequest, VerifyMailRequest } from '@/server/mail/request';
+import { VerifyMailResponse } from '@/server/mail/response';
 import { setAccessToken } from '@/utils/token';
 
 export const useSendMail = () => {

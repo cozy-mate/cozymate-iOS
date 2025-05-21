@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { getRoomLog } from '@/apis/room-log/room-log';
+import { getRoomLog } from '@/server/room-log/room-log';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useGetRoomLog = () => {

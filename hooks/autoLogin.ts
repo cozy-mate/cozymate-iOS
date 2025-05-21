@@ -1,10 +1,10 @@
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 
-import { reissueToken } from '@/apis/auth/auth';
-import { getMemberProfile } from '@/apis/member/member';
-import { getMyDetail } from '@/apis/member-stat/member-stat';
-import { checkHasRoom } from '@/apis/room/room';
+import { reissueToken } from '@/server/auth/auth';
+import { getMemberProfile } from '@/server/member/member';
+import { getMyDetail } from '@/server/member-stat/member-stat';
+import { checkHasRoom } from '@/server/room/room';
 import { deleteToken, getRefreshToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';

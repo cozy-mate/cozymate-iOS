@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { createReport } from '@/apis/report/report';
-import { CreateReportRequest } from '@/apis/report/request';
+import { createReport } from '@/server/report/report';
+import { CreateReportRequest } from '@/server/report/request';
 
 export const useCreateReport = (closeModal: any) => {
   const router = useRouter();

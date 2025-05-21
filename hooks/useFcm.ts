@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
 import { getDeviceId } from 'react-native-device-info';
 
-import { postFcmToken } from '@/apis/fcm/fcm';
+import { postFcmToken } from '@/server/fcm/fcm';
 import { convertAction } from '@/utils/notification/convertAction';
 import {
   requestUserPermission,

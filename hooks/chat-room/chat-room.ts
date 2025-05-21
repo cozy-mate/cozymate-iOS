@@ -1,15 +1,22 @@
-import { useMutation, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { exitChatRoom, getChatRoomList, getNewChatRoomCount } from '@/apis/chat-room/chat-room';
+import { exitChatRoom, getChatRoomList, getNewChatRoomCount } from '@/server/chat-room/chat-room';
 
-export const useExitChatRoom = (chatRoomId: number, refetch: () => void) => {
+export const useExitChatRoom = (chatRoomId: number) => {
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => exitChatRoom(chatRoomId),
     onSuccess: () => {
-      refetch();
+      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
       router.back();
     },
   });

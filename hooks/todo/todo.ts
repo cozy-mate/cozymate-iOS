@@ -1,8 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { CreateTodoRequest, UpdateTodoRequest } from '@/apis/todo/request';
-import { createTodo, deleteTodo, getTodoList, toggleTodoDone, updateTodo } from '@/apis/todo/todo';
+import { CreateTodoRequest, UpdateTodoRequest } from '@/server/todo/request';
+import {
+  createTodo,
+  deleteTodo,
+  getTodoList,
+  toggleTodoDone,
+  updateTodo,
+} from '@/server/todo/todo';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteTodo = (roomId: number, todoId: number) => {

@@ -4,8 +4,8 @@ import { Alert } from 'react-native';
 import {
   getPreferenceList,
   updatePreferenceList,
-} from '@/apis/member-stat-preference/member-stat-preference';
-import { UpdatePreferenceListRequest } from '@/apis/member-stat-preference/request';
+} from '@/server/member-stat-preference/member-stat-preference';
+import { UpdatePreferenceListRequest } from '@/server/member-stat-preference/request';
 
 export const useGetPreferenceList = () => {
   return useSuspenseQuery({

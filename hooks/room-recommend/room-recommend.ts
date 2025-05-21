@@ -1,6 +1,6 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { getRecommendRoomList } from '@/apis/room-recommend/room-recommend';
+import { getRecommendRoomList } from '@/server/room-recommend/room-recommend';
 
 export const useGetHomeRecommendRoomList = () => {
   return useSuspenseQuery({

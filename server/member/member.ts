@@ -9,6 +9,7 @@ import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from './reque
 import {
   CheckNicknameResponse,
   GetMemberProfileResponse,
+  GetMemberUniversityInfoResponse,
   SignUpResponse,
   UpdateMemberInfoResponse,
   WithdrawResponse,
@@ -17,6 +18,14 @@ import {
 // 회원 탈퇴
 export const withdraw = async (data?: WithdrawRequest): Promise<WithdrawResponse> => {
   const response = await DeleteAxiosInstance<WithdrawResponse>(`/members/withdraw`, data);
+
+  return response.data;
+};
+
+// 인증된 학교 정보
+export const getMemberUniversityInfo = async (): Promise<GetMemberUniversityInfoResponse> => {
+  const response =
+    await GetAxiosInstance<GetMemberUniversityInfoResponse>(`/members/university-info`);
 
   return response.data;
 };

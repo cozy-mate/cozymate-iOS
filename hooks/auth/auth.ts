@@ -3,9 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 
-import { socialLogin } from '@/apis/auth/auth';
-import { getMyDetail } from '@/apis/member-stat/member-stat';
-import { checkHasRoom } from '@/apis/room/room';
+import { socialLogin } from '@/server/auth/auth';
+import { getMyDetail } from '@/server/member-stat/member-stat';
+import { checkHasRoom } from '@/server/room/room';
 import { errorRefiner } from '@/error/refiner';
 import { setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
