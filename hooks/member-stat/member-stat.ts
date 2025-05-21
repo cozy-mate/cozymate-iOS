@@ -15,8 +15,8 @@ import {
   getRandomMemberList,
   searchUser,
   updateMemberDetail,
-} from '@/apis/member-stat/member-stat';
-import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/apis/member-stat/request';
+} from '@/server/member-stat/member-stat';
+import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/server/member-stat/request';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 export const useGetMyDetail = () => {

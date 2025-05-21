@@ -9,7 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import { getUniversityList } from '@/apis/university/university';
+import { getUniversityList } from '@/server/university/university';
 import { UniversityItem } from '@/type/university';
 
 interface SchoolSelectModalComponentProps {

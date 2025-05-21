@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { CreateRuleRequest, UpdateRuleRequest } from '@/apis/rule/request';
-import { createRule, deleteRule, getRuleList, updateRule } from '@/apis/rule/rule';
+import { CreateRuleRequest, UpdateRuleRequest } from '@/server/rule/request';
+import { createRule, deleteRule, getRuleList, updateRule } from '@/server/rule/rule';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteRule = (roomId: number, ruleId: number) => {

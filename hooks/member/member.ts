@@ -2,18 +2,19 @@ import { StackActions } from '@react-navigation/native';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigationContainerRef, useRouter } from 'expo-router';
 
+import { useAuthProvider } from '@/providers/AuthProvider';
 import {
   checkNickname,
   signUp,
   updateMemberInfo,
   getMemberProfile,
   withdraw,
-} from '@/apis/member/member';
-import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/apis/member/request';
-import { SignUpResponse } from '@/apis/member/response';
+  getMemberUniversityInfo,
+} from '@/server/member/member';
+import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
+import { SignUpResponse } from '@/server/member/response';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
-import { useAuthProvider } from '@/providers/AuthProvider';
 
 export const useWithdraw = () => {
   const router = useRouter();
@@ -27,6 +28,13 @@ export const useWithdraw = () => {
       rootNavigation.dispatch(StackActions.popToTop());
       router.replace('/');
     },
+  });
+};
+
+export const useGetMemberUniversityInfo = () => {
+  return useSuspenseQuery({
+    queryKey: [`/members/university-info`],
+    queryFn: () => getMemberUniversityInfo(),
   });
 };
 
@@ -71,8 +79,10 @@ export const useSignUp = () => {
         setAccessToken(response.result.tokenResponseDTO.accessToken),
         setRefreshToken(response.result.tokenResponseDTO.refreshToken),
         setMemberState(response.result.memberDetailResponseDTO),
-      ]).then(()=> // Auth 전역 상태 업데이트
-        broadcastLogin());
+      ]).then(() =>
+        // Auth 전역 상태 업데이트
+        broadcastLogin(),
+      );
 
       router.push('/(onBoard)/complete');
     },

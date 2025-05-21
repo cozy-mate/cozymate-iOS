@@ -4,7 +4,7 @@ import {
   createRoomLike,
   deleteRoomLike,
   getRoomLikeList,
-} from '@/apis/room-favorite/room-favorite';
+} from '@/server/room-favorite/room-favorite';
 
 export const useDeleteRoomLike = (roomFavoriteId: number, refetch: () => void) => {
   return useMutation({

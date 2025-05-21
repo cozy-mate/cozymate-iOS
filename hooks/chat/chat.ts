@@ -1,8 +1,8 @@
-import { useMutation, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { getChatRoomDetail, sendChat } from '@/apis/chat/chat';
-import { SendChatRequest } from '@/apis/chat/request';
+import { getChatRoomDetail, sendChat } from '@/server/chat/chat';
+import { SendChatRequest } from '@/server/chat/request';
 
 export const useGetChatRoomDetail = (chatRoomId: number) => {
   return useSuspenseInfiniteQuery({
@@ -18,12 +18,18 @@ export const useGetChatRoomDetail = (chatRoomId: number) => {
   });
 };
 
-export const useSendChat = (recipientId: number) => {
+export const useSendChat = (recipientId: number, chatRoomId?: number) => {
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: SendChatRequest) => sendChat(recipientId, data),
     onSuccess: () => {
+      if (chatRoomId) {
+        console.log('호출');
+        queryClient.invalidateQueries({ queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId] });
+      }
       router.back();
     },
   });

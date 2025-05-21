@@ -5,6 +5,14 @@ export interface WithdrawResponse {
   result: string;
 }
 
+export interface GetMemberUniversityInfoResponse {
+  result: {
+    universityName: string;
+    mailAddress: string;
+    majorName: string;
+  };
+}
+
 export interface GetMemberProfileResponse {
   result: MemberData;
 }

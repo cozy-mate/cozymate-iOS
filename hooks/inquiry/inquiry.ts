@@ -1,8 +1,8 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { checkHasInquiry, createInquiry, getInquiryList } from '@/apis/inquiry/inquiry';
-import { CreateInquiryRequest } from '@/apis/inquiry/request';
+import { checkHasInquiry, createInquiry, getInquiryList } from '@/server/inquiry/inquiry';
+import { CreateInquiryRequest } from '@/server/inquiry/request';
 
 export const useGetInquiryList = () => {
   return useSuspenseQuery({
@@ -21,10 +21,18 @@ export const useCheckHasInquiry = () => {
 export const useCreateInquiry = () => {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: CreateInquiryRequest) => createInquiry(data),
     onSuccess: () => {
       router.back();
+      queryClient.invalidateQueries({ queryKey: [`/inquiries`] });
+      queryClient.invalidateQueries({ queryKey: [`/inquiries/exist`] });
+    },
+    onError: (error: any) => {
+      console.log(error.response?.data?.message);
+      router.push('/myPage/inquiry/failed');
     },
   });
 };

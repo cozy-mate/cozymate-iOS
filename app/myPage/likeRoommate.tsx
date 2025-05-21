@@ -35,8 +35,6 @@ export default function LikeRoommate() {
     }
   };
 
-  console.log(roomList?.pages?.flatMap((page) => page.result.result));
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="gap-y-[20px] flex-1">

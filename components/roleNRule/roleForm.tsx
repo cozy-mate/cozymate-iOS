@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import { CreateRoleRequest } from '@/apis/role/request';
+import { CreateRoleRequest } from '@/server/role/request';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 
 import CustomTextInputComponent from '../common/customTextInput';

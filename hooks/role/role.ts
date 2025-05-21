@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { CreateRoleRequest, UpdateRoleRequest } from '@/apis/role/request';
-import { createRole, deleteRole, getRoleList, updateRole } from '@/apis/role/role';
+import { CreateRoleRequest, UpdateRoleRequest } from '@/server/role/request';
+import { createRole, deleteRole, getRoleList, updateRole } from '@/server/role/role';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteRole = (roomId: number, roleId: number) => {

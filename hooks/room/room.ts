@@ -9,9 +9,10 @@ import {
 import { useRouter, useNavigationContainerRef } from 'expo-router';
 import React from 'react';
 
-import { CreatePublicRoomRequest } from '@/apis/room/request';
-import { CreatePublicRoomResponse, GetRoomByInviteCodeResponse } from '@/apis/room/response';
+import { CreatePublicRoomRequest } from '@/server/room/request';
+import { CreatePublicRoomResponse, GetRoomByInviteCodeResponse } from '@/server/room/response';
 import {
+  acceptRoomInvite,
   acceptRoomRequest,
   cancelInviteMember,
   cancelRequestRoom,
@@ -29,7 +30,7 @@ import {
   joinRoom,
   searchRoom,
   sendRoomRequest,
-} from '@/apis/room/room';
+} from '@/server/room/room';
 import { RoomItem } from '@/type/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -243,6 +244,15 @@ export const useAcceptRoomRequest = (requesterId: number) => {
       queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
       queryClient.invalidateQueries({ queryKey: [`/rooms/pending-status/${requesterId}`] });
     },
+  });
+};
+
+export const useAcceptRoomInvite = (roomId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (accept: boolean) => acceptRoomInvite(roomId, accept),
+    onSuccess: () => {},
   });
 };
 

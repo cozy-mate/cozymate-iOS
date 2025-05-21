@@ -63,12 +63,12 @@ export default function UserDetail() {
 
   return (
     <Suspense>
-      <SafeAreaView edges={['top', 'left', 'right']} className="flex-1 bg-subColor1">
+      <SafeAreaView edges={['top', 'left', 'right']} className="bg-subColor1">
         <ScrollView
           contentContainerStyle={{ flexGrow: 1, rowGap: 20, paddingBottom: 60 }}
           bounces={false}
         >
-          <View className="px-[20px] gap-y-5">
+          <View className="px-[20px] gap-y-[20px]">
             <Background style={{ position: 'absolute' }} />
 
             <BackHeaderComponent>
@@ -228,6 +228,8 @@ export default function UserDetail() {
           </View>
         )}
       </SafeAreaView>
+
+      <SafeAreaView edges={['bottom']} className="bg-white" />
     </Suspense>
   );
 }

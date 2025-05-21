@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
 import ChipList from '@/components/common/chipList';
-import MyInfoComponent from '@/components/myPage/MyInfo';
+import MyInfoComponent from '@/components/myPage/myInfo';
 import PreferenceListComponent from '@/components/myPage/PreferenceList';
 import {
   useGetPreferenceList,
@@ -48,12 +48,11 @@ export default function MyInfo() {
 
   return (
     <SafeAreaView className="flex-1 bg-white px-[20px]">
-      <ScrollView contentContainerStyle={{ rowGap: 8 }}>
-        <BackHeaderComponent />
-        <View className="gap-y-5">
-          <MyInfoComponent />
-          <PreferenceListComponent bottomSheetRef={bottomSheetRef} />
-        </View>
+      <BackHeaderComponent />
+
+      <ScrollView contentContainerStyle={{ rowGap: 20 }}>
+        <MyInfoComponent />
+        <PreferenceListComponent bottomSheetRef={bottomSheetRef} />
       </ScrollView>
 
       <BottomSheet

@@ -1,15 +1,13 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
 import BorderDateBox from '@/components/common/borderDateBox';
-import BorderPressBox from '@/components/common/borderPressBox';
 import BorderTextButtonBox from '@/components/common/borderTextButtonBox';
-import BottomButton from '@/components/common/bottomButton';
-import MajorSelectModalComponent from '@/components/onBoard/majorSelectModal';
 import { useCheckNickname, useGetMemberProfile, useUpdateMemberInfo } from '@/hooks/member/member';
+import BottomButtonComponent from '@/newComponents/common/bottomButton';
 
 export default function UpdateInfo() {
   const { type } = useLocalSearchParams();
@@ -19,16 +17,7 @@ export default function UpdateInfo() {
   const { mutateAsync: checkNickname } = useCheckNickname();
 
   const [nickname, setNickname] = useState<string>(data.result.nickname);
-  const [majorName, setMajorName] = useState<string>(data.result.majorName);
   const [birthday, setBirthday] = useState<string>(data.result.birthday);
-
-  const [isMajorSelectModalOpen, setIsMajorSelectModalOpen] = useState<boolean>(false);
-
-  const handleMajor = (major: string) => {
-    setMajorName(major);
-
-    setIsMajorSelectModalOpen(false);
-  };
 
   const { mutateAsync: updateInfo } = useUpdateMemberInfo();
 
@@ -50,24 +39,6 @@ export default function UpdateInfo() {
           />
         )}
 
-        {type === 'majorName' && (
-          <Fragment>
-            <BorderPressBox
-              title="학과"
-              value={majorName}
-              placeholder="학과를 선택해주세요"
-              onPress={() => setIsMajorSelectModalOpen(true)}
-            />
-
-            <MajorSelectModalComponent
-              isVisible={isMajorSelectModalOpen}
-              universityId={data.result.universityId}
-              handleValue={handleMajor}
-              closeModal={() => setIsMajorSelectModalOpen(false)}
-            />
-          </Fragment>
-        )}
-
         {type === 'birthday' && (
           <BorderDateBox
             title="생년월일"
@@ -77,24 +48,27 @@ export default function UpdateInfo() {
         )}
       </View>
 
-      <View className="absolute bottom-0 pb-[42px] w-full px-[22px] bg-white">
-        <BottomButton
-          buttonText="수정"
-          disabled={
-            (type === 'nickname' && nickname.trim() === '') ||
-            (type === 'majorName' && majorName.trim() === '') ||
-            (type === 'birthday' && birthday.trim() === '')
-          }
-          onPress={() =>
-            updateInfo({
-              nickname: nickname,
-              majorName: majorName,
-              birthday: birthday,
-              persona: data.result.persona,
-            })
-          }
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="수정"
+        onPress={() =>
+          updateInfo({
+            nickname: nickname,
+            majorName: data.result.majorName,
+            birthday: birthday,
+            persona: data.result.persona,
+          })
+        }
+        color={
+          (type === 'nickname' && nickname.trim() === '') ||
+          (type === 'birthday' && birthday.trim() === '')
+            ? 'GRAY'
+            : 'BLUE'
+        }
+        disabled={
+          (type === 'nickname' && nickname.trim() === '') ||
+          (type === 'birthday' && birthday.trim() === '')
+        }
+      />
     </SafeAreaView>
   );
 }

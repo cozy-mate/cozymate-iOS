@@ -1,6 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
-import { getNotificationLog } from '@/apis/notification/notification';
+import { getNotificationLog } from '@/server/notification/notification';
 
 export const useGetNotificationLog = () => {
   return useSuspenseInfiniteQuery({

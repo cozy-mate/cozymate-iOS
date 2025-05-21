@@ -13,8 +13,8 @@ const BackHeaderComponent: React.FC<BackHeaderComponentProps> = ({ title, childr
   const router = useRouter();
 
   return (
-    <View className="mt-2 flex flex-row justify-between items-center">
-      <Pressable onPress={() => router.back()} className="w-10 h-10 flex justify-center">
+    <View className="mt-[8px] flex flex-row justify-between items-center">
+      <Pressable onPress={() => router.back()} className="w-[40px] h-[40px] flex justify-center">
         <BackArrow />
       </Pressable>
 

@@ -19,7 +19,9 @@ export default function MyPageLayout() {
       <Stack.Screen name="likeRoommate" options={{ headerShown: false }} />
 
       {/* 문의하기 */}
-      <Stack.Screen name="inquiry" options={{ headerShown: false }} />
+      <Stack.Screen name="inquiry/list" options={{ headerShown: false }} />
+      <Stack.Screen name="inquiry/register" options={{ headerShown: false }} />
+      <Stack.Screen name="inquiry/failed" options={{ headerShown: false }} />
 
       {/* 회원탈퇴 */}
       <Stack.Screen name="withdraw" options={{ headerShown: false }} />

@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { getMyUniversityInfo, getUniversityInfo } from '@/apis/university/university';
+import { getMyUniversityInfo, getUniversityInfo } from '@/server/university/university';
 
 export const useGetMyUniversityInfo = () => {
   return useSuspenseQuery({

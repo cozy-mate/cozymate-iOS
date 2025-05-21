@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { Keyboard, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { UpdateRoleRequest } from '@/apis/role/request';
-import { UpdateRuleRequest } from '@/apis/rule/request';
-import { UpdateTodoRequest } from '@/apis/todo/request';
+import { UpdateRoleRequest } from '@/server/role/request';
+import { UpdateRuleRequest } from '@/server/rule/request';
+import { UpdateTodoRequest } from '@/server/todo/request';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
 import RoleFormComponent from '@/components/roleNRule/roleForm';

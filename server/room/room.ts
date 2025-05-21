@@ -224,9 +224,18 @@ export const joinRoom = async (roomId: number): Promise<JoinRoomResponse> => {
 };
 
 // 사용자 -> 방 참여 요청/수락
-export const acceptRoomInvite = async (roomId: number): Promise<AcceptRoomInviteResponse> => {
+export const acceptRoomInvite = async (
+  roomId: number,
+  accept: boolean,
+): Promise<AcceptRoomInviteResponse> => {
   const response = await PostAxiosInstance<AcceptRoomInviteResponse>(
     `/rooms/${roomId}/invite-request`,
+    null,
+    {
+      params: {
+        accept,
+      },
+    },
   );
 
   return response.data;

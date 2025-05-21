@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import StarImage from '@/assets/images/lifeStyle/star.svg';
-import BottomButton from '@/components/common/bottomButton';
+import BottomButtonComponent from '@/newComponents/common/bottomButton';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function LifeStyleOnboarding() {
@@ -29,13 +29,12 @@ export default function LifeStyleOnboarding() {
         </View>
       </View>
 
-      <View className="absolute bottom-[42px] w-full px-[22px]">
-        <BottomButton
-          buttonText="내 라이프 스타일 입력하러 가기"
-          disabled={false}
-          onPress={() => router.push('/lifeStyle/basicInfo')}
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="내 라이프 스타일 입력하러 가기"
+        onPress={() => router.push('/lifeStyle/basicInfo')}
+        color="BLUE"
+        disabled={false}
+      />
     </SafeAreaView>
   );
 }
