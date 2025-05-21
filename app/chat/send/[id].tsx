@@ -3,16 +3,16 @@ import { useState } from 'react';
 import { TextInput, View, Text, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import BottomButton from '@/components/common/bottomButton';
 import XHeaderComponent from '@/components/common/xHeader';
+import BottomButtonComponent from '@/components/myPage/bottomButton';
 import { useSendChat } from '@/hooks/chat/chat';
 
 export default function SendChat() {
-  const { id, nickname } = useLocalSearchParams();
+  const { id, chatRoomId, nickname } = useLocalSearchParams();
 
   const [content, setContent] = useState<string>('');
 
-  const { mutateAsync: sendChat } = useSendChat(Number(id));
+  const { mutateAsync: sendChat } = useSendChat(Number(id), Number(chatRoomId));
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -36,13 +36,12 @@ export default function SendChat() {
         </View>
       </TouchableWithoutFeedback>
 
-      <View className="absolute bottom-[42px] w-full px-[22px]">
-        <BottomButton
-          buttonText="쪽지 보내기"
-          disabled={content === ''}
-          onPress={() => sendChat({ content })}
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="쪽지 보내기"
+        onPress={() => sendChat({ content })}
+        disabled={content === ''}
+        color={content === '' ? 'GRAY' : 'BLUE'}
+      />
     </SafeAreaView>
   );
 }

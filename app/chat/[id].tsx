@@ -1,35 +1,40 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SettingIcon from '@/assets/images/common/setting.svg';
-import ChatComponent from '@/components/chat/ChatComponent';
+import ChatItemComponent from '@/components/chat/chatItem';
 import BackHeaderComponent from '@/components/common/backHeader';
 import ReportModalComponent from '@/components/common/reportModal';
 import TwoButtonModal from '@/components/common/twoButtonModal';
 import { useGetChatRoomDetail } from '@/hooks/chat/chat';
-import { useExitChatRoom, useGetChatRoomList } from '@/hooks/chat-room/chat-room';
+import { useExitChatRoom } from '@/hooks/chat-room/chat-room';
 
 export default function ChatRoom() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const router = useRouter();
 
-  const { id } = useLocalSearchParams();
+  const { id, nickname } = useLocalSearchParams();
 
-  const { data } = useGetChatRoomDetail(Number(id));
-
-  const { refetch } = useGetChatRoomList();
-  const { mutateAsync: exitChatRoom } = useExitChatRoom(Number(id), refetch);
+  const { mutateAsync: exitChatRoom } = useExitChatRoom(Number(id));
 
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
   const [isReportModalVisible, setIsReportModalVisible] = useState<boolean>(false);
 
+  const { data, fetchNextPage, hasNextPage } = useGetChatRoomDetail(Number(id));
+
+  const loadMoreList = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white  pt-[8px] relative">
-      <View className="gap-y-[49px] px-[20px]">
+    <SafeAreaView className="flex-1 bg-white pt-[8px] relative">
+      <View className="px-[20px]">
         <BackHeaderComponent>
           <Pressable
             onPress={() => bottomSheetRef.current?.expand()}
@@ -38,11 +43,24 @@ export default function ChatRoom() {
             <SettingIcon />
           </Pressable>
         </BackHeaderComponent>
-        <ChatComponent id={Number(id)} />
       </View>
 
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 80 }}
+        className="px-[20px] mt-[16px]"
+        data={data?.pages?.flatMap((page) => page.result.result.content)}
+        renderItem={({ item }) => <ChatItemComponent data={item} />}
+        ItemSeparatorComponent={() => <View className="bg-[#F1F2F4] h-[1px] my-[18px]" />}
+        onEndReached={loadMoreList}
+        onEndReachedThreshold={0.5}
+      />
+
       <Pressable
-        onPress={() => router.push(`/chat/send/${data?.pages[0]?.result.result.memberId}`)}
+        onPress={() =>
+          router.push(
+            `/chat/send/${data?.pages[0]?.result.result.memberId}?chatRoomId=${Number(id)}&nickname=${encodeURIComponent(nickname as string)}`,
+          )
+        }
         className="bg-mainColor rounded-full px-[60px] py-[14px] absolute bottom-[62px] left-1/2 -translate-x-1/2"
       >
         <Text className="text-14 font-600 leading-14 text-white text-center">쪽지쓰기</Text>
