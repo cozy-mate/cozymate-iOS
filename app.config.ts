@@ -50,6 +50,8 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
         badge: true,
         sound: true,
       },
+      // http3 비활성화, 켜놓으면 GA 전송이 안됩니다!
+      NSHTTP3Enabled: false,
     },
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './GoogleService-Info.plist',
   },
