@@ -4,6 +4,8 @@ import { Modal, Pressable, Text, TextInput, View } from 'react-native';
 import LoadingComponent from '@/components/common/loading';
 import { useSendMail } from '@/hooks/mail/mail';
 import { useGetUniversityInfo } from '@/hooks/university/university';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
 
 const EmailInputBox: React.FC = () => {
@@ -15,6 +17,8 @@ const EmailInputBox: React.FC = () => {
 
   const { mailState, setMailState } = useMailAuthenticationStore();
 
+  const { trackInput, trackButton } = useTracker();
+
   const { data } = useGetUniversityInfo(mailState.universityId);
 
   const getDomain = (value: string) => {
@@ -24,6 +28,13 @@ const EmailInputBox: React.FC = () => {
 
   const { mutateAsync: sendMail, isPending } = useSendMail();
 
+  const handleInput = (value: string) => {
+    setMailState({ mailAddress: value });
+    trackInput(InputEvent.Email, EventCategory.Onboarding, {
+      email: mailState.mailAddress,
+    });
+  };
+
   const handleSendMail = async () => {
     try {
       await sendMail({
@@ -32,6 +43,10 @@ const EmailInputBox: React.FC = () => {
       });
 
       setIsSended(true);
+
+      trackButton(ButtonEvent.Email, EventCategory.Onboarding, {
+        email: mailState.mailAddress,
+      });
     } catch (error: any) {
       console.log(error);
       setIsError(true);
@@ -59,7 +74,7 @@ const EmailInputBox: React.FC = () => {
             <TextInput
               ref={inputRef}
               value={mailState.mailAddress}
-              onChangeText={(e: string) => setMailState({ mailAddress: e })}
+              onChangeText={handleInput}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               placeholder="학교 이메일을 입력해주세요"
