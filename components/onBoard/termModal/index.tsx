@@ -5,6 +5,8 @@ import GrayArrow from '@/assets/images/common/grayArrow.svg';
 import Check from '@/assets/images/onBoard/check.svg';
 import NotCheck from '@/assets/images/onBoard/notCheck.svg';
 import BottomButton from '@/components/common/bottomButton';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 
 interface TermsAgreeComponentProps {
   isVisible: boolean;
@@ -20,7 +22,12 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
   const [isUseTermsAgree, setIsUseTermsAgree] = useState<boolean>(false);
   const [isInformationTermsAgree, setIsInformationTermsAgree] = useState<boolean>(false);
 
+  const { trackButton } = useTracker();
+
   const handleTotal = () => {
+    trackButton(ButtonEvent.agree_all, EventCategory.Onboarding, {
+      agree_all: isUseTermsAgree && isInformationTermsAgree,
+    });
     if (isUseTermsAgree && isInformationTermsAgree) {
       setIsUseTermsAgree(false);
       setIsInformationTermsAgree(false);
@@ -28,6 +35,20 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
       setIsUseTermsAgree(true);
       setIsInformationTermsAgree(true);
     }
+  };
+
+  const handleUseTermsAgree = () => {
+    setIsUseTermsAgree(!isUseTermsAgree);
+    trackButton(ButtonEvent.agree_1, EventCategory.Onboarding, {
+      agree_1: isUseTermsAgree,
+    });
+  };
+
+  const handleInformationTermsAgree = () => {
+    setIsInformationTermsAgree(!isInformationTermsAgree);
+    trackButton(ButtonEvent.agree_2, EventCategory.Onboarding, {
+      agree_2: isInformationTermsAgree,
+    });
   };
 
   const isAllAgree = isUseTermsAgree && isInformationTermsAgree;
@@ -67,7 +88,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                     <GrayArrow />
                   </Pressable>
                 </View>
-                <Pressable onPress={() => setIsUseTermsAgree(!isUseTermsAgree)} className="p-[8px]">
+                <Pressable onPress={handleUseTermsAgree} className="p-[8px]">
                   {isUseTermsAgree ? <Check /> : <NotCheck />}
                 </Pressable>
               </View>
@@ -84,10 +105,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                   </Pressable>
                 </View>
 
-                <Pressable
-                  onPress={() => setIsInformationTermsAgree(!isInformationTermsAgree)}
-                  className="p-[8px]"
-                >
+                <Pressable onPress={handleInformationTermsAgree} className="p-[8px]">
                   {isInformationTermsAgree ? <Check /> : <NotCheck />}
                 </Pressable>
               </View>

@@ -5,12 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomButton from '@/components/common/bottomButton';
 import { getPersona } from '@/constants/items/characterItem';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useSignUpStore } from '@/zustand/member/member';
 
 export default function Complete() {
   const { signUpState } = useSignUpStore();
 
   const navigationRef = useNavigationContainerRef();
+
+  const { trackButton } = useTracker();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -28,6 +32,12 @@ export default function Complete() {
           buttonText="cozymate 바로가기"
           disabled={false}
           onPress={() => {
+            trackButton(ButtonEvent.okay, EventCategory.Onboarding, {
+              nickname: signUpState.nickname,
+              gender: signUpState.gender,
+              birthday: signUpState.birthday,
+              persona: signUpState.persona,
+            });
             navigationRef.dispatch(
               CommonActions.reset({
                 index: 0,

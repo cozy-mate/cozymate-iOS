@@ -23,7 +23,7 @@ export const lifeStyleItems = [
   { title: '음주빈도', value: 'drinkingFrequency' },
   { title: '성격', value: 'personalities' },
   { title: 'MBTI', value: 'mbti' },
-];
+] as const;
 
 export const intensityItems = ['안틀어요', '약하게 틀어요', '적당하게 틀어요', '강하게 틀어요'];
 
@@ -34,3 +34,5 @@ export const sensitivityItems = [
   '예민해요',
   '매우 예민해요',
 ];
+
+export type LifeStyleValue = (typeof lifeStyleItems)[number]['value'];

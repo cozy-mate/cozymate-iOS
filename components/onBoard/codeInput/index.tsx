@@ -34,7 +34,7 @@ const CodeInputBox: React.FC = () => {
         majorName: mailState.majorName,
       });
 
-      trackButton(ButtonEvent.Email_code, EventCategory.Onboarding, {
+      trackButton(ButtonEvent.email_code, EventCategory.Onboarding, {
         code: mailState.code,
       });
     } catch (error: any) {
