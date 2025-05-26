@@ -9,6 +9,8 @@ import Background from '@/assets/images/cozyHome/background.svg';
 import SchoolIcon from '@/assets/images/cozyHome/blueSchoolIcon.svg';
 import Magnifier from '@/assets/images/cozyHome/magnifier.svg';
 import TwoButtonModal from '@/components/common/twoButtonModal';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useHasRoomStore } from '@/zustand/room/room';
@@ -22,6 +24,8 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
 
   const router = useRouter();
 
+  const { trackButton } = useTracker();
+
   const { memberState } = useMemberStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
   const { roomInfo } = useHasRoomStore();
@@ -33,6 +37,10 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleCreateModal(true);
     } else {
+      trackButton(ButtonEvent.make_room, EventCategory.Cozyhome, {
+        category: 'home_header',
+        button: 'make_room',
+      });
       router.push('/room/createRoom');
     }
   };
@@ -41,10 +49,35 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleJoinModal(true);
     } else {
+      trackButton(ButtonEvent.join_room, EventCategory.Cozyhome, {
+        category: 'home_header',
+        button: 'join_room',
+      });
       router.push('/room/joinRoom');
     }
   };
 
+  const handleChat = () => {
+    trackButton(ButtonEvent.chat, EventCategory.Cozyhome, {
+      category: 'home_header',
+      button: 'chat',
+    });
+    router.push('/chat/list');
+  };
+
+  const handleNotice = () => {
+    trackButton(ButtonEvent.notice, EventCategory.Cozyhome, {
+      category: 'home_header',
+      button: 'notice',
+    });
+  };
+
+  const handleLifeStyle = () => {
+    trackButton(ButtonEvent.life_style, EventCategory.Cozyhome, {
+      category: 'home_header',
+      button: 'life_style',
+    });
+  };
   return (
     <View
       className="gap-y-[12px] pt-[18px] pb-[25px] bg-subColor1 px-[20px] relative"
@@ -63,11 +96,11 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
         </Pressable>
 
         <View className="flex flex-row justify-between items-center">
-          <Pressable onPress={() => router.push('/chat/list')} className="p-[10px]">
+          <Pressable onPress={handleChat} className="p-[10px]">
             <ChatIcon />
           </Pressable>
 
-          <Pressable onPress={() => router.push('/notification')} className="p-[10px]">
+          <Pressable onPress={handleNotice} className="p-[10px]">
             <NotificationIcon />
           </Pressable>
         </View>
@@ -75,7 +108,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
 
       {!hasLifeStyle && (
         <Pressable
-          onPress={() => router.push('/lifeStyle/onboarding')}
+          onPress={handleLifeStyle}
           className="bg-colorBox py-[12px] px-[16px] flex flex-row justify-between items-center rounded-xl"
         >
           <View className="gap-x-[8px] flex flex-row items-center">

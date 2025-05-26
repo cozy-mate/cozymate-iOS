@@ -2,16 +2,27 @@ import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 import { useGetMyRoomDetail } from '@/hooks/room/room';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 const MyRoomComponent: React.FC = () => {
   const router = useRouter();
+  const { trackButton } = useTracker();
 
   const { memberState } = useMemberStore();
   const { roomInfo } = useHasRoomStore();
 
   const { data } = useGetMyRoomDetail();
+
+  const handleRoomPress = () => {
+    trackButton(ButtonEvent.my_room, EventCategory.Cozyhome, {
+      category: 'home_content',
+      button: 'my_room',
+    });
+    router.push(`/room/${roomInfo.roomId}`);
+  };
 
   return (
     <View className="gap-y-[16px] px-[20px]">
@@ -26,7 +37,7 @@ const MyRoomComponent: React.FC = () => {
 
       {roomInfo.roomId !== 0 ? (
         <Pressable
-          onPress={() => router.push(`/room/${roomInfo.roomId}`)}
+          onPress={handleRoomPress}
           className="rounded-xl p-[16px] gap-y-[8px] border border-mainColor bg-subColor2"
         >
           <View className="flex flex-row gap-x-[8px]">

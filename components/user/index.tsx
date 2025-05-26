@@ -6,13 +6,19 @@ import { getLifeStyleIcon, getLifeStyleLabel, getLifeStyleValue } from '@/utils/
 
 interface UserComponentProps {
   userData: MemberItem;
+  onPress?: () => void;
 }
 
-const UserComponent: React.FC<UserComponentProps> = ({ userData }) => {
+const UserComponent: React.FC<UserComponentProps> = ({ userData, onPress = () => { } }) => {
   const router = useRouter();
 
+  const handlePress = () => {
+    onPress();
+    router.push(`/user/${userData.memberDetail.memberId}`);
+  };
+
   return (
-    <Pressable onPress={() => router.push(`/user/${userData.memberDetail.memberId}`)}>
+    <Pressable onPress={handlePress}>
       <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
         <View className="flex flex-row items-center justify-between">
           <Text className="text-16 font-600 leading-16 text-basicFont mx-[8px]">
