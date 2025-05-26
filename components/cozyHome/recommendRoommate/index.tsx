@@ -11,7 +11,6 @@ import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-sta
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
-import { ButtonEventDescriptions } from '@/utils/ga/eventDescriptionMap';
 
 const RecommendRoommateComponent: React.FC = () => {
   const router = useRouter();
@@ -30,19 +29,12 @@ const RecommendRoommateComponent: React.FC = () => {
   const memberList = randomMemberList?.result.memberList ?? recommendMemberList?.result.memberList;
 
   const handleMore = () => {
-    trackButton(ButtonEvent.mate_more, EventCategory.Cozyhome, {
-      category: 'home_content',
-      button: 'mate_more',
-    });
+    trackButton(ButtonEvent.mate_more, EventCategory.homecontent);
     router.push('/user/roomMate');
   };
 
   const handleUserPress = () => {
-    trackButton(ButtonEvent.mate_component, EventCategory.Cozyhome, {
-      category: 'home_content',
-      button: 'mate_component',
-      description: ButtonEventDescriptions[ButtonEvent.mate_component],
-    });
+    trackButton(ButtonEvent.mate_component, EventCategory.homecontent);
   };
 
   return (

@@ -5,7 +5,10 @@ import { FlatList, Pressable, Text, View } from 'react-native';
 import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
 import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import StarImage from '@/assets/images/roomMate/star.svg';
+import { LifeStyleValue } from '@/constants/items/lifeStyle';
 import { useGetMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 import ChipList from '../common/chipList';
@@ -16,7 +19,9 @@ const RoomMateComponent: React.FC = () => {
 
   const { memberState } = useMemberStore();
 
-  const [filterList, setFilterList] = useState<string[]>([]);
+  const [filterList, setFilterList] = useState<LifeStyleValue[]>([]);
+
+  const { trackButton } = useTracker();
 
   const { data: randomMemberList } = useGetRandomMemberList();
   const { data, hasNextPage, fetchNextPage } = useGetMemberList(filterList);
@@ -25,18 +30,26 @@ const RoomMateComponent: React.FC = () => {
     // 라이프스타일이 있는 사용자
     data !== undefined
       ? // 추천 룸메이트 데이터 사용
-        data?.pages?.flatMap((page) => page.result.memberList)
+      data?.pages?.flatMap((page) => page.result.memberList)
       : // 필터링을 선택하지 않은 경우
-        filterList.length === 0
+      filterList.length === 0
         ? // 랜덤 룸메이트 데이터 사용
-          randomMemberList?.result.memberList
+        randomMemberList?.result.memberList
         : [];
 
-  const handleValue = (value: string) => {
+  const handleValue = (value: LifeStyleValue) => {
     setFilterList((prev) => {
       if (prev.includes(value)) {
+        trackButton(ButtonEvent[`chip_${value}`], EventCategory.content_mate, {
+          isActivated: !prev.includes(value),
+          activeChipCount: prev.filter((item) => item !== value).length,
+        });
         return prev.filter((item) => item !== value);
       } else {
+        trackButton(ButtonEvent[`chip_${value}`], EventCategory.content_mate, {
+          isActivated: prev.includes(value),
+          activeChipCount: prev.filter((item) => item !== value).length,
+        });
         return [...prev, value];
       }
     });
@@ -48,10 +61,19 @@ const RoomMateComponent: React.FC = () => {
     }
   };
 
+  const onPressLifeStyle = () => {
+    trackButton(ButtonEvent.life_style_component, EventCategory.content_mate);
+    router.push('/lifeStyle/onboarding');
+  };
+
+  const onPressUser = () => {
+    trackButton(ButtonEvent.mate_component, EventCategory.content_mate);
+  };
+
   return (
     <FlatList
       data={memberList}
-      renderItem={({ item }) => <UserComponent userData={item} />}
+      renderItem={({ item }) => <UserComponent userData={item} onPress={onPressUser} />}
       ListHeaderComponent={() => (
         <View className="px-[20px] mb-[32px] gap-y-[16px]">
           <View className="gap-y-[4px] mx-[4px]">
@@ -96,7 +118,7 @@ const RoomMateComponent: React.FC = () => {
                 </Text>
               </View>
               <Pressable
-                onPress={() => router.push('/lifeStyle/onboarding')}
+                onPress={onPressLifeStyle}
                 className="p-[8px] flex flex-row items-center gap-x-[8px]"
               >
                 <Text className="text-16 font-600 leading-16 text-mainColor text-center">
