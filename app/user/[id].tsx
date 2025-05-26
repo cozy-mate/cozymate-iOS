@@ -29,12 +29,16 @@ import {
   useCheckIsRequestedMember,
   useInviteMember,
 } from '@/hooks/room/room';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function UserDetail() {
   const { id } = useLocalSearchParams();
 
   const { memberState } = useMemberStore();
+
+  const { trackButton } = useTracker();
 
   const router = useRouter();
 
@@ -61,6 +65,53 @@ export default function UserDetail() {
 
   const { mutateAsync: acceptRoomRequest } = useAcceptRoomRequest(Number(id));
 
+  const onPressChat = () => {
+    trackButton(ButtonEvent.mate_message, EventCategory.mate_detail);
+    router.push(
+      `/chat/send/${Number(id)}?nickname=${encodeURIComponent(data.result.memberDetail.nickname)}`,
+    );
+  };
+
+  const onPressLike = (action: 'like' | 'unlike') => {
+    trackButton(ButtonEvent.mate_like, EventCategory.mate_detail, {
+      action,
+    });
+    if (action === 'like') {
+      createLike();
+    } else {
+      deleteLike();
+    }
+  };
+
+  const onPressSetView = (view: 'LIST' | 'TABLE') => {
+    trackButton(
+      view === 'LIST' ? ButtonEvent.show_list : ButtonEvent.show_grid,
+      EventCategory.mate_detail,
+      { view },
+    );
+    setType(view);
+  };
+
+  const onPressInvite = () => {
+    trackButton(ButtonEvent.invite_room, EventCategory.mate_detail);
+    inviteMember();
+  };
+
+  const onPressInviteCancel = () => {
+    trackButton(ButtonEvent.invite_room_cancel, EventCategory.mate_detail);
+    cancelInvite();
+  };
+
+  const onPressRoomAccept = () => {
+    trackButton(ButtonEvent.room_accept, EventCategory.mate_detail);
+    acceptRoomRequest(false);
+  };
+
+  const onPressRoomReject = () => {
+    trackButton(ButtonEvent.room_reject, EventCategory.mate_detail);
+    acceptRoomRequest(true);
+  };
+
   return (
     <Suspense>
       <SafeAreaView edges={['top', 'left', 'right']} className="bg-subColor1">
@@ -73,22 +124,15 @@ export default function UserDetail() {
 
             <BackHeaderComponent>
               <View className="flex flex-row items-center gap-x-[4px]">
-                <Pressable
-                  onPress={() =>
-                    router.push(
-                      `/chat/send/${Number(id)}?nickname=${encodeURIComponent(data.result.memberDetail.nickname)}`,
-                    )
-                  }
-                  className="pl-[14px] pr-[8px] py-[11px]"
-                >
+                <Pressable onPress={onPressChat} className="pl-[14px] pr-[8px] py-[11px]">
                   <ChatIcon />
                 </Pressable>
                 {data.result.favoriteId !== 0 ? (
-                  <Pressable onPress={() => deleteLike()} className="p-[8px]">
+                  <Pressable onPress={() => onPressLike('unlike')} className="p-[8px]">
                     <FilledHeartIcon />
                   </Pressable>
                 ) : (
-                  <Pressable onPress={() => createLike()} className="p-[8px]">
+                  <Pressable onPress={() => onPressLike('like')} className="p-[8px]">
                     <HeartIcon />
                   </Pressable>
                 )}
@@ -130,7 +174,7 @@ export default function UserDetail() {
           <View className="bg-white gap-y-[16px] flex-1 pt-3 rounded-t-[20px] pb-[68px]">
             <View className="flex flex-row justify-center items-center">
               <Pressable
-                onPress={() => setType('LIST')}
+                onPress={() => onPressSetView('LIST')}
                 className="flex flex-row items-center gap-x-[6px] p-[16px]"
               >
                 {type === 'LIST' ? <SelectedListIcon /> : <ListIcon />}
@@ -144,7 +188,7 @@ export default function UserDetail() {
               <View className="h-[24px] w-[1px] mx-[18px] bg-disabledColor" />
 
               <Pressable
-                onPress={() => setType('TABLE')}
+                onPress={() => onPressSetView('TABLE')}
                 className="flex flex-row items-center gap-x-[6px] p-[16px]"
               >
                 {type === 'TABLE' ? <SelectedTableIcon /> : <TableIcon />}
@@ -191,7 +235,7 @@ export default function UserDetail() {
               <BottomButton
                 buttonText="초대 취소하기"
                 disabled={false}
-                onPress={() => cancelInvite()}
+                onPress={onPressInviteCancel}
                 backColor="bg-colorBox"
                 borderColor="border-mainColor"
                 textColor="text-mainColor"
@@ -202,7 +246,7 @@ export default function UserDetail() {
             {isRequested?.result && (
               <View className="gap-x-[8px] flex flex-row items-center">
                 <Pressable
-                  onPress={() => acceptRoomRequest(false)}
+                  onPress={onPressRoomReject}
                   className="bg-white border border-mainColor rounded-xl p-[16px] flex-1"
                 >
                   <Text className="text-16 font-600 leading-16 text-mainColor text-center">
@@ -210,7 +254,7 @@ export default function UserDetail() {
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => acceptRoomRequest(true)}
+                  onPress={onPressRoomAccept}
                   className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1"
                 >
                   <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
@@ -222,7 +266,7 @@ export default function UserDetail() {
               <BottomButton
                 buttonText="내 방으로 초대하기"
                 disabled={false}
-                onPress={() => inviteMember()}
+                onPress={onPressInvite}
               />
             )}
           </View>
