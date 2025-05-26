@@ -13,7 +13,7 @@ export default function ScreenTracker() {
     const now = Date.now();
     if (prevScreenRef.current) {
       // 이전 스크린에서 머문 시간(초)
-      const duration = Math.floor((now - enterTimeRef.current) / 1000);
+      const duration = Math.round((now - enterTimeRef.current) / 1000);
       // 이전 스크린 타임 측정
       trackScreen(prevScreenRef.current, { duration });
     }
@@ -21,6 +21,15 @@ export default function ScreenTracker() {
     trackScreen(pathname);
     prevScreenRef.current = pathname;
     enterTimeRef.current = now;
+
+    // cleanup: 언마운트 시 마지막 스크린 duration 추적
+    return () => {
+      const end = Date.now();
+      if (prevScreenRef.current) {
+        const duration = Math.round((end - enterTimeRef.current) / 1000);
+        trackScreen(prevScreenRef.current, { duration });
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
   return null;
