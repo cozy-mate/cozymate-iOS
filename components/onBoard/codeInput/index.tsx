@@ -21,7 +21,7 @@ const CodeInputBox: React.FC = () => {
 
   const handleInput = (value: string) => {
     setMailState({ code: value });
-    trackInput(InputEvent.Email_code, EventCategory.Onboarding, {
+    trackInput(InputEvent.email_code, EventCategory.onboarding1, {
       code: mailState.code,
     });
   };
@@ -34,7 +34,7 @@ const CodeInputBox: React.FC = () => {
         majorName: mailState.majorName,
       });
 
-      trackButton(ButtonEvent.email_code, EventCategory.Onboarding, {
+      trackButton(ButtonEvent.email_code, EventCategory.onboarding1, {
         code: mailState.code,
       });
     } catch (error: any) {

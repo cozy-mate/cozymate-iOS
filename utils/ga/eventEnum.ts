@@ -116,6 +116,11 @@ export enum InputEvent {
   room_search = 'room_search',
   name = 'name',
   univ = 'univ',
+  major = 'major',
+  email = 'email',
+  email_code = 'email_code',
+  gender = 'gender',
+  birth = 'birth',
 }
 
 export enum ScreenName {

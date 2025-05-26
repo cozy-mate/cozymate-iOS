@@ -32,7 +32,7 @@ export default function Complete() {
           buttonText="cozymate 바로가기"
           disabled={false}
           onPress={() => {
-            trackButton(ButtonEvent.okay, EventCategory.Onboarding, {
+            trackButton(ButtonEvent.okay, EventCategory.onboarding5, {
               nickname: signUpState.nickname,
               gender: signUpState.gender,
               birthday: signUpState.birthday,

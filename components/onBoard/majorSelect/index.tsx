@@ -19,7 +19,7 @@ const MajorSelectBoxComponent: React.FC = () => {
 
     setIsMajorSelectModalOpen(false);
 
-    trackInput(InputEvent.Major, EventCategory.Onboarding, {
+    trackInput(InputEvent.major, EventCategory.onboarding1, {
       majorName: majorName,
     });
   };

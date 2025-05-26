@@ -27,28 +27,28 @@ export default function PersonalInfo() {
 
   const handleNickname = (value: string) => {
     setNickname(value);
-    trackInput(InputEvent.Name, EventCategory.Onboarding, {
+    trackInput(InputEvent.name, EventCategory.onboarding2, {
       nickname: value,
     });
   };
 
   const handleGender = (value: string) => {
     setGender(value);
-    trackInput(InputEvent.Gender, EventCategory.Onboarding, {
+    trackInput(InputEvent.gender, EventCategory.onboarding2, {
       gender: value,
     });
   };
 
   const handleBirthday = (value: string) => {
     setBirthday(value);
-    trackInput(InputEvent.Birth, EventCategory.Onboarding, {
+    trackInput(InputEvent.birth, EventCategory.onboarding2, {
       birthday: value,
     });
   };
 
   const handleNicknameChecked = (value: boolean) => {
     setNicknameChecked(value);
-    trackButton(ButtonEvent.name, EventCategory.Onboarding, {
+    trackButton(ButtonEvent.name, EventCategory.onboarding2, {
       nickname: nickname,
     });
   };

@@ -20,7 +20,7 @@ const SchoolSelectBoxComponent: React.FC = () => {
 
     setIsSchoolSelectModalOpen(false);
 
-    trackInput(InputEvent.Univ, EventCategory.Onboarding, {
+    trackInput(InputEvent.univ, EventCategory.onboarding1, {
       universityName: item.name,
     });
   };

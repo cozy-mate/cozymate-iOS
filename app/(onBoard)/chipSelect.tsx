@@ -21,10 +21,7 @@ export default function ChipSelect() {
   const { trackButton } = useTracker();
 
   const handleValue = (value: LifeStyleValue) => {
-    trackButton(ButtonEvent[value], EventCategory.Onboarding, {
-      chip: value,
-      chip_select: preferenceList,
-    });
+    trackButton(ButtonEvent[value], EventCategory.onboarding4);
     setPreferenceList((prev) => {
       if (prev.includes(value)) {
         return prev.filter((item) => item !== value);
@@ -62,9 +59,7 @@ export default function ChipSelect() {
           preferenceList: preferenceList,
         },
       });
-      trackButton(ButtonEvent.okay, EventCategory.Onboarding, {
-        chip_select: preferenceList,
-      });
+      trackButton(ButtonEvent.okay, EventCategory.onboarding5);
     } catch (error: any) {
       console.log(error.config);
     }
