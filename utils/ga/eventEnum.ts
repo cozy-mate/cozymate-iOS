@@ -129,6 +129,11 @@ export enum ScreenName {
   RoommateRecommendation = 'roommate_recommendation',
 }
 
+export enum GestureEvent {
+  room_swipe = 'room_swipe',
+  mate_swipe = 'mate_swipe',
+}
+
 export enum Actions {
   input_box = 'input_box',
   button_click = 'button_click',

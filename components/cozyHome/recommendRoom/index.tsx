@@ -9,12 +9,12 @@ import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import RoomComponent from '@/components/room';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
-import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
+import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 const RecommendRoomComponent: React.FC = () => {
   const router = useRouter();
-  const { trackButton } = useTracker();
+  const { trackButton, trackGesture } = useTracker();
 
   const { memberState } = useMemberStore();
 
@@ -63,6 +63,12 @@ const RecommendRoomComponent: React.FC = () => {
         autoPlay={false}
         onProgressChange={progress}
         renderItem={({ item }) => <RoomComponent roomData={item} onPress={handleRoomPress} />}
+        onSnapToItem={(index) => {
+          trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
+            index,
+            roomId: data.result.result[index]?.roomId,
+          });
+        }}
       />
 
       <Pagination.Custom

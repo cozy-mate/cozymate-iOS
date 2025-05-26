@@ -58,25 +58,18 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
   };
 
   const handleChat = () => {
-    trackButton(ButtonEvent.chat, EventCategory.home_header, {
-      category: 'home_header',
-      button: 'chat',
-    });
+    trackButton(ButtonEvent.chat, EventCategory.home_header);
     router.push('/chat/list');
   };
 
   const handleNotice = () => {
-    trackButton(ButtonEvent.notice, EventCategory.home_header, {
-      category: 'home_header',
-      button: 'notice',
-    });
+    trackButton(ButtonEvent.notice, EventCategory.home_header);
+    router.push('/notification');
   };
 
   const handleLifeStyle = () => {
-    trackButton(ButtonEvent.life_style, EventCategory.home_header, {
-      category: 'home_header',
-      button: 'life_style',
-    });
+    trackButton(ButtonEvent.life_style, EventCategory.home_header);
+    router.push('/lifeStyle/onboarding');
   };
   return (
     <View

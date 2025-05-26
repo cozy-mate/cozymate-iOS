@@ -9,7 +9,7 @@ import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import UserComponent from '@/components/user';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
 import { useTracker } from '@/providers/TrackerProvider';
-import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
+import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 const RecommendRoommateComponent: React.FC = () => {
@@ -17,7 +17,7 @@ const RecommendRoommateComponent: React.FC = () => {
 
   const { memberState } = useMemberStore();
 
-  const { trackButton } = useTracker();
+  const { trackButton, trackGesture } = useTracker();
 
   const width = Dimensions.get('screen').width;
 
@@ -68,6 +68,12 @@ const RecommendRoommateComponent: React.FC = () => {
           autoPlay={false}
           onProgressChange={progress}
           renderItem={({ item }) => <UserComponent userData={item} onPress={handleUserPress} />}
+          onSnapToItem={(index) => {
+            trackGesture(GestureEvent.mate_swipe, EventCategory.home_content, {
+              index,
+              userId: memberList[index]?.memberDetail?.memberId,
+            });
+          }}
         />
 
         <Pagination.Custom

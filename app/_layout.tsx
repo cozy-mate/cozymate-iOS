@@ -20,6 +20,7 @@ import { initGlobalThis } from '@/lib/initGlobalThis';
 import AuthProvider from '@/providers/AuthProvider';
 import FCMProvider from '@/providers/FCMProvider';
 import { TrackerProvider } from '@/providers/TrackerProvider';
+import ScreenTracker from '@/utils/ga/screenTracker';
 
 import '../global.css';
 
@@ -52,24 +53,10 @@ export default function RootLayout() {
 
   useAutoLogin(setAppLoaded);
 
-  // const testAnalytics = async () => {
-  //   try {
-  //     console.log('testAnalytics');
-  //     await analytics().setAnalyticsCollectionEnabled(true);
-  //     await analytics().logEvent('health_check', {
-  //       test_param: '성동',
-  //       debug: true,
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   useEffect(() => {
     if (appLoaded && fontsLoaded) {
       initializeKakaoSDK(kakaoNativeAppKey);
       // SplashScreen.hideAsync();
-      // testAnalytics();
     }
   }, [appLoaded, fontsLoaded]);
 
@@ -80,6 +67,7 @@ export default function RootLayout() {
           <AuthProvider appLoaded={appLoaded}>
             <FCMProvider appLoaded={appLoaded}>
               <TrackerProvider>
+                <ScreenTracker />
                 <Host>
                   <Stack>
                     {/* 온보딩 화면 */}
