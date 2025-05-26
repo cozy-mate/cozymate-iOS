@@ -1,7 +1,7 @@
 import analytics from '@react-native-firebase/analytics';
 import React, { createContext, useContext } from 'react';
 
-import { ButtonEvent, EventCategory, InputEvent, ScreenName } from '@/utils/ga/eventEnum';
+import { Actions, ButtonEvent, EventCategory, InputEvent, ScreenName } from '@/utils/ga/eventEnum';
 
 type TrackerContextType = {
     trackButton: (name: ButtonEvent, category: EventCategory, extra?: Record<string, unknown>) => Promise<void>;
@@ -19,13 +19,14 @@ export const useTracker = () => useContext(TrackerContext);
 
 export const TrackerProvider = ({ children }: { children: React.ReactNode }) => {
     const trackButton = async (
-        name: ButtonEvent,
+        label: ButtonEvent,
         category: EventCategory,
         extra?: Record<string, unknown>
     ) => {
         try {
             await analytics().logEvent('button_click', {
-                name,
+                action: Actions.button_click,
+                label,
                 category,
                 ...extra,
             });

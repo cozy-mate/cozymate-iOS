@@ -1,9 +1,16 @@
 export enum EventCategory {
-  Cozyhome = 'cozyhome',
-  Lifestyle = 'lifestyle',
-  Onboarding = 'onboarding',
-  RoomRecommendation = 'room_recommendation',
-  RoommateRecommendation = 'roommate_recommendation',
+  onboarding1 = 'onboarding1',
+  onboarding2 = 'onboarding2',
+  onboarding3 = 'onboarding3',
+  onboarding4 = 'onboarding4',
+  onboarding5 = 'onboarding5',
+  homeheader = 'home_header',
+  homecontent = 'home_content',
+  life_style = 'life_style',
+  content_mate = 'content_mate',
+  mate_detail = 'mate_detail',
+  content_room = 'content_room',
+  room_detail = 'room_detail',
 }
 
 export enum ButtonEvent {
@@ -31,6 +38,10 @@ export enum ButtonEvent {
   email = 'email',
   email_code = 'email_code',
   room_card = 'room_card',
+  next_general = 'next_general',
+  next_essential = 'next_essential',
+  next_choice = 'next_choice',
+  choice_text_input = 'choice_text_input',
   // 라이프스타일 value
   birthYear = 'birthYear',
   admissionYear = 'admissionYear',
@@ -59,17 +70,21 @@ export enum ButtonEvent {
 }
 
 export enum InputEvent {
-  Birth = 'birth',
-  Email = 'email',
-  Email_code = 'email_code',
-  Gender = 'gender',
-  Major = 'major',
-  Name = 'name',
-  Univ = 'univ',
+  mate_search = 'mate_search',
+  name = 'name',
+  univ = 'univ',
 }
 
 export enum ScreenName {
   Onboarding = 'onboarding',
   RoomRecommendation = 'room_recommendation',
   RoommateRecommendation = 'roommate_recommendation',
+}
+
+export enum Actions {
+  input_box = 'input_box',
+  button_click = 'button_click',
+  session_time = 'session_time',
+  gesture = 'gesture',
+  page_view = 'page_view',
 }
