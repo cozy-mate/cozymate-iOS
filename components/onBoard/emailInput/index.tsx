@@ -31,7 +31,7 @@ const EmailInputBox: React.FC = () => {
   const handleInput = (value: string) => {
     setMailState({ mailAddress: value });
     trackInput(InputEvent.email, EventCategory.onboarding1, {
-      email: mailState.mailAddress,
+      email: value,
     });
   };
 

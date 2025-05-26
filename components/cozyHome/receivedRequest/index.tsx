@@ -14,17 +14,13 @@ const ReceivedRequestComponent: React.FC = () => {
   const { data } = useGetReceivedRequestList();
 
   const handleMore = () => {
-    trackButton(ButtonEvent.request_more, EventCategory.home_content, {
-      category: 'home_content',
-      button: 'request_more',
-    });
+    trackButton(ButtonEvent.request_more, EventCategory.home_content);
     router.push('/user/receivedRequest');
   };
 
   const handleUserPress = (memberId: number) => {
     trackButton(ButtonEvent.request_component, EventCategory.home_content, {
-      category: 'home_content',
-      button: 'request_component',
+      memberId,
     });
     router.push(`/user/${memberId}`);
   };

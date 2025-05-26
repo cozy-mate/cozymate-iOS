@@ -37,10 +37,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleCreateModal(true);
     } else {
-      trackButton(ButtonEvent.make_room, EventCategory.home_header, {
-        category: 'home_header',
-        button: 'make_room',
-      });
+      trackButton(ButtonEvent.make_room, EventCategory.home_header);
       router.push('/room/createRoom');
     }
   };
@@ -49,10 +46,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleJoinModal(true);
     } else {
-      trackButton(ButtonEvent.join_room, EventCategory.home_header, {
-        category: 'home_header',
-        button: 'join_room',
-      });
+      trackButton(ButtonEvent.join_room, EventCategory.home_header);
       router.push('/room/joinRoom');
     }
   };

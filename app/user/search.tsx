@@ -21,9 +21,11 @@ export default function SearchUser() {
   const { trackInput } = useTracker();
 
   useEffect(() => {
-    trackInput(InputEvent.mate_search, EventCategory.content_mate, {
-      keyword: debouncedKeyword,
-    });
+    if (debouncedKeyword.trim()) {
+      trackInput(InputEvent.mate_search, EventCategory.content_mate, {
+        keyword: debouncedKeyword,
+      });
+    }
   }, [debouncedKeyword]);
 
   return (

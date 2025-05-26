@@ -20,9 +20,11 @@ export default function SearchRoom() {
   const { trackInput } = useTracker();
 
   useEffect(() => {
-    trackInput(InputEvent.room_search, EventCategory.content_room, {
-      keyword: debouncedKeyword,
-    });
+    if (debouncedKeyword.trim()) {
+      trackInput(InputEvent.room_search, EventCategory.content_room, {
+        keyword: debouncedKeyword,
+      });
+    }
   }, [debouncedKeyword]);
 
   return (
