@@ -17,7 +17,7 @@ const MyRoomComponent: React.FC = () => {
   const { data } = useGetMyRoomDetail();
 
   const handleRoomPress = () => {
-    trackButton(ButtonEvent.my_room, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.my_room, EventCategory.home_content, {
       category: 'home_content',
       button: 'my_room',
     });

@@ -37,7 +37,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleCreateModal(true);
     } else {
-      trackButton(ButtonEvent.make_room, EventCategory.Cozyhome, {
+      trackButton(ButtonEvent.make_room, EventCategory.home_header, {
         category: 'home_header',
         button: 'make_room',
       });
@@ -49,7 +49,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     if (!hasLifeStyle) {
       setShowNoLifeStyleJoinModal(true);
     } else {
-      trackButton(ButtonEvent.join_room, EventCategory.Cozyhome, {
+      trackButton(ButtonEvent.join_room, EventCategory.home_header, {
         category: 'home_header',
         button: 'join_room',
       });
@@ -58,7 +58,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
   };
 
   const handleChat = () => {
-    trackButton(ButtonEvent.chat, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.chat, EventCategory.home_header, {
       category: 'home_header',
       button: 'chat',
     });
@@ -66,14 +66,14 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
   };
 
   const handleNotice = () => {
-    trackButton(ButtonEvent.notice, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.notice, EventCategory.home_header, {
       category: 'home_header',
       button: 'notice',
     });
   };
 
   const handleLifeStyle = () => {
-    trackButton(ButtonEvent.life_style, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.life_style, EventCategory.home_header, {
       category: 'home_header',
       button: 'life_style',
     });

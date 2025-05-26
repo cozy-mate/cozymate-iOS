@@ -25,18 +25,12 @@ const RecommendRoomComponent: React.FC = () => {
   const { data } = useGetHomeRecommendRoomList();
 
   const handleMore = () => {
-    trackButton(ButtonEvent.room_more, EventCategory.Cozyhome, {
-      category: 'home_content',
-      button: 'room_more',
-    });
+    trackButton(ButtonEvent.room_more, EventCategory.home_content);
     router.push('/room/recommendRoom');
   };
 
   const handleRoomPress = () => {
-    trackButton(ButtonEvent.room_component, EventCategory.Cozyhome, {
-      category: 'home_content',
-      button: 'room_component',
-    });
+    trackButton(ButtonEvent.room_component, EventCategory.home_content);
   };
 
   return (

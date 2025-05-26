@@ -14,7 +14,7 @@ const ReceivedRequestComponent: React.FC = () => {
   const { data } = useGetReceivedRequestList();
 
   const handleMore = () => {
-    trackButton(ButtonEvent.request_more, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.request_more, EventCategory.home_content, {
       category: 'home_content',
       button: 'request_more',
     });
@@ -22,7 +22,7 @@ const ReceivedRequestComponent: React.FC = () => {
   };
 
   const handleUserPress = (memberId: number) => {
-    trackButton(ButtonEvent.request_component, EventCategory.Cozyhome, {
+    trackButton(ButtonEvent.request_component, EventCategory.home_content, {
       category: 'home_content',
       button: 'request_component',
     });

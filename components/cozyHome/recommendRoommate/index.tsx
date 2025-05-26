@@ -29,12 +29,12 @@ const RecommendRoommateComponent: React.FC = () => {
   const memberList = randomMemberList?.result.memberList ?? recommendMemberList?.result.memberList;
 
   const handleMore = () => {
-    trackButton(ButtonEvent.mate_more, EventCategory.homecontent);
+    trackButton(ButtonEvent.mate_more, EventCategory.home_content);
     router.push('/user/roomMate');
   };
 
   const handleUserPress = () => {
-    trackButton(ButtonEvent.mate_component, EventCategory.homecontent);
+    trackButton(ButtonEvent.mate_component, EventCategory.home_content);
   };
 
   return (
