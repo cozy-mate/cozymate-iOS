@@ -39,7 +39,7 @@ export default function RecommendRoom() {
 
   const onPressSortTypeSubmit = (value: SortTypeValue) => {
     trackButton(ButtonEvent.sorting, EventCategory.content_room);
-    setSelectedSortType(value);
+    setSortType(value);
     bottomSheetRef.current?.close();
     refetch();
   };
@@ -49,7 +49,7 @@ export default function RecommendRoom() {
     trackButton(ButtonEvent[buttonEvent], EventCategory.content_room, {
       sorting: ButtonEvent[buttonEvent],
     });
-    setSortType(value);
+    setSelectedSortType(value);
   };
 
   const onPressRoom = (roomId: number) => {
@@ -99,7 +99,7 @@ export default function RecommendRoom() {
                 className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
               >
                 <Text className="text-14 font-500 leading-14 text-basicFont">
-                  {sortTypeItem.find((item) => item.value === selectedSortType)?.title}
+                  {sortTypeItem.find((item) => item.value === sortType)?.title}
                 </Text>
 
                 <View className="rotate-90">
@@ -132,13 +132,13 @@ export default function RecommendRoom() {
                 className="flex flex-row justify-between items-center"
               >
                 <Text
-                  className={`text-16 leading-16 py-[11.5px] ${item.value === sortType ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                  className={`text-16 leading-16 py-[11.5px] ${item.value === selectedSortType ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
                 >
                   {item.title}
                 </Text>
 
                 <View className="p-[8px] my-[1px]">
-                  {item.value === sortType ? <SelectedRadioIcon /> : <RadioIcon />}
+                  {item.value === selectedSortType ? <SelectedRadioIcon /> : <RadioIcon />}
                 </View>
               </Pressable>
             ))}
