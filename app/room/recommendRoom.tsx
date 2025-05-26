@@ -11,8 +11,10 @@ import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButton from '@/components/common/bottomButton';
 import RoomComponent from '@/components/room';
-import { sortTypeItem } from '@/constants/items/sortItem';
+import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function RecommendRoom() {
@@ -20,10 +22,12 @@ export default function RecommendRoom() {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const [sortType, setSortType] = useState<string>('AVERAGE_RATE');
-  const [selectedSortType, setSelectedSortType] = useState<string>('AVERAGE_RATE');
+  const [sortType, setSortType] = useState<SortTypeValue>('AVERAGE_RATE');
+  const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
 
   const { memberState } = useMemberStore();
+
+  const { trackButton } = useTracker();
 
   const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(sortType);
 
@@ -31,6 +35,28 @@ export default function RecommendRoom() {
     if (hasNextPage) {
       fetchNextPage();
     }
+  };
+
+  const onPressSortTypeSubmit = (value: SortTypeValue) => {
+    trackButton(ButtonEvent.sorting, EventCategory.content_room);
+    setSortType(value);
+    bottomSheetRef.current?.close();
+    refetch();
+  };
+
+  const onPressSortType = (value: SortTypeValue) => {
+    const buttonEvent = `sorting_${value.toLowerCase()}` as keyof typeof ButtonEvent;
+    trackButton(ButtonEvent[buttonEvent], EventCategory.content_room, {
+      sorting: ButtonEvent[buttonEvent],
+    });
+    setSortType(value);
+  };
+
+  const onPressRoom = (roomId: number) => {
+    trackButton(ButtonEvent.room_component, EventCategory.content_room, {
+      roomId,
+    });
+    router.push(`/room/${roomId}`);
   };
 
   return (
@@ -42,7 +68,9 @@ export default function RecommendRoom() {
 
         <FlatList
           data={data?.pages?.flatMap((page) => page.result.result)}
-          renderItem={({ item }) => <RoomComponent roomData={item} />}
+          renderItem={({ item }) => (
+            <RoomComponent roomData={item} onPress={() => onPressRoom(item.roomId)} />
+          )}
           ListHeaderComponent={() => (
             <View className="px-[20px]">
               <View className="gap-y-[4px] ml-[4px]">
@@ -100,7 +128,7 @@ export default function RecommendRoom() {
             {sortTypeItem.map((item, index) => (
               <Pressable
                 key={index}
-                onPress={() => setSelectedSortType(item.value)}
+                onPress={() => onPressSortType(item.value)}
                 className="flex flex-row justify-between items-center"
               >
                 <Text
@@ -121,9 +149,7 @@ export default function RecommendRoom() {
               buttonText="확인"
               disabled={false}
               onPress={() => {
-                setSortType(selectedSortType);
-                bottomSheetRef.current?.close();
-                refetch();
+                onPressSortTypeSubmit(selectedSortType);
               }}
             />
           </View>

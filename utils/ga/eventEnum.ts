@@ -46,12 +46,19 @@ export enum ButtonEvent {
   univ = 'univ',
   major = 'major',
   email = 'email',
+  sorting = 'sorting',
+  sorting_average_rate = 'sorting_rate',
+  sorting_latest = 'sorting_new',
+  sorting_closing_soon = 'sorting_deadline',
   email_code = 'email_code',
   room_card = 'room_card',
   next_general = 'next_general',
   next_essential = 'next_essential',
   next_choice = 'next_choice',
   choice_text_input = 'choice_text_input',
+  room_message = 'room_message',
+  room_like = 'room_like',
+
   // 라이프스타일 value
   birthYear = 'birthYear',
   admissionYear = 'admissionYear',
@@ -106,6 +113,7 @@ export enum ButtonEvent {
 
 export enum InputEvent {
   mate_search = 'mate_search',
+  room_search = 'room_search',
   name = 'name',
   univ = 'univ',
 }

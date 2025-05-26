@@ -5,6 +5,8 @@ import GrayArrowIcon from '@/assets/images/common/smaillGrayArrow.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { RoomItem } from '@/type/room';
 import { useMemberStore } from '@/zustand/member/member';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 
 interface MateListComponentProps {
   data: RoomItem;
@@ -14,6 +16,16 @@ const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
   const router = useRouter();
 
   const { memberState } = useMemberStore();
+
+  const { trackButton } = useTracker();
+
+  const onPressMate = (memberId: number) => {
+    trackButton(ButtonEvent.mate_component, EventCategory.content_room, {
+      roomId: data.roomId,
+      memberId,
+    });
+    router.push(`/user/${memberId}`);
+  };
 
   return (
     <View className="px-[20px] gap-y-[12px]">
@@ -28,7 +40,7 @@ const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
         {data.mateDetailList.map((mate, index) => (
           <Pressable
             key={mate.mateId}
-            onPress={() => router.push(`/user/${mate.memberId}`)}
+            onPress={() => onPressMate(mate.memberId)}
             className={`flex flex-row justify-between items-center py-3 ${index !== data.mateDetailList.length - 1 && 'border-b border-b-[#F1F2F4]'}`}
           >
             <View className="flex flex-row items-center gap-x-[8px]">
