@@ -79,7 +79,6 @@ export default function RoomDetail() {
       roomId: Number(id),
     });
     setIsExitModalOpen(true);
-    exitRoom();
   };
 
   const onPressAcceptRoom = () => {
@@ -205,7 +204,7 @@ export default function RoomDetail() {
         leftButtonText="취소"
         leftButtonFunc={() => setIsExitModalOpen(false)}
         rightButtonText="나가기"
-        rightButtonFunc={onPressExitRoom}
+        rightButtonFunc={exitRoom}
       />
     </Fragment>
   );
