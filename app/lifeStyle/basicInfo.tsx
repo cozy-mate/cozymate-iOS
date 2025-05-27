@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Animated,
+  GestureResponderEvent,
   Keyboard,
   Pressable,
   ScrollView,
@@ -17,6 +18,8 @@ import CustomTextInputComponent from '@/components/lifeStyle/customTextInput';
 import { dormJoiningStatusItems, numOfRoommateItems } from '@/constants/items/lifeStyleItem';
 import { useGetMyUniversityInfo } from '@/hooks/university/university';
 import { useInputAnimation } from '@/hooks/useInputAnimation';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 export default function LifeStyleBasicInfo() {
@@ -25,6 +28,8 @@ export default function LifeStyleBasicInfo() {
   const { lifeStyle, setLifeStyle } = useRegisterLifeStyleStore();
 
   const { data } = useGetMyUniversityInfo();
+
+  const { trackButton } = useTracker();
 
   const dormitoryItems = data.result.dormitoryNames.map((item, index) => ({
     index,
@@ -40,6 +45,12 @@ export default function LifeStyleBasicInfo() {
   const roommateInputAnimation = useInputAnimation(showNumofRoommate, 400);
   const dormJoiningStatusInputAnimation = useInputAnimation(showDormJoiningStatus, 400);
 
+  const handleNext = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+    trackButton(ButtonEvent.next_general, EventCategory.life_style);
+    router.push('/lifeStyle/essentialInfo');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-[20px]">
@@ -49,10 +60,7 @@ export default function LifeStyleBasicInfo() {
             lifeStyle.numOfRoommate !== '' &&
             lifeStyle.dormJoiningStatus !== '' && (
               <Pressable
-                onPress={(event) => {
-                  router.push('/lifeStyle/essentialInfo');
-                  event.stopPropagation();
-                }}
+                onPress={handleNext}
                 className="bg-subColor1 rounded-md px-[20px] py-[10px]"
               >
                 <Text className="text-14 font-600 leading-14 text-mainColor">다음</Text>

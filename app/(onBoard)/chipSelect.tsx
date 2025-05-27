@@ -7,15 +7,21 @@ import BottomButton from '@/components/common/bottomButton';
 import ChipList from '@/components/common/chipList';
 import LoadingComponent from '@/components/common/loading';
 import TermsAgreeComponent from '@/components/onBoard/termModal';
+import { LifeStyleValue } from '@/constants/items/lifeStyle';
 import { useSignUp } from '@/hooks/member/member';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useSignUpStore } from '@/zustand/member/member';
 
 export default function ChipSelect() {
   const { signUpState } = useSignUpStore();
 
-  const [preferenceList, setPreferenceList] = useState<string[]>([]);
+  const [preferenceList, setPreferenceList] = useState<LifeStyleValue[]>([]);
 
-  const handleValue = (value: string) => {
+  const { trackButton } = useTracker();
+
+  const handleValue = (value: LifeStyleValue) => {
+    trackButton(ButtonEvent[value], EventCategory.onboarding4);
     setPreferenceList((prev) => {
       if (prev.includes(value)) {
         return prev.filter((item) => item !== value);
@@ -53,6 +59,7 @@ export default function ChipSelect() {
           preferenceList: preferenceList,
         },
       });
+      trackButton(ButtonEvent.okay, EventCategory.onboarding5);
     } catch (error: any) {
       console.log(error.config);
     }

@@ -1,11 +1,13 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XButton from '@/assets/images/common/roundX.svg';
 import { useSearchRoom } from '@/hooks/room/room';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useTracker } from '@/providers/TrackerProvider';
+import { EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 
 export default function SearchRoom() {
   const router = useRouter();
@@ -14,6 +16,16 @@ export default function SearchRoom() {
   const debouncedKeyword = useDebounce(keyword, 500);
 
   const { data } = useSearchRoom(debouncedKeyword);
+
+  const { trackInput } = useTracker();
+
+  useEffect(() => {
+    if (debouncedKeyword.trim()) {
+      trackInput(InputEvent.room_search, EventCategory.content_room, {
+        keyword: debouncedKeyword,
+      });
+    }
+  }, [debouncedKeyword]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

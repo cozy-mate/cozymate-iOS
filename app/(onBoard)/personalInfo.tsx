@@ -8,6 +8,8 @@ import BorderRadioBox from '@/components/common/borderRadioBox';
 import BottomButton from '@/components/common/bottomButton';
 import NicknameInputComponent from '@/components/onBoard/nicknameInput';
 import { GenderItems } from '@/constants/items/genderItem';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useSignUpStore } from '@/zustand/member/member';
 
 export default function PersonalInfo() {
@@ -20,6 +22,36 @@ export default function PersonalInfo() {
   const [birthday, setBirthday] = useState<string>('');
 
   const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
+
+  const { trackInput, trackButton } = useTracker();
+
+  const handleNickname = (value: string) => {
+    setNickname(value);
+    trackInput(InputEvent.name, EventCategory.onboarding2, {
+      nickname: value,
+    });
+  };
+
+  const handleGender = (value: string) => {
+    setGender(value);
+    trackInput(InputEvent.gender, EventCategory.onboarding2, {
+      gender: value,
+    });
+  };
+
+  const handleBirthday = (value: string) => {
+    setBirthday(value);
+    trackInput(InputEvent.birth, EventCategory.onboarding2, {
+      birthday: value,
+    });
+  };
+
+  const handleNicknameChecked = (value: boolean) => {
+    setNicknameChecked(value);
+    trackButton(ButtonEvent.name, EventCategory.onboarding2, {
+      nickname: nickname,
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -35,9 +67,9 @@ export default function PersonalInfo() {
             <NicknameInputComponent
               title="닉네임"
               value={nickname}
-              handleValue={(e: string) => setNickname(e)}
+              handleValue={handleNickname}
               placeholder="닉네임을 입력해주세요"
-              handleNicknameChecked={(e: boolean) => setNicknameChecked(e)}
+              handleNicknameChecked={handleNicknameChecked}
             />
 
             {/* 성별 입력 */}
@@ -45,15 +77,11 @@ export default function PersonalInfo() {
               title="성별"
               items={GenderItems}
               value={gender}
-              handleValue={(e: string) => setGender(e)}
+              handleValue={handleGender}
             />
 
             {/* 생년월일 입력 */}
-            <BorderDateBox
-              title="생년월일"
-              value={birthday}
-              handleValue={(e: string) => setBirthday(e)}
-            />
+            <BorderDateBox title="생년월일" value={birthday} handleValue={handleBirthday} />
           </View>
         </View>
       </TouchableWithoutFeedback>

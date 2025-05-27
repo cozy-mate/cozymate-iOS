@@ -1,10 +1,10 @@
 import { Text, View, Pressable, StyleSheet } from 'react-native';
 
-import { lifeStyleItems } from '@/constants/items/lifeStyle';
+import { lifeStyleItems, LifeStyleValue } from '@/constants/items/lifeStyle';
 
 interface ChipListProps {
-  value: string[];
-  handleValue: (value: string) => void;
+  value: LifeStyleValue[];
+  handleValue: (value: LifeStyleValue) => void;
 }
 
 const ChipList: React.FC<ChipListProps> = ({ value, handleValue }) => {

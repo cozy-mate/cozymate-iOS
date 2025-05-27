@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Animated,
+  GestureResponderEvent,
   Keyboard,
   Pressable,
   ScrollView,
@@ -36,6 +37,8 @@ import {
   studyingStatusItems,
 } from '@/constants/items/lifeStyleItem';
 import { useInputAnimation } from '@/hooks/useInputAnimation';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 export default function LifeStyleEssentialInfo() {
@@ -83,6 +86,14 @@ export default function LifeStyleEssentialInfo() {
   const personalitiesAnimation = useInputAnimation(showPersonalities, 400);
   const mbtiAnimation = useInputAnimation(showMbti, 400);
 
+  const { trackButton } = useTracker();
+
+  const handleNext = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+    trackButton(ButtonEvent.next_essential, EventCategory.life_style);
+    router.push('/lifeStyle/additionalInfo');
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-[20px]">
@@ -108,10 +119,7 @@ export default function LifeStyleEssentialInfo() {
             lifeStyle.personalities.length !== 0 &&
             lifeStyle.mbti !== '' && (
               <Pressable
-                onPress={(event) => {
-                  router.push('/lifeStyle/additionalInfo');
-                  event.stopPropagation();
-                }}
+                onPress={handleNext}
                 className="bg-subColor1 rounded-md px-[20px] py-[10px]"
               >
                 <Text className="text-14 font-600 leading-14 text-mainColor">다음</Text>

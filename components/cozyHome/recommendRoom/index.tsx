@@ -8,10 +8,13 @@ import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import RoomComponent from '@/components/room';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 const RecommendRoomComponent: React.FC = () => {
   const router = useRouter();
+  const { trackButton, trackGesture } = useTracker();
 
   const { memberState } = useMemberStore();
 
@@ -20,6 +23,15 @@ const RecommendRoomComponent: React.FC = () => {
   const progress = useSharedValue<number>(0);
 
   const { data } = useGetHomeRecommendRoomList();
+
+  const handleMore = () => {
+    trackButton(ButtonEvent.room_more, EventCategory.home_content);
+    router.push('/room/recommendRoom');
+  };
+
+  const handleRoomPress = () => {
+    trackButton(ButtonEvent.room_component, EventCategory.home_content);
+  };
 
   return (
     <View className="gap-y-[16px]">
@@ -33,7 +45,7 @@ const RecommendRoomComponent: React.FC = () => {
           </Text>
         </View>
 
-        <Pressable onPress={() => router.push('/room/recommendRoom')}>
+        <Pressable onPress={handleMore}>
           <View className="flex flex-row items-center gap-x-[4px]">
             <Text className="text-12 font-600 leading-12 text-disabledFont">더보기</Text>
             <GrayArrowIcon />
@@ -50,7 +62,13 @@ const RecommendRoomComponent: React.FC = () => {
         pagingEnabled={true}
         autoPlay={false}
         onProgressChange={progress}
-        renderItem={({ item }) => <RoomComponent roomData={item} />}
+        renderItem={({ item }) => <RoomComponent roomData={item} onPress={handleRoomPress} />}
+        onSnapToItem={(index) => {
+          trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
+            index,
+            roomId: data.result.result[index]?.roomId,
+          });
+        }}
       />
 
       <Pagination.Custom

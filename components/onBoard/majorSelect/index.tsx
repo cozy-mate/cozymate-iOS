@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, Text } from 'react-native';
 
+import { useTracker } from '@/providers/TrackerProvider';
+import { EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
 
 import MajorSelectModalComponent from '../majorSelectModal';
@@ -8,12 +10,18 @@ import MajorSelectModalComponent from '../majorSelectModal';
 const MajorSelectBoxComponent: React.FC = () => {
   const { mailState, setMailState } = useMailAuthenticationStore();
 
+  const { trackInput } = useTracker();
+
   const [isMajorSelectModalOpen, setIsMajorSelectModalOpen] = useState<boolean>(false);
 
   const handleMajor = (majorName: string) => {
     setMailState({ majorName: majorName });
 
     setIsMajorSelectModalOpen(false);
+
+    trackInput(InputEvent.major, EventCategory.onboarding1, {
+      majorName: majorName,
+    });
   };
 
   return (

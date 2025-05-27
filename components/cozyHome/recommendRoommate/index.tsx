@@ -8,12 +8,16 @@ import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import UserComponent from '@/components/user';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
 const RecommendRoommateComponent: React.FC = () => {
   const router = useRouter();
 
   const { memberState } = useMemberStore();
+
+  const { trackButton, trackGesture } = useTracker();
 
   const width = Dimensions.get('screen').width;
 
@@ -23,6 +27,15 @@ const RecommendRoommateComponent: React.FC = () => {
   const { data: recommendMemberList } = useGetHomeMemberList();
 
   const memberList = randomMemberList?.result.memberList ?? recommendMemberList?.result.memberList;
+
+  const handleMore = () => {
+    trackButton(ButtonEvent.mate_more, EventCategory.home_content);
+    router.push('/user/roomMate');
+  };
+
+  const handleUserPress = () => {
+    trackButton(ButtonEvent.mate_component, EventCategory.home_content);
+  };
 
   return (
     memberList !== undefined && (
@@ -37,7 +50,7 @@ const RecommendRoommateComponent: React.FC = () => {
             </Text>
           </View>
 
-          <Pressable onPress={() => router.push('/user/roomMate')}>
+          <Pressable onPress={handleMore}>
             <View className="flex flex-row items-center gap-x-[4px]">
               <Text className="text-12 font-600 leading-12 text-disabledFont">더보기</Text>
               <GrayArrowIcon />
@@ -54,7 +67,13 @@ const RecommendRoommateComponent: React.FC = () => {
           pagingEnabled={true}
           autoPlay={false}
           onProgressChange={progress}
-          renderItem={({ item }) => <UserComponent userData={item} />}
+          renderItem={({ item }) => <UserComponent userData={item} onPress={handleUserPress} />}
+          onSnapToItem={(index) => {
+            trackGesture(GestureEvent.mate_swipe, EventCategory.home_content, {
+              index,
+              userId: memberList[index]?.memberDetail?.memberId,
+            });
+          }}
         />
 
         <Pagination.Custom

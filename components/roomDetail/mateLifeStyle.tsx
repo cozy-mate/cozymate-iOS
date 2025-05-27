@@ -4,7 +4,9 @@ import { Pressable, Text, View } from 'react-native';
 import WhiteXIcon from '@/assets/images/common/whiteX.svg';
 import MemberStatModalComponent from '@/components/roomDetail/memberStatModal';
 import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat';
+import { useTracker } from '@/providers/TrackerProvider';
 import { ChipItem, RoomItem } from '@/type/room';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
 import { closeTooltip, getTooltip, setTooltip } from '@/utils/tooltip';
 
@@ -16,6 +18,8 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
   const [isMemberStatModalOpen, setIsMemberStatModalOpen] = useState<boolean>(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
+  const { trackButton } = useTracker();
+
   const [statItem, setStatItem] = useState<ChipItem>({
     title: '',
     memberList: [],
@@ -25,7 +29,12 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
 
   const handleStat = async (memberStatKey: string) => {
     const response = await getStats({ roomId: Number(data.roomId), memberStatKey });
-
+    // TODO : Member Stat Key를 타입으로 고정
+    const buttonEventKey = `chip_${memberStatKey}` as keyof typeof ButtonEvent;
+    trackButton(ButtonEvent[buttonEventKey], EventCategory.content_room, {
+      roomId: Number(data.roomId),
+      chip: ButtonEvent[buttonEventKey],
+    });
     setStatItem({
       title: getLifeStyleLabel(memberStatKey),
       memberList: response.result.memberList,

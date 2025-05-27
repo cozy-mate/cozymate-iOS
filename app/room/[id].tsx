@@ -25,6 +25,8 @@ import {
 import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room-favorite';
 import BottomButtonComponent from '@/newComponents/common/bottomButton';
 import TwoBottomButtonComponent from '@/newComponents/common/twoBottomButton';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function RoomDetail() {
@@ -33,6 +35,8 @@ export default function RoomDetail() {
   const router = useRouter();
 
   const { roomInfo } = useHasRoomStore();
+
+  const { trackButton } = useTracker();
 
   const { data, refetch } = useGetRoomDetail(Number(id));
   const { data: isRequested } = useCheckIsRequestedRoom(Number(id));
@@ -54,28 +58,72 @@ export default function RoomDetail() {
   const { mutateAsync: exitRoom } = useExitRoom(Number(id));
   const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
 
+  const onPressChat = () => {
+    trackButton(ButtonEvent.room_message, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    router.push(
+      `/chat/send/${Number(data.result.managerMemberId)}?nickname=${encodeURIComponent(data.result.managerNickname)}`,
+    );
+  };
+
+  const onPressLike = () => {
+    trackButton(ButtonEvent.room_like, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    data.result.favoriteId !== 0 ? deleteLike() : createLike();
+  };
+
+  const onPressExitRoom = () => {
+    trackButton(ButtonEvent.room_out, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    setIsExitModalOpen(true);
+  };
+
+  const onPressAcceptRoom = () => {
+    trackButton(ButtonEvent.room_accept, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    acceptRoomInvite(false);
+  };
+
+  const onPressRejectRoom = () => {
+    trackButton(ButtonEvent.room_reject, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    acceptRoomInvite(true);
+  };
+
+  const onPressSendRequest = () => {
+    trackButton(ButtonEvent.invite_room, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    sendRequest();
+  };
+
+  const onPressCancelRequest = () => {
+    trackButton(ButtonEvent.invite_room_cancel, EventCategory.content_room, {
+      roomId: Number(id),
+    });
+    cancelRequest();
+  };
+
   return (
     <Fragment>
       <SafeAreaView edges={['top']} className="bg-subColor1">
         <View className="px-[20px]">
           <BackHeaderComponent>
             <View className="flex flex-row items-center gap-x-[4px]">
-              <Pressable
-                onPress={() =>
-                  router.push(
-                    `/chat/send/${Number(data.result.managerMemberId)}?nickname=${encodeURIComponent(data.result.managerNickname)}`,
-                  )
-                }
-                className="pl-[14px] pr-[8px] py-[11px]"
-              >
+              <Pressable onPress={onPressChat} className="pl-[14px] pr-[8px] py-[11px]">
                 <ChatIcon />
               </Pressable>
               {data.result.favoriteId !== 0 ? (
-                <Pressable onPress={() => deleteLike()} className="p-[8px]">
+                <Pressable onPress={onPressLike} className="p-[8px]">
                   <FilledHeartIcon />
                 </Pressable>
               ) : (
-                <Pressable onPress={() => createLike()} className="p-[8px]">
+                <Pressable onPress={onPressLike} className="p-[8px]">
                   <HeartIcon />
                 </Pressable>
               )}
@@ -115,14 +163,14 @@ export default function RoomDetail() {
           buttonText="방 참여하기"
           disabled={false}
           color="BLUE"
-          onPress={() => sendRequest()}
+          onPress={onPressSendRequest}
         />
       )}
 
       {roomInfo.roomId !== data.result.roomId && isRequested.result && (
         <BottomButtonComponent
           buttonText="방 참여 취소하기"
-          onPress={() => cancelRequest()}
+          onPress={onPressCancelRequest}
           color="WHITE"
           disabled={false}
         />
@@ -130,8 +178,8 @@ export default function RoomDetail() {
 
       {roomInfo.roomId !== data.result.roomId && isInvited.result && (
         <TwoBottomButtonComponent
-          onLeftPress={() => acceptRoomInvite(false)}
-          onRightPress={() => acceptRoomInvite(true)}
+          onLeftPress={onPressAcceptRoom}
+          onRightPress={onPressRejectRoom}
           disabled={false}
         />
       )}
@@ -156,10 +204,7 @@ export default function RoomDetail() {
         leftButtonText="취소"
         leftButtonFunc={() => setIsExitModalOpen(false)}
         rightButtonText="나가기"
-        rightButtonFunc={() => {
-          setIsExitModalOpen(false);
-          exitRoom();
-        }}
+        rightButtonFunc={exitRoom}
       />
     </Fragment>
   );

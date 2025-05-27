@@ -3,6 +3,8 @@ import { Modal, Pressable, Text, TextInput, View } from 'react-native';
 
 import LoadingComponent from '@/components/common/loading';
 import { useVerifyMail } from '@/hooks/mail/mail';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
 
 const CodeInputBox: React.FC = () => {
@@ -13,7 +15,16 @@ const CodeInputBox: React.FC = () => {
 
   const { mailState, setMailState } = useMailAuthenticationStore();
 
+  const { trackInput, trackButton } = useTracker();
+
   const { mutateAsync: verifyMail, isPending } = useVerifyMail();
+
+  const handleInput = (value: string) => {
+    setMailState({ code: value });
+    trackInput(InputEvent.email_code, EventCategory.onboarding1, {
+      code: mailState.code,
+    });
+  };
 
   const handleVerifyMail = async () => {
     try {
@@ -21,6 +32,10 @@ const CodeInputBox: React.FC = () => {
         code: mailState.code,
         universityId: mailState.universityId,
         majorName: mailState.majorName,
+      });
+
+      trackButton(ButtonEvent.email_code, EventCategory.onboarding1, {
+        code: mailState.code,
       });
     } catch (error: any) {
       console.log(error);
@@ -48,7 +63,7 @@ const CodeInputBox: React.FC = () => {
             <TextInput
               ref={inputRef}
               value={mailState.code}
-              onChangeText={(e: string) => setMailState({ code: e })}
+              onChangeText={handleInput}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               placeholder="인증 번호를 입력해주세요"

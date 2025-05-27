@@ -1,9 +1,11 @@
-import { Keyboard, Pressable, Text, TextInput, View } from 'react-native';
+import { Keyboard, Pressable, Text, TextInput, View, GestureResponderEvent } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
 import { useCreateMemberDetail } from '@/hooks/member-stat/member-stat';
+import { useTracker } from '@/providers/TrackerProvider';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 export default function LifeStyleAdditionalInfo() {
@@ -11,17 +13,19 @@ export default function LifeStyleAdditionalInfo() {
 
   const { mutateAsync: createLifeStyle } = useCreateMemberDetail();
 
+  const { trackButton } = useTracker();
+
+  const handleNext = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+    trackButton(ButtonEvent.next_choice, EventCategory.life_style);
+    createLifeStyle(lifeStyle);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-[20px]">
         <BackHeaderComponent title="선택정보">
-          <Pressable
-            onPress={(event) => {
-              createLifeStyle(lifeStyle);
-              event.stopPropagation();
-            }}
-            className="bg-subColor1 rounded-md px-[20px] py-[10px]"
-          >
+          <Pressable onPress={handleNext} className="bg-subColor1 rounded-md px-[20px] py-[10px]">
             <Text className="text-14 font-600 leading-14 text-mainColor">완료</Text>
           </Pressable>
         </BackHeaderComponent>
@@ -34,6 +38,16 @@ export default function LifeStyleAdditionalInfo() {
               </Text>
               <TextInput
                 value={lifeStyle.selfIntroduction}
+                onFocus={() =>
+                  trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
+                    focus: true,
+                  })
+                }
+                onBlur={() =>
+                  trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
+                    focus: false,
+                  })
+                }
                 onChangeText={(e: string) => setLifeStyle({ selfIntroduction: e })}
                 className="bg-colorBox h-[270px] rounded-xl p-[16px]"
                 placeholder="내용을 입력해주세요"

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 
+import { useTracker } from '@/providers/TrackerProvider';
 import { UniversityItem } from '@/type/university';
+import { EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
 
 import SchoolSelectModalComponent from '../schoolSelectModal';
@@ -9,12 +11,18 @@ import SchoolSelectModalComponent from '../schoolSelectModal';
 const SchoolSelectBoxComponent: React.FC = () => {
   const { mailState, setMailState } = useMailAuthenticationStore();
 
+  const { trackInput } = useTracker();
+
   const [isSchoolSelectModalOpen, setIsSchoolSelectModalOpen] = useState<boolean>(false);
 
   const handleUniversity = (item: UniversityItem) => {
     setMailState({ universityId: item.id, universityName: item.name, majorName: '' });
 
     setIsSchoolSelectModalOpen(false);
+
+    trackInput(InputEvent.univ, EventCategory.onboarding1, {
+      universityName: item.name,
+    });
   };
 
   return (

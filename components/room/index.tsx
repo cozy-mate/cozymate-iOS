@@ -6,9 +6,10 @@ import { getLifeStyleIcon, getLifeStyleLabel } from '@/utils/lifeStyle';
 
 interface RoomComponentProps {
   roomData: RecommendRoomItem;
+  onPress?: () => void;
 }
 
-const RoomComponent: React.FC<RoomComponentProps> = ({ roomData }) => {
+const RoomComponent: React.FC<RoomComponentProps> = ({ roomData, onPress = () => { } }) => {
   const router = useRouter();
 
   const getChipColor = (numOfArrival: number, count: number) => {
@@ -21,8 +22,13 @@ const RoomComponent: React.FC<RoomComponentProps> = ({ roomData }) => {
     }
   };
 
+  const handlePress = () => {
+    onPress();
+    router.push(`/room/${roomData.roomId}`);
+  };
+
   return (
-    <Pressable onPress={() => router.push(`/room/${roomData.roomId}`)}>
+    <Pressable onPress={handlePress}>
       <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
         <View className="flex flex-row items-center justify-between">
           <Text className="text-16 font-600 leading-16 text-basicFont mx-2">{roomData.name}</Text>

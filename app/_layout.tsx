@@ -19,6 +19,8 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { initGlobalThis } from '@/lib/initGlobalThis';
 import AuthProvider from '@/providers/AuthProvider';
 import FCMProvider from '@/providers/FCMProvider';
+import { TrackerProvider } from '@/providers/TrackerProvider';
+import ScreenTracker from '@/utils/ga/screenTracker';
 
 import '../global.css';
 
@@ -64,53 +66,56 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <AuthProvider appLoaded={appLoaded}>
             <FCMProvider appLoaded={appLoaded}>
-              <Host>
-                <Stack>
-                  {/* 온보딩 화면 */}
-                  <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
+              <TrackerProvider>
+                <ScreenTracker />
+                <Host>
+                  <Stack>
+                    {/* 온보딩 화면 */}
+                    <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
 
-                  {/* 메인 화면 */}
-                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    {/* 메인 화면 */}
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-                  {/* 라이프스타일 화면 */}
-                  <Stack.Screen name="lifeStyle" options={{ headerShown: false }} />
+                    {/* 라이프스타일 화면 */}
+                    <Stack.Screen name="lifeStyle" options={{ headerShown: false }} />
 
-                  {/* 알림 화면 */}
-                  <Stack.Screen name="notification" options={{ headerShown: false }} />
+                    {/* 알림 화면 */}
+                    <Stack.Screen name="notification" options={{ headerShown: false }} />
 
-                  {/* 쪽지방 화면 */}
-                  <Stack.Screen name="chat" options={{ headerShown: false }} />
+                    {/* 쪽지방 화면 */}
+                    <Stack.Screen name="chat" options={{ headerShown: false }} />
 
-                  {/* 유저 관련 화면 */}
-                  <Stack.Screen name="user" options={{ headerShown: false }} />
+                    {/* 유저 관련 화면 */}
+                    <Stack.Screen name="user" options={{ headerShown: false }} />
 
-                  {/* 방 관련 화면 */}
-                  <Stack.Screen name="room" options={{ headerShown: false }} />
+                    {/* 방 관련 화면 */}
+                    <Stack.Screen name="room" options={{ headerShown: false }} />
 
-                  {/* 롤앤룰 화면 */}
-                  <Stack.Screen name="roleNRule" options={{ headerShown: false }} />
+                    {/* 롤앤룰 화면 */}
+                    <Stack.Screen name="roleNRule" options={{ headerShown: false }} />
 
-                  {/* 마이페이지 화면 */}
-                  <Stack.Screen name="myPage" options={{ headerShown: false }} />
+                    {/* 마이페이지 화면 */}
+                    <Stack.Screen name="myPage" options={{ headerShown: false }} />
 
-                  <Stack.Screen name="+not-found" />
-                </Stack>
+                    <Stack.Screen name="+not-found" />
+                  </Stack>
 
-                {!isAnimationFinished && (
-                  <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-                    <LottieView
-                      source={require('@/assets/lotties/splash.json')}
-                      style={{ flex: 1 }}
-                      autoPlay={true}
-                      loop={false}
-                      onAnimationFinish={() => {
-                        setTimeout(() => setIsAnimationFinished(true), 2000);
-                      }}
-                    />
-                  </View>
-                )}
-                <StatusBar style="auto" />
-              </Host>
+                  {!isAnimationFinished && (
+                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+                      <LottieView
+                        source={require('@/assets/lotties/splash.json')}
+                        style={{ flex: 1 }}
+                        autoPlay={true}
+                        loop={false}
+                        onAnimationFinish={() => {
+                          setTimeout(() => setIsAnimationFinished(true), 2000);
+                        }}
+                      />
+                    </View>
+                  )}
+                  <StatusBar style="auto" />
+                </Host>
+              </TrackerProvider>
             </FCMProvider>
           </AuthProvider>
         </QueryClientProvider>
