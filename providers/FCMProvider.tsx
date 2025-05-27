@@ -1,3 +1,4 @@
+import messaging from '@react-native-firebase/messaging';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 import useFcm from '@/hooks/useFcm';
@@ -31,6 +32,15 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
   useEffect(() => {
     if (!isReady) return;
     const run = async () => {
+      const status = await messaging().requestPermission();
+
+      const enabled =
+        status === messaging.AuthorizationStatus.AUTHORIZED ||
+        status === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (!enabled) {
+        throw new Error('No permission for push notifications');
+      }
       try {
         if (isLoggedIn) {
           console.log('[FCM] Registering FCM...');
