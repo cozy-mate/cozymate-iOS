@@ -1,4 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
+import { useQueryClient } from '@tanstack/react-query';
 import * as Notifications from 'expo-notifications';
 import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
@@ -11,6 +12,7 @@ import {
   deactivateFcmToken,
   getFcmToken,
 } from '@/utils/notification/fcmTokenUtil';
+import { useHasRoomStore } from '@/zustand/room/room';
 
 const DEDUP_WINDOW = 10_000;
 const processed = new Set<string>();
@@ -29,7 +31,11 @@ export default function useFcm(
   const fgSub = useRef<() => void>();
   const tokenRef = useRef<string | null>(null);
 
+  const queryClient = useQueryClient();
+
   const router = useRouter();
+
+  const { roomInfo } = useHasRoomStore();
 
   const withDedup = (id: string | undefined, cb: () => void) => {
     if (!id || processed.has(id)) return;
@@ -69,8 +75,39 @@ export default function useFcm(
           },
           trigger: null,
         });
+
+        const data = msg.data;
+
+        const actionType = msg.data?.actionType;
+
+        switch (actionType) {
+          case 'ARRIVE_ROOM_INVITE':
+            console.log('요청 받음');
+            break;
+
+          // 방장 입장
+          case 'ARRIVE_ROOM_JOIN_REQUEST':
+            console.log('방 참여 요청 받음');
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
+            break;
+
+          case 'ROOM_IN':
+            console.log('방장) 방 요청 수락');
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            break;
+
+          case 'ROOM_OUT':
+            console.log('방에서 누가 나감');
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            break;
+
+          default:
+            console.log('data: ', data);
+            console.log(`Unhandled actionType: ${actionType}`);
+        }
       });
     });
+
     if (!listener.current) {
       listener.current = null;
       listener.current = Notifications.addNotificationReceivedListener((n) =>

@@ -14,16 +14,36 @@ import {
 import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
 import { SignUpResponse } from '@/server/member/response';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMailAuthenticationStore } from '@/zustand/mail/mail';
+import { useMemberStore, useSignUpStore } from '@/zustand/member/member';
+import { useHasLifeStyleStore, useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
+import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useWithdraw = () => {
   const router = useRouter();
   const rootNavigation = useNavigationContainerRef();
 
+  const { clearMailState } = useMailAuthenticationStore();
+  const { clearSignUpState } = useSignUpStore();
+  const { clearMemberState } = useMemberStore();
+  const { clearHasLifeStyle } = useHasLifeStyleStore();
+  const { clearLifeStyle } = useRegisterLifeStyleStore();
+  const { clearSelectedItem } = useSelectedItemStore();
+  const { clearRoomInfo } = useHasRoomStore();
+
   return useMutation({
     mutationFn: (data?: WithdrawRequest) => withdraw(data),
     onSuccess: async () => {
       await deleteToken();
+
+      clearMailState();
+      clearSignUpState();
+      clearMemberState();
+      clearHasLifeStyle();
+      clearLifeStyle();
+      clearSelectedItem();
+      clearRoomInfo();
 
       rootNavigation.dispatch(StackActions.popToTop());
       router.replace('/');

@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { TextInput, View, Text, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { TextInput, View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XHeaderComponent from '@/components/common/xHeader';
@@ -16,10 +16,19 @@ export default function SendChat() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="px-[20px] gap-y-[24px]">
-          <XHeaderComponent />
+      <View className="px-[20px] gap-y-[24px]">
+        <XHeaderComponent />
+      </View>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
+        className="flex-1"
+      >
+        <ScrollView
+          contentContainerStyle={{ paddingHorizontal: 20, marginTop: 24 }}
+          keyboardShouldPersistTaps="handled"
+        >
           <View className="gap-y-[12px]">
             <Text className="text-18 font-600 leading-18 text-basicFont mx-[8px]">
               {nickname}님에게
@@ -33,8 +42,8 @@ export default function SendChat() {
               placeholder="내용을 입력해주세요"
             />
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <BottomButtonComponent
         buttonText="쪽지 보내기"

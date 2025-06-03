@@ -11,10 +11,12 @@ import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-sta
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
+import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
 
 const RecommendRoommateComponent: React.FC = () => {
   const router = useRouter();
 
+  const { hasLifeStyle } = useHasLifeStyleStore();
   const { memberState } = useMemberStore();
 
   const { trackButton, trackGesture } = useTracker();
@@ -26,7 +28,10 @@ const RecommendRoommateComponent: React.FC = () => {
   const { data: randomMemberList } = useGetRandomMemberList();
   const { data: recommendMemberList } = useGetHomeMemberList();
 
-  const memberList = randomMemberList?.result.memberList ?? recommendMemberList?.result.memberList;
+  const memberList =
+    hasLifeStyle && recommendMemberList?.result.memberList
+      ? recommendMemberList.result.memberList
+      : randomMemberList?.result.memberList;
 
   const handleMore = () => {
     trackButton(ButtonEvent.mate_more, EventCategory.home_content);

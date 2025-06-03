@@ -5,6 +5,7 @@ import { MailState } from './type';
 export const useMailAuthenticationStore = create<{
   mailState: MailState;
   setMailState: (newState: Partial<MailState>) => void;
+  clearMailState: () => void;
 }>((set) => ({
   mailState: {
     universityId: 0,
@@ -16,5 +17,15 @@ export const useMailAuthenticationStore = create<{
   setMailState: (newState) =>
     set((state) => ({
       mailState: { ...state.mailState, ...newState },
+    })),
+  clearMailState: () =>
+    set(() => ({
+      mailState: {
+        universityId: 0,
+        universityName: '',
+        majorName: '',
+        mailAddress: '',
+        code: '',
+      },
     })),
 }));

@@ -3,7 +3,9 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   Pressable,
+  ScrollView,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -11,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectPersonaIcon from '@/assets/images/common/selectPersona.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
 import CustomSelectComponent from '@/components/common/customSelect';
 import PersonaSelectComponent from '@/components/common/personaSelect';
 import CustomMultiTextInputComponent from '@/components/createRoom/customMultiTextInputBox';
@@ -19,6 +20,7 @@ import RoomNameInputComponent from '@/components/createRoom/roomNameInput';
 import { getPersona } from '@/constants/items/characterItem';
 import { numOfMateItems } from '@/constants/items/numOfMate';
 import { useCreatePublicRoom } from '@/hooks/room/room';
+import BottomButtonComponent from '@/newComponents/common/bottomButton';
 
 export default function CreateRoom() {
   const [isPersonaModalOpen, setIsPersonaModalOpen] = useState<boolean>(false);
@@ -57,10 +59,19 @@ export default function CreateRoom() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-white">
-        <View className="px-[20px] gap-y-8">
+        <View className="px-[20px]">
           <BackHeaderComponent />
+        </View>
 
-          <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
+          className="flex-1"
+        >
+          <ScrollView
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+            keyboardShouldPersistTaps="handled"
+          >
             <View className="gap-y-[42px] flex items-center">
               <View className="relative">
                 {persona === 0 ? (
@@ -104,22 +115,21 @@ export default function CreateRoom() {
                 />
               </View>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
 
-        <View className="absolute bottom-[42px] w-full px-[22px]">
-          <BottomButton
-            buttonText="방 생성하기"
-            disabled={
-              persona === 0 ||
-              isError ||
-              name === '' ||
-              maxMateNum === 0 ||
-              hashtagList.length === 0
-            }
-            onPress={() => createPublicRoom({ name, persona, maxMateNum, hashtagList })}
-          />
-        </View>
+        <BottomButtonComponent
+          buttonText="방 생성하기"
+          onPress={() => createPublicRoom({ name, persona, maxMateNum, hashtagList })}
+          color={
+            persona === 0 || isError || name === '' || maxMateNum === 0 || hashtagList.length === 0
+              ? 'GRAY'
+              : 'BLUE'
+          }
+          disabled={
+            persona === 0 || isError || name === '' || maxMateNum === 0 || hashtagList.length === 0
+          }
+        />
 
         <PersonaSelectComponent
           isVisible={isPersonaModalOpen}

@@ -5,10 +5,18 @@ import { RoomInfo } from './type';
 export const useHasRoomStore = create<{
   roomInfo: RoomInfo;
   setRoomInfo: (newRoomId: RoomInfo) => void;
+  clearRoomInfo: () => void;
 }>((set) => ({
   roomInfo: {
     roomId: 0,
     isRoomManager: false,
   },
   setRoomInfo: (newState: RoomInfo) => set({ roomInfo: newState }),
+  clearRoomInfo: () =>
+    set({
+      roomInfo: {
+        roomId: 0,
+        isRoomManager: false,
+      },
+    }),
 }));

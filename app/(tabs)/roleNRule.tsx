@@ -2,7 +2,7 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/botto
 import { useRouter } from 'expo-router';
 import moment from 'moment';
 import { Suspense, useRef, useState } from 'react';
-import { Dimensions, Text, Pressable, ScrollView, View } from 'react-native';
+import { Dimensions, Text, Pressable, ScrollView, View, TouchableOpacity } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -100,12 +100,12 @@ export default function RoleNRule() {
           )}
         </ScrollView>
 
-        <Pressable
+        <TouchableOpacity
           onPress={() => router.push('/roleNRule/create')}
           className="absolute bottom-[126px] right-[20px]"
         >
           <AddButton />
-        </Pressable>
+        </TouchableOpacity>
 
         <Portal>
           <BottomSheet
