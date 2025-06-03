@@ -26,7 +26,7 @@ const MultiLineInputComponent: React.FC<MultiLineInputComponentProps> = ({
         onChangeText={(e: string) => setValue(e)}
         placeholder={placeholder}
         placeholderTextColor={'#ACADB4'}
-        className={`p-[16px] bg-colorBox rounded-xl ${height}`}
+        className={`p-[16px] bg-colorBox rounded-xl text-14 font-medium leading-14 text-basicFont ${height}`}
         autoCapitalize="none"
         multiline
       />

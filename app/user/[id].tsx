@@ -104,12 +104,12 @@ export default function UserDetail() {
 
   const onPressRoomAccept = () => {
     trackButton(ButtonEvent.room_accept, EventCategory.mate_detail);
-    acceptRoomRequest(false);
+    acceptRoomRequest(true);
   };
 
   const onPressRoomReject = () => {
     trackButton(ButtonEvent.room_reject, EventCategory.mate_detail);
-    acceptRoomRequest(true);
+    acceptRoomRequest(false);
   };
 
   return (

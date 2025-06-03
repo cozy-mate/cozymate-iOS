@@ -5,6 +5,7 @@ import { MemberState, SignUpState } from './type';
 export const useSignUpStore = create<{
   signUpState: SignUpState;
   setSignUpState: (newState: Partial<SignUpState>) => void;
+  clearSignUpState: () => void;
 }>((set) => ({
   signUpState: {
     nickname: '',
@@ -16,11 +17,21 @@ export const useSignUpStore = create<{
     set((state) => ({
       signUpState: { ...state.signUpState, ...newState },
     })),
+  clearSignUpState: () =>
+    set(() => ({
+      signUpState: {
+        nickname: '',
+        gender: '',
+        birthday: '',
+        persona: 0,
+      },
+    })),
 }));
 
 export const useMemberStore = create<{
   memberState: MemberState;
   setMemberState: (newState: Partial<MemberState>) => void;
+  clearMemberState: () => void;
 }>((set) => ({
   memberState: {
     memberId: 0,
@@ -35,5 +46,18 @@ export const useMemberStore = create<{
   setMemberState: (newState: any) =>
     set((state) => ({
       memberState: { ...state.memberState, ...newState },
+    })),
+  clearMemberState: () =>
+    set(() => ({
+      memberState: {
+        memberId: 0,
+        nickname: '',
+        gender: '',
+        birthday: '',
+        universityName: '',
+        universityId: 0,
+        majorName: '',
+        persona: 0,
+      },
     })),
 }));

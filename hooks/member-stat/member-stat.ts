@@ -92,6 +92,8 @@ export const useCreateMemberDetail = () => {
   return useMutation({
     mutationFn: (data: CreateMemberDetailRequest) => createMemberDetail(data),
     onSuccess: () => {
+      setHasLifeStyle(true);
+
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
@@ -99,7 +101,6 @@ export const useCreateMemberDetail = () => {
 
       queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
 
-      setHasLifeStyle(true);
       router.dismissAll();
       router.back();
     },
@@ -117,7 +118,7 @@ export const useUpdateMemberDetail = () => {
   return useMutation({
     mutationFn: (data: UpdatememberDetailRequest) => updateMemberDetail(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/member/stat/suspense`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
       router.back();
     },
     onError: (error: any) => {

@@ -5,9 +5,11 @@ import { RegisterLifeStyle } from './type';
 export const useHasLifeStyleStore = create<{
   hasLifeStyle: boolean;
   setHasLifeStyle: (newState: boolean) => void;
+  clearHasLifeStyle: () => void;
 }>((set) => ({
   hasLifeStyle: false,
   setHasLifeStyle: (newState: boolean) => set({ hasLifeStyle: newState }),
+  clearHasLifeStyle: () => set({ hasLifeStyle: false }),
 }));
 
 export const useRegisterLifeStyleStore = create<{

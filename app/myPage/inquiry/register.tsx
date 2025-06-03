@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -20,29 +20,36 @@ export default function Inquiry() {
         <BackHeaderComponent />
       </View>
 
-      <ScrollView
-        contentContainerStyle={{
-          rowGap: 40,
-          paddingTop: 8,
-          paddingBottom: 120,
-          paddingHorizontal: 20,
-        }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
+        className="flex-1"
       >
-        <MultiLineInputComponent
-          title={'문의 내용을 입력해주세요'}
-          value={content}
-          setValue={setContent}
-          placeholder="내용을 입력해주세요"
-          height="h-[258px]"
-        />
+        <ScrollView
+          contentContainerStyle={{
+            rowGap: 40,
+            paddingTop: 8,
+            paddingBottom: 120,
+            paddingHorizontal: 20,
+          }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <MultiLineInputComponent
+            title={'문의 내용을 입력해주세요'}
+            value={content}
+            setValue={setContent}
+            placeholder="내용을 입력해주세요"
+            height="h-[258px]"
+          />
 
-        <InputComponent
-          title={'답변 내용을 받으실\n이메일을 입력해주세요'}
-          value={email}
-          setValue={setEmail}
-          placeholder="이메일을 입력해주세요"
-        />
-      </ScrollView>
+          <InputComponent
+            title={'답변 내용을 받으실\n이메일을 입력해주세요'}
+            value={email}
+            setValue={setEmail}
+            placeholder="이메일을 입력해주세요"
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <BottomButtonComponent
         buttonText="등록"

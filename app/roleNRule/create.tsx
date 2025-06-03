@@ -1,17 +1,9 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import {
-  Keyboard,
-  Pressable,
-  ScrollView,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
 import RoleFormComponent from '@/components/roleNRule/roleForm';
 import RuleFormComponent from '@/components/roleNRule/ruleForm';
 import TodoFormComponent from '@/components/roleNRule/todoForm';
@@ -76,41 +68,40 @@ export default function Create() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className="px-[20px] gap-y-[24px]">
-            <View className="gap-y-[8px]">
-              <BackHeaderComponent />
+      <View className="px-[20px]">
+        <BackHeaderComponent />
+      </View>
 
-              <View className="flex flex-row items-center gap-x-[12px]">
-                {['To-do', 'Role', 'Rule'].map((item, index) => (
-                  <Pressable
-                    key={index}
-                    onPress={() => setType(item)}
-                    className="p-[8px] gap-y-[8px]"
-                  >
-                    <Text
-                      className={`text-18 font-600 leading-18 ${type === item ? 'text-mainColor' : 'text-disabledFont'}`}
-                    >
-                      {item}
-                    </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
+        className="flex-1"
+      >
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 60, paddingHorizontal: 20, rowGap: 24 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="flex flex-row items-center gap-x-[12px]">
+            {['To-do', 'Role', 'Rule'].map((item, index) => (
+              <Pressable key={index} onPress={() => setType(item)} className="p-[8px] gap-y-[8px]">
+                <Text
+                  className={`text-18 font-600 leading-18 ${type === item ? 'text-mainColor' : 'text-disabledFont'}`}
+                >
+                  {item}
+                </Text>
 
-                    <View
-                      className={`h-[4px] rounded-full ${type === item ? 'bg-mainColor' : 'bg-white'}`}
-                    />
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-
-            {type === 'To-do' && (
-              <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />
-            )}
-            {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
-            {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
+                <View
+                  className={`h-[4px] rounded-full ${type === item ? 'bg-mainColor' : 'bg-white'}`}
+                />
+              </Pressable>
+            ))}
           </View>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+
+          {type === 'To-do' && <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />}
+          {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
+          {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <BottomButtonComponent
         buttonText="확인"

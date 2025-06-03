@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 
 import { checkHasInquiry, createInquiry, getInquiryList } from '@/server/inquiry/inquiry';
 import { CreateInquiryRequest } from '@/server/inquiry/request';
+import { showRejectToast } from '@/utils/toast';
 
 export const useGetInquiryList = () => {
   return useSuspenseQuery({
@@ -31,8 +32,9 @@ export const useCreateInquiry = () => {
       queryClient.invalidateQueries({ queryKey: [`/inquiries/exist`] });
     },
     onError: (error: any) => {
+      showRejectToast(error.response?.data?.message);
       console.log(error.response?.data?.message);
-      router.push('/myPage/inquiry/failed');
+      // router.push('/myPage/inquiry/failed');
     },
   });
 };

@@ -8,6 +8,7 @@ import BottomButton from '@/components/common/bottomButton';
 import ChipList from '@/components/common/chipList';
 import MyInfoComponent from '@/components/myPage/myInfo';
 import PreferenceListComponent from '@/components/myPage/PreferenceList';
+import { LifeStyleValue } from '@/constants/items/lifeStyle';
 import {
   useGetPreferenceList,
   useUpdatePreferenceList,
@@ -71,7 +72,7 @@ export default function MyInfo() {
         )}
       >
         <BottomSheetView className="px-[20px] flex-1 relative pt-5">
-          <ChipList value={preferenceList} handleValue={handleValue} />
+          <ChipList value={preferenceList as LifeStyleValue[]} handleValue={handleValue} />
 
           <View className="absolute bottom-[54px] left-5 w-full">
             <BottomButton

@@ -5,6 +5,7 @@ import { SelectedItem } from './type';
 export const useSelectedItemStore = create<{
   selectedItem: SelectedItem;
   setSelectedItem: (newState: SelectedItem) => void;
+  clearSelectedItem: () => void;
 }>((set) => ({
   selectedItem: {
     id: 0,
@@ -29,4 +30,29 @@ export const useSelectedItemStore = create<{
     },
   },
   setSelectedItem: (newState: SelectedItem) => set({ selectedItem: newState }),
+  clearSelectedItem: () =>
+    set({
+      selectedItem: {
+        id: 0,
+        type: '',
+        content: '',
+
+        todoItem: {
+          mateIdList: [],
+          content: '',
+          timePoint: '',
+        },
+
+        ruleItem: {
+          content: '',
+          memo: '',
+        },
+
+        roleItem: {
+          mateIdNameList: [],
+          content: '',
+          repeatDayList: [],
+        },
+      },
+    }),
 }));

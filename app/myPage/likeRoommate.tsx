@@ -68,9 +68,21 @@ export default function LikeRoommate() {
         <View className="flex-1">
           {type === 'MEMBER' && (
             <FlatList
+              contentContainerStyle={
+                memberList?.pages?.flatMap((page) => page.result.result).length === 0 && {
+                  flexGrow: 1,
+                }
+              }
               data={memberList?.pages?.flatMap((page) => page.result.result)}
               renderItem={({ item }) => (
                 <UserComponent userData={item.memberStatPreferenceDetail} />
+              )}
+              ListEmptyComponent={() => (
+                <View className="flex-1 justify-center items-center mb-20">
+                  <Text className="text-14 font-500 leading-14 text-disabledFont">
+                    찜한 룸메이트가 없어요!
+                  </Text>
+                </View>
               )}
               ItemSeparatorComponent={() => <View className="h-[24px]" />}
               onEndReached={loadMoreMember}
@@ -80,8 +92,20 @@ export default function LikeRoommate() {
 
           {type === 'ROOM' && (
             <FlatList
+              contentContainerStyle={
+                roomList?.pages?.flatMap((page) => page.result.result).length === 0 && {
+                  flexGrow: 1,
+                }
+              }
               data={roomList?.pages?.flatMap((page) => page.result.result)}
               renderItem={({ item }) => <RoomComponent roomData={item} />}
+              ListEmptyComponent={() => (
+                <View className="flex-1 justify-center items-center mb-20">
+                  <Text className="text-14 font-500 leading-14 text-disabledFont">
+                    찜한 방이 없어요!
+                  </Text>
+                </View>
+              )}
               ItemSeparatorComponent={() => <View className="h-[24px]" />}
               onEndReached={loadMoreRoom}
               onEndReachedThreshold={0.5}
