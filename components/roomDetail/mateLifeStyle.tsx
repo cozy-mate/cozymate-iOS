@@ -46,7 +46,6 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
 
   useEffect(() => {
     const handleToolTip = async () => {
-      await setTooltip();
       const tooltip = await getTooltip();
       if (tooltip === 'TRUE' || tooltip === null) {
         setIsTooltipOpen(true);
