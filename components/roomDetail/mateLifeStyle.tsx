@@ -61,9 +61,7 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
   return (
     <Fragment>
       <View className="px-[20px] gap-y-[12px]">
-        <Text className="text-16 font-600 text-emphasizedFont">
-          룸메이트 라이프스타일 한 눈에 보기
-        </Text>
+        <Text className="Semibold16 text-emphasizedFont">룸메이트 라이프스타일 한 눈에 보기</Text>
 
         <View className="flex flex-row flex-wrap gap-[8px]">
           {data.difference.blue.map((chip, index) => (
@@ -72,7 +70,7 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
               onPress={() => handleStat(chip)}
               className="px-[14px] py-[8px] rounded-full border border-mainColor bg-subColor1"
             >
-              <Text className="text-12 font-600 text-mainColor">{getLifeStyleLabel(chip)}</Text>
+              <Text className="Semibold12 text-mainColor">{getLifeStyleLabel(chip)}</Text>
             </Pressable>
           ))}
 
@@ -82,7 +80,7 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
               onPress={() => handleStat(chip)}
               className="px-[14px] py-[8px] rounded-full border border-warningColor bg-warningSubColor"
             >
-              <Text className="text-12 font-600 text-warningColor">{getLifeStyleLabel(chip)}</Text>
+              <Text className="Semibold12 text-warningColor">{getLifeStyleLabel(chip)}</Text>
             </Pressable>
           ))}
 
@@ -92,19 +90,13 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
               onPress={() => handleStat(chip)}
               className="px-[14px] py-[8px] rounded-full border border-transparent bg-white shadow-chipback"
             >
-              <Text className="text-12 font-500 text-disabledFont">{getLifeStyleLabel(chip)}</Text>
+              <Text className="Medium12 text-disabledFont">{getLifeStyleLabel(chip)}</Text>
             </Pressable>
           ))}
 
           {/* 툴팁 */}
           {isTooltipOpen && (
-            <Pressable
-              onPress={async () => {
-                setIsTooltipOpen(false);
-                await closeTooltip();
-              }}
-              className="absolute left-10 top-10 bg-emphasizedFont"
-            >
+            <View style={{ position: 'absolute', left: 40, top: 40, borderBottomColor: '#51555C' }}>
               <View
                 style={{
                   width: 0,
@@ -122,15 +114,29 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
                   left: 16,
                 }}
               />
-              <View className="bg-emphasizedFont p-2 pl-4 rounded-[20px] flex flex-row items-center">
-                <Text className="text-12 font-500 leading-12 text-white">
+              <Pressable
+                onPress={async () => {
+                  setIsTooltipOpen(false);
+                  await closeTooltip();
+                }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: '#51555C',
+                  padding: 8,
+                  paddingLeft: 16,
+                  borderRadius: 20,
+                }}
+              >
+                <Text className="Medium12 text-white">
                   칩을 선택하면 룸메이트 간의{'\n'}라이프스타일 답변을 비교할 수 있어요!
                 </Text>
                 <View className="p-[11px]">
                   <WhiteXIcon />
                 </View>
-              </View>
-            </Pressable>
+              </Pressable>
+            </View>
           )}
         </View>
       </View>
