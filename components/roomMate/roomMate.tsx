@@ -30,11 +30,11 @@ const RoomMateComponent: React.FC = () => {
     // 라이프스타일이 있는 사용자
     data !== undefined
       ? // 추천 룸메이트 데이터 사용
-      data?.pages?.flatMap((page) => page.result.memberList)
+        data?.pages?.flatMap((page) => page.result.memberList)
       : // 필터링을 선택하지 않은 경우
-      filterList.length === 0
+        filterList.length === 0
         ? // 랜덤 룸메이트 데이터 사용
-        randomMemberList?.result.memberList
+          randomMemberList?.result.memberList
         : [];
 
   const handleValue = (value: LifeStyleValue) => {
@@ -102,8 +102,14 @@ const RoomMateComponent: React.FC = () => {
       )}
       ListEmptyComponent={() =>
         data !== undefined ? (
-          <View>
-            <Text>없음</Text>
+          <View className="flex-1">
+            <View className="w-full h-full flex items-center justify-center">
+              <View className="gap-y-[20px] pb-[50px]">
+                <Text className="text-14 font-500 leading-14 text-disabledFont text-center">
+                  아직 함께할 룸메이트가 없네요.{'\n'}곧 당신과 잘 맞는 룸메이트가 찾아올 거예요.
+                </Text>
+              </View>
+            </View>
           </View>
         ) : (
           <View className="pt-[32px] pb-[16px] flex items-center mt-[16px]">
@@ -131,7 +137,7 @@ const RoomMateComponent: React.FC = () => {
         )
       }
       ItemSeparatorComponent={() => <View className="h-[24px]" />}
-      contentContainerStyle={{ paddingBottom: 60 }}
+      contentContainerStyle={{ paddingBottom: 60, flexGrow: 1 }}
       onEndReached={randomMemberList ? undefined : loadMoreList}
       onEndReachedThreshold={randomMemberList ? 0 : 0.5}
     />
