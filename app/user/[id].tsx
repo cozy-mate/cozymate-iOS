@@ -1,58 +1,39 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Fragment, Suspense, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Fragment, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Background from '@/assets/images/common/background.svg';
 import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
-import SelectedListIcon from '@/assets/images/userDetail/coloredListIcon.svg';
-import SelectedTableIcon from '@/assets/images/userDetail/coloredTableIcon.svg';
-import ListIcon from '@/assets/images/userDetail/listIcon.svg';
-import TableIcon from '@/assets/images/userDetail/tableIcon.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
 import TwoButtonModal from '@/components/common/twoButtonModal';
 import AdditionalInfoComponent from '@/components/userDetail/additionalInfo';
 import BasicInfoComponent from '@/components/userDetail/basicInfo';
+import BottomButtonContainer from '@/components/userDetail/bottomButtonContainer';
 import DormitoryInfoComponent from '@/components/userDetail/dormitoryInfo';
 import EssentialInfoComponent from '@/components/userDetail/essentialInfo';
+import MemberInfoComponent from '@/components/userDetail/memberInfo';
 import TableInfoComponent from '@/components/userDetail/tableInfo';
-import { getPersona } from '@/constants/items/characterItem';
+import ViewTypeButtonComponent from '@/components/userDetail/viewTypeButton';
 import { useCreateMemberLike, useDeleteMemberLike } from '@/hooks/member-favorite/member-favorite';
 import { useGetMemberDetail } from '@/hooks/member-stat/member-stat';
-import {
-  useAcceptRoomRequest,
-  useCancelInviteMember,
-  useCheckIsInvitedMember,
-  useCheckIsRequestedMember,
-  useInviteMember,
-} from '@/hooks/room/room';
+import { useAcceptRoomRequest, useCancelInviteMember, useInviteMember } from '@/hooks/room/room';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
 
 export default function UserDetail() {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
-
-  const { memberState } = useMemberStore();
 
   const { trackButton } = useTracker();
 
-  const router = useRouter();
+  const { data } = useGetMemberDetail(Number(id));
 
-  const { data, refetch } = useGetMemberDetail(Number(id));
-  const { data: isInvited } = useCheckIsInvitedMember(Number(id));
-  const { data: isRequested } = useCheckIsRequestedMember(Number(id));
+  const [type, setType] = useState<'LIST' | 'TABLE'>('LIST');
 
-  const [type, setType] = useState<string>('LIST');
-
-  const { mutateAsync: deleteLike } = useDeleteMemberLike(data.result.favoriteId, refetch);
-  const { mutateAsync: createLike } = useCreateMemberLike(
-    data.result.memberDetail.memberId,
-    refetch,
-  );
+  const { mutateAsync: deleteLike } = useDeleteMemberLike(data.result.favoriteId, Number(id));
+  const { mutateAsync: createLike } = useCreateMemberLike(data.result.memberDetail.memberId);
 
   const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false);
 
@@ -62,218 +43,127 @@ export default function UserDetail() {
     setIsCreateRoomModalOpen,
   );
   const { mutateAsync: cancelInvite } = useCancelInviteMember(Number(id));
-
   const { mutateAsync: acceptRoomRequest } = useAcceptRoomRequest(Number(id));
 
-  const onPressChat = () => {
-    trackButton(ButtonEvent.mate_message, EventCategory.mate_detail);
-    router.push(
-      `/chat/send/${Number(id)}?nickname=${encodeURIComponent(data.result.memberDetail.nickname)}`,
-    );
-  };
+  const onPress = (
+    type: 'CHAT' | 'LIKE' | 'VIEW' | 'INVITE' | 'CANCEL' | 'ACCEPT' | 'REJECT',
+    viewType?: 'LIST' | 'TABLE',
+  ) => {
+    if (type === 'VIEW') {
+      trackButton(
+        viewType === 'LIST' ? ButtonEvent.show_list : ButtonEvent.show_grid,
+        EventCategory.mate_detail,
+        { viewType },
+      );
+      setType(viewType as 'LIST' | 'TABLE');
+      return;
+    }
 
-  const onPressLike = (action: 'like' | 'unlike') => {
-    trackButton(ButtonEvent.mate_like, EventCategory.mate_detail, {
-      action,
-    });
-    if (action === 'like') {
-      createLike();
-    } else {
-      deleteLike();
+    trackButton(ButtonEvent.invite_room, EventCategory.mate_detail);
+
+    switch (type) {
+      case 'CHAT':
+        router.push(
+          `/chat/send/${Number(id)}?nickname=${encodeURIComponent(data.result.memberDetail.nickname)}`,
+        );
+        break;
+
+      case 'LIKE':
+        if (data.result.favoriteId !== 0) {
+          deleteLike();
+        } else {
+          createLike();
+        }
+        break;
+
+      case 'INVITE':
+        inviteMember();
+        break;
+
+      case 'CANCEL':
+        cancelInvite();
+        break;
+
+      case 'ACCEPT':
+        acceptRoomRequest(true);
+        break;
+
+      case 'REJECT':
+        acceptRoomRequest(false);
+        break;
+
+      default:
+        return null;
     }
   };
 
-  const onPressSetView = (view: 'LIST' | 'TABLE') => {
-    trackButton(
-      view === 'LIST' ? ButtonEvent.show_list : ButtonEvent.show_grid,
-      EventCategory.mate_detail,
-      { view },
-    );
-    setType(view);
-  };
-
-  const onPressInvite = () => {
-    trackButton(ButtonEvent.invite_room, EventCategory.mate_detail);
-    inviteMember();
-  };
-
-  const onPressInviteCancel = () => {
-    trackButton(ButtonEvent.invite_room_cancel, EventCategory.mate_detail);
-    cancelInvite();
-  };
-
-  const onPressRoomAccept = () => {
-    trackButton(ButtonEvent.room_accept, EventCategory.mate_detail);
-    acceptRoomRequest(true);
-  };
-
-  const onPressRoomReject = () => {
-    trackButton(ButtonEvent.room_reject, EventCategory.mate_detail);
-    acceptRoomRequest(false);
-  };
-
   return (
-    <Suspense>
-      <SafeAreaView edges={['top', 'left', 'right']} className="bg-subColor1">
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, rowGap: 20, paddingBottom: 60 }}
-          bounces={false}
-        >
-          <View className="px-[20px] gap-y-[20px]">
-            <Background style={{ position: 'absolute' }} />
-
-            <BackHeaderComponent>
-              <View className="flex flex-row items-center gap-x-[4px]">
-                <Pressable onPress={onPressChat} className="pl-[14px] pr-[8px] py-[11px]">
-                  <ChatIcon />
-                </Pressable>
-                {data.result.favoriteId !== 0 ? (
-                  <Pressable onPress={() => onPressLike('unlike')} className="p-[8px]">
-                    <FilledHeartIcon />
-                  </Pressable>
-                ) : (
-                  <Pressable onPress={() => onPressLike('like')} className="p-[8px]">
-                    <HeartIcon />
-                  </Pressable>
-                )}
-              </View>
-            </BackHeaderComponent>
-
-            <View className="flex flex-row items-center gap-x-[8px]">
-              {getPersona(data.result.memberDetail.persona, 40, 40)}
-              <View className="gap-y-1">
-                <Text className="text-16 font-600 text-emphasizedFont">
-                  {data.result.memberDetail.nickname}
-                </Text>
-                {Number(id) !== memberState.memberId && (
-                  <Text className="text-14 font-500 text-basicFont">
-                    나와의 일치율 {data.result.equality ?? '??'}%
-                  </Text>
-                )}
-              </View>
-            </View>
-
-            {data.result.roomId !== 0 ? (
-              <Pressable
-                onPress={() => router.push(`/room/${data.result.roomId}`)}
-                className="bg-mainColor rounded-xl border border-mainColor p-3"
-              >
-                <Text className="text-14 font-600 text-white text-center">
-                  {data.result.memberDetail.nickname}님이 속한 방 바로 가기
-                </Text>
+    <SafeAreaView edges={['top', 'left', 'right']} className="bg-subColor1">
+      <View className="px-[20px] pb-[8px]">
+        <BackHeaderComponent>
+          <View className="flex flex-row items-center gap-x-[4px]">
+            <Pressable onPress={() => onPress('CHAT')} className="pl-[14px] pr-[8px] py-[11px]">
+              <ChatIcon />
+            </Pressable>
+            {data.result.favoriteId !== 0 ? (
+              <Pressable onPress={() => onPress('LIKE')} className="p-[8px]">
+                <FilledHeartIcon />
               </Pressable>
             ) : (
-              <View className="bg-colorBox rounded-xl border border-disabledFont p-3">
-                <Text className="text-14 font-600 text-disabledFont text-center">
-                  {data.result.memberDetail.nickname}님은 아직 속한 방이 없어요
-                </Text>
-              </View>
+              <Pressable onPress={() => onPress('LIKE')} className="p-[8px]">
+                <HeartIcon />
+              </Pressable>
             )}
           </View>
+        </BackHeaderComponent>
+      </View>
 
-          <View className="bg-white gap-y-[16px] flex-1 pt-3 rounded-t-[20px] pb-[68px]">
-            <View className="flex flex-row justify-center items-center">
-              <Pressable
-                onPress={() => onPressSetView('LIST')}
-                className="flex flex-row items-center gap-x-[6px] p-[16px]"
-              >
-                {type === 'LIST' ? <SelectedListIcon /> : <ListIcon />}
-                <Text
-                  className={`text-14 ${type === 'LIST' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
-                >
-                  리스트로 보기
-                </Text>
-              </Pressable>
+      <ScrollView contentContainerStyle={{ marginTop: 8, rowGap: 20, paddingBottom: 160 }}>
+        <MemberInfoComponent id={Number(id)} data={data.result} />
 
-              <View className="h-[24px] w-[1px] mx-[18px] bg-disabledColor" />
-
-              <Pressable
-                onPress={() => onPressSetView('TABLE')}
-                className="flex flex-row items-center gap-x-[6px] p-[16px]"
-              >
-                {type === 'TABLE' ? <SelectedTableIcon /> : <TableIcon />}
-                <Text
-                  className={`text-14 ${type === 'TABLE' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
-                >
-                  표로 보기
-                </Text>
-              </Pressable>
-            </View>
-
-            <View className="gap-y-14">
-              {type === 'LIST' ? (
-                <Fragment>
-                  <BasicInfoComponent id={Number(id)} />
-                  <DormitoryInfoComponent id={Number(id)} />
-                  <EssentialInfoComponent id={Number(id)} />
-                </Fragment>
-              ) : (
-                <TableInfoComponent id={Number(id)} />
-              )}
-              <AdditionalInfoComponent id={Number(id)} />
-            </View>
+        <View className="bg-white flex-1 gap-y-[16px] pt-[12px] rounded-t-[20px] pb-[68px]">
+          <ViewTypeButtonComponent currentType={type} onPress={onPress} />
+          <View className="gap-y-[56px]">
+            {type === 'LIST' ? (
+              <Fragment>
+                <BasicInfoComponent data={data.result} />
+                <DormitoryInfoComponent data={data.result} />
+                <EssentialInfoComponent data={data.result} />
+              </Fragment>
+            ) : (
+              <TableInfoComponent data={data.result} />
+            )}
+            <AdditionalInfoComponent data={data.result} />
           </View>
-        </ScrollView>
+        </View>
 
-        <TwoButtonModal
-          isVisible={isCreateRoomModalOpen}
-          title={`${data.result.memberDetail.nickname}님을 초대할 방이 없어요,\n방을 만드시겠어요?`}
-          closeFunc={() => setIsCreateRoomModalOpen(false)}
-          leftButtonText="아니오"
-          leftButtonFunc={() => setIsCreateRoomModalOpen(false)}
-          rightButtonText="예"
-          rightButtonFunc={() => {
-            setIsCreateRoomModalOpen(false);
-            router.push('/room/createRoom');
+        {/* 하단 over-scroll 시의 흰색 배경 설정 */}
+        <View
+          style={{
+            backgroundColor: '#FFFFFF',
+            height: 300,
+            position: 'absolute',
+            bottom: -100,
+            left: 0,
+            right: 0,
           }}
         />
+      </ScrollView>
 
-        {Number(id) !== memberState.memberId && (
-          <View className="absolute bottom-0 w-full px-[22px] pb-[42px] bg-white">
-            {/* 해당 사용자를 초대함 => 초대 취소하기 */}
-            {isInvited?.result && (
-              <BottomButton
-                buttonText="초대 취소하기"
-                disabled={false}
-                onPress={onPressInviteCancel}
-                backColor="bg-colorBox"
-                borderColor="border-mainColor"
-                textColor="text-mainColor"
-              />
-            )}
+      <TwoButtonModal
+        isVisible={isCreateRoomModalOpen}
+        title={`${data.result.memberDetail.nickname}님을 초대할 방이 없어요,\n방을 만드시겠어요?`}
+        closeFunc={() => setIsCreateRoomModalOpen(false)}
+        leftButtonText="아니오"
+        leftButtonFunc={() => setIsCreateRoomModalOpen(false)}
+        rightButtonText="예"
+        rightButtonFunc={() => {
+          setIsCreateRoomModalOpen(false);
+          router.push('/room/createRoom');
+        }}
+      />
 
-            {/* 해당 사용자가 방 참여 요청을 보냄 => 수락/거절 */}
-            {isRequested?.result && (
-              <View className="gap-x-[8px] flex flex-row items-center">
-                <Pressable
-                  onPress={onPressRoomReject}
-                  className="bg-white border border-mainColor rounded-xl p-[16px] flex-1"
-                >
-                  <Text className="text-16 font-600 leading-16 text-mainColor text-center">
-                    거절
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={onPressRoomAccept}
-                  className="bg-mainColor border border-mainColor rounded-xl p-[16px] flex-1"
-                >
-                  <Text className="text-16 font-600 leading-16 text-white text-center">수락</Text>
-                </Pressable>
-              </View>
-            )}
-
-            {!isRequested?.result && !isInvited?.result && (
-              <BottomButton
-                buttonText="내 방으로 초대하기"
-                disabled={false}
-                onPress={onPressInvite}
-              />
-            )}
-          </View>
-        )}
-      </SafeAreaView>
-
-      <SafeAreaView edges={['bottom']} className="bg-white" />
-    </Suspense>
+      <BottomButtonContainer id={Number(id)} onPress={onPress} />
+    </SafeAreaView>
   );
 }
