@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -72,36 +73,32 @@ export default function Create() {
         <BackHeaderComponent />
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ paddingHorizontal: 20, rowGap: 24 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 60, paddingHorizontal: 20, rowGap: 24 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View className="flex flex-row items-center gap-x-[12px]">
-            {['To-do', 'Role', 'Rule'].map((item, index) => (
-              <Pressable key={index} onPress={() => setType(item)} className="p-[8px] gap-y-[8px]">
-                <Text
-                  className={`text-18 font-600 leading-18 ${type === item ? 'text-mainColor' : 'text-disabledFont'}`}
-                >
-                  {item}
-                </Text>
+        <View className="flex flex-row items-center gap-x-[12px]">
+          {['To-do', 'Role', 'Rule'].map((item, index) => (
+            <Pressable key={index} onPress={() => setType(item)} className="p-[8px] gap-y-[8px]">
+              <Text
+                className={`text-18 font-600 leading-18 ${type === item ? 'text-mainColor' : 'text-disabledFont'}`}
+              >
+                {item}
+              </Text>
 
-                <View
-                  className={`h-[4px] rounded-full ${type === item ? 'bg-mainColor' : 'bg-white'}`}
-                />
-              </Pressable>
-            ))}
-          </View>
+              <View
+                className={`h-[4px] rounded-full ${type === item ? 'bg-mainColor' : 'bg-white'}`}
+              />
+            </Pressable>
+          ))}
+        </View>
 
-          {type === 'To-do' && <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />}
-          {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
-          {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
-        </ScrollView>
-      </KeyboardAvoidingView>
+        {type === 'To-do' && <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />}
+        {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
+        {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
+      </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="확인"

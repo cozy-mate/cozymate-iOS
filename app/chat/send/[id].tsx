@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { TextInput, View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { TextInput, View, Text } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XHeaderComponent from '@/components/common/xHeader';
@@ -20,30 +21,24 @@ export default function SendChat() {
         <XHeaderComponent />
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ marginTop: 24, paddingHorizontal: 20, rowGap: 12 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, marginTop: 24 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View className="gap-y-[12px]">
-            <Text className="text-18 font-600 leading-18 text-basicFont mx-[8px]">
-              {nickname}님에게
-            </Text>
+        <Text className="text-18 font-600 leading-18 text-basicFont mx-[8px]">
+          {nickname}님에게
+        </Text>
 
-            <TextInput
-              value={content}
-              onChangeText={(e: string) => setContent(e)}
-              multiline={true}
-              className="min-h-[320px] bg-colorBox rounded-xl p-[20px]"
-              placeholder="내용을 입력해주세요"
-            />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <TextInput
+          value={content}
+          onChangeText={(e: string) => setContent(e)}
+          multiline={true}
+          className="min-h-[320px] bg-colorBox rounded-xl p-[20px]"
+          placeholder="내용을 입력해주세요"
+        />
+      </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="쪽지 보내기"

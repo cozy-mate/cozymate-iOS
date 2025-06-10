@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -53,31 +54,22 @@ export default function Update() {
         </View>
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ paddingHorizontal: 20, rowGap: 24, marginTop: 8 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: 60,
-            paddingHorizontal: 20,
-            rowGap: 24,
-            marginTop: 8,
-          }}
-          keyboardShouldPersistTaps="handled"
-        >
-          {type === 'To-do' && (
-            <TodoFormComponent todoForm={todoForm as UpdateTodoRequest} setTodoForm={setTodoForm} />
-          )}
-          {type === 'Role' && (
-            <RoleFormComponent roleForm={roleForm as UpdateRoleRequest} setRoleForm={setRoleForm} />
-          )}
-          {type === 'Rule' && (
-            <RuleFormComponent ruleForm={ruleForm as UpdateRuleRequest} setRuleForm={setRuleForm} />
-          )}
-        </ScrollView>
-      </KeyboardAvoidingView>
+        {type === 'To-do' && (
+          <TodoFormComponent todoForm={todoForm as UpdateTodoRequest} setTodoForm={setTodoForm} />
+        )}
+        {type === 'Role' && (
+          <RoleFormComponent roleForm={roleForm as UpdateRoleRequest} setRoleForm={setRoleForm} />
+        )}
+        {type === 'Rule' && (
+          <RuleFormComponent ruleForm={ruleForm as UpdateRuleRequest} setRuleForm={setRuleForm} />
+        )}
+      </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="수정하기"
