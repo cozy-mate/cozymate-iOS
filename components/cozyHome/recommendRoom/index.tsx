@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Dimensions, Text, View } from 'react-native';
 import { Pressable } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
@@ -53,37 +53,46 @@ const RecommendRoomComponent: React.FC = () => {
         </Pressable>
       </View>
 
-      <Carousel
-        width={width}
-        loop={true}
-        data={data.result.result}
-        height={210}
-        snapEnabled={true}
-        pagingEnabled={true}
-        autoPlay={false}
-        onProgressChange={progress}
-        renderItem={({ item }) => <RoomComponent roomData={item} onPress={handleRoomPress} />}
-        onSnapToItem={(index) => {
-          trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
-            index,
-            roomId: data.result.result[index]?.roomId,
-          });
-        }}
-      />
-
-      <Pagination.Custom
-        progress={progress}
-        data={data.result.result}
-        dotStyle={{ backgroundColor: '#E6E6E6', borderRadius: 9999, width: 8, height: 8 }}
-        activeDotStyle={{
-          backgroundColor: '#68A4FF',
-          borderRadius: 9999,
-          width: 16,
-          height: 8,
-          overflow: 'hidden',
-        }}
-        containerStyle={{ gap: 8 }}
-      />
+      {data.result.result.length !== 0 ? (
+        <Fragment>
+          <Carousel
+            width={width}
+            loop={true}
+            data={data.result.result}
+            height={210}
+            snapEnabled={true}
+            pagingEnabled={true}
+            autoPlay={false}
+            onProgressChange={progress}
+            renderItem={({ item }) => <RoomComponent roomData={item} onPress={handleRoomPress} />}
+            onSnapToItem={(index) => {
+              trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
+                index,
+                roomId: data.result.result[index]?.roomId,
+              });
+            }}
+          />
+          <Pagination.Custom
+            progress={progress}
+            data={data.result.result}
+            dotStyle={{ backgroundColor: '#E6E6E6', borderRadius: 9999, width: 8, height: 8 }}
+            activeDotStyle={{
+              backgroundColor: '#68A4FF',
+              borderRadius: 9999,
+              width: 16,
+              height: 8,
+              overflow: 'hidden',
+            }}
+            containerStyle={{ gap: 8 }}
+          />
+        </Fragment>
+      ) : (
+        <View className="mx-[20px] border border-disabledColor rounded-xl h-[154px] flex justify-center items-center">
+          <Text className="text-14 font-medium leading-14 text-disabledFont text-center">
+            아직 함께할 룸메이트가 없네요.{'\n'}곧 당신과 잘 맞는 룸메이트가 찾아올 거예요.
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
