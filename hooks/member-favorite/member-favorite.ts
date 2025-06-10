@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import {
   createMemberLike,
@@ -6,10 +6,15 @@ import {
   getMemberLikeList,
 } from '@/server/member-favorite/member-favorite';
 
-export const useDeleteMemberLike = (memberFavoriteId: number, refetch: () => void) => {
+export const useDeleteMemberLike = (memberFavoriteId: number, memberId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => deleteMemberLike(memberFavoriteId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/${memberId}`, memberId] });
+      queryClient.invalidateQueries({ queryKey: [`/favorites/members`] });
+    },
   });
 };
 
@@ -26,9 +31,14 @@ export const useGetMemberLikeList = () => {
   });
 };
 
-export const useCreateMemberLike = (memberId: number, refetch: () => void) => {
+export const useCreateMemberLike = (memberId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => createMemberLike(memberId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/${memberId}`, memberId] });
+      queryClient.invalidateQueries({ queryKey: [`/favorites/members`] });
+    },
   });
 };
