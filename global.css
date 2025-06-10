@@ -1,3 +1,149 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .Bold20 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 23.9px;
+    letter-spacing: -0.02em;
+  }
+
+  .Semibold20 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 23.9px;
+    letter-spacing: -0.02em;
+  }
+
+  .Bold18 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 21.5px;
+    letter-spacing: -0.02em;
+  }
+
+  .Semibold18 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 21.5px;
+    letter-spacing: -0.02em;
+  }
+
+  .Medium18 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.5px;
+    letter-spacing: -0.02em;
+  }
+
+  .Regular18 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 21.5px;
+    letter-spacing: -0.02em;
+  }
+
+  .Semibold16 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19.1px;
+    letter-spacing: -0.02em;
+  }
+
+  .Medium16 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.1px;
+    letter-spacing: -0.02em;
+  }
+
+  .Regular16 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19.1px;
+    letter-spacing: -0.02em;
+  }
+
+  .Semibold14 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.7px;
+    letter-spacing: -0.03em;
+  }
+
+  .Medium14 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16.7px;
+    letter-spacing: -0.03em;
+  }
+
+  .Regular14 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.2px;
+    letter-spacing: -0.03em;
+  }
+
+  .Semibold12 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16.8px;
+    letter-spacing: -0.02em;
+  }
+
+  .Medium12 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16.8px;
+    letter-spacing: -0.02em;
+  }
+
+  .Regular12 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.8px;
+    letter-spacing: -0.02em;
+  }
+
+  .Semibold10 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .Medium10 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .Regular10 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    letter-spacing: -0.02em;
+  }
+}
