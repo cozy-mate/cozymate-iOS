@@ -1,3 +1,4 @@
+import * as Linking from 'expo-linking';
 import React, { useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 
@@ -25,7 +26,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
   const { trackButton } = useTracker();
 
   const handleTotal = () => {
-    trackButton(ButtonEvent.agree_all, EventCategory.Onboarding, {
+    trackButton(ButtonEvent.agree_all, EventCategory.onboarding4, {
       agree_all: isUseTermsAgree && isInformationTermsAgree,
     });
     if (isUseTermsAgree && isInformationTermsAgree) {
@@ -39,14 +40,14 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
 
   const handleUseTermsAgree = () => {
     setIsUseTermsAgree(!isUseTermsAgree);
-    trackButton(ButtonEvent.agree_1, EventCategory.Onboarding, {
+    trackButton(ButtonEvent.agree_1, EventCategory.onboarding4, {
       agree_1: isUseTermsAgree,
     });
   };
 
   const handleInformationTermsAgree = () => {
     setIsInformationTermsAgree(!isInformationTermsAgree);
-    trackButton(ButtonEvent.agree_2, EventCategory.Onboarding, {
+    trackButton(ButtonEvent.agree_2, EventCategory.onboarding4, {
       agree_2: isInformationTermsAgree,
     });
   };
@@ -82,8 +83,14 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                   <Text className="text-14 font-500 leading-14 text-basicFont my-[12.5px]">
                     이용약관 동의 (필수)
                   </Text>
-                  {/* TODO: 약관 보기 연결 */}
-                  <Pressable className="flex flex-row items-center">
+                  <Pressable
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://midi-effect-fab.notion.site/209b3552fe64800794eac92b71ee2b8e?source=copy_link',
+                      )
+                    }
+                    className="flex flex-row items-center"
+                  >
                     <Text className="text-12 font-500 leading-12 text-disabledFont">약관 보기</Text>
                     <GrayArrow />
                   </Pressable>
@@ -98,8 +105,14 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                   <Text className="text-14 font-500 leading-14 text-basicFont my-[12.5px]">
                     개인정보 수집 및 이용동의 (필수)
                   </Text>
-                  {/* TODO: 약관 보기 연결 */}
-                  <Pressable className="flex flex-row items-center">
+                  <Pressable
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://midi-effect-fab.notion.site/209b3552fe6480358259fbfdcf828f78?source=copy_link',
+                      )
+                    }
+                    className="flex flex-row items-center"
+                  >
                     <Text className="text-12 font-500 leading-12 text-disabledFont">약관 보기</Text>
                     <GrayArrow />
                   </Pressable>
