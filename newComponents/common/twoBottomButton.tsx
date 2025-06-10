@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Text, Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface TwoBottomButtonComponentProps {
   onLeftPress: any;
@@ -12,6 +13,8 @@ const TwoBottomButtonComponent: React.FC<TwoBottomButtonComponentProps> = ({
   onRightPress,
   disabled = false,
 }) => {
+  const { bottom } = useSafeAreaInsets();
+
   const [isLeftPressed, setIsLeftPressed] = useState<boolean>(false);
   const [isRightPressed, setIsRightPressed] = useState<boolean>(false);
 
@@ -28,7 +31,7 @@ const TwoBottomButtonComponent: React.FC<TwoBottomButtonComponentProps> = ({
   };
 
   return (
-    <View className="absolute bottom-0 bg-white w-full" style={{ height: 108 }}>
+    <View className="absolute bg-white w-full" style={{ height: 108, bottom: bottom + 24 }}>
       <View className="flex flex-row items-center px-[20px] gap-x-[8px]">
         <Pressable
           onPress={onLeftPress}
