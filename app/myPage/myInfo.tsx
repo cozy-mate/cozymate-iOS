@@ -74,7 +74,7 @@ export default function MyInfo() {
         <BottomSheetView className="px-[20px] flex-1 relative pt-5">
           <ChipList value={preferenceList as LifeStyleValue[]} handleValue={handleValue} />
 
-          <View className="absolute bottom-[54px] left-5 w-full">
+          <View className="absolute bottom-[54px] left-[20px] w-full">
             <BottomButton
               buttonText="확인"
               disabled={preferenceList.length !== 4}
