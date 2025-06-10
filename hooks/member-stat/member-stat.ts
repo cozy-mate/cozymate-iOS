@@ -17,7 +17,11 @@ import {
   updateMemberDetail,
 } from '@/server/member-stat/member-stat';
 import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/server/member-stat/request';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import {
+  useHasLifeStyleStore,
+  useRegisterLifeStyleStore,
+  useShowLifeStyleInputStore,
+} from '@/zustand/member-stat/member-stat';
 
 export const useGetMyDetail = () => {
   const { hasLifeStyle } = useHasLifeStyleStore();
@@ -88,11 +92,15 @@ export const useCreateMemberDetail = () => {
   const router = useRouter();
 
   const { setHasLifeStyle } = useHasLifeStyleStore();
+  const { clearLifeStyle } = useRegisterLifeStyleStore();
+  const { clearShowLifeStyleInput } = useShowLifeStyleInputStore();
 
   return useMutation({
     mutationFn: (data: CreateMemberDetailRequest) => createMemberDetail(data),
     onSuccess: () => {
       setHasLifeStyle(true);
+      clearLifeStyle();
+      clearShowLifeStyleInput();
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
 
