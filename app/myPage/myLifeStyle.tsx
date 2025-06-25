@@ -82,6 +82,7 @@ export default function MyLifeStyle() {
                   setLifeStyle((prev) => ({ ...prev, admissionYear: String(e) }));
                 }}
                 placeholder="ex. 23"
+                isNumber={true}
               />
 
               <CustomRadioComponent

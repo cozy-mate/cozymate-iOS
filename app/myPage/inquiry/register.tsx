@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
@@ -20,36 +21,31 @@ export default function Inquiry() {
         <BackHeaderComponent />
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          rowGap: 40,
+          paddingTop: 8,
+          paddingHorizontal: 20,
+        }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
-        <ScrollView
-          contentContainerStyle={{
-            rowGap: 40,
-            paddingTop: 8,
-            paddingBottom: 120,
-            paddingHorizontal: 20,
-          }}
-          keyboardShouldPersistTaps="handled"
-        >
-          <MultiLineInputComponent
-            title={'문의 내용을 입력해주세요'}
-            value={content}
-            setValue={setContent}
-            placeholder="내용을 입력해주세요"
-            height="h-[258px]"
-          />
+        <MultiLineInputComponent
+          title={'문의 내용을 입력해주세요'}
+          value={content}
+          setValue={setContent}
+          placeholder="내용을 입력해주세요"
+          height="h-[258px]"
+        />
 
-          <InputComponent
-            title={'답변 내용을 받으실\n이메일을 입력해주세요'}
-            value={email}
-            setValue={setEmail}
-            placeholder="이메일을 입력해주세요"
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <InputComponent
+          title={'답변 내용을 받으실\n이메일을 입력해주세요'}
+          value={email}
+          setValue={setEmail}
+          placeholder="이메일을 입력해주세요"
+        />
+      </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="등록"

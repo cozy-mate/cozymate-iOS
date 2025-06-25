@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import {
   createRoomLike,
@@ -6,10 +6,15 @@ import {
   getRoomLikeList,
 } from '@/server/room-favorite/room-favorite';
 
-export const useDeleteRoomLike = (roomFavoriteId: number, refetch: () => void) => {
+export const useDeleteRoomLike = (roomFavoriteId: number, roomId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => deleteRoomLike(roomFavoriteId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
+      queryClient.invalidateQueries({ queryKey: [`/favorites/rooms`] });
+    },
   });
 };
 
@@ -26,9 +31,14 @@ export const useGetRoomLikeList = () => {
   });
 };
 
-export const useCreateRoomLike = (roomId: number, refetch: () => void) => {
+export const useCreateRoomLike = (roomId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => createRoomLike(roomId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
+      queryClient.invalidateQueries({ queryKey: [`/favorites/rooms`] });
+    },
   });
 };

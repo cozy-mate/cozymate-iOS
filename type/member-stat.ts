@@ -1,13 +1,15 @@
+import { MemberData } from './member';
+
 export type MemberStatItem = {
   dormName: string;
   numOfRoommate: string;
-  admissionYear: string;
+  admissionYear: string | undefined;
   dormJoiningStatus: string;
   wakeUpTime: number | undefined;
   sleepingTime: number | undefined;
   turnOffTime: number | undefined;
   smokingStatus: string;
-  sleepingHabits: string[];
+  sleepingHabits: string[] | undefined;
   coolingIntensity: string;
   heatingIntensity: string;
   lifePattern: string;
@@ -21,7 +23,21 @@ export type MemberStatItem = {
   noiseSensitivity: string;
   cleaningFrequency: string;
   drinkingFrequency: string;
-  personalities: string[];
+  personalities: string[] | undefined;
   mbti: string;
   selfIntroduction: string;
 };
+
+export interface MemberDetailItem {
+  memberDetail: MemberData;
+  memberStatDetail: MemberStatItem;
+  equality: number | null;
+  roomId: number;
+  isRoomPublic: boolean;
+  hasRequestedRoomEntry: boolean;
+  favoriteId: number;
+}
+
+export interface UserDetailComponentProps {
+  data: MemberDetailItem;
+}

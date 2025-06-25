@@ -6,6 +6,7 @@ interface CustomTextInputComponentProps {
   value: string;
   handleValue: (value: string) => void;
   placeholder: string;
+  isNumber?: boolean;
 }
 
 const CustomTextInputComponent: React.FC<CustomTextInputComponentProps> = ({
@@ -13,6 +14,7 @@ const CustomTextInputComponent: React.FC<CustomTextInputComponentProps> = ({
   value,
   handleValue,
   placeholder,
+  isNumber = false,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -30,6 +32,7 @@ const CustomTextInputComponent: React.FC<CustomTextInputComponentProps> = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={`p-4 border ${isFocused ? 'bg-subColor2 border-mainColor' : 'bg-colorBox border-colorBox'} rounded-xl text-14 font-500 leading-14 text-basicFont`}
+        keyboardType={isNumber ? 'number-pad' : 'default'}
       />
     </View>
   );

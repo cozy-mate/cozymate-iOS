@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BorderDateBox from '@/components/common/borderDateBox';
 import BorderRadioBox from '@/components/common/borderRadioBox';
-import BottomButton from '@/components/common/bottomButton';
 import NicknameInputComponent from '@/components/onBoard/nicknameInput';
 import { GenderItems } from '@/constants/items/genderItem';
+import BottomButtonComponent from '@/newComponents/common/bottomButton';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, InputEvent } from '@/utils/ga/eventEnum';
 import { useSignUpStore } from '@/zustand/member/member';
@@ -56,10 +56,10 @@ export default function PersonalInfo() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="mt-14 gap-y-[24px] px-[20px]">
-          <View className="gap-y-1 mx-1">
-            <Text className="text-20 text-emphasizedFont font-700">원활한 서비스 이용을 위해</Text>
-            <Text className="text-20 text-emphasizedFont font-700">개인정보를 입력해주세요!</Text>
+        <View className="mt-[56px] gap-y-[24px] px-[20px]">
+          <View className="gap-y-[4px] mx-[4px]">
+            <Text className="text-20 text-emphasizedFont font-600">원활한 서비스 이용을 위해</Text>
+            <Text className="text-20 text-emphasizedFont font-600">개인정보를 입력해주세요!</Text>
           </View>
 
           <View className="gap-y-[16px]">
@@ -86,20 +86,21 @@ export default function PersonalInfo() {
         </View>
       </TouchableWithoutFeedback>
 
-      <View className="absolute bottom-[42px] w-full px-[22px]">
-        <BottomButton
-          buttonText="다음"
-          disabled={!nicknameChecked || nickname === '' || gender === '' || birthday === ''}
-          onPress={() => {
-            router.push('/(onBoard)/character');
-            setSignUpState({
-              nickname,
-              gender,
-              birthday,
-            });
-          }}
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="다음"
+        onPress={() => {
+          router.push('/(onBoard)/character');
+          setSignUpState({
+            nickname,
+            gender,
+            birthday,
+          });
+        }}
+        color={
+          !nicknameChecked || nickname === '' || gender === '' || birthday === '' ? 'GRAY' : 'BLUE'
+        }
+        disabled={!nicknameChecked || nickname === '' || gender === '' || birthday === ''}
+      />
     </SafeAreaView>
   );
 }

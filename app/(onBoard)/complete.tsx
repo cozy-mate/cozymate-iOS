@@ -1,5 +1,5 @@
 import { CommonActions } from '@react-navigation/native';
-import { useNavigationContainerRef, useRouter } from 'expo-router';
+import { useNavigationContainerRef } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

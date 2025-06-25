@@ -1,14 +1,6 @@
 import { useState } from 'react';
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SelectPersonaIcon from '@/assets/images/common/selectPersona.svg';
@@ -63,60 +55,56 @@ export default function CreateRoom() {
           <BackHeaderComponent />
         </View>
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 0}
-          className="flex-1"
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 32 }}
+          keyboardShouldPersistTaps="handled"
+          enableOnAndroid={true}
+          extraScrollHeight={20}
         >
-          <ScrollView
-            contentContainerStyle={{ paddingHorizontal: 20 }}
-            keyboardShouldPersistTaps="handled"
-          >
-            <View className="gap-y-[42px] flex items-center">
-              <View className="relative">
-                {persona === 0 ? (
-                  <View className="bg-[#D9D9D9] rounded-full w-[130px] h-[130px]" />
-                ) : (
-                  getPersona(persona, 130, 130)
-                )}
-                <Pressable
-                  onPress={() => setIsPersonaModalOpen(true)}
-                  className="absolute bottom-0 right-0"
-                >
-                  <SelectPersonaIcon />
-                </Pressable>
-              </View>
-
-              <View className="w-full gap-y-10">
-                <RoomNameInputComponent
-                  title="방 이름을 입력해주세요"
-                  value={name}
-                  handleValue={(e: string) => setName(e)}
-                  placeholder="방이름을 입력해주세요"
-                  isError={isError}
-                  handleIsError={(e: boolean) => setIsError(e)}
-                />
-
-                <CustomSelectComponent
-                  title="인원을 선택해주세요 (본인 포함)"
-                  value={maxMateNum}
-                  items={numOfMateItems}
-                  handleValue={(e) => setMaxMateNum(Number(e))}
-                />
-
-                <CustomMultiTextInputComponent
-                  title="방을 나타낼 해시태그를 입력해주세요 (최대 3개)"
-                  value={hashtag}
-                  handleValue={(e: string) => setHashtag(e)}
-                  handleSubmit={handleHashtagSubmit}
-                  valueList={hashtagList}
-                  handleRemove={handleHashtagRemove}
-                  placeholder="해시태그를 입력해주세요"
-                />
-              </View>
+          <View className="gap-y-[42px] flex items-center">
+            <View className="relative">
+              {persona === 0 ? (
+                <View className="bg-[#D9D9D9] rounded-full w-[130px] h-[130px]" />
+              ) : (
+                getPersona(persona, 130, 130)
+              )}
+              <Pressable
+                onPress={() => setIsPersonaModalOpen(true)}
+                className="absolute bottom-0 right-0"
+              >
+                <SelectPersonaIcon />
+              </Pressable>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+
+            <View className="w-full gap-y-[40px]">
+              <RoomNameInputComponent
+                title="방 이름을 입력해주세요"
+                value={name}
+                handleValue={(e: string) => setName(e)}
+                placeholder="방이름을 입력해주세요"
+                isError={isError}
+                handleIsError={(e: boolean) => setIsError(e)}
+              />
+
+              <CustomSelectComponent
+                title="인원을 선택해주세요 (본인 포함)"
+                value={maxMateNum}
+                items={numOfMateItems}
+                handleValue={(e) => setMaxMateNum(Number(e))}
+              />
+
+              <CustomMultiTextInputComponent
+                title="방을 나타낼 해시태그를 입력해주세요 (최대 3개)"
+                value={hashtag}
+                handleValue={(e: string) => setHashtag(e)}
+                handleSubmit={handleHashtagSubmit}
+                valueList={hashtagList}
+                handleRemove={handleHashtagRemove}
+                placeholder="해시태그를 입력해주세요"
+              />
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
 
         <BottomButtonComponent
           buttonText="방 생성하기"

@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native';
 
 interface CustomSelectComponentProps {
   title: string;
-  value: string[];
+  value: string[] | undefined;
   items: {
     index: number;
     title: string;
@@ -17,10 +17,12 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
   items,
   handleValue,
 }) => {
+  const checkedValue = value ?? [];
+
   const toggleSelection = (itemValue: string) => {
-    const updatedValue = value.includes(itemValue)
-      ? value.filter((v) => v !== itemValue)
-      : [...value, itemValue];
+    const updatedValue = checkedValue.includes(itemValue)
+      ? checkedValue.filter((v) => v !== itemValue)
+      : [...checkedValue, itemValue];
     handleValue(updatedValue);
   };
 
@@ -33,10 +35,10 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
           <Pressable
             key={index}
             onPress={() => toggleSelection(item.value)}
-            className={`px-[20px] py-[10px] rounded-md ${value.includes(item.value) ? 'bg-subColor1' : 'bg-colorBox'}`}
+            className={`px-[20px] py-[10px] rounded-md ${checkedValue.includes(item.value) ? 'bg-subColor1' : 'bg-colorBox'}`}
           >
             <Text
-              className={`text-14 leading-14 ${value.includes(item.value) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`text-14 leading-14 ${checkedValue.includes(item.value) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
             >
               {item.title}
             </Text>
