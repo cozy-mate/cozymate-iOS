@@ -91,6 +91,12 @@
     letter-spacing: -0.03em;
   }
 
+  .InputMedium14 {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
   .Regular14 {
     font-family: 'Pretendard', system-ui, sans-serif;
     font-size: 14px;
