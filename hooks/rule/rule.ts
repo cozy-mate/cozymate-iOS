@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 
 import { CreateRuleRequest, UpdateRuleRequest } from '@/server/rule/request';
 import { createRule, deleteRule, getRuleList, updateRule } from '@/server/rule/rule';
-import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteRule = (roomId: number, ruleId: number) => {
   const queryClient = useQueryClient();
@@ -11,7 +10,7 @@ export const useDeleteRule = (roomId: number, ruleId: number) => {
   return useMutation({
     mutationFn: () => deleteRule(roomId, ruleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
     },
     onError: (error: any) => {
       console.log(error);
@@ -27,7 +26,7 @@ export const useUpdateRule = (roomId: number, ruleId: number) => {
     mutationFn: (data: UpdateRuleRequest) => updateRule(roomId, ruleId, data),
     onSuccess: () => {
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
     },
     onError: (error: any) => {
       console.log(error);
@@ -36,12 +35,10 @@ export const useUpdateRule = (roomId: number, ruleId: number) => {
 };
 
 export const useGetRuleList = (roomId: number) => {
-  const { roomInfo } = useHasRoomStore();
-
   return useQuery({
     queryKey: [`/rooms/${roomId}/rules`, roomId],
     queryFn: () => getRuleList(roomId),
-    enabled: roomInfo.roomId !== 0,
+    enabled: roomId !== 0,
   });
 };
 
@@ -52,8 +49,8 @@ export const useCreateRule = (roomId: number) => {
   return useMutation({
     mutationFn: (data: CreateRuleRequest) => createRule(roomId, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`] });
     },
     onError: (error: any) => {
       console.log(error);

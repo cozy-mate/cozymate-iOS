@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 
 import { CreateRoleRequest, UpdateRoleRequest } from '@/server/role/request';
 import { createRole, deleteRole, getRoleList, updateRole } from '@/server/role/role';
-import { useHasRoomStore } from '@/zustand/room/room';
 
 export const useDeleteRole = (roomId: number, roleId: number) => {
   const queryClient = useQueryClient();
@@ -11,7 +10,7 @@ export const useDeleteRole = (roomId: number, roleId: number) => {
   return useMutation({
     mutationFn: () => deleteRole(roomId, roleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
     },
     onError: (error: any) => {
       console.log(error);
@@ -26,8 +25,8 @@ export const useUpdateRole = (roomId: number, roleId: number) => {
   return useMutation({
     mutationFn: (data: UpdateRoleRequest) => updateRole(roomId, roleId, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
     },
     onError: (error: any) => {
       console.log(error);
@@ -36,12 +35,10 @@ export const useUpdateRole = (roomId: number, roleId: number) => {
 };
 
 export const useGetRoleList = (roomId: number) => {
-  const { roomInfo } = useHasRoomStore();
-
   return useQuery({
     queryKey: [`/rooms/${roomId}/roles`, roomId],
     queryFn: () => getRoleList(roomId),
-    enabled: roomInfo.roomId !== 0,
+    enabled: roomId !== 0,
   });
 };
 
@@ -52,8 +49,10 @@ export const useCreateRole = (roomId: number) => {
   return useMutation({
     mutationFn: (data: CreateRoleRequest) => createRole(roomId, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/todos`, roomId] });
+
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`] });
     },
     onError: (error: any) => {
       console.log(error);
