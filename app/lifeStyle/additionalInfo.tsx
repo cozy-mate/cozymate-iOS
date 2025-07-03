@@ -1,15 +1,9 @@
-import {
-  Keyboard,
-  Text,
-  TextInput,
-  View,
-  GestureResponderEvent,
-  TouchableOpacity,
-} from 'react-native';
+import { Keyboard, Text, View, GestureResponderEvent, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
+import CustomTextarea from '@/components/common/customInput/customTextarea';
 import LoadingComponent from '@/components/common/loading';
 import ProgressBarComponent from '@/components/lifeStyle/progressBar';
 import { useCreateMemberDetail } from '@/hooks/member-stat/member-stat';
@@ -37,9 +31,14 @@ export default function LifeStyleAdditionalInfo() {
         <BackHeaderComponent title="선택정보">
           <TouchableOpacity
             onPress={handleNext}
-            className="bg-subColor1 rounded-md px-[20px] py-[10px]"
+            disabled={lifeStyle.selfIntroduction.length > 200}
+            className={`rounded-md px-[20px] py-[10px] ${lifeStyle.selfIntroduction.length > 200 ? 'bg-[#C4C4C4]' : 'bg-subColor1'}`}
           >
-            <Text className="text-14 font-600 leading-14 text-mainColor">완료</Text>
+            <Text
+              className={`Semibold14 ${lifeStyle.selfIntroduction.length > 200 ? 'text-white' : 'text-mainColor'}`}
+            >
+              완료
+            </Text>
           </TouchableOpacity>
         </BackHeaderComponent>
       </View>
@@ -48,29 +47,23 @@ export default function LifeStyleAdditionalInfo() {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className="gap-y-[20px] mt-[40px] px-[20px]">
-          <View className="gap-y-[12px]">
-            <Text className="text-16 font-600 leading-16 text-emphasizedFont mx-[4px]">
-              하고싶은 말을 적어주세요 (선택)
-            </Text>
-            <TextInput
-              value={lifeStyle.selfIntroduction}
-              onFocus={() =>
-                trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
-                  focus: true,
-                })
-              }
-              onBlur={() =>
-                trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
-                  focus: false,
-                })
-              }
-              onChangeText={(e: string) => setLifeStyle({ selfIntroduction: e })}
-              className="bg-colorBox h-[270px] rounded-xl p-[16px]"
-              placeholder="내용을 입력해주세요"
-              placeholderTextColor={'#ACADB4'}
-              multiline
-            />
-          </View>
+          <CustomTextarea
+            title="하고싶은 말을 적어주세요 (선택)"
+            value={lifeStyle.selfIntroduction}
+            handleValue={(e: string) => setLifeStyle({ selfIntroduction: e })}
+            placeholder="내용을 입력해주세요"
+            height="h-[270px]"
+            onFocus={() =>
+              trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
+                focus: true,
+              })
+            }
+            onBlur={() =>
+              trackButton(ButtonEvent.choice_text_input, EventCategory.life_style, {
+                focus: false,
+              })
+            }
+          />
 
           <View className="mx-[4px] gap-y-[16px]">
             <Text className="Medium12 text-disabledFont">이런 내용을 적어주면 좋아요!</Text>

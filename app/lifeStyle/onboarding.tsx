@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XIcon from '@/assets/icons/x.svg';
 import StarImage from '@/assets/images/lifeStyle/star.svg';
-import BottomButtonComponent from '@/newComponents/common/bottomButton';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function LifeStyleOnboarding() {

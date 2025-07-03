@@ -2,17 +2,17 @@ import { useRouter } from 'expo-router';
 import {
   GestureResponderEvent,
   Keyboard,
-  Pressable,
   ScrollView,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
+import CustomTimeSelect from '@/components/common/customInput/customTimeSelect';
 import AnimatedFieldComponent from '@/components/lifeStyle/animatedField';
-import CustomTimeSelectComponent from '@/components/lifeStyle/customTimeSelect';
 import ProgressBarComponent from '@/components/lifeStyle/progressBar';
 import {
   coolingIntensityItems,
@@ -106,12 +106,12 @@ export default function LifeStyleEssentialInfo() {
             lifeStyle.personalities !== undefined &&
             lifeStyle.personalities.length !== 0 &&
             lifeStyle.mbti !== '' && (
-              <Pressable
+              <TouchableOpacity
                 onPress={handleNext}
                 className="bg-subColor1 rounded-md px-[20px] py-[10px]"
               >
                 <Text className="Semibold14 text-mainColor">다음</Text>
-              </Pressable>
+              </TouchableOpacity>
             )}
         </BackHeaderComponent>
       </View>
@@ -390,7 +390,7 @@ export default function LifeStyleEssentialInfo() {
             }}
           />
 
-          <CustomTimeSelectComponent
+          <CustomTimeSelect
             title="기상시간을 선택해주세요"
             value={lifeStyle.wakeUpTime}
             onChange={(e) => {

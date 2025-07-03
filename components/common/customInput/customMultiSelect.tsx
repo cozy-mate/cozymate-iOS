@@ -1,21 +1,21 @@
 import { Pressable, Text, View } from 'react-native';
 
-interface CustomSelectComponentProps {
+interface CustomMultiSelectProps {
   title: string;
   value: string[] | undefined;
+  handleValue: (e: string[]) => void;
   items: {
     index: number;
     title: string;
     value: string;
   }[];
-  handleValue: (value: string[]) => void;
 }
 
-const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
+const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({
   title,
   value,
-  items,
   handleValue,
+  items,
 }) => {
   const checkedValue = value ?? [];
 
@@ -27,10 +27,10 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
   };
 
   return (
-    <View className="gap-y-2">
-      <Text className="text-16 font-600 text-emphasizedFont mx-1">{title}</Text>
+    <View className="gap-y-[12px]">
+      <Text className="Semibold16 text-emphasizedFont mx-[4px]">{title}</Text>
 
-      <View className="flex flex-row flex-wrap gap-2">
+      <View className="flex flex-row flex-wrap gap-[8px]">
         {items.map((item, index) => (
           <Pressable
             key={index}
@@ -38,7 +38,7 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
             className={`px-[20px] py-[10px] rounded-md ${checkedValue.includes(item.value) ? 'bg-subColor1' : 'bg-colorBox'}`}
           >
             <Text
-              className={`text-14 leading-14 ${checkedValue.includes(item.value) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`${checkedValue.includes(item.value) ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
             >
               {item.title}
             </Text>
@@ -49,4 +49,4 @@ const CustomSelectComponent: React.FC<CustomSelectComponentProps> = ({
   );
 };
 
-export default CustomSelectComponent;
+export default CustomMultiSelect;
