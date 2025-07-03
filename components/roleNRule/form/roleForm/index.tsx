@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 
+import CustomTextInput from '@/components/common/customInput/customTextInput';
+import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { CreateRoleRequest } from '@/server/role/request';
-import { useGetMyRoomDetail } from '@/hooks/room/room';
 
-import CustomTextInputComponent from '../common/customTextInput';
+import DaySelectComponent from '../todoForm/daySelect';
 
-import DaySelectComponent from './daySelect';
 import RoleMateSelectComponent from './roleMateSelect';
 
 interface RoleFormComponentProps {
@@ -14,15 +14,18 @@ interface RoleFormComponentProps {
 }
 
 const RoleFormComponent: React.FC<RoleFormComponentProps> = ({ roleForm, setRoleForm }) => {
-  const { data: memberList } = useGetMyRoomDetail();
+  const { data: hasRoom } = useCheckHasRoom();
+
+  const { data: memberList } = useGetMyRoomDetail(hasRoom.result.roomId);
 
   return (
     <View className="gap-y-[48px]">
-      <CustomTextInputComponent
+      <CustomTextInput
         title="역할을 입력해주세요"
         value={roleForm.content}
         handleValue={(e: string) => setRoleForm((prev) => ({ ...prev, content: e }))}
         placeholder="역할을 입력해주세요"
+        maxLength={20}
       />
 
       {memberList?.result.mateDetailList !== undefined && (

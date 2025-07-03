@@ -41,7 +41,7 @@ const RoleMateSelectComponent: React.FC<RoleMateSelectComponentProps> = ({
 
   return (
     <View className="gap-y-[12px]">
-      <Text className="text-16 font-600 leading-16 text-basicFont px-[4px]">{title}</Text>
+      <Text className="Semibold18 text-basicFont px-[4px]">{title}</Text>
 
       <View className="gap-y-[8px]">
         <View className="flex flex-row flex-wrap gap-[8px]">
@@ -52,7 +52,7 @@ const RoleMateSelectComponent: React.FC<RoleMateSelectComponentProps> = ({
               className={`px-[20px] py-[10px] rounded-md ${value.some((v) => v.mateId === item.mateId) ? 'bg-subColor1' : 'bg-colorBox'}`}
             >
               <Text
-                className={`text-14 leading-14 ${value.some((v) => v.mateId === item.mateId) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                className={`${value.some((v) => v.mateId === item.mateId) ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
               >
                 {item.nickname}
               </Text>
@@ -65,7 +65,7 @@ const RoleMateSelectComponent: React.FC<RoleMateSelectComponentProps> = ({
             {value.length === items.length ? <CheckBoxIcon /> : <NotCheckBoxIcon />}
           </Pressable>
 
-          <Text className="text-14 font-500 leading-14 text-disabledFont">모두</Text>
+          <Text className="Medium14 text-disabledFont">모두</Text>
         </View>
       </View>
     </View>

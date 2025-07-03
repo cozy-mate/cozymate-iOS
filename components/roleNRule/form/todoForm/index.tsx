@@ -1,11 +1,11 @@
 import { View, Text } from 'react-native';
 
+import CustomTextInput from '@/components/common/customInput/customTextInput';
+import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { CreateTodoRequest } from '@/server/todo/request';
-import { useGetMyRoomDetail } from '@/hooks/room/room';
 
-import CustomTextInputComponent from '../common/customTextInput';
+import CustomCalendar from '../../todoSection/calendar';
 
-import CustomCalendar from './Calendar';
 import TodoMateSelectComponent from './todoMateSelect';
 
 interface TodoFormComponentProps {
@@ -14,15 +14,18 @@ interface TodoFormComponentProps {
 }
 
 const TodoFormComponent: React.FC<TodoFormComponentProps> = ({ todoForm, setTodoForm }) => {
-  const { data: memberList } = useGetMyRoomDetail();
+  const { data: hasRoom } = useCheckHasRoom();
+
+  const { data: memberList } = useGetMyRoomDetail(hasRoom.result.roomId);
 
   return (
     <View className="gap-y-[48px]">
-      <CustomTextInputComponent
+      <CustomTextInput
         title="할 일을 입력해주세요"
         value={todoForm.content}
         handleValue={(e: string) => setTodoForm((prev) => ({ ...prev, content: e }))}
         placeholder="할 일을 입력해주세요"
+        maxLength={20}
       />
 
       {memberList?.result.mateDetailList !== undefined && (
@@ -35,9 +38,7 @@ const TodoFormComponent: React.FC<TodoFormComponentProps> = ({ todoForm, setTodo
       )}
 
       <View className="gap-y-[8px]">
-        <Text className="text-16 font-600 leading-16 text-basicFont mx-[4px]">
-          날짜를 선택해주세요
-        </Text>
+        <Text className="Semibold18 text-basicFont mx-[4px]">날짜를 선택해주세요</Text>
         <CustomCalendar
           canSelectPrev={false}
           onDateTimeSelect={(dateTime) => setTodoForm((prev) => ({ ...prev, timePoint: dateTime }))}

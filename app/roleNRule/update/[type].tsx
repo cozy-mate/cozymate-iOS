@@ -5,39 +5,63 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import RoleFormComponent from '@/components/roleNRule/roleForm';
-import RuleFormComponent from '@/components/roleNRule/ruleForm';
-import TodoFormComponent from '@/components/roleNRule/todoForm';
+import RoleFormComponent from '@/components/roleNRule/form/roleForm';
+import RuleFormComponent from '@/components/roleNRule/form/ruleForm';
+import TodoFormComponent from '@/components/roleNRule/form/todoForm';
 import { useUpdateRole } from '@/hooks/role/role';
+import { useCheckHasRoom } from '@/hooks/room/room';
 import { useUpdateRule } from '@/hooks/rule/rule';
 import { useUpdateTodo } from '@/hooks/todo/todo';
-import BottomButtonComponent from '@/newComponents/common/bottomButton';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { UpdateRoleRequest } from '@/server/role/request';
 import { UpdateRuleRequest } from '@/server/rule/request';
 import { UpdateTodoRequest } from '@/server/todo/request';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
-import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function Update() {
   const { type } = useLocalSearchParams();
 
-  const { roomInfo } = useHasRoomStore();
+  const { data: hasRoom } = useCheckHasRoom();
 
   const { selectedItem } = useSelectedItemStore();
 
-  const { mutateAsync: updateTodo } = useUpdateTodo(roomInfo.roomId, selectedItem.id);
-  const [todoForm, setTodoForm] = useState<UpdateTodoRequest | undefined>(selectedItem.todoItem);
+  const { mutateAsync: updateTodo } = useUpdateTodo(hasRoom.result.roomId, selectedItem.id);
+  const [todoForm, setTodoForm] = useState<UpdateTodoRequest>(selectedItem.todoItem);
 
-  const { mutateAsync: updateRole } = useUpdateRole(roomInfo.roomId, selectedItem.id);
-  const [roleForm, setRoleForm] = useState<UpdateRoleRequest | undefined>(selectedItem.roleItem);
+  const { mutateAsync: updateRole } = useUpdateRole(hasRoom.result.roomId, selectedItem.id);
+  const [roleForm, setRoleForm] = useState<UpdateRoleRequest>(selectedItem.roleItem);
 
-  const { mutateAsync: updateRule } = useUpdateRule(roomInfo.roomId, selectedItem.id);
-  const [ruleForm, setRuleForm] = useState<UpdateRuleRequest | undefined>(selectedItem.ruleItem);
+  const { mutateAsync: updateRule } = useUpdateRule(hasRoom.result.roomId, selectedItem.id);
+  const [ruleForm, setRuleForm] = useState<UpdateRuleRequest>(selectedItem.ruleItem);
 
   const handleUpdate = () => {
     if (type === 'To-do') updateTodo(todoForm as UpdateTodoRequest);
     else if (type === 'Role') updateRole(roleForm as UpdateRoleRequest);
     else updateRule(ruleForm as UpdateRuleRequest);
+  };
+
+  const isFormValid = (): boolean => {
+    if (type === 'To-do') {
+      return (
+        todoForm.content.trim() !== '' &&
+        todoForm.mateIdList.length > 0 &&
+        todoForm.timePoint.trim() !== ''
+      );
+    }
+
+    if (type === 'Role') {
+      return (
+        roleForm.content.trim() !== '' &&
+        roleForm.mateIdNameList.length > 0 &&
+        roleForm.repeatDayList !== null
+      );
+    }
+
+    if (type === 'Rule') {
+      return ruleForm.content.trim() !== '';
+    }
+
+    return false;
   };
 
   return (
@@ -46,8 +70,8 @@ export default function Update() {
         <BackHeaderComponent />
 
         <View className="flex flex-row items-center gap-x-[12px]">
-          <View className="p-[8px] gap-y-[8px]">
-            <Text className="text-18 font-600 leading-18 text-mainColor">{type}</Text>
+          <View className="py-[8px] gap-y-[8px]">
+            <Text className="Semibold18 text-mainColor px-[8px]">{type}</Text>
 
             <View className="h-[4px] rounded-full bg-mainColor" />
           </View>
@@ -55,49 +79,26 @@ export default function Update() {
       </View>
 
       <KeyboardAwareScrollView
-        contentContainerStyle={{ paddingHorizontal: 20, rowGap: 24, marginTop: 8 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          rowGap: 24,
+          paddingTop: 24,
+          paddingBottom: 120,
+        }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
         extraScrollHeight={20}
       >
-        {type === 'To-do' && (
-          <TodoFormComponent todoForm={todoForm as UpdateTodoRequest} setTodoForm={setTodoForm} />
-        )}
-        {type === 'Role' && (
-          <RoleFormComponent roleForm={roleForm as UpdateRoleRequest} setRoleForm={setRoleForm} />
-        )}
-        {type === 'Rule' && (
-          <RuleFormComponent ruleForm={ruleForm as UpdateRuleRequest} setRuleForm={setRuleForm} />
-        )}
+        {type === 'To-do' && <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />}
+        {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
+        {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
       </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="수정하기"
         onPress={handleUpdate}
-        disabled={
-          (type === 'To-do' &&
-            (todoForm.content.trim() === '' ||
-              todoForm.mateIdList.length === 0 ||
-              todoForm.timePoint.trim() === '')) ||
-          (type === 'Role' &&
-            (roleForm.mateIdNameList.length === 0 ||
-              roleForm.content.trim() === '' ||
-              roleForm.repeatDayList === null)) ||
-          (type === 'Rule' && ruleForm.content.trim() === '')
-        }
-        color={
-          (type === 'To-do' &&
-            (todoForm.content.trim() === '' ||
-              todoForm.mateIdList.length === 0 ||
-              todoForm.timePoint.trim() === '')) ||
-          (type === 'Role' &&
-            (roleForm.mateIdNameList.length === 0 ||
-              roleForm.content.trim() === '' ||
-              roleForm.repeatDayList === null)) ||
-          (type === 'Rule' && ruleForm.content.trim() === '')
-            ? 'GRAY'
-            : 'BLUE'
-        }
+        disabled={!isFormValid()}
+        color={isFormValid() ? 'BLUE' : 'GRAY'}
       />
     </SafeAreaView>
   );

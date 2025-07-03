@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 LocaleConfig.locales.fr = {
@@ -48,6 +48,7 @@ interface TodoItem {
 interface CustomCalendarProps {
   canSelectPrev: boolean;
   onDateTimeSelect: (dateTime: string) => void;
+  selectedDate: string;
   todoData?: TodoItem[];
   useMarkedDates?: boolean;
 }
@@ -55,11 +56,11 @@ interface CustomCalendarProps {
 const CustomCalendar: React.FC<CustomCalendarProps> = ({
   canSelectPrev,
   onDateTimeSelect,
+  selectedDate,
   todoData = [],
   useMarkedDates = true,
 }) => {
   const today = moment().format('YYYY-MM-DD');
-  const [selected, setSelected] = useState(today);
 
   const minDate = canSelectPrev ? undefined : today;
 
@@ -78,7 +79,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
       }
     });
 
-    marks[selected] = {
+    marks[selectedDate] = {
       selected: true,
       disableTouchEvent: true,
       selectedDayBackgroundColor: '#CADFFF',
@@ -86,7 +87,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
     };
 
     return marks;
-  }, [selected, todoData, useMarkedDates]);
+  }, [selectedDate, todoData, useMarkedDates]);
 
   return (
     <Calendar
@@ -94,7 +95,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
       minDate={minDate}
       onDayPress={(day: any) => {
         onDateTimeSelect(day.dateString);
-        setSelected(day.dateString);
       }}
       markedDates={useMarkedDates ? markedDates : {}}
       theme={{

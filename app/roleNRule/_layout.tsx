@@ -6,7 +6,7 @@ export default function RoleNRuleLayout() {
       {/* 롤앤룰 생성 */}
       <Stack.Screen name="create" options={{ headerShown: false }} />
 
-      {/* 롤앤룰 수정 */}
+      {/* Todo 수정 */}
       <Stack.Screen name="update/[type]" options={{ headerShown: false }} />
     </Stack>
   );

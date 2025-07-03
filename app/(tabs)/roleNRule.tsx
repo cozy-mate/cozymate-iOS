@@ -1,173 +1,83 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
 import moment from 'moment';
-import { Suspense, useRef, useState } from 'react';
-import { Dimensions, Text, Pressable, ScrollView, View, TouchableOpacity } from 'react-native';
-import { Portal } from 'react-native-portalize';
+import { useCallback, useRef, useState } from 'react';
+import { Dimensions, RefreshControl, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AddButton from '@/assets/images/roleNRule/addButton.svg';
 import Background from '@/assets/images/roleNRule/background.svg';
-import TwoButtonModal from '@/components/common/twoButtonModal';
-import CustomCalendar from '@/components/roleNRule/Calendar';
-import MateTodoComponent from '@/components/roleNRule/MateTodo';
-import MyTodoComponent from '@/components/roleNRule/MyTodo';
-import RoleComponent from '@/components/roleNRule/Role';
-import RuleComponent from '@/components/roleNRule/Rule';
-import { useDeleteRole } from '@/hooks/role/role';
-import { useDeleteRule } from '@/hooks/rule/rule';
-import { useDeleteTodo } from '@/hooks/todo/todo';
-import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
-import { useHasRoomStore } from '@/zustand/room/room';
+import BottomSheetComponent from '@/components/common/bottomSheet';
+import RoleNRuleHeader from '@/components/roleNRule/header';
+import RoleNRuleBottomSheetComponent from '@/components/roleNRule/roleNruleBottomSheet';
+import RoleRuleSection from '@/components/roleNRule/roleRuleSection';
+import TodoSection from '@/components/roleNRule/todoSection';
+import { useGetRoleList } from '@/hooks/role/role';
+import { useCheckHasRoom } from '@/hooks/room/room';
+import { useGetRuleList } from '@/hooks/rule/rule';
+import { useGetTodoList } from '@/hooks/todo/todo';
 
 export default function RoleNRule() {
   const router = useRouter();
-
+  const width = Dimensions.get('screen').width;
+  const [currentType, setCurrentType] = useState<'To-do' | 'Role'>('To-do');
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const width = Dimensions.get('screen').width;
+  const { data: hasRoom } = useCheckHasRoom();
 
-  const { roomInfo } = useHasRoomStore();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const [type, setType] = useState<string>('todo');
   const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
 
-  const handleDateTimeSelect = (dateTime: string) => {
-    setTimePoint(dateTime);
-  };
+  const { refetch: todoRefetch } = useGetTodoList(hasRoom.result.roomId, timePoint);
+  const { refetch: ruleRefetch } = useGetRuleList(hasRoom.result.roomId);
+  const { refetch: roleRefetch } = useGetRoleList(hasRoom.result.roomId);
 
-  const { selectedItem } = useSelectedItemStore();
+  const refetchFuncs = [todoRefetch(), ruleRefetch(), roleRefetch()];
 
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
-
-  const { mutateAsync: deleteTodo } = useDeleteTodo(roomInfo.roomId, selectedItem.id);
-  const { mutateAsync: deleteRole } = useDeleteRole(roomInfo.roomId, selectedItem.id);
-  const { mutateAsync: deleteRule } = useDeleteRule(roomInfo.roomId, selectedItem.id);
-
-  const handleDelete = () => {
-    if (selectedItem.type === 'To-do') deleteTodo();
-    else if (selectedItem.type === 'Role') deleteRole();
-    else deleteRule();
-
-    setIsDeleteModalVisible(false);
-  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    Promise.all(refetchFuncs).finally(() => {
+      setRefreshing(false);
+    });
+  }, []);
 
   return (
-    <Suspense>
-      <SafeAreaView className="flex-1 bg-subColor1 relative">
-        <Background style={{ position: 'absolute', width: width }} />
+    <SafeAreaView className="flex-1 bg-subColor1 relative">
+      <Background style={{ position: 'absolute', width: width }} />
 
-        <View className="flex flex-row gap-x-[24px] px-[20px] mt-[28px]">
-          <Pressable onPress={() => setType('todo')} className="w-[92px] gap-y-[8px]">
-            <Text
-              className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'todo' ? 'text-mainColor' : 'text-disabledFont'}`}
-            >
-              To - do
-            </Text>
+      <RoleNRuleHeader
+        currentType={currentType}
+        handleType={(e: 'To-do' | 'Role') => setCurrentType(e)}
+      />
 
-            <View
-              className={`h-[4px] rounded-[32px] ${type === 'todo' ? 'bg-mainColor' : 'bg-subColor1'}`}
-            />
-          </Pressable>
+      <ScrollView
+        className="bg-[#F7FAFF] px-[20px] flex-1 rounded-tr-[48px]"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={'#68A4FF'} />
+        }
+      >
+        {currentType === 'To-do' ? (
+          <TodoSection
+            bottomSheetRef={bottomSheetRef}
+            timePoint={timePoint}
+            setTimePoint={setTimePoint}
+          />
+        ) : (
+          <RoleRuleSection bottomSheetRef={bottomSheetRef} />
+        )}
+      </ScrollView>
 
-          <Pressable onPress={() => setType('role')} className="w-[92px] gap-y-2">
-            <Text
-              className={`text-center text-16 font-600 leading-16 p-[4px] ${type === 'role' ? 'text-mainColor' : 'text-disabledFont'}`}
-            >
-              Role & Rule
-            </Text>
+      <TouchableOpacity
+        onPress={() => router.push(`/roleNRule/create?currentType=${currentType}`)}
+        className="absolute bottom-[126px] right-[20px]"
+      >
+        <AddButton />
+      </TouchableOpacity>
 
-            <View
-              className={`h-[4px] rounded-[32px] ${type === 'role' ? 'bg-mainColor' : 'bg-subColor1'}`}
-            />
-          </Pressable>
-        </View>
-
-        <ScrollView className="bg-[#F7FAFF] px-[20px] flex-1 rounded-tr-[48px]">
-          {type === 'todo' && (
-            <View className="pt-[34px] gap-y-[32px] flex-1 pb-[112px]">
-              <CustomCalendar canSelectPrev={true} onDateTimeSelect={handleDateTimeSelect} />
-              <MyTodoComponent timePoint={timePoint} bottomSheetRef={bottomSheetRef} />
-              <MateTodoComponent timePoint={timePoint} />
-            </View>
-          )}
-
-          {type === 'role' && (
-            <View className="pt-[34px] gap-y-[32px] flex-1 pb-[112px]">
-              <RuleComponent bottomSheetRef={bottomSheetRef} />
-              <RoleComponent bottomSheetRef={bottomSheetRef} />
-            </View>
-          )}
-        </ScrollView>
-
-        <TouchableOpacity
-          onPress={() => router.push('/roleNRule/create')}
-          className="absolute bottom-[126px] right-[20px]"
-        >
-          <AddButton />
-        </TouchableOpacity>
-
-        <Portal>
-          <BottomSheet
-            ref={bottomSheetRef}
-            snapPoints={[216]}
-            index={-1}
-            enablePanDownToClose={true}
-            backdropComponent={(props) => (
-              <BottomSheetBackdrop
-                {...props}
-                opacity={0.7}
-                disappearsOnIndex={-1}
-                appearsOnIndex={0}
-              />
-            )}
-          >
-            <BottomSheetView className="px-[20px] pt-[24px] pb-[50px] gap-y-[24px]">
-              <Text className="text-18 font-700 leading-18 text-emphasizedFont text-center">
-                ‘ {selectedItem.content} ‘
-              </Text>
-
-              <View>
-                <Pressable
-                  onPress={() => {
-                    bottomSheetRef.current?.close();
-                    router.push(`/roleNRule/update/${selectedItem.type}`);
-                  }}
-                  className="py-[11.5px]"
-                >
-                  <Text className="text-16 font-500 leading-16 text-basicFont mx-[4px]">
-                    수정하기
-                  </Text>
-                </Pressable>
-
-                <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
-
-                <Pressable
-                  onPress={() => {
-                    bottomSheetRef.current?.close();
-                    setIsDeleteModalVisible(true);
-                  }}
-                  className="py-[11.5px]"
-                >
-                  <Text className="text-16 font-500 leading-16 text-basicFont mx-[4px]">
-                    삭제하기
-                  </Text>
-                </Pressable>
-              </View>
-            </BottomSheetView>
-          </BottomSheet>
-        </Portal>
-
-        <TwoButtonModal
-          isVisible={isDeleteModalVisible}
-          title="삭제하시겠습니까?"
-          closeFunc={() => setIsDeleteModalVisible(false)}
-          leftButtonText="취소"
-          leftButtonFunc={() => setIsDeleteModalVisible(false)}
-          rightButtonText="삭제"
-          rightButtonFunc={handleDelete}
-        />
-      </SafeAreaView>
-    </Suspense>
+      <BottomSheetComponent bottomSheetRef={bottomSheetRef} snapPoints={[216]}>
+        <RoleNRuleBottomSheetComponent bottomSheetRef={bottomSheetRef} />
+      </BottomSheetComponent>
+    </SafeAreaView>
   );
 }

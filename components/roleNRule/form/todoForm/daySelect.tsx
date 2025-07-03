@@ -36,7 +36,7 @@ const DaySelectComponent: React.FC<DaySelectComponentProps> = ({ title, value, h
 
   return (
     <View className="gap-y-[12px]">
-      <Text className="text-16 font-600 leading-16 text-basicFont px-[4px]">{title}</Text>
+      <Text className="Semibold18 text-basicFont px-[4px]">{title}</Text>
 
       <View className="gap-y-[8px]">
         <View className="flex flex-row flex-wrap gap-[8px]">
@@ -47,7 +47,7 @@ const DaySelectComponent: React.FC<DaySelectComponentProps> = ({ title, value, h
               className={`w-[32px] h-[32px] m-[4px] flex items-center justify-center rounded-full ${value !== null && value.includes(item) ? 'bg-subColor1' : 'bg-colorBox'}`}
             >
               <Text
-                className={`text-12 leading-14 ${value !== null && value.includes(item) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                className={`${value !== null && value.includes(item) ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
               >
                 {item}
               </Text>
@@ -60,9 +60,7 @@ const DaySelectComponent: React.FC<DaySelectComponentProps> = ({ title, value, h
             {value !== null && value.length === 0 ? <CheckBoxIcon /> : <NotCheckBoxIcon />}
           </Pressable>
 
-          <Text className="text-14 font-500 leading-14 text-disabledFont">
-            정해진 요일이 없어요
-          </Text>
+          <Text className="Medium14 text-disabledFont">정해진 요일이 없어요</Text>
         </View>
       </View>
     </View>
