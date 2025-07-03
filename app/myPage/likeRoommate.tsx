@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import RoomComponent from '@/components/room';
-import UserComponent from '@/components/user';
+import LoadingComponent from '@/components/common/loading';
+import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
+import BasicUserItem from '@/components/common/userItem/basicUserItem';
 import { useGetMemberLikeList } from '@/hooks/member-favorite/member-favorite';
 import { useGetRoomLikeList } from '@/hooks/room-favorite/room-favorite';
 
-export default function LikeRoommate() {
+function LikeRoommateComponent() {
   const [type, setType] = useState<string>('MEMBER');
 
   const {
@@ -37,7 +39,7 @@ export default function LikeRoommate() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="gap-y-[20px] flex-1">
+      <View className="flex-1 gap-y-[20px]">
         <View className="gap-y-[16px] px-[20px]">
           <BackHeaderComponent />
 
@@ -47,7 +49,7 @@ export default function LikeRoommate() {
               className={`border rounded-lg px-[14px] py-[8px] ${type === 'MEMBER' ? 'border-mainColor bg-subColor1' : 'border-disabledColor bg-white'}`}
             >
               <Text
-                className={`text-12 leading-12 ${type === 'MEMBER' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                className={`${type === 'MEMBER' ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
               >
                 내가 찜한 룸메이트
               </Text>
@@ -57,7 +59,7 @@ export default function LikeRoommate() {
               className={`border rounded-lg px-[14px] py-[8px] ${type === 'ROOM' ? 'border-mainColor bg-subColor1' : 'border-disabledColor bg-white'}`}
             >
               <Text
-                className={`text-12 leading-12 ${type === 'ROOM' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                className={`${type === 'ROOM' ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
               >
                 내가 찜한 방
               </Text>
@@ -75,13 +77,14 @@ export default function LikeRoommate() {
               }
               data={memberList?.pages?.flatMap((page) => page.result.result)}
               renderItem={({ item }) => (
-                <UserComponent userData={item.memberStatPreferenceDetail} />
+                <BasicUserItem
+                  key={item.memberFavoriteId}
+                  userData={item.memberStatPreferenceDetail}
+                />
               )}
               ListEmptyComponent={() => (
-                <View className="flex-1 justify-center items-center mb-20">
-                  <Text className="text-14 font-500 leading-14 text-disabledFont">
-                    찜한 룸메이트가 없어요!
-                  </Text>
+                <View className="flex-1 justify-center items-center mb-[80px]">
+                  <Text className="Medium14 text-disabledFont">찜한 룸메이트가 없어요!</Text>
                 </View>
               )}
               ItemSeparatorComponent={() => <View className="h-[24px]" />}
@@ -98,12 +101,10 @@ export default function LikeRoommate() {
                 }
               }
               data={roomList?.pages?.flatMap((page) => page.result.result)}
-              renderItem={({ item }) => <RoomComponent roomData={item} />}
+              renderItem={({ item }) => <BasicRoomItem key={item.roomId} roomData={item} />}
               ListEmptyComponent={() => (
-                <View className="flex-1 justify-center items-center mb-20">
-                  <Text className="text-14 font-500 leading-14 text-disabledFont">
-                    찜한 방이 없어요!
-                  </Text>
+                <View className="flex-1 justify-center items-center mb-[80px]">
+                  <Text className="Medium14 text-disabledFont">찜한 방이 없어요!</Text>
                 </View>
               )}
               ItemSeparatorComponent={() => <View className="h-[24px]" />}
@@ -114,5 +115,19 @@ export default function LikeRoommate() {
         </View>
       </View>
     </SafeAreaView>
+  );
+}
+
+export default function LikeRoommate() {
+  return (
+    <Suspense
+      fallback={
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      }
+    >
+      <LikeRoommateComponent />
+    </Suspense>
   );
 }

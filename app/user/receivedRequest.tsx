@@ -1,14 +1,15 @@
-import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import { useGetReceivedRequestList } from '@/hooks/room/room';
+import SimpleUserItem from '@/components/common/userItem/simpleUserItem';
+import { useGetReceivedRequestList } from '@/hooks/room/roomManager';
+import { useHasRoomStore } from '@/zustand/room/room';
 
 export default function ReceivedRequest() {
-  const router = useRouter();
+  const { roomInfo } = useHasRoomStore();
 
-  const { data } = useGetReceivedRequestList();
+  const { data } = useGetReceivedRequestList(roomInfo.isRoomManager);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -20,33 +21,20 @@ export default function ReceivedRequest() {
         <View className="gap-y-[16px] px-[20px]">
           <View className="flex flex-row items-center">
             <View className="gap-y-[4px] ml-[4px]">
-              <Text className="text-18 font-600 text-emphasizedFont">
-                {data?.result.length}개의
-              </Text>
-              <Text className="text-18 font-600 text-emphasizedFont">
-                방 참여 요청이 도착했어요
-              </Text>
+              <Text className="Semibold18 text-emphasizedFont">{data?.result.length}개의</Text>
+              <Text className="Semibold18 text-emphasizedFont">방 참여 요청이 도착했어요</Text>
             </View>
           </View>
 
-          {data?.result.length !== 0 &&
-            data?.result.map((member) => (
-              <Pressable
-                key={member.memberId}
-                onPress={() => router.push(`/user/${member.memberId}`)}
-                className="px-[16px] py-[20px] flex flex-row justify-between items-center border border-disabledColor rounded-xl"
-              >
-                <Text className="text-16 font-600 leading-16 text-basicFont mx-[8px]">
-                  {member.nickname}
-                </Text>
-
-                <Text
-                  className={`text-16 font-500 leading-16 ${member.mateEquality !== null && member.mateEquality > 50 ? 'text-mainColor' : 'text-colorFont'}`}
-                >
-                  {member.mateEquality}%
-                </Text>
-              </Pressable>
-            ))}
+          {data?.result.length !== 0 ? (
+            data?.result.map((member) => <SimpleUserItem key={member.memberId} userData={member} />)
+          ) : (
+            <View className="mt-[120px] py-[37px]">
+              <Text className="Medium14 text-disabledFont text-center">
+                아직 도착한 방 참여 요청이 없어요.{'\n'}곧 당신과 잘 맞는 룸메이트가 찾아올 거예요.
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

@@ -1,7 +1,8 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
@@ -9,27 +10,30 @@ import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
-import RoomComponent from '@/components/room';
+import LoadingComponent from '@/components/common/loading';
+import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
 import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 
-export default function RecommendRoom() {
+function RecommendRoomComponent() {
   const router = useRouter();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const [sortType, setSortType] = useState<SortTypeValue>('AVERAGE_RATE');
+  const sortTypeRef = useRef<SortTypeValue>('AVERAGE_RATE');
   const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
 
   const { memberState } = useMemberStore();
 
   const { trackButton } = useTracker();
 
-  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(sortType);
+  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(
+    () => sortTypeRef.current,
+  );
 
   const loadMoreList = () => {
     if (hasNextPage) {
@@ -39,7 +43,8 @@ export default function RecommendRoom() {
 
   const onPressSortTypeSubmit = (value: SortTypeValue) => {
     trackButton(ButtonEvent.sorting, EventCategory.content_room);
-    setSortType(value);
+    sortTypeRef.current = value;
+    setSelectedSortType(value);
     bottomSheetRef.current?.close();
     refetch();
   };
@@ -56,7 +61,6 @@ export default function RecommendRoom() {
     trackButton(ButtonEvent.room_component, EventCategory.content_room, {
       roomId,
     });
-    router.push(`/room/${roomId}`);
   };
 
   return (
@@ -70,17 +74,17 @@ export default function RecommendRoom() {
           contentContainerStyle={{ flexGrow: 1 }}
           data={data?.pages?.flatMap((page) => page.result.result)}
           renderItem={({ item }) => (
-            <RoomComponent roomData={item} onPress={() => onPressRoom(item.roomId)} />
+            <BasicRoomItem
+              key={item.roomId}
+              roomData={item}
+              onPress={() => onPressRoom(item.roomId)}
+            />
           )}
           ListHeaderComponent={() => (
             <View className="px-[20px]">
               <View className="gap-y-[4px] ml-[4px]">
-                <Text className="text-18 font-600 text-emphasizedFont">
-                  {memberState.nickname}님과
-                </Text>
-                <Text className="text-18 font-600 text-emphasizedFont">
-                  꼭 맞는 방을 추천해드릴게요
-                </Text>
+                <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님과</Text>
+                <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
               </View>
 
               <Pressable
@@ -90,17 +94,15 @@ export default function RecommendRoom() {
                 <View className="p-[8px]">
                   <MagnifierIcon />
                 </View>
-                <Text className="text-14 font-500 leading-14 text-disabledFont">
-                  방 이름을 검색해보세요
-                </Text>
+                <Text className="Medium14 text-disabledFont">방 이름을 검색해보세요</Text>
               </Pressable>
 
               <Pressable
                 onPress={() => bottomSheetRef.current?.expand()}
                 className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
               >
-                <Text className="text-14 font-500 leading-14 text-basicFont">
-                  {sortTypeItem.find((item) => item.value === sortType)?.title}
+                <Text className="Medium14 text-basicFont">
+                  {sortTypeItem.find((item) => item.value === sortTypeRef.current)?.title}
                 </Text>
 
                 <View className="rotate-90">
@@ -116,7 +118,7 @@ export default function RecommendRoom() {
             <View className="flex-1">
               <View className="w-full h-full flex items-center justify-center">
                 <View className="gap-y-[20px] pb-[50px]">
-                  <Text className="text-14 font-500 leading-14 text-disabledFont text-center">
+                  <Text className="Medium14 text-disabledFont text-center">
                     아직 함께할 룸메이트가 없네요.{'\n'}곧 당신과 잘 맞는 룸메이트가 찾아올 거예요.
                   </Text>
                 </View>
@@ -128,15 +130,15 @@ export default function RecommendRoom() {
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={[320]}
+        snapPoints={[285]}
         index={-1}
         enablePanDownToClose={true}
         backdropComponent={(props) => (
           <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
         )}
       >
-        <BottomSheetView className="px-[20px] flex-1 relative pt-[12px]">
-          <View className="gap-y-[8px]">
+        <BottomSheetView className="flex-1 relative pt-[12px]">
+          <View className="gap-y-[8px] px-[20px]">
             {sortTypeItem.map((item, index) => (
               <Pressable
                 key={index}
@@ -144,7 +146,7 @@ export default function RecommendRoom() {
                 className="flex flex-row justify-between items-center"
               >
                 <Text
-                  className={`text-16 leading-16 py-[11.5px] ${item.value === selectedSortType ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+                  className={`py-[11.5px] ${item.value === selectedSortType ? 'Semibold16 text-mainColor' : 'Medium16 text-disabledFont'}`}
                 >
                   {item.title}
                 </Text>
@@ -156,17 +158,30 @@ export default function RecommendRoom() {
             ))}
           </View>
 
-          <View className="absolute bottom-[54px] left-5 w-full">
-            <BottomButton
-              buttonText="확인"
-              disabled={false}
-              onPress={() => {
-                onPressSortTypeSubmit(selectedSortType);
-              }}
-            />
-          </View>
+          <BottomButtonComponent
+            buttonText="확인"
+            onPress={() => {
+              onPressSortTypeSubmit(selectedSortType);
+            }}
+            color="BLUE"
+            disabled={false}
+          />
         </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
+  );
+}
+
+export default function RecommendRoom() {
+  return (
+    <Suspense
+      fallback={
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      }
+    >
+      <RecommendRoomComponent />
+    </Suspense>
   );
 }
