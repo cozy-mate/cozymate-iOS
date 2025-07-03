@@ -1,25 +1,27 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useRef, useState } from 'react';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { Suspense, useRef, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
-import ChipList from '@/components/common/chipList';
-import MyInfoComponent from '@/components/myPage/myInfo';
-import PreferenceListComponent from '@/components/myPage/PreferenceList';
+import BottomButtonComponent from '@/components/common/bottomButton';
+import BottomSheetComponent from '@/components/common/bottomSheet';
+import LoadingComponent from '@/components/common/loading';
+import PreferenceChipListComponent from '@/components/common/preferenceChipList';
+import BasicInfoComponent from '@/components/myPage/myInfo/basicInfo';
+import PreferenceInfoComponent from '@/components/myPage/myInfo/preferenceInfo';
 import { LifeStyleValue } from '@/constants/items/lifeStyle';
 import {
   useGetPreferenceList,
   useUpdatePreferenceList,
 } from '@/hooks/member-stat-preference/member-stat-preference';
 
-export default function MyInfo() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
+function MyInfoComponent() {
   const { data } = useGetPreferenceList();
-
   const { mutateAsync: updatePreferenceList } = useUpdatePreferenceList();
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [preferenceList, setPreferenceList] = useState<string[]>(data.result.preferenceList);
 
@@ -27,7 +29,7 @@ export default function MyInfo() {
     setPreferenceList(data.result.preferenceList);
   };
 
-  const handleValue = (value: string) => {
+  const handleValue = (value: LifeStyleValue) => {
     setPreferenceList((prev) => {
       if (prev.includes(value)) {
         return prev.filter((item) => item !== value);
@@ -52,40 +54,45 @@ export default function MyInfo() {
       <BackHeaderComponent />
 
       <ScrollView contentContainerStyle={{ rowGap: 20 }}>
-        <MyInfoComponent />
-        <PreferenceListComponent bottomSheetRef={bottomSheetRef} />
-      </ScrollView>
+        <BasicInfoComponent />
+        <PreferenceInfoComponent data={preferenceList} bottomSheetRef={bottomSheetRef} />
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={[500]}
-        index={-1}
-        enablePanDownToClose={true}
-        backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            opacity={0.7}
-            disappearsOnIndex={-1}
-            appearsOnIndex={0}
-            onPress={resetPreferenceList}
-          />
-        )}
-      >
-        <BottomSheetView className="px-[20px] flex-1 relative pt-5">
-          <ChipList value={preferenceList as LifeStyleValue[]} handleValue={handleValue} />
+        <BottomSheetComponent
+          bottomSheetRef={bottomSheetRef}
+          snapPoints={[500]}
+          backdropFunc={resetPreferenceList}
+        >
+          <BottomSheetView className="flex-1 mt-[20px]">
+            <View className="px-[20px]">
+              <PreferenceChipListComponent value={preferenceList} handleValue={handleValue} />
+            </View>
 
-          <View className="absolute bottom-[54px] left-[20px] w-full">
-            <BottomButton
+            <BottomButtonComponent
               buttonText="확인"
-              disabled={preferenceList.length !== 4}
               onPress={() => {
                 updatePreferenceList({ preferenceList });
                 bottomSheetRef.current?.close();
               }}
+              color={preferenceList.length !== 4 ? 'GRAY' : 'BLUE'}
+              disabled={preferenceList.length !== 4}
             />
-          </View>
-        </BottomSheetView>
-      </BottomSheet>
+          </BottomSheetView>
+        </BottomSheetComponent>
+      </ScrollView>
     </SafeAreaView>
+  );
+}
+
+export default function MyInfo() {
+  return (
+    <Suspense
+      fallback={
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      }
+    >
+      <MyInfoComponent />
+    </Suspense>
   );
 }

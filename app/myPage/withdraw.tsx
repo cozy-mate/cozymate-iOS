@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Keyboard, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
+import CustomTextarea from '@/components/common/customInput/customTextarea';
 import LoadingComponent from '@/components/common/loading';
 import { useWithdraw } from '@/hooks/member/member';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function Withdraw() {
@@ -22,9 +23,11 @@ export default function Withdraw() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {isPending && <LoadingComponent />}
-      <View className="px-[20px]">
-        <BackHeaderComponent />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className="px-[20px]">
+          <BackHeaderComponent />
+        </View>
+      </TouchableWithoutFeedback>
 
       <KeyboardAwareScrollView
         contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, rowGap: 100 }}
@@ -34,55 +37,42 @@ export default function Withdraw() {
       >
         <View className="gap-y-[4px]">
           <View className="gap-y-[2px] mx-[4px]">
-            <Text className="text-20 font-600 leading-20 text-emphasizedFont">
-              {memberState.nickname}님,
-            </Text>
-            <Text className="text-20 font-600 leading-20 text-emphasizedFont">
-              cozymate를 떠나시나요?
-            </Text>
+            <Text className="Semibold20 text-emphasizedFont">{memberState.nickname}님,</Text>
+            <Text className="Semibold20 text-emphasizedFont">cozymate를 떠나시나요?</Text>
           </View>
 
-          <Text className="text-12 font-500 leading-12 text-basicFont">
+          <Text className="Medium12 text-basicFont">
             * 탈퇴하시면 모든 정보가 사라지며, 모든 데이터는 복구가 불가능해요
           </Text>
         </View>
 
-        <View className="gap-y-[16px]">
-          <View className="gap-y-[2px] mx-[4px]">
-            <Text className="text-20 font-600 leading-20 text-emphasizedFont">
-              {memberState.nickname}님,
-            </Text>
-            <Text className="text-20 font-600 leading-20 text-emphasizedFont">
-              떠나시는 이유를 알려주세요
-            </Text>
-          </View>
-
-          <TextInput
-            value={withdrawReason}
-            onChangeText={(e: string) => setWithdrawReason(e)}
-            placeholder={`서비스 탈퇴 이유를 알려주신다면,\ncozymate가 더 나은 서비스가 되는 데에,\n큰 도움이 될 거에요.`}
-            placeholderTextColor={'#ACADB4'}
-            className="bg-colorBox rounded-xl h-[258px] p-[16px] text-14 font-medium leading-14 text-basicFont"
-            multiline
-          />
-        </View>
+        <CustomTextarea
+          title={`${memberState.nickname}님,\n떠나시는 이유를 알려주세요`}
+          value={withdrawReason}
+          handleValue={(e: string) => setWithdrawReason(e)}
+          placeholder={
+            '서비스 탈퇴 이유를 알려주신다면,\ncozymate가 더 나은 서비스가 되는 데에,\n큰 도움이 될 거에요.'
+          }
+          height="h-[258px]"
+        />
       </KeyboardAwareScrollView>
 
-      <View className="absolute bottom-[42px] w-full px-[22px] gap-y-[11px] bg-white">
-        <View className="flex flex-row items-center">
+      <View className="absolute bottom-[42px] w-full bg-white">
+        <View className="flex flex-row items-center px-[22px]">
           <Pressable onPress={() => setIsChecked(!isChecked)} className="p-[8px]">
             {isChecked ? <SelectedIcon /> : <RadioIcon />}
           </Pressable>
-          <Text
-            className={`text-12 font-500 ${isChecked ? 'text-mainColor' : 'text-disabledFont'}`}
-          >
+          <Text className={`Medium12 ${isChecked ? 'text-mainColor' : 'text-disabledFont'}`}>
             회원 탈퇴 유의사항을 확인하였으며, 이에 동의합니다.
           </Text>
         </View>
-        <BottomButton
+
+        <BottomButtonComponent
           buttonText="탈퇴하기"
-          disabled={!isChecked}
           onPress={() => withdraw({ withdrawReason })}
+          color={!isChecked || withdrawReason.length > 200 ? 'GRAY' : 'BLUE'}
+          disabled={!isChecked || withdrawReason.length > 200}
+          isFixedPosition={false}
         />
       </View>
     </SafeAreaView>

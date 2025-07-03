@@ -7,7 +7,7 @@ export default function MyPageLayout() {
       <Stack.Screen name="myInfo" options={{ headerShown: false }} />
 
       {/* 내 정보 수정 */}
-      <Stack.Screen name="updateInfo/[type]" options={{ headerShown: false }} />
+      <Stack.Screen name="updateInfo" options={{ headerShown: false }} />
 
       {/* 학교 인증 */}
       <Stack.Screen name="schoolAuthentication" options={{ headerShown: false }} />
@@ -19,9 +19,7 @@ export default function MyPageLayout() {
       <Stack.Screen name="likeRoommate" options={{ headerShown: false }} />
 
       {/* 문의하기 */}
-      <Stack.Screen name="inquiry/list" options={{ headerShown: false }} />
-      <Stack.Screen name="inquiry/register" options={{ headerShown: false }} />
-      <Stack.Screen name="inquiry/failed" options={{ headerShown: false }} />
+      <Stack.Screen name="inquiry" options={{ headerShown: false }} />
 
       {/* 회원탈퇴 */}
       <Stack.Screen name="withdraw" options={{ headerShown: false }} />
