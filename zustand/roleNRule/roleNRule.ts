@@ -4,7 +4,7 @@ import { SelectedItem } from './type';
 
 export const useSelectedItemStore = create<{
   selectedItem: SelectedItem;
-  setSelectedItem: (newState: SelectedItem) => void;
+  setSelectedItem: (updater: (prev: SelectedItem) => SelectedItem) => void;
   clearSelectedItem: () => void;
 }>((set) => ({
   selectedItem: {
@@ -29,7 +29,10 @@ export const useSelectedItemStore = create<{
       repeatDayList: [],
     },
   },
-  setSelectedItem: (newState: SelectedItem) => set({ selectedItem: newState }),
+  setSelectedItem: (updater) =>
+    set((state) => ({
+      selectedItem: updater(state.selectedItem),
+    })),
   clearSelectedItem: () =>
     set({
       selectedItem: {

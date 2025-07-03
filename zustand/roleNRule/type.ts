@@ -7,9 +7,7 @@ export interface SelectedItem {
   type: string;
   content: string;
 
-  todoItem?: UpdateTodoRequest;
-
-  roleItem?: UpdateRoleRequest;
-
-  ruleItem?: UpdateRuleRequest;
+  todoItem: UpdateTodoRequest;
+  roleItem: UpdateRoleRequest;
+  ruleItem: UpdateRuleRequest;
 }
