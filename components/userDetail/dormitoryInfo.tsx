@@ -11,7 +11,9 @@ const DormitoryInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) =>
         <View className="flex flex-row items-center gap-x-[12px]">
           <Text className="Medium14 text-colorFont">인실</Text>
           <Text className="Medium14 text-basicFont">
-            {data.memberStatDetail.numOfRoommate}인 1실
+            {data.memberStatDetail.numOfRoommate !== '0'
+              ? `${data.memberStatDetail.numOfRoommate}인 1실`
+              : '미정'}
           </Text>
         </View>
 
