@@ -6,6 +6,7 @@ import React, { useRef } from 'react';
 import { getDeviceId } from 'react-native-device-info';
 
 import { postFcmToken } from '@/server/fcm/fcm';
+import { checkHasRoom } from '@/server/room/room';
 import { convertAction } from '@/utils/notification/convertAction';
 import {
   requestUserPermission,
@@ -35,7 +36,7 @@ export default function useFcm(
 
   const router = useRouter();
 
-  const { roomInfo } = useHasRoomStore();
+  const { roomInfo, setRoomInfo } = useHasRoomStore();
 
   const withDedup = (id: string | undefined, cb: () => void) => {
     if (!id || processed.has(id)) return;
@@ -79,32 +80,84 @@ export default function useFcm(
         const data = msg.data;
 
         const actionType = msg.data?.actionType;
+        const targetId = msg.data?.targetId;
 
         switch (actionType) {
-          case 'ARRIVE_ROOM_INVITE':
-            console.log('요청 받음');
-            break;
-
-          // 방장 입장
+          // 사용자가 방에 참여 요청을 보낸 경우 (사용자 -> 방) : 방장이 쿼리 무효화
           case 'ARRIVE_ROOM_JOIN_REQUEST':
-            console.log('방 참여 요청 받음');
             await queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
             break;
 
+          // 방장이 방 참여 요청을 수락한 경우 : 사용자가 쿼리 무효화
+          case 'ACCEPT_ROOM_JOIN':
+            const response = await checkHasRoom();
+            setRoomInfo(response.result);
+
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo.roomId}`, roomInfo.roomId],
+            });
+            // 홈 화면
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 3] });
+            // 홈 화면 -> 더보기
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 5] });
+
+            break;
+
+          // 방장이 방 참여 요청을 거절한 경우 : 사용자가 쿼리 무효화
+          case 'REJECT_ROOM_JOIN':
+            // await queryClient.invalidateQueries({
+            //   queryKey: [`/rooms/${targetId}`, targetId],
+            // });
+            // 홈 화면
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 3] });
+            // 홈 화면 -> 더보기
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 5] });
+            break;
+
+          // 방장이 사용자에게 참가 요청을 보낸 경우 (방장 -> 사용자) : 사용자가 쿼리 무효화
+          case 'ARRIVE_ROOM_INVITE':
+            // await queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
+            break;
+
+          // 유저가 방 참여 요청을 수락한 경우 : 방장이 쿼리 무효화
+          case 'ACCEPT_ROOM_INVITE':
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo.roomId}`, roomInfo.roomId],
+            });
+            break;
+
+          // 유저가 방 참여 요청을 거절한 경우 : 방장이 쿼리 무효화
+          case 'REJECT_ROOM_INVITE':
+            // await queryClient.invalidateQueries({
+            //   queryKey: [`/rooms/${targetId}`, targetId],
+            // });
+            break;
+
           case 'ROOM_IN':
-            console.log('방장) 방 요청 수락');
             await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
             break;
 
           case 'ROOM_OUT':
-            console.log('방에서 누가 나감');
+            const checkHasRoomResponse = await checkHasRoom();
+            setRoomInfo(checkHasRoomResponse.result);
+
             await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+
             break;
+
+          case 'ARRIVE_CHAT':
+            await queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
+          // await queryClient.invalidateQueries({ queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId] });
 
           default:
             console.log('data: ', data);
             console.log(`Unhandled actionType: ${actionType}`);
         }
+
+        await queryClient.invalidateQueries({ queryKey: ['/notificationLogs'] });
       });
     });
 

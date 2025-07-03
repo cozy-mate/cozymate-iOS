@@ -6,9 +6,9 @@ export function ensureNotificationHandler() {
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert : true,
-      shouldPlaySound : true,
-      shouldSetBadge  : true,
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
     }),
   });
 }
