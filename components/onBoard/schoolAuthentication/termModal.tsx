@@ -5,7 +5,7 @@ import { Modal, Pressable, Text, View } from 'react-native';
 import GrayArrow from '@/assets/images/common/grayArrow.svg';
 import Check from '@/assets/images/onBoard/check.svg';
 import NotCheck from '@/assets/images/onBoard/notCheck.svg';
-import BottomButton from '@/components/common/bottomButton';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 
@@ -59,18 +59,19 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
       <View onTouchEnd={closeModal} className="w-full h-full bg-black/70 justify-end">
         <View
           onTouchEnd={(e) => e.stopPropagation()}
-          className="bg-white rounded-2xl px-[20px] pt-[32px] pb-[40px] gap-y-[15px]"
+          className="bg-white rounded-2xl px-[20px] pt-[32px] pb-[120px] gap-y-[15px]"
         >
           <View className="gap-y-[20px]">
-            <Text className="text-emphasizedFont text-18 font-700 leading-18">
-              최종 가입을 위해서는{'\n'}개인정보 활용 동의가 필요해요
-            </Text>
+            <View className="gap-y-[6px]">
+              <Text className="Bold18 text-emphasizedFont">cozymate와 함께하려면</Text>
+              <Text className="Bold18 text-emphasizedFont">
+                이용약관 및 개인정보 수집·이용에 동의해 주세요.
+              </Text>
+            </View>
 
             <View>
               <View className="flex flex-row justify-between items-center">
-                <Text className="text-16 font-600 leading-16 text-basicFont my-[11.5px]">
-                  약관 전체 동의
-                </Text>
+                <Text className="Semibold16 text-basicFont my-[11.5px]">약관 전체 동의</Text>
                 <Pressable onPress={handleTotal} className="p-[8px]">
                   {isAllAgree ? <Check /> : <NotCheck />}
                 </Pressable>
@@ -80,9 +81,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
 
               <View className="flex flex-row justify-between items-center">
                 <View className="flex flex-row items-center gap-x-[8px]">
-                  <Text className="text-14 font-500 leading-14 text-basicFont my-[12.5px]">
-                    이용약관 동의 (필수)
-                  </Text>
+                  <Text className="Medium14 text-basicFont my-[12.5px]">이용약관 동의 (필수)</Text>
                   <Pressable
                     onPress={() =>
                       Linking.openURL(
@@ -91,7 +90,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                     }
                     className="flex flex-row items-center"
                   >
-                    <Text className="text-12 font-500 leading-12 text-disabledFont">약관 보기</Text>
+                    <Text className="Medium12 text-disabledFont">약관 보기</Text>
                     <GrayArrow />
                   </Pressable>
                 </View>
@@ -102,7 +101,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
 
               <View className="flex flex-row justify-between items-center">
                 <View className="flex flex-row items-center gap-x-[8px]">
-                  <Text className="text-14 font-500 leading-14 text-basicFont my-[12.5px]">
+                  <Text className="Medium14 text-basicFont my-[12.5px]">
                     개인정보 수집 및 이용동의 (필수)
                   </Text>
                   <Pressable
@@ -113,7 +112,7 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
                     }
                     className="flex flex-row items-center"
                   >
-                    <Text className="text-12 font-500 leading-12 text-disabledFont">약관 보기</Text>
+                    <Text className="Medium12 text-disabledFont">약관 보기</Text>
                     <GrayArrow />
                   </Pressable>
                 </View>
@@ -124,11 +123,14 @@ const TermsAgreeComponent: React.FC<TermsAgreeComponentProps> = ({
               </View>
             </View>
           </View>
-
-          <View className="h-[54px]">
-            <BottomButton buttonText="확인" disabled={!isAllAgree} onPress={confirmFunc} />
-          </View>
         </View>
+
+        <BottomButtonComponent
+          buttonText="확인"
+          disabled={!isAllAgree}
+          color={isAllAgree ? 'BLUE' : 'GRAY'}
+          onPress={confirmFunc}
+        />
       </View>
     </Modal>
   );

@@ -8,6 +8,7 @@ import {
   FlatList,
   Pressable,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useGetUniversityInfo } from '@/hooks/university/university';
 
@@ -68,18 +69,18 @@ const MajorSelectModalComponent: React.FC<MajorSelectModalComponentProps> = ({
   return (
     isVisible && (
       <Modal>
-        <View className="mt-[63px] px-[20px] gap-y-[20px] flex-1">
-          <View className="flex flex-row items-center gap-x-[8px]">
+        <SafeAreaView className="mt-[63px] gap-y-[20px] flex-1 bg-white">
+          <View className="flex flex-row items-center gap-x-[8px] px-[20px]">
             <TextInput
               value={keyword}
               onChangeText={(e: string) => setkeyword(e)}
               placeholder="학과를 입력해주세요"
               placeholderTextColor={'#ACADB4'}
-              className="bg-colorBox rounded-xl p-[16px] text-14 font-500 text-basicFont flex-1"
+              className="bg-colorBox rounded-xl p-[16px] InputMedium14 text-basicFont flex-1"
             />
 
             <Pressable onPress={closeModal} className="px-[8px] py-[11.5px]">
-              <Text className="text-14 font-500 leading-14 text-emphasizedFont">취소</Text>
+              <Text className="Medium14 text-emphasizedFont">취소</Text>
             </Pressable>
           </View>
 
@@ -91,19 +92,20 @@ const MajorSelectModalComponent: React.FC<MajorSelectModalComponentProps> = ({
                   key={index}
                   onPress={() => handleValue(item)}
                   underlayColor={'#F2F2F2'}
-                  className="rounded-[10px] bg-white"
+                  className="rounded-[10px] bg-white mx-[20px]"
                 >
                   <View className="px-[8px] py-[20px] rounded-[10px]">
-                    <Text className="text-16 font-500 leading-16 text-emphasizedFont">
+                    <Text className="Medium16 text-emphasizedFont">
                       {highlightText(item, keyword)}
                     </Text>
                   </View>
                 </TouchableHighlight>
               )}
               ItemSeparatorComponent={() => <View className="h-[4px]" />}
+              ListFooterComponent={() => <View className="h-[64px] bg-white" />}
             />
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     )
   );
