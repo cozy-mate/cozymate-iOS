@@ -1,11 +1,14 @@
+import { Suspense } from 'react';
 import { View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import UniversityComponent from '@/components/myPage/university';
+import BorderPressBox from '@/components/common/borderComponent/borderPressBox';
+import LoadingComponent from '@/components/common/loading';
 import { useGetMemberUniversityInfo } from '@/hooks/member/member';
 
-export default function SchoolAuthentication() {
+function SchoolAuthenticationComponent() {
   const { data } = useGetMemberUniversityInfo();
 
   return (
@@ -13,10 +16,44 @@ export default function SchoolAuthentication() {
       <BackHeaderComponent />
 
       <View className="gap-y-[16px]">
-        <UniversityComponent title="학교" value={data.result.universityName} editable={false} />
-        <UniversityComponent title="학교 이메일" value={data.result.mailAddress} editable={false} />
-        <UniversityComponent title="학과" value={data.result.majorName} editable={false} />
+        <BorderPressBox
+          title="학교"
+          value={data.result.universityName}
+          placeholder=""
+          onPress={() => {}}
+          isFocused={true}
+        />
+
+        <BorderPressBox
+          title="학교 이메일"
+          value={data.result.mailAddress}
+          placeholder=""
+          onPress={() => {}}
+          isFocused={true}
+        />
+
+        <BorderPressBox
+          title="학과"
+          value={data.result.majorName}
+          placeholder=""
+          onPress={() => {}}
+          isFocused={true}
+        />
       </View>
     </SafeAreaView>
+  );
+}
+
+export default function SchoolAuthentication() {
+  return (
+    <Suspense
+      fallback={
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      }
+    >
+      <SchoolAuthenticationComponent />
+    </Suspense>
   );
 }
