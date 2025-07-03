@@ -1,10 +1,9 @@
 import React from 'react';
 import { Animated } from 'react-native';
 
-import CustomGridRadioComponent from './customGridRadio';
-import CustomRadioComponent from './customRadio';
-import CustomSelectComponent from './customSelect';
-import CustomTimeSelectComponent from './customTimeSelect';
+import CustomMultiSelect from '@/components/common/customInput/customMultiSelect';
+import CustomSelect from '@/components/common/customInput/customSelect';
+import CustomTimeSelect from '@/components/common/customInput/customTimeSelect';
 
 interface AnimatedFieldComponentProps {
   show: boolean;
@@ -38,26 +37,20 @@ const AnimatedFieldComponent: React.FC<AnimatedFieldComponentProps> = ({
       }}
     >
       {type === 'RADIO' && (
-        <CustomRadioComponent title={title} value={value} items={items} handleValue={handleValue} />
+        <CustomSelect title={title} value={value} items={items} handleValue={handleValue} />
       )}
       {type === 'SELECT' && (
-        <CustomSelectComponent
-          title={title}
-          value={value}
-          items={items}
-          handleValue={handleValue}
-        />
+        <CustomMultiSelect title={title} value={value} items={items} handleValue={handleValue} />
       )}
-      {type === 'TIME' && (
-        <CustomTimeSelectComponent title={title} value={value} onChange={handleValue} />
-      )}
+      {type === 'TIME' && <CustomTimeSelect title={title} value={value} onChange={handleValue} />}
 
       {type === 'GRID' && (
-        <CustomGridRadioComponent
+        <CustomSelect
           title={title}
           value={value}
           items={items}
           handleValue={handleValue}
+          isGrid={true}
         />
       )}
     </Animated.View>

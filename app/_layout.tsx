@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { Text, TextInput, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Host } from 'react-native-portalize';
+import { Host, Portal } from 'react-native-portalize';
 import Toast from 'react-native-toast-message';
 
 import { toastConfig } from '@/config/toastConfig';
@@ -31,10 +31,18 @@ initGlobalThis();
 
 const kakaoNativeAppKey = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || '';
 
-Text.defaultProps = Text.defaultProps || {};
-Text.defaultProps.allowFontScaling = false;
-TextInput.defaultProps = TextInput.defaultProps || {};
-TextInput.defaultProps.allowFontScaling = false;
+interface TextWithDefaultProps extends Text {
+  defaultProps?: { allowFontScaling?: boolean };
+}
+interface TextInputWithDefaultProps extends TextInput {
+  defaultProps?: { allowFontScaling?: boolean };
+}
+(Text as unknown as TextWithDefaultProps).defaultProps =
+  (Text as unknown as TextWithDefaultProps).defaultProps || {};
+(Text as unknown as TextWithDefaultProps).defaultProps!.allowFontScaling = false;
+(TextInput as unknown as TextInputWithDefaultProps).defaultProps =
+  (TextInput as unknown as TextInputWithDefaultProps).defaultProps || {};
+(TextInput as unknown as TextInputWithDefaultProps).defaultProps!.allowFontScaling = false;
 
 const queryClient = new QueryClient();
 
@@ -101,17 +109,28 @@ export default function RootLayout() {
                   </Stack>
 
                   {!isAnimationFinished && (
-                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
-                      <LottieView
-                        source={require('@/assets/lotties/splash.json')}
-                        style={{ flex: 1 }}
-                        autoPlay={true}
-                        loop={false}
-                        onAnimationFinish={() => {
-                          setTimeout(() => setIsAnimationFinished(true), 2000);
+                    <Portal>
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          zIndex: 9999,
                         }}
-                      />
-                    </View>
+                      >
+                        <LottieView
+                          source={require('@/assets/lotties/splash.json')}
+                          style={{ flex: 1 }}
+                          autoPlay={true}
+                          loop={false}
+                          onAnimationFinish={() => {
+                            setTimeout(() => setIsAnimationFinished(true), 2000);
+                          }}
+                        />
+                      </View>
+                    </Portal>
                   )}
                   <StatusBar style="auto" />
                 </Host>

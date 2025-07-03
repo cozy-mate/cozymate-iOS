@@ -14,18 +14,8 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
   closeModal,
   item,
 }) => {
-  const getTextColor = () => {
-    if (item.color === 'blue') {
-      return 'text-mainColor';
-    } else if (item.color === 'red') {
-      return 'text-warningColor';
-    } else {
-      return 'text-emphasizeFont';
-    }
-  };
-
   const translateTime = (value: number) => {
-    if (value === 0) return '오전 0시';
+    if (value === 0) return '오전 12시';
     if (value === 12) return '오후 12시';
     if (value < 12) return `오전 ${value}시`;
     return `오후 ${value - 12}시`;
@@ -49,7 +39,9 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
           onTouchEnd={(e) => e.stopPropagation()}
           className="w-[334px] gap-y-[16px] rounded-xl bg-white p-[16px] pt-[20px]"
         >
-          <Text className={`text-16 font-600 leading-16 text-center ${getTextColor()}`}>
+          <Text
+            className={`Semibold16 text-center ${item.color === 'blue' ? 'text-mainColor' : item.color === 'red' ? 'text-warningColor' : 'text-emphasizedFont'}`}
+          >
             {item.title}
           </Text>
 
@@ -57,18 +49,25 @@ const MemberStatModalComponent: React.FC<MemberStatModalComponentProps> = ({
             {item.memberList.map((member, index) => (
               <View
                 key={member.memberDetail.memberId}
-                className={`flex flex-row items-center gap-x-[8px] py-[12px] border-b border-b-[#F1F2F4] ${index === 0 && 'pt-[8px]'}
-                ${index === item.memberList.length - 1 && 'pb-[8px] border-b-0'}`}
+                className={`flex flex-row flex-wrap items-start gap-x-[8px] py-[12px] border-b border-b-[#F1F2F4] ${
+                  index === 0 ? 'pt-[8px]' : ''
+                } ${index === item.memberList.length - 1 ? 'pb-[8px] border-b-0' : ''}`}
               >
-                <View className="flex flex-row items-center gap-x-[6px]">
+                {/* 왼쪽: 이미지 + 닉네임 */}
+                <View className="flex flex-row items-center gap-x-[6px] shrink-0">
                   {getPersona(member.memberDetail.persona, 24, 24)}
-                  <Text className="text-14 font-500 leading-14 text-emphasizedFont">
+                  <Text className="Medium14 text-emphasizedFont">
                     {member.memberDetail.nickname}
                   </Text>
                 </View>
 
+                {/* 오른쪽: 번역된 답변 */}
                 {Object.entries(member.memberStat).map(([key, value]) => (
-                  <Text key={key} className="text-14 font-500 leading-14 text-colorFont">
+                  <Text
+                    key={key}
+                    lineBreakStrategyIOS="standard"
+                    className="Medium14 text-colorFont py-[3.5px]"
+                  >
                     {translateAnswer(value)}
                   </Text>
                 ))}

@@ -49,12 +49,13 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
             if (error.response?.data?.code === 'MEMBERSTAT402') {
               setHasLifeStyle(false);
             }
+            console.log(error);
           }
 
           const hasRoomResponse = await checkHasRoom();
           setRoomInfo(hasRoomResponse.result);
 
-          router.replace('/(tabs)/home');
+          router.replace('/(tabs)/cozyHome');
         } catch (error: any) {
           console.log(error);
           //   setIsLoggedIn(false);

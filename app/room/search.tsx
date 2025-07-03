@@ -36,7 +36,7 @@ export default function SearchRoom() {
               value={keyword}
               onChangeText={(e: string) => setKeyword(e)}
               placeholder="방 이름을 입력해주세요"
-              className="bg-colorBox rounded-xl p-[16px] text-14 font-500 text-basicFont pr-[40px]"
+              className="bg-colorBox rounded-xl p-[16px] InputMedium14 text-basicFont pr-[40px]"
             />
             {keyword !== '' && (
               <Pressable
@@ -49,7 +49,7 @@ export default function SearchRoom() {
           </View>
 
           <Pressable onPress={() => router.back()} className="px-[8px] py-[11.5px]">
-            <Text className="text-14 font-500 leading-14 text-emphasizedFont">취소</Text>
+            <Text className="Medium14 text-emphasizedFont">취소</Text>
           </Pressable>
         </View>
 
@@ -63,23 +63,21 @@ export default function SearchRoom() {
                 className="flex flex-row justify-between items-center px-[8px] py-[10px]"
               >
                 <View>
-                  <Text className="text-16 font-600 leading-16 text-emphasizedFont">
-                    {item.name}
-                  </Text>
-                  <Text className="text-12 font-500 leading-12 text-disabledFont">
+                  <Text className="Semibold16 text-emphasizedFont">{item.name}</Text>
+                  <Text className="Medium12 text-disabledFont">
                     <Text className="text-mainColor">{item.arrivalMateNum}명</Text>의 룸메이트가
                     있어요
                   </Text>
                 </View>
 
-                <Text className="text-16 font-500 leading-16 text-mainColor">{item.equality}%</Text>
+                <Text className="Medium16 text-mainColor">{item.equality}%</Text>
               </Pressable>
             )}
             ItemSeparatorComponent={() => <View className="h-[1px] bg-[#F6F6F6] my-[12px]" />}
             contentContainerStyle={data.result.length === 0 ? { flexGrow: 1 } : undefined}
             ListEmptyComponent={() => (
               <View className="flex-1 justify-center items-center">
-                <Text className="text-14 font-500 leading-14 text-disabledFont text-center mb-[75px]">
+                <Text className="Medium14 text-disabledFont text-center mb-[75px]">
                   검색결과가 없어요
                 </Text>
               </View>

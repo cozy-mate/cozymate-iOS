@@ -70,12 +70,8 @@ export default function HomeScreen() {
               loop
             />
             <View className="gap-y-[12px]">
-              <Text className="text-20 font-700 leading-20 text-emphasizedFont text-center">
-                {item.title}
-              </Text>
-              <Text className="text-14 font-500 leading-14 text-basicFont text-center">
-                {item.subtitle}
-              </Text>
+              <Text className="Bold20 text-emphasizedFont text-center">{item.title}</Text>
+              <Text className="Medium14 text-basicFont text-center">{item.subtitle}</Text>
             </View>
           </View>
         )}
@@ -101,7 +97,7 @@ export default function HomeScreen() {
           onPress={() => kakaoLogin()}
         >
           <KakaoLogo />
-          <Text className="text-16 font-semibold text-black">카카오톡으로 계속하기</Text>
+          <Text className="Semibold16 text-black">카카오톡으로 계속하기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -109,7 +105,7 @@ export default function HomeScreen() {
           onPress={() => appleLogin()}
         >
           <AppleLogo />
-          <Text className="text-center text-16 font-semibold text-white">Apple로 계속하기</Text>
+          <Text className="Semibold16 text-white">Apple로 계속하기</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

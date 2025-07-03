@@ -22,7 +22,7 @@ const ViewTypeButtonComponent: React.FC<ViewTypeButtonComponentProps> = ({
       >
         {currentType === 'LIST' ? <SelectedListIcon /> : <ListIcon />}
         <Text
-          className={`text-14 ${currentType === 'LIST' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+          className={`${currentType === 'LIST' ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
         >
           리스트로 보기
         </Text>
@@ -36,7 +36,7 @@ const ViewTypeButtonComponent: React.FC<ViewTypeButtonComponentProps> = ({
       >
         {currentType === 'TABLE' ? <SelectedTableIcon /> : <TableIcon />}
         <Text
-          className={`text-14 ${currentType === 'TABLE' ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+          className={`${currentType === 'TABLE' ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
         >
           표로 보기
         </Text>

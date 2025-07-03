@@ -31,17 +31,15 @@ const MemberInfoComponent: React.FC<MemberInfoComponentProps> = ({ id, data }) =
       {data.roomId !== 0 ? (
         <Pressable
           onPress={() => router.push(`/room/${data.roomId}`)}
-          className="bg-mainColor rounded-xl border border-mainColor p-3"
+          className="bg-subColor2 rounded-xl border border-mainColor py-[12px]"
         >
-          <Text className="Semibold14 text-white text-center">
+          <Text className="Semibold14 text-mainColor text-center">
             {data.memberDetail.nickname}님이 속한 방 바로 가기
           </Text>
         </Pressable>
       ) : (
-        <View className="bg-colorBox rounded-xl border border-disabledFont p-3">
-          <Text className="Semibold14 text-disabledFont text-center">
-            {data.memberDetail.nickname}님은 아직 속한 방이 없어요
-          </Text>
+        <View className="bg-colorBox rounded-xl border border-disabledFont py-[12px]">
+          <Text className="Semibold14 text-disabledFont text-center">아직 속한 방이 없어요</Text>
         </View>
       )}
     </View>

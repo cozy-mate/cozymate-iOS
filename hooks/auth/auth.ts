@@ -3,10 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useRouter } from 'expo-router';
 
+import { errorRefiner } from '@/error/refiner';
 import { socialLogin } from '@/server/auth/auth';
 import { getMyDetail } from '@/server/member-stat/member-stat';
 import { checkHasRoom } from '@/server/room/room';
-import { errorRefiner } from '@/error/refiner';
 import { setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
@@ -63,6 +63,9 @@ export const useKakaoLogin = () => {
             setMemberState(loginResponse.result.memberDetailResponseDTO),
           ]);
 
+          const hasRoomResponse = await checkHasRoom();
+          setRoomInfo(hasRoomResponse.result);
+
           try {
             await getMyDetail();
             setHasLifeStyle(true);
@@ -72,11 +75,9 @@ export const useKakaoLogin = () => {
             }
           }
 
-          const hasRoomResponse = await checkHasRoom();
-          setRoomInfo(hasRoomResponse.result);
           broadcastLogin();
 
-          router.replace('/(tabs)/home');
+          router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         // error 처리 추상화
@@ -161,6 +162,9 @@ export const useAppleLogin = () => {
             setMemberState(loginResponse.result.memberDetailResponseDTO),
           ]);
 
+          const hasRoomResponse = await checkHasRoom();
+          setRoomInfo(hasRoomResponse.result);
+
           try {
             await getMyDetail();
             setHasLifeStyle(true);
@@ -170,11 +174,9 @@ export const useAppleLogin = () => {
             }
           }
 
-          const hasRoomResponse = await checkHasRoom();
-          setRoomInfo(hasRoomResponse.result);
           broadcastLogin();
 
-          router.replace('/(tabs)/home');
+          router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         console.log(error);

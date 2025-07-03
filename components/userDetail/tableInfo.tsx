@@ -24,14 +24,6 @@ const InfoRow: React.FC<InfoRowProps> = ({ item }) => {
   const getTextStyle = (myValue: any, otherValue: any) =>
     JSON.stringify(myValue) !== JSON.stringify(otherValue) ? 'text-[#F7473B]' : 'text-basicFont';
 
-  const getSlicedText = (text: string) => {
-    if (text.length > 8) {
-      return text.slice(0, 8) + '...';
-    } else {
-      return text;
-    }
-  };
-
   return (
     <View
       className={`flex flex-row items-center py-[12px] border-b border-b-[#F1F2F4] ${item.index === 1 && 'pt-0'}
@@ -295,7 +287,7 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
         >
           <View className="flex flex-row items-center gap-x-[8px]">
             <MagnifierIcon />
-            <Text className="text-12 font-600 leading-12 text-basicFont">
+            <Text className="Semibold12 text-basicFont">
               아래 화면은 예시 데이터예요.{'\n'}라이프스타일 입력하고 표로 쉽게 비교해보세요!
             </Text>
           </View>

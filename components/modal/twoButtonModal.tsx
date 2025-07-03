@@ -1,22 +1,26 @@
 import React from 'react';
 import { View, Text, Modal, Pressable } from 'react-native';
 
-interface OneButtonModalProps {
+interface TwoButtonModalProps {
   isVisible: boolean;
   title: string;
   subtitle?: string;
   closeFunc: any;
-  buttonText: string;
-  buttonFunc: any;
+  leftButtonText: string;
+  leftButtonFunc: any;
+  rightButtonText: string;
+  rightButtonFunc: any;
 }
 
-const OneButtonModal: React.FC<OneButtonModalProps> = ({
+const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
   isVisible,
   title,
   subtitle,
   closeFunc,
-  buttonText,
-  buttonFunc,
+  leftButtonText,
+  leftButtonFunc,
+  rightButtonText,
+  rightButtonFunc,
 }) => {
   return (
     <Modal visible={isVisible} transparent={true} animationType="fade">
@@ -29,9 +33,7 @@ const OneButtonModal: React.FC<OneButtonModalProps> = ({
           className="w-11/12 gap-y-[20px] rounded-xl bg-white p-[32px]"
         >
           <View className={`flex flex-col ${subtitle ? 'space-y-1' : ''}`}>
-            <Text className="text-center text-16 font-600 leading-16 text-emphasizedFont">
-              {title}
-            </Text>
+            <Text className="text-center Semibold16 text-emphasizedFont">{title}</Text>
             {subtitle && (
               <Text className="text-center text-sm font-medium text-colorFont">{subtitle}</Text>
             )}
@@ -39,12 +41,22 @@ const OneButtonModal: React.FC<OneButtonModalProps> = ({
 
           <View className="flex flex-row justify-center gap-x-[12px]">
             <Pressable
-              onPress={buttonFunc}
+              onPress={leftButtonFunc}
+              className="rounded-lg bg-disabledColor px-[28px] py-[14px] flex-1"
+            >
+              <Text className="px-[14px] text-center Semibold14 text-disabledFont">
+                {leftButtonText}
+              </Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => {
+                rightButtonFunc();
+                closeFunc();
+              }}
               className="rounded-lg bg-mainColor px-[28px] py-[14px] flex-1"
             >
-              <Text className="px-[14px] text-center text-14 font-600 leading-14 text-white">
-                {buttonText}
-              </Text>
+              <Text className="px-[14px] text-center Semibold14 text-white">{rightButtonText}</Text>
             </Pressable>
           </View>
         </View>
@@ -53,4 +65,4 @@ const OneButtonModal: React.FC<OneButtonModalProps> = ({
   );
 };
 
-export default OneButtonModal;
+export default TwoButtonModal;

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-import ReportModalComponent from '@/components/common/reportModal';
+import ReportModalComponent from '@/components/modal/reportModal';
 import { UserDetailComponentProps } from '@/type/member-stat';
 
 const AdditionalInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {

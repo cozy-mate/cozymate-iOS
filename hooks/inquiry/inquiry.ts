@@ -32,9 +32,8 @@ export const useCreateInquiry = () => {
       queryClient.invalidateQueries({ queryKey: [`/inquiries/exist`] });
     },
     onError: (error: any) => {
-      showRejectToast(error.response?.data?.message);
-      console.log(error.response?.data?.message);
-      // router.push('/myPage/inquiry/failed');
+      const errorMessage = error.response?.data?.message;
+      showRejectToast(errorMessage);
     },
   });
 };

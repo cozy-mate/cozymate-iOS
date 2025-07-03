@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 
 import { createReport } from '@/server/report/report';
 import { CreateReportRequest } from '@/server/report/request';
+import { showSuccessToast } from '@/utils/toast';
 
 export const useCreateReport = (closeModal: any) => {
   const router = useRouter();
@@ -10,6 +11,7 @@ export const useCreateReport = (closeModal: any) => {
   return useMutation({
     mutationFn: (data: CreateReportRequest) => createReport(data),
     onSuccess: () => {
+      showSuccessToast('신고가 접수되었습니다!');
       closeModal();
       router.back();
     },

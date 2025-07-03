@@ -20,10 +20,10 @@ export const useUpdatePreferenceList = () => {
   return useMutation({
     mutationFn: (data: UpdatePreferenceListRequest) => updatePreferenceList(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/preference`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/filter/home`] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/preference`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
     },
     onError: (error: any) => {
       console.log(error);

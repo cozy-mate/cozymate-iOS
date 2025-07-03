@@ -17,6 +17,7 @@ import {
   updateMemberDetail,
 } from '@/server/member-stat/member-stat';
 import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/server/member-stat/request';
+import { useMemberStore } from '@/zustand/member/member';
 import {
   useHasLifeStyleStore,
   useRegisterLifeStyleStore,
@@ -70,12 +71,12 @@ export const useGetHomeMemberList = () => {
   });
 };
 
-export const useGetMemberList = (filterList: string[]) => {
+export const useGetMemberList = (filterList: string[], hasRoom: boolean) => {
   const { hasLifeStyle } = useHasLifeStyleStore();
 
   return useInfiniteQuery({
-    queryKey: [`/members/stat/filter`, filterList],
-    queryFn: ({ pageParam }) => getMemberList(pageParam, filterList),
+    queryKey: [`/members/stat/filter`, filterList, hasRoom],
+    queryFn: ({ pageParam }) => getMemberList(pageParam, filterList, hasRoom),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage.result.hasNext) {
@@ -91,6 +92,7 @@ export const useCreateMemberDetail = () => {
 
   const router = useRouter();
 
+  const { memberState } = useMemberStore();
   const { setHasLifeStyle } = useHasLifeStyleStore();
   const { clearLifeStyle } = useRegisterLifeStyleStore();
   const { clearShowLifeStyleInput } = useShowLifeStyleInputStore();
@@ -103,10 +105,13 @@ export const useCreateMemberDetail = () => {
       clearShowLifeStyleInput();
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
+      queryClient.invalidateQueries({
+        queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+      });
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/filter/home`] });
-
       queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
 
       router.dismissAll();
@@ -123,10 +128,21 @@ export const useUpdateMemberDetail = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const { memberState } = useMemberStore();
+
   return useMutation({
     mutationFn: (data: UpdatememberDetailRequest) => updateMemberDetail(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
+      queryClient.invalidateQueries({
+        queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+      });
+
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat/filter/home`] });
+      queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
+
       router.back();
     },
     onError: (error: any) => {

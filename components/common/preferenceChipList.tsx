@@ -1,13 +1,16 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { lifeStyleItems, LifeStyleValue } from '@/constants/items/lifeStyle';
 
-interface ChipListProps {
-  value: LifeStyleValue[];
-  handleValue: (value: LifeStyleValue) => void;
+interface PreferenceChipListComponentProps {
+  value: string[];
+  handleValue: (e: LifeStyleValue) => void;
 }
 
-const ChipList: React.FC<ChipListProps> = ({ value, handleValue }) => {
+const PreferenceChipListComponent: React.FC<PreferenceChipListComponentProps> = ({
+  value,
+  handleValue,
+}) => {
   return (
     <View className="flex flex-row flex-wrap gap-x-[8px] gap-y-[12px]">
       {lifeStyleItems.map((lifeStyle, index) => (
@@ -18,7 +21,7 @@ const ChipList: React.FC<ChipListProps> = ({ value, handleValue }) => {
           className={`px-[14px] py-[8px] rounded-full border ${value.includes(lifeStyle.value) ? 'border-mainColor bg-subColor1' : 'border-transparent bg-white'}`}
         >
           <Text
-            className={`text-14 leading-14 ${value.includes(lifeStyle.value) ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+            className={`${value.includes(lifeStyle.value) ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
           >
             {lifeStyle.title}
           </Text>
@@ -28,7 +31,7 @@ const ChipList: React.FC<ChipListProps> = ({ value, handleValue }) => {
   );
 };
 
-export default ChipList;
+export default PreferenceChipListComponent;
 
 const styles = StyleSheet.create({
   chipback: {

@@ -1,15 +1,18 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { View, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import XHeaderComponent from '@/components/common/xHeader';
-import BottomButtonComponent from '@/components/myPage/bottomButton';
+import XButton from '@/assets/images/common/xButton.svg';
+import BottomButtonComponent from '@/components/common/bottomButton';
+import CustomTextarea from '@/components/common/customInput/customTextarea';
 import { useSendChat } from '@/hooks/chat/chat';
 
 export default function SendChat() {
   const { id, chatRoomId, nickname } = useLocalSearchParams();
+
+  const router = useRouter();
 
   const [content, setContent] = useState<string>('');
 
@@ -17,34 +20,39 @@ export default function SendChat() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="px-[20px] gap-y-[24px]">
-        <XHeaderComponent />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className="px-[20px] gap-y-[24px]">
+          <View className="mt-[8px] flex flex-row justify-end items-center">
+            <Pressable
+              onPress={() => router.back()}
+              className="w-[40px] h-[40px] flex items-center justify-center"
+            >
+              <XButton />
+            </Pressable>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
 
       <KeyboardAwareScrollView
-        contentContainerStyle={{ marginTop: 24, paddingHorizontal: 20, rowGap: 12 }}
+        contentContainerStyle={{ paddingTop: 24, paddingHorizontal: 20 }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
         extraScrollHeight={20}
       >
-        <Text className="text-18 font-600 leading-18 text-basicFont mx-[8px]">
-          {nickname}님에게
-        </Text>
-
-        <TextInput
+        <CustomTextarea
+          title={`${nickname}님에게`}
           value={content}
-          onChangeText={(e: string) => setContent(e)}
-          multiline={true}
-          className="min-h-[320px] bg-colorBox rounded-xl p-[20px]"
+          handleValue={(e: string) => setContent(e)}
           placeholder="내용을 입력해주세요"
+          height="h-[320px]"
         />
       </KeyboardAwareScrollView>
 
       <BottomButtonComponent
         buttonText="쪽지 보내기"
         onPress={() => sendChat({ content })}
-        disabled={content === ''}
-        color={content === '' ? 'GRAY' : 'BLUE'}
+        disabled={content === '' || content.length > 200}
+        color={content === '' || content.length > 200 ? 'GRAY' : 'BLUE'}
       />
     </SafeAreaView>
   );

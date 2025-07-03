@@ -6,20 +6,34 @@ import BackArrow from '@/assets/images/common/backArrow.svg';
 
 interface BackHeaderComponentProps {
   title?: string;
+  additionalFunction?: () => void;
   children?: ReactNode;
 }
 
-const BackHeaderComponent: React.FC<BackHeaderComponentProps> = ({ title, children }) => {
+const BackHeaderComponent: React.FC<BackHeaderComponentProps> = ({
+  title,
+  additionalFunction,
+  children,
+}) => {
   const router = useRouter();
 
   return (
     <View className="mt-[8px] flex flex-row justify-between items-center">
-      <Pressable onPress={() => router.back()} className="w-[40px] h-[40px] flex justify-center">
+      <Pressable
+        onPress={() => {
+          router.back();
+
+          if (additionalFunction !== undefined) {
+            additionalFunction();
+          }
+        }}
+        className="w-[40px] h-[40px] flex justify-center"
+      >
         <BackArrow />
       </Pressable>
 
       {title !== undefined && (
-        <Text className="text-16 font-600 leading-16 text-basicFont absolute left-1/2 -translate-x-1/2 py-[6px]">
+        <Text className="Semibold16 text-basicFont absolute left-1/2 -translate-x-1/2 py-[6px]">
           {title}
         </Text>
       )}

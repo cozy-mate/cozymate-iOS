@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButton from '@/components/common/bottomButton';
-import CustomTextInputComponent from '@/components/common/customTextInput';
-import OneButtonModal from '@/components/common/oneButtonModal';
-import TwoButtonModal from '@/components/common/twoButtonModal';
+import BottomButtonComponent from '@/components/common/bottomButton';
+import CustomTextInput from '@/components/common/customInput/customTextInput';
+import OneButtonModal from '@/components/modal/oneButtonModal';
+import TwoButtonModal from '@/components/modal/twoButtonModal';
 import { useGetRoomByInviteCode, useJoinRoom } from '@/hooks/room/room';
 import { RoomItem } from '@/type/room';
 
@@ -22,13 +22,14 @@ export default function JoinRoom() {
     setIsRoomInfoModalOpen,
     setIsWrongInviteCodeModalOpen,
   );
-  const { mutateAsync: joinRoom } = useJoinRoom();
+  const { mutateAsync: joinRoom } = useJoinRoom(roomInfo?.roomId as number);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="px-[20px] gap-y-5">
+      <View className="flex-1 px-[20px] gap-y-[20px]">
         <BackHeaderComponent />
-        <CustomTextInputComponent
+
+        <CustomTextInput
           title="방장이 준 초대코드를 입력해주세요!"
           value={inviteCode}
           handleValue={(e: string) => setInviteCode(e)}
@@ -36,13 +37,12 @@ export default function JoinRoom() {
         />
       </View>
 
-      <View className="absolute bottom-[42px] w-full px-[22px]">
-        <BottomButton
-          buttonText="확인"
-          disabled={inviteCode.length === 0}
-          onPress={() => getRoomByInviteCode(inviteCode)}
-        />
-      </View>
+      <BottomButtonComponent
+        buttonText="확인"
+        onPress={() => getRoomByInviteCode(inviteCode)}
+        color={inviteCode.length === 0 ? 'GRAY' : 'BLUE'}
+        disabled={inviteCode.length === 0}
+      />
 
       {roomInfo !== null && (
         <TwoButtonModal
@@ -53,7 +53,7 @@ export default function JoinRoom() {
           leftButtonText="취소"
           leftButtonFunc={() => setIsRoomInfoModalOpen(false)}
           rightButtonText="확인"
-          rightButtonFunc={() => joinRoom(roomInfo.roomId)}
+          rightButtonFunc={joinRoom}
         />
       )}
 

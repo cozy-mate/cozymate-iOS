@@ -16,8 +16,8 @@ export const useExitChatRoom = (chatRoomId: number) => {
   return useMutation({
     mutationFn: () => exitChatRoom(chatRoomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
       router.back();
+      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
     },
   });
 };

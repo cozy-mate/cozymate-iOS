@@ -8,7 +8,7 @@ import { useTracker } from '@/providers/TrackerProvider';
 import { ChipItem, RoomItem } from '@/type/room';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
-import { closeTooltip, getTooltip, setTooltip } from '@/utils/tooltip';
+import { closeTooltip, getTooltip } from '@/utils/tooltip';
 
 interface MateLifeStyleComponentProps {
   data: RoomItem;
@@ -31,10 +31,12 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
     const response = await getStats({ roomId: Number(data.roomId), memberStatKey });
     // TODO : Member Stat Key를 타입으로 고정
     const buttonEventKey = `chip_${memberStatKey}` as keyof typeof ButtonEvent;
+
     trackButton(ButtonEvent[buttonEventKey], EventCategory.content_room, {
       roomId: Number(data.roomId),
       chip: ButtonEvent[buttonEventKey],
     });
+
     setStatItem({
       title: getLifeStyleLabel(memberStatKey),
       memberList: response.result.memberList,
@@ -142,7 +144,14 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
 
       <MemberStatModalComponent
         isVisible={isMemberStatModalOpen}
-        closeModal={() => setIsMemberStatModalOpen(false)}
+        closeModal={() => {
+          setIsMemberStatModalOpen(false);
+          setStatItem({
+            title: '',
+            memberList: [],
+            color: '',
+          });
+        }}
         item={statItem}
       />
     </Fragment>

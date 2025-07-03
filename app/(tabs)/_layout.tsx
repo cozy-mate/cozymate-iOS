@@ -55,17 +55,17 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="cozyHome"
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`mt-2 text-12 ${focused ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`mt-[8px] ${focused ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
             >
               코지홈
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
-            <View className="w-10 h-10 flex justify-center items-center mt-2">
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
               {focused ? <CozyHomeSelected /> : <CozyHomeNotSelected />}
             </View>
           ),
@@ -76,13 +76,13 @@ export default function TabLayout() {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`mt-2 text-12 ${focused ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`mt-[8px] ${focused ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
             >
               롤앤룰
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
-            <View className="w-10 h-10 flex justify-center items-center mt-2">
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
               {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
             </View>
           ),
@@ -106,13 +106,13 @@ export default function TabLayout() {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`mt-2 text-12 ${focused ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`mt-[8px] ${focused ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
             >
               코지봇
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
-            <View className="w-10 h-10 flex justify-center items-center mt-2">
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
               {focused ? <RoomMateSelected /> : <RoomMateNotSelected />}
             </View>
           ),
@@ -136,20 +136,20 @@ export default function TabLayout() {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`mt-2 text-12 ${focused ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`mt-[8px] ${focused ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
             >
               피드
             </Text>
           ),
           tabBarIcon: ({ focused }) =>
             roomInfo.roomId !== 0 ? (
-              <View className="w-10 h-10 flex justify-center items-center mt-2">
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
                 {focused ? <FeedSelected /> : <FeedNotSelected />}
               </View>
             ) : (
               <Pressable
                 onPress={() => showRejectToast('방에 참여해야 사용할 수 있어요!')}
-                className="w-10 h-10 flex justify-center items-center mt-2"
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
               >
                 {focused ? <FeedSelected /> : <FeedNotSelected />}
               </Pressable>
@@ -161,13 +161,13 @@ export default function TabLayout() {
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`mt-2 text-12 ${focused ? 'font-600 text-mainColor' : 'font-500 text-disabledFont'}`}
+              className={`mt-[8px] ${focused ? 'Semibold12 text-mainColor' : 'Medium12 text-disabledFont'}`}
             >
               마이페이지
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
-            <View className="w-10 h-10 flex justify-center items-center mt-2">
+            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
               {focused ? <MyPageSelected /> : <MyPageNotSelected />}
             </View>
           ),

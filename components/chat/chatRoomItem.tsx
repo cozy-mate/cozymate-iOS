@@ -19,13 +19,13 @@ const ChatRoomItemComponent: React.FC<ChatRoomItemComponentProps> = ({ data }) =
       }
       className="py-3 flex flex-row justify-between items-center"
     >
-      <View className="gap-y-[12px]">
+      <View className="gap-y-[12px] flex-1 ">
         <View className="flex flex-row items-center gap-x-1.5">
           {getPersona(data.persona, 24, 24)}
-          <Text className="text-14 font-500 text-colorFont">{data.nickname}</Text>
+          <Text className="Medium14 text-colorFont">{data.nickname}</Text>
         </View>
 
-        <Text className="text-14 font-500 text-basicFont">{data.lastContent}</Text>
+        <Text className="Medium14 text-basicFont">{data.lastContent}</Text>
       </View>
 
       <View className="w-[40px] h-[40px] flex items-center justify-center">

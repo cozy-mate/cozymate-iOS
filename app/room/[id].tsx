@@ -1,31 +1,53 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ErrorBoundaryProps, useLocalSearchParams, useRouter } from 'expo-router';
+import { Suspense, useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Background from '@/assets/images/common/background.svg';
 import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
+import ErrorImage from '@/assets/images/error.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import TwoButtonModal from '@/components/common/twoButtonModal';
+import BottomButtonComponent from '@/components/common/bottomButton';
+import LoadingComponent from '@/components/common/loading';
+import OverScrollView from '@/components/common/overScrollView';
+import TwoButtonModal from '@/components/modal/twoButtonModal';
 import BottomButtonContainer from '@/components/roomDetail/bottomButtonContainer';
 import DormitoryInfoComponent from '@/components/roomDetail/dormitoryInfo';
 import MateLifeStyleComponent from '@/components/roomDetail/mateLifeStyle';
 import MateListComponent from '@/components/roomDetail/mateList';
 import RoomInfoComponent from '@/components/roomDetail/roomInfo';
-import {
-  useAcceptRoomInvite,
-  useCancelRequestRoom,
-  useExitRoom,
-  useGetRoomDetail,
-  useSendRoomRequest,
-} from '@/hooks/room/room';
+import { useExitRoom, useGetRoomDetail } from '@/hooks/room/room';
+import { useAcceptRoomInvite, useCancelRequestRoom, useSendRoomRequest } from '@/hooks/room/user';
 import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room-favorite';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 
-export default function RoomDetail() {
+export function ErrorBoundary({ error }: ErrorBoundaryProps) {
+  const router = useRouter();
+
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="px-[20px]">
+        <Text className="Semibold20 text-emphasizedFont mt-[56px] mb-[100px]">
+          잘못된 요청입니다.
+        </Text>
+        <ErrorImage />
+      </View>
+
+      <BottomButtonComponent
+        buttonText="뒤로 가기"
+        onPress={() => router.back()}
+        color="BLUE"
+        disabled={false}
+      />
+    </SafeAreaView>
+  );
+}
+
+function RoomDetailComponent() {
   const { id } = useLocalSearchParams();
 
   const router = useRouter();
@@ -41,11 +63,14 @@ export default function RoomDetail() {
 
   const { mutateAsync: sendRequest } = useSendRoomRequest(
     Number(id),
-    data.result.name,
+    data.result.managerNickname,
     setIsLifeStyleModalOpen,
   );
   const { mutateAsync: cancelRequest } = useCancelRequestRoom(Number(id));
-  const { mutateAsync: acceptRoomInvite } = useAcceptRoomInvite(Number(id));
+  const { mutateAsync: acceptRoomInvite } = useAcceptRoomInvite(
+    Number(id),
+    data.result.managerNickname,
+  );
 
   const { mutateAsync: exitRoom } = useExitRoom(Number(id));
   const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
@@ -75,11 +100,11 @@ export default function RoomDetail() {
         break;
 
       case 'ACCEPT':
-        acceptRoomInvite(false);
+        acceptRoomInvite(true);
         break;
 
       case 'REJECT':
-        acceptRoomInvite(true);
+        acceptRoomInvite(false);
         break;
 
       case 'SEND':
@@ -100,15 +125,27 @@ export default function RoomDetail() {
       <View className="px-[20px] pb-[8px]">
         <BackHeaderComponent>
           <View className="flex flex-row items-center gap-x-[4px]">
-            <Pressable onPress={() => onPress('CHAT')} className="pl-[14px] pr-[8px] py-[11px]">
-              <ChatIcon />
-            </Pressable>
+            {!data.result.isRoomManager && (
+              <Pressable
+                onPress={() => onPress('CHAT')}
+                className="flex items-center justify-center w-[40px] h-[40px]"
+              >
+                <ChatIcon />
+              </Pressable>
+            )}
+
             {data.result.favoriteId !== 0 ? (
-              <Pressable onPress={() => onPress('LIKE')} className="p-[8px]">
+              <Pressable
+                onPress={() => onPress('LIKE')}
+                className="flex items-center justify-center w-[40px] h-[40px]"
+              >
                 <FilledHeartIcon />
               </Pressable>
             ) : (
-              <Pressable onPress={() => onPress('LIKE')} className="p-[8px]">
+              <Pressable
+                onPress={() => onPress('LIKE')}
+                className="flex items-center justify-center w-[40px] h-[40px]"
+              >
                 <HeartIcon />
               </Pressable>
             )}
@@ -127,16 +164,7 @@ export default function RoomDetail() {
         </View>
 
         {/* 하단 over-scroll 시의 흰색 배경 설정 */}
-        <View
-          style={{
-            backgroundColor: '#FFFFFF',
-            height: 300,
-            position: 'absolute',
-            bottom: -100,
-            left: 0,
-            right: 0,
-          }}
-        />
+        <OverScrollView backgroundColor="#FFFFFF" height={300} bottom={-100} />
       </ScrollView>
 
       <BottomButtonContainer id={Number(id)} onPress={onPress} />
@@ -164,5 +192,19 @@ export default function RoomDetail() {
         rightButtonFunc={exitRoom}
       />
     </SafeAreaView>
+  );
+}
+
+export default function RoomDetail() {
+  return (
+    <Suspense
+      fallback={
+        <Portal>
+          <LoadingComponent />
+        </Portal>
+      }
+    >
+      <RoomDetailComponent />
+    </Suspense>
   );
 }

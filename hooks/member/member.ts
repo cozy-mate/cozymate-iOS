@@ -13,12 +13,13 @@ import {
 } from '@/server/member/member';
 import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
 import { SignUpResponse } from '@/server/member/response';
+import { showRejectToast } from '@/utils/toast';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
 import { useMemberStore, useSignUpStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore, useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useCreateRoomStore, useHasRoomStore } from '@/zustand/room/room';
 
 export const useWithdraw = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ export const useWithdraw = () => {
   const { clearHasLifeStyle } = useHasLifeStyleStore();
   const { clearLifeStyle } = useRegisterLifeStyleStore();
   const { clearSelectedItem } = useSelectedItemStore();
+  const { clearCreateRoomInfo } = useCreateRoomStore();
   const { clearRoomInfo } = useHasRoomStore();
 
   return useMutation({
@@ -43,6 +45,7 @@ export const useWithdraw = () => {
       clearHasLifeStyle();
       clearLifeStyle();
       clearSelectedItem();
+      clearCreateRoomInfo();
       clearRoomInfo();
 
       rootNavigation.dispatch(StackActions.popToTop());
@@ -78,11 +81,28 @@ export const useUpdateMemberInfo = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const { memberState, setMemberState } = useMemberStore();
+  const { hasLifeStyle } = useHasLifeStyleStore();
+
   return useMutation({
     mutationFn: (data: UpdateMemberInfoRequest) => updateMemberInfo(data),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      const value = variables;
+      setMemberState(value);
+
       queryClient.invalidateQueries({ queryKey: [`/members/member-info`] });
+      queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
+
+      if (hasLifeStyle) {
+        queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
+        queryClient.invalidateQueries({
+          queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+        });
+      }
       router.back();
+    },
+    onError: () => {
+      showRejectToast('내 정보 수정에 실패했어요!');
     },
   });
 };

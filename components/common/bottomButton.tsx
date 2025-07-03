@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Text, Pressable, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomButtonComponentProps {
   buttonText: string;
   onPress: any;
   color: 'BLUE' | 'GRAY' | 'WHITE' | 'RED';
   disabled: boolean;
+  isFixedPosition?: boolean;
 }
 
 const BottomButtonComponent: React.FC<BottomButtonComponentProps> = ({
@@ -14,9 +14,8 @@ const BottomButtonComponent: React.FC<BottomButtonComponentProps> = ({
   onPress,
   color,
   disabled,
+  isFixedPosition = true,
 }) => {
-  const { bottom } = useSafeAreaInsets();
-
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const basicButtonStyle = `mx-[22px] mt-[12px] mb-[8px] rounded-xl`;
@@ -27,7 +26,7 @@ const BottomButtonComponent: React.FC<BottomButtonComponentProps> = ({
     RED: 'bg-warningSubColor border border-warningColor py-[15.5px]',
   };
 
-  const basicTextStyle = `text-16 font-600 leading-16 text-center`;
+  const basicTextStyle = `Semibold16 text-center`;
   const textStyle = {
     BLUE: 'text-white',
     GRAY: 'text-white',
@@ -35,8 +34,8 @@ const BottomButtonComponent: React.FC<BottomButtonComponentProps> = ({
     RED: 'text-warningColor',
   };
 
-  return (
-    <View className="absolute bg-white w-full" style={{ height: 108, bottom: bottom + 24 }}>
+  return isFixedPosition ? (
+    <View className="absolute bottom-0 bg-white w-full" style={{ height: 108 }}>
       <Pressable
         onPress={onPress}
         onPressIn={() => setIsPressed(true)}
@@ -47,6 +46,16 @@ const BottomButtonComponent: React.FC<BottomButtonComponentProps> = ({
         <Text className={`${basicTextStyle} ${textStyle[color]}`}>{buttonText}</Text>
       </Pressable>
     </View>
+  ) : (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
+      className={`${isPressed && 'opacity-50'} ${basicButtonStyle} ${buttonStyle[color]}`}
+      disabled={disabled}
+    >
+      <Text className={`${basicTextStyle} ${textStyle[color]}`}>{buttonText}</Text>
+    </Pressable>
   );
 };
 
