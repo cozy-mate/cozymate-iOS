@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Dimensions, LayoutChangeEvent, Pressable, Text, View } from 'react-native';
+import { Dimensions, Pressable, Text, View } from 'react-native';
 
 import ChatIcon from '@/assets/images/common/chat.svg';
 import GrayArrow from '@/assets/images/common/grayArrow.svg';
@@ -8,18 +8,14 @@ import NotificationIcon from '@/assets/images/common/notification.svg';
 import Background from '@/assets/images/cozyHome/background.svg';
 import SchoolIcon from '@/assets/images/cozyHome/blueSchoolIcon.svg';
 import Magnifier from '@/assets/images/cozyHome/magnifier.svg';
-import TwoButtonModal from '@/components/common/twoButtonModal';
+import TwoButtonModal from '@/components/modal/twoButtonModal';
+import { useCheckHasRoom } from '@/hooks/room/room';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
 import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
-import { useHasRoomStore } from '@/zustand/room/room';
 
-interface HeaderComponentProps {
-  handleLayout: (event: LayoutChangeEvent) => void;
-}
-
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
+const HeaderComponent: React.FC = () => {
   const width = Dimensions.get('screen').width;
 
   const router = useRouter();
@@ -28,7 +24,8 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
 
   const { memberState } = useMemberStore();
   const { hasLifeStyle } = useHasLifeStyleStore();
-  const { roomInfo } = useHasRoomStore();
+
+  const { data: hasRoom } = useCheckHasRoom();
 
   const [showNoLifeStyleCreateModal, setShowNoLifeStyleCreateModal] = useState<boolean>(false);
   const [showNoLifeStyleJoinModal, setShowNoLifeStyleJoinModal] = useState<boolean>(false);
@@ -65,21 +62,16 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
     trackButton(ButtonEvent.life_style, EventCategory.home_header);
     router.push('/lifeStyle/onboarding');
   };
+
   return (
-    <View
-      className="gap-y-[12px] pt-[18px] pb-[25px] bg-subColor1 px-[20px] relative"
-      onLayout={handleLayout}
-    >
+    <View className="gap-y-[12px] px-[20px] pt-[18px] pb-[25px] bg-subColor1 relative">
       <Background style={{ position: 'absolute', top: -47 }} width={width} />
       <View className="flex flex-row justify-between items-center">
-        <Pressable
-          // onPress={() => router.push('/onBoard/chipSelect')}
-          className="flex flex-row items-center gap-x-[6px]"
-        >
-          <SchoolIcon />
-          <Text className="text-18 font-600 leading-18 text-mainColor">
-            {memberState.universityName}
-          </Text>
+        <Pressable onPress={() => router.push('/lifeStyle/basicInfo')}>
+          <View className="flex flex-row items-center gap-x-[6px]">
+            <SchoolIcon />
+            <Text className="Semibold18 text-mainColor">{memberState.universityName}</Text>
+          </View>
         </Pressable>
 
         <View className="flex flex-row justify-between items-center">
@@ -100,7 +92,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
         >
           <View className="gap-x-[8px] flex flex-row items-center">
             <Magnifier />
-            <Text className="text-12 font-600 leading-12 text-basicFont">
+            <Text className="Semibold12 text-basicFont">
               {memberState.nickname}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
               찾아볼까요?
             </Text>
@@ -112,12 +104,12 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
 
       <View className="flex flex-row items-center gap-x-[11px]">
         <Pressable
-          disabled={roomInfo.roomId !== 0}
+          disabled={hasRoom.result.roomId !== 0}
           onPress={handleCreateRoom}
           className="bg-colorBox p-[16px] rounded-xl flex-1 h-[80px]"
         >
           <Text
-            className={`text-16 font-600 leading-16 ${roomInfo.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
+            className={`Semibold16 ${hasRoom.result.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
           >
             방 만들기
           </Text>
@@ -134,12 +126,12 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ handleLayout }) => {
         />
 
         <Pressable
-          disabled={roomInfo.roomId !== 0}
+          disabled={hasRoom.result.roomId !== 0}
           onPress={handleJoinRoom}
           className="bg-colorBox p-[16px] rounded-xl flex-1 h-[80px]"
         >
           <Text
-            className={`text-16 font-600 leading-16 ${roomInfo.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
+            className={`Semibold16 ${hasRoom.result.roomId !== 0 ? 'text-disabledFont' : 'text-mainColor'}`}
           >
             방 참여하기
           </Text>

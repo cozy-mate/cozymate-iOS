@@ -6,7 +6,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
-import RoomComponent from '@/components/room';
+import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
@@ -37,17 +37,13 @@ const RecommendRoomComponent: React.FC = () => {
     <View className="gap-y-[16px]">
       <View className="flex flex-row justify-between items-center px-[20px]">
         <View className="gap-y-[4px] ml-[4px]">
-          <Text className="text-18 font-600 leading-18 text-emphasizedFont">
-            {memberState.nickname}님과
-          </Text>
-          <Text className="text-18 font-600 leading-18 text-emphasizedFont">
-            꼭 맞는 방을 추천해드릴게요
-          </Text>
+          <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님과</Text>
+          <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
         </View>
 
         <Pressable onPress={handleMore}>
           <View className="flex flex-row items-center gap-x-[4px]">
-            <Text className="text-12 font-600 leading-12 text-disabledFont">더보기</Text>
+            <Text className="Semibold12 text-disabledFont">더보기</Text>
             <GrayArrowIcon />
           </View>
         </Pressable>
@@ -64,7 +60,9 @@ const RecommendRoomComponent: React.FC = () => {
             pagingEnabled={true}
             autoPlay={false}
             onProgressChange={progress}
-            renderItem={({ item }) => <RoomComponent roomData={item} onPress={handleRoomPress} />}
+            renderItem={({ item }) => (
+              <BasicRoomItem key={item.roomId} roomData={item} onPress={handleRoomPress} />
+            )}
             onSnapToItem={(index) => {
               trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
                 index,
@@ -88,7 +86,7 @@ const RecommendRoomComponent: React.FC = () => {
         </Fragment>
       ) : (
         <View className="mx-[20px] border border-disabledColor rounded-xl h-[154px] flex justify-center items-center">
-          <Text className="text-14 font-medium leading-14 text-disabledFont text-center">
+          <Text className="Medium14 text-disabledFont text-center">
             아직 함께할 룸메이트가 없네요.{'\n'}곧 당신과 잘 맞는 룸메이트가 찾아올 거예요.
           </Text>
         </View>
