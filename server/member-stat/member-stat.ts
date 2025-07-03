@@ -48,9 +48,10 @@ export const getRandomMemberList = async (): Promise<GetRandomMemberListResponse
 export const getMemberList = async (
   page: number,
   filterList?: string[],
+  hasRoom?: boolean,
 ): Promise<GetMemberListResponse> => {
   const response = await GetAxiosInstance<GetMemberListResponse>(`/members/stat/filter`, {
-    params: { page, filterList },
+    params: { page, filterList, hasRoom },
   });
 
   return response.data;
