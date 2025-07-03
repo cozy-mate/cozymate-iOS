@@ -3,6 +3,7 @@ export interface GetMyUniversityInfoResponse {
     id: number;
     name: string;
     mailPattern: string;
+    mailPatterns: string[];
     dormitoryNames: string[];
     departments: string[];
   };
@@ -22,6 +23,7 @@ export interface GetUniversityInfoResponse {
     id: number;
     name: string;
     mailPattern: string;
+    mailPatterns: string[];
     dormitoryNames: string[];
     departments: string[];
   };
