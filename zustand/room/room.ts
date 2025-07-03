@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { RoomInfo } from './type';
+import { CreateRoomInfo, RoomInfo } from './type';
 
 export const useHasRoomStore = create<{
   roomInfo: RoomInfo;
@@ -19,4 +19,33 @@ export const useHasRoomStore = create<{
         isRoomManager: false,
       },
     }),
+}));
+
+export const useCreateRoomStore = create<{
+  createRoomInfo: CreateRoomInfo;
+  setCreateRoomInfo: (status: Partial<CreateRoomInfo>) => void;
+  clearCreateRoomInfo: () => void;
+}>((set) => ({
+  createRoomInfo: {
+    name: '',
+    persona: 0,
+    maxMateNum: 0,
+    hashtagList: [],
+  },
+  setCreateRoomInfo: (status) =>
+    set((state) => ({
+      createRoomInfo: {
+        ...state.createRoomInfo,
+        ...status,
+      },
+    })),
+  clearCreateRoomInfo: () =>
+    set(() => ({
+      createRoomInfo: {
+        name: '',
+        persona: 0,
+        maxMateNum: 0,
+        hashtagList: [],
+      },
+    })),
 }));
