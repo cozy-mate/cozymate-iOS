@@ -46,6 +46,8 @@ export const useGetMemberDetail = (memberId: number) => {
   return useSuspenseQuery({
     queryKey: [`/members/stat/${memberId}`, memberId],
     queryFn: () => getMemberDetail(memberId),
+    // 오류가 발생했을 때 refetch를 시도하는 것 방지
+    retry: false,
   });
 };
 

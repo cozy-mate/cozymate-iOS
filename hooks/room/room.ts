@@ -32,6 +32,8 @@ export const useGetRoomDetail = (roomId: number) => {
   return useSuspenseQuery({
     queryKey: [`/rooms/${roomId}`, roomId],
     queryFn: () => getRoomDetail(roomId),
+    // 오류가 발생했을 때 refetch를 시도하는 것 방지
+    retry: false,
   });
 };
 
