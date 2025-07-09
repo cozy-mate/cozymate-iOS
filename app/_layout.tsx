@@ -122,7 +122,10 @@ export default function RootLayout() {
                       >
                         <LottieView
                           source={require('@/assets/lotties/splash.json')}
-                          style={{ flex: 1 }}
+                          style={{
+                            flex: 1,
+                          }}
+                          resizeMode="cover"
                           autoPlay={true}
                           loop={false}
                           onAnimationFinish={() => {
