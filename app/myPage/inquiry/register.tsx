@@ -28,6 +28,7 @@ export default function Inquiry() {
           rowGap: 40,
           paddingTop: 8,
           paddingHorizontal: 20,
+          marginTop: 16,
         }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
