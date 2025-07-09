@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { ErrorBoundaryProps, useLocalSearchParams, useRouter } from 'expo-router';
 import { Suspense, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -28,18 +29,30 @@ import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 export function ErrorBoundary({ error }: ErrorBoundaryProps) {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="px-[20px]">
-        <Text className="Semibold20 text-emphasizedFont mt-[56px] mb-[100px]">
-          잘못된 요청입니다.
-        </Text>
-        <ErrorImage />
+      <View className="px-[20px] mt-[56px]">
+        <View className="mb-[136px] gap-y-[2px]">
+          <Text className="Semibold20 text-emphasizedFont">삭제된 방이에요</Text>
+          <Text className="Semibold20 text-emphasizedFont">방을 불러올 수 없어요..</Text>
+        </View>
+        <View className="mx-auto">
+          <ErrorImage />
+        </View>
       </View>
 
       <BottomButtonComponent
-        buttonText="뒤로 가기"
-        onPress={() => router.back()}
+        buttonText="다시 시도하러 가기"
+        onPress={async () => {
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] }),
+            queryClient.invalidateQueries({ queryKey: [`/rooms/list`] }),
+            queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] }),
+          ]);
+          router.back();
+        }}
         color="BLUE"
         disabled={false}
       />
