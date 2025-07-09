@@ -1,5 +1,12 @@
 import { Suspense, useRef, useState } from 'react';
-import { Keyboard, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Keyboard,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -342,12 +349,12 @@ function MyLifeStyleComponent() {
         </KeyboardAwareScrollView>
       )}
 
-      <Pressable
+      <TouchableOpacity
         onPress={toTop}
         className="absolute bottom-[60px] right-[20px] z-50 bg-white rounded-full"
       >
         <TopButtonIcon />
-      </Pressable>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
