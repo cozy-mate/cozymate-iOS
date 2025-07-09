@@ -98,22 +98,17 @@ export default function useFcm(
             await queryClient.invalidateQueries({
               queryKey: [`/rooms/${roomInfo.roomId}`, roomInfo.roomId],
             });
-            // 홈 화면
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 3] });
-            // 홈 화면 -> 더보기
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 5] });
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
 
             break;
 
-          // 방장이 방 참여 요청을 거절한 경우 : 사용자가 쿼리 무효화
+          // 방장이 유저의 방 참여 요청을 거절한 경우 : 사용자가 쿼리 무효화
           case 'REJECT_ROOM_JOIN':
-            // await queryClient.invalidateQueries({
-            //   queryKey: [`/rooms/${targetId}`, targetId],
-            // });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${targetId}/pending-status`, targetId],
+            });
             // 홈 화면
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 3] });
-            // 홈 화면 -> 더보기
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`, 5] });
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
             break;
 
           // 방장이 사용자에게 참가 요청을 보낸 경우 (방장 -> 사용자) : 사용자가 쿼리 무효화
@@ -129,11 +124,11 @@ export default function useFcm(
             });
             break;
 
-          // 유저가 방 참여 요청을 거절한 경우 : 방장이 쿼리 무효화
+          // 유저가 방장의 방 초대 요청을 거절한 경우 : 방장이 쿼리 무효화
           case 'REJECT_ROOM_INVITE':
-            // await queryClient.invalidateQueries({
-            //   queryKey: [`/rooms/${targetId}`, targetId],
-            // });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/invited-status/${targetId}`, targetId],
+            });
             break;
 
           case 'ROOM_IN':
@@ -142,6 +137,7 @@ export default function useFcm(
 
           case 'ROOM_OUT':
             const checkHasRoomResponse = await checkHasRoom();
+            // 방장 여부 저장
             setRoomInfo(checkHasRoomResponse.result);
 
             await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
@@ -150,7 +146,9 @@ export default function useFcm(
 
           case 'ARRIVE_CHAT':
             await queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
-          // await queryClient.invalidateQueries({ queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/chats/chatrooms/${targetId}`, targetId],
+            });
 
           default:
             console.log('data: ', data);
