@@ -14,13 +14,7 @@ const NotificationListComponent: React.FC = () => {
     }
   };
 
-  console.log(data?.pages?.flatMap((page) => page.result.result));
-
   const toRoute = (category: string, content: string, targetId: number) => {
-    if (targetId === null) {
-      return;
-    }
-
     if (category === '초대요청') {
       // 방 (방장) -> 유저 : 유저 입장
       if (content.includes('나를 초대했어요')) {
