@@ -58,7 +58,12 @@ export default function CreateRoom() {
         </View>
 
         <KeyboardAwareScrollView
-          contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 32, rowGap: 42 }}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingTop: 32,
+            rowGap: 42,
+            paddingBottom: 160,
+          }}
           keyboardShouldPersistTaps="handled"
           enableOnAndroid={true}
           extraScrollHeight={20}

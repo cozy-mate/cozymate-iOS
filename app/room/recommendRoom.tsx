@@ -10,11 +10,11 @@ import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import LoadingComponent from '@/components/common/loading';
 import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
 import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
-import BottomButtonComponent from '@/components/common/bottomButton';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/member/member';
@@ -71,7 +71,7 @@ function RecommendRoomComponent() {
         </View>
 
         <FlatList
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
           data={data?.pages?.flatMap((page) => page.result.result)}
           renderItem={({ item }) => (
             <BasicRoomItem

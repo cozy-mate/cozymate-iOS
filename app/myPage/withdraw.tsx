@@ -1,15 +1,22 @@
 import { useState } from 'react';
-import { Keyboard, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Dimensions,
+  Keyboard,
+  Pressable,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
+import BottomButtonComponent from '@/components/common/bottomButton';
 import CustomTextarea from '@/components/common/customInput/customTextarea';
 import LoadingComponent from '@/components/common/loading';
 import { useWithdraw } from '@/hooks/member/member';
-import BottomButtonComponent from '@/components/common/bottomButton';
 import { useMemberStore } from '@/zustand/member/member';
 
 export default function Withdraw() {
@@ -19,6 +26,8 @@ export default function Withdraw() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const { mutateAsync: withdraw, isPending } = useWithdraw();
+
+  const isSmallSize = Dimensions.get('screen').height <= 667;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -30,7 +39,12 @@ export default function Withdraw() {
       </TouchableWithoutFeedback>
 
       <KeyboardAwareScrollView
-        contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 20, rowGap: 100 }}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingTop: 20,
+          rowGap: 100,
+          paddingBottom: 160,
+        }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid={true}
         extraScrollHeight={20}
@@ -57,7 +71,7 @@ export default function Withdraw() {
         />
       </KeyboardAwareScrollView>
 
-      <View className="absolute bottom-[42px] w-full bg-white">
+      <View className={`absolute ${isSmallSize ? 'bottom-0' : 'bottom-[42px]'} w-full bg-white`}>
         <View className="flex flex-row items-center px-[22px]">
           <Pressable onPress={() => setIsChecked(!isChecked)} className="p-[8px]">
             {isChecked ? <SelectedIcon /> : <RadioIcon />}
