@@ -80,11 +80,15 @@ export default function useFcm(
         const data = msg.data;
 
         const actionType = msg.data?.actionType;
-        const targetId = msg.data?.targetId;
+        const targetMemberId = Number(data?.memberId);
+        const targetRoomId = Number(data?.roomId);
 
         switch (actionType) {
           // 사용자가 방에 참여 요청을 보낸 경우 (사용자 -> 방) : 방장이 쿼리 무효화
           case 'ARRIVE_ROOM_JOIN_REQUEST':
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/pending-status/${targetMemberId}`, targetMemberId],
+            });
             await queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
             break;
 
@@ -105,18 +109,21 @@ export default function useFcm(
           // 방장이 유저의 방 참여 요청을 거절한 경우 : 사용자가 쿼리 무효화
           case 'REJECT_ROOM_JOIN':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${targetId}/pending-status`, targetId],
+              queryKey: [`/rooms/${targetRoomId}/pending-status`, targetRoomId],
             });
             // 홈 화면
             await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
             break;
 
-          // 방장이 사용자에게 참가 요청을 보낸 경우 (방장 -> 사용자) : 사용자가 쿼리 무효화
+          // 방장이 사용자에게 초대 요청을 보낸 경우 (방장 -> 사용자) : 사용자가 쿼리 무효화
           case 'ARRIVE_ROOM_INVITE':
-            // await queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${targetRoomId}/invited-status`, targetRoomId],
+            });
+            await queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
             break;
 
-          // 유저가 방 참여 요청을 수락한 경우 : 방장이 쿼리 무효화
+          // 유저가 방 초대 요청을 수락한 경우 : 방장이 쿼리 무효화
           case 'ACCEPT_ROOM_INVITE':
             await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
             await queryClient.invalidateQueries({
@@ -127,7 +134,7 @@ export default function useFcm(
           // 유저가 방장의 방 초대 요청을 거절한 경우 : 방장이 쿼리 무효화
           case 'REJECT_ROOM_INVITE':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/invited-status/${targetId}`, targetId],
+              queryKey: [`/rooms/invited-status/${targetMemberId}`, targetMemberId],
             });
             break;
 
@@ -145,10 +152,13 @@ export default function useFcm(
             break;
 
           case 'ARRIVE_CHAT':
+            const chatRoomId = Number(data?.chatRoomId);
+
             await queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
             await queryClient.invalidateQueries({
-              queryKey: [`/chats/chatrooms/${targetId}`, targetId],
+              queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId],
             });
+            break;
 
           default:
             console.log('data: ', data);
