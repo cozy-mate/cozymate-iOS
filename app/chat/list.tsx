@@ -17,8 +17,6 @@ function ChatListComponent() {
     }
   };
 
-  console.log(data.pages.flatMap((page) => page.result.result));
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="px-[20px]">
