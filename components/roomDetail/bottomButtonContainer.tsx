@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import BottomButtonComponent from '@/components/common/bottomButton';
@@ -14,13 +14,15 @@ interface BottomButtonContainerProps {
 const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPress }) => {
   const { bottom } = useSafeAreaInsets();
 
+  const isSmallSize = Dimensions.get('screen').height <= 667;
+
   const { data: hasRoom } = useCheckHasRoom();
 
   const { data: isRequested } = useCheckIsRequestedRoom(Number(id));
   const { data: isInvited } = useCheckIsInvitedRoom(Number(id));
 
   return (
-    <View style={{ height: 108, bottom: bottom + 124 }}>
+    <View style={{ height: 108, bottom: isSmallSize ? 160 : bottom + 124 }}>
       {hasRoom.result.roomId === id && (
         <BottomButtonComponent
           buttonText="방 나가기"

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import BottomButtonComponent from '@/components/common/bottomButton';
@@ -17,6 +17,8 @@ interface BottomButtonContainerProps {
 
 const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPress }) => {
   const router = useRouter();
+
+  const isSmallSize = Dimensions.get('screen').height <= 667;
 
   const { bottom } = useSafeAreaInsets();
 
@@ -37,7 +39,7 @@ const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPre
   if (isInMateList || (!roomInfo.isRoomManager && roomInfo.roomId !== 0)) return null;
 
   return (
-    <View style={{ height: 108, bottom: bottom + 94 }}>
+    <View style={{ height: 108, bottom: isSmallSize ? 160 : bottom + 94 }}>
       {id !== memberState.memberId && !hasLifeStyle && (
         <BottomButtonComponent
           buttonText="라이프스타일 입력하고 내 방으로 초대하기"
