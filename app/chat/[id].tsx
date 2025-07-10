@@ -1,7 +1,7 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Suspense, useRef, useState } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -51,7 +51,7 @@ function ChatRoomComponent() {
 
       <FlatList
         contentContainerStyle={{ paddingBottom: 80 }}
-        className="px-[20px] mt-[16px]"
+        className="px-[20px] mt-[32px]"
         data={data?.pages?.flatMap((page) => page.result.result.content)}
         renderItem={({ item }) => <ChatItemComponent data={item} />}
         ItemSeparatorComponent={() => <View className="bg-[#F1F2F4] h-[1px] my-[18px]" />}
@@ -60,7 +60,7 @@ function ChatRoomComponent() {
       />
 
       {data?.pages[0]?.result.result.memberId !== null && (
-        <Pressable
+        <TouchableOpacity
           onPress={() =>
             router.push(
               `/chat/send/${data?.pages[0]?.result.result.memberId}?chatRoomId=${Number(id)}&nickname=${encodeURIComponent(nickname as string)}`,
@@ -69,7 +69,7 @@ function ChatRoomComponent() {
           className="bg-mainColor rounded-full px-[60px] py-[14px] absolute bottom-[62px] left-1/2 -translate-x-1/2"
         >
           <Text className="Semibold14 text-white text-center">쪽지쓰기</Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
 
       <BottomSheet
