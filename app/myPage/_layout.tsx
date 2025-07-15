@@ -21,6 +21,9 @@ export default function MyPageLayout() {
       {/* 문의하기 */}
       <Stack.Screen name="inquiry" options={{ headerShown: false }} />
 
+      {/* 차단한 멤버 목록 */}
+      <Stack.Screen name="blockMember" options={{ headerShown: false }} />
+
       {/* 회원탈퇴 */}
       <Stack.Screen name="withdraw" options={{ headerShown: false }} />
     </Stack>

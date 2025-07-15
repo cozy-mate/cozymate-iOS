@@ -1,10 +1,12 @@
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useQueryClient } from '@tanstack/react-query';
 import { ErrorBoundaryProps, useLocalSearchParams, useRouter } from 'expo-router';
-import { Fragment, Suspense, useState } from 'react';
+import { Fragment, Suspense, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import SeeMoreIcon from '@/assets/icons/seeMore.svg';
 import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
@@ -13,6 +15,7 @@ import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButtonComponent from '@/components/common/bottomButton';
 import LoadingComponent from '@/components/common/loading';
 import OverScrollView from '@/components/common/overScrollView';
+import ReportModalComponent from '@/components/modal/reportModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
 import AdditionalInfoComponent from '@/components/userDetail/additionalInfo';
 import BasicInfoComponent from '@/components/userDetail/basicInfo';
@@ -22,6 +25,11 @@ import EssentialInfoComponent from '@/components/userDetail/essentialInfo';
 import MemberInfoComponent from '@/components/userDetail/memberInfo';
 import TableInfoComponent from '@/components/userDetail/tableInfo';
 import ViewTypeButtonComponent from '@/components/userDetail/viewTypeButton';
+import {
+  useBlockMember,
+  useGetMemberBlockStatus,
+  useUnblockMember,
+} from '@/hooks/member-block/member-block';
 import { useCreateMemberLike, useDeleteMemberLike } from '@/hooks/member-favorite/member-favorite';
 import { useGetMemberDetail } from '@/hooks/member-stat/member-stat';
 import {
@@ -149,6 +157,16 @@ function UserDetailComponent() {
     }
   };
 
+  const [isReportModalVisible, setIsReportModalVisible] = useState<boolean>(false);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const [isBlockModalVisible, setIsBlockModalVisible] = useState<boolean>(false);
+  const [isUnblockModalVisible, setIsUnblockModalVisible] = useState<boolean>(false);
+  const { data: blockStatus } = useGetMemberBlockStatus(Number(id));
+
+  const { mutate: blockMember } = useBlockMember();
+  const { mutate: unblockMember } = useUnblockMember();
+
   return (
     <SafeAreaView className="bg-subColor1">
       <View className="px-[20px] pb-[8px]">
@@ -176,6 +194,12 @@ function UserDetailComponent() {
                   <HeartIcon />
                 </Pressable>
               )}
+              <Pressable
+                onPress={() => bottomSheetRef.current?.expand()}
+                className="flex items-center justify-center w-[40px] h-[40px]"
+              >
+                <SeeMoreIcon />
+              </Pressable>
             </View>
           )}
         </BackHeaderComponent>
@@ -219,7 +243,86 @@ function UserDetailComponent() {
         }}
       />
 
+      <TwoButtonModal
+        isVisible={isBlockModalVisible}
+        title={`${data.result.memberDetail.nickname}님을\n차단하시나요?`}
+        closeFunc={() => setIsBlockModalVisible(false)}
+        leftButtonText="취소"
+        leftButtonFunc={() => setIsBlockModalVisible(false)}
+        rightButtonText="차단"
+        rightButtonFunc={async () => {
+          blockMember(data.result.memberDetail.memberId);
+          setIsCreateRoomModalOpen(false);
+        }}
+      />
+
+      <TwoButtonModal
+        isVisible={isUnblockModalVisible}
+        title={`${data.result.memberDetail.nickname}님을\n차단 해제하시나요?`}
+        closeFunc={() => setIsUnblockModalVisible(false)}
+        leftButtonText="취소"
+        leftButtonFunc={() => setIsUnblockModalVisible(false)}
+        rightButtonText="차단 해제"
+        rightButtonFunc={async () => {
+          unblockMember(data.result.memberDetail.memberId);
+          setIsCreateRoomModalOpen(false);
+        }}
+      />
+
+      <ReportModalComponent
+        isVisible={isReportModalVisible}
+        memberId={data.result.memberDetail.memberId}
+        source="MEMBER_STAT"
+        closeModal={() => setIsReportModalVisible(false)}
+      />
+
       <BottomButtonContainer id={Number(id)} onPress={onPress} />
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={[350]}
+        index={-1}
+        enablePanDownToClose={true}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
+        )}
+      >
+        <BottomSheetView className="flex-1 pt-[12px] pb-[16px] px-[20px]">
+          <Pressable
+            onPress={() => {
+              setIsReportModalVisible(true);
+              bottomSheetRef.current?.close();
+            }}
+            className="py-[11.5px]"
+          >
+            <Text className="Medium16 text-basicFont">신고하기</Text>
+          </Pressable>
+
+          <View className="h-[1px] bg-[#F1F2F4] my-[8px]" />
+
+          {blockStatus.result ? (
+            <Pressable
+              onPress={() => {
+                setIsUnblockModalVisible(true);
+                bottomSheetRef.current?.close();
+              }}
+              className="py-[11.5px]"
+            >
+              <Text className="Medium16 text-basicFont">차단 해제하기</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => {
+                setIsBlockModalVisible(true);
+                bottomSheetRef.current?.close();
+              }}
+              className="py-[11.5px]"
+            >
+              <Text className="Medium16 text-basicFont">차단하기</Text>
+            </Pressable>
+          )}
+        </BottomSheetView>
+      </BottomSheet>
     </SafeAreaView>
   );
 }

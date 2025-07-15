@@ -18,6 +18,7 @@ const BottomMenuComponent: React.FC = () => {
           ? router.push('/myPage/inquiry/list')
           : router.push('/myPage/inquiry/register'),
     },
+    { title: '차단 목록', subTitle: null, onPress: () => router.push('/myPage/blockMember') },
   ];
 
   return (
