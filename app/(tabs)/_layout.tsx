@@ -12,7 +12,6 @@ import RoleNRuleNotSelected from '@/assets/images/bottomTab/roleNRuleNotSelected
 import RoleNRuleSelected from '@/assets/images/bottomTab/roleNRuleSelected.svg';
 // import RoomMateNotSelected from '@/assets/images/bottomTab/roomMateNotSelected.svg';
 // import RoomMateSelected from '@/assets/images/bottomTab/roomMateSelected.svg';
-import { HapticTab } from '@/components/HapticTab';
 import { showRejectToast } from '@/utils/toast';
 import { useHasRoomStore } from '@/zustand/room/room';
 
@@ -24,7 +23,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: '#68A4FF',
         headerShown: false,
-        tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
