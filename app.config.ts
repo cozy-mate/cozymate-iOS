@@ -74,7 +74,6 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
       'expo-font',
       {
         fonts: [
-          './assets/fonts/SpaceMono-Regular.ttf',
           './assets/fonts/Pretendard-Bold.otf',
           './assets/fonts/Pretendard-SemiBold.otf',
           './assets/fonts/Pretendard-Medium.otf',
