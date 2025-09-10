@@ -56,10 +56,12 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './GoogleService-Info.plist',
   },
   android: {
+    package: 'umc.cozymate',
     adaptiveIcon: {
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
+    googleServicesFile: './google-services.json',
   },
   web: {
     bundler: 'metro',
@@ -68,6 +70,19 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
+    [
+      'expo-font',
+      {
+        fonts: [
+          './assets/fonts/SpaceMono-Regular.ttf',
+          './assets/fonts/Pretendard-Bold.otf',
+          './assets/fonts/Pretendard-SemiBold.otf',
+          './assets/fonts/Pretendard-Medium.otf',
+          './assets/fonts/Pretendard-Regular.otf',
+        ],
+      },
+    ],
+    'expo-web-browser',
     [
       'expo-build-properties',
       {
@@ -86,6 +101,9 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
       '@react-native-kakao/core',
       {
         nativeAppKey: kakaoNativeAppKey,
+        android: {
+          authCodeHandlerActivity: true,
+        },
         ios: {
           handleKakaoOpenUrl: true,
         },
