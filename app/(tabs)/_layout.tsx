@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform, Pressable, Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 
 import CozyHomeNotSelected from '@/assets/images/bottomTab/cozyHomeNotSelected.svg';
 import CozyHomeSelected from '@/assets/images/bottomTab/cozyHomeSelected.svg';
@@ -12,17 +12,15 @@ import RoleNRuleNotSelected from '@/assets/images/bottomTab/roleNRuleNotSelected
 import RoleNRuleSelected from '@/assets/images/bottomTab/roleNRuleSelected.svg';
 // import RoomMateNotSelected from '@/assets/images/bottomTab/roomMateNotSelected.svg';
 // import RoomMateSelected from '@/assets/images/bottomTab/roomMateSelected.svg';
-import { showRejectToast } from '@/utils/toast';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { HapticTab, RoleNRuleHapticTab } from '@/components/HapticTab';
 
 export default function TabLayout() {
-  const { roomInfo } = useHasRoomStore();
-
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#68A4FF',
         headerShown: false,
+        tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -84,19 +82,7 @@ export default function TabLayout() {
               {focused ? <RoleNRuleSelected /> : <RoleNRuleNotSelected />}
             </View>
           ),
-          tabBarButton: (props) => (
-            <Pressable
-              {...props}
-              onPress={(e) => {
-                if (roomInfo.roomId === 0) {
-                  e.preventDefault();
-                  showRejectToast('방에 참여해야 사용할 수 있어요!');
-                } else {
-                  props.onPress?.(e);
-                }
-              }}
-            />
-          ),
+          tabBarButton: RoleNRuleHapticTab,
         }}
       />
       {/* <Tabs.Screen
