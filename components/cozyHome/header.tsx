@@ -12,8 +12,7 @@ import TwoButtonModal from '@/components/modal/twoButtonModal';
 import { useCheckHasRoom } from '@/hooks/room/room';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 const HeaderComponent: React.FC = () => {
   const width = Dimensions.get('screen').width;
@@ -22,8 +21,7 @@ const HeaderComponent: React.FC = () => {
 
   const { trackButton } = useTracker();
 
-  const { memberState } = useMemberStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { memberInfo, hasLifeStyle } = useMemberStore();
 
   const { data: hasRoom } = useCheckHasRoom();
 
@@ -70,7 +68,7 @@ const HeaderComponent: React.FC = () => {
         <Pressable onPress={() => router.push('/lifeStyle/basicInfo')}>
           <View className="flex flex-row items-center gap-x-[6px]">
             <SchoolIcon />
-            <Text className="Semibold18 text-mainColor">{memberState.universityName}</Text>
+            <Text className="Semibold18 text-mainColor">{memberInfo?.universityName}</Text>
           </View>
         </Pressable>
 
@@ -93,7 +91,7 @@ const HeaderComponent: React.FC = () => {
           <View className="gap-x-[8px] flex flex-row items-center">
             <Magnifier />
             <Text className="Semibold12 text-basicFont">
-              {memberState.nickname}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
+              {memberInfo?.nickname}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
               찾아볼까요?
             </Text>
           </View>

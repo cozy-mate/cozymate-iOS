@@ -7,10 +7,10 @@ import BackHeaderComponent from '@/components/common/backHeader';
 import LoadingComponent from '@/components/common/loading';
 import SimpleRoomItem from '@/components/common/roomItem/simpleRoomItem';
 import { useGetSentRequestRoomList } from '@/hooks/room/user';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 function SentRequestComponent() {
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { data, hasNextPage, fetchNextPage } = useGetSentRequestRoomList(5);
 
@@ -31,7 +31,7 @@ function SentRequestComponent() {
             <BackHeaderComponent />
             <View className="flex flex-row justify-between items-center">
               <View className="gap-y-[4px] mx-[4px]">
-                <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님이</Text>
+                <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님이</Text>
                 <Text className="Semibold18 text-emphasizedFont">참여요청을 보낸 방이에요</Text>
               </View>
             </View>

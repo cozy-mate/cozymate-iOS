@@ -1,20 +1,20 @@
 import { Text, View } from 'react-native';
 
 import { ChatData } from '@/type/chat';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 interface ChatItemComponentProps {
   data: ChatData;
 }
 
 const ChatItemComponent: React.FC<ChatItemComponentProps> = ({ data }) => {
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   return (
     <View className="gap-y-[4px]">
       <View className="gap-y-[6px]">
         <Text
-          className={`Semibold16 ${data.nickname === `${memberState.nickname} (나)` ? 'text-mainColor' : 'text-colorFont'} `}
+          className={`Semibold16 ${data.nickname === `${memberInfo?.nickname} (나)` ? 'text-mainColor' : 'text-colorFont'} `}
         >
           {data.nickname}
         </Text>

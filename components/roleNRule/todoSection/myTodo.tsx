@@ -9,8 +9,8 @@ import { useToggleTodoDone } from '@/hooks/todo/todo';
 import { MemberTodo } from '@/type/todo';
 import { showRejectToast } from '@/utils/toast';
 import { formatDateToKorean } from '@/utils/translateDate';
-import { useMemberStore } from '@/zustand/member/member';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
+import { useMemberStore } from '@/zustand/store';
 
 interface MyTodoComponentProps {
   timePoint: string;
@@ -19,7 +19,7 @@ interface MyTodoComponentProps {
 }
 
 const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bottomSheetRef }) => {
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { data: hasRoom } = useCheckHasRoom();
 
@@ -55,7 +55,7 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bott
     <View className="gap-y-[12px]">
       <Text className="Semibold18 text-basicFont mx-[4px]">
         <Text className="text-mainColor">{formatDateToKorean(timePoint)}, </Text>
-        {` ${memberState.nickname}`}님이{'\n'}해야할 일들을 알려드릴게요!
+        {` ${memberInfo?.nickname}`}님이{'\n'}해야할 일들을 알려드릴게요!
       </Text>
 
       {data !== undefined && data.todoList.length !== 0 ? (

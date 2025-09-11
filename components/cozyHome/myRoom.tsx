@@ -4,15 +4,13 @@ import { Pressable, Text, View } from 'react-native';
 import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 const MyRoomComponent: React.FC = () => {
   const router = useRouter();
   const { trackButton } = useTracker();
 
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { memberState } = useMemberStore();
+  const { memberInfo, hasLifeStyle } = useMemberStore();
 
   const { data: hasRoom } = useCheckHasRoom();
   const { data } = useGetMyRoomDetail(hasRoom.result.roomId);
@@ -27,7 +25,7 @@ const MyRoomComponent: React.FC = () => {
       <View>
         <View className="gap-y-[16px] px-[20px]">
           <View className="gap-y-[2px] mx-[4px]">
-            <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님이</Text>
+            <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님이</Text>
             <Text className="Semibold18 text-emphasizedFont">현재 참여하고있는 방이에요</Text>
           </View>
 

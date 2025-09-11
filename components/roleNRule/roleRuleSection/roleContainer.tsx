@@ -3,8 +3,8 @@ import { Pressable, Text, View } from 'react-native';
 
 import SettingIcon from '@/assets/images/roleNRule/setting.svg';
 import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
-import { useMemberStore } from '@/zustand/member/member';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
+import { useMemberStore } from '@/zustand/store';
 
 interface RoleContainerProps {
   data:
@@ -23,7 +23,7 @@ interface RoleContainerProps {
 }
 
 const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) => {
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { data: hasRoom } = useCheckHasRoom();
 
@@ -66,7 +66,7 @@ const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) =
                   </Text>
                 </View>
 
-                {role.mateList.some((mate) => mate.nickname === memberState.nickname) && (
+                {role.mateList.some((mate) => mate.nickname === memberInfo?.nickname) && (
                   <Pressable
                     onPress={() => {
                       setSelectedItem((prev) => ({

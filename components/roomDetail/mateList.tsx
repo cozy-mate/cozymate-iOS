@@ -6,7 +6,7 @@ import { getPersona } from '@/constants/items/characterItem';
 import { useTracker } from '@/providers/TrackerProvider';
 import { RoomItem } from '@/type/room';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 interface MateListComponentProps {
   data: RoomItem;
@@ -15,7 +15,7 @@ interface MateListComponentProps {
 const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
   const router = useRouter();
 
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { trackButton } = useTracker();
 
@@ -55,7 +55,7 @@ const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
             </View>
 
             <View className="flex flex-row items-center gap-x-2">
-              {memberState.memberId !== mate.memberId && (
+              {memberInfo?.memberId !== mate.memberId && (
                 <Text className="Medium14 text-colorFont">{mate.mateEquality ?? '?? '}%</Text>
               )}
               <GrayArrowIcon />

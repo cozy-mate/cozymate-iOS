@@ -4,12 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BackHeaderComponent from '@/components/common/backHeader';
 import SimpleUserItem from '@/components/common/userItem/simpleUserItem';
 import { useGetReceivedRequestList } from '@/hooks/room/roomManager';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 export default function ReceivedRequest() {
-  const { roomInfo } = useHasRoomStore();
+  const { roomInfo } = useMemberStore();
 
-  const { data } = useGetReceivedRequestList(roomInfo.isRoomManager);
+  const { data } = useGetReceivedRequestList(roomInfo?.isRoomManager || false);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

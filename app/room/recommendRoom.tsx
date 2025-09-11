@@ -17,7 +17,7 @@ import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 function RecommendRoomComponent() {
   const router = useRouter();
@@ -27,7 +27,7 @@ function RecommendRoomComponent() {
   const sortTypeRef = useRef<SortTypeValue>('AVERAGE_RATE');
   const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
 
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { trackButton } = useTracker();
 
@@ -83,7 +83,7 @@ function RecommendRoomComponent() {
           ListHeaderComponent={() => (
             <View className="px-[20px]">
               <View className="gap-y-[4px] ml-[4px]">
-                <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님과</Text>
+                <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님과</Text>
                 <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
               </View>
 

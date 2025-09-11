@@ -5,12 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import XIcon from '@/assets/icons/x.svg';
 import StarImage from '@/assets/images/lifeStyle/star.svg';
 import BottomButtonComponent from '@/components/common/bottomButton';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 export default function LifeStyleOnboarding() {
   const router = useRouter();
 
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -22,7 +22,7 @@ export default function LifeStyleOnboarding() {
         <View className="gap-y-[92px]">
           <View className="gap-y-[4px] mx-[4px]">
             <Text className="Semibold20 text-basicFont">
-              <Text className="text-mainColor">{memberState.nickname}</Text>님과
+              <Text className="text-mainColor">{memberInfo?.nickname}</Text>님과
             </Text>
             <Text className="Semibold20 text-basicFont">딱 맞는 라이프스타일을 가진</Text>
             <Text className="Semibold20 text-basicFont">

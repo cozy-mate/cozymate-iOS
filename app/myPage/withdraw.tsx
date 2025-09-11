@@ -17,10 +17,10 @@ import BottomButtonComponent from '@/components/common/bottomButton';
 import CustomTextarea from '@/components/common/customInput/customTextarea';
 import LoadingComponent from '@/components/common/loading';
 import { useWithdraw } from '@/hooks/member/member';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 export default function Withdraw() {
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const [withdrawReason, setWithdrawReason] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -51,7 +51,7 @@ export default function Withdraw() {
       >
         <View className="gap-y-[4px]">
           <View className="gap-y-[2px] mx-[4px]">
-            <Text className="Semibold20 text-emphasizedFont">{memberState.nickname}님,</Text>
+            <Text className="Semibold20 text-emphasizedFont">{memberInfo?.nickname}님,</Text>
             <Text className="Semibold20 text-emphasizedFont">cozymate를 떠나시나요?</Text>
           </View>
 
@@ -61,7 +61,7 @@ export default function Withdraw() {
         </View>
 
         <CustomTextarea
-          title={`${memberState.nickname}님,\n떠나시는 이유를 알려주세요`}
+          title={`${memberInfo?.nickname}님,\n떠나시는 이유를 알려주세요`}
           value={withdrawReason}
           handleValue={(e: string) => setWithdrawReason(e)}
           placeholder={
