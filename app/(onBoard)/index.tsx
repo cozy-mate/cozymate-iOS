@@ -1,17 +1,19 @@
 import LottieView from 'lottie-react-native';
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppleLogo from '@/assets/images/common/appleLogo.svg';
 import KakaoLogo from '@/assets/images/common/kakaoLogo.svg';
+import GoogleLogo from '@/assets/images/common/googleLogo.svg';
 import LoadingComponent from '@/components/common/loading';
-import { useAppleLogin, useKakaoLogin } from '@/hooks/auth/auth';
+import { useAppleLogin, useGoogleLogin, useKakaoLogin } from '@/hooks/auth/auth';
 
 export default function HomeScreen() {
   const { mutateAsync: kakaoLogin, isPending: kakaoPending } = useKakaoLogin();
   const { mutateAsync: appleLogin, isPending: applePending } = useAppleLogin();
+  const { mutateAsync: googleLogin, isPending: googlePending } = useGoogleLogin();
 
   const progress = useSharedValue<number>(0);
 
@@ -47,7 +49,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {(kakaoPending || applePending) && <LoadingComponent />}
+      {(kakaoPending || applePending || googlePending) && <LoadingComponent />}
 
       <Carousel
         width={width}
@@ -106,13 +108,23 @@ export default function HomeScreen() {
           <Text className="Semibold16 text-black">카카오톡으로 계속하기</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          className="flex-row gap-x-[8px] items-center justify-center rounded-[33px] bg-appleblack px-[24px] py-[16px]"
-          onPress={() => appleLogin()}
-        >
-          <AppleLogo />
-          <Text className="Semibold16 text-white">Apple로 계속하기</Text>
-        </TouchableOpacity>
+        {Platform.OS === 'ios' ? (
+          <TouchableOpacity
+            className="flex-row gap-x-[8px] items-center justify-center rounded-[33px] bg-appleblack px-[24px] py-[16px]"
+            onPress={() => appleLogin()}
+          >
+            <AppleLogo />
+            <Text className="Semibold16 text-white">Apple로 계속하기</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            className="flex-row gap-x-[8px] items-center justify-center rounded-[33px] bg-white px-[24px] py-[16px]"
+            onPress={() => googleLogin()}
+          >
+            <GoogleLogo />
+            <Text className="Semibold16 text-black">Google로 계속하기</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
