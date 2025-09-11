@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { MemberState, SignUpState } from './type';
+import { SignUpState } from './type';
 
 export const useSignUpStore = create<{
   signUpState: SignUpState;
@@ -23,40 +23,6 @@ export const useSignUpStore = create<{
         nickname: '',
         gender: '',
         birthday: '',
-        persona: 0,
-      },
-    })),
-}));
-
-export const useMemberStore = create<{
-  memberState: MemberState;
-  setMemberState: (newState: Partial<MemberState>) => void;
-  clearMemberState: () => void;
-}>((set) => ({
-  memberState: {
-    memberId: 0,
-    nickname: '',
-    gender: '',
-    birthday: '',
-    universityName: '',
-    universityId: 0,
-    majorName: '',
-    persona: 0,
-  },
-  setMemberState: (newState: any) =>
-    set((state) => ({
-      memberState: { ...state.memberState, ...newState },
-    })),
-  clearMemberState: () =>
-    set(() => ({
-      memberState: {
-        memberId: 0,
-        nickname: '',
-        gender: '',
-        birthday: '',
-        universityName: '',
-        universityId: 0,
-        majorName: '',
         persona: 0,
       },
     })),
