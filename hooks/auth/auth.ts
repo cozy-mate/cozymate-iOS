@@ -1,3 +1,4 @@
+import { GoogleSignin, SignInResponse, User } from '@react-native-google-signin/google-signin';
 import { KakaoUser, login, me } from '@react-native-kakao/user';
 import { useMutation } from '@tanstack/react-query';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -8,18 +9,14 @@ import { socialLogin } from '@/server/auth/auth';
 import { getMyDetail } from '@/server/member-stat/member-stat';
 import { checkHasRoom } from '@/server/room/room';
 import { setAccessToken, setRefreshToken } from '@/utils/token';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
-import { useHasRoomStore } from '@/zustand/room/room';
 
 import { useAuthProvider } from '../../providers/AuthProvider';
+import { useMemberStore } from '@/zustand/store';
 
 export const useKakaoLogin = () => {
   const router = useRouter();
 
-  const { setMemberState } = useMemberStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomInfo } = useHasRoomStore();
+  const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
 
   const { broadcastLogin } = useAuthProvider();
 
@@ -60,24 +57,33 @@ export const useKakaoLogin = () => {
           await Promise.all([
             setAccessToken(loginResponse.result.tokenResponseDTO.accessToken),
             setRefreshToken(loginResponse.result.tokenResponseDTO.refreshToken),
-            setMemberState(loginResponse.result.memberDetailResponseDTO),
+            setMemberInfo(loginResponse.result.memberDetailResponseDTO),
           ]);
 
-          const hasRoomResponse = await checkHasRoom();
-          setRoomInfo(hasRoomResponse.result);
+          try {
+            const hasRoomResponse = await checkHasRoom();
+
+            if (hasRoomResponse.result.roomId !== 0) {
+              setRoom(hasRoomResponse.result);
+            }
+          } catch (error: any) {
+            console.log('서버 오류', error);
+          }
 
           try {
             await getMyDetail();
-            setHasLifeStyle(true);
+            setHasLifeStyle();
           } catch (error: any) {
             if (error.response?.data?.code === 'MEMBERSTAT402') {
-              setHasLifeStyle(false);
+              console.log('라이프스타일이 없음');
+            } else {
+              console.log('서버 오류', error);
             }
           }
 
           broadcastLogin();
 
-          router.replace('/(tabs)/cozyHome');
+          // router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         // error 처리 추상화
@@ -118,9 +124,7 @@ export const appleLoginAuth =
 export const useAppleLogin = () => {
   const router = useRouter();
 
-  const { setMemberState } = useMemberStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomInfo } = useHasRoomStore();
+  const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
 
   const { broadcastLogin } = useAuthProvider();
 
@@ -159,24 +163,33 @@ export const useAppleLogin = () => {
           await Promise.all([
             setAccessToken(loginResponse.result.tokenResponseDTO.accessToken),
             setRefreshToken(loginResponse.result.tokenResponseDTO.refreshToken),
-            setMemberState(loginResponse.result.memberDetailResponseDTO),
+            setMemberInfo(loginResponse.result.memberDetailResponseDTO),
           ]);
 
-          const hasRoomResponse = await checkHasRoom();
-          setRoomInfo(hasRoomResponse.result);
+          try {
+            const hasRoomResponse = await checkHasRoom();
+
+            if (hasRoomResponse.result.roomId !== 0) {
+              setRoom(hasRoomResponse.result);
+            }
+          } catch (error: any) {
+            console.log('서버 오류', error);
+          }
 
           try {
             await getMyDetail();
-            setHasLifeStyle(true);
+            setHasLifeStyle();
           } catch (error: any) {
             if (error.response?.data?.code === 'MEMBERSTAT402') {
-              setHasLifeStyle(false);
+              console.log('라이프스타일이 없음');
+            } else {
+              console.log('서버 오류', error);
             }
           }
 
           broadcastLogin();
 
-          router.replace('/(tabs)/cozyHome');
+          // router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         console.log(error);
@@ -184,6 +197,102 @@ export const useAppleLogin = () => {
     },
     onError: (error) => {
       console.log('로그인 실패:', error);
+    },
+  });
+};
+
+export const useGoogleLogin = () => {
+  const router = useRouter();
+
+  const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
+
+  const { broadcastLogin } = useAuthProvider();
+
+  return useMutation({
+    mutationFn: async () => {
+      await GoogleSignin.hasPlayServices();
+      return await GoogleSignin.signIn();
+    },
+    onSuccess: async () => {
+      try {
+        const currentUser: User | null = GoogleSignin.getCurrentUser();
+
+        if (!currentUser) {
+          console.log('현재 로그인한 Google 사용자가 없습니다.');
+          return;
+        }
+
+        const loginResponse = await socialLogin({
+          clientId: String(currentUser.user.id),
+          socialType: 'GOOGLE',
+        });
+
+        // 신규 멤버
+        if (loginResponse.result.memberDetailResponseDTO === null) {
+          console.log(loginResponse.result.tokenResponseDTO.accessToken);
+
+          // 임시 토큰 저장
+          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+
+          console.log('가입된 회원이 아님');
+          router.push('/(onBoard)/schoolAuthentication');
+        }
+
+        // 준회원 (학교 인증 완료)
+        else if (
+          loginResponse.result.memberDetailResponseDTO !== null &&
+          loginResponse.result.tokenResponseDTO.refreshToken === ''
+        ) {
+          console.log('준회원');
+          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+          router.push('/(onBoard)/personalInfo');
+        }
+
+        // 기존 멤버
+        else {
+          await Promise.all([
+            setAccessToken(loginResponse.result.tokenResponseDTO.accessToken),
+            setRefreshToken(loginResponse.result.tokenResponseDTO.refreshToken),
+            setMemberInfo(loginResponse.result.memberDetailResponseDTO),
+          ]);
+
+          try {
+            const hasRoomResponse = await checkHasRoom();
+
+            if (hasRoomResponse.result.roomId !== 0) {
+              setRoom(hasRoomResponse.result);
+            }
+          } catch (error: any) {
+            console.log('서버 오류', error);
+          }
+
+          try {
+            await getMyDetail();
+            setHasLifeStyle();
+          } catch (error: any) {
+            if (error.response?.data?.code === 'MEMBERSTAT402') {
+              console.log('라이프스타일이 없음');
+            } else {
+              console.log('서버 오류', error);
+            }
+          }
+
+          broadcastLogin();
+
+          // router.replace('/(tabs)/cozyHome');
+        }
+      } catch (error: any) {
+        // error 처리 추상화
+        // axiosError일 경우 정제해서 throw
+        throw errorRefiner(error);
+      }
+    },
+    onError: (error) => {
+      // onSuccess에서 throw한 에러를 여기서 잡음.
+      if (__DEV__) {
+        console.log('에러:', error);
+      }
+      // TODO : Prod에서 잡지 못한다면 최상단 Error Boundary를 하나 놓는게 좋을 거 같습니다!
     },
   });
 };

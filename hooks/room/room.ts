@@ -16,7 +16,8 @@ import {
 } from '@/server/room/room';
 import { RoomItem } from '@/type/room';
 import { showRejectToast } from '@/utils/toast';
-import { useCreateRoomStore, useHasRoomStore } from '@/zustand/room/room';
+import { useCreateRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 // 내 방 정보 조회
 export const useGetMyRoomDetail = (roomId: number) => {
@@ -87,14 +88,14 @@ export const useExitRoom = (roomId: number) => {
 
   const router = useRouter();
 
-  const { setRoomInfo } = useHasRoomStore();
+  const { clearRoom } = useMemberStore();
 
   const rootNavigation = useNavigationContainerRef();
 
   return useMutation({
     mutationFn: () => exitRoom(roomId),
     onSuccess: () => {
-      setRoomInfo({ roomId: 0, isRoomManager: false });
+      clearRoom();
 
       queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
       queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
@@ -112,12 +113,12 @@ export const useJoinRoom = (roomId: number) => {
 
   const queryClient = useQueryClient();
 
-  const { setRoomInfo } = useHasRoomStore();
+  const { setRoom } = useMemberStore();
 
   return useMutation({
     mutationFn: () => joinRoom(roomId),
-    onSuccess: (data) => {
-      setRoomInfo({ roomId: roomId, isRoomManager: false });
+    onSuccess: () => {
+      setRoom({ roomId: roomId, isRoomManager: false });
 
       queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
       queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
@@ -131,14 +132,14 @@ export const useCreatePublicRoom = () => {
   const router = useRouter();
 
   const { clearCreateRoomInfo } = useCreateRoomStore();
-  const { setRoomInfo } = useHasRoomStore();
+  const { setRoom } = useMemberStore();
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreatePublicRoomRequest) => createPublicRoom(data),
     onSuccess: (response: CreatePublicRoomResponse) => {
-      setRoomInfo({ roomId: response.result.roomId, isRoomManager: true });
+      setRoom({ roomId: response.result.roomId, isRoomManager: true });
 
       queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
       queryClient.invalidateQueries({

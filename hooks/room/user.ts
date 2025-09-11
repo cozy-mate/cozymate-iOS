@@ -14,7 +14,7 @@ import {
   sendRoomRequest,
 } from '@/server/room/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 // 사용자 -> 방 참여 요청 취소
 export const useCancelRequestRoom = (roomId: number) => {
@@ -100,7 +100,7 @@ export const useSendRoomRequest = (
 export const useAcceptRoomInvite = (roomId: number, roomManagerName: string) => {
   const queryClient = useQueryClient();
 
-  const { setRoomInfo } = useHasRoomStore();
+  const { setRoom } = useMemberStore();
 
   return useMutation({
     mutationFn: (accept: boolean) => acceptRoomInvite(roomId, accept),
@@ -109,7 +109,7 @@ export const useAcceptRoomInvite = (roomId: number, roomManagerName: string) => 
 
       if (accept) {
         showSuccessToast(`[${roomManagerName}]님의 방 참여 요청을 수락했어요`);
-        setRoomInfo({ roomId: roomId, isRoomManager: false });
+        setRoom({ roomId: roomId, isRoomManager: false });
 
         queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
         queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
