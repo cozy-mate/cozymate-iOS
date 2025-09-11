@@ -2,8 +2,8 @@ import messaging from '@react-native-firebase/messaging';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 import useFcm from '@/hooks/useFcm';
-import { useAuthProvider } from '@/providers/AuthProvider';
 import { ensureNotificationHandler } from '@/utils/notification/expoNotification';
+import { useMemberStore } from '@/zustand/store';
 
 interface FCMContextType {
   token: null;
@@ -20,7 +20,7 @@ export const useFCM = () => useContext(FCMContext);
 export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
   const [notificationList, setNotificationList] = useState<(() => void)[]>([]);
 
-  const { isLoggedIn, isReady } = useAuthProvider();
+  const { isLoggedIn } = useMemberStore();
   const { token, register, unregister } = useFcm(setNotificationList);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
   useEffect(() => ensureNotificationHandler(), []);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!appLoaded) return;
     const run = async () => {
       const status = await messaging().requestPermission();
 
@@ -72,12 +72,12 @@ export default function FCMProvider({ children, appLoaded }: FCMProviderProps) {
   };
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!appLoaded) return;
     if (notificationList.length > 0 && appLoaded) {
       console.log('[FCM] Processing notifications:', notificationList.length);
       executeNotifications(notificationList).then(clearNotificationList);
     }
-  }, [appLoaded, notificationList, isReady]);
+  }, [appLoaded, notificationList]);
 
   return <FCMContext.Provider value={{ token: null }}>{children}</FCMContext.Provider>;
 }
