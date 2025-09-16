@@ -1,6 +1,5 @@
 import { Suspense, useCallback, useState } from 'react';
 import {
-  Modal,
   NativeScrollEvent,
   NativeSyntheticEvent,
   RefreshControl,
@@ -9,7 +8,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import LoadingComponent from '@/components/common/loading';
 import OverScrollView from '@/components/common/overScrollView';
 import HeaderComponent from '@/components/cozyHome/header';
 import MyRoomComponent from '@/components/cozyHome/myRoom';
@@ -79,11 +77,11 @@ function CozyHomeComponent() {
 export default function CozyHome() {
   return (
     <Suspense
-      fallback={
-        <Modal visible={true} transparent={true}>
-          <LoadingComponent />
-        </Modal>
-      }
+    // fallback={
+    //   <Modal visible={true} transparent={true}>
+    //     <LoadingComponent />
+    //   </Modal>
+    // }
     >
       <CozyHomeComponent />
     </Suspense>

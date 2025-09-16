@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 
 import { reissueToken } from '@/server/auth/auth';
@@ -6,16 +5,10 @@ import { getMemberProfile } from '@/server/member/member';
 import { getMyDetail } from '@/server/member-stat/member-stat';
 import { checkHasRoom } from '@/server/room/room';
 import { deleteToken, getRefreshToken, setAccessToken, setRefreshToken } from '@/utils/token';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
-export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<boolean>>) => {
-  const router = useRouter();
-
-  const { setMemberState } = useMemberStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
-  const { setRoomInfo } = useHasRoomStore();
+export const useAutoLogin = () => {
+  const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -24,9 +17,7 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
         console.log('리프레쉬 : ', refreshToken);
 
         if (!refreshToken) {
-          //   setIsLoggedIn(false);
           await deleteToken();
-          setAppLoaded(true);
           return;
         }
         try {
@@ -34,42 +25,39 @@ export const useAutoLogin = (setAppLoaded: React.Dispatch<React.SetStateAction<b
           const newTokens = await reissueToken(refreshToken);
           console.log(newTokens);
 
-          await Promise.all([
-            setAccessToken(newTokens.result.tokenResponseDTO.accessToken),
-            setRefreshToken(newTokens.result.tokenResponseDTO.refreshToken),
-          ]);
+          await setAccessToken(newTokens.result.tokenResponseDTO.accessToken);
+          await setRefreshToken(newTokens.result.tokenResponseDTO.refreshToken);
 
           const response = await getMemberProfile();
-          setMemberState(response.result);
+          setMemberInfo(response.result);
 
           try {
             await getMyDetail();
-            setHasLifeStyle(true);
+            setHasLifeStyle();
           } catch (error: any) {
             if (error.response?.data?.code === 'MEMBERSTAT402') {
-              setHasLifeStyle(false);
+              console.log('라이프스타일이 없음');
+            } else {
+              console.log('서버 오류', error);
             }
-            console.log(error);
           }
 
-          const hasRoomResponse = await checkHasRoom();
-          setRoomInfo(hasRoomResponse.result);
+          try {
+            const hasRoomResponse = await checkHasRoom();
 
-          router.replace('/(tabs)/cozyHome');
+            if (hasRoomResponse.result.roomId !== 0) {
+              setRoom(hasRoomResponse.result);
+            }
+          } catch (error: any) {
+            console.log('서버 오류', error);
+          }
         } catch (error: any) {
           console.log(error);
-          //   setIsLoggedIn(false);
           await deleteToken();
-          setAppLoaded(true);
           return;
         }
-
-        // setIsLoggedIn(true);
-        setAppLoaded(true);
       } catch (error: any) {
-        // setIsLoggedIn(false);
         await deleteToken();
-        setAppLoaded(true);
         return;
       }
     };

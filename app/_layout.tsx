@@ -1,7 +1,7 @@
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
-// import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import LottieView from 'lottie-react-native';
 import { useEffect, useState } from 'react';
@@ -14,17 +14,14 @@ import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/config/toastConfig';
 import { useAutoLogin } from '@/hooks/autoLogin';
 import { initGlobalThis } from '@/lib/initGlobalThis';
-import AuthProvider from '@/providers/AuthProvider';
-import FCMProvider from '@/providers/FCMProvider';
 import { TrackerProvider } from '@/providers/TrackerProvider';
 import ScreenTracker from '@/utils/ga/screenTracker';
 
 import '../global.css';
+import { useMemberStore } from '@/zustand/store';
+import FCMProvider from '@/providers/FCMProvider';
 
 initGlobalThis();
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-// SplashScreen.preventAutoHideAsync();
 
 const kakaoNativeAppKey = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || '';
 
@@ -44,37 +41,35 @@ interface TextInputWithDefaultProps extends TextInput {
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const [appLoaded, setAppLoaded] = useState<boolean>(false);
-  // const [fontsLoaded] = useFonts({
-  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  //   'Pretendard-Bold': require('../assets/fonts/Pretendard-Bold.otf'),
-  //   'Pretendard-SemiBold': require('../assets/fonts/Pretendard-SemiBold.otf'),
-  //   'Pretendard-Medium': require('../assets/fonts/Pretendard-Medium.otf'),
-  //   'Pretendard-Regular': require('../assets/fonts/Pretendard-Regular.otf'),
-  // });
   const [isAnimationFinished, setIsAnimationFinished] = useState<boolean>(false);
 
-  useAutoLogin(setAppLoaded);
+  useAutoLogin();
 
   useEffect(() => {
     // if (appLoaded && fontsLoaded) {
     initializeKakaoSDK(kakaoNativeAppKey);
     // SplashScreen.hideAsync();
     //}
+
+    GoogleSignin.configure({});
   }, []);
+
+  const { isLoggedIn } = useMemberStore();
 
   return (
     <GestureHandlerRootView>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider appLoaded={appLoaded}>
-          <FCMProvider appLoaded={appLoaded}>
-            <TrackerProvider>
-              <ScreenTracker />
-              <Host>
-                <Stack>
+        <FCMProvider appLoaded={isAnimationFinished}>
+          <TrackerProvider>
+            <ScreenTracker />
+            <Host>
+              <Stack>
+                <Stack.Protected guard={!isLoggedIn}>
                   {/* 온보딩 화면 */}
                   <Stack.Screen name="(onBoard)" options={{ headerShown: false }} />
+                </Stack.Protected>
 
+                <Stack.Protected guard={isLoggedIn}>
                   {/* 메인 화면 */}
                   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
@@ -98,42 +93,42 @@ export default function RootLayout() {
 
                   {/* 마이페이지 화면 */}
                   <Stack.Screen name="myPage" options={{ headerShown: false }} />
+                </Stack.Protected>
 
-                  <Stack.Screen name="+not-found" />
-                </Stack>
+                <Stack.Screen name="+not-found" />
+              </Stack>
 
-                {!isAnimationFinished && (
-                  <Portal>
-                    <View
+              {!isAnimationFinished && (
+                <Portal>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      zIndex: 9999,
+                    }}
+                  >
+                    <LottieView
+                      source={require('@/assets/lotties/splash.json')}
                       style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        zIndex: 9999,
+                        flex: 1,
                       }}
-                    >
-                      <LottieView
-                        source={require('@/assets/lotties/splash.json')}
-                        style={{
-                          flex: 1,
-                        }}
-                        resizeMode="cover"
-                        autoPlay={true}
-                        loop={false}
-                        onAnimationFinish={() => {
-                          setTimeout(() => setIsAnimationFinished(true), 2000);
-                        }}
-                      />
-                    </View>
-                  </Portal>
-                )}
-                <StatusBar style="auto" />
-              </Host>
-            </TrackerProvider>
-          </FCMProvider>
-        </AuthProvider>
+                      resizeMode="cover"
+                      autoPlay={true}
+                      loop={false}
+                      onAnimationFinish={() => {
+                        setTimeout(() => setIsAnimationFinished(true), 2000);
+                      }}
+                    />
+                  </View>
+                </Portal>
+              )}
+              <StatusBar style="auto" />
+            </Host>
+          </TrackerProvider>
+        </FCMProvider>
       </QueryClientProvider>
 
       <Toast config={toastConfig} />

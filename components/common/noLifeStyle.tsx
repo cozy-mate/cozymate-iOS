@@ -5,13 +5,13 @@ import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
 import StarImage from '@/assets/images/roomMate/star.svg';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
+import { useMemberStore } from '@/zustand/store';
 
 const NoLifeStyleComponent: React.FC = () => {
   const router = useRouter();
   const { trackButton } = useTracker();
 
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const onPressLifeStyle = () => {
     trackButton(ButtonEvent.life_style_component, EventCategory.content_mate);
@@ -24,7 +24,7 @@ const NoLifeStyleComponent: React.FC = () => {
       <View className="p-[16px] flex items-center">
         <View>
           <Text className="Medium12 text-disabledFont text-center">
-            {memberState.nickname}님, 라이프스타일을 입력하면
+            {memberInfo?.nickname ?? ''}님, 라이프스타일을 입력하면
           </Text>
           <Text className="Medium12 text-disabledFont text-center">
             나와 똑같은 답변을 한 사용자를 확인할 수 있어요!

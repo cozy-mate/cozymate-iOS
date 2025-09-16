@@ -1,8 +1,6 @@
-import { StackActions } from '@react-navigation/native';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { useNavigationContainerRef, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
-import { useAuthProvider } from '@/providers/AuthProvider';
 import {
   checkNickname,
   signUp,
@@ -16,40 +14,31 @@ import { SignUpResponse } from '@/server/member/response';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
 import { useMailAuthenticationStore } from '@/zustand/mail/mail';
-import { useMemberStore, useSignUpStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore, useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useSignUpStore } from '@/zustand/member/member';
+import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
-import { useCreateRoomStore, useHasRoomStore } from '@/zustand/room/room';
+import { useCreateRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 export const useWithdraw = () => {
-  const router = useRouter();
-  const rootNavigation = useNavigationContainerRef();
-
   const { clearMailState } = useMailAuthenticationStore();
   const { clearSignUpState } = useSignUpStore();
-  const { clearMemberState } = useMemberStore();
-  const { clearHasLifeStyle } = useHasLifeStyleStore();
+  const { logout } = useMemberStore();
   const { clearLifeStyle } = useRegisterLifeStyleStore();
   const { clearSelectedItem } = useSelectedItemStore();
   const { clearCreateRoomInfo } = useCreateRoomStore();
-  const { clearRoomInfo } = useHasRoomStore();
 
   return useMutation({
     mutationFn: (data?: WithdrawRequest) => withdraw(data),
     onSuccess: async () => {
       await deleteToken();
 
+      logout();
       clearMailState();
       clearSignUpState();
-      clearMemberState();
-      clearHasLifeStyle();
       clearLifeStyle();
       clearSelectedItem();
       clearCreateRoomInfo();
-      clearRoomInfo();
-
-      rootNavigation.dispatch(StackActions.popToTop());
-      router.replace('/');
     },
   });
 };
@@ -81,14 +70,21 @@ export const useUpdateMemberInfo = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { memberState, setMemberState } = useMemberStore();
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { memberInfo, setMemberInfo, hasLifeStyle } = useMemberStore();
 
   return useMutation({
     mutationFn: (data: UpdateMemberInfoRequest) => updateMemberInfo(data),
     onSuccess: (_data, variables) => {
       const value = variables;
-      setMemberState(value);
+      setMemberInfo({
+        ...memberInfo,
+        ...value, // 새 값 덮어쓰기
+        // memberId, gender, universityName, universityId는 기존 값을 유지하고 싶다면 명시적으로
+        memberId: memberInfo?.memberId ?? 0,
+        gender: memberInfo?.gender ?? '',
+        universityName: memberInfo?.universityName ?? '',
+        universityId: memberInfo?.universityId ?? 0,
+      });
 
       queryClient.invalidateQueries({ queryKey: [`/members/member-info`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
@@ -96,7 +92,7 @@ export const useUpdateMemberInfo = () => {
       if (hasLifeStyle) {
         queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
         queryClient.invalidateQueries({
-          queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+          queryKey: [`/members/stat/${memberInfo?.memberId}`, memberInfo?.memberId],
         });
       }
       router.back();
@@ -108,23 +104,15 @@ export const useUpdateMemberInfo = () => {
 };
 
 export const useSignUp = () => {
-  const router = useRouter();
+  const { setMemberInfo } = useMemberStore();
 
-  const { setMemberState } = useMemberStore();
-  const { broadcastLogin } = useAuthProvider();
   return useMutation({
     mutationFn: (data: SignUpRequest) => signUp(data),
     onSuccess: async (response: SignUpResponse) => {
-      await Promise.all([
-        setAccessToken(response.result.tokenResponseDTO.accessToken),
-        setRefreshToken(response.result.tokenResponseDTO.refreshToken),
-        setMemberState(response.result.memberDetailResponseDTO),
-      ]).then(() =>
-        // Auth 전역 상태 업데이트
-        broadcastLogin(),
-      );
+      await setAccessToken(response.result.tokenResponseDTO.accessToken);
+      await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
 
-      router.push('/(onBoard)/complete');
+      setMemberInfo(response.result.memberDetailResponseDTO);
     },
   });
 };

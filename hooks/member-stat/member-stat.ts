@@ -17,15 +17,14 @@ import {
   updateMemberDetail,
 } from '@/server/member-stat/member-stat';
 import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/server/member-stat/request';
-import { useMemberStore } from '@/zustand/member/member';
 import {
-  useHasLifeStyleStore,
   useRegisterLifeStyleStore,
   useShowLifeStyleInputStore,
 } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 export const useGetMyDetail = () => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { hasLifeStyle } = useMemberStore();
 
   return useQuery({
     queryKey: [`/members/stat`],
@@ -53,7 +52,7 @@ export const useGetMemberDetail = (memberId: number) => {
 
 // 사용자 랜덤 추천
 export const useGetRandomMemberList = () => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { hasLifeStyle } = useMemberStore();
 
   return useQuery({
     queryKey: [`/members/stat/random`],
@@ -64,7 +63,7 @@ export const useGetRandomMemberList = () => {
 
 // 사용자 상세정보 완전 일치 필터링 및 일치율 조회
 export const useGetHomeMemberList = () => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { hasLifeStyle } = useMemberStore();
 
   return useQuery({
     queryKey: [`/members/stat/filter/home`],
@@ -74,7 +73,7 @@ export const useGetHomeMemberList = () => {
 };
 
 export const useGetMemberList = (filterList: string[], hasRoom: boolean) => {
-  const { hasLifeStyle } = useHasLifeStyleStore();
+  const { hasLifeStyle } = useMemberStore();
 
   return useInfiniteQuery({
     queryKey: [`/members/stat/filter`, filterList, hasRoom],
@@ -94,22 +93,21 @@ export const useCreateMemberDetail = () => {
 
   const router = useRouter();
 
-  const { memberState } = useMemberStore();
-  const { setHasLifeStyle } = useHasLifeStyleStore();
+  const { memberInfo, setHasLifeStyle } = useMemberStore();
   const { clearLifeStyle } = useRegisterLifeStyleStore();
   const { clearShowLifeStyleInput } = useShowLifeStyleInputStore();
 
   return useMutation({
     mutationFn: (data: CreateMemberDetailRequest) => createMemberDetail(data),
     onSuccess: () => {
-      setHasLifeStyle(true);
+      setHasLifeStyle();
       clearLifeStyle();
       clearShowLifeStyleInput();
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
       queryClient.invalidateQueries({
-        queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+        queryKey: [`/members/stat/${memberInfo?.memberId}`, memberInfo?.memberId],
       });
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
@@ -130,7 +128,7 @@ export const useUpdateMemberDetail = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { memberState } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   return useMutation({
     mutationFn: (data: UpdatememberDetailRequest) => updateMemberDetail(data),
@@ -138,7 +136,7 @@ export const useUpdateMemberDetail = () => {
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
       queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
       queryClient.invalidateQueries({
-        queryKey: [`/members/stat/${memberState.memberId}`, memberState.memberId],
+        queryKey: [`/members/stat/${memberInfo?.memberId}`, memberInfo?.memberId],
       });
 
       queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });

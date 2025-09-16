@@ -13,7 +13,7 @@ import {
   deactivateFcmToken,
   getFcmToken,
 } from '@/utils/notification/fcmTokenUtil';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 const DEDUP_WINDOW = 10_000;
 const processed = new Set<string>();
@@ -36,7 +36,7 @@ export default function useFcm(
 
   const router = useRouter();
 
-  const { roomInfo, setRoomInfo } = useHasRoomStore();
+  const { roomInfo, setRoom } = useMemberStore();
 
   const withDedup = (id: string | undefined, cb: () => void) => {
     if (!id || processed.has(id)) return;
@@ -95,12 +95,14 @@ export default function useFcm(
           // 방장이 방 참여 요청을 수락한 경우 : 사용자가 쿼리 무효화
           case 'ACCEPT_ROOM_JOIN':
             const response = await checkHasRoom();
-            setRoomInfo(response.result);
+            setRoom(response.result);
 
             await queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo.roomId}`, roomInfo.roomId],
+              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
+            });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo?.roomId}`, roomInfo?.roomId],
             });
             await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
 
@@ -125,9 +127,11 @@ export default function useFcm(
 
           // 유저가 방 초대 요청을 수락한 경우 : 방장이 쿼리 무효화
           case 'ACCEPT_ROOM_INVITE':
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo.roomId}`, roomInfo.roomId],
+              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
+            });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo?.roomId}`, roomInfo?.roomId],
             });
             break;
 
@@ -139,15 +143,19 @@ export default function useFcm(
             break;
 
           case 'ROOM_IN':
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
+            });
             break;
 
           case 'ROOM_OUT':
             const checkHasRoomResponse = await checkHasRoom();
             // 방장 여부 저장
-            setRoomInfo(checkHasRoomResponse.result);
+            setRoom(checkHasRoomResponse.result);
 
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/${roomInfo.roomId}/myRoom`] });
+            await queryClient.invalidateQueries({
+              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
+            });
 
             break;
 

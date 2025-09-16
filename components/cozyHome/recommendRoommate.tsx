@@ -10,14 +10,12 @@ import BasicUserItem from '@/components/common/userItem/basicUserItem';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 const RecommendRoommateComponent: React.FC = () => {
   const router = useRouter();
 
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { memberState } = useMemberStore();
+  const { memberInfo, hasLifeStyle } = useMemberStore();
 
   const { trackButton, trackGesture } = useTracker();
 
@@ -48,7 +46,9 @@ const RecommendRoommateComponent: React.FC = () => {
         <View className="gap-y-[16px]">
           <View className="flex flex-row justify-between items-center px-[20px]">
             <View className="gap-y-[4px] ml-[4px]">
-              <Text className="Semibold18 text-emphasizedFont">{memberState.nickname}님과</Text>
+              <Text className="Semibold18 text-emphasizedFont">
+                {memberInfo?.nickname ?? ''}님과
+              </Text>
               <Text className="Semibold18 text-emphasizedFont">
                 꼭 맞는 룸메이트를 추천해드릴게요
               </Text>

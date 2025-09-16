@@ -6,8 +6,7 @@ import MagnifierIcon from '@/assets/images/userDetail/magnifier.svg';
 import { sampleLifeStyleData } from '@/constants/sampleLifeStyle';
 import { useGetMyDetail } from '@/hooks/member-stat/member-stat';
 import { UserDetailComponentProps } from '@/type/member-stat';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 type InfoItem = {
   index: number;
@@ -52,8 +51,7 @@ const InfoRow: React.FC<InfoRowProps> = ({ item }) => {
 const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
   const router = useRouter();
 
-  const { hasLifeStyle } = useHasLifeStyleStore();
-  const { memberState } = useMemberStore();
+  const { memberInfo, hasLifeStyle } = useMemberStore();
 
   const { data: myData } = useGetMyDetail();
 
@@ -68,19 +66,19 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
     {
       index: 1,
       label: '닉네임',
-      myValue: memberState.nickname,
+      myValue: memberInfo?.nickname ?? '',
       otherValue: data.memberDetail.nickname,
     },
     {
       index: 2,
       label: '출생년도',
-      myValue: `${memberState.birthday.slice(0, 4)}년`,
+      myValue: `${memberInfo?.birthday.slice(0, 4) ?? 0}년`,
       otherValue: `${data.memberDetail.birthday.slice(0, 4)}년`,
     },
     {
       index: 3,
       label: '학교',
-      myValue: memberState.universityName,
+      myValue: memberInfo?.universityName ?? '',
       otherValue: data.memberDetail.universityName,
     },
     {
@@ -95,7 +93,7 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
     {
       index: 5,
       label: '학과',
-      myValue: memberState.majorName,
+      myValue: memberInfo?.majorName ?? '',
       otherValue: data.memberDetail.majorName,
     },
     {

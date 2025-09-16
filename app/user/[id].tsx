@@ -39,8 +39,7 @@ import {
 } from '@/hooks/room/roomManager';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/member/member';
-import { useHasRoomStore } from '@/zustand/room/room';
+import { useMemberStore } from '@/zustand/store';
 
 export function ErrorBoundary({ error }: ErrorBoundaryProps) {
   const router = useRouter();
@@ -78,8 +77,7 @@ function UserDetailComponent() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
-  const { memberState } = useMemberStore();
-  const { roomInfo } = useHasRoomStore();
+  const { memberInfo, roomInfo } = useMemberStore();
 
   const { trackButton } = useTracker();
 
@@ -102,7 +100,7 @@ function UserDetailComponent() {
   const { mutateAsync: acceptRoomRequest } = useAcceptRoomRequest(
     Number(id),
     data.result.memberDetail.nickname,
-    roomInfo.roomId,
+    roomInfo?.roomId as number,
   );
 
   const onPress = (
@@ -171,7 +169,7 @@ function UserDetailComponent() {
     <SafeAreaView className="bg-subColor1">
       <View className="px-[20px] pb-[8px]">
         <BackHeaderComponent>
-          {Number(id) !== memberState.memberId && (
+          {Number(id) !== Number(memberInfo?.memberId ?? 0) && (
             <View className="flex flex-row items-center gap-x-[4px]">
               <Pressable
                 onPress={() => onPress('CHAT')}

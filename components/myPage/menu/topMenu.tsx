@@ -7,33 +7,29 @@ import VerifiedIcon from '@/assets/images/myPage/verified.svg';
 import { useGetMemberProfile } from '@/hooks/member/member';
 import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { showRejectToast } from '@/utils/toast';
-import { useHasLifeStyleStore } from '@/zustand/member-stat/member-stat';
+import { useMemberStore } from '@/zustand/store';
 
 const TopMenuComponent: React.FC = () => {
   const router = useRouter();
 
-  const { hasLifeStyle } = useHasLifeStyleStore();
-
-  const { data } = useGetMemberProfile();
-  const { data: hasRoom } = useCheckHasRoom();
-  const { data: roomData } = useGetMyRoomDetail(hasRoom.result.roomId);
+  const { memberInfo, hasLifeStyle, hasRoom, roomInfo } = useMemberStore();
+  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId || 0);
 
   const topMenuItems = [
     { title: '내 정보', subTitle: null, onPress: () => router.push('/myPage/myInfo') },
     {
       title: '나의 코지룸',
-      subTitle:
-        roomData !== undefined ? (
-          <View className="flex flex-row items-center gap-x-[4px]">
-            <HomeIcon />
-            <Text className="Medium14 text-mainColor">{roomData?.result.name}</Text>
-          </View>
-        ) : (
-          <Text className="Medium14 text-disabledFont">아직 방이 존재하지 않아요</Text>
-        ),
+      subTitle: hasRoom ? (
+        <View className="flex flex-row items-center gap-x-[4px]">
+          <HomeIcon />
+          <Text className="Medium14 text-mainColor">{roomData?.result.name}</Text>
+        </View>
+      ) : (
+        <Text className="Medium14 text-disabledFont">아직 방이 존재하지 않아요</Text>
+      ),
       onPress: () =>
         roomData !== undefined
-          ? router.push(`/room/${hasRoom.result.roomId}`)
+          ? router.push(`/room/${roomInfo?.roomId}`)
           : showRejectToast('참여한 방이 아직 없어요'),
     },
     {
@@ -41,7 +37,7 @@ const TopMenuComponent: React.FC = () => {
       subTitle: (
         <View className="flex flex-row items-center gap-x-[4px]">
           <VerifiedIcon />
-          <Text className="Medium14 text-mainColor">{data.result.universityName}</Text>
+          <Text className="Medium14 text-mainColor">{memberInfo?.universityName ?? ''}</Text>
         </View>
       ),
       onPress: () => router.push('/myPage/schoolAuthentication'),

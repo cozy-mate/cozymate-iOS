@@ -12,6 +12,7 @@ import { getPersona } from '@/constants/items/characterItem';
 import { useGetMemberProfile } from '@/hooks/member/member';
 import { useAuthProvider } from '@/providers/AuthProvider';
 import { deleteToken } from '@/utils/token';
+import { useMemberStore } from '@/zustand/store';
 
 function MyPageComponent() {
   const width = Dimensions.get('screen').width;
@@ -20,11 +21,14 @@ function MyPageComponent() {
 
   const { data } = useGetMemberProfile();
 
+  const { logout, clearRoom } = useMemberStore();
+
   const { broadcastLogout } = useAuthProvider();
 
   const handleLogout = async () => {
     await deleteToken().then(() => broadcastLogout());
-    router.replace('/');
+    logout();
+    clearRoom();
   };
 
   return (
