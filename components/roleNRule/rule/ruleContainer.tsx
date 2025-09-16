@@ -4,6 +4,8 @@ import { Pressable, Text, View } from 'react-native';
 import SettingIcon from '@/assets/icons/setting.svg';
 import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
+import RuleBox from './ruleSkeleton';
+import { RefObject } from 'react';
 
 type RuleItem = {
   ruleId: number;
@@ -12,11 +14,12 @@ type RuleItem = {
 };
 
 interface RuleContainerProps {
+  isFetching: boolean;
   data: RuleItem[] | undefined;
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: RefObject<BottomSheet>;
 }
 
-const RuleContainer: React.FC<RuleContainerProps> = ({ data, bottomSheetRef }) => {
+export default function RuleContainer({ isFetching, data, bottomSheetRef }: RuleContainerProps) {
   const { data: hasRoom } = useCheckHasRoom();
 
   const { data: roomData } = useGetMyRoomDetail(hasRoom.result.roomId);
@@ -30,7 +33,9 @@ const RuleContainer: React.FC<RuleContainerProps> = ({ data, bottomSheetRef }) =
         알려드릴게요!
       </Text>
 
-      {data !== undefined && data.length !== 0 ? (
+      {isFetching ? (
+        <RuleBox />
+      ) : data !== undefined && data.length !== 0 ? (
         <View className="p-[8px] pl-[16px] rounded-xl bg-white shadow-chipback">
           {data.map((rule, index) => (
             <View
@@ -76,6 +81,4 @@ const RuleContainer: React.FC<RuleContainerProps> = ({ data, bottomSheetRef }) =
       )}
     </View>
   );
-};
-
-export default RuleContainer;
+}

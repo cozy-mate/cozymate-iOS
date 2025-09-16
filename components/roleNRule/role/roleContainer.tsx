@@ -5,8 +5,11 @@ import SettingIcon from '@/assets/images/roleNRule/setting.svg';
 import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useMemberStore } from '@/zustand/store';
+import RoleBox from './roleSkeleton';
+import { RefObject } from 'react';
 
 interface RoleContainerProps {
+  isFetching: boolean;
   data:
     | {
         roleId: number;
@@ -19,10 +22,10 @@ interface RoleContainerProps {
         isAllDays: boolean;
       }[]
     | undefined;
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: RefObject<BottomSheet>;
 }
 
-const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) => {
+export default function RoleContainer({ isFetching, data, bottomSheetRef }: RoleContainerProps) {
   const { memberInfo } = useMemberStore();
 
   const { data: hasRoom } = useCheckHasRoom();
@@ -38,7 +41,9 @@ const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) =
         알려드릴게요!
       </Text>
 
-      {data !== undefined && data.length !== 0 ? (
+      {isFetching ? (
+        <RoleBox />
+      ) : data !== undefined && data.length !== 0 ? (
         <View className="gap-y-[16px]">
           {data.map((role) => (
             <View
@@ -94,6 +99,4 @@ const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) =
       )}
     </View>
   );
-};
-
-export default RoleContainer;
+}
