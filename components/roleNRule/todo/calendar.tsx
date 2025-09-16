@@ -91,7 +91,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
 
   return (
     <Calendar
-      enableSwipeMonths={true}
+      enableSwipeMonths={false}
       minDate={minDate}
       onDayPress={(day: any) => {
         onDateTimeSelect(day.dateString);

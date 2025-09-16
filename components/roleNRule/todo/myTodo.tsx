@@ -4,28 +4,31 @@ import { Pressable, Text, View } from 'react-native';
 import DoneIcon from '@/assets/images/roleNRule/done.svg';
 import NotDoneIcon from '@/assets/images/roleNRule/notDone.svg';
 import SettingIcon from '@/assets/images/roleNRule/setting.svg';
-import { useCheckHasRoom } from '@/hooks/room/room';
 import { useToggleTodoDone } from '@/hooks/todo/todo';
 import { MemberTodo } from '@/type/todo';
-import { showRejectToast } from '@/utils/toast';
 import { formatDateToKorean } from '@/utils/translateDate';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useMemberStore } from '@/zustand/store';
+import MyTodoSkeleton from './myTodoSkeleton';
+import { useRef } from 'react';
+import { useRouter } from 'expo-router';
 
 interface MyTodoComponentProps {
+  isFetching: boolean;
   timePoint: string;
   data: MemberTodo | undefined;
-  bottomSheetRef: React.RefObject<BottomSheet>;
 }
 
-const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bottomSheetRef }) => {
-  const { memberInfo } = useMemberStore();
+export default function MyTodoComponent({ isFetching, timePoint, data }: MyTodoComponentProps) {
+  const router = useRouter();
 
-  const { data: hasRoom } = useCheckHasRoom();
+  const { memberInfo, roomInfo } = useMemberStore();
 
-  const { mutateAsync: toggleTodo } = useToggleTodoDone(hasRoom.result.roomId, timePoint);
+  const { mutateAsync: toggleTodo } = useToggleTodoDone(roomInfo?.roomId ?? 0, timePoint);
 
   const { setSelectedItem } = useSelectedItemStore();
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const handleTodoType = (todoType: string) => {
     switch (todoType) {
@@ -35,19 +38,8 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bott
       case 'group':
         return 'bg-mainColor';
 
-      case 'role':
-        return 'bg-[#ACE246]';
-
       default:
         return 'bg-white';
-    }
-  };
-
-  const handleToggle = (todoId: number, completed: boolean) => {
-    if (todoId < 0) {
-      showRejectToast('미래의 롤 투두는 완료할 수 없어요');
-    } else {
-      toggleTodo({ todoId: todoId, completed: completed });
     }
   };
 
@@ -58,13 +50,15 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bott
         {` ${memberInfo?.nickname ?? ''}`}님이{'\n'}해야할 일들을 알려드릴게요!
       </Text>
 
-      {data !== undefined && data.todoList.length !== 0 ? (
+      {isFetching ? (
+        <MyTodoSkeleton />
+      ) : data !== undefined && data.todoList.length !== 0 ? (
         <View className="p-[8px] rounded-xl bg-white shadow-chipback">
           {data.todoList.map((todo) => (
             <View key={todo.todoId} className="flex flex-row items-center justify-between">
               <View className="flex flex-row items-center">
                 <Pressable
-                  onPress={() => handleToggle(todo.todoId, !todo.completed)}
+                  onPress={() => toggleTodo({ todoId: todo.todoId, completed: !todo.completed })}
                   className="p-[9px]"
                 >
                   {todo.completed ? <DoneIcon /> : <NotDoneIcon />}
@@ -96,7 +90,7 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bott
           ))}
         </View>
       ) : (
-        <View className="bg-white h-[144px] flex items-center justify-center rounded-xl shadow-chipback">
+        <View className="bg-white h-[136px] flex items-center justify-center rounded-xl shadow-chipback">
           <Text className="Medium14 text-disabledFont text-center">
             오늘 등록된 할 일이 없어요!
           </Text>
@@ -104,6 +98,4 @@ const MyTodoComponent: React.FC<MyTodoComponentProps> = ({ timePoint, data, bott
       )}
     </View>
   );
-};
-
-export default MyTodoComponent;
+}
