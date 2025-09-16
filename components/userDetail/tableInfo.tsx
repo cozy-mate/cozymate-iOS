@@ -66,19 +66,19 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
     {
       index: 1,
       label: '닉네임',
-      myValue: memberInfo?.nickname,
+      myValue: memberInfo?.nickname ?? '',
       otherValue: data.memberDetail.nickname,
     },
     {
       index: 2,
       label: '출생년도',
-      myValue: `${memberInfo?.birthday.slice(0, 4)}년`,
+      myValue: `${memberInfo?.birthday.slice(0, 4) ?? 0}년`,
       otherValue: `${data.memberDetail.birthday.slice(0, 4)}년`,
     },
     {
       index: 3,
       label: '학교',
-      myValue: memberInfo?.universityName,
+      myValue: memberInfo?.universityName ?? '',
       otherValue: data.memberDetail.universityName,
     },
     {
@@ -93,7 +93,7 @@ const TableInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
     {
       index: 5,
       label: '학과',
-      myValue: memberInfo?.majorName,
+      myValue: memberInfo?.majorName ?? '',
       otherValue: data.memberDetail.majorName,
     },
     {

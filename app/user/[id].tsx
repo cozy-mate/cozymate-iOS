@@ -169,7 +169,7 @@ function UserDetailComponent() {
     <SafeAreaView className="bg-subColor1">
       <View className="px-[20px] pb-[8px]">
         <BackHeaderComponent>
-          {Number(id) !== memberInfo?.memberId && (
+          {Number(id) !== Number(memberInfo?.memberId ?? 0) && (
             <View className="flex flex-row items-center gap-x-[4px]">
               <Pressable
                 onPress={() => onPress('CHAT')}

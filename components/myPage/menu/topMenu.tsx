@@ -37,7 +37,7 @@ const TopMenuComponent: React.FC = () => {
       subTitle: (
         <View className="flex flex-row items-center gap-x-[4px]">
           <VerifiedIcon />
-          <Text className="Medium14 text-mainColor">{memberInfo?.universityName}</Text>
+          <Text className="Medium14 text-mainColor">{memberInfo?.universityName ?? ''}</Text>
         </View>
       ),
       onPress: () => router.push('/myPage/schoolAuthentication'),

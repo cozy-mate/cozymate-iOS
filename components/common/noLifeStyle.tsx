@@ -24,7 +24,7 @@ const NoLifeStyleComponent: React.FC = () => {
       <View className="p-[16px] flex items-center">
         <View>
           <Text className="Medium12 text-disabledFont text-center">
-            {memberInfo?.nickname}님, 라이프스타일을 입력하면
+            {memberInfo?.nickname ?? ''}님, 라이프스타일을 입력하면
           </Text>
           <Text className="Medium12 text-disabledFont text-center">
             나와 똑같은 답변을 한 사용자를 확인할 수 있어요!

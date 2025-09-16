@@ -83,7 +83,9 @@ function RecommendRoomComponent() {
           ListHeaderComponent={() => (
             <View className="px-[20px]">
               <View className="gap-y-[4px] ml-[4px]">
-                <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님과</Text>
+                <Text className="Semibold18 text-emphasizedFont">
+                  {memberInfo?.nickname ?? ''}님과
+                </Text>
                 <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
               </View>
 

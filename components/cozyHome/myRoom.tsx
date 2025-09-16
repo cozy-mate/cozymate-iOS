@@ -25,7 +25,7 @@ const MyRoomComponent: React.FC = () => {
       <View>
         <View className="gap-y-[16px] px-[20px]">
           <View className="gap-y-[2px] mx-[4px]">
-            <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님이</Text>
+            <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname ?? ''}님이</Text>
             <Text className="Semibold18 text-emphasizedFont">현재 참여하고있는 방이에요</Text>
           </View>
 

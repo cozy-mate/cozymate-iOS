@@ -55,7 +55,7 @@ const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
             </View>
 
             <View className="flex flex-row items-center gap-x-2">
-              {memberInfo?.memberId !== mate.memberId && (
+              {Number(memberInfo?.memberId ?? 0) !== Number(mate.memberId) && (
                 <Text className="Medium14 text-colorFont">{mate.mateEquality ?? '?? '}%</Text>
               )}
               <GrayArrowIcon />

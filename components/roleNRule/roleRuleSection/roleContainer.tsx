@@ -66,7 +66,7 @@ const RoleContainer: React.FC<RoleContainerProps> = ({ data, bottomSheetRef }) =
                   </Text>
                 </View>
 
-                {role.mateList.some((mate) => mate.nickname === memberInfo?.nickname) && (
+                {role.mateList.some((mate) => mate.nickname === (memberInfo?.nickname ?? '')) && (
                   <Pressable
                     onPress={() => {
                       setSelectedItem((prev) => ({

@@ -31,7 +31,9 @@ function SentRequestComponent() {
             <BackHeaderComponent />
             <View className="flex flex-row justify-between items-center">
               <View className="gap-y-[4px] mx-[4px]">
-                <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname}님이</Text>
+                <Text className="Semibold18 text-emphasizedFont">
+                  {memberInfo?.nickname ?? ''}님이
+                </Text>
                 <Text className="Semibold18 text-emphasizedFont">참여요청을 보낸 방이에요</Text>
               </View>
             </View>

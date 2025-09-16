@@ -51,7 +51,7 @@ export default function Withdraw() {
       >
         <View className="gap-y-[4px]">
           <View className="gap-y-[2px] mx-[4px]">
-            <Text className="Semibold20 text-emphasizedFont">{memberInfo?.nickname}님,</Text>
+            <Text className="Semibold20 text-emphasizedFont">{memberInfo?.nickname ?? ''}님,</Text>
             <Text className="Semibold20 text-emphasizedFont">cozymate를 떠나시나요?</Text>
           </View>
 
@@ -61,7 +61,7 @@ export default function Withdraw() {
         </View>
 
         <CustomTextarea
-          title={`${memberInfo?.nickname}님,\n떠나시는 이유를 알려주세요`}
+          title={`${memberInfo?.nickname ?? ''}님,\n떠나시는 이유를 알려주세요`}
           value={withdrawReason}
           handleValue={(e: string) => setWithdrawReason(e)}
           placeholder={

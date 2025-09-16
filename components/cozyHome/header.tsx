@@ -68,7 +68,7 @@ const HeaderComponent: React.FC = () => {
         <Pressable onPress={() => router.push('/lifeStyle/basicInfo')}>
           <View className="flex flex-row items-center gap-x-[6px]">
             <SchoolIcon />
-            <Text className="Semibold18 text-mainColor">{memberInfo?.universityName}</Text>
+            <Text className="Semibold18 text-mainColor">{memberInfo?.universityName ?? ''}</Text>
           </View>
         </Pressable>
 
@@ -91,7 +91,7 @@ const HeaderComponent: React.FC = () => {
           <View className="gap-x-[8px] flex flex-row items-center">
             <Magnifier />
             <Text className="Semibold12 text-basicFont">
-              {memberInfo?.nickname}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
+              {memberInfo?.nickname ?? ''}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
               찾아볼까요?
             </Text>
           </View>

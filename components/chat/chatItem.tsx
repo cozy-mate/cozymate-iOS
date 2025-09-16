@@ -14,7 +14,7 @@ const ChatItemComponent: React.FC<ChatItemComponentProps> = ({ data }) => {
     <View className="gap-y-[4px]">
       <View className="gap-y-[6px]">
         <Text
-          className={`Semibold16 ${data.nickname === `${memberInfo?.nickname} (나)` ? 'text-mainColor' : 'text-colorFont'} `}
+          className={`Semibold16 ${data.nickname === `${memberInfo?.nickname ?? ''} (나)` ? 'text-mainColor' : 'text-colorFont'} `}
         >
           {data.nickname}
         </Text>

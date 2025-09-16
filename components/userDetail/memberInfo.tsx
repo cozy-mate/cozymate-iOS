@@ -22,7 +22,7 @@ const MemberInfoComponent: React.FC<MemberInfoComponentProps> = ({ id, data }) =
         {getPersona(data.memberDetail.persona, 40, 40)}
         <View className="gap-y-[4px]">
           <Text className="Semibold16 text-emphasizedFont">{data.memberDetail.nickname}</Text>
-          {id !== memberInfo?.memberId && (
+          {id !== Number(memberInfo?.memberId ?? 0) && (
             <Text className="Medium14 text-basicFont">나와의 일치율 {data.equality ?? '??'}%</Text>
           )}
         </View>

@@ -36,7 +36,7 @@ const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPre
 
   return (
     <View style={{ height: 108, bottom: isSmallSize ? 160 : bottom + 94 }}>
-      {id !== memberInfo?.memberId && !hasLifeStyle && (
+      {id !== Number(memberInfo?.memberId ?? 0) && !hasLifeStyle && (
         <BottomButtonComponent
           buttonText="라이프스타일 입력하고 내 방으로 초대하기"
           disabled={false}
@@ -45,7 +45,7 @@ const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPre
         />
       )}
       {/* 해당 사용자를 초대함 => 초대 취소하기 */}
-      {Number(id) !== memberInfo?.memberId && isInvited?.result && (
+      {Number(id) !== Number(memberInfo?.memberId ?? 0) && isInvited?.result && (
         <BottomButtonComponent
           buttonText="초대 취소하기"
           disabled={false}
@@ -54,14 +54,14 @@ const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPre
         />
       )}
       {/* 해당 사용자가 방 참여 요청을 보냄 => 수락/거절 */}
-      {Number(id) !== memberInfo?.memberId && isRequested?.result && (
+      {Number(id) !== Number(memberInfo?.memberId ?? 0) && isRequested?.result && (
         <TwoBottomButtonComponent
           onLeftPress={() => onPress('REJECT')}
           onRightPress={() => onPress('ACCEPT')}
           disabled={false}
         />
       )}
-      {Number(id) !== memberInfo?.memberId &&
+      {Number(id) !== Number(memberInfo?.memberId ?? 0) &&
         !isRequested?.result &&
         !isInvited?.result &&
         hasLifeStyle && (
