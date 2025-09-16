@@ -4,8 +4,8 @@ import { Platform, Text, View } from 'react-native';
 
 import CozyHomeNotSelected from '@/assets/images/bottomTab/cozyHomeNotSelected.svg';
 import CozyHomeSelected from '@/assets/images/bottomTab/cozyHomeSelected.svg';
-// import FeedNotSelected from '@/assets/images/bottomTab/feedNotSelected.svg';
-// import FeedSelected from '@/assets/images/bottomTab/feedSelected.svg';
+import FeedNotSelected from '@/assets/images/bottomTab/feedNotSelected.svg';
+import FeedSelected from '@/assets/images/bottomTab/feedSelected.svg';
 import MyPageNotSelected from '@/assets/images/bottomTab/myPageNotSelected.svg';
 import MyPageSelected from '@/assets/images/bottomTab/myPageSelected.svg';
 import RoleNRuleNotSelected from '@/assets/images/bottomTab/roleNRuleNotSelected.svg';
@@ -115,7 +115,7 @@ export default function TabLayout() {
           ),
         }}
       /> */}
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="feed"
         options={{
           tabBarLabel: ({ focused }) => (
@@ -125,21 +125,13 @@ export default function TabLayout() {
               피드
             </Text>
           ),
-          tabBarIcon: ({ focused }) =>
-            roomInfo.roomId !== 0 ? (
+          tabBarIcon: ({ focused }) => (
             <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
-                {focused ? <FeedSelected /> : <FeedNotSelected />}
-              </View>
-            ) : (
-              <Pressable
-                onPress={() => showRejectToast('방에 참여해야 사용할 수 있어요!')}
-            <View className="w-[40px] h-[40px] flex justify-center items-center mt-[8px]">
-              >
-                {focused ? <FeedSelected /> : <FeedNotSelected />}
-              </Pressable>
-            ),
+              {focused ? <FeedSelected /> : <FeedNotSelected />}
+            </View>
+          ),
         }}
-      /> */}
+      />
       <Tabs.Screen
         name="myPage"
         options={{
