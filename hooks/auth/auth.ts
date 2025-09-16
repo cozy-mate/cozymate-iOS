@@ -1,4 +1,4 @@
-import { GoogleSignin, SignInResponse, User } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
 import { KakaoUser, login, me } from '@react-native-kakao/user';
 import { useMutation } from '@tanstack/react-query';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -10,15 +10,12 @@ import { getMyDetail } from '@/server/member-stat/member-stat';
 import { checkHasRoom } from '@/server/room/room';
 import { setAccessToken, setRefreshToken } from '@/utils/token';
 
-import { useAuthProvider } from '../../providers/AuthProvider';
 import { useMemberStore } from '@/zustand/store';
 
 export const useKakaoLogin = () => {
   const router = useRouter();
 
   const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
-
-  const { broadcastLogin } = useAuthProvider();
 
   return useMutation({
     mutationFn: () => login(),
@@ -80,10 +77,6 @@ export const useKakaoLogin = () => {
               console.log('서버 오류', error);
             }
           }
-
-          broadcastLogin();
-
-          // router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         // error 처리 추상화
@@ -125,8 +118,6 @@ export const useAppleLogin = () => {
   const router = useRouter();
 
   const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
-
-  const { broadcastLogin } = useAuthProvider();
 
   return useMutation({
     mutationFn: () => appleLoginAuth(),
@@ -186,10 +177,6 @@ export const useAppleLogin = () => {
               console.log('서버 오류', error);
             }
           }
-
-          broadcastLogin();
-
-          // router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         console.log(error);
@@ -205,8 +192,6 @@ export const useGoogleLogin = () => {
   const router = useRouter();
 
   const { setMemberInfo, setHasLifeStyle, setRoom } = useMemberStore();
-
-  const { broadcastLogin } = useAuthProvider();
 
   return useMutation({
     mutationFn: async () => {
@@ -276,10 +261,6 @@ export const useGoogleLogin = () => {
               console.log('서버 오류', error);
             }
           }
-
-          broadcastLogin();
-
-          // router.replace('/(tabs)/cozyHome');
         }
       } catch (error: any) {
         // error 처리 추상화
