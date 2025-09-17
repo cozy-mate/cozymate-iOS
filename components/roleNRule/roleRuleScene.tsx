@@ -1,5 +1,4 @@
-import BottomSheet from '@gorhom/bottom-sheet';
-import { RefObject, useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 
 import { useGetRoleList } from '@/hooks/role/role';
