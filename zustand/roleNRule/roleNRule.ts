@@ -9,25 +9,15 @@ export const useSelectedItemStore = create<{
 }>((set) => ({
   selectedItem: {
     id: 0,
-    type: '',
     content: '',
 
-    todoItem: {
-      mateIdList: [],
-      content: '',
-      timePoint: '',
-    },
+    mateIdList: [],
+    timePoint: '',
 
-    ruleItem: {
-      content: '',
-      memo: '',
-    },
+    memo: '',
 
-    roleItem: {
-      mateIdNameList: [],
-      content: '',
-      repeatDayList: [],
-    },
+    mateIdNameList: [],
+    repeatDayList: [],
   },
   setSelectedItem: (updater) =>
     set((state) => ({
@@ -37,25 +27,15 @@ export const useSelectedItemStore = create<{
     set({
       selectedItem: {
         id: 0,
-        type: '',
         content: '',
 
-        todoItem: {
-          mateIdList: [],
-          content: '',
-          timePoint: '',
-        },
+        mateIdList: [],
+        timePoint: '',
 
-        ruleItem: {
-          content: '',
-          memo: '',
-        },
+        memo: '',
 
-        roleItem: {
-          mateIdNameList: [],
-          content: '',
-          repeatDayList: [],
-        },
+        mateIdNameList: [],
+        repeatDayList: [],
       },
     }),
 }));
