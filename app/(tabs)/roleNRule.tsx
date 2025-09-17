@@ -1,14 +1,13 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Dimensions, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import Background from '@/assets/images/roleNRule/background.svg';
 
 import AddButton from '@/assets/images/roleNRule/addButton.svg';
-import TodoScene from '@/components/roleNRule/todoScene';
+import Background from '@/assets/images/roleNRule/background.svg';
 import RoleNRuleScene from '@/components/roleNRule/roleRuleScene';
+import TodoScene from '@/components/roleNRule/todoScene';
 
 const renderScene = SceneMap({
   TODO: TodoScene,
@@ -21,9 +20,11 @@ export default function RoleNRule() {
   const [index, setIndex] = useState(0);
 
   const [routes] = useState([
-    { key: 'TODO', title: 'To - do', type: 'To-do' },
-    { key: 'ROLENRULE', title: 'Role & Rule', type: 'Role' },
+    { key: 'TODO', title: 'To - do', type: 0 },
+    { key: 'ROLENRULE', title: 'Role & Rule', type: 1 },
   ]);
+
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <SafeAreaView className="flex-1 bg-[#CADFFF] relative">
@@ -67,12 +68,14 @@ export default function RoleNRule() {
         )}
       />
 
-      <TouchableOpacity
-        onPress={() => router.push(`/roleNRule/create?currentType=${routes[index].type}`)}
-        className="absolute bottom-[126px] right-[20px]"
+      <Pressable
+        onPressIn={() => setIsPressed(true)}
+        onPressOut={() => setIsPressed(false)}
+        onPress={() => router.push(`/roleNRule/create?type=${routes[index].type}`)}
+        className={`absolute bottom-[126px] right-[20px] ${isPressed && 'opacity-60'}`}
       >
         <AddButton />
-      </TouchableOpacity>
+      </Pressable>
 
       {/* 스크롤 최하단 배경색 지정 */}
       <View className="absolute bottom-0 w-full h-[400px] bg-[#F7FAFF] -z-10" />
