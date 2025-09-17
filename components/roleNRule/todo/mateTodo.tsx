@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
@@ -6,6 +7,7 @@ import DoneIcon from '@/assets/images/roleNRule/done.svg';
 import NotDoneIcon from '@/assets/images/roleNRule/notDone.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { MemberTodo } from '@/type/todo';
+
 import MateTodoSkeleton from './mateTodoSkeleton';
 
 interface MateTodoComponentProps {
@@ -15,6 +17,8 @@ interface MateTodoComponentProps {
 
 export default function MateTodoComponent({ isFetching, data }: MateTodoComponentProps) {
   const router = useRouter();
+
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <View className="gap-y-[12px]">
@@ -57,8 +61,10 @@ export default function MateTodoComponent({ isFetching, data }: MateTodoComponen
             </Text>
 
             <Pressable
+              onPressIn={() => setIsPressed(true)}
+              onPressOut={() => setIsPressed(false)}
               onPress={() => router.push('/user/roomMate')}
-              className="p-[8px] gap-x-[8px] flex flex-row items-center"
+              className={`p-[8px] gap-x-[8px] flex flex-row items-center ${isPressed && 'opacity-60'}`}
             >
               <Text className="Semibold16 text-mainColor text-center">룸메이트 찾으러 가기</Text>
               <BlueRightArrowIcon />
