@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { CreateRuleRequest, UpdateRuleRequest } from '@/server/rule/request';
 import { createRule, deleteRule, getRuleList, updateRule } from '@/server/rule/rule';
 
-export const useDeleteRule = (roomId: number, ruleId: number) => {
+export const useDeleteRule = ({ roomId, ruleId }: { roomId: number; ruleId: number }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -18,7 +18,7 @@ export const useDeleteRule = (roomId: number, ruleId: number) => {
   });
 };
 
-export const useUpdateRule = (roomId: number, ruleId: number) => {
+export const useUpdateRule = ({ roomId, ruleId }: { roomId: number; ruleId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -34,7 +34,7 @@ export const useUpdateRule = (roomId: number, ruleId: number) => {
   });
 };
 
-export const useGetRuleList = (roomId: number) => {
+export const useGetRuleList = ({ roomId }: { roomId: number }) => {
   return useQuery({
     queryKey: [`/rooms/${roomId}/rules`, roomId],
     queryFn: () => getRuleList(roomId),
@@ -42,7 +42,7 @@ export const useGetRuleList = (roomId: number) => {
   });
 };
 
-export const useCreateRule = (roomId: number) => {
+export const useCreateRule = ({ roomId }: { roomId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
