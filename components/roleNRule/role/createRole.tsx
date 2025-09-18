@@ -37,7 +37,7 @@ export default function CreateRoleScene() {
   };
 
   const mateToggleAll = () => {
-    if (mateIdNameList.length === items.length) {
+    if (mateIdNameList.length === memberList?.result.mateDetailList.length) {
       setMateIdNameList([]);
     } else {
       setMateIdNameList(
@@ -72,6 +72,9 @@ export default function CreateRoleScene() {
   };
 
   const isReady = !isLoading && memberList !== undefined;
+
+  // 역할, 담당자, 정해진 요일이 모두 입력된 경우
+  const isComplete = content !== '' && mateIdNameList.length > 0 && repeatDayList !== null;
 
   return (
     <View className="flex-1">
@@ -177,12 +180,10 @@ export default function CreateRoleScene() {
 
       <Pressable
         onPress={() => createRole({ content, mateIdNameList, repeatDayList })}
-        disabled={!(content !== '' && mateIdNameList.length > 0 && repeatDayList !== null)}
+        disabled={!isComplete}
         className={`${
-          content !== '' && mateIdNameList.length > 0 && repeatDayList !== null
-            ? 'bg-mainColor'
-            : 'bg-[#C4C4C4]'
-        }  py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
+          isComplete ? 'bg-mainColor' : 'bg-[#C4C4C4]'
+        } py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
       >
         <Text className="Semibold16 text-white text-center">확인</Text>
       </Pressable>
