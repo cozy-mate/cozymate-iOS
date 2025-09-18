@@ -17,7 +17,10 @@ export default function UpdateTodoScene() {
 
   const { selectedItem } = useSelectedItemStore();
 
-  const { mutateAsync: updateTodo } = useUpdateTodo(roomInfo?.roomId ?? 0, selectedItem.id);
+  const { mutateAsync: updateTodo } = useUpdateTodo({
+    roomId: roomInfo?.roomId ?? 0,
+    todoId: selectedItem.id,
+  });
 
   const [content, setContent] = useState<string>(selectedItem.content);
   const [mateIdList, setMateIdList] = useState<number[]>(selectedItem.mateIdList);

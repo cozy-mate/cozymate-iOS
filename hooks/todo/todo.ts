@@ -10,7 +10,7 @@ import {
   updateTodo,
 } from '@/server/todo/todo';
 
-export const useDeleteTodo = (roomId: number, todoId: number) => {
+export const useDeleteTodo = ({ roomId, todoId }: { roomId: number; todoId: number }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -24,7 +24,7 @@ export const useDeleteTodo = (roomId: number, todoId: number) => {
   });
 };
 
-export const useUpdateTodo = (roomId: number, todoId: number) => {
+export const useUpdateTodo = ({ roomId, todoId }: { roomId: number; todoId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -40,7 +40,7 @@ export const useUpdateTodo = (roomId: number, todoId: number) => {
   });
 };
 
-export const useGetTodoList = (roomId: number, timePoint?: string) => {
+export const useGetTodoList = ({ roomId, timePoint }: { roomId: number; timePoint?: string }) => {
   return useQuery({
     queryKey: [`/rooms/${roomId}/todos`, roomId, timePoint],
     queryFn: () => getTodoList(roomId, timePoint),
@@ -48,7 +48,7 @@ export const useGetTodoList = (roomId: number, timePoint?: string) => {
   });
 };
 
-export const useToggleTodoDone = (roomId: number, timePoint: string) => {
+export const useToggleTodoDone = ({ roomId, timePoint }: { roomId: number; timePoint: string }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -63,7 +63,7 @@ export const useToggleTodoDone = (roomId: number, timePoint: string) => {
   });
 };
 
-export const useCreateTodo = (roomId: number) => {
+export const useCreateTodo = ({ roomId }: { roomId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 

@@ -15,7 +15,7 @@ import CustomCalendar from '../todo/calendar';
 export default function CreateTodoScene() {
   const { roomInfo } = useMemberStore();
 
-  const { mutateAsync: createTodo } = useCreateTodo(roomInfo?.roomId ?? 0);
+  const { mutateAsync: createTodo } = useCreateTodo({ roomId: roomInfo?.roomId ?? 0 });
 
   const [content, setContent] = useState<string>('');
   const [mateIdList, setMateIdList] = useState<number[]>([]);
