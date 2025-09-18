@@ -35,7 +35,7 @@ export default function RuleContainer({ isFetching, data }: RuleContainerProps) 
     <Fragment>
       <View className="gap-y-[12px]">
         <Text className="Semibold18 text-basicFont">
-          <Text className="text-mainColor">{roomData?.result.name}</Text>의{'\n'}규칙에 대해
+          <Text className="text-mainColor">{roomData?.result.name ?? ''}</Text>의{'\n'}규칙에 대해
           알려드릴게요!
         </Text>
 

@@ -30,7 +30,7 @@ interface RoleContainerProps {
 export default function RoleContainer({ isFetching, data }: RoleContainerProps) {
   const { memberInfo, roomInfo } = useMemberStore();
 
-  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId || 0);
+  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
 
   const { setSelectedItem } = useSelectedItemStore();
 
@@ -40,7 +40,7 @@ export default function RoleContainer({ isFetching, data }: RoleContainerProps) 
     <Fragment>
       <View className="gap-y-[12px]">
         <Text className="Semibold18 text-basicFont">
-          <Text className="text-mainColor">{roomData?.result.name}</Text>의{'\n'}역할에 대해
+          <Text className="text-mainColor">{roomData?.result.name ?? ''}</Text>의{'\n'}역할에 대해
           알려드릴게요!
         </Text>
 
