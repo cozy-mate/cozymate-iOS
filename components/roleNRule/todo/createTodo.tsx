@@ -40,6 +40,9 @@ export default function CreateTodoScene() {
 
   const isReady = !isLoading && memberList !== undefined;
 
+  // 할 일, 담당자, 날짜가 모두 입력된 경우
+  const isComplete = content !== '' && mateIdList.length > 0 && timePoint !== '';
+
   return (
     <View className="flex-1">
       {!isReady ? (
@@ -120,12 +123,10 @@ export default function CreateTodoScene() {
 
       <Pressable
         onPress={() => createTodo({ content, mateIdList, timePoint })}
-        disabled={!(content !== '' && mateIdList.length > 0 && timePoint !== '')}
+        disabled={!isComplete}
         className={`${
-          content !== '' && mateIdList.length > 0 && timePoint !== ''
-            ? 'bg-mainColor'
-            : 'bg-[#C4C4C4]'
-        }  py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
+          isComplete ? 'bg-mainColor' : 'bg-[#C4C4C4]'
+        } py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
       >
         <Text className="Semibold16 text-white text-center">확인</Text>
       </Pressable>
