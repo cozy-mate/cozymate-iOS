@@ -13,6 +13,8 @@ export default function CreateRuleScene() {
   const [content, setContent] = useState('');
   const [memo, setMemo] = useState('');
 
+  const isComplete = content !== '';
+
   return (
     <View className="flex-1">
       <KeyboardAwareScrollView
@@ -58,10 +60,10 @@ export default function CreateRuleScene() {
 
       <Pressable
         onPress={() => createRule({ content, memo })}
-        disabled={!(content !== '')}
+        disabled={!isComplete}
         className={`${
-          content !== '' ? 'bg-mainColor' : 'bg-[#C4C4C4]'
-        }  py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
+          isComplete ? 'bg-mainColor' : 'bg-[#C4C4C4]'
+        } py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
       >
         <Text className="Semibold16 text-white text-center">확인</Text>
       </Pressable>
