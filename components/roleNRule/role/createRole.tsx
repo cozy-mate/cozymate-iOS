@@ -20,7 +20,7 @@ type MateIdName = {
 export default function CreateRoleScene() {
   const { roomInfo } = useMemberStore();
 
-  const { mutateAsync: createRole } = useCreateRole(roomInfo?.roomId ?? 0);
+  const { mutateAsync: createRole } = useCreateRole({ roomId: roomInfo?.roomId ?? 0 });
 
   const [content, setContent] = useState<string>('');
   const [mateIdNameList, setMateIdNameList] = useState<MateIdName[]>([]);

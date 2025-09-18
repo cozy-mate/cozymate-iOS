@@ -23,7 +23,10 @@ export default function UpdateRoleScene() {
 
   const { selectedItem } = useSelectedItemStore();
 
-  const { mutateAsync: updateRole } = useUpdateRole(roomInfo?.roomId ?? 0, selectedItem.id);
+  const { mutateAsync: updateRole } = useUpdateRole({
+    roomId: roomInfo?.roomId ?? 0,
+    roleId: selectedItem.id,
+  });
 
   const [content, setContent] = useState<string>(selectedItem.content);
   const [mateIdNameList, setMateIdNameList] = useState<MateIdName[]>(selectedItem.mateIdNameList);

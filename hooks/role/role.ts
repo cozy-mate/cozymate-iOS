@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { CreateRoleRequest, UpdateRoleRequest } from '@/server/role/request';
 import { createRole, deleteRole, getRoleList, updateRole } from '@/server/role/role';
 
-export const useDeleteRole = (roomId: number, roleId: number) => {
+export const useDeleteRole = ({ roomId, roleId }: { roomId: number; roleId: number }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -18,7 +18,7 @@ export const useDeleteRole = (roomId: number, roleId: number) => {
   });
 };
 
-export const useUpdateRole = (roomId: number, roleId: number) => {
+export const useUpdateRole = ({ roomId, roleId }: { roomId: number; roleId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -34,7 +34,7 @@ export const useUpdateRole = (roomId: number, roleId: number) => {
   });
 };
 
-export const useGetRoleList = (roomId: number) => {
+export const useGetRoleList = ({ roomId }: { roomId: number }) => {
   return useQuery({
     queryKey: [`/rooms/${roomId}/roles`, roomId],
     queryFn: () => getRoleList(roomId),
@@ -42,7 +42,7 @@ export const useGetRoleList = (roomId: number) => {
   });
 };
 
-export const useCreateRole = (roomId: number) => {
+export const useCreateRole = ({ roomId }: { roomId: number }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
