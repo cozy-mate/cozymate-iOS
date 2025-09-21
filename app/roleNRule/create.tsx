@@ -1,152 +1,81 @@
 import { useLocalSearchParams } from 'expo-router';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { Keyboard, Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useState } from 'react';
+import { Dimensions, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Route, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import RoleFormComponent from '@/components/roleNRule/form/roleForm';
-import RuleFormComponent from '@/components/roleNRule/form/ruleForm';
-import TodoFormComponent from '@/components/roleNRule/form/todoForm';
-import { useCreateRole } from '@/hooks/role/role';
-import { useCheckHasRoom } from '@/hooks/room/room';
-import { useCreateRule } from '@/hooks/rule/rule';
-import { useCreateTodo } from '@/hooks/todo/todo';
-import BottomButtonComponent from '@/components/common/bottomButton';
-import { CreateRoleRequest } from '@/server/role/request';
-import { CreateRuleRequest } from '@/server/rule/request';
-import { CreateTodoRequest } from '@/server/todo/request';
+import CreateRoleScene from '@/components/roleNRule/role/createRole';
+import CreateRuleScene from '@/components/roleNRule/rule/createRule';
+import CreateTodoScene from '@/components/roleNRule/todo/createTodo';
 
 export default function Create() {
-  const { currentType } = useLocalSearchParams<{ currentType?: string }>();
+  const { type } = useLocalSearchParams();
 
-  const [type, setType] = useState<string>(currentType ?? 'To-do');
+  const [index, setIndex] = useState(Number(type));
 
-  const { data: hasRoom } = useCheckHasRoom();
+  const [routes] = useState([
+    { key: 'TODO', title: 'To-do', type: 'To-do' },
+    { key: 'ROLE', title: 'Role', type: 'Role' },
+    { key: 'RULE', title: 'Rule', type: 'Role' },
+  ]);
 
-  const { mutateAsync: createTodo } = useCreateTodo(hasRoom.result.roomId);
-  const [todoForm, setTodoForm] = useState<CreateTodoRequest>({
-    content: '',
-    mateIdList: [],
-    timePoint: moment().format('YYYY-MM-DD'),
-  });
-  const getInitialTodoForm = (): CreateTodoRequest => ({
-    content: '',
-    mateIdList: [],
-    timePoint: moment().format('YYYY-MM-DD'),
-  });
+  const renderScene = ({ route }: { route: Route } & SceneRendererProps) => {
+    switch (route.key) {
+      case 'TODO':
+        return <CreateTodoScene key={route.key + index} />;
 
-  const { mutateAsync: createRole } = useCreateRole(hasRoom.result.roomId);
-  const [roleForm, setRoleForm] = useState<CreateRoleRequest>({
-    content: '',
-    mateIdNameList: [],
-    repeatDayList: null,
-  });
-  const getInitialRoleForm = (): CreateRoleRequest => ({
-    content: '',
-    mateIdNameList: [],
-    repeatDayList: null,
-  });
+      case 'ROLE':
+        return <CreateRoleScene key={route.key + index} />;
 
-  const { mutateAsync: createRule } = useCreateRule(hasRoom.result.roomId);
-  const [ruleForm, setRuleForm] = useState<CreateRuleRequest>({
-    content: '',
-    memo: '',
-  });
+      case 'RULE':
+        return <CreateRuleScene key={route.key + index} />;
 
-  const getInitialRuleForm = (): CreateRuleRequest => ({
-    content: '',
-    memo: '',
-  });
-
-  const handleCreate = () => {
-    if (type === 'To-do') createTodo(todoForm);
-    else if (type === 'Role') createRole(roleForm);
-    else createRule(ruleForm);
-  };
-
-  useEffect(() => {
-    setTodoForm(getInitialTodoForm());
-    setRoleForm(getInitialRoleForm());
-    setRuleForm(getInitialRuleForm());
-  }, [type]);
-
-  const isFormValid = (): boolean => {
-    if (type === 'To-do') {
-      return (
-        todoForm.content.trim() !== '' &&
-        todoForm.content.trim().length <= 20 &&
-        todoForm.mateIdList.length > 0 &&
-        todoForm.timePoint.trim() !== ''
-      );
+      default:
+        return null;
     }
-
-    if (type === 'Role') {
-      return (
-        roleForm.content.trim() !== '' &&
-        roleForm.content.trim().length <= 20 &&
-        roleForm.mateIdNameList.length > 0 &&
-        roleForm.repeatDayList !== null
-      );
-    }
-
-    if (type === 'Rule') {
-      const contentValid = ruleForm.content.trim() !== '' && ruleForm.content.trim().length <= 20;
-      const memoValid = ruleForm.memo.trim() === '' || ruleForm.memo.trim().length <= 50;
-
-      return contentValid && memoValid;
-    }
-
-    return false;
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="px-[20px] gap-y-[8px]">
-          <BackHeaderComponent />
+      <View className="px-[20px]">
+        <BackHeaderComponent />
+      </View>
 
-          <View className="flex flex-row items-center gap-x-[12px]">
-            {['To-do', 'Role', 'Rule'].map((item, index) => (
-              <Pressable key={index} onPress={() => setType(item)} className="p-[8px] gap-y-[8px]">
-                <Text
-                  className={`Semibold18 ${type === item ? 'text-mainColor' : 'text-disabledFont'}`}
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: Dimensions.get('screen').width }}
+        swipeEnabled={false}
+        renderTabBar={(props) => (
+          <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: 'transparent' }}
+            style={{
+              backgroundColor: 'transparent',
+              marginTop: 8,
+              marginHorizontal: 20,
+            }}
+            renderTabBarItem={(tabProps) => {
+              const tabIndex = props.navigationState.routes.indexOf(tabProps.route);
+              const isFocused = props.navigationState.index === tabIndex;
+
+              return (
+                <Pressable
+                  onPress={tabProps.onPress}
+                  className={`w-[65px] m-[8px] pb-[8px] border-b-[4px] ${isFocused ? 'border-b-mainColor' : 'border-b-transparent'} ${tabIndex !== 2 && 'mr-[12px]'}`}
                 >
-                  {item}
-                </Text>
-
-                <View
-                  className={`h-[4px] rounded-full ${type === item ? 'bg-mainColor' : 'bg-white'}`}
-                />
-              </Pressable>
-            ))}
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-
-      <KeyboardAwareScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingHorizontal: 20,
-          rowGap: 24,
-          paddingTop: 24,
-          paddingBottom: 120,
-        }}
-        keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        extraScrollHeight={20}
-      >
-        {type === 'To-do' && <TodoFormComponent todoForm={todoForm} setTodoForm={setTodoForm} />}
-        {type === 'Role' && <RoleFormComponent roleForm={roleForm} setRoleForm={setRoleForm} />}
-        {type === 'Rule' && <RuleFormComponent ruleForm={ruleForm} setRuleForm={setRuleForm} />}
-      </KeyboardAwareScrollView>
-
-      <BottomButtonComponent
-        buttonText="확인"
-        onPress={handleCreate}
-        disabled={!isFormValid()}
-        color={isFormValid() ? 'BLUE' : 'GRAY'}
+                  <Text
+                    className={`${isFocused ? 'text-[#68A4FF]' : 'text-[#ACADB4]'} Semibold18 text-center`}
+                  >
+                    {tabProps.route.title}
+                  </Text>
+                </Pressable>
+              );
+            }}
+          />
+        )}
       />
     </SafeAreaView>
   );

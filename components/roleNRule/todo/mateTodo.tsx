@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 import BlueRightArrowIcon from '@/assets/images/common/blueRightArrow.svg';
@@ -7,12 +8,17 @@ import NotDoneIcon from '@/assets/images/roleNRule/notDone.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { MemberTodo } from '@/type/todo';
 
+import MateTodoSkeleton from './mateTodoSkeleton';
+
 interface MateTodoComponentProps {
+  isFetching: boolean;
   data: Record<string, MemberTodo>;
 }
 
-const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ data }) => {
+export default function MateTodoComponent({ isFetching, data }: MateTodoComponentProps) {
   const router = useRouter();
+
+  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <View className="gap-y-[12px]">
@@ -21,7 +27,9 @@ const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ data }) => {
       </Text>
 
       <View className="gap-y-[16px]">
-        {data !== undefined && Object.entries(data).length !== 0 ? (
+        {isFetching ? (
+          <MateTodoSkeleton />
+        ) : data !== undefined && Object.entries(data).length !== 0 ? (
           Object.entries(data).map(([key, mate]) => (
             <View key={key} className="p-[8px] rounded-xl bg-white shadow-chipback">
               <View className="flex flex-row items-center gap-x-[6px] p-[8px]">
@@ -47,14 +55,16 @@ const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ data }) => {
             </View>
           ))
         ) : (
-          <View className="bg-white h-[144px] flex items-center justify-center rounded-xl shadow-chipback">
+          <View className="bg-white h-[136px] flex items-center justify-center rounded-xl shadow-chipback">
             <Text className="Medium14 text-disabledFont text-center">
               직접 룸메이트를 찾으러 가볼까요?
             </Text>
 
             <Pressable
+              onPressIn={() => setIsPressed(true)}
+              onPressOut={() => setIsPressed(false)}
               onPress={() => router.push('/user/roomMate')}
-              className="p-[8px] gap-x-[8px] flex flex-row items-center"
+              className={`p-[8px] gap-x-[8px] flex flex-row items-center ${isPressed && 'opacity-60'}`}
             >
               <Text className="Semibold16 text-mainColor text-center">룸메이트 찾으러 가기</Text>
               <BlueRightArrowIcon />
@@ -64,6 +74,4 @@ const MateTodoComponent: React.FC<MateTodoComponentProps> = ({ data }) => {
       </View>
     </View>
   );
-};
-
-export default MateTodoComponent;
+}

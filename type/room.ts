@@ -1,5 +1,13 @@
 import { MemberDetail } from './member';
 
+export type MateDetail = {
+  memberId: number;
+  mateId: number;
+  nickname: string;
+  persona: number;
+  mateEquality: number;
+};
+
 export type RecommendRoomItem = {
   roomId: number;
   name: string;
@@ -19,13 +27,7 @@ export type RoomItem = {
   name: string;
   inviteCode: string;
   persona: number;
-  mateDetailList: {
-    memberId: number;
-    mateId: number;
-    nickname: string;
-    persona: number;
-    mateEquality: number;
-  }[];
+  mateDetailList: MateDetail[];
   managerMemberId: number;
   managerNickname: string;
   isRoomManager: true;

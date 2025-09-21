@@ -7,7 +7,7 @@ export default function RoleNRuleLayout() {
       <Stack.Screen name="create" options={{ headerShown: false }} />
 
       {/* Todo 수정 */}
-      <Stack.Screen name="update/[type]" options={{ headerShown: false }} />
+      <Stack.Screen name="update" options={{ headerShown: false }} />
     </Stack>
   );
 }

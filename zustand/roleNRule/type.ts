@@ -1,13 +1,13 @@
-import { UpdateRoleRequest } from '@/server/role/request';
-import { UpdateRuleRequest } from '@/server/rule/request';
-import { UpdateTodoRequest } from '@/server/todo/request';
+import { MateIdNameListItem } from '@/type/role';
 
 export interface SelectedItem {
   id: number;
-  type: string;
   content: string;
+  mateIdList: number[];
+  timePoint: string;
 
-  todoItem: UpdateTodoRequest;
-  roleItem: UpdateRoleRequest;
-  ruleItem: UpdateRuleRequest;
+  mateIdNameList: MateIdNameListItem[];
+  repeatDayList: string[] | null;
+
+  memo: string;
 }
