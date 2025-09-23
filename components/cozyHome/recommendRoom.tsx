@@ -5,7 +5,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
-import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
+import { RoomCard, RoomCardSkeleton } from '@/components/common/room';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
@@ -23,7 +23,7 @@ export default function RecommendRoomComponent() {
 
   const progress = useSharedValue<number>(0);
 
-  const { data } = useGetHomeRecommendRoomList();
+  const { data, isLoading } = useGetHomeRecommendRoomList();
 
   const handleMore = () => {
     trackButton(ButtonEvent.room_more, EventCategory.home_content);
@@ -50,7 +50,34 @@ export default function RecommendRoomComponent() {
         </OpacityPressable>
       </View>
 
-      {data.result.result.length !== 0 ? (
+      {isLoading || data === undefined ? (
+        <Fragment>
+          <Carousel
+            width={width}
+            loop={true}
+            data={Array.from({ length: 5 }, (_, i) => i + 1)}
+            height={210}
+            snapEnabled={true}
+            pagingEnabled={true}
+            autoPlay={false}
+            onProgressChange={progress}
+            renderItem={({ item }) => <RoomCardSkeleton key={item} />}
+          />
+          <Pagination.Custom
+            progress={progress}
+            data={Array.from({ length: 5 }, (_, i) => i + 1)}
+            dotStyle={{ backgroundColor: '#E6E6E6', borderRadius: 9999, width: 8, height: 8 }}
+            activeDotStyle={{
+              backgroundColor: '#68A4FF',
+              borderRadius: 9999,
+              width: 16,
+              height: 8,
+              overflow: 'hidden',
+            }}
+            containerStyle={{ gap: 8 }}
+          />
+        </Fragment>
+      ) : data.result.result.length !== 0 ? (
         <Fragment>
           <Carousel
             width={width}
@@ -62,7 +89,7 @@ export default function RecommendRoomComponent() {
             autoPlay={false}
             onProgressChange={progress}
             renderItem={({ item }) => (
-              <BasicRoomItem key={item.roomId} roomData={item} onPress={handleRoomPress} />
+              <RoomCard key={item.roomId} data={item} onPress={handleRoomPress} />
             )}
             onSnapToItem={(index) => {
               trackGesture(GestureEvent.room_swipe, EventCategory.home_content, {
