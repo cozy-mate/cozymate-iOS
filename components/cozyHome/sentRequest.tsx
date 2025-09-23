@@ -5,7 +5,7 @@ import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import { useGetSentRequestRoomList } from '@/hooks/room/user';
 import { useMemberStore } from '@/zustand/store';
 
-import SimpleRoomItem from '../common/roomItem/simpleRoomItem';
+import { SimpleRoomCard } from '../common/room';
 
 export default function SentRequestComponent() {
   const router = useRouter();
@@ -37,10 +37,9 @@ export default function SentRequestComponent() {
           </View>
 
           {data.pages
-            ?.flatMap((page) => page.result.result)
-            .slice(0, 3)
+            .flatMap((page) => page.result.result)
             .map((room) => (
-              <SimpleRoomItem key={room.roomId} roomData={room} />
+              <SimpleRoomCard key={room.roomId} data={room} />
             ))}
         </View>
 
