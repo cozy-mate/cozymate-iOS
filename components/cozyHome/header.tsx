@@ -36,12 +36,12 @@ export default function HeaderComponent() {
 
   return (
     <View
-      className={`${hasLifeStyle ? 'h-[201px]' : 'h-[127px]'} pt-[65px] gap-y-[12px] px-[20px] bg-subColor1 relative`}
+      className={`${!hasLifeStyle ? 'h-[201px]' : 'h-[127px]'} pt-[65px] gap-y-[12px] px-[20px] bg-subColor1 relative`}
     >
       <Background
         style={{ position: 'absolute', top: 0 }}
         width={Dimensions.get('screen').width}
-        height={hasLifeStyle ? 201 : 127}
+        height={!hasLifeStyle ? 201 : 127}
         preserveAspectRatio="xMidYMid slice"
       />
       <View className="flex flex-row justify-between items-center">
@@ -65,7 +65,7 @@ export default function HeaderComponent() {
         </View>
       </View>
 
-      {hasLifeStyle && (
+      {!hasLifeStyle && (
         <OpacityPressable onPress={handleLifeStyle}>
           <View className="bg-colorBox py-[12px] px-[16px] flex flex-row justify-between items-center rounded-xl">
             <View className="gap-x-[8px] flex flex-row items-center">
