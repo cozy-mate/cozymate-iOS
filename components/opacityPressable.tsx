@@ -3,9 +3,15 @@ import { Pressable, PressableProps } from 'react-native';
 
 interface OpacityPressableProps extends PressableProps {
   children: ReactNode;
+  className?: string;
 }
 
-export default function OpacityPressable({ children, onPress, ...rest }: OpacityPressableProps) {
+export default function OpacityPressable({
+  children,
+  className,
+  onPress,
+  ...rest
+}: OpacityPressableProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   return (
@@ -13,7 +19,7 @@ export default function OpacityPressable({ children, onPress, ...rest }: Opacity
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}
       onPress={onPress}
-      className={`${isPressed && 'opacity-60'}`}
+      className={`${className ?? ''} ${isPressed && 'opacity-60'}`}
       {...rest}
     >
       {children}
