@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import OpacityPressable from '@/components/opacityPressable';
 import { RecommendRoomItem } from '@/type/room';
 import { getLifeStyleIcon, getLifeStyleLabel } from '@/utils/lifeStyle';
 
@@ -9,7 +10,7 @@ interface BasicRoomItemProps {
   onPress?: () => void;
 }
 
-const BasicRoomItem: React.FC<BasicRoomItemProps> = ({ roomData, onPress = () => {} }) => {
+export default function BasicRoomItem({ roomData, onPress = () => {} }: BasicRoomItemProps) {
   const router = useRouter();
 
   const getChipColor = (numOfArrival: number, count: number) => {
@@ -28,7 +29,7 @@ const BasicRoomItem: React.FC<BasicRoomItemProps> = ({ roomData, onPress = () =>
   };
 
   return (
-    <Pressable onPress={handlePress}>
+    <OpacityPressable onPress={handlePress}>
       <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
         <View className="flex flex-row items-center justify-between">
           <Text className="Semibold16 text-basicFont mx-[8px]">{roomData.name}</Text>
@@ -79,8 +80,6 @@ const BasicRoomItem: React.FC<BasicRoomItemProps> = ({ roomData, onPress = () =>
           </View>
         </View>
       </View>
-    </Pressable>
+    </OpacityPressable>
   );
-};
-
-export default BasicRoomItem;
+}

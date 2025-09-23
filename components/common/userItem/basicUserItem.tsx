@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
+import OpacityPressable from '@/components/opacityPressable';
 import { MemberItem } from '@/type/member';
 import { getLifeStyleIcon, getLifeStyleLabel, getLifeStyleValue } from '@/utils/lifeStyle';
 
@@ -9,7 +10,7 @@ interface BasicUserItemProps {
   onPress?: () => void;
 }
 
-const BasicUserItem: React.FC<BasicUserItemProps> = ({ userData, onPress = () => {} }) => {
+export default function BasicUserItem({ userData, onPress = () => {} }: BasicUserItemProps) {
   const router = useRouter();
 
   const handlePress = () => {
@@ -18,7 +19,7 @@ const BasicUserItem: React.FC<BasicUserItemProps> = ({ userData, onPress = () =>
   };
 
   return (
-    <Pressable onPress={handlePress}>
+    <OpacityPressable onPress={handlePress}>
       <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
         <View className="flex flex-row items-center justify-between">
           <Text className="Semibold16 text-basicFont mx-[8px]">
@@ -58,8 +59,6 @@ const BasicUserItem: React.FC<BasicUserItemProps> = ({ userData, onPress = () =>
           </View>
         </View>
       </View>
-    </Pressable>
+    </OpacityPressable>
   );
-};
-
-export default BasicUserItem;
+}
