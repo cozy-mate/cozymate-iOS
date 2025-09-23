@@ -1,32 +1,17 @@
-import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import OpacityPressable from '@/components/opacityPressable';
-import { useTracker } from '@/providers/TrackerProvider';
 import { RoomDetailItem } from '@/type/room';
-import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useMemberStore } from '@/zustand/store';
 
 interface MyRoomCardProps {
   data: RoomDetailItem;
+  onPress: () => void;
 }
 
-export default function MyRoomCard({ data }: MyRoomCardProps) {
-  const router = useRouter();
-  const { trackButton } = useTracker();
-
-  const { hasRoom, roomInfo } = useMemberStore();
-
-  const handleRoomPress = () => {
-    if (hasRoom && roomInfo !== undefined && roomInfo.roomId !== 0) {
-      trackButton(ButtonEvent.my_room, EventCategory.home_content);
-      router.push(`/room/${roomInfo?.roomId}`);
-    }
-  };
-
+export default function MyRoomCard({ data, onPress }: MyRoomCardProps) {
   return (
     <OpacityPressable
-      onPress={handleRoomPress}
+      onPress={onPress}
       className="rounded-xl p-[16px] gap-y-[8px] border border-mainColor bg-subColor2"
     >
       <View className="flex flex-row gap-x-[8px]">
