@@ -1,9 +1,17 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
-import { getUniversityList } from './university';
+import { getMyUniversityInfo, getUniversityList, getUniversityInfo } from './university';
 
 export const universityQueries = createQueryKeys('university', {
-  getUniversityList: () => ({
+  list: () => ({
     queryKey: ['list'],
     queryFn: () => getUniversityList(),
+  }),
+  detail: ({ universityId }: { universityId: number }) => ({
+    queryKey: ['detail', universityId],
+    queryFn: () => getUniversityInfo(universityId),
+  }),
+  myUniversity: () => ({
+    queryKey: ['my-university'],
+    queryFn: () => getMyUniversityInfo(),
   }),
 });

@@ -40,6 +40,7 @@ import {
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
 
 export function ErrorBoundary({ error }: ErrorBoundaryProps) {
   const router = useRouter();
@@ -62,9 +63,13 @@ export function ErrorBoundary({ error }: ErrorBoundaryProps) {
         buttonText="다시 시도하러 가기"
         onPress={() => {
           router.back();
-          queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
-          queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
-          queryClient.invalidateQueries({ queryKey: [`/members/stat/filter`] });
+          queryClient.invalidateQueries({
+            predicate: matchMultiQueries([
+              queries.memberStat.getRandomMemberList._def,
+              queries.room.getReceivedRequestList._def,
+              queries.memberStat.getMemberList._def,
+            ])
+          })
         }}
         color="BLUE"
         disabled={false}

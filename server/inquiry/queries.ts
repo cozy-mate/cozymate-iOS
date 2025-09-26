@@ -2,11 +2,11 @@ import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { checkHasInquiry, getInquiryList } from './inquiry';
 
 export const inquiryQueries = createQueryKeys('inquiry', {
-  getInquiryList: () => ({
+  list: () => ({
     queryKey: ['list'],
     queryFn: () => getInquiryList(),
   }),
-  checkHasInquiry: () => ({
+  exist: () => ({
     queryKey: ['exist'],
     queryFn: () => checkHasInquiry(),
   }),

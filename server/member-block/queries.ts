@@ -2,11 +2,11 @@ import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { getBlockedMemberList, getMemberBlockStatus } from './member-block';
 
 export const memberBlockQueries = createQueryKeys('memberBlock', {
-  getMemberBlockStatus: ({ memberId }: { memberId: number }) => ({
+  status: ({ memberId }: { memberId: number }) => ({
     queryKey: ['status', memberId],
     queryFn: () => getMemberBlockStatus(memberId),
   }),
-  getBlockedMemberList: () => ({
+  list: () => ({
     queryKey: ['list'],
     queryFn: () => getBlockedMemberList(),
   }),

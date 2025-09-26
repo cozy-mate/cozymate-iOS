@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 
 import { CreateRuleRequest, UpdateRuleRequest } from '@/server/rule/request';
 import { createRule, deleteRule, getRuleList, updateRule } from '@/server/rule/rule';
+import { queries } from '@/server';
 
 export const useDeleteRule = ({ roomId, ruleId }: { roomId: number; ruleId: number }) => {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export const useDeleteRule = ({ roomId, ruleId }: { roomId: number; ruleId: numb
   return useMutation({
     mutationFn: () => deleteRule(roomId, ruleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
+      queryClient.invalidateQueries(queries.rule.list({ roomId }));
     },
     onError: (error: any) => {
       console.log(error);
@@ -26,7 +27,7 @@ export const useUpdateRule = ({ roomId, ruleId }: { roomId: number; ruleId: numb
     mutationFn: (data: UpdateRuleRequest) => updateRule(roomId, ruleId, data),
     onSuccess: () => {
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
+      queryClient.invalidateQueries(queries.rule.list({ roomId }));
     },
     onError: (error: any) => {
       console.log(error);
@@ -36,7 +37,7 @@ export const useUpdateRule = ({ roomId, ruleId }: { roomId: number; ruleId: numb
 
 export const useGetRuleList = ({ roomId }: { roomId: number }) => {
   return useQuery({
-    queryKey: [`/rooms/${roomId}/rules`, roomId],
+    ...queries.rule.list({ roomId }),
     queryFn: () => getRuleList(roomId),
     enabled: roomId !== 0,
   });
@@ -49,7 +50,7 @@ export const useCreateRule = ({ roomId }: { roomId: number }) => {
   return useMutation({
     mutationFn: (data: CreateRuleRequest) => createRule(roomId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/rules`, roomId] });
+      queryClient.invalidateQueries(queries.rule.list({ roomId }));
       router.back();
     },
     onError: (error: any) => {

@@ -5,16 +5,11 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
-import {
-  acceptRoomInvite,
-  cancelRequestRoom,
-  checkIsInvitedRoom,
-  checkIsRequestedRoom,
-  getSentRequestRoomList,
-  sendRoomRequest,
-} from '@/server/room/room';
+import { acceptRoomInvite, cancelRequestRoom, sendRoomRequest } from '@/server/room/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
+import { GetSentRequestRoomListResponse } from '@/server/room/response';
 
 // 사용자 -> 방 참여 요청 취소
 export const useCancelRequestRoom = (roomId: number) => {
@@ -24,35 +19,32 @@ export const useCancelRequestRoom = (roomId: number) => {
     mutationFn: () => cancelRequestRoom(roomId),
     onSuccess: () => {
       showRejectToast('방 참여 요청을 취소했어요');
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/pending-status`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkIsRequestedRoom({ roomId }).queryKey,
+          queries.room.receivedRequestList._def,
+        ]),
+      });
     },
   });
 };
 
 // 사용자 -> 사용자가 참여 요청한 방인지 조회
 export const useCheckIsRequestedRoom = (roomId: number) => {
-  return useSuspenseQuery({
-    queryKey: [`/rooms/${roomId}/pending-status`, roomId],
-    queryFn: () => checkIsRequestedRoom(roomId),
-  });
+  return useSuspenseQuery(queries.room.checkIsRequestedRoom({ roomId }));
 };
 
 // 사용자 -> 사용자가 초대 받은 방인지 조회
 export const useCheckIsInvitedRoom = (roomId: number) => {
-  return useSuspenseQuery({
-    queryKey: [`/rooms/${roomId}/invited-status`, roomId],
-    queryFn: () => checkIsInvitedRoom(roomId),
-  });
+  return useSuspenseQuery(queries.room.checkIsInvitedRoom({ roomId }));
 };
 
 // 사용자가 참여 요청한 방 목록 조회
 export const useGetSentRequestRoomList = (size: number) => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/rooms/requested`, size],
-    queryFn: ({ pageParam }) => getSentRequestRoomList(pageParam, size),
+    ...queries.room.sentRequestRoomList({ size }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetSentRequestRoomListResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
@@ -71,13 +63,21 @@ export const useSendRoomRequest = (
   return useMutation({
     mutationFn: () => sendRoomRequest(roomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/pending-status`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkIsRequestedRoom({ roomId }).queryKey,
+          queries.room.receivedRequestList._def,
+        ]),
+      });
       showSuccessToast(`[${roomManagerName}]님에게 방 참여 요청을 보냈어요`);
     },
     onError: (error: any) => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/pending-status`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkIsRequestedRoom({ roomId }).queryKey,
+          queries.room.receivedRequestList._def,
+        ]),
+      });
 
       const code = error.response?.data?.code;
 
@@ -111,14 +111,23 @@ export const useAcceptRoomInvite = (roomId: number, roomManagerName: string) => 
         showSuccessToast(`[${roomManagerName}]님의 방 참여 요청을 수락했어요`);
         setRoom({ roomId: roomId, isRoomManager: false });
 
-        queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
-        queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
-        queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
+        queryClient.invalidateQueries({
+          predicate: matchMultiQueries([
+            queries.room.checkHasRoom._def,
+            queries.room.myRoomDetail({ roomId }).queryKey,
+            queries.room.detail({ roomId }).queryKey,
+          ]),
+        });
       } else {
         showSuccessToast(`[${roomManagerName}]님의 방 참여 요청을 거절했어요`);
       }
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/invited-status`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkIsInvitedRoom({ roomId }).queryKey,
+          // TODO : 이런 이름으로 저장하는 Key가 없는데 왜 존재하는지 모르겠음
+          ['/rooms/invited'],
+        ]),
+      });
     },
     onError: (error: any) => {
       const code = error.response?.data?.code;
@@ -126,8 +135,13 @@ export const useAcceptRoomInvite = (roomId: number, roomManagerName: string) => 
       if (code === 'ROOM408') {
         showRejectToast('존재하지 않는 초대요청이에요');
       }
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/invited-status`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkIsInvitedRoom({ roomId }).queryKey,
+          // TODO : 이런 이름으로 저장하는 Key가 없는데 왜 존재하는지 모르겠음
+          ['/rooms/invited'],
+        ]),
+      });
     },
   });
 };

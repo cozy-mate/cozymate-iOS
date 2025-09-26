@@ -7,6 +7,7 @@ import {
   unblockMember,
 } from '@/server/member-block/member-block';
 import { showSuccessToast } from '@/utils/toast';
+import { matchMultiQueries, queries } from '@/server';
 
 // 멤버 차단 해제
 export const useUnblockMember = () => {
@@ -18,27 +19,26 @@ export const useUnblockMember = () => {
       const memberId = variables;
 
       showSuccessToast('차단 해제 되었습니다');
-      queryClient.invalidateQueries({ queryKey: [`/block/members`] });
-      queryClient.invalidateQueries({ queryKey: [`/block/members/${memberId}`, memberId] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/filter`] });
+
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.memberBlock.list._def,
+          queries.memberBlock.status({ memberId }).queryKey,
+          queries.memberStat.list._def,
+        ]),
+      });
     },
   });
 };
 
 // 특정 멤버 차단 여부 조회
 export const useGetMemberBlockStatus = (memberId: number) => {
-  return useSuspenseQuery({
-    queryKey: [`/block/members/${memberId}`, memberId],
-    queryFn: () => getMemberBlockStatus(memberId),
-  });
+  return useSuspenseQuery(queries.memberBlock.status({ memberId }));
 };
 
 // 멤버 차단 목록 조회
 export const useGetBlockedMemberList = () => {
-  return useSuspenseQuery({
-    queryKey: [`/block/members`],
-    queryFn: () => getBlockedMemberList(),
-  });
+  return useSuspenseQuery(queries.memberBlock.list());
 };
 
 // 멤버 차단
@@ -51,9 +51,13 @@ export const useBlockMember = () => {
       const memberId = variables;
 
       showSuccessToast('차단이 접수되었습니다');
-      queryClient.invalidateQueries({ queryKey: [`/block/members`] });
-      queryClient.invalidateQueries({ queryKey: [`/block/members/${memberId}`, memberId] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/filter`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.memberBlock.list._def,
+          queries.memberBlock.status({ memberId }).queryKey,
+          queries.memberStat.list._def,
+        ]),
+      });
     },
   });
 };

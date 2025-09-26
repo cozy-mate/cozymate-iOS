@@ -2,8 +2,8 @@ import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { getRoomLog } from './room-log';
 
 export const roomLogQueries = createQueryKeys('roomLog', {
-  getRoomLogList: ({ roomId, page, size }: { roomId: number; page: number; size: number }) => ({
-    queryKey: ['list', roomId, page, size],
-    queryFn: () => getRoomLog(roomId, page, size),
+  list: ({ roomId, size }: { roomId: number; size: number }) => ({
+    queryKey: ['list', roomId, size],
+    queryFn: ({ pageParam = 0 }: { pageParam?: number }) => getRoomLog(roomId, pageParam, size),
   }),
 });

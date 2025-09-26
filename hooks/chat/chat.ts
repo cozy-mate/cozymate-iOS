@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { getChatRoomDetail, sendChat } from '@/server/chat/chat';
+import { sendChat } from '@/server/chat/chat';
 import { SendChatRequest } from '@/server/chat/request';
+import { queries } from '@/server';
+import { GetChatRoomDetailResponse } from '@/server/chat/response';
 
 export const useGetChatRoomDetail = (chatRoomId: number) => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId],
-    queryFn: ({ pageParam }) => getChatRoomDetail(chatRoomId, pageParam, 5),
-
+    ...queries.chat.detail({ chatRoomId, size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetChatRoomDetailResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }

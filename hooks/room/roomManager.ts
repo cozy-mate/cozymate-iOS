@@ -4,12 +4,11 @@ import {
   acceptRoomRequest,
   cancelInviteMember,
   checkIsInvitedMember,
-  checkIsRequestedMember,
-  getReceivedRequestList,
   inviteMember,
 } from '@/server/room/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
 
 // 방장 -> 내방으로 초대 취소 기능
 export const useCancelInviteMember = (inviteeId: number) => {
@@ -24,9 +23,7 @@ export const useCancelInviteMember = (inviteeId: number) => {
       queryClient.invalidateQueries({
         queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
       });
-      queryClient.invalidateQueries({
-        queryKey: [`/rooms/invited-status/${inviteeId}`, inviteeId],
-      });
+      queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
     },
   });
 };
@@ -36,16 +33,14 @@ export const useCheckIsRequestedMember = (memberId: number) => {
   const { roomInfo } = useMemberStore();
 
   return useQuery({
-    queryKey: [`/rooms/pending-status/${memberId}`, memberId],
-    queryFn: () => checkIsRequestedMember(memberId),
+    ...queries.room.checkIsRequestedMember({ memberId }),
     enabled: roomInfo?.roomId !== 0 && roomInfo?.isRoomManager,
   });
 };
 
 export const useGetReceivedRequestList = (isRoomManager: boolean) => {
   return useQuery({
-    queryKey: [`/rooms/pending-members`],
-    queryFn: () => getReceivedRequestList(),
+    ...queries.room.receivedRequestList(),
     enabled: isRoomManager,
   });
 };
@@ -55,8 +50,7 @@ export const useCheckIsInvitedMember = (memberId: number) => {
   const { roomInfo } = useMemberStore();
 
   return useQuery({
-    queryKey: [`/rooms/invited-status/${memberId}`, memberId],
-    queryFn: () => checkIsInvitedMember(memberId),
+    ...queries.room.checkIsInvitedMember({ memberId }),
     enabled: roomInfo?.roomId !== 0 && roomInfo?.isRoomManager,
   });
 };
@@ -80,10 +74,12 @@ export const useAcceptRoomRequest = (
         showSuccessToast(`[${requesterName}]님의 방 참여 요청을 거절했어요`);
       }
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/pending-status/${requesterId}`, requesterId],
+        predicate: matchMultiQueries([
+          queries.room.checkIsRequestedMember({ memberId: requesterId }).queryKey,
+          queries.room.receivedRequestList._def,
+          queries.room.myRoomDetail({ roomId }).queryKey,
+        ]),
       });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
     },
     onError: (error: any) => {
       const code = error.response?.data?.code;
@@ -91,10 +87,13 @@ export const useAcceptRoomRequest = (
       if (code === 'ROOM412') {
         showRejectToast('존재하지 않는 참여요청이에요');
       }
+
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/pending-status/${requesterId}`, requesterId],
+        predicate: matchMultiQueries([
+          queries.room.checkIsRequestedMember({ memberId: requesterId }).queryKey,
+          queries.room.receivedRequestList._def,
+        ]),
       });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
     },
   });
 };
@@ -116,14 +115,14 @@ export const useInviteMember = (
       queryClient.invalidateQueries({
         queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
       });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/invited-status/${inviteeId}`] });
+      queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
       showSuccessToast(`[${nickname}]님에게 방 초대 요청을 보냈어요`);
     },
     onError: (error: any) => {
       queryClient.invalidateQueries({
         queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
       });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/invited-status/${inviteeId}`] });
+      queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
 
       const code = error.response?.data?.code;
 

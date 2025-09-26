@@ -14,14 +14,20 @@ import {
 } from './room';
 
 export const roomQueries = createQueryKeys('room', {
-  getRoomDetail: ({ roomId }: { roomId: number }) => ({
+  detail: ({ roomId }: { roomId: number }) => ({
     queryKey: ['detail', roomId],
     queryFn: () => getRoomDetail(roomId),
   }),
+  myRoomDetail: ({ roomId }: { roomId: number }) => ({
+    queryKey: ['my-room', roomId],
+    queryFn: () => getRoomDetail(roomId),
+  }),
+  // pending-status
   checkIsRequestedRoom: ({ roomId }: { roomId: number }) => ({
     queryKey: ['requested-room', roomId],
     queryFn: () => checkIsRequestedRoom(roomId),
   }),
+  // invited-status
   checkIsInvitedRoom: ({ roomId }: { roomId: number }) => ({
     queryKey: ['invited-room', roomId],
     queryFn: () => checkIsInvitedRoom(roomId),
@@ -30,22 +36,25 @@ export const roomQueries = createQueryKeys('room', {
     queryKey: ['search', keyword],
     queryFn: () => searchRoom(keyword),
   }),
-  getSentRequestRoomList: ({ page, size }: { page?: number; size?: number } = {}) => ({
-    queryKey: ['sent-request', page, size],
-    queryFn: () => getSentRequestRoomList(page, size),
+  sentRequestRoomList: ({ size }: { size?: number }) => ({
+    queryKey: ['sent-request', size],
+    queryFn: (page: number) => getSentRequestRoomList(page, size),
   }),
+  // pending-status
   checkIsRequestedMember: ({ memberId }: { memberId: number }) => ({
     queryKey: ['requested-member', memberId],
     queryFn: () => checkIsRequestedMember(memberId),
   }),
-  getReceivedRequestList: () => ({
+  // pending-members
+  receivedRequestList: () => ({
     queryKey: ['received-requests'],
     queryFn: () => getReceivedRequestList(),
   }),
-  getRoomByInviteCode: ({ inviteCode }: { inviteCode: string }) => ({
+  roomByInviteCode: ({ inviteCode }: { inviteCode: string }) => ({
     queryKey: ['by-invite', inviteCode],
     queryFn: () => getRoomByInviteCode(inviteCode),
   }),
+  //pending-status
   checkIsInvitedMember: ({ memberId }: { memberId: number }) => ({
     queryKey: ['invited-member', memberId],
     queryFn: () => checkIsInvitedMember(memberId),
@@ -54,7 +63,7 @@ export const roomQueries = createQueryKeys('room', {
     queryKey: ['has-room'],
     queryFn: () => checkHasRoom(),
   }),
-  checkRoomName: ({ roomName }: { roomName: string }) => ({
+  checkDuplicateRoomName: ({ roomName }: { roomName: string }) => ({
     queryKey: ['check-name', roomName],
     queryFn: () => checkRoomName(roomName),
   }),

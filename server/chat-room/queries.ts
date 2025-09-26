@@ -1,17 +1,17 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { getChatRoomId, getChatRoomList, getNewChatRoomCount } from './chat-room';
 
-export const chatRoomQueries = createQueryKeys('chatRoom', {
-  getChatRoomList: ({ page, size }: { page?: number; size?: number } = {}) => ({
-    queryKey: ['list', page, size],
-    queryFn: () => getChatRoomList(page, size),
+export const chatRoomQueries = createQueryKeys('chatRooms', {
+  list: ({ size }: { size?: number } = {}) => ({
+    queryKey: ['list', size],
+    queryFn: ({ pageParam = 0 }: { pageParam?: number }) => getChatRoomList(pageParam, size),
   }),
-  getChatRoomId: ({ recipientId }: { recipientId: number }) => ({
+  id: ({ recipientId }: { recipientId: number }) => ({
     queryKey: ['id', recipientId],
     queryFn: () => getChatRoomId(recipientId),
   }),
-  getNewChatRoomCount: () => ({
-    queryKey: ['count', 'new'],
+  countNewChat: () => ({
+    queryKey: ['count', 'new-chat'],
     queryFn: () => getNewChatRoomCount(),
   }),
 });

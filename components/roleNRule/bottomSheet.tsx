@@ -10,6 +10,7 @@ import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useMemberStore } from '@/zustand/store';
 
 import TwoButtonModal from '../modal/twoButtonModal';
+import { queries } from '@/server/index';
 
 async function deleteItem({
   roomId,
@@ -71,7 +72,7 @@ export default function RoleNRuleBottomSheet({ type, bottomSheetRef }: RoleNRule
               opacity={0.7}
               disappearsOnIndex={-1}
               appearsOnIndex={0}
-              // onPress={backdropFunc}
+            // onPress={backdropFunc}
             />
           )}
         >

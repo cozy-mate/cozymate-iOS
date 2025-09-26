@@ -5,25 +5,17 @@ import React from 'react';
 
 import { CreatePublicRoomRequest } from '@/server/room/request';
 import { CreatePublicRoomResponse, GetRoomByInviteCodeResponse } from '@/server/room/response';
-import {
-  checkHasRoom,
-  createPublicRoom,
-  exitRoom,
-  getRoomByInviteCode,
-  getRoomDetail,
-  joinRoom,
-  searchRoom,
-} from '@/server/room/room';
+import { createPublicRoom, exitRoom, getRoomByInviteCode, joinRoom } from '@/server/room/room';
 import { RoomItem } from '@/type/room';
 import { showRejectToast } from '@/utils/toast';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
 
 // 내 방 정보 조회
 export const useGetMyRoomDetail = (roomId: number) => {
   return useQuery({
-    queryKey: [`/rooms/${roomId}/myRoom`, roomId],
-    queryFn: () => getRoomDetail(roomId),
+    ...queries.room.myRoomDetail({ roomId }),
     enabled: roomId !== 0,
   });
 };
@@ -31,8 +23,7 @@ export const useGetMyRoomDetail = (roomId: number) => {
 // 방 정보 조회 기능
 export const useGetRoomDetail = (roomId: number) => {
   return useSuspenseQuery({
-    queryKey: [`/rooms/${roomId}`, roomId],
-    queryFn: () => getRoomDetail(roomId),
+    ...queries.room.detail({ roomId }),
     // 오류가 발생했을 때 refetch를 시도하는 것 방지
     retry: false,
   });
@@ -41,8 +32,7 @@ export const useGetRoomDetail = (roomId: number) => {
 // 방 검색
 export const useSearchRoom = (keyword: string) => {
   return useQuery({
-    queryKey: [`/rooms/search`, keyword],
-    queryFn: () => searchRoom(keyword),
+    ...queries.room.searchRoom({ keyword }),
     enabled: keyword !== '',
   });
 };
@@ -77,8 +67,7 @@ export const useGetRoomByInviteCode = (
 // 로그인한 사용자가 참여한 방이 있는지 여부 조회
 export const useCheckHasRoom = () => {
   return useSuspenseQuery({
-    queryKey: [`/rooms/exist`],
-    queryFn: () => checkHasRoom(),
+    ...queries.room.checkHasRoom(),
   });
 };
 
@@ -97,9 +86,13 @@ export const useExitRoom = (roomId: number) => {
     onSuccess: () => {
       clearRoom();
 
-      queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkHasRoom._def,
+          queries.room.detail({ roomId }).queryKey,
+          queries.room.myRoomDetail({ roomId }).queryKey,
+        ]),
+      });
 
       rootNavigation.dispatch(StackActions.popToTop());
       router.replace('/(tabs)/cozyHome');
@@ -120,8 +113,13 @@ export const useJoinRoom = (roomId: number) => {
     onSuccess: () => {
       setRoom({ roomId: roomId, isRoomManager: false });
 
-      queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.checkHasRoom._def,
+          queries.room.myRoomDetail({ roomId }).queryKey,
+        ]),
+      });
+
       router.back();
     },
   });
@@ -139,11 +137,15 @@ export const useCreatePublicRoom = () => {
   return useMutation({
     mutationFn: (data: CreatePublicRoomRequest) => createPublicRoom(data),
     onSuccess: (response: CreatePublicRoomResponse) => {
-      setRoom({ roomId: response.result.roomId, isRoomManager: true });
+      const { roomId } = response.result;
 
-      queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
+      setRoom({ roomId, isRoomManager: true });
+
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/${response.result.roomId}/myRoom`, response.result.roomId],
+        predicate: matchMultiQueries([
+          queries.room.checkHasRoom._def,
+          queries.room.myRoomDetail({ roomId }).queryKey,
+        ]),
       });
 
       setTimeout(() => router.back(), 100);

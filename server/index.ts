@@ -1,4 +1,5 @@
 import { mergeQueryKeys } from '@lukemorales/query-key-factory';
+import { matchQuery, Query, QueryKey } from '@tanstack/react-query';
 
 import { chatQueries } from './chat/queries';
 import { chatRoomQueries } from './chat-room/queries';
@@ -39,3 +40,14 @@ export const queries = mergeQueryKeys(
   todoQueries,
   universityQueries,
 );
+
+export const matchMultiQueries = (queryKeys: readonly QueryKey[]) => {
+  return (query: Query) =>
+    queryKeys.some((queryKey) => {
+      return matchQuery({ queryKey }, query);
+    });
+};
+
+// queries.chat._def;
+// queries.chat.getChatRoomDetail._def;
+// queries.chatRoom.getChatRoomId({ recipientId: 1 });

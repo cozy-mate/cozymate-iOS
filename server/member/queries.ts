@@ -2,11 +2,11 @@ import { createQueryKeys } from '@lukemorales/query-key-factory';
 import { getMemberProfile, getMemberUniversityInfo, checkNickname } from './member';
 
 export const memberQueries = createQueryKeys('member', {
-  getMemberUniversityInfo: () => ({
+  universityInfo: () => ({
     queryKey: ['university-info'],
     queryFn: () => getMemberUniversityInfo(),
   }),
-  getMemberProfile: () => ({
+  profile: () => ({
     queryKey: ['member-info'],
     queryFn: () => getMemberProfile(),
   }),

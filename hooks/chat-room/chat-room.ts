@@ -7,6 +7,8 @@ import {
 import { useRouter } from 'expo-router';
 
 import { exitChatRoom, getChatRoomList, getNewChatRoomCount } from '@/server/chat-room/chat-room';
+import { queries } from '@/server';
+import { GetChatRoomListResponse } from '@/server/chat-room/response';
 
 export const useExitChatRoom = (chatRoomId: number) => {
   const router = useRouter();
@@ -16,18 +18,17 @@ export const useExitChatRoom = (chatRoomId: number) => {
   return useMutation({
     mutationFn: () => exitChatRoom(chatRoomId),
     onSuccess: () => {
+      queryClient.invalidateQueries(queries.chatRooms.list({ size: 5 }));
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
     },
   });
 };
 
 export const useGetChatRoomList = () => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/chatrooms`],
-    queryFn: ({ pageParam }) => getChatRoomList(pageParam, 5),
+    ...queries.chatRooms.list({ size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetChatRoomListResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
@@ -36,8 +37,5 @@ export const useGetChatRoomList = () => {
 };
 
 export const useGetNewChatRoomCount = () => {
-  return useSuspenseQuery({
-    queryKey: [`/chatrooms/count/new-chat`],
-    queryFn: () => getNewChatRoomCount(),
-  });
+  return useSuspenseQuery(queries.chatRooms.countNewChat());
 };

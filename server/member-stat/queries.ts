@@ -8,11 +8,15 @@ import {
 } from './member-stat';
 
 export const memberStatQueries = createQueryKeys('memberStat', {
-  getMyDetail: () => ({
+  myDetail: () => ({
     queryKey: ['my-detail'],
     queryFn: () => getMyDetail(),
   }),
-  getMemberDetail: ({ memberId }: { memberId: number }) => ({
+  suspenseMyDetail: () => ({
+    queryKey: ['my-detail-suspense'],
+    queryFn: () => getMyDetail(),
+  }),
+  detail: ({ memberId }: { memberId: number }) => ({
     queryKey: ['detail', memberId],
     queryFn: () => getMemberDetail(memberId),
   }),
@@ -20,20 +24,17 @@ export const memberStatQueries = createQueryKeys('memberStat', {
     queryKey: ['search', keyword],
     queryFn: () => searchUser(keyword),
   }),
-  getRandomMemberList: () => ({
+  randomList: () => ({
     queryKey: ['random'],
     queryFn: () => getRandomMemberList(),
   }),
-  getMemberList: ({
-    page,
-    filterList,
-    hasRoom,
-  }: {
-    page: number;
-    filterList?: string[];
-    hasRoom?: boolean;
-  }) => ({
-    queryKey: ['list', page, filterList, hasRoom],
-    queryFn: () => getMemberList(page, filterList, hasRoom),
+  list: ({ filterList, hasRoom }: { filterList?: string[]; hasRoom?: boolean }) => ({
+    queryKey: ['list', filterList, hasRoom],
+    queryFn: ({ pageParam = 0 }: { pageParam: number }) =>
+      getMemberList(pageParam, filterList, hasRoom),
+  }),
+  filterHome: () => ({
+    queryKey: ['filter-home'],
+    queryFn: () => getMemberList(0),
   }),
 });

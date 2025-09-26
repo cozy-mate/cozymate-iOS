@@ -19,6 +19,7 @@ import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
+import { queries } from '@/server';
 
 export const useWithdraw = () => {
   const { clearMailState } = useMailAuthenticationStore();
@@ -44,10 +45,7 @@ export const useWithdraw = () => {
 };
 
 export const useGetMemberUniversityInfo = () => {
-  return useSuspenseQuery({
-    queryKey: [`/members/university-info`],
-    queryFn: () => getMemberUniversityInfo(),
-  });
+  return useSuspenseQuery(queries.member.universityInfo());
 };
 
 export const useCheckNickname = () => {
@@ -60,10 +58,7 @@ export const useCheckNickname = () => {
 };
 
 export const useGetMemberProfile = () => {
-  return useSuspenseQuery({
-    queryKey: [`/members/member-info`],
-    queryFn: () => getMemberProfile(),
-  });
+  return useSuspenseQuery(queries.member.profile());
 };
 
 export const useUpdateMemberInfo = () => {
@@ -86,7 +81,7 @@ export const useUpdateMemberInfo = () => {
         universityId: memberInfo?.universityId ?? 0,
       });
 
-      queryClient.invalidateQueries({ queryKey: [`/members/member-info`] });
+      queryClient.invalidateQueries(queries.member.profile());
       queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
 
       if (hasLifeStyle) {

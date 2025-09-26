@@ -5,6 +5,8 @@ import {
   deleteMemberLike,
   getMemberLikeList,
 } from '@/server/member-favorite/member-favorite';
+import { matchMultiQueries, queries } from '@/server';
+import { GetMemberLikeListResponse } from '@/server/member-favorite/response';
 
 export const useDeleteMemberLike = (memberFavoriteId: number, memberId: number) => {
   const queryClient = useQueryClient();
@@ -12,18 +14,21 @@ export const useDeleteMemberLike = (memberFavoriteId: number, memberId: number) 
   return useMutation({
     mutationFn: () => deleteMemberLike(memberFavoriteId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/${memberId}`, memberId] });
-      queryClient.invalidateQueries({ queryKey: [`/favorites/members`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.memberFavorite.list._def,
+          queries.memberStat.detail({ memberId }).queryKey,
+        ]),
+      });
     },
   });
 };
 
 export const useGetMemberLikeList = () => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/favorites/members`],
-    queryFn: ({ pageParam }) => getMemberLikeList(pageParam, 5),
+    ...queries.memberFavorite.list({ size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetMemberLikeListResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
@@ -37,8 +42,12 @@ export const useCreateMemberLike = (memberId: number) => {
   return useMutation({
     mutationFn: () => createMemberLike(memberId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/${memberId}`, memberId] });
-      queryClient.invalidateQueries({ queryKey: [`/favorites/members`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.memberFavorite.list._def,
+          queries.memberStat.detail({ memberId }).queryKey,
+        ]),
+      });
     },
   });
 };
