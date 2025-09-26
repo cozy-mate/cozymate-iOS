@@ -65,9 +65,9 @@ export function ErrorBoundary({ error }: ErrorBoundaryProps) {
           router.back();
           queryClient.invalidateQueries({
             predicate: matchMultiQueries([
-              queries.memberStat.getRandomMemberList._def,
-              queries.room.getReceivedRequestList._def,
-              queries.memberStat.getMemberList._def,
+              queries.memberStat.randomList._def,
+              queries.room.receivedRequestList._def,
+              queries.memberStat.list._def,
             ])
           })
         }}

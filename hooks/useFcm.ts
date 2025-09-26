@@ -185,9 +185,11 @@ export default function useFcm(
           case 'ARRIVE_CHAT':
             const chatRoomId = Number(data?.chatRoomId);
 
-            await queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
             await queryClient.invalidateQueries({
-              queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId],
+              predicate: matchMultiQueries([
+                queries.chatRooms.list._def,
+                queries.chatRooms.id({ recipientId: chatRoomId }).queryKey,
+              ]),
             });
             break;
 
@@ -196,7 +198,7 @@ export default function useFcm(
             console.log(`Unhandled actionType: ${actionType}`);
         }
 
-        await queryClient.invalidateQueries({ queryKey: ['/notificationLogs'] });
+        await queryClient.invalidateQueries(queries.notification.list());
       });
     });
 

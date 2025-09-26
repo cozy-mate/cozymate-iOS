@@ -26,11 +26,11 @@ export const useSendChat = (recipientId: number, chatRoomId?: number) => {
   return useMutation({
     mutationFn: (data: SendChatRequest) => sendChat(recipientId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
+      queryClient.invalidateQueries(queries.chatRooms.list());
 
       // 쪽지방이 이전에 있는 경우
       if (chatRoomId) {
-        queryClient.invalidateQueries({ queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId] });
+        queryClient.invalidateQueries(queries.chatRooms.id({ recipientId: chatRoomId }));
       }
       router.back();
     },

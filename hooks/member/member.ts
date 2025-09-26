@@ -19,7 +19,7 @@ import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
-import { queries } from '@/server';
+import { matchMultiQueries, queries } from '@/server';
 
 export const useWithdraw = () => {
   const { clearMailState } = useMailAuthenticationStore();
@@ -81,16 +81,19 @@ export const useUpdateMemberInfo = () => {
         universityId: memberInfo?.universityId ?? 0,
       });
 
-      queryClient.invalidateQueries(queries.member.profile());
-      queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([queries.member.profile._def, queries.memberStat.list._def]),
+      });
 
       if (hasLifeStyle) {
-        queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
-        queryClient.invalidateQueries({
-          queryKey: [`/members/stat/${memberInfo?.memberId}`, memberInfo?.memberId],
-        });
+        queryClient.invalidateQueries(queries.memberStat.suspenseMyDetail());
+
+        const memberId = memberInfo?.memberId;
+        if (memberId) {
+          queryClient.invalidateQueries(queries.memberStat.detail({ memberId }));
+        }
+        router.back();
       }
-      router.back();
     },
     onError: () => {
       showRejectToast('내 정보 수정에 실패했어요!');

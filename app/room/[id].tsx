@@ -51,7 +51,7 @@ export function ErrorBoundary({ error }: ErrorBoundaryProps) {
           await queryClient.invalidateQueries({
             predicate: matchMultiQueries([
               queries.roomRecommend._def,
-              queries.room.getSentRequestRoomList._def
+              queries.room.sentRequestRoomList._def
             ]),
           })
           router.back();

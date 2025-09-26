@@ -1,5 +1,5 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, QueryKey } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { Fragment, RefObject, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -10,7 +10,7 @@ import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useMemberStore } from '@/zustand/store';
 
 import TwoButtonModal from '../modal/twoButtonModal';
-import { queries } from '@/server/index';
+import { matchMultiQueries, queries } from '@/server/index';
 
 async function deleteItem({
   roomId,
@@ -30,8 +30,13 @@ const useDeleteItem = () => {
   return useMutation({
     mutationFn: deleteItem,
     onSuccess: (_, variables) => {
+      const { roomId, type } = variables;
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/${variables.roomId}/${variables.type}`],
+        predicate: matchMultiQueries([
+          type === 'roles' && queries.role.list({ roomId }).queryKey,
+          type === 'rules' && queries.rule.list({ roomId }).queryKey,
+          type === 'todos' && queries.todo.list({ roomId }).queryKey,
+        ].filter(Boolean) as readonly QueryKey[]),
       });
     },
   });
