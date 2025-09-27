@@ -1,25 +1,27 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { initializeKakaoSDK } from '@react-native-kakao/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as ExpoDevice from 'expo-device';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import LottieView from 'lottie-react-native';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host, Portal } from 'react-native-portalize';
 import Toast from 'react-native-toast-message';
+import { useSyncQueriesExternal } from 'react-query-external-sync';
 
 import { toastConfig } from '@/config/toastConfig';
 import { useAutoLogin } from '@/hooks/autoLogin';
 import { initGlobalThis } from '@/lib/initGlobalThis';
+import FCMProvider from '@/providers/FCMProvider';
 import { TrackerProvider } from '@/providers/TrackerProvider';
 import ScreenTracker from '@/utils/ga/screenTracker';
-
 import '../global.css';
 import { useMemberStore } from '@/zustand/store';
-import FCMProvider from '@/providers/FCMProvider';
 
 initGlobalThis();
 
@@ -44,6 +46,16 @@ export default function RootLayout() {
   const [isAnimationFinished, setIsAnimationFinished] = useState<boolean>(false);
 
   useAutoLogin();
+
+  useSyncQueriesExternal({
+    queryClient,
+    socketURL: 'http://localhost:42831', // Default port for React Native DevTools
+    deviceName: Platform?.OS || 'ios',
+    platform: Platform?.OS || 'ios',
+    deviceId: Platform?.OS || 'ios',
+    isDevice: ExpoDevice.isDevice,
+    asyncStorage: AsyncStorage,
+  });
 
   useEffect(() => {
     // if (appLoaded && fontsLoaded) {
