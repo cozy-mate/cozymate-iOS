@@ -5,6 +5,8 @@ import {
   deleteRoomLike,
   getRoomLikeList,
 } from '@/server/room-favorite/room-favorite';
+import { matchMultiQueries, queries } from '@/server';
+import { GetRoomLikeListResponse } from '@/server/room-favorite/response';
 
 export const useDeleteRoomLike = (roomFavoriteId: number, roomId: number) => {
   const queryClient = useQueryClient();
@@ -12,18 +14,21 @@ export const useDeleteRoomLike = (roomFavoriteId: number, roomId: number) => {
   return useMutation({
     mutationFn: () => deleteRoomLike(roomFavoriteId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/favorites/rooms`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.detail({ roomId }).queryKey,
+          queries.roomFavorite.list._def,
+        ]),
+      });
     },
   });
 };
 
 export const useGetRoomLikeList = () => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/favorites/rooms`],
-    queryFn: ({ pageParam }) => getRoomLikeList(pageParam, 5),
+    ...queries.roomFavorite.list(),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetRoomLikeListResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
@@ -37,8 +42,12 @@ export const useCreateRoomLike = (roomId: number) => {
   return useMutation({
     mutationFn: () => createRoomLike(roomId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/favorites/rooms`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.room.detail({ roomId }).queryKey,
+          queries.roomFavorite.list._def,
+        ]),
+      });
     },
   });
 };

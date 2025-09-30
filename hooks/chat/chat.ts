@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import { getChatRoomDetail, sendChat } from '@/server/chat/chat';
+import { sendChat } from '@/server/chat/chat';
 import { SendChatRequest } from '@/server/chat/request';
+import { queries } from '@/server';
+import { GetChatRoomDetailResponse } from '@/server/chat/response';
 
 export const useGetChatRoomDetail = (chatRoomId: number) => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId],
-    queryFn: ({ pageParam }) => getChatRoomDetail(chatRoomId, pageParam, 5),
-
+    ...queries.chat.detail({ chatRoomId, size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetChatRoomDetailResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }
@@ -26,11 +26,11 @@ export const useSendChat = (recipientId: number, chatRoomId?: number) => {
   return useMutation({
     mutationFn: (data: SendChatRequest) => sendChat(recipientId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
+      queryClient.invalidateQueries(queries.chatRooms.list());
 
       // 쪽지방이 이전에 있는 경우
       if (chatRoomId) {
-        queryClient.invalidateQueries({ queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId] });
+        queryClient.invalidateQueries(queries.chatRooms.id({ recipientId: chatRoomId }));
       }
       router.back();
     },

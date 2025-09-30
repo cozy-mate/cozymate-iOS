@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { getRoomLog } from '@/server/room-log/room-log';
+import { GetRoomLogResponse } from '@/server/room-log/response';
+import { queries } from '@/server';
 
 export const useGetRoomLog = (roomId: number) => {
   return useInfiniteQuery({
-    queryKey: [`/roomlog/${roomId}`, roomId],
-    queryFn: ({ pageParam }) => getRoomLog(roomId, pageParam, 5),
+    ...queries.roomLog.list({ roomId, size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetRoomLogResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }

@@ -1,13 +1,13 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
-import { getNotificationLog } from '@/server/notification/notification';
+import { queries } from '@/server';
+import { GetNotificationLogResponse } from '@/server/notification/response';
 
 export const useGetNotificationLog = () => {
   return useSuspenseInfiniteQuery({
-    queryKey: [`/notificationLogs`],
-    queryFn: ({ pageParam }) => getNotificationLog(pageParam, 5),
+    ...queries.notification.list({ size: 5 }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetNotificationLogResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }

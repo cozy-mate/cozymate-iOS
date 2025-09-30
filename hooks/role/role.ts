@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 
 import { CreateRoleRequest, UpdateRoleRequest } from '@/server/role/request';
 import { createRole, deleteRole, getRoleList, updateRole } from '@/server/role/role';
+import { matchMultiQueries, queries } from '@/server';
 
 export const useDeleteRole = ({ roomId, roleId }: { roomId: number; roleId: number }) => {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export const useDeleteRole = ({ roomId, roleId }: { roomId: number; roleId: numb
   return useMutation({
     mutationFn: () => deleteRole(roomId, roleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
+      queryClient.invalidateQueries(queries.role.list({ roomId }));
     },
     onError: (error: any) => {
       console.log(error);
@@ -25,7 +26,7 @@ export const useUpdateRole = ({ roomId, roleId }: { roomId: number; roleId: numb
   return useMutation({
     mutationFn: (data: UpdateRoleRequest) => updateRole(roomId, roleId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
+      queryClient.invalidateQueries(queries.role.list({ roomId }));
       router.back();
     },
     onError: (error: any) => {
@@ -36,8 +37,7 @@ export const useUpdateRole = ({ roomId, roleId }: { roomId: number; roleId: numb
 
 export const useGetRoleList = ({ roomId }: { roomId: number }) => {
   return useQuery({
-    queryKey: [`/rooms/${roomId}/roles`, roomId],
-    queryFn: () => getRoleList(roomId),
+    ...queries.role.list({ roomId }),
     enabled: roomId !== 0,
   });
 };
@@ -49,8 +49,12 @@ export const useCreateRole = ({ roomId }: { roomId: number }) => {
   return useMutation({
     mutationFn: (data: CreateRoleRequest) => createRole(roomId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/roles`, roomId] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/todos`, roomId] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.role.list({ roomId }).queryKey,
+          queries.todo.list({ roomId }).queryKey,
+        ]),
+      });
 
       router.back();
     },

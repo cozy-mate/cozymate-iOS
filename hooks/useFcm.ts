@@ -14,6 +14,7 @@ import {
   getFcmToken,
 } from '@/utils/notification/fcmTokenUtil';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
 
 const DEDUP_WINDOW = 10_000;
 const processed = new Set<string>();
@@ -87,84 +88,108 @@ export default function useFcm(
           // 사용자가 방에 참여 요청을 보낸 경우 (사용자 -> 방) : 방장이 쿼리 무효화
           case 'ARRIVE_ROOM_JOIN_REQUEST':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/pending-status/${targetMemberId}`, targetMemberId],
+              predicate: matchMultiQueries([
+                queries.room.checkIsRequestedRoom({ roomId: targetRoomId }).queryKey,
+                queries.room.receivedRequestList._def,
+              ]),
             });
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/pending-members`] });
             break;
 
           // 방장이 방 참여 요청을 수락한 경우 : 사용자가 쿼리 무효화
-          case 'ACCEPT_ROOM_JOIN':
+          case 'ACCEPT_ROOM_JOIN': {
             const response = await checkHasRoom();
             setRoom(response.result);
 
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/exist`] });
+            const roomId = roomInfo?.roomId;
+            if (roomId) {
+              await queryClient.invalidateQueries({
+                predicate: matchMultiQueries([
+                  queries.room.myRoomDetail({ roomId }).queryKey,
+                  queries.room.detail({ roomId }).queryKey,
+                ]),
+              });
+            }
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
+              predicate: matchMultiQueries([
+                queries.room.checkHasRoom._def,
+                queries.room.receivedRequestList._def,
+              ]),
             });
-            await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}`, roomInfo?.roomId],
-            });
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
 
             break;
-
+          }
           // 방장이 유저의 방 참여 요청을 거절한 경우 : 사용자가 쿼리 무효화
           case 'REJECT_ROOM_JOIN':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${targetRoomId}/pending-status`, targetRoomId],
+              predicate: matchMultiQueries([
+                queries.room.checkIsRequestedRoom({ roomId: targetRoomId }).queryKey,
+                queries.room.receivedRequestList._def,
+              ]),
             });
-            // 홈 화면
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] });
+
             break;
 
           // 방장이 사용자에게 초대 요청을 보낸 경우 (방장 -> 사용자) : 사용자가 쿼리 무효화
           case 'ARRIVE_ROOM_INVITE':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${targetRoomId}/invited-status`, targetRoomId],
+              predicate: matchMultiQueries([
+                queries.room.checkIsInvitedRoom({ roomId: targetRoomId }).queryKey,
+                ['/rooms/invited'],
+              ]),
             });
-            await queryClient.invalidateQueries({ queryKey: [`/rooms/invited`] });
+
             break;
 
           // 유저가 방 초대 요청을 수락한 경우 : 방장이 쿼리 무효화
-          case 'ACCEPT_ROOM_INVITE':
-            await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
-            });
-            await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}`, roomInfo?.roomId],
-            });
+          case 'ACCEPT_ROOM_INVITE': {
+            const roomId = roomInfo?.roomId;
+            if (roomId) {
+              await queryClient.invalidateQueries({
+                predicate: matchMultiQueries([
+                  queries.room.myRoomDetail({ roomId }).queryKey,
+                  queries.room.detail({ roomId }).queryKey,
+                ]),
+              });
+            }
             break;
+          }
 
           // 유저가 방장의 방 초대 요청을 거절한 경우 : 방장이 쿼리 무효화
           case 'REJECT_ROOM_INVITE':
             await queryClient.invalidateQueries({
-              queryKey: [`/rooms/invited-status/${targetMemberId}`, targetMemberId],
+              queryKey: queries.room.checkIsInvitedMember({ memberId: targetMemberId }).queryKey,
             });
             break;
 
-          case 'ROOM_IN':
-            await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
-            });
-            break;
+          case 'ROOM_IN': {
+            if (roomInfo?.roomId) {
+              await queryClient.invalidateQueries(
+                queries.room.myRoomDetail({ roomId: roomInfo?.roomId }),
+              );
+            }
 
-          case 'ROOM_OUT':
+            break;
+          }
+          case 'ROOM_OUT': {
             const checkHasRoomResponse = await checkHasRoom();
             // 방장 여부 저장
             setRoom(checkHasRoomResponse.result);
-
-            await queryClient.invalidateQueries({
-              queryKey: [`/rooms/${roomInfo?.roomId}/myRoom`],
-            });
+            if (roomInfo?.roomId) {
+              await queryClient.invalidateQueries(
+                queries.room.myRoomDetail({ roomId: roomInfo?.roomId }),
+              );
+            }
 
             break;
-
+          }
           case 'ARRIVE_CHAT':
             const chatRoomId = Number(data?.chatRoomId);
 
-            await queryClient.invalidateQueries({ queryKey: [`/chatrooms`] });
             await queryClient.invalidateQueries({
-              queryKey: [`/chats/chatrooms/${chatRoomId}`, chatRoomId],
+              predicate: matchMultiQueries([
+                queries.chatRooms.list._def,
+                queries.chatRooms.id({ recipientId: chatRoomId }).queryKey,
+              ]),
             });
             break;
 
@@ -173,7 +198,7 @@ export default function useFcm(
             console.log(`Unhandled actionType: ${actionType}`);
         }
 
-        await queryClient.invalidateQueries({ queryKey: ['/notificationLogs'] });
+        await queryClient.invalidateQueries(queries.notification.list());
       });
     });
 

@@ -4,19 +4,14 @@ import { useRouter } from 'expo-router';
 import { checkHasInquiry, createInquiry, getInquiryList } from '@/server/inquiry/inquiry';
 import { CreateInquiryRequest } from '@/server/inquiry/request';
 import { showRejectToast } from '@/utils/toast';
+import { queries } from '@/server';
 
 export const useGetInquiryList = () => {
-  return useSuspenseQuery({
-    queryKey: [`/inquiries`],
-    queryFn: () => getInquiryList(),
-  });
+  return useSuspenseQuery(queries.inquiry.list());
 };
 
 export const useCheckHasInquiry = () => {
-  return useSuspenseQuery({
-    queryKey: [`/inquiries/exist`],
-    queryFn: () => checkHasInquiry(),
-  });
+  return useSuspenseQuery(queries.inquiry.exist());
 };
 
 export const useCreateInquiry = () => {
@@ -28,8 +23,9 @@ export const useCreateInquiry = () => {
     mutationFn: (data: CreateInquiryRequest) => createInquiry(data),
     onSuccess: () => {
       router.back();
-      queryClient.invalidateQueries({ queryKey: [`/inquiries`] });
-      queryClient.invalidateQueries({ queryKey: [`/inquiries/exist`] });
+      queryClient.invalidateQueries({
+        queryKey: queries.inquiry._def,
+      });
     },
     onError: (error: any) => {
       const errorMessage = error.response?.data?.message;

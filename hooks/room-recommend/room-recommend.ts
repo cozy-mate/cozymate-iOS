@@ -1,20 +1,18 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { getRecommendRoomList } from '@/server/room-recommend/room-recommend';
+import { queries } from '@/server';
+import { GetRecommendRoomListResponse } from '@/server/room-recommend/response';
 
 export const useGetHomeRecommendRoomList = () => {
-  return useQuery({
-    queryKey: [`/rooms/list/home`],
-    queryFn: () => getRecommendRoomList(5, 0),
-  });
+  return useSuspenseQuery(queries.roomRecommend.home());
 };
 
-export const useGetRecommendRoomList = (sortType: string) => {
-  return useInfiniteQuery({
-    queryKey: [`/rooms/list`],
-    queryFn: ({ pageParam }) => getRecommendRoomList(5, pageParam, sortType),
+export const useGetRecommendRoomList = (getSortType: () => SortTypeValue) => {
+  return useSuspenseInfiniteQuery({
+    ...queries.roomRecommend.list({ size: 5, sortType: getSortType() }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: GetRecommendRoomListResponse) => {
       if (lastPage.result.hasNext) {
         return lastPage.result.page + 1;
       }

@@ -6,12 +6,10 @@ import {
   updatePreferenceList,
 } from '@/server/member-stat-preference/member-stat-preference';
 import { UpdatePreferenceListRequest } from '@/server/member-stat-preference/request';
+import { matchMultiQueries, queries } from '@/server';
 
 export const useGetPreferenceList = () => {
-  return useSuspenseQuery({
-    queryKey: [`/members/stat/preference`],
-    queryFn: () => getPreferenceList(),
-  });
+  return useSuspenseQuery(queries.memberStatPreference.list());
 };
 
 export const useUpdatePreferenceList = () => {
@@ -20,10 +18,14 @@ export const useUpdatePreferenceList = () => {
   return useMutation({
     mutationFn: (data: UpdatePreferenceListRequest) => updatePreferenceList(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/preference`] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/random`] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat/filter/home`] });
-      queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([
+          queries.memberStatPreference._def,
+          queries.memberStat.randomList._def,
+          queries.memberStat.filterHome._def,
+          ['/rooms/list/home'],
+        ]),
+      });
     },
     onError: (error: any) => {
       console.log(error);

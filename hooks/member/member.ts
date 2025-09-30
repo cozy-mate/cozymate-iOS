@@ -19,6 +19,7 @@ import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
+import { matchMultiQueries, queries } from '@/server';
 
 export const useWithdraw = () => {
   const { clearMailState } = useMailAuthenticationStore();
@@ -44,10 +45,7 @@ export const useWithdraw = () => {
 };
 
 export const useGetMemberUniversityInfo = () => {
-  return useSuspenseQuery({
-    queryKey: [`/members/university-info`],
-    queryFn: () => getMemberUniversityInfo(),
-  });
+  return useSuspenseQuery(queries.member.universityInfo());
 };
 
 export const useCheckNickname = () => {
@@ -60,10 +58,7 @@ export const useCheckNickname = () => {
 };
 
 export const useGetMemberProfile = () => {
-  return useSuspenseQuery({
-    queryKey: [`/members/member-info`],
-    queryFn: () => getMemberProfile(),
-  });
+  return useSuspenseQuery(queries.member.profile());
 };
 
 export const useUpdateMemberInfo = () => {
@@ -86,16 +81,19 @@ export const useUpdateMemberInfo = () => {
         universityId: memberInfo?.universityId ?? 0,
       });
 
-      queryClient.invalidateQueries({ queryKey: [`/members/member-info`] });
-      queryClient.invalidateQueries({ queryKey: [`/members/stat`] });
+      queryClient.invalidateQueries({
+        predicate: matchMultiQueries([queries.member.profile._def, queries.memberStat.list._def]),
+      });
 
       if (hasLifeStyle) {
-        queryClient.invalidateQueries({ queryKey: [`/members/stat/suspense`] });
-        queryClient.invalidateQueries({
-          queryKey: [`/members/stat/${memberInfo?.memberId}`, memberInfo?.memberId],
-        });
+        queryClient.invalidateQueries(queries.memberStat.suspenseMyDetail());
+
+        const memberId = memberInfo?.memberId;
+        if (memberId) {
+          queryClient.invalidateQueries(queries.memberStat.detail({ memberId }));
+        }
+        router.back();
       }
-      router.back();
     },
     onError: () => {
       showRejectToast('내 정보 수정에 실패했어요!');

@@ -25,6 +25,8 @@ import { useAcceptRoomInvite, useCancelRequestRoom, useSendRoomRequest } from '@
 import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room-favorite';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
+import { matchMultiQueries, queries } from '@/server';
+import { getRecommendRoomList } from '../../server/room-recommend/room-recommend';
 
 export function ErrorBoundary({ error }: ErrorBoundaryProps) {
   const router = useRouter();
@@ -46,11 +48,12 @@ export function ErrorBoundary({ error }: ErrorBoundaryProps) {
       <BottomButtonComponent
         buttonText="다시 시도하러 가기"
         onPress={async () => {
-          await Promise.all([
-            queryClient.invalidateQueries({ queryKey: [`/rooms/list/home`] }),
-            queryClient.invalidateQueries({ queryKey: [`/rooms/list`] }),
-            queryClient.invalidateQueries({ queryKey: [`/rooms/requested`] }),
-          ]);
+          await queryClient.invalidateQueries({
+            predicate: matchMultiQueries([
+              queries.roomRecommend._def,
+              queries.room.sentRequestRoomList._def
+            ]),
+          })
           router.back();
         }}
         color="BLUE"
