@@ -4,6 +4,8 @@ import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import XButton from '@/assets/images/common/roundX.svg';
+import MiniRoomCard from '@/components/common/room/miniRoomCard';
+import OpacityPressable from '@/components/opacityPressable';
 import { useSearchRoom } from '@/hooks/room/room';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useTracker } from '@/providers/TrackerProvider';
@@ -48,41 +50,31 @@ export default function SearchRoom() {
             )}
           </View>
 
-          <Pressable onPress={() => router.back()} className="px-[8px] py-[11.5px]">
+          <OpacityPressable onPress={() => router.back()} className="px-[8px] py-[11.5px]">
             <Text className="Medium14 text-emphasizedFont">취소</Text>
-          </Pressable>
+          </OpacityPressable>
         </View>
 
-        {data !== undefined && (
-          <FlatList
-            data={data?.result}
-            renderItem={({ item }) => (
-              <Pressable
-                key={item.roomId}
-                onPress={() => router.push(`/room/${item.roomId}`)}
-                className="flex flex-row justify-between items-center px-[8px] py-[10px]"
-              >
-                <View>
-                  <Text className="Semibold16 text-emphasizedFont">{item.name}</Text>
-                  <Text className="Medium12 text-disabledFont">
-                    <Text className="text-mainColor">{item.arrivalMateNum}명</Text>의 룸메이트가
-                    있어요
+        {keyword === '' ? (
+          <View className="flex-1 items-center justify-center">
+            <Text className="Medium14 text-disabledFont">검색어를 입력해주세요</Text>
+          </View>
+        ) : (
+          data !== undefined && (
+            <FlatList
+              data={data.result}
+              renderItem={({ item }) => <MiniRoomCard key={item.roomId} data={item} />}
+              ItemSeparatorComponent={() => <View className="h-[1px] bg-[#F6F6F6] my-[12px]" />}
+              contentContainerStyle={data.result.length === 0 ? { flexGrow: 1 } : undefined}
+              ListEmptyComponent={() => (
+                <View className="flex-1 justify-center items-center">
+                  <Text className="Medium14 text-disabledFont text-center mb-[75px]">
+                    검색결과가 없어요
                   </Text>
                 </View>
-
-                <Text className="Medium16 text-mainColor">{item.equality}%</Text>
-              </Pressable>
-            )}
-            ItemSeparatorComponent={() => <View className="h-[1px] bg-[#F6F6F6] my-[12px]" />}
-            contentContainerStyle={data.result.length === 0 ? { flexGrow: 1 } : undefined}
-            ListEmptyComponent={() => (
-              <View className="flex-1 justify-center items-center">
-                <Text className="Medium14 text-disabledFont text-center mb-[75px]">
-                  검색결과가 없어요
-                </Text>
-              </View>
-            )}
-          />
+              )}
+            />
+          )
         )}
       </View>
     </SafeAreaView>

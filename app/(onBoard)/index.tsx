@@ -1,12 +1,12 @@
 import LottieView from 'lottie-react-native';
-import { Alert, Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AppleLogo from '@/assets/images/common/appleLogo.svg';
-import KakaoLogo from '@/assets/images/common/kakaoLogo.svg';
 import GoogleLogo from '@/assets/images/common/googleLogo.svg';
+import KakaoLogo from '@/assets/images/common/kakaoLogo.svg';
 import LoadingComponent from '@/components/common/loading';
 import { useAppleLogin, useGoogleLogin, useKakaoLogin } from '@/hooks/auth/auth';
 

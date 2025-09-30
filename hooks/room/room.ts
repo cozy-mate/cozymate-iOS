@@ -1,6 +1,6 @@
-import { StackActions } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { useRouter, useNavigationContainerRef } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React from 'react';
 
 import { CreatePublicRoomRequest } from '@/server/room/request';
@@ -86,11 +86,9 @@ export const useCheckHasRoom = () => {
 export const useExitRoom = (roomId: number) => {
   const queryClient = useQueryClient();
 
-  const router = useRouter();
-
   const { clearRoom } = useMemberStore();
 
-  const rootNavigation = useNavigationContainerRef();
+  const navigation = useNavigation();
 
   return useMutation({
     mutationFn: () => exitRoom(roomId),
@@ -101,8 +99,12 @@ export const useExitRoom = (roomId: number) => {
       queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}`, roomId] });
       queryClient.invalidateQueries({ queryKey: [`/rooms/${roomId}/myRoom`, roomId] });
 
-      rootNavigation.dispatch(StackActions.popToTop());
-      router.replace('/(tabs)/cozyHome');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: '(tabs)' }],
+        }),
+      );
     },
   });
 };

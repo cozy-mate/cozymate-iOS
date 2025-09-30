@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
 import LoadingComponent from '@/components/common/loading';
-import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
+import { RoomCard } from '@/components/common/room';
 import BasicUserItem from '@/components/common/userItem/basicUserItem';
 import { useGetMemberLikeList } from '@/hooks/member-favorite/member-favorite';
 import { useGetRoomLikeList } from '@/hooks/room-favorite/room-favorite';
@@ -101,7 +101,7 @@ function LikeRoommateComponent() {
                 }
               }
               data={roomList?.pages?.flatMap((page) => page.result.result)}
-              renderItem={({ item }) => <BasicRoomItem key={item.roomId} roomData={item} />}
+              renderItem={({ item }) => <RoomCard key={item.roomId} data={item} />}
               ListEmptyComponent={() => (
                 <View className="flex-1 justify-center items-center mb-[80px]">
                   <Text className="Medium14 text-disabledFont">찜한 방이 없어요!</Text>

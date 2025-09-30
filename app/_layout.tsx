@@ -5,25 +5,30 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import LottieView from 'lottie-react-native';
 import { useEffect, useState } from 'react';
-import 'react-native-reanimated';
 import { Text, TextInput, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host, Portal } from 'react-native-portalize';
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
 
 import { toastConfig } from '@/config/toastConfig';
 import { useAutoLogin } from '@/hooks/autoLogin';
 import { initGlobalThis } from '@/lib/initGlobalThis';
+import FCMProvider from '@/providers/FCMProvider';
 import { TrackerProvider } from '@/providers/TrackerProvider';
 import ScreenTracker from '@/utils/ga/screenTracker';
-
 import '../global.css';
 import { useMemberStore } from '@/zustand/store';
-import FCMProvider from '@/providers/FCMProvider';
 
 initGlobalThis();
 
 const kakaoNativeAppKey = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || '';
+
+// https://docs.swmansion.com/react-native-reanimated/docs/debugging/logger-configuration/
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 interface TextWithDefaultProps extends Text {
   defaultProps?: { allowFontScaling?: boolean };
