@@ -1,14 +1,14 @@
-import { RoomItem } from '@/type/room';
+import { MiniRoomItem, RoomDetailItem, RoomItem } from '@/type/room';
 
 export interface GetRoomDetailResponse {
-  result: RoomItem;
+  result: RoomDetailItem;
 }
 
 export interface GetSentRequestRoomListResponse {
   result: {
     page: number;
     hasNext: boolean;
-    result: RoomItem[];
+    result: RoomDetailItem[];
   };
 }
 
@@ -42,34 +42,7 @@ export interface InviteMemberResponse {
 }
 
 export interface CreatePublicRoomResponse {
-  result: {
-    roomId: number;
-    name: string;
-    inviteCode: string;
-    persona: number;
-    mateDetailList: {
-      memberId: number;
-      mateId: number;
-      nickname: string;
-      persona: number;
-      mateEquality: number;
-    }[];
-    managerMemberId: number;
-    managerNickname: string;
-    isRoomManager: true;
-    favoriteId: number;
-    maxMateNum: number;
-    arrivalMateNum: number;
-    dormitoryName: string;
-    roomType: string;
-    hashtagList: string[];
-    equality: number;
-    difference: {
-      blue: string[];
-      red: string[];
-      white: string[];
-    };
-  };
+  result: RoomDetailItem;
 }
 
 export interface ExitRoomResponse {
@@ -101,12 +74,7 @@ export interface CheckIsInvitedRoomResponse {
 }
 
 export interface SearchRoomResponse {
-  result: {
-    roomId: number;
-    name: string;
-    arrivalMateNum: number;
-    equality: number;
-  }[];
+  result: MiniRoomItem[];
 }
 
 export interface AcceptRoomRequestResponse {

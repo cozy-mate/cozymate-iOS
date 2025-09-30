@@ -1,8 +1,7 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
-import { Suspense, useRef, useState } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
-import { Portal } from 'react-native-portalize';
+import { useRef, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
@@ -10,46 +9,35 @@ import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
 import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButtonComponent from '@/components/common/bottomButton';
-import LoadingComponent from '@/components/common/loading';
-import BasicRoomItem from '@/components/common/roomItem/basicRoomItem';
-import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
+import { RoomCard } from '@/components/common/room';
+import OpacityPressable from '@/components/opacityPressable';
+import { sortTypeItem } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
 
-function RecommendRoomComponent() {
+export default function RecommendRoom() {
   const router = useRouter();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const sortTypeRef = useRef<SortTypeValue>('AVERAGE_RATE');
-  const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
+  const [selectedSortType, setSelectedSortType] = useState<string>('AVERAGE_RATE');
 
   const { memberInfo } = useMemberStore();
 
   const { trackButton } = useTracker();
 
-  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(
-    () => sortTypeRef.current,
-  );
+  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(selectedSortType);
 
-  const loadMoreList = () => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  };
-
-  const onPressSortTypeSubmit = (value: SortTypeValue) => {
+  const onPressSortTypeSubmit = (value: string) => {
     trackButton(ButtonEvent.sorting, EventCategory.content_room);
-    sortTypeRef.current = value;
     setSelectedSortType(value);
     bottomSheetRef.current?.close();
     refetch();
   };
 
-  const onPressSortType = (value: SortTypeValue) => {
+  const onPressSortType = (value: string) => {
     const buttonEvent = `sorting_${value.toLowerCase()}` as keyof typeof ButtonEvent;
     trackButton(ButtonEvent[buttonEvent], EventCategory.content_room, {
       sorting: ButtonEvent[buttonEvent],
@@ -74,11 +62,7 @@ function RecommendRoomComponent() {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
           data={data?.pages?.flatMap((page) => page.result.result)}
           renderItem={({ item }) => (
-            <BasicRoomItem
-              key={item.roomId}
-              roomData={item}
-              onPress={() => onPressRoom(item.roomId)}
-            />
+            <RoomCard key={item.roomId} data={item} onPress={() => onPressRoom(item.roomId)} />
           )}
           ListHeaderComponent={() => (
             <View className="px-[20px]">
@@ -89,7 +73,7 @@ function RecommendRoomComponent() {
                 <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
               </View>
 
-              <Pressable
+              <OpacityPressable
                 onPress={() => router.push('/room/search')}
                 className="bg-colorBox rounded-xl px-[4px] py-[8px] flex flex-row items-center mt-[16px] mb-[20px]"
               >
@@ -97,24 +81,25 @@ function RecommendRoomComponent() {
                   <MagnifierIcon />
                 </View>
                 <Text className="Medium14 text-disabledFont">방 이름을 검색해보세요</Text>
-              </Pressable>
+              </OpacityPressable>
 
-              <Pressable
+              <OpacityPressable
                 onPress={() => bottomSheetRef.current?.expand()}
                 className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
               >
-                <Text className="Medium14 text-basicFont">
-                  {sortTypeItem.find((item) => item.value === sortTypeRef.current)?.title}
-                </Text>
-
+                <Text className="Medium14 text-basicFont">{sortTypeItem[selectedSortType]}</Text>
                 <View className="rotate-90">
                   <GrayArrowIcon />
                 </View>
-              </Pressable>
+              </OpacityPressable>
             </View>
           )}
           ItemSeparatorComponent={() => <View className="h-[24px]" />}
-          onEndReached={loadMoreList}
+          onEndReached={() => {
+            if (hasNextPage) {
+              fetchNextPage();
+            }
+          }}
           onEndReachedThreshold={0.5}
           ListEmptyComponent={() => (
             <View className="flex-1">
@@ -132,58 +117,39 @@ function RecommendRoomComponent() {
 
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={[285]}
+        snapPoints={[350]}
         index={-1}
         enablePanDownToClose={true}
         backdropComponent={(props) => (
           <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
         )}
       >
-        <BottomSheetView className="flex-1 relative pt-[12px]">
-          <View className="gap-y-[8px] px-[20px]">
-            {sortTypeItem.map((item, index) => (
-              <Pressable
-                key={index}
-                onPress={() => onPressSortType(item.value)}
-                className="flex flex-row justify-between items-center"
-              >
-                <Text
-                  className={`py-[11.5px] ${item.value === selectedSortType ? 'Semibold16 text-mainColor' : 'Medium16 text-disabledFont'}`}
-                >
-                  {item.title}
-                </Text>
+        <BottomSheetView className="h-[350px] px-[20px] pt-[24px]">
+          <View className="flex-1 gap-y-[8px]">
+            {Object.entries(sortTypeItem).map(([value, title]) => (
+              <OpacityPressable key={value} onPress={() => onPressSortType(value)}>
+                <View className="flex flex-row justify-between items-center">
+                  <Text
+                    className={`py-[11.5px] ${value === selectedSortType ? 'Semibold16 text-mainColor' : 'Medium16 text-disabledFont'}`}
+                  >
+                    {title}
+                  </Text>
 
-                <View className="p-[8px] my-[1px]">
-                  {item.value === selectedSortType ? <SelectedRadioIcon /> : <RadioIcon />}
+                  <View className="p-[8px] my-[1px]">
+                    {value === selectedSortType ? <SelectedRadioIcon /> : <RadioIcon />}
+                  </View>
                 </View>
-              </Pressable>
+              </OpacityPressable>
             ))}
           </View>
 
-          <BottomButtonComponent
-            buttonText="확인"
-            onPress={() => {
-              onPressSortTypeSubmit(selectedSortType);
-            }}
-            color="BLUE"
-            disabled={false}
-          />
+          <OpacityPressable onPress={() => onPressSortTypeSubmit(selectedSortType)}>
+            <View className="border bg-mainColor py-[17.5px] rounded-xl mb-[50px]">
+              <Text className="Semibold16 text-white text-center">확인</Text>
+            </View>
+          </OpacityPressable>
         </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
-  );
-}
-
-export default function RecommendRoom() {
-  return (
-    <Suspense
-      fallback={
-        <Portal>
-          <LoadingComponent />
-        </Portal>
-      }
-    >
-      <RecommendRoomComponent />
-    </Suspense>
   );
 }

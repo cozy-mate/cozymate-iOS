@@ -11,6 +11,7 @@ import 'react-native-reanimated';
 import { Text, TextInput, View, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host, Portal } from 'react-native-portalize';
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
 import { useSyncQueriesExternal } from 'react-query-external-sync';
 
@@ -26,6 +27,12 @@ import { useMemberStore } from '@/zustand/store';
 initGlobalThis();
 
 const kakaoNativeAppKey = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY || '';
+
+// https://docs.swmansion.com/react-native-reanimated/docs/debugging/logger-configuration/
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
 
 interface TextWithDefaultProps extends Text {
   defaultProps?: { allowFontScaling?: boolean };

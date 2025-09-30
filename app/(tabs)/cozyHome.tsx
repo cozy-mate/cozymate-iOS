@@ -1,89 +1,126 @@
-import { Suspense, useCallback, useState } from 'react';
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  RefreshControl,
-  ScrollView,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCallback, useState } from 'react';
+import { RefreshControl, ScrollView, Text, View } from 'react-native';
 
-import OverScrollView from '@/components/common/overScrollView';
 import HeaderComponent from '@/components/cozyHome/header';
 import MyRoomComponent from '@/components/cozyHome/myRoom';
 import ReceivedRequestComponent from '@/components/cozyHome/receivedRequest';
 import RecommendRoomComponent from '@/components/cozyHome/recommendRoom';
 import RecommendRoommateComponent from '@/components/cozyHome/recommendRoommate';
 import SentRequestComponent from '@/components/cozyHome/sentRequest';
+import OpacityPressable from '@/components/opacityPressable';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
-import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
+import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { useGetReceivedRequestList } from '@/hooks/room/roomManager';
 import { useGetSentRequestRoomList } from '@/hooks/room/user';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
+import { useMemberStore } from '@/zustand/store';
 
-function CozyHomeComponent() {
-  const { data: hasRoom } = useCheckHasRoom();
+export default function CozyHome() {
+  const { hasLifeStyle, hasRoom, roomInfo } = useMemberStore();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  // 스크롤 시 SafeAreaView 색상 관련
-  const [scrollY, setScrollY] = useState<number>(0);
+  const { refetch: myRoomRefetch } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { refetch: receivedRequestRefetch } = useGetReceivedRequestList(
+    roomInfo?.isRoomManager ?? false,
+  );
+  const { refetch: sentRequestRefetch } = useGetSentRequestRoomList(3);
+  const { refetch: randomMemberRefetch } = useGetRandomMemberList();
+  const { refetch: memberRefetch } = useGetHomeMemberList();
+  const { refetch: roomRefetch } = useGetHomeRecommendRoomList();
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setScrollY(event.nativeEvent.contentOffset.y);
-  };
-
-  const refetchFuncs = [
-    useGetMyRoomDetail(hasRoom.result.roomId).refetch(),
-    useGetReceivedRequestList(hasRoom.result.isRoomManager).refetch(),
-    useGetSentRequestRoomList(3).refetch(),
-    useGetRandomMemberList().refetch(),
-    useGetHomeMemberList().refetch(),
-    useGetHomeRecommendRoomList().refetch(),
-  ];
-
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    Promise.all(refetchFuncs).finally(() => {
-      setRefreshing(false);
-    });
-  }, []);
+    // 시간 계산용
+    const start = Date.now();
+    console.log('[onRefresh] start');
+
+    try {
+      const tasks: Promise<any>[] = [];
+
+      // 방 유무
+      if (!hasRoom) {
+        tasks.push(sentRequestRefetch());
+      } else if (roomInfo?.roomId !== 0) {
+        tasks.push(myRoomRefetch());
+
+        if (roomInfo?.isRoomManager) {
+          tasks.push(receivedRequestRefetch());
+        }
+      }
+
+      // 라이프스타일 유무
+      if (!hasLifeStyle) {
+        tasks.push(randomMemberRefetch());
+      } else {
+        tasks.push(memberRefetch());
+      }
+
+      // 추천 방
+      tasks.push(roomRefetch());
+
+      await Promise.all(tasks);
+    } finally {
+      const elapsed = Date.now() - start;
+      const minDuration = 1000; // 최소 1초 동안은 표시
+      const delay = Math.max(0, minDuration - elapsed);
+
+      setTimeout(() => {
+        console.log(`[onRefresh] done in ${Date.now() - start}ms`);
+        setRefreshing(false);
+      }, delay);
+    }
+  }, [
+    hasRoom,
+    hasLifeStyle,
+    roomInfo,
+    myRoomRefetch,
+    receivedRequestRefetch,
+    sentRequestRefetch,
+    randomMemberRefetch,
+    memberRefetch,
+    roomRefetch,
+  ]);
 
   return (
-    <SafeAreaView className={`flex-1 ${scrollY <= 175 ? 'bg-subColor1' : 'bg-white'}`}>
+    <View className="flex-1 bg-white">
+      <HeaderComponent />
+
       <ScrollView
-        onScroll={handleScroll}
-        contentContainerStyle={{ paddingBottom: 120, backgroundColor: '#FFFFFF' }}
+        contentContainerStyle={{
+          zIndex: 10,
+          paddingTop: 36,
+          paddingBottom: 120,
+          backgroundColor: '#FFFFFF',
+          rowGap: 24,
+        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={'#68A4FF'} />
         }
       >
-        <HeaderComponent />
-        <View className="bg-white pt-[24px] gap-y-[24px]">
-          <MyRoomComponent />
+        {/* 방이 있는 경우 */}
+        {hasRoom && roomInfo !== undefined && roomInfo.roomId !== 0 && <MyRoomComponent />}
+
+        {/* 방이 있으면서 방장인 경우 */}
+        {hasRoom && roomInfo !== undefined && roomInfo.roomId !== 0 && roomInfo.isRoomManager && (
           <ReceivedRequestComponent />
-          <SentRequestComponent />
-          <RecommendRoommateComponent />
-          <RecommendRoomComponent />
-        </View>
+        )}
 
-        {/* 하단 over-scroll 시의 흰색 배경 설정 */}
-        <OverScrollView backgroundColor="#FFFFFF" height={200} bottom={-100} />
+        {/* 방이 없고 보낸 요청이 있는 경우 */}
+        {!hasRoom && <SentRequestComponent />}
+
+        <RecommendRoommateComponent />
+
+        <RecommendRoomComponent />
+
+        {!hasRoom && (
+          <OpacityPressable onPress={() => {}}>
+            <View className="mx-[20px] bg-colorBox rounded-xl px-[16px] py-[12px]">
+              <Text className="Semibold12 text-basicFont">초대코드로 친구를 찾고 계신가요?</Text>
+            </View>
+          </OpacityPressable>
+        )}
       </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-export default function CozyHome() {
-  return (
-    <Suspense
-    // fallback={
-    //   <Modal visible={true} transparent={true}>
-    //     <LoadingComponent />
-    //   </Modal>
-    // }
-    >
-      <CozyHomeComponent />
-    </Suspense>
+    </View>
   );
 }

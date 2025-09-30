@@ -1,31 +1,30 @@
-import { Suspense } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
-import LoadingComponent from '@/components/common/loading';
-import SimpleRoomItem from '@/components/common/roomItem/simpleRoomItem';
+import { SimpleRoomCard, SimpleRoomCardSkeleton } from '@/components/common/room';
 import { useGetSentRequestRoomList } from '@/hooks/room/user';
+import { RoomDetailItem } from '@/type/room';
 import { useMemberStore } from '@/zustand/store';
 
-function SentRequestComponent() {
+export default function SentRequest() {
   const { memberInfo } = useMemberStore();
 
   const { data, hasNextPage, fetchNextPage } = useGetSentRequestRoomList(5);
-
-  const loadMoreList = () => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  };
+  const rooms = data?.pages?.flatMap((page) => page.result.result) ?? [];
+  const skeletonData = Array.from({ length: 3 }, (_, i) => i);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <FlatList
+      <FlatList<RoomDetailItem | number>
         className="px-[20px]"
-        data={data.pages?.flatMap((page) => page.result.result)}
-        renderItem={({ item }) => <SimpleRoomItem key={item.roomId} roomData={item} />}
+        data={!data ? skeletonData : rooms}
+        keyExtractor={(item, index) =>
+          !data ? `skeleton-${index}` : `room-${(item as RoomDetailItem).roomId}`
+        }
+        renderItem={({ item }) =>
+          !data ? <SimpleRoomCardSkeleton /> : <SimpleRoomCard data={item as RoomDetailItem} />
+        }
         ListHeaderComponent={() => (
           <View className="gap-y-[20px] mb-[16px]">
             <BackHeaderComponent />
@@ -40,23 +39,13 @@ function SentRequestComponent() {
           </View>
         )}
         ItemSeparatorComponent={() => <View className="h-[12px]" />}
-        onEndReached={loadMoreList}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
         onEndReachedThreshold={0.5}
       />
     </SafeAreaView>
-  );
-}
-
-export default function SentRequest() {
-  return (
-    <Suspense
-      fallback={
-        <Portal>
-          <LoadingComponent />
-        </Portal>
-      }
-    >
-      <SentRequestComponent />
-    </Suspense>
   );
 }
