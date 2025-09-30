@@ -1,6 +1,5 @@
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { SortTypeValue } from '@/constants/items/sortItem';
 import { getRecommendRoomList } from '@/server/room-recommend/room-recommend';
 
 export const useGetHomeRecommendRoomList = () => {
@@ -10,13 +9,10 @@ export const useGetHomeRecommendRoomList = () => {
   });
 };
 
-export const useGetRecommendRoomList = (getSortType: () => SortTypeValue) => {
-  return useSuspenseInfiniteQuery({
+export const useGetRecommendRoomList = (sortType: string) => {
+  return useInfiniteQuery({
     queryKey: [`/rooms/list`],
-    queryFn: ({ pageParam = 0 }) => {
-      const sortType = getSortType();
-      return getRecommendRoomList(5, pageParam, sortType);
-    },
+    queryFn: ({ pageParam }) => getRecommendRoomList(5, pageParam, sortType),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage.result.hasNext) {

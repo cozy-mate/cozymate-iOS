@@ -1,7 +1,7 @@
 import {
+  useInfiniteQuery,
   useMutation,
   useQueryClient,
-  useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
@@ -48,7 +48,7 @@ export const useCheckIsInvitedRoom = (roomId: number) => {
 
 // 사용자가 참여 요청한 방 목록 조회
 export const useGetSentRequestRoomList = (size: number) => {
-  return useSuspenseInfiniteQuery({
+  return useInfiniteQuery({
     queryKey: [`/rooms/requested`, size],
     queryFn: ({ pageParam }) => getSentRequestRoomList(pageParam, size),
     initialPageParam: 0,

@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { Fragment } from 'react';
 import { Dimensions, Text, View } from 'react-native';
-import { Pressable } from 'react-native-gesture-handler';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
@@ -12,7 +11,9 @@ import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
 
-const RecommendRoommateComponent: React.FC = () => {
+import OpacityPressable from '../opacityPressable';
+
+export default function RecommendRoommateComponent() {
   const router = useRouter();
 
   const { memberInfo, hasLifeStyle } = useMemberStore();
@@ -54,12 +55,12 @@ const RecommendRoommateComponent: React.FC = () => {
               </Text>
             </View>
 
-            <Pressable onPress={handleMore}>
+            <OpacityPressable onPress={handleMore}>
               <View className="flex flex-row items-center gap-x-[4px]">
                 <Text className="Semibold12 text-disabledFont">더보기</Text>
                 <GrayArrowIcon />
               </View>
-            </Pressable>
+            </OpacityPressable>
           </View>
 
           {memberList.length !== 0 ? (
@@ -114,6 +115,4 @@ const RecommendRoommateComponent: React.FC = () => {
       </View>
     )
   );
-};
-
-export default RecommendRoommateComponent;
+}

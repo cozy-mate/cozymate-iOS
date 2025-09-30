@@ -2,22 +2,21 @@ import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
-import { useCheckHasRoom } from '@/hooks/room/room';
 import { useGetSentRequestRoomList } from '@/hooks/room/user';
-
-import SimpleRoomItem from '../common/roomItem/simpleRoomItem';
 import { useMemberStore } from '@/zustand/store';
 
-const SentRequestComponent: React.FC = () => {
+import SimpleRoomItem from '../common/roomItem/simpleRoomItem';
+
+export default function SentRequestComponent() {
   const router = useRouter();
 
-  const { memberInfo, hasRoom } = useMemberStore();
+  const { memberInfo } = useMemberStore();
 
   const { data } = useGetSentRequestRoomList(3);
 
   return (
-    hasRoom &&
-    data.pages?.flatMap((page) => page.result.result).length !== 0 && (
+    data !== undefined &&
+    data.pages.flatMap((page) => page.result.result).length !== 0 && (
       <View>
         <View className="gap-y-[16px] px-[20px]">
           <View className="flex flex-row justify-between items-center">
@@ -49,6 +48,4 @@ const SentRequestComponent: React.FC = () => {
       </View>
     )
   );
-};
-
-export default SentRequestComponent;
+}
