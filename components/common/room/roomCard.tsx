@@ -10,7 +10,7 @@ interface RoomCardProps {
   onPress?: () => void;
 }
 
-export default function RoomCard({ data, onPress = () => {} }: RoomCardProps) {
+export default function RoomCard({ data, onPress = () => { } }: RoomCardProps) {
   const router = useRouter();
 
   const getChipColor = (numOfArrival: number, count: number) => {

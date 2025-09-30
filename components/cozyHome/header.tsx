@@ -35,15 +35,8 @@ export default function HeaderComponent() {
   };
 
   return (
-    <View
-      className={`${!hasLifeStyle ? 'h-[201px]' : 'h-[127px]'} pt-[65px] gap-y-[12px] px-[20px] bg-subColor1 relative`}
-    >
-      <Background
-        style={{ position: 'absolute', top: 0 }}
-        width={Dimensions.get('screen').width}
-        height={!hasLifeStyle ? 201 : 127}
-        preserveAspectRatio="xMidYMid slice"
-      />
+    <View className="gap-y-[12px] px-[20px] pt-[18px] pb-[25px] bg-subColor1 relative">
+      <Background style={{ position: 'absolute', top: -47 }} width={width} />
       <View className="flex flex-row justify-between items-center">
         <View className="flex flex-row items-center gap-x-[6px]">
           <SchoolIcon />
@@ -66,18 +59,19 @@ export default function HeaderComponent() {
       </View>
 
       {!hasLifeStyle && (
-        <OpacityPressable onPress={handleLifeStyle}>
-          <View className="bg-colorBox py-[12px] px-[16px] flex flex-row justify-between items-center rounded-xl">
-            <View className="gap-x-[8px] flex flex-row items-center">
-              <Magnifier />
-              <Text className="Semibold12 text-basicFont">
-                {memberInfo?.nickname ?? ''}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
-                찾아볼까요?
-              </Text>
-            </View>
-
-            <GrayArrow />
+        <OpacityPressable
+          onPress={handleLifeStyle}
+          className="bg-colorBox py-[12px] px-[16px] flex flex-row justify-between items-center rounded-xl"
+        >
+          <View className="gap-x-[8px] flex flex-row items-center">
+            <Magnifier />
+            <Text className="Semibold12 text-basicFont">
+              {memberInfo?.nickname ?? ''}님, 라이프스타일을 입력하고{'\n'}나와 꼭 맞는 룸메이트를
+              찾아볼까요?
+            </Text>
           </View>
+
+          <GrayArrow />
         </OpacityPressable>
       )}
     </View>
