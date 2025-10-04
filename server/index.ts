@@ -20,6 +20,10 @@ import { ruleQueries } from './rule/queries';
 import { todoQueries } from './todo/queries';
 import { universityQueries } from './university/queries';
 
+import { postQueries } from './post/queries';
+import { commentQueries } from './comment/queries';
+import { feedQueries } from './feed/queries';
+
 export const queries = mergeQueryKeys(
   chatQueries,
   chatRoomQueries,
@@ -39,6 +43,9 @@ export const queries = mergeQueryKeys(
   ruleQueries,
   todoQueries,
   universityQueries,
+  feedQueries,
+  postQueries,
+  commentQueries,
 );
 
 export const matchMultiQueries = (queryKeys: readonly QueryKey[]) => {

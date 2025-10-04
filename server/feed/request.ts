@@ -1,0 +1,5 @@
+export interface UpdateMyRoomFeedRequest {
+  roomId: number;
+  name: string;
+  description: string;
+}
