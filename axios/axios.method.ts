@@ -3,11 +3,11 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
 import axiosInstance from '@/axios/axios.Instance';
 
-export const PostAxiosInstance = async <T>(
+export const PostAxiosInstance = async <TResponse, TRequest extends any>(
   url: string,
-  data?: any,
+  data?: TRequest,
   config?: AxiosRequestConfig,
-): Promise<AxiosResponse> => {
+): Promise<AxiosResponse<TResponse>> => {
   const response = await axiosInstance.post(url, data, config);
   return response;
 };
