@@ -1,6 +1,6 @@
-import { GetAxiosInstance, PutAxiosInstance } from '@/axios/axios.method';
+import { GetAxiosInstance, PostAxiosInstance, PutAxiosInstance } from '@/axios/axios.method';
 
-import { UpdateMyRoomFeedRequest } from './request';
+import { CreateMyRoomFeedRequest, UpdateMyRoomFeedRequest } from './request';
 import { GetMyRoomFeedResponse } from './response';
 
 export type Feed = {
@@ -8,8 +8,13 @@ export type Feed = {
   description: string;
 };
 
-export const getMyRoomFeed = async () => {
-  const response = await GetAxiosInstance<GetMyRoomFeedResponse>('/feed');
+export const getMyRoomFeed = async ({ roomId }: { roomId: number }) => {
+  const response = await GetAxiosInstance<GetMyRoomFeedResponse>(`/feed/${roomId}`);
+  return response.data;
+};
+
+export const createMyRoomFeed = async (request: CreateMyRoomFeedRequest) => {
+  const response = await PostAxiosInstance<boolean, CreateMyRoomFeedRequest>('/feed', request);
   return response.data;
 };
 

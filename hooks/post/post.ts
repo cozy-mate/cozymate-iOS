@@ -6,14 +6,15 @@ import { CreatePostRequest, UpdatePostRequest } from '@/server/post/request';
 import { GetPostListResponse } from '@/server/post/response';
 
 export const useGetPostList = ({ roomId }: { roomId: number }) => {
-  return useInfiniteQuery({
+  return useQuery<GetPostListResponse>({
     ...queries.post.list({ roomId }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage: GetPostListResponse) => {
-      if (lastPage.result.hasNext) {
-        return lastPage.result.page + 1;
-      }
-    },
+    // initialPageParam: 0,
+    // getNextPageParam: (lastPage: GetPostListResponse) => {
+    //   if (lastPage.result.hasNext) {
+    //     return lastPage.result.page + 1;
+    //   }
+    // },
+    enabled: roomId !== 0,
   });
 };
 
