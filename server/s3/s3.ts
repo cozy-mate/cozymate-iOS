@@ -13,16 +13,14 @@ export const getS3Urls = async ({ s3Keys }: { s3Keys: string[] }) => {
 };
 
 export const generatePresignedUrl = async ({
-  fileName,
-  contentType,
-}: GeneratePresignedUrlRequest) => {
+  requests,
+}: {
+  requests: GeneratePresignedUrlRequest[];
+}) => {
   const response = await PostAxiosInstance<
     GeneratePresignedUrlResponse,
-    GeneratePresignedUrlRequest
-  >('/api/files/presigned-url', {
-    fileName,
-    contentType,
-  });
+    GeneratePresignedUrlRequest[]
+  >('/api/files/presigned-urls', requests);
   return response.data;
 };
 

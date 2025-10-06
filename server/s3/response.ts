@@ -6,9 +6,9 @@ export interface GetS3UrlsResponse {
 
 export interface GeneratePresignedUrlResponse {
   result: {
-    uploadUrl: string[];
-    s3Key: string[];
-  };
+    uploadUrl: string;
+    s3Key: string;
+  }[];
 }
 
 export interface DeleteFileResponse {
