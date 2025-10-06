@@ -1,17 +1,20 @@
 
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from '@tanstack/react-query';
 import * as ImagePicker from 'expo-image-picker';
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Modal, ScrollView, Text, TextInput, View, Image, Pressable } from "react-native";
+import { z } from "zod";
 
 import GalleryIcon from "@/assets/icons/feed/gallery.svg";
 import DeleteImageIcon from "@/assets/images/feed/deleteImage.svg";
+import BottomButtonComponent from "@/components/common/bottomButton";
 import { EditLayout } from "@/components/common/layout";
 import OpacityPressable from "@/components/opacityPressable";
 import { useCreatePost } from "@/hooks/post/post";
-import { CreatePostRequest } from "@/server/post/request";
-import { generatePresignedUrl } from "@/server/s3/s3";
+import { useUploadImagesAndGetKeys } from '@/hooks/s3/s3';
 import { showRejectToast } from '@/utils/toast';
 import { useMemberStore } from "@/zustand/store";
 
@@ -24,14 +27,31 @@ export default function CreateFeed() {
         images: ImagePicker.ImagePickerAsset[];
     };
 
-    const { control, handleSubmit, setValue, watch, formState: { isValid } } = useForm<PostForm>({
+    const { control, handleSubmit, getValues, setValue, watch, formState: { isValid } } = useForm<PostForm>({
         mode: 'onChange',
         defaultValues: { content: '', images: [] },
+        resolver: zodResolver(z.object({
+            content: z.string().min(1),
+            images: z.array(z.any()),
+        })),
     });
 
     const images = watch('images');
 
     const { mutate: createPost, isPending } = useCreatePost({ roomId: roomInfo?.roomId ?? 0 });
+
+    const { mutate: uploadImagesAndGetKeys, isPending: isUploadingImages } = useUploadImagesAndGetKeys({
+        onSuccess: (s3Keys) => {
+            createPost({
+                roomId: roomInfo?.roomId ?? 0,
+                content: getValues('content') ?? '',
+                imageList: s3Keys,
+            });
+        },
+        onError: () => {
+            showRejectToast('이미지 업로드에 실패했어요');
+        },
+    });
 
     const [previewUri, setPreviewUri] = React.useState<string | null>(null);
 
@@ -59,58 +79,6 @@ export default function CreateFeed() {
         setValue('images', next, { shouldValidate: true, shouldDirty: true });
     };
 
-    const uploadImagesAndGetKeys = async (assets: ImagePicker.ImagePickerAsset[]): Promise<string[]> => {
-        if (assets.length === 0) return [];
-
-        const requests = assets.map(asset => {
-            const uri = asset.uri;
-            const contentType = asset.mimeType ?? (uri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
-            const fileName = asset.fileName ?? uri.split('/').pop() ?? `upload_${Date.now()}`;
-            return { fileName, contentType };
-        });
-
-        const { result } = await generatePresignedUrl({ requests });
-        console.log(result);
-        const uploadUrls = result.map(item => item.uploadUrl);
-        const s3Keys = result.map(item => item.s3Key);
-
-        const uploadPromises = assets.map(async (asset, index) => {
-            const fileResponse = await fetch(asset.uri);
-            const blob = await fileResponse.blob();
-            const contentType = asset.mimeType ?? (asset.uri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
-
-            await fetch(uploadUrls[index], {
-                method: 'PUT',
-                headers: { 'Content-Type': contentType },
-                body: blob
-            });
-
-            return s3Keys[index];
-        });
-
-        return Promise.all(uploadPromises);
-    };
-
-    const onSubmit = async (data: PostForm) => {
-        if (!roomInfo?.roomId) return;
-        if ((data.images?.length ?? 0) === 0) return;
-
-        try {
-            const s3Keys = await uploadImagesAndGetKeys(data.images);
-            const payload: CreatePostRequest = {
-                roomId: roomInfo.roomId,
-                content: data.content ?? '',
-                imageList: s3Keys,
-            };
-            createPost(payload);
-        } catch (error) {
-            console.error(error);
-            showRejectToast('이미지 업로드에 실패했어요');
-        }
-
-
-
-    };
 
     return (
         <EditLayout>
@@ -151,15 +119,22 @@ export default function CreateFeed() {
                             )}
                         />
                     </View>
-                </View >
+                </View>
             </View>
-            <OpacityPressable
-                disabled={!isValid || isPending || (images?.length ?? 0) === 0}
-                onPress={handleSubmit(onSubmit)}
-                className={`${!isValid || isPending ? 'bg-[#C4C4C4]' : 'bg-mainColor'} py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
-            >
-                <Text className="Semibold16 text-white text-center">{isPending ? '작성중입니다...' : '작성'}</Text>
-            </OpacityPressable>
+            <BottomButtonComponent
+                buttonText={(() => {
+                    if (isUploadingImages) {
+                        return '이미지 업로드중입니다...';
+                    }
+                    if (isPending) {
+                        return '작성중입니다...';
+                    }
+                    return '작성';
+                })()}
+                onPress={handleSubmit((data) => uploadImagesAndGetKeys(data.images))}
+                disabled={!isValid || isPending || isUploadingImages}
+                color={!isValid || isPending || isUploadingImages ? 'GRAY' : 'BLUE'}
+            />
             <Modal visible={previewUri !== null} transparent animationType="fade" onRequestClose={() => setPreviewUri(null)}>
                 <Pressable className="flex-1 bg-[rgba(0,0,0,0.6)] items-center justify-center" onPress={() => setPreviewUri(null)}>
                     {previewUri && (
