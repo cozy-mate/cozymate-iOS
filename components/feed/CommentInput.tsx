@@ -2,7 +2,10 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { View, TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 
+import SendDisabledIcon from '@/assets/icons/feed/send-disabled.svg';
 import SendIcon from '@/assets/icons/feed/send.svg';
+
+
 
 interface CommentInputProps {
     onSubmit: (comment: string) => void;
@@ -75,10 +78,19 @@ const CommentInput: React.FC<CommentInputProps> = ({
                     disabled={isCommentEmpty || isDisabled}
                     className={`w-[44px] h-[44px] rounded-xl items-center justify-center`}
                 >
-                    <SendIcon
-                        width={40}
-                        height={40}
-                    />
+                    {
+                        isCommentEmpty || isDisabled ? (
+                            <SendDisabledIcon
+                                width={40}
+                                height={40}
+                            />
+                        ) : (
+                            <SendIcon
+                                width={40}
+                                height={40}
+                            />
+                        )
+                    }
                 </Pressable>
             </View>
         </KeyboardAvoidingView>
