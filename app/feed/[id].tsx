@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
-import { FlatList, Keyboard, RefreshControl, View } from "react-native";
+import { useState } from "react";
+import { FlatList, RefreshControl, View } from "react-native";
 
 import { EditLayout } from "@/components/common/layout";
 import LoadingComponent from "@/components/common/loading";
@@ -17,7 +18,8 @@ export default function PostDetail() {
     const { id } = useLocalSearchParams();
     const { roomInfo } = useMemberStore();
 
-    const { data, isLoading, refetch, isFetching } = useGetPostDetail({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) });
+    const { data, isLoading, refetch, isRefetching } = useGetPostDetail({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) });
+
     const { mutate, isPending } = useCreateComment({
         roomId: roomInfo?.roomId ?? 0,
         postId: Number(id)
@@ -40,7 +42,9 @@ export default function PostDetail() {
             ) : (
                 <>
                     <FlatList
-                        refreshControl={<RefreshControl refreshing={isFetching && !isLoading} onRefresh={refetch} />}
+                        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => {
+                            refetch();
+                        }} />}
                         ListHeaderComponent={
                             <>
                                 <View className="px-5">

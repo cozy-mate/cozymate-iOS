@@ -25,6 +25,8 @@ export const useGetPostDetail = ({ roomId, postId }: { roomId: number; postId: n
   return useQuery({
     ...queries.post.detail({ roomId, postId }),
     enabled: roomId !== 0,
+    // @description : refreshcontrol에서 refetching을 사용하기 위해서 적용된 option
+    gcTime: 0,
   });
 };
 

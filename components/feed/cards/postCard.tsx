@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { Image as ExpoImage } from 'expo-image';
 import React, { useState } from 'react';
 import { Text, View, useWindowDimensions } from 'react-native';
@@ -8,7 +7,6 @@ import ChatIcon from '@/assets/icons/feed/chat.svg';
 import MoreDotIcon from '@/assets/icons/feed/more-dot.svg';
 import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
-import { queries } from '@/server/index';
 import { Post } from '@/server/post/post';
 import { formatDate } from '@/utils/translateDate';
 
@@ -41,17 +39,12 @@ const PostListHeader = ({ persona, nickname, createdAt }: { persona: number, nic
 const PostContent = ({ content, imageList }: { content: string, imageList: string[] }) => {
 
     const { width } = useWindowDimensions();
-    const cardHorizontalPadding = 32; // p-4
+    const cardHorizontalPadding = 32;
     const carouselWidth = width - cardHorizontalPadding * 2;
     const carouselHeight = carouselWidth;
-    // const { data, isLoading } = useQuery({
-    //     ...queries.s3.getS3Urls({ s3Keys: imageList }),
-    //     enabled: imageList.length > 0,
-    // })
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // const imageUrls = [] // data?.result.imageUrlList ?? [];
     const imageUrls = imageList;
     const showSkeleton = false || imageUrls.length === 0;
 
