@@ -113,7 +113,7 @@ export const PostListCard = ({
                 <PostContent content={content} imageList={imageList} />
                 <View className="flex flex-row gap-x-[6px] items-center">
                     <ChatIcon />
-                    <Text className="Medium12 text-basicFont">{commentCount}</Text>
+                    <Text className="Medium12 text-disabledFont">{commentCount}</Text>
                 </View>
             </View>
         </OpacityPressable>
@@ -136,7 +136,7 @@ export const PostDetailCard = ({
                 <View className="flex flex-row gap-x-[6px] items-center justify-between">
                     <View className="flex flex-row gap-x-[6px] items-center">
                         <ChatIcon />
-                        <Text className="Medium12 text-basicFont">{commentCount}</Text>
+                        <Text className="Medium12 text-disabledFont">{commentCount}</Text>
                     </View>
                     <Text className="Regular12 text-disabledFont">{formatDate(createdAt)}</Text>
                 </View>
