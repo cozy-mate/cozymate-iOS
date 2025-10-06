@@ -4,17 +4,29 @@ import React, { useState } from 'react';
 import { Text, View, useWindowDimensions } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
-
 import ChatIcon from '@/assets/icons/feed/chat.svg';
+import MoreDotIcon from '@/assets/icons/feed/more-dot.svg';
 import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
 import { queries } from '@/server/index';
 import { Post } from '@/server/post/post';
 import { formatDate } from '@/utils/translateDate';
 
+const PostDetailHeader = ({ persona, nickname }: { persona: number, nickname: string }) => {
+    return (
+        <View className="flex flex-row justify-between items-center">
+            <View className="flex flex-row gap-x-[6px] items-center">
+                {getPersona(persona, 24, 24)}
+                <Text className="Semibold14 text-emphasizedFont">{nickname}</Text>
+            </View>
+            <OpacityPressable>
+                <MoreDotIcon />
+            </OpacityPressable>
+        </View>
+    )
+}
 
-
-const PostHeader = ({ persona, nickname, createdAt }: { persona: number, nickname: string, createdAt: string }) => {
+const PostListHeader = ({ persona, nickname, createdAt }: { persona: number, nickname: string, createdAt: string }) => {
     return (
         <View className="flex flex-row justify-between items-center">
             <View className="flex flex-row gap-x-[6px] items-center">
@@ -48,7 +60,7 @@ const PostContent = ({ content, imageList }: { content: string, imageList: strin
             <Text className="Medium14 text-basicFont">{content}</Text>
 
             {imageList.length > 0 && (
-                <View className="flex flex-col items-center">
+                <View className="flex flex-col items-center" key={imageList.join(',')}>
                     {showSkeleton ? (
                         <View className="w-full bg-[#E6E6E6] rounded-2xl" style={{ width: carouselWidth, height: carouselHeight }} />
                     ) : (
@@ -86,16 +98,18 @@ const PostContent = ({ content, imageList }: { content: string, imageList: strin
 
 export const PostListCard = ({
     post,
+    onPress
 }: {
     post: Post & { commentCount: number };
+    onPress?: () => void;
 }) => {
 
     const { persona, nickname, content, commentCount, createdAt, imageList } = post;
 
     return (
-        <OpacityPressable>
+        <OpacityPressable onPress={onPress}>
             <View className="flex flex-col p-4 rounded-2xl bg-[#FFFFFF] gap-y-2">
-                <PostHeader persona={persona} nickname={nickname} createdAt={createdAt} />
+                <PostListHeader persona={persona} nickname={nickname} createdAt={createdAt} />
                 <PostContent content={content} imageList={imageList} />
                 <View className="flex flex-row gap-x-[6px] items-center">
                     <ChatIcon />
@@ -105,3 +119,28 @@ export const PostListCard = ({
         </OpacityPressable>
     );
 };
+
+export const PostDetailCard = ({
+    post
+}: {
+    post: Post & { commentCount: number };
+}) => {
+
+    const { persona, nickname, content, commentCount, createdAt, imageList } = post;
+
+    return (
+        <View className="flex flex-col pt-4 rounded-2xl bg-[#FFFFFF] gap-y-2">
+            <View className="flex flex-col rounded-2xl bg-[#FFFFFF] gap-y-2">
+                <PostDetailHeader persona={persona} nickname={nickname} />
+                <PostContent content={content} imageList={imageList} />
+                <View className="flex flex-row gap-x-[6px] items-center justify-between">
+                    <View className="flex flex-row gap-x-[6px] items-center">
+                        <ChatIcon />
+                        <Text className="Medium12 text-basicFont">{commentCount}</Text>
+                    </View>
+                    <Text className="Regular12 text-disabledFont">{formatDate(createdAt)}</Text>
+                </View>
+            </View>
+        </View>
+    )
+}

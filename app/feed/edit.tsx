@@ -21,8 +21,8 @@ export default function EditFeed() {
         formState: { isValid },
     } = useForm<Feed>({
         defaultValues: {
-            name: '',
-            description: '',
+            name: data?.result.name,
+            description: data?.result.description,
         },
         resolver: zodResolver(z.object({
             name: z.string().min(1),
