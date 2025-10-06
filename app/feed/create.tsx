@@ -119,7 +119,7 @@ export default function CreateFeed() {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%', height: 80 }} contentContainerStyle={{ alignItems: 'center' }}>
                         <OpacityPressable onPress={pickImages} className="h-[80px] w-[80px] mr-2 bg-colorBox rounded-2xl flex items-center justify-center gap-y-2">
                             <GalleryIcon />
-                            <Text className="Medium12 text-disabledFont">{(images?.length ?? 0)}/10</Text>
+                            <Text className={`Medium12 text-disabledFont`}>{(<Text className={`${images?.length === 0 ? 'text-disabledFont' : 'text-mainColor'}`}>{images?.length ?? 0}</Text>)}/10</Text>
                         </OpacityPressable>
                         {(images ?? []).map((img, idx) => (
                             <View key={img.assetId ?? img.uri} className="relative h-[80px] w-[80px] mr-2 rounded-2xl">
