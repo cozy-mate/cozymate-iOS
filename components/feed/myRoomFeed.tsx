@@ -16,10 +16,10 @@ import PostListCardSkeleton from './cards/postCardSkeleton';
 
 
 export default function MyRoomFeed() {
+
   const router = useRouter();
   const { roomInfo } = useMemberStore();
   const { data, isLoading, refetch, isFetching } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
-
 
   return (
     <View className="flex-1 bg-[#F7FAFF] relative px-5">
@@ -39,6 +39,7 @@ export default function MyRoomFeed() {
         }
         ItemSeparatorComponent={() => <View className="h-4" />}
         showsVerticalScrollIndicator={false}
+        ListFooterComponent={() => <View className="h-20" />}
       />
       <OpacityPressable className="absolute bottom-[100px] right-[20px]" onPress={() => router.push('/feed/create')}>
         <EditButton />
