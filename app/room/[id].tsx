@@ -24,9 +24,8 @@ import { useExitRoom, useGetRoomDetail } from '@/hooks/room/room';
 import { useAcceptRoomInvite, useCancelRequestRoom, useSendRoomRequest } from '@/hooks/room/user';
 import { useCreateRoomLike, useDeleteRoomLike } from '@/hooks/room-favorite/room-favorite';
 import { useTracker } from '@/providers/TrackerProvider';
-import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { matchMultiQueries, queries } from '@/server';
-import { getRecommendRoomList } from '../../server/room-recommend/room-recommend';
+import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 
 export function ErrorBoundary({ error }: ErrorBoundaryProps) {
   const router = useRouter();

@@ -3,8 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
 
+import BottomButtonComponent from '@/components/common/bottomButton';
 import { EditLayout } from '@/components/common/layout/editLayout';
-import OpacityPressable from '@/components/opacityPressable';
 import { useGetMyRoomFeed, useUpdateMyRoomFeed } from '@/hooks/feed/feed';
 import { Feed } from '@/server/feed/feed';
 import { useMemberStore } from '@/zustand/store';
@@ -13,7 +13,7 @@ export default function EditFeed() {
 
     const { roomInfo } = useMemberStore();
 
-    const { data } = useGetMyRoomFeed();
+    const { data, isLoading, isError } = useGetMyRoomFeed();
 
     const {
         control,
@@ -44,6 +44,7 @@ export default function EditFeed() {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput
                                 value={value}
+                                editable={!isLoading}
                                 onChangeText={onChange}
                                 onBlur={onBlur}
                                 placeholder="내용을 입력해주세요"
@@ -61,6 +62,7 @@ export default function EditFeed() {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput
                                 value={value}
+                                editable={!isLoading}
                                 onChangeText={onChange}
                                 onBlur={onBlur}
                                 placeholder="내용을 입력해주세요"
@@ -71,13 +73,28 @@ export default function EditFeed() {
                     />
                 </View>
             </View>
-            <OpacityPressable
-                disabled={!isValid || isPending}
+            <BottomButtonComponent
+                buttonText={
+                    (() => {
+                        if (isLoading) {
+                            return '로딩중입니다...'
+                        }
+
+                        if (isError) {
+                            return '에러가 발생했습니다';
+                        }
+
+                        if (isPending) {
+                            return '수정중입니다...';
+                        }
+                        return '확인';
+                    })()
+                }
                 onPress={handleSubmit((data) => mutate({ ...data, roomId: roomInfo?.roomId ?? 0 }))}
-                className={`${!isValid || isPending ? 'bg-[#C4C4C4]' : 'bg-mainColor'} py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
+                color={!isValid || isPending || isLoading ? 'GRAY' : 'BLUE'}
+                disabled={!isValid || isPending || isLoading}
             >
-                <Text className="Semibold16 text-white text-center">{isPending ? '수정중입니다...' : '확인'}</Text>
-            </OpacityPressable>
+            </BottomButtonComponent>
         </EditLayout>
     );
 };
