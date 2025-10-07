@@ -1,13 +1,13 @@
 import { Text, View } from 'react-native';
 
-import { ChatData } from '@/type/chat';
+import { MessageData } from '@/type/message';
 import { useMemberStore } from '@/zustand/store';
 
-interface ChatItemComponentProps {
-  data: ChatData;
+interface MessageItemComponentProps {
+  data: MessageData;
 }
 
-const ChatItemComponent: React.FC<ChatItemComponentProps> = ({ data }) => {
+export default function MessageItemComponent({ data }: MessageItemComponentProps) {
   const { memberInfo } = useMemberStore();
 
   return (
@@ -23,6 +23,4 @@ const ChatItemComponent: React.FC<ChatItemComponentProps> = ({ data }) => {
       <Text className="Regular12 text-disabledFont">{data.datetime}</Text>
     </View>
   );
-};
-
-export default ChatItemComponent;
+}
