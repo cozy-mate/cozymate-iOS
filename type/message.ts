@@ -1,14 +1,14 @@
-export type ChatData = {
+export type MessageData = {
   nickname: string;
   content: string;
   datetime: string;
 };
 
-export type ChatRoomData = {
+export type MessageRoomData = {
   persona: number;
   nickname: string;
   lastContent: string;
-  chatRoomId: number;
+  messageRoomId: number;
   memberId: number;
-  hasNewChat: boolean;
+  hasNewMessage: boolean;
 };
