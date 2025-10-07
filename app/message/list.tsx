@@ -1,15 +1,12 @@
-import { Suspense } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import ChatRoomItemComponent from '@/components/chat/chatRoomItem';
 import BackHeaderComponent from '@/components/common/backHeader';
-import LoadingComponent from '@/components/common/loading';
-import { useGetChatRoomList } from '@/hooks/chat-room/chat-room';
+import ChatRoomItemComponent from '@/components/message/messageRoomItem';
+import { useGetMessageRoomList } from '@/hooks/message-room/message-room';
 
-function ChatListComponent() {
-  const { data, fetchNextPage, hasNextPage } = useGetChatRoomList();
+export default function MessageList() {
+  const { data, fetchNextPage, hasNextPage } = useGetMessageRoomList();
 
   const loadMoreList = () => {
     if (hasNextPage) {
@@ -25,7 +22,7 @@ function ChatListComponent() {
 
       <FlatList
         contentContainerStyle={
-          data.pages.flatMap((page) => page.result.result).length === 0
+          data?.pages.flatMap((page) => page.result.result).length === 0
             ? { flexGrow: 1 }
             : { paddingBottom: 120 }
         }
@@ -42,19 +39,5 @@ function ChatListComponent() {
         onEndReachedThreshold={0.5}
       />
     </SafeAreaView>
-  );
-}
-
-export default function ChatList() {
-  return (
-    <Suspense
-      fallback={
-        <Portal>
-          <LoadingComponent />
-        </Portal>
-      }
-    >
-      <ChatListComponent />
-    </Suspense>
   );
 }

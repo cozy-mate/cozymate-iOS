@@ -7,16 +7,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import XButton from '@/assets/images/common/xButton.svg';
 import BottomButtonComponent from '@/components/common/bottomButton';
 import CustomTextarea from '@/components/common/customInput/customTextarea';
-import { useSendChat } from '@/hooks/chat/chat';
+import { useSendMessage } from '@/hooks/message/message';
 
-export default function SendChat() {
-  const { id, chatRoomId, nickname } = useLocalSearchParams();
+export default function SendMessage() {
+  const { id, messageRoomId, nickname } = useLocalSearchParams();
 
   const router = useRouter();
 
   const [content, setContent] = useState<string>('');
 
-  const { mutateAsync: sendChat } = useSendChat(Number(id), Number(chatRoomId));
+  const { mutateAsync: sendMessage } = useSendMessage(Number(id), Number(messageRoomId));
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -50,7 +50,7 @@ export default function SendChat() {
 
       <BottomButtonComponent
         buttonText="쪽지 보내기"
-        onPress={() => sendChat({ content })}
+        onPress={() => sendMessage({ content })}
         disabled={content === '' || content.length > 200}
         color={content === '' || content.length > 200 ? 'GRAY' : 'BLUE'}
       />
