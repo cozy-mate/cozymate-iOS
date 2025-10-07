@@ -78,7 +78,7 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
     )
 }
 
-const PostListHeader = ({ persona, nickname, createdAt }: { persona: number, nickname: string, createdAt: string }) => {
+const PostListHeader = memo(({ persona, nickname, createdAt }: { persona: number, nickname: string, createdAt: string }) => {
     return (
         <View className="flex flex-row justify-between items-center">
             <View className="flex flex-row gap-x-[6px] items-center">
@@ -88,7 +88,11 @@ const PostListHeader = ({ persona, nickname, createdAt }: { persona: number, nic
             <Text className="Regular12 text-disabledFont">{formatDate(createdAt)}</Text>
         </View>
     )
-}
+}, (prevProps, nextProps) => {
+    return prevProps.persona === nextProps.persona && prevProps.nickname === nextProps.nickname && prevProps.createdAt === nextProps.createdAt;
+})
+
+PostListHeader.displayName = 'PostListHeader';
 
 //@description : content와 imageList가 바뀌지 않았다면 useMemo로 고정
 const PostContent = memo(({ content, imageList }: { content: string, imageList: string[] }) => {
@@ -150,6 +154,19 @@ const PostContent = memo(({ content, imageList }: { content: string, imageList: 
 
 PostContent.displayName = 'PostContent';
 
+const PostFooter = memo(({ commentCount }: { commentCount: number }) => {
+    return (
+        <View className="flex flex-row gap-x-[6px] items-center">
+            <ChatIcon />
+            <Text className="Medium12 text-disabledFont">{commentCount}</Text>
+        </View>
+    )
+}, (prevProps, nextProps) => {
+    return prevProps.commentCount === nextProps.commentCount;
+})
+
+PostFooter.displayName = 'PostFooter';
+
 export const PostListCard = ({
     post,
     onPress
@@ -165,10 +182,7 @@ export const PostListCard = ({
             <View className="flex flex-col p-4 rounded-2xl bg-[#FFFFFF] gap-y-2">
                 <PostListHeader persona={persona} nickname={nickname} createdAt={createdAt} />
                 <PostContent content={content} imageList={imageList} />
-                <View className="flex flex-row gap-x-[6px] items-center">
-                    <ChatIcon />
-                    <Text className="Medium12 text-disabledFont">{commentCount}</Text>
-                </View>
+                <PostFooter commentCount={commentCount} />
             </View>
         </OpacityPressable>
     );
@@ -187,10 +201,7 @@ export const PostDetailCard = ({
                 <PostDetailHeader persona={persona} nickname={nickname} postId={postId} />
                 <PostContent content={content} imageList={imageList} />
                 <View className="flex flex-row gap-x-[6px] items-center justify-between">
-                    <View className="flex flex-row gap-x-[6px] items-center">
-                        <ChatIcon />
-                        <Text className="Medium12 text-disabledFont">{commentCount}</Text>
-                    </View>
+                    <PostFooter commentCount={commentCount} />
                     <Text className="Regular12 text-disabledFont">{formatDate(createdAt)}</Text>
                 </View>
             </View>
