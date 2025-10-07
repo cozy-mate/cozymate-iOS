@@ -1,6 +1,6 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Suspense, useRef, useState } from 'react';
+import { Suspense } from 'react';
 import { FlatList, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,14 +8,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingIcon from '@/assets/images/common/setting.svg';
 import ChatItemComponent from '@/components/chat/chatItem';
 import BackHeaderComponent from '@/components/common/backHeader';
+import { BottomSheetItem, useBottomSheet } from '@/components/common/bottomSheet';
 import LoadingComponent from '@/components/common/loading';
 import ReportModalComponent from '@/components/modal/reportModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
 import { useGetChatRoomDetail } from '@/hooks/chat/chat';
 import { useExitChatRoom } from '@/hooks/chat-room/chat-room';
+import { useToggle } from '@/hooks/useToggle';
 
 function ChatRoomComponent() {
-  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const router = useRouter();
 
@@ -23,8 +24,10 @@ function ChatRoomComponent() {
 
   const { mutateAsync: exitChatRoom } = useExitChatRoom(Number(id));
 
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
-  const [isReportModalVisible, setIsReportModalVisible] = useState<boolean>(false);
+  const { open: openDeleteModal, close: closeDeleteModal, isOpen: isDeleteModalVisible } = useToggle();
+
+  const { open: openReportModal, close: closeReportModal, isOpen: isReportModalVisible } = useToggle();
+
 
   const { data, fetchNextPage, hasNextPage } = useGetChatRoomDetail(Number(id));
 
@@ -35,6 +38,7 @@ function ChatRoomComponent() {
   };
 
   const snapPoints = data?.pages[0]?.result.result.memberId !== null ? [175] : [120];
+  const { bottomSheetRef, BottomSheetComponent } = useBottomSheet({ snapPoints });
 
   return (
     <SafeAreaView className="flex-1 bg-white relative">
@@ -72,53 +76,41 @@ function ChatRoomComponent() {
         </TouchableOpacity>
       )}
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={snapPoints}
-        index={-1}
-        enablePanDownToClose={true}
-        backdropComponent={(props) => (
-          <BottomSheetBackdrop {...props} opacity={0.7} disappearsOnIndex={-1} appearsOnIndex={0} />
-        )}
-      >
+      <BottomSheetComponent>
         <BottomSheetView className="px-[20px] pt-[24px] pb-[50px]">
-          <Pressable
+          <BottomSheetItem
             onPress={() => {
               bottomSheetRef.current?.close();
-              setIsDeleteModalVisible(true);
+              openDeleteModal();
             }}
-            className="py-[11.5px]"
-          >
-            <Text className="Medium16 text-basicFont mx-[4px]">삭제하기</Text>
-          </Pressable>
+            text="삭제하기"
+          />
 
           {data?.pages[0]?.result.result.memberId !== null && (
             <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
           )}
 
           {data?.pages[0]?.result.result.memberId !== null && (
-            <Pressable
+            <BottomSheetItem
               onPress={() => {
                 bottomSheetRef.current?.close();
-                setIsReportModalVisible(true);
+                openReportModal();
               }}
-              className="py-[11.5px]"
-            >
-              <Text className="Medium16 text-basicFont mx-[4px]">신고하기</Text>
-            </Pressable>
+              text="신고하기"
+            />
           )}
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheetComponent>
 
       <TwoButtonModal
         isVisible={isDeleteModalVisible}
         title="쪽지방을 삭제하시겠어요?"
-        closeFunc={() => setIsDeleteModalVisible(false)}
+        closeFunc={() => closeDeleteModal()}
         leftButtonText="아니오"
-        leftButtonFunc={() => setIsDeleteModalVisible(false)}
+        leftButtonFunc={() => closeDeleteModal()}
         rightButtonText="예"
         rightButtonFunc={() => {
-          setIsDeleteModalVisible(false);
+          closeDeleteModal();
           exitChatRoom();
         }}
       />
@@ -127,7 +119,7 @@ function ChatRoomComponent() {
         isVisible={isReportModalVisible}
         memberId={Number(id)}
         source="CHAT"
-        closeModal={() => setIsReportModalVisible(false)}
+        closeModal={() => closeReportModal()}
       />
     </SafeAreaView>
   );
