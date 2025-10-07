@@ -12,7 +12,7 @@ interface TwoButtonModalProps {
   rightButtonFunc: any;
 }
 
-const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
+const TwoButtonModal = ({
   isVisible,
   title,
   subtitle,
@@ -21,7 +21,7 @@ const TwoButtonModal: React.FC<TwoButtonModalProps> = ({
   leftButtonFunc,
   rightButtonText,
   rightButtonFunc,
-}) => {
+}: TwoButtonModalProps) => {
   return (
     <Modal visible={isVisible} transparent={true} animationType="fade">
       <View
