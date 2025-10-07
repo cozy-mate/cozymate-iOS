@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 
@@ -25,8 +25,7 @@ export const useGetPostDetail = ({ roomId, postId }: { roomId: number; postId: n
   return useQuery({
     ...queries.post.detail({ roomId, postId }),
     enabled: roomId !== 0,
-    // @description : refreshcontrol에서 refetching을 사용하기 위해서 적용된 option
-    gcTime: 0,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -66,18 +65,31 @@ export const useUpdatePost = ({ roomId, postId }: { roomId: number; postId: numb
   });
 };
 
-export const useDeletePost = ({ roomId, postId }: { roomId: number; postId: number }) => {
+export const useDeletePost = ({
+  roomId,
+  postId,
+  onSuccess,
+}: {
+  roomId: number;
+  postId: number;
+  onSuccess: () => void;
+}) => {
   const queryClient = useQueryClient();
+
+  const router = useRouter();
 
   return useMutation({
     mutationFn: () => deletePost({ roomId, postId }),
-    onSuccess: () => {
+    onSuccess: async () => {
       showSuccessToast('피드가 삭제되었습니다');
+      router.back();
+      await queryClient.invalidateQueries({
+        queryKey: queries.post._def,
+      });
+      onSuccess();
     },
-    onError: (error) => {
-      showRejectToast('피드 삭제에 실패했어요');
-    },
-    onSettled: () => {
+    onError: () => {
+      showRejectToast('피드 삭제에 실패했 어요');
       queryClient.invalidateQueries({
         queryKey: queries.post._def,
       });

@@ -51,6 +51,6 @@ export const updatePost = async (data: UpdatePostRequest): Promise<boolean> => {
 };
 
 export const deletePost = async (data: DeletePostRequest): Promise<boolean> => {
-  const response = await DeleteAxiosInstance<boolean>(`/post`, data);
+  const response = await DeleteAxiosInstance<boolean>(`/post/${data.roomId}/${data.postId}`);
   return response.data;
 };
