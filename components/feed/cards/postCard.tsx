@@ -1,13 +1,14 @@
 import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Image as ExpoImage } from 'expo-image';
+import { useRouter } from 'expo-router';
 import React, { memo, useState } from 'react';
-import ContentLoader, { Rect } from 'react-content-loader/native';
 import { Text, View, useWindowDimensions } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
 import ChatIcon from '@/assets/icons/feed/chat.svg';
 import MoreDotIcon from '@/assets/icons/feed/more-dot.svg';
 import { BottomSheetItem, BottomSheetTitle, useBottomSheet } from '@/components/common/bottomSheet';
+import OneButtonModal from '@/components/modal/oneButtonModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
 import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
@@ -25,14 +26,19 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
 
     const { open: openDeleteModal, close: closeDeleteModal, isOpen: isDeleteModalVisible } = useToggle();
 
+    const { open: openResultModal, close: closeResultModal, isOpen: isResultModalVisible } = useToggle();
+
     const { mutate: deletePost } = useDeletePost(
         {
             roomId: roomInfo?.roomId ?? 0,
             postId: postId,
             onSuccess: () => {
                 closeDeleteModal();
+                openResultModal();
             }
         });
+
+    const router = useRouter();
 
     return (
         <>
@@ -73,6 +79,19 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
                 leftButtonFunc={closeDeleteModal}
                 rightButtonText="삭제"
                 rightButtonFunc={deletePost}
+            />
+            <OneButtonModal
+                isVisible={isResultModalVisible}
+                title="게시물이 삭제되었습니다"
+                closeFunc={() => {
+                    closeResultModal();
+                    router.back();
+                }}
+                buttonText="확인"
+                buttonFunc={() => {
+                    closeResultModal();
+                    router.back();
+                }}
             />
         </>
     )

@@ -76,20 +76,16 @@ export const useDeletePost = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const router = useRouter();
-
   return useMutation({
     mutationFn: () => deletePost({ roomId, postId }),
-    onSuccess: async () => {
-      showSuccessToast('피드가 삭제되었습니다');
-      router.back();
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      onSuccess();
+      queryClient.invalidateQueries({
         queryKey: queries.post._def,
       });
-      onSuccess();
     },
     onError: () => {
-      showRejectToast('피드 삭제에 실패했 어요');
+      showRejectToast('피드 삭제에 실패했어요');
       queryClient.invalidateQueries({
         queryKey: queries.post._def,
       });

@@ -6,11 +6,12 @@ import LoadingComponent from "@/components/common/loading";
 import { CommentCard } from "@/components/feed/cards/commentCard";
 import { PostDetailCard } from "@/components/feed/cards/postCard";
 import CommentInput from "@/components/feed/CommentInput";
+import OneButtonModal from "@/components/modal/oneButtonModal";
 import { useCreateComment, useGetCommentList } from "@/hooks/comment/comment";
 import { useGetPostDetail } from "@/hooks/post/post";
+import { useToggle } from "@/hooks/useToggle";
 import { Post } from "@/server/post/post";
 import { useMemberStore } from "@/zustand/store";
-
 
 export default function PostDetail() {
 
@@ -38,6 +39,8 @@ export default function PostDetail() {
         });
     };
 
+    const { open: openResultModal, close: closeResultModal, isOpen: isResultModalVisible } = useToggle();
+
     return (
         <EditLayout>
             {isLoading || isCommentListLoading ? (
@@ -58,7 +61,8 @@ export default function PostDetail() {
                             </>
                         }
                         data={commentList?.result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}
-                        renderItem={({ item }) => <CommentCard key={item.id} comment={{ ...item, postId: Number(id) }} />}
+                        renderItem={({ item }) => <CommentCard
+                            key={item.id} comment={{ ...item, postId: Number(id) }} openResultModal={openResultModal} />}
                         ItemSeparatorComponent={() => <View className="bg-[#F1F1F1] h-[1px] my-5 px-5" />}
                         showsVerticalScrollIndicator={false}
                         className="flex-1"
@@ -72,7 +76,13 @@ export default function PostDetail() {
                     />
                 </>
             )}
-
+            <OneButtonModal
+                isVisible={isResultModalVisible}
+                title="댓글이 삭제되었습니다"
+                closeFunc={closeResultModal}
+                buttonText="확인"
+                buttonFunc={closeResultModal}
+            />
         </EditLayout>
     )
 }

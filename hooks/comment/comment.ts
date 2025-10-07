@@ -55,13 +55,12 @@ export const useDeleteComment = ({
   return useMutation({
     mutationFn: () => deleteComment({ commentId, roomId, postId }),
     onSuccess: () => {
-      showSuccessToast('댓글이 삭제되었습니다.');
       onSuccess();
       queryClient.invalidateQueries(queries.comment.list({ roomId, postId }));
     },
     onError: () => {
-      queryClient.invalidateQueries(queries.comment.list({ roomId, postId }));
       showRejectToast('댓글 삭제에 실패했어요');
+      queryClient.invalidateQueries(queries.comment.list({ roomId, postId }));
     },
   });
 };
