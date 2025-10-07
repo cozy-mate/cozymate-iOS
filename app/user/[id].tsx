@@ -125,9 +125,9 @@ function UserDetailComponent() {
     trackButton(ButtonEvent.invite_room, EventCategory.mate_detail);
 
     switch (type) {
-      case 'CHAT':
+      case 'MESSAGE':
         router.push(
-          `/chat/send/${Number(id)}?nickname=${encodeURIComponent(data.result.memberDetail.nickname)}`,
+          `/message/send/${Number(id)}?nickname=${encodeURIComponent(data?.result.memberDetail.nickname ?? '')}`,
         );
         break;
 
