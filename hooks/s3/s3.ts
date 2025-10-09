@@ -17,7 +17,7 @@ const uploadImagesAndGetKeys = async (
   });
 
   const { result } = await generatePresignedUrl({ requests });
-  console.log(result);
+
   const uploadUrls = result.map((item) => item.uploadUrl);
   const s3Keys = result.map((item) => item.s3Key);
 
@@ -39,6 +39,56 @@ const uploadImagesAndGetKeys = async (
   return Promise.all(uploadPromises);
 };
 
+const guessContentTypeFromName = (name: string): string => {
+  const lower = name.toLowerCase();
+  if (lower.endsWith('.png')) return 'image/png';
+  if (lower.endsWith('.webp')) return 'image/webp';
+  if (lower.endsWith('.heic')) return 'image/heic';
+  if (lower.endsWith('.gif')) return 'image/gif';
+  return 'image/jpeg';
+};
+
+const uploadMixedImagesAndGetKeys = async (
+  images: (ImagePicker.ImagePickerAsset | string)[],
+): Promise<string[]> => {
+  if (images.length === 0) return [];
+
+  const requests = images.map((item) => {
+    if (typeof item === 'string') {
+      const clean = item.split('?')[0].split('#')[0];
+      const fileName = clean.split('/').pop() ?? `upload_${Date.now()}`;
+      const contentType = guessContentTypeFromName(fileName);
+      return { fileName, contentType };
+    }
+    const uri = item.uri;
+    const fileName = item.fileName ?? uri.split('/').pop() ?? `upload_${Date.now()}`;
+    const contentType = item.mimeType ?? guessContentTypeFromName(fileName);
+    return { fileName, contentType };
+  });
+
+  const { result } = await generatePresignedUrl({ requests });
+  const uploadUrls = result.map((r) => r.uploadUrl);
+  const s3Keys = result.map((r) => r.s3Key);
+
+  const uploadPromises = images.map(async (item, index) => {
+    console.log({ item });
+    const sourceUri = typeof item === 'string' ? item : item.uri;
+    const res = await fetch(sourceUri);
+
+    const blob = await res.blob();
+    const contentType = requests[index].contentType;
+
+    await fetch(uploadUrls[index], {
+      method: 'PUT',
+      headers: { 'Content-Type': contentType },
+      body: blob,
+    });
+    return s3Keys[index];
+  });
+
+  return Promise.all(uploadPromises);
+};
+
 export const useUploadImagesAndGetKeys = (
   options?: Omit<
     UseMutationOptions<string[], Error, ImagePicker.ImagePickerAsset[], unknown>,
@@ -47,6 +97,20 @@ export const useUploadImagesAndGetKeys = (
 ) => {
   return useMutation({
     mutationFn: (images: ImagePicker.ImagePickerAsset[]) => uploadImagesAndGetKeys(images),
+    ...options,
+  });
+};
+
+// Mixed images (existing URL strings or new ImagePicker assets) -> final s3 keys preserving order
+export const useBuildPostImageKeys = (
+  options?: Omit<
+    UseMutationOptions<string[], Error, (ImagePicker.ImagePickerAsset | string)[], unknown>,
+    'mutationFn'
+  >,
+) => {
+  return useMutation({
+    mutationFn: (images: (ImagePicker.ImagePickerAsset | string)[]) =>
+      uploadMixedImagesAndGetKeys(images),
     ...options,
   });
 };

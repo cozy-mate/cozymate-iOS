@@ -2,7 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 
-import { queries } from '@/server';
+import { matchMultiQueries, queries } from '@/server';
 import { createPost, deletePost, updatePost } from '@/server/post/post';
 import { CreatePostRequest, UpdatePostRequest } from '@/server/post/request';
 import { GetPostListResponse } from '@/server/post/response';
@@ -24,7 +24,7 @@ export const useGetPostList = ({ roomId }: { roomId: number }) => {
 export const useGetPostDetail = ({ roomId, postId }: { roomId: number; postId: number }) => {
   return useQuery({
     ...queries.post.detail({ roomId, postId }),
-    enabled: roomId !== 0,
+    enabled: roomId !== 0 && postId !== 0,
     placeholderData: keepPreviousData,
   });
 };
@@ -55,11 +55,26 @@ export const useCreatePost = ({ roomId }: { roomId: number }) => {
 export const useUpdatePost = ({ roomId, postId }: { roomId: number; postId: number }) => {
   const queryClient = useQueryClient();
 
+  const router = useRouter();
+
   return useMutation({
     mutationFn: (data: UpdatePostRequest) => updatePost(data),
+    onSuccess: () => {
+      showSuccessToast('피드를 수정했어요');
+      router.back();
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      }
+      showRejectToast('피드 수정에 실패했어요');
+    },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: queries.post._def,
+        predicate: matchMultiQueries([
+          queries.post.detail({ roomId, postId }).queryKey,
+          queries.post.list({ roomId }).queryKey,
+        ]),
       });
     },
   });

@@ -19,8 +19,7 @@ export default function MyRoomFeed() {
 
   const router = useRouter();
   const { roomInfo } = useMemberStore();
-  const { data, isLoading, refetch, isFetching } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
-
+  const { data, isLoading, refetch, isFetching, isError } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
   return (
     <View className="flex-1 bg-[#F7FAFF] relative px-5">
       <FlatList<GetPostListResponse['result'][number]>
@@ -31,11 +30,20 @@ export default function MyRoomFeed() {
         onRefresh={refetch}
         refreshControl={<RefreshControl refreshing={!isLoading && isFetching} onRefresh={refetch} />}
         refreshing={!isLoading && isFetching}
-        ListEmptyComponent={isLoading ?
-          <PostListCardSkeleton /> :
-          <View className="flex justify-center items-center w-full h-full">
-            <Text className='Medium14 text-disabledFont'>아직 시작된 우리의 이야기가 없어요!</Text>
-          </View>
+        ListEmptyComponent={
+          (() => {
+            if (isError) {
+              return <View className="flex justify-center items-center w-full h-full">
+                <Text className='Medium14 text-disabledFont'>피드를 불러오는데 실패했어요</Text>
+              </View>
+            }
+            if (isLoading) {
+              return <PostListCardSkeleton />
+            }
+            return <View className="flex justify-center items-center w-full h-full">
+              <Text className='Medium14 text-disabledFont'>아직 시작된 우리의 이야기가 없어요!</Text>
+            </View>
+          })()
         }
         ItemSeparatorComponent={() => <View className="h-4" />}
         showsVerticalScrollIndicator={false}

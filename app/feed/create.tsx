@@ -1,11 +1,13 @@
 
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from '@tanstack/react-query';
+import { } from '@tanstack/react-query';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
+import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Modal, ScrollView, Text, TextInput, View, Image, Pressable } from "react-native";
+import { Modal, ScrollView, Text, TextInput, View, Pressable } from "react-native";
 import { z } from "zod";
 
 import GalleryIcon from "@/assets/icons/feed/gallery.svg";
@@ -13,8 +15,8 @@ import DeleteImageIcon from "@/assets/images/feed/deleteImage.svg";
 import BottomButtonComponent from "@/components/common/bottomButton";
 import { EditLayout } from "@/components/common/layout";
 import OpacityPressable from "@/components/opacityPressable";
-import { useCreatePost } from "@/hooks/post/post";
-import { useUploadImagesAndGetKeys } from '@/hooks/s3/s3';
+import { useCreatePost, useGetPostDetail, useUpdatePost } from "@/hooks/post/post";
+import { useBuildPostImageKeys } from '@/hooks/s3/s3';
 import { showRejectToast } from '@/utils/toast';
 import { useMemberStore } from "@/zustand/store";
 
@@ -22,14 +24,20 @@ import { useMemberStore } from "@/zustand/store";
 export default function CreateFeed() {
     const { roomInfo } = useMemberStore();
 
+    const { id } = useLocalSearchParams<{ id: string }>();
+
+    const isEditMode = !!id;
+
     type PostForm = {
         content: string;
-        images: ImagePicker.ImagePickerAsset[];
+        images: (ImagePicker.ImagePickerAsset | string)[];
     };
 
-    const { control, handleSubmit, getValues, setValue, watch, formState: { isValid } } = useForm<PostForm>({
+    const { data } = useGetPostDetail({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) ?? 0 });
+
+    const { control, handleSubmit, setValue, watch, formState: { isValid }, getValues } = useForm<PostForm>({
         mode: 'onChange',
-        defaultValues: { content: '', images: [] },
+        defaultValues: { content: data?.result.content ?? '', images: data?.result.imageList ?? [] },
         resolver: zodResolver(z.object({
             content: z.string().min(1),
             images: z.array(z.any()),
@@ -39,19 +47,31 @@ export default function CreateFeed() {
     const images = watch('images');
 
     const { mutate: createPost, isPending } = useCreatePost({ roomId: roomInfo?.roomId ?? 0 });
+    const { mutate: updatePost, isPending: isUpdating } = useUpdatePost({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) ?? 0 });
+    const { mutate: buildPostImageKeys, isPending: isUploadingImages } = useBuildPostImageKeys({
+        onSuccess: (response) => {
+            const finalImageList = response;
 
-    const { mutate: uploadImagesAndGetKeys, isPending: isUploadingImages } = useUploadImagesAndGetKeys({
-        onSuccess: (s3Keys) => {
-            createPost({
-                roomId: roomInfo?.roomId ?? 0,
-                content: getValues('content') ?? '',
-                imageList: s3Keys,
-            });
+            if (isEditMode) {
+                updatePost({
+                    roomId: roomInfo?.roomId ?? 0,
+                    postId: Number(id) ?? 0,
+                    content: getValues('content') ?? '',
+                    imageList: finalImageList,
+                })
+            } else {
+                createPost({
+                    roomId: roomInfo?.roomId ?? 0,
+                    content: getValues('content') ?? '',
+                    imageList: finalImageList,
+                });
+            }
         },
         onError: () => {
             showRejectToast('이미지 업로드에 실패했어요');
         },
     });
+
 
     const [previewUri, setPreviewUri] = React.useState<string | null>(null);
 
@@ -79,7 +99,6 @@ export default function CreateFeed() {
         setValue('images', next, { shouldValidate: true, shouldDirty: true });
     };
 
-
     return (
         <EditLayout>
             <View className="flex-1">
@@ -89,16 +108,21 @@ export default function CreateFeed() {
                             <GalleryIcon />
                             <Text className={`Medium12 text-disabledFont`}>{(<Text className={`${images?.length === 0 ? 'text-disabledFont' : 'text-mainColor'}`}>{images?.length ?? 0}</Text>)}/10</Text>
                         </OpacityPressable>
-                        {(images ?? []).map((img, idx) => (
-                            <View key={img.assetId ?? img.uri} className="relative h-[80px] w-[80px] mr-2 rounded-2xl">
-                                <OpacityPressable onPress={() => setPreviewUri(img.uri)}>
-                                    <Image source={{ uri: img.uri }} style={{ width: 80, height: 80, borderRadius: 16 }} />
-                                </OpacityPressable>
-                                <OpacityPressable onPress={() => removeImage(idx)} className="absolute right-[4px] top-[-10px] h-10 w-10 items-center justify-center rounded-full z-10">
-                                    <DeleteImageIcon />
-                                </OpacityPressable>
-                            </View>
-                        ))}
+                        {(images ?? []).map((img, idx) => {
+                            const uri = typeof img === 'string' ? img : img.uri;
+                            const key = typeof img === 'string' ? img : (img.assetId ?? img.uri);
+                            const cacheKey = uri.split('/').pop()?.split('.')[0];
+                            return (
+                                <View key={key} className="relative h-[80px] w-[80px] mr-2 rounded-2xl">
+                                    <OpacityPressable onPress={() => setPreviewUri(uri)}>
+                                        <Image source={{ uri, cacheKey }} cachePolicy="memory-disk" recyclingKey={key} style={{ width: 80, height: 80, borderRadius: 16 }} />
+                                    </OpacityPressable>
+                                    <OpacityPressable onPress={() => removeImage(idx)} className="absolute right-[4px] top-[-10px] h-10 w-10 items-center justify-center rounded-full z-10">
+                                        <DeleteImageIcon />
+                                    </OpacityPressable>
+                                </View>
+                            );
+                        })}
                     </ScrollView>
                     <View className="">
                         <Controller
@@ -126,14 +150,14 @@ export default function CreateFeed() {
                     if (isUploadingImages) {
                         return '이미지 업로드중입니다...';
                     }
-                    if (isPending) {
-                        return '작성중입니다...';
+                    if (isEditMode ? isUpdating : isPending) {
+                        return isEditMode ? '수정중입니다...' : '작성중입니다...';
                     }
-                    return '작성';
+                    return isEditMode ? '수정' : '작성';
                 })()}
-                onPress={handleSubmit((data) => uploadImagesAndGetKeys(data.images))}
-                disabled={!isValid || isPending || isUploadingImages}
-                color={!isValid || isPending || isUploadingImages ? 'GRAY' : 'BLUE'}
+                onPress={handleSubmit((data) => buildPostImageKeys(data.images))}
+                disabled={!isValid || isUploadingImages || (isEditMode ? isUpdating : isPending)}
+                color={!isValid || isUploadingImages || (isEditMode ? isUpdating : isPending) ? 'GRAY' : 'BLUE'}
             />
             <Modal visible={previewUri !== null} transparent animationType="fade" onRequestClose={() => setPreviewUri(null)}>
                 <Pressable className="flex-1 bg-[rgba(0,0,0,0.6)] items-center justify-center" onPress={() => setPreviewUri(null)}>

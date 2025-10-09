@@ -58,6 +58,7 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
                         text="수정하기"
                         onPress={() => {
                             bottomSheetRef.current?.close();
+                            router.push(`/feed/create?id=${postId}`);
                         }}
                     />
                     <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
@@ -134,6 +135,7 @@ const PostContent = memo(({ content, imageList }: { content: string, imageList: 
                         width={carouselWidth}
                         height={carouselHeight}
                         data={imageList}
+                        enabled={imageList.length > 1}
                         onSnapToItem={(index) => setCurrentIndex(index)}
                         renderItem={({ item }: { item: string; index: number }) => {
                             const key = item.split('/').pop()?.split('.')[0];
@@ -149,15 +151,18 @@ const PostContent = memo(({ content, imageList }: { content: string, imageList: 
                             )
                         }}
                     />
-                    <View className="flex flex-row items-center justify-center mt-4" style={{ gap: 6 }}>
-                        {imageList.map((image, i) => (
-                            <View
-                                key={`dot-${image}`}
-                                className="rounded-full"
-                                style={{ width: 6, height: 6, backgroundColor: showSkeleton ? '#D1D1D1' : (i === currentIndex ? '#656B7A' : '#E6E6E6') }}
-                            />
-                        ))}
-                    </View>
+                    {
+                        <View className="flex flex-row items-center justify-center mt-4" style={{ gap: 6 }}>
+                            {imageList.length > 1 && imageList.map((image, i) => (
+                                <View
+                                    key={`dot-${image}`}
+                                    className="rounded-full"
+                                    style={{ width: 6, height: 6, backgroundColor: showSkeleton ? '#D1D1D1' : (i === currentIndex ? '#656B7A' : '#E6E6E6') }}
+                                />
+                            ))}
+                        </View>
+                    }
+
                 </View>
             )}
         </View>
