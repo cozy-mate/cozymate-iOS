@@ -1,4 +1,10 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 
@@ -9,14 +15,14 @@ import { GetPostListResponse } from '@/server/post/response';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 
 export const useGetPostList = ({ roomId }: { roomId: number }) => {
-  return useQuery<GetPostListResponse>({
+  return useInfiniteQuery<GetPostListResponse>({
     ...queries.post.list({ roomId }),
-    // initialPageParam: 0,
-    // getNextPageParam: (lastPage: GetPostListResponse) => {
-    //   if (lastPage.result.hasNext) {
-    //     return lastPage.result.page + 1;
-    //   }
-    // },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage: GetPostListResponse) => {
+      if (lastPage.result.hasNext) {
+        return lastPage.result.page + 1;
+      }
+    },
     enabled: roomId !== 0,
   });
 };

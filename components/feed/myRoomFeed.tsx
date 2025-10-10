@@ -1,6 +1,6 @@
 
 import { useRouter } from 'expo-router';
-import { Text, View, FlatList, RefreshControl } from 'react-native';
+import { Text, View, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 
 import EditButton from '@/assets/images/feed/createFeed.svg'
 import { useGetPostList } from '@/hooks/post/post';
@@ -19,17 +19,23 @@ export default function MyRoomFeed() {
 
   const router = useRouter();
   const { roomInfo } = useMemberStore();
-  const { data, isLoading, refetch, isFetching, isError } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
+  const { data, isLoading, refetch, isRefetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
+
+  const posts = data?.pages?.flatMap((page: GetPostListResponse) => page.result.result) ?? [];
   return (
     <View className="flex-1 bg-[#F7FAFF] relative px-5">
-      <FlatList<GetPostListResponse['result'][number]>
+      <FlatList<GetPostListResponse['result']['result'][number]>
         ListHeaderComponent={<FeedEditButton className="mt-6 mb-[30px]" />}
-        data={data?.result}
+        data={posts}
         keyExtractor={post => post.id.toString()}
         renderItem={({ item }) => <PostListCard post={item} onPress={() => router.push(`/feed/${item.id}`)} />}
-        onRefresh={refetch}
-        refreshControl={<RefreshControl refreshing={!isLoading && isFetching} onRefresh={refetch} />}
-        refreshing={!isLoading && isFetching}
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => { refetch(); }} />}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
         ListEmptyComponent={
           (() => {
             if (isError) {
@@ -47,7 +53,11 @@ export default function MyRoomFeed() {
         }
         ItemSeparatorComponent={() => <View className="h-4" />}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={() => <View className="h-20" />}
+        ListFooterComponent={() => (
+          <View className="h-20 justify-center items-center">
+            {isFetchingNextPage ? <ActivityIndicator /> : null}
+          </View>
+        )}
       />
       <OpacityPressable className="absolute bottom-[100px] right-[20px]" onPress={() => router.push('/feed/create')}>
         <EditButton />

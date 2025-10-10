@@ -6,7 +6,7 @@ export const postQueries = createQueryKeys('post', {
   list: ({ roomId }: { roomId: number }) => ({
     queryKey: [roomId],
     queryFn: ({ pageParam = 0 }: { pageParam?: number }) =>
-      getPostList({ roomId, page: pageParam }),
+      getPostList({ roomId, page: pageParam, size: 10 }),
   }),
   detail: ({ roomId, postId }: { roomId: number; postId: number }) => ({
     queryKey: [roomId, postId],

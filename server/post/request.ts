@@ -1,6 +1,7 @@
 export interface GetPostListRequest {
   roomId: number;
   page: number;
+  size: number;
 }
 
 export interface GetPostDetailRequest {

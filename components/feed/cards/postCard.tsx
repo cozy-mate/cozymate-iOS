@@ -169,6 +169,7 @@ const PostContent = memo(({ content, imageList }: { content: string, imageList: 
     )
 }, (prevProps, nextProps) => {
     return prevProps.content === nextProps.content && (
+        prevProps.imageList.length === nextProps.imageList.length &&
         prevProps.imageList.every((image, index) => {
             const key = image.split('/').pop()?.split('.')[0];
             return key === nextProps.imageList[index].split('/').pop()?.split('.')[0];

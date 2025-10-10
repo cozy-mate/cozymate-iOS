@@ -3,7 +3,11 @@ import { Comment } from '../comment/comment';
 import { Post } from './post';
 
 export interface GetPostListResponse {
-  result: (Post & { commentCount: number })[];
+  result: {
+    page: 0;
+    hasNext: false;
+    result: (Post & { commentCount: number })[];
+  };
 }
 
 export interface GetPostDetailResponse {
