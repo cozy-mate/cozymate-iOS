@@ -1,7 +1,11 @@
 import { GetAxiosInstance } from '@/axios/axios.method';
 
 import { GetDormitoryMenuRequest, GetDormitoryNoticeRequest } from './request';
-import { GetDormitoryMenuResponse, GetDormitoryNoticeResponse } from './response';
+import {
+  GetDormitoryMenuResponse,
+  GetDormitoryNoticeResponse,
+  GetDormitoryNoticePreviewResponse,
+} from './response';
 
 export const getDormitoryMenu = async ({
   date,
@@ -25,7 +29,8 @@ export const getDormitoryNotice = async ({
   return response.data;
 };
 
-export const getDormitoryNoticePreview = async (): Promise<GetDormitoryNoticeResponse> => {
-  const response = await GetAxiosInstance<GetDormitoryNoticeResponse>(`/dormitory/notice/preview`);
+export const getDormitoryNoticePreview = async (): Promise<GetDormitoryNoticePreviewResponse> => {
+  const response =
+    await GetAxiosInstance<GetDormitoryNoticePreviewResponse>(`/dormitory/notice/preview`);
   return response.data;
 };

@@ -19,5 +19,13 @@ export interface GetDormitoryMenuResponse {
 }
 
 export interface GetDormitoryNoticeResponse {
+  result: {
+    result: Notice[];
+    page: number;
+    hasNext: boolean;
+  };
+}
+
+export interface GetDormitoryNoticePreviewResponse {
   result: Notice[];
 }

@@ -9,6 +9,7 @@ import ChatIcon from '@/assets/icons/feed/chat.svg';
 import MoreDotIcon from '@/assets/icons/feed/more-dot.svg';
 import { BottomSheetItem, BottomSheetTitle, useBottomSheet } from '@/components/common/bottomSheet';
 import OneButtonModal from '@/components/modal/oneButtonModal';
+import ReportModalComponent from '@/components/modal/reportModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
 import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
@@ -27,6 +28,8 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
     const { open: openDeleteModal, close: closeDeleteModal, isOpen: isDeleteModalVisible } = useToggle();
 
     const { open: openResultModal, close: closeResultModal, isOpen: isResultModalVisible } = useToggle();
+
+    const { open: openReportModal, close: closeReportModal, isOpen: isReportModalVisible } = useToggle();
 
     const { mutate: deletePost } = useDeletePost(
         {
@@ -69,6 +72,14 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
                             openDeleteModal();
                         }}
                     />
+                    <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
+                    <BottomSheetItem
+                        text="신고하기"
+                        onPress={() => {
+                            bottomSheetRef.current?.close();
+                            openReportModal();
+                        }}
+                    />
                 </BottomSheetView>
             </BottomSheetComponent>
             <TwoButtonModal
@@ -93,6 +104,13 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
                     closeResultModal();
                     router.back();
                 }}
+            />
+            <ReportModalComponent
+                isVisible={isReportModalVisible}
+                memberId={Number(postId)}
+                source="POST"
+                isFake={true}
+                closeModal={() => closeReportModal()}
             />
         </>
     )

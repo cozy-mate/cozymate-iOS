@@ -5,6 +5,7 @@ import { Text, View } from 'react-native';
 
 import MoreDotIcon from '@/assets/icons/feed/more-dot.svg';
 import { BottomSheetItem, BottomSheetTitle, useBottomSheet } from '@/components/common/bottomSheet';
+import ReportModalComponent from "@/components/modal/reportModal";
 import TwoButtonModal from '@/components/modal/twoButtonModal';
 import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
@@ -24,6 +25,8 @@ const CommentHeader = (
     const { bottomSheetRef, BottomSheetComponent, open } = useBottomSheet({ snapPoints: [120] });
 
     const { open: openDeleteModal, close: closeDeleteModal, isOpen: isDeleteModalVisible } = useToggle();
+
+    const { open: openReportModal, close: closeReportModal, isOpen: isReportModalVisible } = useToggle();
 
     const { mutate: deleteComment } = useDeleteComment({
         roomId: roomInfo?.roomId ?? 0,
@@ -56,6 +59,13 @@ const CommentHeader = (
                 rightButtonText="삭제"
                 rightButtonFunc={deleteComment}
             />
+            <ReportModalComponent
+                isVisible={isReportModalVisible}
+                memberId={Number(commentId)}
+                source="COMMENT"
+                isFake={true}
+                closeModal={() => closeReportModal()}
+            />
             <BottomSheetComponent>
                 <BottomSheetView className="flex-1 pt-[12px] pb-[16px] px-[20px]">
                     <BottomSheetTitle title="댓글" />
@@ -66,8 +76,17 @@ const CommentHeader = (
                             openDeleteModal();
                         }}
                     />
+                    <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
+                    <BottomSheetItem
+                        text="신고하기"
+                        onPress={() => {
+                            bottomSheetRef.current?.close();
+                            openReportModal();
+                        }}
+                    />
                 </BottomSheetView>
             </BottomSheetComponent>
+
         </>
     )
 }
