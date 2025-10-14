@@ -17,7 +17,7 @@ export const TextNextHeader = ({
 }) => {
     return (
         <View className={`flex flex-row justify-between items-center px-[20px] ${className}`}>
-            <View className="gap-y-[4px] ml-[4px]">
+            <View className="flex items-center gap-y-[4px] ml-[4px]">
                 {title}
             </View>
             <OpacityPressable onPress={handleMore}>

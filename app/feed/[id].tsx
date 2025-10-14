@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, View } from "react-native";
 
-import { EditLayout } from "@/components/common/layout";
+import { DetailLayout } from "@/components/common/layout";
 import LoadingComponent from "@/components/common/loading";
 import { CommentCard } from "@/components/feed/cards/commentCard";
 import { PostDetailCard } from "@/components/feed/cards/postCard";
@@ -42,7 +42,7 @@ export default function PostDetail() {
     const { open: openResultModal, close: closeResultModal, isOpen: isResultModalVisible } = useToggle();
 
     return (
-        <EditLayout>
+        <DetailLayout>
             {isLoading || isCommentListLoading ? (
                 <LoadingComponent />
             ) : (
@@ -83,6 +83,6 @@ export default function PostDetail() {
                 buttonText="확인"
                 buttonFunc={closeResultModal}
             />
-        </EditLayout>
+        </DetailLayout>
     )
 }

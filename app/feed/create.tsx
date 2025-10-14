@@ -13,7 +13,7 @@ import { z } from "zod";
 import GalleryIcon from "@/assets/icons/feed/gallery.svg";
 import DeleteImageIcon from "@/assets/images/feed/deleteImage.svg";
 import BottomButtonComponent from "@/components/common/bottomButton";
-import { EditLayout } from "@/components/common/layout";
+import { DetailLayout } from "@/components/common/layout";
 import OpacityPressable from "@/components/opacityPressable";
 import { useCreatePost, useGetPostDetail, useUpdatePost } from "@/hooks/post/post";
 import { useBuildPostImageKeys } from '@/hooks/s3/s3';
@@ -100,7 +100,7 @@ export default function CreateFeed() {
     };
 
     return (
-        <EditLayout>
+        <DetailLayout>
             <View className="flex-1">
                 <View className="px-5 pt-5 gap-y-4">
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%', height: 80 }} contentContainerStyle={{ alignItems: 'center' }}>
@@ -166,6 +166,6 @@ export default function CreateFeed() {
                     )}
                 </Pressable>
             </Modal>
-        </EditLayout >
+        </DetailLayout >
     )
 }

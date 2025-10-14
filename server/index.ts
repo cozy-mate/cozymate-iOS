@@ -4,6 +4,7 @@ import { matchQuery, Query, QueryKey } from '@tanstack/react-query';
 import { chatQueries } from './chat/queries';
 import { chatRoomQueries } from './chat-room/queries';
 import { commentQueries } from './comment/queries';
+import { dormitoryQueries } from './dormitory/queries';
 import { feedQueries } from './feed/queries';
 import { inquiryQueries } from './inquiry/queries';
 import { memberQueries } from './member/queries';
@@ -47,6 +48,7 @@ export const queries = mergeQueryKeys(
   postQueries,
   commentQueries,
   s3Queries,
+  dormitoryQueries,
 );
 
 export const matchMultiQueries = (queryKeys: readonly QueryKey[]) => {

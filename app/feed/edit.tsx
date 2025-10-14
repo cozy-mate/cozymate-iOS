@@ -4,7 +4,7 @@ import { Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
 
 import BottomButtonComponent from '@/components/common/bottomButton';
-import { EditLayout } from '@/components/common/layout/editLayout';
+import { DetailLayout } from '@/components/common/layout/detailLayout';
 import { useGetMyRoomFeed, useUpdateMyRoomFeed } from '@/hooks/feed/feed';
 import { Feed } from '@/server/feed/feed';
 import { useMemberStore } from '@/zustand/store';
@@ -34,7 +34,7 @@ export default function EditFeed() {
     const { mutate, isPending } = useUpdateMyRoomFeed();
 
     return (
-        <EditLayout>
+        <DetailLayout>
             <View className="flex-1 px-5 pt-5 gap-y-12">
                 <View className="gap-y-[12px]">
                     <Text className="Semibold16 text-emphasizedFont mx-[4px]">피드 이름을 입력해주세요</Text>
@@ -95,6 +95,6 @@ export default function EditFeed() {
                 disabled={!isValid || isPending || isLoading}
             >
             </BottomButtonComponent>
-        </EditLayout>
+        </DetailLayout>
     );
 };

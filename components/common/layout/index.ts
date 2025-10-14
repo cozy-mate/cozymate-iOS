@@ -1,1 +1,1 @@
-export * from './editLayout';
+export * from './detailLayout';
