@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function ChatLayout() {
+export default function MessageLayout() {
   return (
     <Stack>
       {/* 쪽지방 목록 */}

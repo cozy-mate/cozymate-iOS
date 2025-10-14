@@ -3,19 +3,19 @@ import { Pressable, Text, View } from 'react-native';
 
 import RightArrow from '@/assets/images/common/grayArrow.svg';
 import { getPersona } from '@/constants/items/characterItem';
-import { ChatRoomData } from '@/type/chat';
+import { MessageRoomData } from '@/type/message';
 
-interface ChatRoomItemComponentProps {
-  data: ChatRoomData;
+interface MessageRoomItemComponentProps {
+  data: MessageRoomData;
 }
 
-const ChatRoomItemComponent: React.FC<ChatRoomItemComponentProps> = ({ data }) => {
+export default function MessageRoomItemComponent({ data }: MessageRoomItemComponentProps) {
   const router = useRouter();
 
   return (
     <Pressable
       onPress={() =>
-        router.push(`/chat/${data.chatRoomId}?nickname=${encodeURIComponent(data.nickname)}`)
+        router.push(`/message/${data.messageRoomId}?nickname=${encodeURIComponent(data.nickname)}`)
       }
       className="py-3 flex flex-row justify-between items-center"
     >
@@ -33,6 +33,4 @@ const ChatRoomItemComponent: React.FC<ChatRoomItemComponentProps> = ({ data }) =
       </View>
     </Pressable>
   );
-};
-
-export default ChatRoomItemComponent;
+}
