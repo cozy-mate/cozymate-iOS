@@ -38,6 +38,8 @@ const CommentHeader = (
         }
     });
 
+    const isWriter = nickname === memberInfo?.nickname;
+
     return (
         <>
             <View className="flex flex-row justify-between items-center">
@@ -45,10 +47,14 @@ const CommentHeader = (
                     {getPersona(persona, 24, 24)}
                     <Text className="Semibold14 text-emphasizedFont">{nickname}</Text>
                 </View>
-                <OpacityPressable onPress={() => open()}>
-                    <MoreDotIcon />
-                </OpacityPressable>
-            </View>
+                {
+                    isWriter && (
+                        <OpacityPressable onPress={() => open()}>
+                            <MoreDotIcon />
+                        </OpacityPressable>
+                    )
+                }
+            </View >
             <TwoButtonModal
                 isVisible={isDeleteModalVisible}
                 title="댓글을 삭제하시나요?"

@@ -19,6 +19,7 @@ export default function MyRoomFeed() {
 
   const router = useRouter();
   const { roomInfo } = useMemberStore();
+  console.log(roomInfo);
   const { data, isLoading, refetch, isRefetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetPostList({ roomId: roomInfo?.roomId ?? 0 });
 
   const posts = data?.pages?.flatMap((page: GetPostListResponse) => page.result.result) ?? [];

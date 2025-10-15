@@ -67,7 +67,16 @@ export default function DormitoryFeed() {
             autoPlay={false}
             onProgressChange={progress}
             data={menuItems ?? []}
-            renderItem={({ item }) => <MenuItem menuItem={item} onPress={() => router.push(`/feed/menu?date=${item[0]}`)} isFetching={isMenuFetching} />}
+            containerStyle={{ justifyContent: 'center' }}
+            renderItem={({ item }) => (
+              <View style={{ width: Dimensions.get('window').width, height: 110, justifyContent: 'center', alignItems: 'center' }}>
+                <MenuItem
+                  menuItem={item}
+                  onPress={() => router.push(`/feed/menu?date=${item[0]}`)}
+                  isFetching={isMenuFetching}
+                />
+              </View>
+            )}
             onSnapToItem={(index) => {
               progress.value = index;
             }}
@@ -84,7 +93,7 @@ export default function DormitoryFeed() {
             height: 8,
             overflow: 'hidden',
           }}
-          containerStyle={{ gap: 8 }}
+          containerStyle={{ gap: 8, marginTop: 4 }}
         />
       </>
       <TextNextHeader

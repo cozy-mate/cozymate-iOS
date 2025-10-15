@@ -23,7 +23,7 @@ const PostDetailHeader = ({ post }: { post: Post & { commentCount: number } }) =
 
     const { roomInfo, memberInfo } = useMemberStore();
 
-    const { persona, nickname, id: postId, writerId } = post;
+    const { persona, nickname, id: postId } = post;
 
     const { bottomSheetRef, BottomSheetComponent, open } = useBottomSheet({ snapPoints: [175] });
 
@@ -45,7 +45,7 @@ const PostDetailHeader = ({ post }: { post: Post & { commentCount: number } }) =
 
     const router = useRouter();
 
-    const isWriter = writerId === memberInfo?.memberId;
+    const isWriter = nickname === memberInfo?.nickname;
 
     return (
         <>
