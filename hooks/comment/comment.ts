@@ -7,7 +7,10 @@ import { CreateCommentRequest, UpdateCommentRequest } from '@/server/comment/req
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 
 export const useGetCommentList = ({ roomId, postId }: { roomId: number; postId: number }) => {
-  return useQuery(queries.comment.list({ roomId, postId }));
+  return useQuery({
+    ...queries.comment.list({ roomId, postId }),
+    enabled: roomId > 0 && postId > 0,
+  });
 };
 
 export const useCreateComment = ({ roomId, postId }: { roomId: number; postId: number }) => {
@@ -19,7 +22,7 @@ export const useCreateComment = ({ roomId, postId }: { roomId: number; postId: n
       showSuccessToast('댓글이 생성되었습니다.');
       Keyboard.dismiss();
     },
-    onError: (error) => {
+    onError: () => {
       showRejectToast('댓글 생성에 실패했어요');
     },
     onSettled: () => {

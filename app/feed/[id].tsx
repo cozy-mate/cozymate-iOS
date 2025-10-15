@@ -1,4 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
+import { useMemo } from "react";
 import { FlatList, View } from "react-native";
 
 import { DetailLayout } from "@/components/common/layout";
@@ -31,6 +32,14 @@ export default function PostDetail() {
         postId: Number(id)
     });
 
+    const sortedComments = useMemo(
+        () => commentList?.result.slice().sort((a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        ),
+        [commentList?.result]
+    );
+
+
     const handleCommentSubmit = (content: string) => {
         mutate({
             postId: Number(id),
@@ -60,7 +69,7 @@ export default function PostDetail() {
                                 <View className="bg-[#F4F4F4] h-[2px] my-6" />
                             </>
                         }
-                        data={commentList?.result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}
+                        data={sortedComments}
                         renderItem={({ item }) => <CommentCard
                             key={item.id} comment={{ ...item, postId: Number(id) }} openResultModal={openResultModal} />}
                         ItemSeparatorComponent={() => <View className="bg-[#F1F1F1] h-[1px] my-5 px-5" />}
