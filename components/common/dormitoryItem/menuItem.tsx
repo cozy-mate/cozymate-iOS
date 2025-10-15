@@ -16,7 +16,7 @@ const MENU_TIME_KEY_MAP: Record<MenuTimeKey, string> = {
     dinner: '저녁',
 } as const;
 
-export default function MenuItem({ menuItem, onPress = () => { }, isFetching = true }: MenuItemProps) {
+export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: MenuItemProps) => {
 
     const [menuTime, { time, menu = "[]" }] = menuItem;
 

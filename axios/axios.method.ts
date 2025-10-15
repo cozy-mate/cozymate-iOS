@@ -40,7 +40,7 @@ export const DeleteAxiosInstance = async <T>(
 
 export const PutAxiosInstance = async <TResponse, TRequest extends any>(
   url: string,
-  data?: any,
+  data?: TRequest,
   config?: AxiosRequestConfig,
 ): Promise<AxiosResponse<TResponse>> => {
   const response = await axiosInstance.put(url, data, config);

@@ -19,9 +19,11 @@ import { Post } from '@/server/post/post';
 import { formatDate } from '@/utils/translateDate';
 import { useMemberStore } from '@/zustand/store';
 
-const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nickname: string, postId: number }) => {
+const PostDetailHeader = ({ post }: { post: Post & { commentCount: number } }) => {
 
-    const { roomInfo } = useMemberStore();
+    const { roomInfo, memberInfo } = useMemberStore();
+
+    const { persona, nickname, id: postId, writerId } = post;
 
     const { bottomSheetRef, BottomSheetComponent, open } = useBottomSheet({ snapPoints: [175] });
 
@@ -43,6 +45,8 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
 
     const router = useRouter();
 
+    const isWriter = writerId === memberInfo?.memberId;
+
     return (
         <>
             <View className="flex flex-row justify-between items-center">
@@ -50,9 +54,13 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
                     {getPersona(persona, 24, 24)}
                     <Text className="Semibold14 text-emphasizedFont">{nickname}</Text>
                 </View>
-                <OpacityPressable onPress={() => open()}>
-                    <MoreDotIcon />
-                </OpacityPressable>
+                {
+                    isWriter && (
+                        <OpacityPressable onPress={() => open()}>
+                            <MoreDotIcon />
+                        </OpacityPressable>
+                    )
+                }
             </View>
             <BottomSheetComponent>
                 <BottomSheetView className="flex-1 pt-[12px] pb-[16px] px-[20px]">
@@ -116,7 +124,8 @@ const PostDetailHeader = ({ persona, nickname, postId }: { persona: number, nick
     )
 }
 
-const PostListHeader = memo(({ persona, nickname, createdAt }: { persona: number, nickname: string, createdAt: string }) => {
+const PostListHeader = memo(({ post }: { post: Post & { commentCount: number } }) => {
+    const { persona, nickname, createdAt } = post;
     return (
         <View className="flex flex-row justify-between items-center">
             <View className="flex flex-row gap-x-[6px] items-center">
@@ -127,13 +136,15 @@ const PostListHeader = memo(({ persona, nickname, createdAt }: { persona: number
         </View>
     )
 }, (prevProps, nextProps) => {
-    return prevProps.persona === nextProps.persona && prevProps.nickname === nextProps.nickname && prevProps.createdAt === nextProps.createdAt;
+    return prevProps.post.persona === nextProps.post.persona && prevProps.post.nickname === nextProps.post.nickname && prevProps.post.createdAt === nextProps.post.createdAt;
 })
 
 PostListHeader.displayName = 'PostListHeader';
 
 //@description : content와 imageList가 바뀌지 않았다면 useMemo로 고정
-const PostContent = memo(({ content, imageList }: { content: string, imageList: string[] }) => {
+const PostContent = memo(({ post }: { post: Post & { commentCount: number } }) => {
+
+    const { content, imageList } = post;
 
     const { width } = useWindowDimensions();
     const cardHorizontalPadding = 32;
@@ -186,11 +197,11 @@ const PostContent = memo(({ content, imageList }: { content: string, imageList: 
         </View>
     )
 }, (prevProps, nextProps) => {
-    return prevProps.content === nextProps.content && (
-        prevProps.imageList.length === nextProps.imageList.length &&
-        prevProps.imageList.every((image, index) => {
+    return prevProps.post.content === nextProps.post.content && (
+        prevProps.post.imageList.length === nextProps.post.imageList.length &&
+        prevProps.post.imageList.every((image, index) => {
             const key = image.split('/').pop()?.split('.')[0];
-            return key === nextProps.imageList[index].split('/').pop()?.split('.')[0];
+            return key === nextProps.post.imageList[index].split('/').pop()?.split('.')[0];
         })
     );
 });
@@ -218,13 +229,13 @@ export const PostListCard = ({
     onPress?: () => void;
 }) => {
 
-    const { persona, nickname, content, commentCount, createdAt, imageList } = post;
+    const { commentCount } = post;
 
     return (
         <OpacityPressable onPress={onPress}>
             <View className="flex flex-col p-4 rounded-2xl bg-[#FFFFFF] gap-y-2">
-                <PostListHeader persona={persona} nickname={nickname} createdAt={createdAt} />
-                <PostContent content={content} imageList={imageList} />
+                <PostListHeader post={post} />
+                <PostContent post={post} />
                 <PostFooter commentCount={commentCount} />
             </View>
         </OpacityPressable>
@@ -237,12 +248,12 @@ export const PostDetailCard = ({
     post: Post & { commentCount: number };
 }) => {
 
-    const { persona, nickname, content, commentCount, createdAt, imageList, id: postId } = post;
+    const { commentCount, createdAt } = post;
     return (
         <View className="flex flex-col pt-4 rounded-2xl bg-[#FFFFFF] gap-y-2">
             <View className="flex flex-col rounded-2xl bg-[#FFFFFF] gap-y-2">
-                <PostDetailHeader persona={persona} nickname={nickname} postId={postId} />
-                <PostContent content={content} imageList={imageList} />
+                <PostDetailHeader post={post} />
+                <PostContent post={post} />
                 <View className="flex flex-row gap-x-[6px] items-center justify-between">
                     <PostFooter commentCount={commentCount} />
                     <Text className="Regular12 text-disabledFont">{formatDate(createdAt)}</Text>

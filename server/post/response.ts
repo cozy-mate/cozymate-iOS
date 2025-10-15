@@ -4,8 +4,8 @@ import { Post } from './post';
 
 export interface GetPostListResponse {
   result: {
-    page: 0;
-    hasNext: false;
+    page: number;
+    hasNext: boolean;
     result: (Post & { commentCount: number })[];
   };
 }

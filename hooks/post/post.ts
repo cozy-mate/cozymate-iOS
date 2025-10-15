@@ -46,10 +46,7 @@ export const useCreatePost = ({ roomId }: { roomId: number }) => {
       showSuccessToast('피드가 생성되었습니다');
       router.back();
     },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        console.log(error.response?.data);
-      }
+    onError: () => {
       showRejectToast('피드 생성에 실패했어요');
     },
     onSettled: () => {

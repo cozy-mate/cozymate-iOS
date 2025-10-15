@@ -11,10 +11,10 @@ interface NoticeItemProps {
     isFetching?: boolean;
 }
 
-export default function NoticeItem({ noticeItem, isFetching = true }: NoticeItemProps) {
+export const NoticeItem = ({ noticeItem, isFetching = true }: NoticeItemProps) => {
     return (
         // url 로 이동
-        <OpacityPressable onPress={isFetching ? () => { } : () => Linking.openURL(noticeItem.url)}>
+        <OpacityPressable disabled={isFetching} onPress={isFetching ? () => { } : () => Linking.openURL(noticeItem.url)}>
 
             <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
                 {isFetching ? (
@@ -43,7 +43,7 @@ export default function NoticeItem({ noticeItem, isFetching = true }: NoticeItem
                             </View>
                             <View className="flex flex-row justify-between">
                                 <Text className="Medium12 text-disabledFont">
-                                    {noticeItem.createdAt.replaceAll('-', '.')}
+                                    {noticeItem.createdAt.replace(/-/g, '.')}
                                 </Text>
                             </View>
                         </View>

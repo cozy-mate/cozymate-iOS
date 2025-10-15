@@ -1,5 +1,4 @@
 import { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useLocalSearchParams } from "expo-router";
 import React from 'react';
 import { Text, View } from 'react-native';
 
@@ -20,7 +19,8 @@ const CommentHeader = (
     { comment, openResultModal }: { comment: Comment & { postId: number }, openResultModal: () => void }) => {
 
     const { persona, nickname, postId, id: commentId } = comment;
-    const { roomInfo } = useMemberStore();
+    const { roomInfo, memberInfo } = useMemberStore();
+
 
     const { bottomSheetRef, BottomSheetComponent, open } = useBottomSheet({ snapPoints: [120] });
 
@@ -61,7 +61,7 @@ const CommentHeader = (
             />
             <ReportModalComponent
                 isVisible={isReportModalVisible}
-                memberId={Number(commentId)}
+                memberId={memberInfo?.memberId ?? 0}
                 source="COMMENT"
                 isFake={true}
                 closeModal={() => closeReportModal()}

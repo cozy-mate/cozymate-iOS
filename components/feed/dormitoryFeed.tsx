@@ -6,16 +6,28 @@ import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
 import { useGetDormitoryMenuAndNotice } from '@/hooks/dormitory/dormitory';
-import { Menu, MenuTimeKey } from '@/server/dormitory/response';
+import { Menu, MenuTimeKey, Notice } from '@/server/dormitory/response';
 
-import MenuItem from '../common/dormitoryItem/menuItem';
-import NoticeItem from '../common/dormitoryItem/noticeItem';
+import { MenuItem } from '../common/dormitoryItem/menuItem';
+import { NoticeItem } from '../common/dormitoryItem/noticeItem';
 import { TextNextHeader } from '../common/textNextHeader';
 
 export default function DormitoryFeed() {
 
-  const [{ data: menuData, isFetching: isMenuFetching, error: menuError, refetch: menuRefetch },
-    { data: noticeData, isFetching: isNoticeFetching, error: noticeError, refetch: noticeRefetch }] = useGetDormitoryMenuAndNotice();
+  const [
+    {
+      data: menuData,
+      isFetching: isMenuFetching,
+      error: menuError,
+      refetch: menuRefetch
+    },
+    {
+      data: noticeData,
+      isFetching: isNoticeFetching,
+      error: noticeError,
+      refetch: noticeRefetch
+    }
+  ] = useGetDormitoryMenuAndNotice();
 
   const progress = useSharedValue<number>(0);
 
@@ -32,7 +44,6 @@ export default function DormitoryFeed() {
       />
       <>
         {(() => {
-          // 로딩 또는 초기 데이터 미존재 시: 스켈레톤 3개
           if (isMenuFetching || !menuData) {
             return (
               <View className="gap-y-[12px]">
@@ -87,9 +98,9 @@ export default function DormitoryFeed() {
           if (isNoticeFetching || !noticeData) {
             return (
               <>
-                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as any} isFetching={true} />
-                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as any} isFetching={true} />
-                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as any} isFetching={true} />
+                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as Notice} isFetching={true} />
+                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as Notice} isFetching={true} />
+                <NoticeItem noticeItem={{ title: '', url: '', createdAt: '' } as Notice} isFetching={true} />
               </>
             );
           }

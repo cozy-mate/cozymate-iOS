@@ -23,15 +23,22 @@ const uploadImagesAndGetKeys = async (
 
   const uploadPromises = assets.map(async (asset, index) => {
     const fileResponse = await fetch(asset.uri);
+    if (!fileResponse.ok) {
+      throw new Error('파일을 불러오는데 실패했어요');
+    }
     const blob = await fileResponse.blob();
     const contentType =
       asset.mimeType ?? (asset.uri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
 
-    await fetch(uploadUrls[index], {
+    const uploadResponse = await fetch(uploadUrls[index], {
       method: 'PUT',
       headers: { 'Content-Type': contentType },
       body: blob,
     });
+
+    if (!uploadResponse.ok) {
+      throw new Error('S3에 파일을 업로드하는데 실패했어요');
+    }
 
     return s3Keys[index];
   });

@@ -11,8 +11,6 @@ import { useMemberStore } from '@/zustand/store';
 export const useGetMyRoomFeed = () => {
   const { roomInfo } = useMemberStore();
 
-  console.log(roomInfo?.roomId);
-
   return useQuery({
     ...queries.feed.detail({ roomId: roomInfo?.roomId ?? 0 }),
     enabled: roomInfo?.roomId !== undefined,
@@ -53,7 +51,7 @@ export const useUpdateMyRoomFeed = () => {
     },
     onError: (error: Error, variables: UpdateMyRoomFeedRequest) => {
       if (isAxiosError(error) && error.response?.data?.code === 'FEED401') {
-        console.log(variables);
+        showSuccessToast('피드가 없어 새로 생성됩니다.');
         createMutate(variables);
       } else {
         showRejectToast('피드 수정에 실패했어요');

@@ -1,11 +1,10 @@
 
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Modal, ScrollView, Text, TextInput, View, Pressable } from "react-native";
 import { z } from "zod";
@@ -26,28 +25,45 @@ export default function CreateFeed() {
 
     const { id } = useLocalSearchParams<{ id: string }>();
 
-    const isEditMode = !!id;
+    const postId = id ? Number(id) : 0;
+    const isEditMode = postId > 0;
 
     type PostForm = {
         content: string;
         images: (ImagePicker.ImagePickerAsset | string)[];
     };
 
-    const { data } = useGetPostDetail({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) ?? 0 });
+    const { data } = useGetPostDetail({
+        roomId: roomInfo?.roomId ?? 0,
+        postId: isEditMode ? postId : 0,
+    });
 
-    const { control, handleSubmit, setValue, watch, formState: { isValid }, getValues } = useForm<PostForm>({
+    const { control, handleSubmit, setValue, watch, formState: { isValid }, getValues, reset } = useForm<PostForm>({
         mode: 'onChange',
         defaultValues: { content: data?.result.content ?? '', images: data?.result.imageList ?? [] },
         resolver: zodResolver(z.object({
-            content: z.string().min(1),
+            content: z.string(),
             images: z.array(z.any()),
         })),
     });
 
+
+    useEffect(() => {
+        if (isEditMode && data?.result) {
+            reset({
+                content: data.result.content ?? '',
+                images: data.result.imageList ?? [],
+            });
+        }
+    }, [isEditMode, data, reset]);
+
     const images = watch('images');
 
     const { mutate: createPost, isPending } = useCreatePost({ roomId: roomInfo?.roomId ?? 0 });
-    const { mutate: updatePost, isPending: isUpdating } = useUpdatePost({ roomId: roomInfo?.roomId ?? 0, postId: Number(id) ?? 0 });
+    const { mutate: updatePost, isPending: isUpdating } = useUpdatePost({
+        roomId: roomInfo?.roomId ?? 0,
+        postId,
+    });
     const { mutate: buildPostImageKeys, isPending: isUploadingImages } = useBuildPostImageKeys({
         onSuccess: (response) => {
             const finalImageList = response;
@@ -55,7 +71,7 @@ export default function CreateFeed() {
             if (isEditMode) {
                 updatePost({
                     roomId: roomInfo?.roomId ?? 0,
-                    postId: Number(id) ?? 0,
+                    postId,
                     content: getValues('content') ?? '',
                     imageList: finalImageList,
                 })

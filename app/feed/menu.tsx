@@ -3,41 +3,12 @@ import { useMemo, useState } from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 
-import MenuItem from "@/components/common/dormitoryItem/menuItem";
+import { MenuItem } from "@/components/common/dormitoryItem/menuItem";
 import { DetailLayout } from "@/components/common/layout";
 import { TextHeader } from "@/components/common/textHeader";
 import { useGetDormitoryMenu } from "@/hooks/dormitory/dormitory";
 import { Menu as DormitoryMenu, MenuTimeKey } from "@/server/dormitory/response";
-
-function formatDateYYYYMMDD(date: Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-function startOfWeekSunday(date: Date) {
-    const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const day = d.getDay(); // 0: Sun
-    d.setDate(d.getDate() - day);
-    d.setHours(0, 0, 0, 0);
-    return d;
-}
-
-function addDays(date: Date, days: number) {
-    const d = new Date(date);
-    d.setDate(d.getDate() + days);
-    return d;
-}
-
-function getWeeksAround(centerWeekStart: Date, weekRange = 6) {
-    const arr: Date[] = [];
-    for (let i = -weekRange; i <= weekRange; i++) {
-        const ws = addDays(centerWeekStart, i * 7);
-        arr.push(ws);
-    }
-    return arr;
-}
+import { formatDateYYYYMMDD, startOfWeekSunday, addDays, getWeeksAround } from "@/utils/date";
 
 export default function Menu() {
     const today = useMemo(() => new Date(), []);
@@ -120,7 +91,6 @@ export default function Menu() {
         } />
         <View className="mt-[16px] gap-y-[12px] text-center w-full">
             {(() => {
-                // 에러 처리
                 if (isAxiosError(error) && error.response?.data?.code === 'DORMITORYMENU400') {
                     return <Text className="text-disabledFont w-full text-center">해당 날짜의 메뉴가 없습니다.</Text>
                 }
@@ -134,7 +104,6 @@ export default function Menu() {
                         </>
                     );
                 }
-                // stale 상태 데이터
                 if (isFetching && data) {
                     return (
                         <>

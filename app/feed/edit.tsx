@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
@@ -19,6 +20,7 @@ export default function EditFeed() {
         control,
         handleSubmit,
         formState: { isValid },
+        reset
     } = useForm<Feed>({
         defaultValues: {
             name: data?.result.name,
@@ -30,6 +32,15 @@ export default function EditFeed() {
         })),
         mode: 'all',
     })
+
+    useEffect(() => {
+        if (data?.result) {
+            reset({
+                name: data.result.name,
+                description: data.result.description,
+            });
+        }
+    }, [data, reset]);
 
     const { mutate, isPending } = useUpdateMyRoomFeed();
 
