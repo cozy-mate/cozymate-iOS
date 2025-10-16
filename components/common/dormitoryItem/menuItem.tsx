@@ -21,7 +21,7 @@ export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: M
     const [menuTime, { time, menu = "[]" }] = menuItem;
 
     return (
-        <OpacityPressable onPress={onPress} className='h-fit'>
+        <OpacityPressable onPress={onPress} className='h-fit w-full'>
             <View className="flex flex-col border border-disabledColor h-fit p-3 rounded-xl mx-[20px]">
                 {isFetching ? (
                     <>
@@ -44,7 +44,7 @@ export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: M
                                 {/* 자간 조정 */}
                                 <Text className="Medium12 text-colorFont leading-[14px]">{MENU_TIME_KEY_MAP[menuTime]}</Text>
                             </View>
-                            < Text className="Medium12 text-basicFont mx-[8px]">
+                            <Text className="Medium12 text-basicFont mx-[8px]">
                                 {time}
                             </Text>
                         </View>

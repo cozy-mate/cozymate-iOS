@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
 import { View, Text, FlatList, RefreshControl } from "react-native";
 
 
-import NoticeItem from "@/components/common/dormitoryItem/noticeItem";
+import { NoticeItem } from "@/components/common/dormitoryItem/noticeItem";
 import { DetailLayout } from "@/components/common/layout";
 import { TextHeader } from "@/components/common/textHeader";
 import { useGetDormitoryImportantNoticeList, useGetDormitoryNoticeList } from "@/hooks/dormitory/dormitory";

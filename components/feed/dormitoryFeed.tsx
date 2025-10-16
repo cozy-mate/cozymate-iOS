@@ -69,7 +69,7 @@ export default function DormitoryFeed() {
             data={menuItems ?? []}
             containerStyle={{ justifyContent: 'center' }}
             renderItem={({ item }) => (
-              <View style={{ width: Dimensions.get('window').width, height: 110, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ width: '100%', height: 110, justifyContent: 'center', alignItems: 'center' }}>
                 <MenuItem
                   menuItem={item}
                   onPress={() => router.push(`/feed/menu?date=${item[0]}`)}

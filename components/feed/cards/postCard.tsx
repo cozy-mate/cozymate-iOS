@@ -54,33 +54,35 @@ const PostDetailHeader = ({ post }: { post: Post & { commentCount: number } }) =
                     {getPersona(persona, 24, 24)}
                     <Text className="Semibold14 text-emphasizedFont">{nickname}</Text>
                 </View>
-                {
-                    isWriter && (
-                        <OpacityPressable onPress={() => open()}>
-                            <MoreDotIcon />
-                        </OpacityPressable>
-                    )
-                }
+                <OpacityPressable onPress={() => open()}>
+                    <MoreDotIcon />
+                </OpacityPressable>
             </View>
             <BottomSheetComponent>
                 <BottomSheetView className="flex-1 pt-[12px] pb-[16px] px-[20px]">
                     <BottomSheetTitle title="게시물" />
-                    <BottomSheetItem
-                        text="수정하기"
-                        onPress={() => {
-                            bottomSheetRef.current?.close();
-                            router.push(`/feed/create?id=${postId}`);
-                        }}
-                    />
-                    <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
-                    <BottomSheetItem
-                        text="삭제하기"
-                        onPress={() => {
-                            bottomSheetRef.current?.close();
-                            openDeleteModal();
-                        }}
-                    />
-                    <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
+                    {
+                        isWriter && (
+                            <>
+                                <BottomSheetItem
+                                    text="수정하기"
+                                    onPress={() => {
+                                        bottomSheetRef.current?.close();
+                                        router.push(`/feed/create?id=${postId}`);
+                                    }}
+                                />
+                                <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
+                                <BottomSheetItem
+                                    text="삭제하기"
+                                    onPress={() => {
+                                        bottomSheetRef.current?.close();
+                                        openDeleteModal();
+                                    }}
+                                />
+                                <View className="bg-[#F1F2F4] w-full h-[1px] my-[8px]" />
+                            </>
+                        )
+                    }
                     <BottomSheetItem
                         text="신고하기"
                         onPress={() => {

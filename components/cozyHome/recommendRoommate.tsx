@@ -46,14 +46,9 @@ export default function RecommendRoommateComponent() {
         <View className="gap-y-[16px]">
           <TextNextHeader
             title={
-              <>
-                <Text className="Semibold18 text-emphasizedFont">
-                  {memberInfo?.nickname ?? ''}님과
-                </Text>
-                <Text className="Semibold18 text-emphasizedFont">
-                  꼭 맞는 룸메이트를 추천해드릴게요
-                </Text>
-              </>
+              <Text className="Semibold18 text-emphasizedFont">
+                {`${memberInfo?.nickname ?? ''}님과 \n꼭 맞는 룸메이트를 추천해드릴게요`}
+              </Text>
             }
             handleMore={handleMore}
           />

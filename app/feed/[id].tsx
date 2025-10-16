@@ -59,17 +59,22 @@ export default function PostDetail() {
                     <FlatList
                         ListHeaderComponent={
                             <>
-                                <View className="px-5">
-                                    <PostDetailCard post={{
-                                        ...data?.result as Post,
-                                        commentCount: commentList?.result.length ?? 0,
-                                    }} />
-                                </View>
+                                {
+                                    data?.result && (
+                                        <View className="px-5">
+                                            <PostDetailCard post={{
+                                                ...data?.result as Post,
+                                                commentCount: commentList?.result.length ?? 0,
+                                            }} />
+                                        </View>
+                                    )
+                                }
                                 {/* Divider */}
                                 <View className="bg-[#F4F4F4] h-[2px] my-6" />
                             </>
                         }
-                        data={sortedComments}
+                        data={sortedComments ?? []}
+                        keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => <CommentCard
                             key={item.id} comment={{ ...item, postId: Number(id) }} openResultModal={openResultModal} />}
                         ItemSeparatorComponent={() => <View className="bg-[#F1F1F1] h-[1px] my-5 px-5" />}
