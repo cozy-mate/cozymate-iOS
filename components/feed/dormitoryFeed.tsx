@@ -72,7 +72,7 @@ export default function DormitoryFeed() {
               <View style={{ width: '100%', height: 110, justifyContent: 'center', alignItems: 'center' }}>
                 <MenuItem
                   menuItem={item}
-                  onPress={() => router.push(`/feed/menu?date=${item[0]}`)}
+                  onPress={() => router.push(`/feed/menu`)}
                   isFetching={isMenuFetching}
                 />
               </View>
