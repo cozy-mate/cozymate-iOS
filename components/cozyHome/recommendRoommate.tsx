@@ -4,14 +4,13 @@ import { Dimensions, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
-import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
+import { TextNextHeader } from '@/components/common/textNextHeader';
 import BasicUserItem from '@/components/common/userItem/basicUserItem';
 import { useGetHomeMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
 
-import OpacityPressable from '../opacityPressable';
 
 export default function RecommendRoommateComponent() {
   const router = useRouter();
@@ -45,24 +44,14 @@ export default function RecommendRoommateComponent() {
     memberList !== undefined && (
       <View>
         <View className="gap-y-[16px]">
-          <View className="flex flex-row justify-between items-center px-[20px]">
-            <View className="gap-y-[4px] ml-[4px]">
+          <TextNextHeader
+            title={
               <Text className="Semibold18 text-emphasizedFont">
-                {memberInfo?.nickname ?? ''}님과
+                {`${memberInfo?.nickname ?? ''}님과 \n꼭 맞는 룸메이트를 추천해드릴게요`}
               </Text>
-              <Text className="Semibold18 text-emphasizedFont">
-                꼭 맞는 룸메이트를 추천해드릴게요
-              </Text>
-            </View>
-
-            <OpacityPressable onPress={handleMore}>
-              <View className="flex flex-row items-center gap-x-[4px]">
-                <Text className="Semibold12 text-disabledFont">더보기</Text>
-                <GrayArrowIcon />
-              </View>
-            </OpacityPressable>
-          </View>
-
+            }
+            handleMore={handleMore}
+          />
           {memberList.length !== 0 ? (
             <Fragment>
               <Carousel

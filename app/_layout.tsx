@@ -7,7 +7,6 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import LottieView from 'lottie-react-native';
 import { useEffect, useState } from 'react';
-import 'react-native-reanimated';
 import { Text, TextInput, View, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Host, Portal } from 'react-native-portalize';
@@ -109,6 +108,9 @@ export default function RootLayout() {
 
                   {/* 롤앤룰 화면 */}
                   <Stack.Screen name="roleNRule" options={{ headerShown: false }} />
+
+                  {/* 피드 화면 */}
+                  <Stack.Screen name="feed" options={{ headerShown: false }} />
 
                   {/* 마이페이지 화면 */}
                   <Stack.Screen name="myPage" options={{ headerShown: false }} />

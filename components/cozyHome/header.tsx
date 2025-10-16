@@ -35,8 +35,8 @@ export default function HeaderComponent() {
   };
 
   return (
-    <View className="gap-y-[12px] px-[20px] pt-[18px] pb-[25px] bg-subColor1 relative">
-      <Background style={{ position: 'absolute', top: -47 }} width={width} />
+    <View className="gap-y-[12px] px-[20px] pt-[65px] pb-[25px] bg-subColor1 relative">
+      <Background style={{ position: 'absolute', top: -47 }} width={Dimensions.get('screen').width} />
       <View className="flex flex-row justify-between items-center">
         <View className="flex flex-row items-center gap-x-[6px]">
           <SchoolIcon />

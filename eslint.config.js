@@ -3,10 +3,10 @@ const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 const { defineConfig, globalIgnores } = require('eslint/config');
 const _import = require('eslint-plugin-import');
-const prettier = require('eslint-plugin-prettier');
+// Removed eslint-plugin-prettier to let Prettier extension be the sole formatter
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: process.cwd(),
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all,
 });
@@ -24,13 +24,10 @@ module.exports = defineConfig([
     ),
 
     plugins: {
-      prettier,
       import: fixupPluginRules(_import),
     },
 
     rules: {
-      'prettier/prettier': 'error',
-
       'import/order': [
         'error',
         {
@@ -45,5 +42,5 @@ module.exports = defineConfig([
       ],
     },
   },
-  globalIgnores(['dist/*']),
+  globalIgnores(['dist/*', '/.expo', 'node_modules']),
 ]);

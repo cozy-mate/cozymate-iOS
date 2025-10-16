@@ -20,6 +20,7 @@ interface ReportModalProps {
   memberId: number;
   source: string;
   closeModal: any;
+  isFake?: boolean;
 }
 
 const ReportModalComponent: React.FC<ReportModalProps> = ({
@@ -27,6 +28,7 @@ const ReportModalComponent: React.FC<ReportModalProps> = ({
   memberId,
   source,
   closeModal,
+  isFake = false,
 }) => {
   const [reason, setReason] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -109,7 +111,7 @@ const ReportModalComponent: React.FC<ReportModalProps> = ({
             <Pressable
               disabled={!canSubmit}
               onPress={() => {
-                createReport({
+                !isFake && createReport({
                   memberId: memberId,
                   source: source,
                   reason: reason,
