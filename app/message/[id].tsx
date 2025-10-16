@@ -6,14 +6,14 @@ import { Portal } from 'react-native-portalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SettingIcon from '@/assets/images/common/setting.svg';
-import ChatItemComponent from '@/components/chat/chatItem';
 import BackHeaderComponent from '@/components/common/backHeader';
 import { BottomSheetItem, useBottomSheet } from '@/components/common/bottomSheet';
 import LoadingComponent from '@/components/common/loading';
+import ChatItemComponent from '@/components/message/messageItem';
 import ReportModalComponent from '@/components/modal/reportModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
-import { useGetChatRoomDetail } from '@/hooks/chat/chat';
-import { useExitChatRoom } from '@/hooks/chat-room/chat-room';
+import { useGetMessageRoomDetail } from '@/hooks/message/message';
+import { useExitMessageRoom } from '@/hooks/message-room/message-room';
 import { useToggle } from '@/hooks/useToggle';
 
 function ChatRoomComponent() {
@@ -22,14 +22,13 @@ function ChatRoomComponent() {
 
   const { id, nickname } = useLocalSearchParams();
 
-  const { mutateAsync: exitChatRoom } = useExitChatRoom(Number(id));
+  const { mutateAsync: exitMessageRoom } = useExitMessageRoom(Number(id));
 
   const { open: openDeleteModal, close: closeDeleteModal, isOpen: isDeleteModalVisible } = useToggle();
 
   const { open: openReportModal, close: closeReportModal, isOpen: isReportModalVisible } = useToggle();
 
-
-  const { data, fetchNextPage, hasNextPage } = useGetChatRoomDetail(Number(id));
+  const { data, fetchNextPage, hasNextPage } = useGetMessageRoomDetail(Number(id));
 
   const loadMoreList = () => {
     if (hasNextPage) {
@@ -67,7 +66,7 @@ function ChatRoomComponent() {
         <TouchableOpacity
           onPress={() =>
             router.push(
-              `/chat/send/${data?.pages[0]?.result.result.memberId}?chatRoomId=${Number(id)}&nickname=${encodeURIComponent(nickname as string)}`,
+              `/message/send/${data?.pages[0]?.result.result.memberId}?messageRoomId=${Number(id)}&nickname=${encodeURIComponent(nickname as string)}`,
             )
           }
           className="bg-mainColor rounded-full px-[60px] py-[14px] absolute bottom-[62px] left-1/2 -translate-x-1/2"
@@ -111,7 +110,7 @@ function ChatRoomComponent() {
         rightButtonText="예"
         rightButtonFunc={() => {
           closeDeleteModal();
-          exitChatRoom();
+          exitMessageRoom();
         }}
       />
 

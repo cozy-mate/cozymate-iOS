@@ -30,11 +30,11 @@ const linking = {
         },
       },
       notification: 'notification',
-      chat: {
+      message: {
         screens: {
-          list: 'chat/list',
-          '[id]': 'chat/:id',
-          'send/[id]': 'chat/send/:id',
+          list: 'message/list',
+          '[id]': 'message/:id',
+          'send/[id]': 'message/send/:id',
         },
       },
       room: {

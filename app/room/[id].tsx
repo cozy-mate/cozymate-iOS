@@ -50,9 +50,9 @@ export function ErrorBoundary({ error }: ErrorBoundaryProps) {
           await queryClient.invalidateQueries({
             predicate: matchMultiQueries([
               queries.roomRecommend._def,
-              queries.room.sentRequestRoomList._def
+              queries.room.sentRequestRoomList._def,
             ]),
-          })
+          });
           router.back();
         }}
         color="BLUE"
@@ -90,15 +90,15 @@ function RoomDetailComponent() {
   const { mutateAsync: exitRoom } = useExitRoom(Number(id));
   const [isExitRoomModalOpen, setIsExitModalOpen] = useState<boolean>(false);
 
-  const onPress = (type: 'CHAT' | 'LIKE' | 'EXIT' | 'ACCEPT' | 'REJECT' | 'SEND' | 'CANCEL') => {
+  const onPress = (type: 'MESSAGE' | 'LIKE' | 'EXIT' | 'ACCEPT' | 'REJECT' | 'SEND' | 'CANCEL') => {
     trackButton(ButtonEvent.room_message, EventCategory.content_room, {
       roomId: Number(id),
     });
 
     switch (type) {
-      case 'CHAT':
+      case 'MESSAGE':
         router.push(
-          `/chat/send/${Number(data.result.managerMemberId)}?nickname=${encodeURIComponent(data.result.managerNickname)}`,
+          `/message/send/${Number(data.result.managerMemberId)}?nickname=${encodeURIComponent(data.result.managerNickname)}`,
         );
         break;
 
@@ -142,7 +142,7 @@ function RoomDetailComponent() {
           <View className="flex flex-row items-center gap-x-[4px]">
             {!data.result.isRoomManager && (
               <Pressable
-                onPress={() => onPress('CHAT')}
+                onPress={() => onPress('MESSAGE')}
                 className="flex items-center justify-center w-[40px] h-[40px]"
               >
                 <ChatIcon />

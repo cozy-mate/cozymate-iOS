@@ -98,7 +98,7 @@ export default function RootLayout() {
                   <Stack.Screen name="notification" options={{ headerShown: false }} />
 
                   {/* 쪽지방 화면 */}
-                  <Stack.Screen name="chat" options={{ headerShown: false }} />
+                  <Stack.Screen name="message" options={{ headerShown: false }} />
 
                   {/* 유저 관련 화면 */}
                   <Stack.Screen name="user" options={{ headerShown: false }} />
