@@ -78,7 +78,6 @@ const uploadMixedImagesAndGetKeys = async (
   const s3Keys = result.map((r) => r.s3Key);
 
   const uploadPromises = images.map(async (item, index) => {
-    console.log({ item });
     const sourceUri = typeof item === 'string' ? item : item.uri;
     const res = await fetch(sourceUri);
 
