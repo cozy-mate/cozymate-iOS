@@ -19,9 +19,9 @@ export default function HeaderComponent() {
   const { memberInfo, hasLifeStyle } = useMemberStore();
   const { trackButton } = useTracker();
 
-  const handleChat = () => {
+  const handleMessage = () => {
     trackButton(ButtonEvent.chat, EventCategory.home_header);
-    router.push('/chat/list');
+    router.push('/message/list');
   };
 
   const handleNotice = () => {
@@ -35,8 +35,15 @@ export default function HeaderComponent() {
   };
 
   return (
-    <View className="gap-y-[12px] px-[20px] pt-[18px] pb-[25px] bg-subColor1 relative">
-      <Background style={{ position: 'absolute', top: -47 }} width={width} />
+    <View
+      className={`${!hasLifeStyle ? 'h-[201px]' : 'h-[127px]'} pt-[65px] gap-y-[12px] px-[20px] bg-subColor1 relative`}
+    >
+      <Background
+        style={{ position: 'absolute', top: 0 }}
+        width={Dimensions.get('screen').width}
+        height={!hasLifeStyle ? 201 : 127}
+        preserveAspectRatio="xMidYMid slice"
+      />
       <View className="flex flex-row justify-between items-center">
         <View className="flex flex-row items-center gap-x-[6px]">
           <SchoolIcon />
@@ -44,7 +51,7 @@ export default function HeaderComponent() {
         </View>
 
         <View className="flex flex-row justify-between items-center">
-          <OpacityPressable onPress={handleChat}>
+          <OpacityPressable onPress={handleMessage}>
             <View className="p-[10px]">
               <ChatIcon />
             </View>
