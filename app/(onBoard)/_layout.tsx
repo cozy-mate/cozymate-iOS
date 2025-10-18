@@ -12,6 +12,9 @@ export default function OnBoardLayout() {
       {/* 유저 정보 */}
       <Stack.Screen name="personalInfo" options={{ headerShown: false }} />
 
+      {/* 유저 정보 v2 */}
+      <Stack.Screen name="personalInfo_v2" options={{ headerShown: false }} />
+
       {/* 캐릭터 선택 */}
       <Stack.Screen name="character" options={{ headerShown: false }} />
 
