@@ -13,7 +13,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
   owner: 'cozymate',
   name: 'cozymate',
   slug: 'cozymate',
-  version: '1.0.0',
+  version: '1.1.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'cozymate',
@@ -31,13 +31,14 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
   updates: {
     url: `https://u.expo.dev/${projectId}`,
   },
-  runtimeVersion: '1.0.0',
+  runtimeVersion: '1.1.0',
   ios: {
     supportsTablet: false,
     bundleIdentifier: serviceUrlSchemeIOS,
-    buildNumber: '1.0.0',
+    buildNumber: '1.1.0',
     usesAppleSignIn: true,
     infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
       NSPhotoLibraryUsageDescription: '사진을 업로드하기 위해 갤러리 접근 권한이 필요합니다.',
       NSCameraUsageDescription: '사진을 찍기 위해 카메라 접근 권한이 필요합니다.',
       NSUserNotificationUsageDescription: '푸시 알림을 통해 중요한 알림을 받을 수 있습니다.',
