@@ -4,14 +4,12 @@ import { Dimensions, Text, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 
-import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import { RoomCard, RoomCardSkeleton } from '@/components/common/room';
+import { TextNextHeader } from '@/components/common/textNextHeader';
 import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory, GestureEvent } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
-
-import OpacityPressable from '../opacityPressable';
 
 export default function RecommendRoomComponent() {
   const router = useRouter();
@@ -36,19 +34,14 @@ export default function RecommendRoomComponent() {
 
   return (
     <View className="gap-y-[16px]">
-      <View className="flex flex-row justify-between items-center px-[20px]">
-        <View className="gap-y-[4px] ml-[4px]">
-          <Text className="Semibold18 text-emphasizedFont">{memberInfo?.nickname ?? ''}님과</Text>
-          <Text className="Semibold18 text-emphasizedFont">꼭 맞는 방을 추천해드릴게요</Text>
-        </View>
-
-        <OpacityPressable onPress={handleMore}>
-          <View className="flex flex-row items-center gap-x-[4px]">
-            <Text className="Semibold12 text-disabledFont">더보기</Text>
-            <GrayArrowIcon />
-          </View>
-        </OpacityPressable>
-      </View>
+      <TextNextHeader
+        title={
+          <Text className="Semibold18 text-emphasizedFont">
+            {`${memberInfo?.nickname ?? ''}님과 \n꼭 맞는 방을 추천해드릴게요`}
+          </Text>
+        }
+        handleMore={handleMore}
+      />
 
       {isLoading || data === undefined ? (
         <Fragment>

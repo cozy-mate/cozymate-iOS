@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, Pressable } from 'react-native';
+import { Portal } from 'react-native-portalize';
 
 interface OneButtonModalProps {
   isVisible: boolean;

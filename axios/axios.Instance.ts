@@ -1,6 +1,13 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, isAxiosError } from 'axios';
 
-import { deleteToken, getAccessToken } from '@/utils/token';
+import { reissueToken } from '@/server/auth/auth';
+import {
+  deleteToken,
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/utils/token';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -34,6 +41,24 @@ axiosInstance.interceptors.request.use(
   },
 );
 
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (value?: any) => void;
+  reject: (error?: any) => void;
+}[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
 // 토큰 관련 에러 처리
 axiosInstance.interceptors.response.use(
   async (response) => {
@@ -41,7 +66,59 @@ axiosInstance.interceptors.response.use(
   },
 
   async (error) => {
-    // 토큰 만료나 잘못된 토큰일 때 로그아웃 처리
+    const originalRequest = error.config;
+
+    if (isAxiosError(error) && error.response?.status === 401) {
+      // 이미 재시도한 요청이면 에러 반환
+      if (originalRequest._retry) {
+        return Promise.reject(error);
+      }
+
+      // 토큰 재발급 중이면 대기열에 추가
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            return axiosInstance(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshToken = await getRefreshToken();
+        if (!refreshToken) {
+          deleteToken();
+          processQueue(error, null);
+          return Promise.reject(error);
+        }
+
+        const { result } = await reissueToken(refreshToken);
+        const newAccessToken = result.tokenResponseDTO.accessToken;
+        const newRefreshToken = result.tokenResponseDTO.refreshToken;
+
+        setAccessToken(newAccessToken);
+        setRefreshToken(newRefreshToken);
+
+        processQueue(null, newAccessToken);
+
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        deleteToken();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
     if (error.response?.data?.code === 'AUTH_001') {
       console.log('잘못된 토큰');
       deleteToken();

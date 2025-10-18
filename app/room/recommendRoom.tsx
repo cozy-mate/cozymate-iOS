@@ -11,7 +11,7 @@ import SelectedRadioIcon from '@/assets/images/room/selectedRadio.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
 import { RoomCard } from '@/components/common/room';
 import OpacityPressable from '@/components/opacityPressable';
-import { sortTypeItem } from '@/constants/items/sortItem';
+import { sortTypeItem, SortTypeValue } from '@/constants/items/sortItem';
 import { useGetRecommendRoomList } from '@/hooks/room-recommend/room-recommend';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
@@ -22,22 +22,24 @@ export default function RecommendRoom() {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const [selectedSortType, setSelectedSortType] = useState<string>('AVERAGE_RATE');
+  const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
 
   const { memberInfo } = useMemberStore();
 
   const { trackButton } = useTracker();
 
-  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList(selectedSortType);
+  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList({
+    sortType: selectedSortType,
+  });
 
-  const onPressSortTypeSubmit = (value: string) => {
+  const onPressSortTypeSubmit = (value: SortTypeValue) => {
     trackButton(ButtonEvent.sorting, EventCategory.content_room);
     setSelectedSortType(value);
     bottomSheetRef.current?.close();
     refetch();
   };
 
-  const onPressSortType = (value: string) => {
+  const onPressSortType = (value: SortTypeValue) => {
     const buttonEvent = `sorting_${value.toLowerCase()}` as keyof typeof ButtonEvent;
     trackButton(ButtonEvent[buttonEvent], EventCategory.content_room, {
       sorting: ButtonEvent[buttonEvent],
@@ -87,7 +89,9 @@ export default function RecommendRoom() {
                 onPress={() => bottomSheetRef.current?.expand()}
                 className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
               >
-                <Text className="Medium14 text-basicFont">{sortTypeItem[selectedSortType]}</Text>
+                <Text className="Medium14 text-basicFont">
+                  {sortTypeItem.find(({ value }) => value === selectedSortType)?.title}
+                </Text>
                 <View className="rotate-90">
                   <GrayArrowIcon />
                 </View>
@@ -126,7 +130,7 @@ export default function RecommendRoom() {
       >
         <BottomSheetView className="h-[350px] px-[20px] pt-[24px]">
           <View className="flex-1 gap-y-[8px]">
-            {Object.entries(sortTypeItem).map(([value, title]) => (
+            {sortTypeItem.map(({ value, title }) => (
               <OpacityPressable key={value} onPress={() => onPressSortType(value)}>
                 <View className="flex flex-row justify-between items-center">
                   <Text
@@ -144,7 +148,7 @@ export default function RecommendRoom() {
           </View>
 
           <OpacityPressable onPress={() => onPressSortTypeSubmit(selectedSortType)}>
-            <View className="border bg-mainColor py-[17.5px] rounded-xl mb-[50px]">
+            <View className="bg-mainColor py-[17.5px] rounded-xl mb-[50px]">
               <Text className="Semibold16 text-white text-center">확인</Text>
             </View>
           </OpacityPressable>

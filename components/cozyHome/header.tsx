@@ -39,7 +39,7 @@ export default function HeaderComponent() {
       className={`${!hasLifeStyle ? 'h-[201px]' : 'h-[127px]'} pt-[65px] gap-y-[12px] px-[20px] bg-subColor1 relative`}
     >
       <Background
-        style={{ position: 'absolute', top: 0 }}
+        style={{ position: 'absolute', top: -47 }}
         width={Dimensions.get('screen').width}
         height={!hasLifeStyle ? 201 : 127}
         preserveAspectRatio="xMidYMid slice"
