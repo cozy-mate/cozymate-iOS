@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import Background from '@/assets/images/roleNRule/background.svg';
 
+import Background from '@/assets/images/roleNRule/background.svg';
 import DormitoryFeed from '@/components/feed/dormitoryFeed';
 import MyRoomFeed from '@/components/feed/myRoomFeed';
+import { useMemberStore } from '@/zustand/store';
 
 const renderScene = SceneMap({
   DORMITORY: DormitoryFeed,
@@ -15,10 +16,12 @@ const renderScene = SceneMap({
 export default function Feed() {
   const [index, setIndex] = useState(0);
 
-  const [routes] = useState([
+  const { roomInfo } = useMemberStore();
+
+  const routes = [
     { key: 'DORMITORY', title: '기숙사' },
-    { key: 'MYROOM', title: '우리방' },
-  ]);
+    ...(roomInfo.roomId > 0 ? [{ key: 'MYROOM', title: '우리방' }] : []),
+  ];
 
   return (
     <SafeAreaView className="flex-1 bg-[#CADFFF] relative">
