@@ -9,7 +9,7 @@ export const useCreateRoomStore = create<{
 }>((set) => ({
   createRoomInfo: {
     name: '',
-    persona: 0,
+    persona: 1,
     maxMateNum: 0,
     hashtagList: [],
   },
@@ -24,7 +24,7 @@ export const useCreateRoomStore = create<{
     set(() => ({
       createRoomInfo: {
         name: '',
-        persona: 0,
+        persona: 1,
         maxMateNum: 0,
         hashtagList: [],
       },
