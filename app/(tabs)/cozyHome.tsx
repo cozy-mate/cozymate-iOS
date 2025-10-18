@@ -1,6 +1,8 @@
+import { useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { RefreshControl, ScrollView, Text, View } from 'react-native';
 
+import GrayArrowIcon from '@/assets/icons/room/grayArrow.svg';
 import HeaderComponent from '@/components/cozyHome/header';
 import MyRoomComponent from '@/components/cozyHome/myRoom';
 import ReceivedRequestComponent from '@/components/cozyHome/receivedRequest';
@@ -16,14 +18,14 @@ import { useGetHomeRecommendRoomList } from '@/hooks/room-recommend/room-recomme
 import { useMemberStore } from '@/zustand/store';
 
 export default function CozyHome() {
+  const router = useRouter();
+
   const { hasLifeStyle, hasRoom, roomInfo } = useMemberStore();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
-  const { refetch: myRoomRefetch } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
-  const { refetch: receivedRequestRefetch } = useGetReceivedRequestList(
-    roomInfo?.isRoomManager ?? false,
-  );
+  const { refetch: myRoomRefetch } = useGetMyRoomDetail(roomInfo.roomId);
+  const { refetch: receivedRequestRefetch } = useGetReceivedRequestList(roomInfo.isRoomManager);
   const { refetch: sentRequestRefetch } = useGetSentRequestRoomList(3);
   const { refetch: randomMemberRefetch } = useGetRandomMemberList();
   const { refetch: memberRefetch } = useGetHomeMemberList();
@@ -41,10 +43,10 @@ export default function CozyHome() {
       // 방 유무
       if (!hasRoom) {
         tasks.push(sentRequestRefetch());
-      } else if (roomInfo?.roomId !== 0) {
+      } else if (roomInfo.roomId !== 0) {
         tasks.push(myRoomRefetch());
 
-        if (roomInfo?.isRoomManager) {
+        if (roomInfo.isRoomManager) {
           tasks.push(receivedRequestRefetch());
         }
       }
@@ -114,9 +116,11 @@ export default function CozyHome() {
         <RecommendRoomComponent />
 
         {!hasRoom && (
-          <OpacityPressable onPress={() => {}}>
-            <View className="mx-[20px] bg-colorBox rounded-xl px-[16px] py-[12px]">
+          <OpacityPressable onPress={() => router.push('/room/joinRoom')}>
+            <View className="mx-[20px] bg-colorBox rounded-xl px-[16px] py-[12px] flex flex-row justify-between items-center">
               <Text className="Semibold12 text-basicFont">초대코드로 친구를 찾고 계신가요?</Text>
+
+              <GrayArrowIcon />
             </View>
           </OpacityPressable>
         )}
