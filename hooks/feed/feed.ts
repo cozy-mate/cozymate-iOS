@@ -12,8 +12,8 @@ export const useGetMyRoomFeed = () => {
   const { roomInfo } = useMemberStore();
 
   return useQuery({
-    ...queries.feed.detail({ roomId: roomInfo?.roomId ?? 0 }),
-    enabled: roomInfo?.roomId !== undefined,
+    ...queries.feed.detail({ roomId: roomInfo.roomId }),
+    enabled: roomInfo.roomId !== 0,
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: true,
   });
@@ -27,7 +27,7 @@ export const useCreateMyRoomFeed = () => {
   return useMutation({
     mutationFn: (data: CreateMyRoomFeedRequest) => createMyRoomFeed(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(queries.feed.detail({ roomId: roomInfo?.roomId ?? 0 }));
+      queryClient.invalidateQueries(queries.feed.detail({ roomId: roomInfo.roomId }));
       showSuccessToast('피드가 생성되었습니다');
       router.back();
     },
@@ -58,7 +58,7 @@ export const useUpdateMyRoomFeed = () => {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries(queries.feed.detail({ roomId: roomInfo?.roomId ?? 0 }));
+      queryClient.invalidateQueries(queries.feed.detail({ roomId: roomInfo.roomId }));
     },
   });
 };

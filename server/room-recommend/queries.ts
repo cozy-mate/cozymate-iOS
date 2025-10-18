@@ -1,4 +1,5 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
+
 import { getRecommendRoomList } from './room-recommend';
 
 export const roomRecommendQueries = createQueryKeys('roomRecommend', {

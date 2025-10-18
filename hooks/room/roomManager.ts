@@ -1,14 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import {
-  acceptRoomRequest,
-  cancelInviteMember,
-  checkIsInvitedMember,
-  inviteMember,
-} from '@/server/room/room';
+import { matchMultiQueries, queries } from '@/server';
+import { acceptRoomRequest, cancelInviteMember, inviteMember } from '@/server/room/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
 // 방장 -> 내방으로 초대 취소 기능
 export const useCancelInviteMember = (inviteeId: number) => {
@@ -21,7 +16,7 @@ export const useCancelInviteMember = (inviteeId: number) => {
     onSuccess: () => {
       showRejectToast('방 초대 요청을 취소했어요');
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
+        queryKey: [`/rooms/${roomInfo.roomId}/invited-members`, roomInfo.roomId],
       });
       queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
     },
@@ -34,7 +29,7 @@ export const useCheckIsRequestedMember = (memberId: number) => {
 
   return useQuery({
     ...queries.room.checkIsRequestedMember({ memberId }),
-    enabled: roomInfo?.roomId !== 0 && roomInfo?.isRoomManager,
+    enabled: roomInfo.roomId !== 0 && roomInfo.isRoomManager,
   });
 };
 
@@ -51,7 +46,7 @@ export const useCheckIsInvitedMember = (memberId: number) => {
 
   return useQuery({
     ...queries.room.checkIsInvitedMember({ memberId }),
-    enabled: roomInfo?.roomId !== 0 && roomInfo?.isRoomManager,
+    enabled: roomInfo.roomId !== 0 && roomInfo.isRoomManager,
   });
 };
 
@@ -113,14 +108,14 @@ export const useInviteMember = (
     mutationFn: () => inviteMember(inviteeId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
+        queryKey: [`/rooms/${roomInfo.roomId}/invited-members`, roomInfo.roomId],
       });
       queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
       showSuccessToast(`[${nickname}]님에게 방 초대 요청을 보냈어요`);
     },
     onError: (error: any) => {
       queryClient.invalidateQueries({
-        queryKey: [`/rooms/${roomInfo?.roomId}/invited-members`, roomInfo?.roomId],
+        queryKey: [`/rooms/${roomInfo.roomId}/invited-members`, roomInfo.roomId],
       });
       queryClient.invalidateQueries(queries.room.checkIsInvitedMember({ memberId: inviteeId }));
 

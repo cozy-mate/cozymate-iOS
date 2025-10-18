@@ -7,15 +7,15 @@ import {
 } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
+import { matchMultiQueries, queries } from '@/server';
 import { createMemberDetail, updateMemberDetail } from '@/server/member-stat/member-stat';
 import { CreateMemberDetailRequest, UpdatememberDetailRequest } from '@/server/member-stat/request';
+import { GetMemberListResponse } from '@/server/member-stat/response';
 import {
   useRegisterLifeStyleStore,
   useShowLifeStyleInputStore,
 } from '@/zustand/member-stat/member-stat';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
-import { GetMemberListResponse } from '@/server/member-stat/response';
 
 export const useGetMyDetail = () => {
   const { hasLifeStyle } = useMemberStore();
@@ -32,7 +32,7 @@ export const useSuspenseGetMyDetail = () => {
 
 // 사용자 상세정보 조회
 export const useGetMemberDetail = (memberId: number) => {
-  return useSuspenseQuery({
+  return useQuery({
     ...queries.memberStat.detail({ memberId }),
     // 오류가 발생했을 때 refetch를 시도하는 것 방지
     retry: false,
