@@ -15,13 +15,13 @@ import CustomCalendar from '../todo/calendar';
 export default function CreateTodoScene() {
   const { roomInfo } = useMemberStore();
 
-  const { mutateAsync: createTodo } = useCreateTodo({ roomId: roomInfo?.roomId ?? 0 });
+  const { mutateAsync: createTodo } = useCreateTodo({ roomId: roomInfo.roomId });
 
   const [content, setContent] = useState<string>('');
   const [mateIdList, setMateIdList] = useState<number[]>([]);
   const [timePoint, setTimePoint] = useState(moment().format('YYYY-MM-DD'));
 
-  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo.roomId);
 
   const toggleSelection = (itemValue: number) => {
     const updatedValue = mateIdList.includes(itemValue)

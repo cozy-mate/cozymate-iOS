@@ -16,16 +16,29 @@ export default function RoleNRuleScene() {
     isLoading: isRuleLoading,
     isFetching: isRuleFetching,
     refetch: ruleRefetch,
-  } = useGetRuleList(roomInfo?.roomId ?? 0);
+  } = useGetRuleList({ roomId: roomInfo.roomId });
   const {
     data: roleData,
     isLoading: isRoleLoading,
     isFetching: isRoleFetching,
     refetch: roleRefetch,
-  } = useGetRoleList(roomInfo?.roomId ?? 0);
+  } = useGetRoleList({ roomId: roomInfo.roomId });
 
   const onRefresh = useCallback(async () => {
-    await Promise.all([ruleRefetch(), roleRefetch()]);
+    // 시간 계산용
+    const start = Date.now();
+    console.log('[onRefresh] start');
+    try {
+      await Promise.all([ruleRefetch(), roleRefetch()]);
+    } finally {
+      const elapsed = Date.now() - start;
+      const minDuration = 1000; // 최소 1초 동안은 표시
+      const delay = Math.max(0, minDuration - elapsed);
+
+      setTimeout(() => {
+        console.log(`[onRefresh] done in ${Date.now() - start}ms`);
+      }, delay);
+    }
   }, [ruleRefetch, roleRefetch]);
 
   return (

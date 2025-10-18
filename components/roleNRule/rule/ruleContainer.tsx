@@ -25,7 +25,7 @@ interface RuleContainerProps {
 export default function RuleContainer({ isFetching, data }: RuleContainerProps) {
   const { roomInfo } = useMemberStore();
 
-  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: roomData } = useGetMyRoomDetail(roomInfo.roomId);
 
   const { setSelectedItem } = useSelectedItemStore();
 

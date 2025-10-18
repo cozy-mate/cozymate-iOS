@@ -14,16 +14,29 @@ export default function TodoScene() {
 
   const [timePoint, setTimePoint] = useState<string>(moment().format('YYYY-MM-DD'));
 
-  const { data, isFetching, refetch } = useGetTodoList(Number(roomInfo?.roomId ?? 0), timePoint);
+  const { data, isFetching, refetch } = useGetTodoList({
+    roomId: Number(roomInfo.roomId),
+    timePoint,
+  });
 
   // TimePoint가 변경되었을 경우에는 RefreshControl이 보이지 않도록 커스텀 상태 활용
   const [isRefreshing, setIsRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
     setIsRefreshing(true);
+    // 시간 계산용
+    const start = Date.now();
+    console.log('[onRefresh] start');
     try {
       await refetch();
     } finally {
-      setIsRefreshing(false);
+      const elapsed = Date.now() - start;
+      const minDuration = 1000; // 최소 1초 동안은 표시
+      const delay = Math.max(0, minDuration - elapsed);
+
+      setTimeout(() => {
+        console.log(`[onRefresh] done in ${Date.now() - start}ms`);
+        setIsRefreshing(false);
+      }, delay);
     }
   }, [refetch]);
 

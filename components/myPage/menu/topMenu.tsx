@@ -4,8 +4,7 @@ import { Pressable, Text, View } from 'react-native';
 import GrayArrow from '@/assets/images/common/grayArrow.svg';
 import HomeIcon from '@/assets/images/myPage/home.svg';
 import VerifiedIcon from '@/assets/images/myPage/verified.svg';
-import { useGetMemberProfile } from '@/hooks/member/member';
-import { useCheckHasRoom, useGetMyRoomDetail } from '@/hooks/room/room';
+import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { showRejectToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
 
@@ -13,7 +12,7 @@ const TopMenuComponent: React.FC = () => {
   const router = useRouter();
 
   const { memberInfo, hasLifeStyle, hasRoom, roomInfo } = useMemberStore();
-  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId || 0);
+  const { data: roomData } = useGetMyRoomDetail(roomInfo.roomId);
 
   const topMenuItems = [
     { title: '내 정보', subTitle: null, onPress: () => router.push('/myPage/myInfo') },
@@ -29,7 +28,7 @@ const TopMenuComponent: React.FC = () => {
       ),
       onPress: () =>
         roomData !== undefined
-          ? router.push(`/room/${roomInfo?.roomId}`)
+          ? router.push(`/room/${roomInfo.roomId}`)
           : showRejectToast('참여한 방이 아직 없어요'),
     },
     {

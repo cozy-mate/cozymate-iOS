@@ -20,13 +20,13 @@ type MateIdName = {
 export default function CreateRoleScene() {
   const { roomInfo } = useMemberStore();
 
-  const { mutateAsync: createRole } = useCreateRole({ roomId: roomInfo?.roomId ?? 0 });
+  const { mutateAsync: createRole } = useCreateRole({ roomId: roomInfo.roomId });
 
   const [content, setContent] = useState<string>('');
   const [mateIdNameList, setMateIdNameList] = useState<MateIdName[]>([]);
   const [repeatDayList, setRepeatDayList] = useState<string[] | null>(null);
 
-  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo.roomId);
 
   const mateToggleSelection = (item: MateDetail) => {
     const exists = mateIdNameList.some((v) => v.mateId === item.mateId);

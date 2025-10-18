@@ -13,12 +13,12 @@ export default function MyRoomComponent() {
   const { trackButton } = useTracker();
 
   const { memberInfo, hasRoom, roomInfo } = useMemberStore();
-  const { data } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data } = useGetMyRoomDetail(roomInfo.roomId);
 
   const onPress = () => {
     if (hasRoom && roomInfo !== undefined && roomInfo.roomId !== 0) {
       trackButton(ButtonEvent.my_room, EventCategory.home_content);
-      router.push(`/room/${roomInfo?.roomId}`);
+      router.push(`/room/${roomInfo.roomId}`);
     }
   };
 

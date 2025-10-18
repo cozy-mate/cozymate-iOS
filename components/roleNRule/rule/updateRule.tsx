@@ -12,7 +12,7 @@ export default function UpdateRuleScene() {
   const { selectedItem } = useSelectedItemStore();
 
   const { mutateAsync: updateRule } = useUpdateRule({
-    roomId: roomInfo?.roomId ?? 0,
+    roomId: roomInfo.roomId,
     ruleId: selectedItem.id,
   });
 

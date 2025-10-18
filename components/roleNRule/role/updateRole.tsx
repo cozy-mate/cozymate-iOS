@@ -24,7 +24,7 @@ export default function UpdateRoleScene() {
   const { selectedItem } = useSelectedItemStore();
 
   const { mutateAsync: updateRole } = useUpdateRole({
-    roomId: roomInfo?.roomId ?? 0,
+    roomId: roomInfo.roomId,
     roleId: selectedItem.id,
   });
 
@@ -32,7 +32,7 @@ export default function UpdateRoleScene() {
   const [mateIdNameList, setMateIdNameList] = useState<MateIdName[]>(selectedItem.mateIdNameList);
   const [repeatDayList, setRepeatDayList] = useState<string[] | null>(selectedItem.repeatDayList);
 
-  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo.roomId);
 
   const mateToggleSelection = (item: MateDetail) => {
     const exists = mateIdNameList.some((v) => v.mateId === item.mateId);
