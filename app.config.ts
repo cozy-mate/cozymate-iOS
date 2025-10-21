@@ -82,6 +82,7 @@ const defineConfig = (config: ConfigContext): ExpoConfig => ({
         ],
       },
     ],
+    ['expo-apple-authentication'],
     'expo-web-browser',
     [
       'expo-build-properties',
