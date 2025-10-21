@@ -46,10 +46,10 @@ const CustomTimeSelect: React.FC<CustomTimeSelectProps> = ({ title, value, onCha
           <Pressable
             key={item}
             onPress={() => handleHourSelect(item)}
-            className={`w-[48px] py-[10px] rounded-md ${value === item ? 'bg-subColor1' : 'bg-colorBox'}`}
+            className={`w-[48px] py-[10px] rounded-md ${selectedHour === item ? 'bg-subColor1' : 'bg-colorBox'}`}
           >
             <Text
-              className={`text-center ${value === item ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
+              className={`text-center ${selectedHour === item ? 'Semibold14 text-mainColor' : 'Medium14 text-disabledFont'}`}
             >
               {item}
             </Text>
