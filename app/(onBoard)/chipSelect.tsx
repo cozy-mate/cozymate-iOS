@@ -8,13 +8,20 @@ import BottomButtonComponent from '@/components/common/bottomButton';
 import LoadingComponent from '@/components/common/loading';
 import PreferenceChipListComponent from '@/components/common/preferenceChipList';
 import { LifeStyleValue } from '@/constants/items/lifeStyle';
-import { useSignUp } from '@/hooks/member/member';
+import {
+  //useSignUp,
+  useSignUpV2,
+} from '@/hooks/member/member';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
-import { useSignUpStore } from '@/zustand/member/member';
+import {
+  //useSignUpStore,
+  useSignUpV2Store,
+} from '@/zustand/member/member';
 
 export default function ChipSelect() {
-  const { signUpState } = useSignUpStore();
+  // const { signUpState } = useSignUpStore();
+  const { signUpState } = useSignUpV2Store();
 
   const [preferenceList, setPreferenceList] = useState<LifeStyleValue[]>([]);
 
@@ -41,11 +48,14 @@ export default function ChipSelect() {
     });
   };
 
-  const { mutateAsync: signUp, isPending } = useSignUp();
+  // const { mutateAsync: signUp, isPending } = useSignUp();
+  const { mutateAsync: signUpV2, isPending } = useSignUpV2();
 
   const handleConfirm = async () => {
     try {
-      await signUp({
+      await signUpV2({
+        universityId: signUpState.universityId,
+        majorName: signUpState.majorName,
         nickname: signUpState.nickname,
         gender: signUpState.gender,
         birthday: signUpState.birthday,
