@@ -46,7 +46,7 @@ export default function EditFeed() {
   const { mutate, isPending } = useUpdateMyRoomFeed();
 
   return (
-    <DetailLayout>
+    <DetailLayout className="bg-white">
       <View className="flex-1 px-5 pt-5 gap-y-12">
         <View className="gap-y-[12px]">
           <Text className="Semibold16 text-emphasizedFont mx-[4px]">피드 이름을 입력해주세요</Text>

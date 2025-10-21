@@ -16,7 +16,7 @@ export const NoticeItem = ({ noticeItem, isFetching = true }: NoticeItemProps) =
         // url 로 이동
         <OpacityPressable disabled={isFetching} onPress={isFetching ? () => { } : () => Linking.openURL(noticeItem.url)}>
 
-            <View className="border border-disabledColor px-[16px] pt-[20px] pb-[18px] rounded-xl mx-[20px]">
+            <View className="border border-disabledColor px-[16px] py-[12px] rounded-xl mx-[20px] bg-white">
                 {isFetching ? (
                     <>
                         <View className="flex flex-row justify-between items-center">
@@ -35,7 +35,7 @@ export const NoticeItem = ({ noticeItem, isFetching = true }: NoticeItemProps) =
                     </>
                 ) : (
                     <View className="flex flex-row justify-between items-center">
-                        <View className="flex-1 gap-1">
+                        <View className="flex-1 gap-2">
                             <View className="flex flex-row items-center justify-between">
                                 <Text className="Medium16 text-basicFont" numberOfLines={1} ellipsizeMode="tail">
                                     {noticeItem.title}
