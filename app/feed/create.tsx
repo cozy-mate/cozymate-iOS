@@ -5,7 +5,6 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Modal, ScrollView, Text, TextInput, View, Pressable } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { z } from 'zod';
 
 import GalleryIcon from '@/assets/icons/feed/gallery.svg';
