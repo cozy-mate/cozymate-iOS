@@ -1,6 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Dimensions, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 import BottomButtonComponent from '@/components/common/bottomButton';
 import TwoBottomButtonComponent from '@/components/common/twoBottomButton';
@@ -10,32 +9,37 @@ import { useMemberStore } from '@/zustand/store';
 
 interface BottomButtonContainerProps {
   id: number;
-  onPress: any;
+  onPress: (
+    type: 'MESSAGE' | 'LIKE' | 'VIEW' | 'INVITE' | 'CANCEL' | 'ACCEPT' | 'REJECT',
+    viewType?: 'LIST' | 'TABLE',
+  ) => void;
 }
 
-const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPress }) => {
+export default function BottomButtonContainer({ id, onPress }: BottomButtonContainerProps) {
   const router = useRouter();
-
-  const isSmallSize = Dimensions.get('screen').height <= 667;
-
-  const { bottom } = useSafeAreaInsets();
 
   const { memberInfo, hasLifeStyle, roomInfo } = useMemberStore();
 
   const { data: isInvited } = useCheckIsInvitedMember(id);
   const { data: isRequested } = useCheckIsRequestedMember(id);
 
-  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId as number);
+  const { data: roomData } = useGetMyRoomDetail(roomInfo.roomId);
 
   const isInMateList = roomData?.result?.mateDetailList?.some(
     (mate: { memberId: number }) => mate.memberId === id,
   );
 
-  // 같은 방에 속한 사용자 or 방이 있지만 방장이 아닐 때
-  if (isInMateList || (!roomInfo?.isRoomManager && roomInfo?.roomId !== 0)) return null;
+  if (isInMateList) return null;
 
   return (
-    <View style={{ height: 108, bottom: isSmallSize ? 160 : bottom + 94 }}>
+    <View
+      style={{
+        height: 108,
+        bottom: 0,
+        position: 'fixed',
+        zIndex: 1000,
+      }}
+    >
       {id !== Number(memberInfo?.memberId ?? 0) && !hasLifeStyle && (
         <BottomButtonComponent
           buttonText="라이프스타일 입력하고 내 방으로 초대하기"
@@ -74,6 +78,4 @@ const BottomButtonContainer: React.FC<BottomButtonContainerProps> = ({ id, onPre
         )}
     </View>
   );
-};
-
-export default BottomButtonContainer;
+}
