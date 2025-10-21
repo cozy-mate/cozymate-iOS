@@ -13,7 +13,7 @@ export default function Notice() {
 
     const { data: noticeListData, isRefetching: isNoticeListFetching, error: noticeListError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: noticeListRefetch } = useGetDormitoryNoticeList();
 
-    return <DetailLayout>
+    return <DetailLayout className="bg-[#F7FAFF]">
         <FlatList
             refreshControl={<RefreshControl refreshing={isNoticeListFetching} onRefresh={() => { noticeListRefetch(); }} />}
             ListHeaderComponent={

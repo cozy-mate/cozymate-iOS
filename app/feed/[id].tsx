@@ -53,7 +53,7 @@ export default function PostDetail() {
   } = useToggle();
 
   return (
-    <DetailLayout>
+    <DetailLayout className="bg-white">
       {isLoading || isCommentListLoading ? (
         <LoadingComponent />
       ) : (
