@@ -18,3 +18,15 @@ export interface SignUpRequest {
     preferenceList: string[];
   };
 }
+
+export interface SignUpV2Request {
+  universityId: number;
+  majorName: string;
+  nickname: string;
+  gender: string;
+  birthday: string;
+  persona: number;
+  memberStatPreferenceDto: {
+    preferenceList: string[];
+  };
+}

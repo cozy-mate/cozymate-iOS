@@ -2,8 +2,19 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 import { useRouter } from 'expo-router';
 
 import { matchMultiQueries, queries } from '@/server';
-import { checkNickname, signUp, updateMemberInfo, withdraw } from '@/server/member/member';
-import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
+import {
+  checkNickname,
+  signUp,
+  signUpV2,
+  updateMemberInfo,
+  withdraw,
+} from '@/server/member/member';
+import {
+  SignUpRequest,
+  SignUpV2Request,
+  UpdateMemberInfoRequest,
+  WithdrawRequest,
+} from '@/server/member/request';
 import { SignUpResponse } from '@/server/member/response';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
@@ -104,6 +115,23 @@ export const useSignUp = () => {
       await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
 
       setMemberInfo(response.result.memberDetailResponseDTO);
+    },
+  });
+};
+
+export const useSignUpV2 = () => {
+  const router = useRouter();
+  const { setMemberInfoWithoutLogin } = useMemberStore();
+
+  return useMutation({
+    mutationFn: (data: SignUpV2Request) => signUpV2(data),
+    onSuccess: async (response: SignUpResponse) => {
+      await setAccessToken(response.result.tokenResponseDTO.accessToken);
+      await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
+
+      setMemberInfoWithoutLogin(response.result.memberDetailResponseDTO);
+
+      router.push('/(onBoard)/complete');
     },
   });
 };
