@@ -1,11 +1,13 @@
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
 import { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import CheckBoxIcon from '@/assets/images/roleNRule/check.svg';
 import NotCheckBoxIcon from '@/assets/images/roleNRule/notCheck.svg';
+import CustomTextInput from '@/components/common/customInput/customTextInput';
+import OpacityPressable from '@/components/opacityPressable';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { useCreateTodo } from '@/hooks/todo/todo';
 import { useMemberStore } from '@/zustand/store';
@@ -66,16 +68,13 @@ export default function CreateTodoScene() {
           enableOnAndroid={true}
           extraScrollHeight={20}
         >
-          <View className="gap-y-[12px]">
-            <Text className="Semibold16 text-emphasizedFont mx-[4px]">할 일을 입력해주세요</Text>
-            <TextInput
-              value={content}
-              onChangeText={(e) => setContent(e)}
-              placeholder="할 일을 입력해주세요"
-              placeholderTextColor={'#ACADB4'}
-              className={`px-[16px] py-[15px] rounded-xl InputMedium14 text-basicFont h-[49px] border`}
-            />
-          </View>
+          <CustomTextInput
+            title="할 일을 입력해주세요"
+            value={content}
+            handleValue={setContent}
+            placeholder="할 일을 입력해주세요"
+            maxLength={20}
+          />
 
           <View className="gap-y-[12px]">
             <Text className="Semibold16 text-emphasizedFont mx-[4px]">담당자를 선택해주세요</Text>
@@ -121,7 +120,7 @@ export default function CreateTodoScene() {
         </KeyboardAwareScrollView>
       )}
 
-      <Pressable
+      <OpacityPressable
         onPress={() => createTodo({ content, mateIdList, timePoint })}
         disabled={!isComplete}
         className={`${
@@ -129,7 +128,7 @@ export default function CreateTodoScene() {
         } py-[17.5px] mx-[20px] my-[8px] rounded-xl`}
       >
         <Text className="Semibold16 text-white text-center">확인</Text>
-      </Pressable>
+      </OpacityPressable>
     </View>
   );
 }
