@@ -1,16 +1,18 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import Background from '@/assets/images/common/background.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { UserDetailComponentProps } from '@/type/member-stat';
 import { useMemberStore } from '@/zustand/store';
 
+import OpacityPressable from '../opacityPressable';
+
 interface MemberInfoComponentProps extends UserDetailComponentProps {
   id: number;
 }
 
-const MemberInfoComponent: React.FC<MemberInfoComponentProps> = ({ id, data }) => {
+export default function MemberInfoComponent({ id, data }: MemberInfoComponentProps) {
   const router = useRouter();
   const { memberInfo } = useMemberStore();
 
@@ -29,14 +31,13 @@ const MemberInfoComponent: React.FC<MemberInfoComponentProps> = ({ id, data }) =
       </View>
 
       {data.roomId !== 0 ? (
-        <Pressable
-          onPress={() => router.push(`/room/${data.roomId}`)}
-          className="bg-subColor2 rounded-xl border border-mainColor py-[12px]"
-        >
-          <Text className="Semibold14 text-mainColor text-center">
-            {data.memberDetail.nickname}님이 속한 방 바로 가기
-          </Text>
-        </Pressable>
+        <OpacityPressable onPress={() => router.push(`/room/${data.roomId}`)}>
+          <View className="bg-subColor2 rounded-xl border border-mainColor py-[12px]">
+            <Text className="Semibold14 text-mainColor text-center">
+              {data.memberDetail.nickname}님이 속한 방 바로 가기
+            </Text>
+          </View>
+        </OpacityPressable>
       ) : (
         <View className="bg-colorBox rounded-xl border border-disabledFont py-[12px]">
           <Text className="Semibold14 text-disabledFont text-center">아직 속한 방이 없어요</Text>
@@ -44,5 +45,4 @@ const MemberInfoComponent: React.FC<MemberInfoComponentProps> = ({ id, data }) =
       )}
     </View>
   );
-};
-export default MemberInfoComponent;
+}
