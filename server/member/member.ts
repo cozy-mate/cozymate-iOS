@@ -57,7 +57,7 @@ export const updateMemberInfo = async (
 
 // 회원가입
 export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
-  const response = await PostAxiosInstance<SignUpResponse>(`/members/sign-up`, data);
+  const response = await PostAxiosInstance<SignUpResponse, SignUpRequest>(`/members/sign-up`, data);
 
   return response.data;
 };
