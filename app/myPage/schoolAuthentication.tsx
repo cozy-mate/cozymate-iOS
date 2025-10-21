@@ -24,13 +24,13 @@ function SchoolAuthenticationComponent() {
           isFocused={true}
         />
 
-        <BorderPressBox
+        {/* <BorderPressBox
           title="학교 이메일"
           value={data.result.mailAddress}
           placeholder=""
           onPress={() => {}}
           isFocused={true}
-        />
+        /> */}
 
         <BorderPressBox
           title="학과"
