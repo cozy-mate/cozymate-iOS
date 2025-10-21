@@ -1,14 +1,8 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
-import {
-  checkNickname,
-  signUp,
-  updateMemberInfo,
-  getMemberProfile,
-  withdraw,
-  getMemberUniversityInfo,
-} from '@/server/member/member';
+import { matchMultiQueries, queries } from '@/server';
+import { checkNickname, signUp, updateMemberInfo, withdraw } from '@/server/member/member';
 import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
 import { SignUpResponse } from '@/server/member/response';
 import { showRejectToast } from '@/utils/toast';
@@ -19,7 +13,6 @@ import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
 export const useWithdraw = () => {
   const { clearMailState } = useMailAuthenticationStore();
