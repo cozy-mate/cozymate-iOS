@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { TextInput, View, Text, Pressable } from 'react-native';
 
+import OpacityPressable from '@/components/opacityPressable';
+
 import BorderContainer from './borderContainer';
 
 interface BorderButtonBoxProps {
@@ -16,7 +18,7 @@ interface BorderButtonBoxProps {
   successText?: string;
 }
 
-const BorderButtonBox: React.FC<BorderButtonBoxProps> = ({
+export default function BorderButtonBox({
   title,
   value,
   placeholder,
@@ -27,7 +29,7 @@ const BorderButtonBox: React.FC<BorderButtonBoxProps> = ({
   isError,
   errorText,
   successText,
-}) => {
+}: BorderButtonBoxProps) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputRef = useRef<TextInput>(null);
 
@@ -52,7 +54,7 @@ const BorderButtonBox: React.FC<BorderButtonBoxProps> = ({
             />
           </View>
 
-          <Pressable
+          <OpacityPressable
             onPress={(e) => {
               e.stopPropagation();
               onButtonPress();
@@ -65,7 +67,7 @@ const BorderButtonBox: React.FC<BorderButtonBoxProps> = ({
             >
               {buttonText}
             </Text>
-          </Pressable>
+          </OpacityPressable>
         </BorderContainer>
       </Pressable>
 
@@ -75,6 +77,4 @@ const BorderButtonBox: React.FC<BorderButtonBoxProps> = ({
       )}
     </View>
   );
-};
-
-export default BorderButtonBox;
+}
