@@ -22,7 +22,7 @@ import { useMemberStore } from '@/zustand/store';
 export default function Roommate() {
   const router = useRouter();
 
-  const { memberInfo, hasRoom } = useMemberStore();
+  const { memberInfo, hasRoom, hasLifeStyle } = useMemberStore();
 
   const { trackButton } = useTracker();
 
@@ -102,12 +102,16 @@ export default function Roommate() {
               </OpacityPressable>
             )}
 
-            <View className="flex flex-row justify-end items-center mt-[16px] mb-[8px]">
-              <Pressable onPress={() => setIsHasRoom(!isHasRoom)} className="p-[9px]">
-                {isHasRoom ? <DoneIcon /> : <NotDoneIcon />}
-              </Pressable>
-              <Text className="Medium14 text-basicFont">방이 없는 사용자만 보기</Text>
-            </View>
+            {hasLifeStyle ? (
+              <View className="flex flex-row justify-end items-center mt-[16px] mb-[8px]">
+                <Pressable onPress={() => setIsHasRoom(!isHasRoom)} className="p-[9px]">
+                  {isHasRoom ? <DoneIcon /> : <NotDoneIcon />}
+                </Pressable>
+                <Text className="Medium14 text-basicFont">방이 없는 사용자만 보기</Text>
+              </View>
+            ) : (
+              <View className="h-[16px]" />
+            )}
           </View>
         )}
         ListEmptyComponent={() =>
