@@ -16,7 +16,7 @@ export default function ReceivedRequestComponent() {
 
   const { roomInfo } = useMemberStore();
 
-  const { data } = useGetReceivedRequestList(roomInfo?.isRoomManager ?? false);
+  const { data } = useGetReceivedRequestList(roomInfo.isRoomManager);
 
   const handleMore = () => {
     trackButton(ButtonEvent.request_more, EventCategory.home_content);

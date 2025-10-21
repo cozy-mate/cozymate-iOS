@@ -6,11 +6,11 @@ import { Pressable, Text, View } from 'react-native';
 import { Portal } from 'react-native-portalize';
 
 import { DeleteAxiosInstance } from '@/axios/axios.method';
+import { matchMultiQueries, queries } from '@/server/index';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useMemberStore } from '@/zustand/store';
 
 import TwoButtonModal from '../modal/twoButtonModal';
-import { matchMultiQueries, queries } from '@/server/index';
 
 async function deleteItem({
   roomId,
@@ -32,11 +32,13 @@ const useDeleteItem = () => {
     onSuccess: (_, variables) => {
       const { roomId, type } = variables;
       queryClient.invalidateQueries({
-        predicate: matchMultiQueries([
-          type === 'roles' && queries.role.list({ roomId }).queryKey,
-          type === 'rules' && queries.rule.list({ roomId }).queryKey,
-          type === 'todos' && queries.todo.list({ roomId }).queryKey,
-        ].filter(Boolean) as readonly QueryKey[]),
+        predicate: matchMultiQueries(
+          [
+            type === 'roles' && queries.role.list({ roomId }).queryKey,
+            type === 'rules' && queries.rule.list({ roomId }).queryKey,
+            type === 'todos' && queries.todo.list({ roomId }).queryKey,
+          ].filter(Boolean) as readonly QueryKey[],
+        ),
       });
     },
   });
@@ -77,7 +79,7 @@ export default function RoleNRuleBottomSheet({ type, bottomSheetRef }: RoleNRule
               opacity={0.7}
               disappearsOnIndex={-1}
               appearsOnIndex={0}
-            // onPress={backdropFunc}
+              // onPress={backdropFunc}
             />
           )}
         >
@@ -121,7 +123,7 @@ export default function RoleNRuleBottomSheet({ type, bottomSheetRef }: RoleNRule
         leftButtonFunc={() => setIsDeleteModalVisible(false)}
         rightButtonText="삭제"
         rightButtonFunc={() =>
-          deleteItem({ roomId: roomInfo?.roomId ?? 0, type, itemId: selectedItem.id })
+          deleteItem({ roomId: roomInfo.roomId, type, itemId: selectedItem.id })
         }
       />
     </Fragment>

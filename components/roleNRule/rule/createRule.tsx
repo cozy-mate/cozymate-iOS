@@ -8,7 +8,7 @@ import { useMemberStore } from '@/zustand/store';
 export default function CreateRuleScene() {
   const { roomInfo } = useMemberStore();
 
-  const { mutateAsync: createRule } = useCreateRule({ roomId: roomInfo?.roomId ?? 0 });
+  const { mutateAsync: createRule } = useCreateRule({ roomId: roomInfo.roomId });
 
   const [content, setContent] = useState('');
   const [memo, setMemo] = useState('');

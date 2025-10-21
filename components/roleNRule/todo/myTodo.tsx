@@ -24,7 +24,7 @@ interface MyTodoComponentProps {
 export default function MyTodoComponent({ isFetching, timePoint, data }: MyTodoComponentProps) {
   const { memberInfo, roomInfo } = useMemberStore();
 
-  const { mutate: toggleTodo } = useToggleTodoDone(roomInfo?.roomId ?? 0, timePoint);
+  const { mutate: toggleTodo } = useToggleTodoDone({ roomId: roomInfo.roomId, timePoint });
 
   const { setSelectedItem } = useSelectedItemStore();
 

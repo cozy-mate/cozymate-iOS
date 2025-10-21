@@ -2,10 +2,8 @@ import { mergeQueryKeys } from '@lukemorales/query-key-factory';
 import { matchQuery, Query, QueryKey } from '@tanstack/react-query';
 
 import { commentQueries } from './comment/queries';
-import { feedQueries } from './feed/queries';
 import { dormitoryQueries } from './dormitory/queries';
-import { chatRoomQueries } from './chat-room/queries';
-import { chatQueries } from './chat/queries';
+import { feedQueries } from './feed/queries';
 import { inquiryQueries } from './inquiry/queries';
 import { memberQueries } from './member/queries';
 import { memberBlockQueries } from './member-block/queries';

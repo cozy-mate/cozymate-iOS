@@ -50,6 +50,10 @@ export const useAutoLogin = () => {
             }
           } catch (error: any) {
             console.log('서버 오류', error);
+            setRoom({
+              roomId: 0,
+              isRoomManager: false,
+            });
           }
         } catch (error: any) {
           console.log(error);

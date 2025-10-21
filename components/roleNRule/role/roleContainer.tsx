@@ -30,7 +30,7 @@ interface RoleContainerProps {
 export default function RoleContainer({ isFetching, data }: RoleContainerProps) {
   const { memberInfo, roomInfo } = useMemberStore();
 
-  const { data: roomData } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: roomData } = useGetMyRoomDetail(roomInfo.roomId);
 
   const { setSelectedItem } = useSelectedItemStore();
 

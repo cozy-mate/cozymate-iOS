@@ -9,7 +9,7 @@ import { useMemberStore } from '@/zustand/store';
 export default function ReceivedRequest() {
   const { roomInfo } = useMemberStore();
 
-  const { data } = useGetReceivedRequestList(roomInfo?.isRoomManager || false);
+  const { data } = useGetReceivedRequestList(roomInfo.isRoomManager);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

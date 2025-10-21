@@ -18,7 +18,7 @@ export default function UpdateTodoScene() {
   const { selectedItem } = useSelectedItemStore();
 
   const { mutateAsync: updateTodo } = useUpdateTodo({
-    roomId: roomInfo?.roomId ?? 0,
+    roomId: roomInfo.roomId,
     todoId: selectedItem.id,
   });
 
@@ -26,7 +26,7 @@ export default function UpdateTodoScene() {
   const [mateIdList, setMateIdList] = useState<number[]>(selectedItem.mateIdList);
   const [timePoint, setTimePoint] = useState(selectedItem.timePoint);
 
-  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo?.roomId ?? 0);
+  const { data: memberList, isLoading } = useGetMyRoomDetail(roomInfo.roomId);
 
   const toggleSelection = (itemValue: number) => {
     const updatedValue = mateIdList.includes(itemValue)

@@ -1,7 +1,7 @@
-export const sortTypeItem = [
-  { title: '평균일치율순', value: 'AVERAGE_RATE' },
-  { title: '최신순', value: 'LATEST' },
-  { title: '마감순', value: 'CLOSING_SOON' },
-] as const;
+export type SortTypeValue = 'AVERAGE_RATE' | 'LATEST' | 'CLOSING_SOON';
 
-export type SortTypeValue = (typeof sortTypeItem)[number]['value'];
+export const sortTypeItem: Record<SortTypeValue, string> = {
+  AVERAGE_RATE: '평균일치율순',
+  LATEST: '최신순',
+  CLOSING_SOON: '마감순',
+};

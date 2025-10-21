@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import BlueArrowIcon from '@/assets/icons/room/blueArrow.svg';
 import GrayArrowIcon from '@/assets/images/common/grayArrow.svg';
 import MagnifierIcon from '@/assets/images/common/magnifier.svg';
 import RadioIcon from '@/assets/images/room/radio.svg';
@@ -23,20 +24,18 @@ export default function RecommendRoom() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [selectedSortType, setSelectedSortType] = useState<SortTypeValue>('AVERAGE_RATE');
+  const [tempSortType, setTempSortType] = useState<SortTypeValue>('AVERAGE_RATE');
 
-  const { memberInfo } = useMemberStore();
+  const { memberInfo, hasRoom } = useMemberStore();
 
   const { trackButton } = useTracker();
 
-  const { data, hasNextPage, fetchNextPage, refetch } = useGetRecommendRoomList({
-    sortType: selectedSortType,
-  });
+  const { data, hasNextPage, fetchNextPage } = useGetRecommendRoomList(selectedSortType);
 
-  const onPressSortTypeSubmit = (value: SortTypeValue) => {
+  const onPressSortTypeSubmit = () => {
     trackButton(ButtonEvent.sorting, EventCategory.content_room);
-    setSelectedSortType(value);
+    setSelectedSortType(tempSortType);
     bottomSheetRef.current?.close();
-    refetch();
   };
 
   const onPressSortType = (value: SortTypeValue) => {
@@ -44,7 +43,7 @@ export default function RecommendRoom() {
     trackButton(ButtonEvent[buttonEvent], EventCategory.content_room, {
       sorting: ButtonEvent[buttonEvent],
     });
-    setSelectedSortType(value);
+    setTempSortType(value);
   };
 
   const onPressRoom = (roomId: number) => {
@@ -77,7 +76,7 @@ export default function RecommendRoom() {
 
               <OpacityPressable
                 onPress={() => router.push('/room/search')}
-                className="bg-colorBox rounded-xl px-[4px] py-[8px] flex flex-row items-center mt-[16px] mb-[20px]"
+                className="bg-colorBox rounded-xl px-[4px] py-[8px] flex flex-row items-center mt-[16px]"
               >
                 <View className="p-[8px]">
                   <MagnifierIcon />
@@ -85,13 +84,25 @@ export default function RecommendRoom() {
                 <Text className="Medium14 text-disabledFont">방 이름을 검색해보세요</Text>
               </OpacityPressable>
 
+              {!hasRoom && (
+                <OpacityPressable onPress={() => router.push('/room/createRoom')}>
+                  <View className="bg-colorBox rounded-xl px-[16px] py-[12px] border border-mainColor flex flex-row justify-between items-center mt-[8px]">
+                    <Text className="Semibold12 text-mainColor">
+                      {`${memberInfo?.nickname ?? ''}님, 룸메이트를 초대할 방을 만들어볼까요?`}
+                    </Text>
+                    <BlueArrowIcon />
+                  </View>
+                </OpacityPressable>
+              )}
+
               <OpacityPressable
-                onPress={() => bottomSheetRef.current?.expand()}
-                className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px]"
+                onPress={() => {
+                  setTempSortType(selectedSortType);
+                  bottomSheetRef.current?.expand();
+                }}
+                className="py-[11.5px] self-end mb-[8px] flex flex-row gap-x-[4px] mt-[20px]"
               >
-                <Text className="Medium14 text-basicFont">
-                  {sortTypeItem.find(({ value }) => value === selectedSortType)?.title}
-                </Text>
+                <Text className="Medium14 text-basicFont">{sortTypeItem[selectedSortType]}</Text>
                 <View className="rotate-90">
                   <GrayArrowIcon />
                 </View>
@@ -130,24 +141,24 @@ export default function RecommendRoom() {
       >
         <BottomSheetView className="h-[350px] px-[20px] pt-[24px]">
           <View className="flex-1 gap-y-[8px]">
-            {sortTypeItem.map(({ value, title }) => (
-              <OpacityPressable key={value} onPress={() => onPressSortType(value)}>
+            {Object.entries(sortTypeItem).map(([value, title]) => (
+              <OpacityPressable key={value} onPress={() => onPressSortType(value as SortTypeValue)}>
                 <View className="flex flex-row justify-between items-center">
                   <Text
-                    className={`py-[11.5px] ${value === selectedSortType ? 'Semibold16 text-mainColor' : 'Medium16 text-disabledFont'}`}
+                    className={`py-[11.5px] ${value === tempSortType ? 'Semibold16 text-mainColor' : 'Medium16 text-disabledFont'}`}
                   >
                     {title}
                   </Text>
 
                   <View className="p-[8px] my-[1px]">
-                    {value === selectedSortType ? <SelectedRadioIcon /> : <RadioIcon />}
+                    {value === tempSortType ? <SelectedRadioIcon /> : <RadioIcon />}
                   </View>
                 </View>
               </OpacityPressable>
             ))}
           </View>
 
-          <OpacityPressable onPress={() => onPressSortTypeSubmit(selectedSortType)}>
+          <OpacityPressable onPress={onPressSortTypeSubmit}>
             <View className="bg-mainColor py-[17.5px] rounded-xl mb-[50px]">
               <Text className="Semibold16 text-white text-center">확인</Text>
             </View>

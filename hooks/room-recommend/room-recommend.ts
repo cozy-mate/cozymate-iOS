@@ -8,7 +8,7 @@ export const useGetHomeRecommendRoomList = () => {
   return useQuery(queries.roomRecommend.home());
 };
 
-export const useGetRecommendRoomList = ({ sortType }: { sortType: SortTypeValue }) => {
+export const useGetRecommendRoomList = (sortType: SortTypeValue) => {
   return useInfiniteQuery({
     ...queries.roomRecommend.list({ size: 5, sortType }),
     initialPageParam: 0,

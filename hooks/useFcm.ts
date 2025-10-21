@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import React, { useRef } from 'react';
 import { getDeviceId } from 'react-native-device-info';
 
+import { matchMultiQueries, queries } from '@/server';
 import { postFcmToken } from '@/server/fcm/fcm';
 import { checkHasRoom } from '@/server/room/room';
 import { convertAction } from '@/utils/notification/convertAction';
@@ -14,7 +15,6 @@ import {
   getFcmToken,
 } from '@/utils/notification/fcmTokenUtil';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
 const DEDUP_WINDOW = 10_000;
 const processed = new Set<string>();
@@ -100,7 +100,7 @@ export default function useFcm(
             const response = await checkHasRoom();
             setRoom(response.result);
 
-            const roomId = roomInfo?.roomId;
+            const roomId = roomInfo.roomId;
             if (roomId) {
               await queryClient.invalidateQueries({
                 predicate: matchMultiQueries([
@@ -142,7 +142,7 @@ export default function useFcm(
 
           // 유저가 방 초대 요청을 수락한 경우 : 방장이 쿼리 무효화
           case 'ACCEPT_ROOM_INVITE': {
-            const roomId = roomInfo?.roomId;
+            const roomId = roomInfo.roomId;
             if (roomId) {
               await queryClient.invalidateQueries({
                 predicate: matchMultiQueries([
@@ -162,9 +162,9 @@ export default function useFcm(
             break;
 
           case 'ROOM_IN': {
-            if (roomInfo?.roomId) {
+            if (roomInfo.roomId !== 0) {
               await queryClient.invalidateQueries(
-                queries.room.myRoomDetail({ roomId: roomInfo?.roomId }),
+                queries.room.myRoomDetail({ roomId: roomInfo.roomId }),
               );
             }
 
@@ -174,21 +174,21 @@ export default function useFcm(
             const checkHasRoomResponse = await checkHasRoom();
             // 방장 여부 저장
             setRoom(checkHasRoomResponse.result);
-            if (roomInfo?.roomId) {
+            if (roomInfo.roomId !== 0) {
               await queryClient.invalidateQueries(
-                queries.room.myRoomDetail({ roomId: roomInfo?.roomId }),
+                queries.room.myRoomDetail({ roomId: roomInfo.roomId }),
               );
             }
 
             break;
           }
-          case 'ARRIVE_CHAT':
-            const chatRoomId = Number(data?.chatRoomId);
+          case 'ARRIVE_MESSAGE':
+            const messageRoomId = Number(data?.messageRoomId);
 
             await queryClient.invalidateQueries({
               predicate: matchMultiQueries([
-                queries.chatRooms.list._def,
-                queries.chatRooms.id({ recipientId: chatRoomId }).queryKey,
+                queries.messageRooms.list._def,
+                queries.messageRooms.id({ recipientId: messageRoomId }).queryKey,
               ]),
             });
             break;
