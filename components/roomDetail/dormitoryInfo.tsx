@@ -1,12 +1,12 @@
 import { Text, View } from 'react-native';
 
-import { RoomItem } from '@/type/room';
+import { RoomDetailItem } from '@/type/room';
 
 interface DormitoryInfoComponentProps {
-  data: RoomItem;
+  data: RoomDetailItem;
 }
 
-const DormitoryInfoComponent: React.FC<DormitoryInfoComponentProps> = ({ data }) => {
+export default function DormitoryInfoComponent({ data }: DormitoryInfoComponentProps) {
   return (
     <View className="px-[20px] gap-y-[12px]">
       <Text className="Semibold16 text-emphasizedFont">기숙사 정보</Text>
@@ -26,6 +26,4 @@ const DormitoryInfoComponent: React.FC<DormitoryInfoComponentProps> = ({ data })
       </View>
     </View>
   );
-};
-
-export default DormitoryInfoComponent;
+}

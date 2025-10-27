@@ -4,15 +4,15 @@ import { Pressable, Text, View } from 'react-native';
 import GrayArrowIcon from '@/assets/images/common/smaillGrayArrow.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { useTracker } from '@/providers/TrackerProvider';
-import { RoomItem } from '@/type/room';
+import { RoomDetailItem } from '@/type/room';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
 
 interface MateListComponentProps {
-  data: RoomItem;
+  data: RoomDetailItem;
 }
 
-const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
+export default function MateListComponent({ data }: MateListComponentProps) {
   const router = useRouter();
 
   const { memberInfo } = useMemberStore();
@@ -65,6 +65,4 @@ const MateListComponent: React.FC<MateListComponentProps> = ({ data }) => {
       </View>
     </View>
   );
-};
-
-export default MateListComponent;
+}

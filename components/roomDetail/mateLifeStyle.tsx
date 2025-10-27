@@ -5,16 +5,16 @@ import WhiteXIcon from '@/assets/images/common/whiteX.svg';
 import MemberStatModalComponent from '@/components/roomDetail/memberStatModal';
 import { useGetRoomMemberStats } from '@/hooks/room-member-stat/room-member-stat';
 import { useTracker } from '@/providers/TrackerProvider';
-import { ChipItem, RoomItem } from '@/type/room';
+import { ChipItem, RoomDetailItem } from '@/type/room';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { getLifeStyleLabel } from '@/utils/lifeStyle';
 import { closeTooltip, getTooltip } from '@/utils/tooltip';
 
 interface MateLifeStyleComponentProps {
-  data: RoomItem;
+  data: RoomDetailItem;
 }
 
-const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data }) => {
+export default function MateLifeStyleComponent({ data }: MateLifeStyleComponentProps) {
   const [isMemberStatModalOpen, setIsMemberStatModalOpen] = useState<boolean>(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
@@ -156,6 +156,4 @@ const MateLifeStyleComponent: React.FC<MateLifeStyleComponentProps> = ({ data })
       />
     </Fragment>
   );
-};
-
-export default MateLifeStyleComponent;
+}
