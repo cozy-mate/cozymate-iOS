@@ -5,11 +5,11 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
+import { matchMultiQueries, queries } from '@/server';
+import { GetSentRequestRoomListResponse } from '@/server/room/response';
 import { acceptRoomInvite, cancelRequestRoom, sendRoomRequest } from '@/server/room/room';
 import { showRejectToast, showSuccessToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
-import { GetSentRequestRoomListResponse } from '@/server/room/response';
 
 // 사용자 -> 방 참여 요청 취소
 export const useCancelRequestRoom = (roomId: number) => {
@@ -41,7 +41,6 @@ export const useCheckIsInvitedRoom = (roomId: number) => {
 
 // 사용자가 참여 요청한 방 목록 조회
 export const useGetSentRequestRoomList = (size: number) => {
-
   return useInfiniteQuery({
     ...queries.room.sentRequestRoomList({ size }),
     initialPageParam: 0,
