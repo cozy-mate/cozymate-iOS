@@ -10,7 +10,7 @@ interface RoomCardProps {
   onPress?: () => void;
 }
 
-export default function RoomCard({ data, onPress = () => { } }: RoomCardProps) {
+export default function RoomCard({ data, onPress = () => {} }: RoomCardProps) {
   const router = useRouter();
 
   const getChipColor = (numOfArrival: number, count: number) => {
@@ -65,14 +65,21 @@ export default function RoomCard({ data, onPress = () => { } }: RoomCardProps) {
             ))}
           </View>
 
-          <View className="flex flex-row items-center justify-between">
-            <View className="flex flex-row gap-x-[6px]">
+          <View className="flex flex-row items-center justify-end">
+            {/* <View className="flex flex-row gap-x-[6px]">
               {data.hashtags.map((hash, index) => (
                 <View key={index} className="py-[2px] px-[8px] rounded bg-colorBox">
                   <Text className="Medium12 text-colorFont">#{hash}</Text>
                 </View>
               ))}
-            </View>
+            </View> */}
+            {/* {data.description ? (
+              <View className="py-[2px] px-[8px] rounded bg-colorBox">
+                <Text className="Medium12 text-colorFont">{data.description}</Text>
+              </View>
+            ) : (
+              <View />
+            )} */}
 
             <Text className="Medium12 text-disabledFont">
               {data.numOfArrival} / {data.maxMateNum}명
