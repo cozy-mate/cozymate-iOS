@@ -42,6 +42,7 @@ export type RoomDetailItem = {
     red: string[];
     white: string[];
   };
+  description: string;
 };
 
 export type RoomItem = {
@@ -56,6 +57,7 @@ export type RoomItem = {
     count: number | null;
   }[];
   roomFavoriteId?: number;
+  description: string;
 };
 
 export type ChipItem = {
