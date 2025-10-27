@@ -121,7 +121,7 @@ export default function CreateFeed() {
   };
 
   return (
-    <DetailLayout>
+    <DetailLayout className="bg-white">
       <View className="flex-1">
         <View className="px-5 pt-5 gap-y-4">
           <ScrollView

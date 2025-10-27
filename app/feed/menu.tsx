@@ -20,9 +20,8 @@ export default function Menu() {
 
     const menuItems = data?.result ? Object.entries(data.result).map(([k, v]) => [k as MenuTimeKey, v as DormitoryMenu]) as [MenuTimeKey, DormitoryMenu][] : [];
 
-    return <DetailLayout>
+    return <DetailLayout className="bg-[#F7FAFF]">
         <View className="mt-[8px]">
-
             <Carousel
                 width={Dimensions.get('window').width}
                 height={84}
@@ -89,39 +88,44 @@ export default function Menu() {
                 </Text>
                 {selectedDate === formatDateYYYYMMDD(today) && <Text className="Regular12 text-disabledFont ml-1">(오늘)</Text>}</View>
         } />
-        <View className="mt-[16px] gap-y-[12px] text-center w-full">
-            {(() => {
-                if (isAxiosError(error) && error.response?.data?.code === 'DORMITORYMENU400') {
-                    return <Text className="text-disabledFont w-full text-center">해당 날짜의 메뉴가 없습니다.</Text>
-                }
-                if (error) {
-                    return <Text className="text-disabledFont w-full text-center">메뉴를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</Text>
-                }
-                if (isFetching && !data) {
-                    return (
-                        <>
-                            <Text className="text-disabledFont w-full text-center">메뉴를 불러오는 중입니다.</Text>
-                        </>
-                    );
-                }
-                if (isFetching && data) {
-                    return (
-                        <>
-                            <MenuItem menuItem={['breakfast', { time: '08:00~09:00', menu: '' }]} isFetching={true} />
-                        </>
-                    );
-                }
+        <View className="flex-1 gap-y-[12px] text-center items-start w-full">
+            {!isFetching && data && menuItems.length > 0 ?
+                <View className="gap-y-[12px] w-full pt-6">
+                    {menuItems.map((mi) => (
+                        <MenuItem key={mi[0]} menuItem={mi} isFetching={false} />
+                    ))}
+                </View>
+                :
+                <View className="flex items-center justify-center w-full h-full pb-60">
+                    {(() => {
+                        if (isAxiosError(error) && error.response?.data?.code === 'DORMITORYMENU400') {
+                            return <Text className="text-disabledFont w-full text-center">해당 날짜의 메뉴가 없습니다.</Text>
+                        }
+                        if (error) {
+                            return <Text className="text-disabledFont w-full text-center">메뉴를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</Text>
+                        }
+                        if (isFetching && !data) {
+                            return (
+                                <>
+                                    <Text className="text-disabledFont w-full text-center">메뉴를 불러오는 중입니다.</Text>
+                                </>
+                            );
+                        }
+                        if (isFetching && data) {
+                            return (
+                                <>
+                                    <MenuItem menuItem={['breakfast', { time: '08:00~09:00', menu: '' }]} isFetching={true} />
+                                </>
+                            );
+                        }
 
-                if (menuItems.length === 0) {
-                    return <Text className="text-disabledFont w-full text-center">해당 날짜의 메뉴가 없습니다.</Text>
-                }
+                        if (menuItems.length === 0) {
+                            return <Text className="text-disabledFont w-full text-center">해당 날짜의 메뉴가 없습니다.</Text>
+                        }
 
-                return null;
-            })()}
-
-            {!isFetching && data && menuItems.length > 0 && menuItems.map((mi) => (
-                <MenuItem key={mi[0]} menuItem={mi} isFetching={false} />
-            ))}
+                        return null;
+                    })()}
+                </View>}
         </View>
     </DetailLayout>
 }

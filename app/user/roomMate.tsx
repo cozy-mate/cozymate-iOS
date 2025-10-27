@@ -1,8 +1,10 @@
 import { useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import BlueArrowIcon from '@/assets/icons/room/blueArrow.svg';
 import BlueArrowIcon from '@/assets/icons/room/blueArrow.svg';
 import DoneIcon from '@/assets/images/roleNRule/done.svg';
 import NotDoneIcon from '@/assets/images/roleNRule/notDone.svg';
@@ -13,10 +15,12 @@ import PreferenceChipListComponent from '@/components/common/preferenceChipList'
 import SearchButtonComponent from '@/components/common/searchButton';
 import BasicUserItem from '@/components/common/userItem/basicUserItem';
 import OpacityPressable from '@/components/opacityPressable';
+import OpacityPressable from '@/components/opacityPressable';
 import { LifeStyleValue } from '@/constants/items/lifeStyle';
 import { useGetMemberList, useGetRandomMemberList } from '@/hooks/member-stat/member-stat';
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
+import { useMemberStore } from '@/zustand/store';
 import { useMemberStore } from '@/zustand/store';
 
 export default function Roommate() {
@@ -27,6 +31,7 @@ export default function Roommate() {
   const { trackButton } = useTracker();
 
   const [filterList, setFilterList] = useState<LifeStyleValue[]>([]);
+  const [isHasRoom, setIsHasRoom] = useState<boolean>(false);
   const [isHasRoom, setIsHasRoom] = useState<boolean>(false);
 
   const handleValue = (value: LifeStyleValue) => {
@@ -48,6 +53,7 @@ export default function Roommate() {
   };
 
   const { data: randomMemberList } = useGetRandomMemberList();
+  const { data, hasNextPage, fetchNextPage } = useGetMemberList(filterList, isHasRoom);
   const { data, hasNextPage, fetchNextPage } = useGetMemberList(filterList, isHasRoom);
 
   const memberList =
@@ -90,6 +96,17 @@ export default function Roommate() {
             <SearchButtonComponent type="user" />
 
             <PreferenceChipListComponent value={filterList} handleValue={handleValue} />
+
+            {!hasRoom && (
+              <OpacityPressable onPress={() => router.push('/room/createRoom')}>
+                <View className="bg-colorBox rounded-xl px-[16px] py-[12px] border border-mainColor flex flex-row justify-between items-center mt-[8px]">
+                  <Text className="Semibold12 text-mainColor">
+                    {`${memberInfo?.nickname ?? ''}님, 룸메이트를 초대할 방을 만들어볼까요?`}
+                  </Text>
+                  <BlueArrowIcon />
+                </View>
+              </OpacityPressable>
+            )}
 
             {!hasRoom && (
               <OpacityPressable onPress={() => router.push('/room/createRoom')}>

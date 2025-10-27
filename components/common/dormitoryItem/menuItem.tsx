@@ -22,7 +22,7 @@ export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: M
 
     return (
         <OpacityPressable onPress={onPress} className='h-fit w-full'>
-            <View className="flex flex-col border border-disabledColor h-fit p-3 rounded-xl mx-[20px]">
+            <View className="flex flex-col border border-disabledColor h-fit p-3 rounded-xl mx-[20px] bg-white">
                 {isFetching ? (
                     <>
                         <View className="flex flex-row items-center justify-start">
@@ -41,7 +41,6 @@ export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: M
                     <>
                         <View className="flex flex-row items-center justify-start">
                             <View className="py-[2px] px-[8px] rounded bg-colorBox">
-                                {/* 자간 조정 */}
                                 <Text className="Medium12 text-colorFont leading-[14px]">{MENU_TIME_KEY_MAP[menuTime]}</Text>
                             </View>
                             <Text className="Medium12 text-basicFont mx-[8px]">
@@ -49,7 +48,7 @@ export const MenuItem = ({ menuItem, onPress = () => { }, isFetching = true }: M
                             </Text>
                         </View>
                         {/* @description 이런 문자열로 와서 임시 처리 로직 넣었습니다 \"백순대볶음*양념장\n쌀밥\n김치떡국\n새송이볶음\n무말랭이무침\n갓김치\" */}
-                        <Text className="text-basicFont mx-[8px] whitespace-nowrap mt-[8px]">
+                        <Text className="Medium14 text-emphasizedFont mx-[8px] whitespace-nowrap mt-[8px]">
                             {!menu || menu === "[]" || menu === "" ? "메뉴가 없습니다" : menu.replace(/\\n|["\[\]]/g, (m) => (m === '\\n' ? ' ' : ''))}
                         </Text>
                     </>
