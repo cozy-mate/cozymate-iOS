@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tansta
 import { useRouter } from 'expo-router';
 import React from 'react';
 
+import { matchMultiQueries, queries } from '@/server';
 import { CreatePublicRoomRequest } from '@/server/room/request';
 import { CreatePublicRoomResponse, GetRoomByInviteCodeResponse } from '@/server/room/response';
 import { createPublicRoom, exitRoom, getRoomByInviteCode, joinRoom } from '@/server/room/room';
@@ -10,7 +11,6 @@ import { RoomItem } from '@/type/room';
 import { showRejectToast } from '@/utils/toast';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
 // 내 방 정보 조회
 export const useGetMyRoomDetail = (roomId: number) => {
@@ -129,7 +129,7 @@ export const useJoinRoom = (roomId: number) => {
 
 // 공개 방 생성 기능
 export const useCreatePublicRoom = () => {
-  const router = useRouter();
+  const navigation = useNavigation();
 
   const { clearCreateRoomInfo } = useCreateRoomStore();
   const { setRoom } = useMemberStore();
@@ -150,7 +150,16 @@ export const useCreatePublicRoom = () => {
         ]),
       });
 
-      setTimeout(() => router.back(), 100);
+      setTimeout(
+        () =>
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: '(tabs)' }],
+            }),
+          ),
+        100,
+      );
       clearCreateRoomInfo();
     },
   });
