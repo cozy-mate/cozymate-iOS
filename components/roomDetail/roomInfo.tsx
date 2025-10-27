@@ -4,13 +4,13 @@ import { Alert, Pressable, Text, View } from 'react-native';
 import CopyIcon from '@/assets/images/room/copy.svg';
 import { getPersona } from '@/constants/items/characterItem';
 import { useCheckHasRoom } from '@/hooks/room/room';
-import { RoomItem } from '@/type/room';
+import { RoomDetailItem } from '@/type/room';
 
 interface RoomInfoComponentProps {
-  data: RoomItem;
+  data: RoomDetailItem;
 }
 
-const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ data }) => {
+export default function RoomInfoComponent({ data }: RoomInfoComponentProps) {
   const { data: hasRoom } = useCheckHasRoom();
 
   return (
@@ -19,13 +19,15 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ data }) => {
         {getPersona(data.persona, 40, 40)}
         <View className="gap-y-1">
           <Text className="Semibold16 text-emphasizedFont">{data.name}</Text>
-          <View className="flex flex-row gap-x-[4px]">
+          {/* <View className="flex flex-row gap-x-[4px]">
             {data.hashtagList.map((hashtag) => (
               <Text key={hashtag} className="Medium14 text-basicFont">
                 #{hashtag}
               </Text>
             ))}
-          </View>
+          </View> */}
+
+          <Text className="Medium14 text-basicFont">{data.description}</Text>
         </View>
       </View>
 
@@ -49,6 +51,4 @@ const RoomInfoComponent: React.FC<RoomInfoComponentProps> = ({ data }) => {
       )}
     </View>
   );
-};
-
-export default RoomInfoComponent;
+}
