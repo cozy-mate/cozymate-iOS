@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
-import { Alert, Keyboard, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButtonComponent from '@/components/common/bottomButton';
-import CustomMultiTextInput from '@/components/common/customInput/customMultiText';
 import CustomSelect from '@/components/common/customInput/customSelect';
+import CustomTextInput from '@/components/common/customInput/customTextInput';
+import LoadingComponent from '@/components/common/loading';
 import RoomNameInput from '@/components/room/createRoom/roomNameInput';
 import SelectPersonaComponent from '@/components/room/createRoom/selectPersona';
 import { numberOfMateItems } from '@/constants/items/numOfMate';
@@ -18,24 +19,6 @@ export default function CreateRoom() {
 
   const [isNameError, setIsNameError] = useState<boolean>(false);
 
-  const [hashtag, setHashtag] = useState<string>('');
-
-  const hashtagRegex = /^(?!_)[가-힣a-zA-Z0-9]+(_[가-힣a-zA-Z0-9]+)*(?<!_)$/;
-
-  const handleHashtagSubmit = () => {
-    if (hashtag.length !== 0) {
-      if (!hashtagRegex.test(hashtag)) {
-        Alert.alert('해시태그 형식이 올바르지 않습니다.');
-      } else if (hashtag.length > 5) {
-        Alert.alert('해시태그는 최대 5글자 입력 가능해요!');
-      } else if (hashtag.length !== 0 && createRoomInfo.hashtagList.length < 3) {
-        setCreateRoomInfo({ hashtagList: [...createRoomInfo.hashtagList, hashtag.trim()] });
-      }
-
-      setHashtag('');
-    }
-  };
-
   const { mutateAsync: createPublicRoom, isPending } = useCreatePublicRoom();
 
   const isInvalid = useMemo(() => {
@@ -43,8 +26,8 @@ export default function CreateRoom() {
       createRoomInfo.persona === 0 ||
       createRoomInfo.name === '' ||
       isNameError ||
-      createRoomInfo.maxMateNum === 0 ||
-      createRoomInfo.hashtagList.length === 0
+      createRoomInfo.maxMateNum === 0
+      // || createRoomInfo.description.trim().length === 0
     );
   }, [createRoomInfo, isNameError]);
 
@@ -53,6 +36,8 @@ export default function CreateRoom() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-white">
+        {isPending && <LoadingComponent />}
+
         <View className="px-[20px]">
           <BackHeaderComponent additionalFunction={clearCreateRoomInfo} />
         </View>
@@ -86,14 +71,11 @@ export default function CreateRoom() {
               handleValue={(e: number) => setCreateRoomInfo({ maxMateNum: e })}
             />
 
-            <CustomMultiTextInput
-              title="방을 나타낼 해시태그를 입력해주세요 (최대 3개)"
-              inputValue={hashtag}
-              setInputValue={setHashtag}
-              value={createRoomInfo.hashtagList}
-              setValue={(e: string[]) => setCreateRoomInfo({ hashtagList: e })}
-              handleSubmit={handleHashtagSubmit}
-              placeholder="해시태그를 입력해주세요"
+            <CustomTextInput
+              title="한 줄 소개를 입력해주세요"
+              value={createRoomInfo.description}
+              handleValue={(e: string) => setCreateRoomInfo({ description: e })}
+              placeholder="룸메이트들에게 방을 소개해주세요"
             />
           </View>
         </KeyboardAwareScrollView>
