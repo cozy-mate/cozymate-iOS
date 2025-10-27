@@ -72,7 +72,7 @@ export default function CreateRoom() {
             />
 
             <CustomTextInput
-              title="한 줄 소개를 입력해주세요"
+              title="한 줄 소개를 입력해주세요 (선택)"
               value={createRoomInfo.description}
               handleValue={(e: string) => setCreateRoomInfo({ description: e })}
               placeholder="룸메이트들에게 방을 소개해주세요"
