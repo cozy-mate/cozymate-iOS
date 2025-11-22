@@ -1,28 +1,27 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useQueryClient } from '@tanstack/react-query';
-import { ErrorBoundaryProps, useLocalSearchParams, useRouter } from 'expo-router';
-import { Fragment, Suspense, useRef, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Fragment, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { Portal } from 'react-native-portalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SeeMoreIcon from '@/assets/icons/seeMore.svg';
 import ChatIcon from '@/assets/images/common/chat.svg';
 import FilledHeartIcon from '@/assets/images/common/filledHeart.svg';
 import HeartIcon from '@/assets/images/common/heart.svg';
-import ErrorImage from '@/assets/images/error.svg';
 import BackHeaderComponent from '@/components/common/backHeader';
-import BottomButtonComponent from '@/components/common/bottomButton';
-import LoadingComponent from '@/components/common/loading';
 import OverScrollView from '@/components/common/overScrollView';
 import ReportModalComponent from '@/components/modal/reportModal';
 import TwoButtonModal from '@/components/modal/twoButtonModal';
+import OpacityPressable from '@/components/opacityPressable';
 import AdditionalInfoComponent from '@/components/userDetail/additionalInfo';
 import BasicInfoComponent from '@/components/userDetail/basicInfo';
+import BasicInfoSkeleton from '@/components/userDetail/basicInfoSkeleton';
 import BottomButtonContainer from '@/components/userDetail/bottomButtonContainer';
 import DormitoryInfoComponent from '@/components/userDetail/dormitoryInfo';
+import DormitoryInfoSkeleton from '@/components/userDetail/dormitoryInfoSkeleton';
 import EssentialInfoComponent from '@/components/userDetail/essentialInfo';
+import EssentialInfoSkeleton from '@/components/userDetail/essentialInfoSkeleton';
 import MemberInfoComponent from '@/components/userDetail/memberInfo';
+import MemberInfoSkeleton from '@/components/userDetail/memberInfoSkeleton';
 import TableInfoComponent from '@/components/userDetail/tableInfo';
 import ViewTypeButtonComponent from '@/components/userDetail/viewTypeButton';
 import {
@@ -40,45 +39,8 @@ import {
 import { useTracker } from '@/providers/TrackerProvider';
 import { ButtonEvent, EventCategory } from '@/utils/ga/eventEnum';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
-export function ErrorBoundary({ error }: ErrorBoundaryProps) {
-  const router = useRouter();
-
-  const queryClient = useQueryClient();
-
-  return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="px-[20px] mt-[56px]">
-        <View className="mb-[136px] gap-y-[2px]">
-          <Text className="Semibold20 text-emphasizedFont">탈퇴한 사용자예요</Text>
-          <Text className="Semibold20 text-emphasizedFont">정보를 불러올 수 없어요..</Text>
-        </View>
-        <View className="mx-auto">
-          <ErrorImage />
-        </View>
-      </View>
-
-      <BottomButtonComponent
-        buttonText="다시 시도하러 가기"
-        onPress={() => {
-          router.back();
-          queryClient.invalidateQueries({
-            predicate: matchMultiQueries([
-              queries.memberStat.randomList._def,
-              queries.room.receivedRequestList._def,
-              queries.memberStat.list._def,
-            ])
-          })
-        }}
-        color="BLUE"
-        disabled={false}
-      />
-    </SafeAreaView>
-  );
-}
-
-function UserDetailComponent() {
+export default function UserDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
@@ -86,30 +48,30 @@ function UserDetailComponent() {
 
   const { trackButton } = useTracker();
 
-  const { data } = useGetMemberDetail(Number(id));
+  const { data, isFetching } = useGetMemberDetail(Number(id));
 
   const [type, setType] = useState<'LIST' | 'TABLE'>('LIST');
 
-  const { mutateAsync: deleteLike } = useDeleteMemberLike(data.result.favoriteId, Number(id));
-  const { mutateAsync: createLike } = useCreateMemberLike(data.result.memberDetail.memberId);
+  const { mutateAsync: deleteLike } = useDeleteMemberLike(data?.result.favoriteId ?? 0, Number(id));
+  const { mutateAsync: createLike } = useCreateMemberLike(data?.result.memberDetail.memberId ?? 0);
 
   const [isCreateRoomModalOpen, setIsCreateRoomModalOpen] = useState<boolean>(false);
 
   const { mutateAsync: inviteMember } = useInviteMember(
     Number(id),
-    data.result.memberDetail.nickname,
+    data?.result.memberDetail.nickname ?? '',
     setIsCreateRoomModalOpen,
-    data.result.roomId,
+    data?.result.roomId ?? 0,
   );
   const { mutateAsync: cancelInvite } = useCancelInviteMember(Number(id));
   const { mutateAsync: acceptRoomRequest } = useAcceptRoomRequest(
     Number(id),
-    data.result.memberDetail.nickname,
-    roomInfo?.roomId as number,
+    data?.result.memberDetail.nickname ?? '',
+    roomInfo.roomId,
   );
 
   const onPress = (
-    type: 'CHAT' | 'LIKE' | 'VIEW' | 'INVITE' | 'CANCEL' | 'ACCEPT' | 'REJECT',
+    type: 'MESSAGE' | 'LIKE' | 'VIEW' | 'INVITE' | 'CANCEL' | 'ACCEPT' | 'REJECT',
     viewType?: 'LIST' | 'TABLE',
   ) => {
     if (type === 'VIEW') {
@@ -132,7 +94,7 @@ function UserDetailComponent() {
         break;
 
       case 'LIKE':
-        if (data.result.favoriteId !== 0) {
+        if (data?.result.favoriteId !== 0) {
           deleteLike();
         } else {
           createLike();
@@ -171,113 +133,131 @@ function UserDetailComponent() {
   const { mutate: unblockMember } = useUnblockMember();
 
   return (
-    <SafeAreaView className="bg-subColor1">
-      <View className="px-[20px] pb-[8px]">
+    <View className="flex-1 bg-subColor1 relative">
+      <View className="pt-[55px] px-[20px] pb-[8px]">
         <BackHeaderComponent>
           {Number(id) !== Number(memberInfo?.memberId ?? 0) && (
             <View className="flex flex-row items-center gap-x-[4px]">
-              <Pressable
-                onPress={() => onPress('CHAT')}
-                className="flex items-center justify-center w-[40px] h-[40px]"
-              >
-                <ChatIcon />
-              </Pressable>
-              {data.result.favoriteId !== 0 ? (
-                <Pressable
-                  onPress={() => onPress('LIKE')}
-                  className="flex items-center justify-center w-[40px] h-[40px]"
-                >
-                  <FilledHeartIcon />
-                </Pressable>
+              <OpacityPressable onPress={() => onPress('MESSAGE')}>
+                <View className="flex items-center justify-center w-[40px] h-[40px]">
+                  <ChatIcon />
+                </View>
+              </OpacityPressable>
+
+              {data?.result.favoriteId !== 0 ? (
+                <OpacityPressable onPress={() => onPress('LIKE')}>
+                  <View className="flex items-center justify-center w-[40px] h-[40px]">
+                    <FilledHeartIcon />
+                  </View>
+                </OpacityPressable>
               ) : (
-                <Pressable
-                  onPress={() => onPress('LIKE')}
-                  className="flex items-center justify-center w-[40px] h-[40px]"
-                >
-                  <HeartIcon />
-                </Pressable>
+                <OpacityPressable onPress={() => onPress('LIKE')}>
+                  <View className="flex items-center justify-center w-[40px] h-[40px]">
+                    <HeartIcon />
+                  </View>
+                </OpacityPressable>
               )}
-              <Pressable
-                onPress={() => bottomSheetRef.current?.expand()}
-                className="flex items-center justify-center w-[40px] h-[40px]"
-              >
-                <SeeMoreIcon />
-              </Pressable>
+
+              <OpacityPressable onPress={() => bottomSheetRef.current?.expand()}>
+                <View className="flex items-center justify-center w-[40px] h-[40px]">
+                  <SeeMoreIcon />
+                </View>
+              </OpacityPressable>
             </View>
           )}
         </BackHeaderComponent>
       </View>
 
-      <ScrollView contentContainerStyle={{ marginTop: 8, rowGap: 20, paddingBottom: 160 }}>
-        <MemberInfoComponent id={Number(id)} data={data.result} />
+      {isFetching || !data ? (
+        <ScrollView contentContainerStyle={{ flexGrow: 1, marginTop: 8, rowGap: 20 }}>
+          <MemberInfoSkeleton />
 
-        <View className="bg-white flex-1 gap-y-[16px] pt-[12px] rounded-t-[20px] pb-[68px]">
-          <ViewTypeButtonComponent currentType={type} onPress={onPress} />
-          <View className="gap-y-[56px]">
-            {type === 'LIST' ? (
-              <Fragment>
-                <BasicInfoComponent data={data.result} />
-                <DormitoryInfoComponent data={data.result} />
-                <EssentialInfoComponent data={data.result} />
-              </Fragment>
-            ) : (
-              <TableInfoComponent data={data.result} />
-            )}
-            <AdditionalInfoComponent data={data.result} />
+          <View className="flex-grow bg-white gap-y-[16px] pt-[12px] rounded-t-[20px] pb-[68px]">
+            <ViewTypeButtonComponent currentType={type} onPress={onPress} />
+
+            <BasicInfoSkeleton />
+            <DormitoryInfoSkeleton />
+            <EssentialInfoSkeleton />
           </View>
-        </View>
+        </ScrollView>
+      ) : (
+        <ScrollView contentContainerStyle={{ flexGrow: 1, marginTop: 8, rowGap: 20 }}>
+          <MemberInfoComponent id={Number(id)} data={data.result} />
 
-        {/* 하단 over-scroll 시의 흰색 배경 설정 */}
-        <OverScrollView backgroundColor="#FFFFFF" height={300} bottom={-100} />
-      </ScrollView>
+          <View className="flex-1 bg-white gap-y-[16px] pt-[12px] rounded-t-[20px] pb-[68px]">
+            <ViewTypeButtonComponent currentType={type} onPress={onPress} />
 
-      <OverScrollView backgroundColor="#FFFFFF" height={94} bottom={0} />
+            <View className="gap-y-[56px]">
+              {type === 'LIST' ? (
+                <Fragment>
+                  <BasicInfoComponent data={data.result} />
+                  <DormitoryInfoComponent data={data.result} />
+                  <EssentialInfoComponent data={data.result} />
+                </Fragment>
+              ) : (
+                <TableInfoComponent data={data.result} />
+              )}
+              <AdditionalInfoComponent data={data.result} />
+            </View>
+          </View>
 
-      <TwoButtonModal
-        isVisible={isCreateRoomModalOpen}
-        title={`${data.result.memberDetail.nickname}님을 초대할 방이 없어요,\n방을 만드시겠어요?`}
-        closeFunc={() => setIsCreateRoomModalOpen(false)}
-        leftButtonText="아니오"
-        leftButtonFunc={() => setIsCreateRoomModalOpen(false)}
-        rightButtonText="예"
-        rightButtonFunc={() => {
-          setIsCreateRoomModalOpen(false);
-          router.push('/room/createRoom');
-        }}
-      />
+          <TwoButtonModal
+            isVisible={isCreateRoomModalOpen}
+            title={`${data.result.memberDetail.nickname}님을 초대할 방이 없어요,\n방을 만드시겠어요?`}
+            closeFunc={() => setIsCreateRoomModalOpen(false)}
+            leftButtonText="아니오"
+            leftButtonFunc={() => setIsCreateRoomModalOpen(false)}
+            rightButtonText="예"
+            rightButtonFunc={() => {
+              setIsCreateRoomModalOpen(false);
+              router.push('/room/createRoom');
+            }}
+          />
 
-      <TwoButtonModal
-        isVisible={isBlockModalVisible}
-        title={`${data.result.memberDetail.nickname}님을\n차단하시나요?`}
-        closeFunc={() => setIsBlockModalVisible(false)}
-        leftButtonText="취소"
-        leftButtonFunc={() => setIsBlockModalVisible(false)}
-        rightButtonText="차단"
-        rightButtonFunc={async () => {
-          blockMember(data.result.memberDetail.memberId);
-          setIsCreateRoomModalOpen(false);
-        }}
-      />
+          <TwoButtonModal
+            isVisible={isBlockModalVisible}
+            title={`${data.result.memberDetail.nickname}님을\n차단하시나요?`}
+            closeFunc={() => setIsBlockModalVisible(false)}
+            leftButtonText="취소"
+            leftButtonFunc={() => setIsBlockModalVisible(false)}
+            rightButtonText="차단"
+            rightButtonFunc={async () => {
+              blockMember(data.result.memberDetail.memberId);
+              setIsCreateRoomModalOpen(false);
+            }}
+          />
 
-      <TwoButtonModal
-        isVisible={isUnblockModalVisible}
-        title={`${data.result.memberDetail.nickname}님을\n차단 해제하시나요?`}
-        closeFunc={() => setIsUnblockModalVisible(false)}
-        leftButtonText="취소"
-        leftButtonFunc={() => setIsUnblockModalVisible(false)}
-        rightButtonText="차단 해제"
-        rightButtonFunc={async () => {
-          unblockMember(data.result.memberDetail.memberId);
-          setIsCreateRoomModalOpen(false);
-        }}
-      />
+          <TwoButtonModal
+            isVisible={isUnblockModalVisible}
+            title={`${data.result.memberDetail.nickname}님을\n차단 해제하시나요?`}
+            closeFunc={() => setIsUnblockModalVisible(false)}
+            leftButtonText="취소"
+            leftButtonFunc={() => setIsUnblockModalVisible(false)}
+            rightButtonText="차단 해제"
+            rightButtonFunc={async () => {
+              unblockMember(data.result.memberDetail.memberId);
+              setIsCreateRoomModalOpen(false);
+            }}
+          />
 
-      <ReportModalComponent
-        isVisible={isReportModalVisible}
-        memberId={data.result.memberDetail.memberId}
-        source="MEMBER_STAT"
-        closeModal={() => setIsReportModalVisible(false)}
-      />
+          <ReportModalComponent
+            isVisible={isReportModalVisible}
+            memberId={data.result.memberDetail.memberId}
+            source="MEMBER_STAT"
+            closeModal={() => setIsReportModalVisible(false)}
+          />
+
+          <OverScrollView backgroundColor="#FFFFFF" height={350} bottom={-300} />
+        </ScrollView>
+      )}
+
+      {/* <View className="bg-white pb-[42px] px-[20px] pt-[12px]">
+        <OpacityPressable>
+          <View className="border bg-mainColor py-[17.5px] rounded-xl">
+            <Text className="Semibold16 text-white text-center">내 방으로 초대하기</Text>
+          </View>
+        </OpacityPressable>
+      </View> */}
 
       <BottomButtonContainer id={Number(id)} onPress={onPress} />
 
@@ -326,20 +306,6 @@ function UserDetailComponent() {
           )}
         </BottomSheetView>
       </BottomSheet>
-    </SafeAreaView>
-  );
-}
-
-export default function UserDetail() {
-  return (
-    <Suspense
-      fallback={
-        <Portal>
-          <LoadingComponent />
-        </Portal>
-      }
-    >
-      <UserDetailComponent />
-    </Suspense>
+    </View>
   );
 }

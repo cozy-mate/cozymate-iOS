@@ -22,7 +22,7 @@ import { useMemberStore } from '@/zustand/store';
 export default function Roommate() {
   const router = useRouter();
 
-  const { memberInfo, hasRoom } = useMemberStore();
+  const { memberInfo, hasRoom, hasLifeStyle } = useMemberStore();
 
   const { trackButton } = useTracker();
 
@@ -102,12 +102,27 @@ export default function Roommate() {
               </OpacityPressable>
             )}
 
-            <View className="flex flex-row justify-end items-center mt-[16px] mb-[8px]">
-              <Pressable onPress={() => setIsHasRoom(!isHasRoom)} className="p-[9px]">
-                {isHasRoom ? <DoneIcon /> : <NotDoneIcon />}
-              </Pressable>
-              <Text className="Medium14 text-basicFont">방이 없는 사용자만 보기</Text>
-            </View>
+            {!hasRoom && (
+              <OpacityPressable onPress={() => router.push('/room/createRoom')}>
+                <View className="bg-colorBox rounded-xl px-[16px] py-[12px] border border-mainColor flex flex-row justify-between items-center mt-[8px]">
+                  <Text className="Semibold12 text-mainColor">
+                    {`${memberInfo?.nickname ?? ''}님, 룸메이트를 초대할 방을 만들어볼까요?`}
+                  </Text>
+                  <BlueArrowIcon />
+                </View>
+              </OpacityPressable>
+            )}
+
+            {hasLifeStyle ? (
+              <View className="flex flex-row justify-end items-center mt-[16px] mb-[8px]">
+                <Pressable onPress={() => setIsHasRoom(!isHasRoom)} className="p-[9px]">
+                  {isHasRoom ? <DoneIcon /> : <NotDoneIcon />}
+                </Pressable>
+                <Text className="Medium14 text-basicFont">방이 없는 사용자만 보기</Text>
+              </View>
+            ) : (
+              <View className="h-[16px]" />
+            )}
           </View>
         )}
         ListEmptyComponent={() =>

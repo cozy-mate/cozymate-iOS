@@ -49,10 +49,10 @@ export const useSignUpV2Store = create<{
   clearSignUpState: () =>
     set(() => ({
       signUpState: {
-        nickname: '',
         universityName: '',
         universityId: 0,
         majorName: '',
+        nickname: '',
         gender: '',
         birthday: '',
         persona: 0,

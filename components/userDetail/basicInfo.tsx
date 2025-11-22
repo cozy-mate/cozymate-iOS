@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 
 import { UserDetailComponentProps } from '@/type/member-stat';
 
-const BasicInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
+export default function BasicInfoComponent({ data }: UserDetailComponentProps) {
   return (
     <View className="px-[20px] gap-y-[12px]">
       <Text className="Semibold16 text-emphasizedFont ml-[4px]">기본 정보</Text>
@@ -45,6 +45,4 @@ const BasicInfoComponent: React.FC<UserDetailComponentProps> = ({ data }) => {
       </View>
     </View>
   );
-};
-
-export default BasicInfoComponent;
+}

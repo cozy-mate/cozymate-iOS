@@ -5,12 +5,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BackHeaderComponent from '@/components/common/backHeader';
 import BottomButtonComponent from '@/components/common/bottomButton';
 import PersonaListComponent from '@/components/common/personaList';
-import { useSignUpStore } from '@/zustand/member/member';
+import {
+  //useSignUpStore,
+  useSignUpV2Store,
+} from '@/zustand/member/member';
 
 export default function Character() {
   const router = useRouter();
 
-  const { signUpState, setSignUpState } = useSignUpStore();
+  // const { signUpState, setSignUpState } = useSignUpStore();
+  const { signUpState, setSignUpState } = useSignUpV2Store();
 
   return (
     <SafeAreaView className="flex-1 bg-white">

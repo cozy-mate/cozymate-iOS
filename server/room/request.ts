@@ -2,7 +2,8 @@ export interface CreatePublicRoomRequest {
   name: string;
   persona: number;
   maxMateNum: number;
-  hashtagList: string[];
+  // hashtagList: string[];
+  description: string;
 }
 
 export interface UpdateRoomInfoRequest {

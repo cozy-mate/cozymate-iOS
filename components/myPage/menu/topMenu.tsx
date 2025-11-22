@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import GrayArrow from '@/assets/images/common/grayArrow.svg';
 import HomeIcon from '@/assets/images/myPage/home.svg';
 import VerifiedIcon from '@/assets/images/myPage/verified.svg';
+import OpacityPressable from '@/components/opacityPressable';
 import { useGetMyRoomDetail } from '@/hooks/room/room';
 import { showRejectToast } from '@/utils/toast';
 import { useMemberStore } from '@/zustand/store';
@@ -57,7 +58,7 @@ const TopMenuComponent: React.FC = () => {
   return (
     <View className="border border-[#F1F2F4] rounded-xl px-[16px] py-[4px]">
       {topMenuItems.map((item, index) => (
-        <Pressable
+        <OpacityPressable
           key={index}
           onPress={item.onPress}
           className={`flex flex-row justify-between py-[12px] ${index !== topMenuItems.length - 1 && 'border-b border-b-[#F1F2F4]'}`}
@@ -68,7 +69,7 @@ const TopMenuComponent: React.FC = () => {
             {item.subTitle !== null && item.subTitle}
             <GrayArrow />
           </View>
-        </Pressable>
+        </OpacityPressable>
       ))}
     </View>
   );

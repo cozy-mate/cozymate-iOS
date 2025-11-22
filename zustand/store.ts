@@ -36,6 +36,8 @@ export type Member = MemberWithRoom | MemberWithoutRoom;
 
 type MemberStore = Member & {
   setMemberInfo: (memberInfo: MemberInfo) => void;
+  setMemberInfoWithoutLogin: (memberInfo: MemberInfo) => void;
+  setLoggedIn: (isLoggedIn: boolean) => void;
   logout: () => void;
   setHasLifeStyle: () => void;
   setRoom: (roomInfo: RoomInfo) => void;
@@ -56,6 +58,16 @@ export const useMemberStore = create<MemberStore>((set) => ({
     set(() => ({
       isLoggedIn: true,
       memberInfo,
+    })),
+
+  setMemberInfoWithoutLogin: (memberInfo: MemberInfo) =>
+    set(() => ({
+      memberInfo,
+    })),
+
+  setLoggedIn: (isLoggedIn: boolean) =>
+    set(() => ({
+      isLoggedIn,
     })),
 
   logout: () =>

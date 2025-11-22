@@ -15,7 +15,7 @@ function SchoolAuthenticationComponent() {
     <SafeAreaView className="flex-1 bg-white px-[20px] gap-y-[8px]">
       <BackHeaderComponent />
 
-      <View className="gap-y-[16px]">
+      <View className="gap-y-[16px] mt-[16px]">
         <BorderPressBox
           title="학교"
           value={data.result.universityName}
@@ -24,13 +24,13 @@ function SchoolAuthenticationComponent() {
           isFocused={true}
         />
 
-        <BorderPressBox
+        {/* <BorderPressBox
           title="학교 이메일"
           value={data.result.mailAddress}
           placeholder=""
           onPress={() => {}}
           isFocused={true}
-        />
+        /> */}
 
         <BorderPressBox
           title="학과"

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { Suspense } from 'react';
-import { Dimensions, Pressable, ScrollView, Text, View } from 'react-native';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 import { Portal } from 'react-native-portalize';
 
 import Background from '@/assets/images/myPage/background.svg';
@@ -8,6 +8,7 @@ import LoadingComponent from '@/components/common/loading';
 import OverScrollView from '@/components/common/overScrollView';
 import BottomMenuComponent from '@/components/myPage/menu/bottomMenu';
 import TopMenuComponent from '@/components/myPage/menu/topMenu';
+import OpacityPressable from '@/components/opacityPressable';
 import { getPersona } from '@/constants/items/characterItem';
 import { useGetMemberProfile } from '@/hooks/member/member';
 import { useAuthProvider } from '@/providers/AuthProvider';
@@ -56,21 +57,21 @@ function MyPageComponent() {
         <BottomMenuComponent />
 
         <View className="flex flex-row justify-center items-center">
-          <Pressable
+          <OpacityPressable
             onPress={() => handleLogout()}
             className="px-[4px] py-[12px] flex items-center"
           >
             <Text className="Medium12 text-disabledFont">로그아웃</Text>
-          </Pressable>
+          </OpacityPressable>
 
           <View className="h-[18px] w-[1px] bg-[#D9D9D9] mx-[16px]" />
 
-          <Pressable
+          <OpacityPressable
             onPress={() => router.push('/myPage/withdraw')}
             className="px-[4px] py-[12px] flex items-center"
           >
             <Text className="Medium12 text-disabledFont">회원탈퇴</Text>
-          </Pressable>
+          </OpacityPressable>
         </View>
       </View>
 

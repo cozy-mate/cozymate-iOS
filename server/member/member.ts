@@ -5,7 +5,12 @@ import {
   PostAxiosInstance,
 } from '@/axios/axios.method';
 
-import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from './request';
+import {
+  SignUpRequest,
+  SignUpV2Request,
+  UpdateMemberInfoRequest,
+  WithdrawRequest,
+} from './request';
 import {
   CheckNicknameResponse,
   GetMemberProfileResponse,
@@ -57,7 +62,17 @@ export const updateMemberInfo = async (
 
 // 회원가입
 export const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
-  const response = await PostAxiosInstance<SignUpResponse>(`/members/sign-up`, data);
+  const response = await PostAxiosInstance<SignUpResponse, SignUpRequest>(`/members/sign-up`, data);
+
+  return response.data;
+};
+
+// 회원가입 v2
+export const signUpV2 = async (data: SignUpV2Request): Promise<SignUpResponse> => {
+  const response = await PostAxiosInstance<SignUpResponse, SignUpV2Request>(
+    `/members/sign-up-direct`,
+    data,
+  );
 
   return response.data;
 };

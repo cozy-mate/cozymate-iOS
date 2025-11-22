@@ -35,18 +35,18 @@ export const useKakaoLogin = () => {
           await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
 
           console.log('가입된 회원이 아님');
-          router.push('/(onBoard)/schoolAuthentication');
+          router.push('/(onBoard)/personalInfo_v2');
         }
 
         // 준회원 (학교 인증 완료)
-        else if (
-          loginResponse.result.memberDetailResponseDTO !== null &&
-          loginResponse.result.tokenResponseDTO.refreshToken === ''
-        ) {
-          console.log('준회원');
-          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
-          router.push('/(onBoard)/personalInfo');
-        }
+        // else if (
+        //   loginResponse.result.memberDetailResponseDTO !== null &&
+        //   loginResponse.result.tokenResponseDTO.refreshToken === ''
+        // ) {
+        //   console.log('준회원');
+        //   await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+        //   router.push('/(onBoard)/personalInfo');
+        // }
 
         // 기존 멤버
         else {
@@ -135,18 +135,18 @@ export const useAppleLogin = () => {
           await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
 
           console.log('가입된 회원이 아님');
-          router.push('/(onBoard)/schoolAuthentication');
+          router.push('/(onBoard)/personalInfo_v2');
         }
 
         // 준회원 (학교 인증 완료)
-        else if (
-          loginResponse.result.memberDetailResponseDTO !== null &&
-          loginResponse.result.tokenResponseDTO.refreshToken === ''
-        ) {
-          console.log('준회원');
-          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
-          router.push('/(onBoard)/personalInfo');
-        }
+        // else if (
+        //   loginResponse.result.memberDetailResponseDTO !== null &&
+        //   loginResponse.result.tokenResponseDTO.refreshToken === ''
+        // ) {
+        //   console.log('준회원');
+        //   await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+        //   router.push('/(onBoard)/personalInfo');
+        // }
 
         // 기존 멤버
         else {
@@ -219,18 +219,18 @@ export const useGoogleLogin = () => {
           await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
 
           console.log('가입된 회원이 아님');
-          router.push('/(onBoard)/schoolAuthentication');
+          router.push('/(onBoard)/personalInfo_v2');
         }
 
         // 준회원 (학교 인증 완료)
-        else if (
-          loginResponse.result.memberDetailResponseDTO !== null &&
-          loginResponse.result.tokenResponseDTO.refreshToken === ''
-        ) {
-          console.log('준회원');
-          await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
-          router.push('/(onBoard)/personalInfo');
-        }
+        // else if (
+        //   loginResponse.result.memberDetailResponseDTO !== null &&
+        //   loginResponse.result.tokenResponseDTO.refreshToken === ''
+        // ) {
+        //   console.log('준회원');
+        //   await setAccessToken(loginResponse.result.tokenResponseDTO.accessToken);
+        //   router.push('/(onBoard)/personalInfo');
+        // }
 
         // 기존 멤버
         else {

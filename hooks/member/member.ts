@@ -1,15 +1,20 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
+import { matchMultiQueries, queries } from '@/server';
 import {
   checkNickname,
   signUp,
+  signUpV2,
   updateMemberInfo,
-  getMemberProfile,
   withdraw,
-  getMemberUniversityInfo,
 } from '@/server/member/member';
-import { SignUpRequest, UpdateMemberInfoRequest, WithdrawRequest } from '@/server/member/request';
+import {
+  SignUpRequest,
+  SignUpV2Request,
+  UpdateMemberInfoRequest,
+  WithdrawRequest,
+} from '@/server/member/request';
 import { SignUpResponse } from '@/server/member/response';
 import { showRejectToast } from '@/utils/toast';
 import { deleteToken, setAccessToken, setRefreshToken } from '@/utils/token';
@@ -19,7 +24,6 @@ import { useRegisterLifeStyleStore } from '@/zustand/member-stat/member-stat';
 import { useSelectedItemStore } from '@/zustand/roleNRule/roleNRule';
 import { useCreateRoomStore } from '@/zustand/room/room';
 import { useMemberStore } from '@/zustand/store';
-import { matchMultiQueries, queries } from '@/server';
 
 export const useWithdraw = () => {
   const { clearMailState } = useMailAuthenticationStore();
@@ -111,6 +115,23 @@ export const useSignUp = () => {
       await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
 
       setMemberInfo(response.result.memberDetailResponseDTO);
+    },
+  });
+};
+
+export const useSignUpV2 = () => {
+  const router = useRouter();
+  const { setMemberInfoWithoutLogin } = useMemberStore();
+
+  return useMutation({
+    mutationFn: (data: SignUpV2Request) => signUpV2(data),
+    onSuccess: async (response: SignUpResponse) => {
+      await setAccessToken(response.result.tokenResponseDTO.accessToken);
+      await setRefreshToken(response.result.tokenResponseDTO.refreshToken);
+
+      setMemberInfoWithoutLogin(response.result.memberDetailResponseDTO);
+
+      router.push('/(onBoard)/complete');
     },
   });
 };

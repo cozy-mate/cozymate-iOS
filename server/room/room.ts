@@ -211,14 +211,16 @@ export const acceptRoomRequest = async (
 
 // 사용자 -> 방 참여 요청
 export const sendRoomRequest = async (roomId: number): Promise<SendRoomRequestRequest> => {
-  const response = await PostAxiosInstance<SendRoomRequestRequest>(`/rooms/${roomId}/request-join`);
+  const response = await PostAxiosInstance<SendRoomRequestRequest, null>(
+    `/rooms/${roomId}/request-join`,
+  );
 
   return response.data;
 };
 
 // 방 입장 기능
 export const joinRoom = async (roomId: number): Promise<JoinRoomResponse> => {
-  const response = await PostAxiosInstance<JoinRoomResponse>(`/rooms/${roomId}/join`);
+  const response = await PostAxiosInstance<JoinRoomResponse, null>(`/rooms/${roomId}/join`);
 
   return response.data;
 };
@@ -228,7 +230,7 @@ export const acceptRoomInvite = async (
   roomId: number,
   accept: boolean,
 ): Promise<AcceptRoomInviteResponse> => {
-  const response = await PostAxiosInstance<AcceptRoomInviteResponse>(
+  const response = await PostAxiosInstance<AcceptRoomInviteResponse, null>(
     `/rooms/${roomId}/invite-request`,
     null,
     {
@@ -243,7 +245,9 @@ export const acceptRoomInvite = async (
 
 // 방장 -> 내방으로 초대하기
 export const inviteMember = async (inviteeId: number): Promise<InviteMemberResponse> => {
-  const response = await PostAxiosInstance<InviteMemberResponse>(`/rooms/invite/${inviteeId}`);
+  const response = await PostAxiosInstance<InviteMemberResponse, null>(
+    `/rooms/invite/${inviteeId}`,
+  );
 
   return response.data;
 };
@@ -252,7 +256,10 @@ export const inviteMember = async (inviteeId: number): Promise<InviteMemberRespo
 export const createPublicRoom = async (
   data: CreatePublicRoomRequest,
 ): Promise<CreatePublicRoomResponse> => {
-  const response = await PostAxiosInstance<CreatePublicRoomResponse>(`/rooms/create-public`, data);
+  const response = await PostAxiosInstance<CreatePublicRoomResponse, CreatePublicRoomRequest>(
+    `/rooms/create-public`,
+    data,
+  );
 
   return response.data;
 };

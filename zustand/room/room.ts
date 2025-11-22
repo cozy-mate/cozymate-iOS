@@ -11,7 +11,7 @@ export const useCreateRoomStore = create<{
     name: '',
     persona: 1,
     maxMateNum: 0,
-    hashtagList: [],
+    description: '',
   },
   setCreateRoomInfo: (status) =>
     set((state) => ({
@@ -26,7 +26,7 @@ export const useCreateRoomStore = create<{
         name: '',
         persona: 1,
         maxMateNum: 0,
-        hashtagList: [],
+        description: '',
       },
     })),
 }));
